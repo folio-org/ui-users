@@ -1,6 +1,7 @@
 # Change history for ui-users
 
-## 6.1.0 (IN PROGRESS)
+## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
 
 * Configure Jest/RTL. Refs UIU-2112.
 * Show user-readable message when user is not found. Fixes UIU-2081.
@@ -44,6 +45,45 @@
 * Handle empty report data in `CashDrawerReconciliationReportCSV`. Refs UIU-2184.
 * Fee/fine owners not available for selection on Transfer Fee/Fine modal. Refs UIU-2174.
 * Save the patron expiration with the time set to 23:59:59. Refs UIU-2182.
+
+## [6.0.6](https://github.com/folio-org/ui-users/tree/v6.0.6) (2021-06-17)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.5...v6.0.6)
+
+* Restore missing "Claimed returned" report button. Refs UIU-2188.
+
+## [6.0.5](https://github.com/folio-org/ui-users/tree/v6.0.5) (2021-04-29)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.4...v6.0.5)
+
+* Import `react` because we are building without new JSX transforms. Refs UIU-2081.
+
+## [6.0.4](https://github.com/folio-org/ui-users/tree/v6.0.4) (2021-04-27)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.3...v6.0.4)
+
+* Show user-readable message when user is not found. Fixes UIU-2081.
+
+## [6.0.3](https://github.com/folio-org/ui-users/tree/v6.0.3) (2021-04-23)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.2...v6.0.3)
+
+* Include missing `limit` clause in request-count query. Refs UIU-2143.
+* Fetch some search container routes conditionally based on permissions. Refs UIU-2132.
+* Show the "Refunds to process manually" report conditionally based on permissions. Refs UIU-2125.
+
+## [6.0.2](https://github.com/folio-org/ui-users/tree/v6.0.2) (2021-04-22)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.1...v6.0.2)
+
+* Close "New fee/fine" page after fee/fine created. Refs UIU-2117.
+* Fix the possibility of create manual patron block with expiration date of today. Refs UIU-2122.
+* Outstanding balance displays incorrectly on closed fee/fines pane. UIU-2085.
+
+## [6.0.1](https://github.com/folio-org/ui-users/tree/v6.0.1) (2021-04-19)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.0.1)
+
+* Configure Jest/RTL. Refs UIU-2112.
+* Lock stripes-cli to ~2.1.1, and thus stripes-webpack to ~1.1.0. Refs UIU-2137.
+* Fix Custom Fields error message by adding a missing permission. Fixes UIU-2104.
+* Fix Notify patron box behavior for New fee/fine when default patron notice is set. Refs UIU-2111.
+* Fix disabling "Save & close" button for Manual patron block. Refs UIU-2123.
+* Fix permission error for "Refunds to Process Manually" report. Refs UIU-2126.
 
 ## [6.0.0](https://github.com/folio-org/ui-users/tree/v6.0.0) (2021-03-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.9...v6.0.0)
