@@ -402,7 +402,7 @@
     "accounts.actions.warning.item": "单件",
     "accounts.actions.warning.waiveAction": "豁免",
     "accounts.error.exceeds": "付款金额超过所选金额",
-    "accounts.warning.itemSelected": "{total, number} 单件已选。 {items, number} {items, plural, one {item} 其他 {items}} 无法 {action} 因为已关闭。",
+    "accounts.warning.itemSelected": "{total, number} 单件已选。 {items, number} {items, plural, one {其他} other {无法}} {action} 因为已关闭。",
     "blocks.reason": "冻结原因：",
     "blocks.modal.header": "读者续借被冻结",
     "blocks.detailsButton": "查看冻结详情",
