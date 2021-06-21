@@ -391,7 +391,7 @@
     "accounts.cancellation.field.feefineType": "Tipologia tariffa/multa",
     "accounts.cancellation.feeFinewillBeCancelled": "<b> {amount} </b> {feeFineType} tariffa/multa verrà <b> annullata </b>",
     "accounts.comment.field.feeFineComment": "Informazioni per lo staff",
-    "accounts.actions.calloutMessage": "La tassa / sanzione {feeFineType} di {amount} è stata {paymentStatus} con successo {paymentStatus} per {name} .",
+    "accounts.actions.calloutMessage": "La tassa / sanzione {feeFineType} di {amount} è stata {paymentStatus} con successo per {name} .",
     "accounts.actions.payFeeFine": "Paga tariffe/multe",
     "accounts.actions.waiveFeeFine": "Revoca tariffe/multe",
     "accounts.actions.warning.summary": "{selectedItemsAmount} items selezionati. {invalidItemsAmount} items non possono essere {action} perché {reason}",
