@@ -808,7 +808,8 @@
     "test": "yarn run test:jest",
     "test:bigtest": "stripes test karma",
     "test:jest": "jest",
-    "build-mod-descriptor": "stripes mod descriptor --full --strict | jq '.[]' > module-descriptor.json"
+    "build-mod-descriptor": "stripes mod descriptor --full --strict | jq '.[]' > module-descriptor.json",
+    "formatjs-compile": "formatjs compile-folder --ast --format simple ./translations/ui-users ./translations/ui-users/compiled"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.13.0",
