@@ -824,6 +824,7 @@
     "@folio/stripes-components": "^9.0.0",
     "@folio/stripes-core": "^7.0.0",
     "@folio/stripes-final-form": "^5.0.0",
+    "@formatjs/cli": "^4.2.7",
     "@jest/globals": "^26.6.2",
     "@testing-library/dom": "^7.26.3",
     "@testing-library/jest-dom": "^5.11.9",
