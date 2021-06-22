@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## 6.2.0 (IN PROGRESS)
+
+* Update local babel config to handle new JSX transform. Refs UIU-2190.
+
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
 
