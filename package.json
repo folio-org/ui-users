@@ -96,6 +96,24 @@
         "visible": true
       },
       {
+        "permissionName": "ui-users.delete",
+        "displayName": "Users: Can delete user profile if user does not have any open transactions",
+        "description": "Delete user when user does not have any open transactions",
+        "subPermissions": [
+          "users-bl.item.delete"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.opentransactions",
+        "displayName": "Users: Can check open transactions",
+        "description": "Check if user does have any open transactions",
+        "subPermissions": [
+          "users-bl.transactions.get"
+        ],
+        "visible": true
+      },
+      {
         "permissionName": "ui-users.create",
         "displayName": "Users: Can create new user",
         "description": "Some subperms can be deleted later when bl does updates and ModulePermissions can be used",

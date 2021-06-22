@@ -63,6 +63,8 @@ import {
 import RequestFeeFineBlockButtons from '../../components/RequestFeeFineBlockButtons';
 import { departmentsShape } from '../../shapes';
 
+import OpenTransactionModal from './components/OpenTransactionModal';
+import DeleteUserModal from './components/DeleteUserModal';
 import ExportFeesFinesReportButton from './components';
 import ErrorPane from '../../components/ErrorPane';
 
@@ -78,6 +80,8 @@ class UserDetail extends React.Component {
     }).isRequired,
     resources: PropTypes.shape({
       selUser: PropTypes.object,
+      delUser: PropTypes.object,
+      openTransactions: PropTypes.object,
       user: PropTypes.arrayOf(PropTypes.object),
       accounts: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
@@ -124,6 +128,7 @@ class UserDetail extends React.Component {
     tagsEnabled: PropTypes.bool,
     paneWidth: PropTypes.string,
     intl: PropTypes.object.isRequired,
+    mutator: PropTypes.object,
   };
 
   static defaultProps = {
@@ -152,6 +157,8 @@ class UserDetail extends React.Component {
 
     this.state = {
       lastUpdate: null,
+      showOpenTransactionModal: false,
+      showDeleteUserModal: false,
       sections: {
         userInformationSection: true,
         extendedInfoSection: false,
@@ -180,6 +187,18 @@ class UserDetail extends React.Component {
     // console.log(`getUser: found ${selUser.length} users, id '${selUser[0].id}' ${selUser[0].id === id ? '==' : '!='} '${id}'`);
     return selUser.find(u => u.id === id);
   }
+
+  handleDeleteUser = (id) => {
+    const { history, location, mutator } = this.props;
+    mutator.delUser.DELETE({ id })
+      .then(() => history.replace(
+        {
+          pathname: '/users',
+          search: `${location.search}`,
+          state: { deletedUserId: id }
+        }
+      ));
+  };
 
   checkScope = () => {
     return document.getElementById('ModuleContainer').contains(document.activeElement);
@@ -309,6 +328,45 @@ class UserDetail extends React.Component {
     );
   }
 
+  showOpenTransactionsModal(json) {
+    this.setState({
+      showOpenTransactionModal: true,
+      openTransactions: json,
+    });
+  }
+
+  showDeleteUserModal(json) {
+    this.setState({
+      showDeleteUserModal: true,
+      openTransactions: json,
+    });
+  }
+
+  doCloseTransactionDeleteModal = () => {
+    this.setState({
+      showDeleteUserModal: false,
+      showOpenTransactionModal: false,
+    });
+  }
+
+  selectModal(transactions) {
+    if (!transactions.hasOpenTransactions) {
+      this.showDeleteUserModal();
+    } else {
+      this.showOpenTransactionsModal(transactions);
+    }
+  }
+
+  handleDeleteClick() {
+    const { mutator } = this.props;
+    const userId = this.props.match.params.id;
+
+    mutator.openTransactions.GET({ userId })
+      .then((response) => {
+        this.selectModal(response);
+      });
+  }
+
   getActionMenu = barcode => ({ onToggle }) => {
     const {
       okapi: {
@@ -336,7 +394,8 @@ class UserDetail extends React.Component {
     const showActionMenu = this.props.stripes.hasPerm('ui-users.edit')
       || this.props.stripes.hasPerm('ui-users.patron_blocks')
       || this.props.stripes.hasPerm('ui-users.feesfines.actions.all')
-      || this.props.stripes.hasPerm('ui-requests.all');
+      || this.props.stripes.hasPerm('ui-requests.all')
+      || this.props.stripes.hasPerm('ui-users.delete,ui-users.opentransactions');
 
     if (showActionMenu) {
       return (
@@ -371,6 +430,21 @@ class UserDetail extends React.Component {
               callout={this.callout}
             />
           </IfInterface>
+          <IfPermission perm="ui-users.delete,ui-users.opentransactions">
+            <Button
+              buttonStyle="dropdownItem"
+              data-test-actions-menu-check-delete
+              id="clickable-checkdeleteuser"
+              onClick={() => {
+                this.handleDeleteClick();
+                onToggle();
+              }}
+            >
+              <Icon icon="trash">
+                <FormattedMessage id="ui-users.details.checkDelete" />
+              </Icon>
+            </Button>
+          </IfPermission>
         </>
       );
     } else {
@@ -431,6 +505,8 @@ class UserDetail extends React.Component {
     } = this.state;
 
     const user = this.getUser();
+    const fullNameOfUser = getFullName(user);
+    const userId = match.params.id;
 
     const addressTypes = (resources.addressTypes || {}).records || [];
     const addresses = getFormAddressList(get(user, 'personal.addresses', []));
@@ -695,6 +771,21 @@ class UserDetail extends React.Component {
               popUpPropertyName="popUpOnUser"
               entityId={user?.id}
             />
+            {this.state.showDeleteUserModal &&
+            <DeleteUserModal
+              onCloseModal={this.doCloseTransactionDeleteModal}
+              username={fullNameOfUser}
+              userId={userId}
+              deleteUser={this.handleDeleteUser}
+            />
+            }
+            {this.state.showOpenTransactionModal &&
+            <OpenTransactionModal
+              onCloseModal={this.doCloseTransactionDeleteModal}
+              openTransactions={this.state.openTransactions}
+              username={fullNameOfUser}
+            />
+            }
           </>
         </HasCommand>
       );
