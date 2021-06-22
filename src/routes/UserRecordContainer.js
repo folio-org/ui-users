@@ -33,8 +33,7 @@ class UserRecordContainer extends React.Component {
       shouldRefresh: () => false,
     },
     // As the transaction check spans multiple modules the checks need to be done in mod-users-bl
-    // https://issues.folio.org/browse/MODUSERBL-116
-    // https://issues.folio.org/browse/MODUSERBL-115
+    // https://issues.folio.org/browse/UXPROD-2904
     openTransactions: {
       type: 'okapi',
       accumulate: 'true',
