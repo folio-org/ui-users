@@ -357,7 +357,7 @@ class UserDetail extends React.Component {
     }
   }
 
-  doFetchOpenTransactions() {
+  handleDeleteClick() {
     const { mutator } = this.props;
     const userId = this.props.match.params.id;
 
@@ -436,7 +436,7 @@ class UserDetail extends React.Component {
               data-test-actions-menu-check-delete
               id="clickable-checkdeleteuser"
               onClick={() => {
-                this.doFetchOpenTransactions();
+                this.handleDeleteClick();
                 onToggle();
               }}
             >
@@ -505,7 +505,7 @@ class UserDetail extends React.Component {
     } = this.state;
 
     const user = this.getUser();
-    const username = getFullName(user);
+    const fullNameOfUser = getFullName(user);
     const userId = match.params.id;
 
     const addressTypes = (resources.addressTypes || {}).records || [];
@@ -774,7 +774,7 @@ class UserDetail extends React.Component {
             {this.state.showDeleteUserModal &&
             <DeleteUserModal
               onCloseModal={this.doCloseTransactionDeleteModal}
-              username={username}
+              username={fullNameOfUser}
               userId={userId}
               deleteUser={this.handleDeleteUser}
             />
@@ -783,7 +783,7 @@ class UserDetail extends React.Component {
             <OpenTransactionModal
               onCloseModal={this.doCloseTransactionDeleteModal}
               openTransactions={this.state.openTransactions}
-              username={username}
+              username={fullNameOfUser}
             />
             }
           </>
