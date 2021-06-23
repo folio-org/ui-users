@@ -910,5 +910,17 @@
     "settings.transferCriteria": "Critères de transfert",
     "settings.transferCriteria.notAvailable": "Aucun plugin disponible!",
     "details.label.loanAnonymized": "Anonymisé",
-    "accounts.history.button.loanAnonymized": "Détails du prêt (anonymisé)"
+    "accounts.history.button.loanAnonymized": "Détails du prêt (anonymisé)",
+    "details.checkDelete": "Check for open transactions/delete user",
+    "details.checkDelete.confirmation": "Are you sure you want to delete this user <strong>{name}</strong>?",
+    "details.openTransactions": "Open transactions",
+    "details.openTransactions.info": "User <strong>{name}</strong> has the following open transactions:",
+    "details.openTransactions.resolve": "Please resolve the transactions to proceed to delete the user.",
+    "details.openLoans": "Open loans",
+    "details.openRequests": "Open requests",
+    "details.openFeesFines": "Open fees/fines",
+    "details.openBlocks": "Open blocks",
+    "details.openUnexpiredProxy": "Open unexpired proxy",
+    "permission.delete": "Users: Can delete user profile if user does not have any open transactions",
+    "permission.opentransactions": "Users: Can check open transactions"
 }
