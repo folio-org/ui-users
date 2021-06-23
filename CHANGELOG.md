@@ -3,6 +3,8 @@
 ## 6.2.0 (IN PROGRESS)
 
 * Update local babel config to handle new JSX transform. Refs UIU-2190.
+* Delete user with check for open transactions. Refs UIU-1971.
+* Prevent fetching resource delUser Refs UIU-2191.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
@@ -48,7 +50,6 @@
 * Fix validation error with END DATE for `Cash drawer reconciliation report` modal. Refs UIU-2175.
 * Handle empty report data in `CashDrawerReconciliationReportCSV`. Refs UIU-2184.
 * Fee/fine owners not available for selection on Transfer Fee/Fine modal. Refs UIU-2174.
-* Delete user with check for open transactions. Refs UIU-1971.
 * Save the patron expiration with the time set to 23:59:59. Refs UIU-2182.
 
 ## [6.0.6](https://github.com/folio-org/ui-users/tree/v6.0.6) (2021-06-17)
