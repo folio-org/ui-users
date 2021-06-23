@@ -7,7 +7,7 @@
     "data.loanActionMap.renewed": "تم تجديده",
     "data.loanActionMap.source": "المصدر",
     "data.loanActionMap.holdRequested": "تم طلب الحجز",
-    "data.loanActionMap.recallRequested": "تم طلب استرجاع مادة",
+    "data.loanActionMap.recallRequested": "تم طلب استعادة مادة",
     "loans.title": "إعارات",
     "loans.open": "مفتوحة",
     "loans.closed": "مغلقة",
@@ -910,5 +910,17 @@
     "settings.transferCriteria": "معايير التحويل",
     "settings.transferCriteria.notAvailable": "لا توجد برامج مساعدة!",
     "details.label.loanAnonymized": "بدون تعريف",
-    "accounts.history.button.loanAnonymized": "تفاصيل الإعارة (بدون تعريف)"
+    "accounts.history.button.loanAnonymized": "تفاصيل الإعارة (بدون تعريف)",
+    "details.checkDelete": "التحقق من وجود معاملات مفتوحة/حذف المستخدم",
+    "details.checkDelete.confirmation": "هل أنت متأكد من أنك تريد حذف المستخدم <strong>{name}</strong>؟",
+    "details.openTransactions": "معاملات مفتوحة",
+    "details.openTransactions.info": "لدى المستخدم <strong>{name}</strong> المعاملات المفتوحة التالية:",
+    "details.openTransactions.resolve": "يرجى حل المعاملات للمتابعة في حذف المستخدم.",
+    "details.openLoans": "إعارات مفتوحة",
+    "details.openRequests": "فتح الطلبات",
+    "details.openFeesFines": "رسوم/غرامات مفتوحة",
+    "details.openBlocks": "كتل مفتوحة",
+    "details.openUnexpiredProxy": "فتح البروكسي غبر المنتهي",
+    "permission.delete": "المستخدمين: إمكانية حذف بروفايل مستخدم إذا لم يكن لديه أي معاملات مفتوحة",
+    "permission.opentransactions": "المستخدمين: إمكانية التحقق من وجود معاملات مفتوحة"
 }
