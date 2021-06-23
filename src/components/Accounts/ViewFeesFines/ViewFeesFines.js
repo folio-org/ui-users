@@ -1,31 +1,33 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  Button,
-  Dropdown,
-  DropdownMenu,
-  MultiColumnList,
-} from '@folio/stripes/components';
-
+import { Link } from 'react-router-dom';
 import {
   FormattedDate,
   FormattedMessage,
   FormattedTime,
 } from 'react-intl';
 
-import { itemStatuses } from '../../../constants';
+import {
+  Button,
+  Dropdown,
+  DropdownMenu,
+  MultiColumnList,
+  Popover,
+  Row,
+  Col,
+  Icon,
+} from '@folio/stripes/components';
 
+import { itemStatuses } from '../../../constants';
 import {
   calculateSortParams,
   nav,
 } from '../../util';
-
 import {
   isRefundAllowed,
   isCancelAllowed,
 } from '../accountFunctions';
-
 
 class ViewFeesFines extends React.Component {
   static propTypes = {
@@ -171,6 +173,47 @@ class ViewFeesFines extends React.Component {
     />;
   }
 
+  comments = (feeFine) => {
+    const feeFineType = feeFine.feeFineType ? feeFine.feeFineType : '';
+    const comments = _.get(this.props.resources, ['comments', 'records'], []);
+    const actions = _.orderBy(comments.filter(c => c.accountId === feeFine.id), ['dateAction'], ['asc']);
+    const myComments = actions.filter(a => a.comments).map(a => a.comments);
+    const commentsAmount = myComments.length;
+
+    return (
+      <div>
+        <Row>
+          <Col>{feeFineType}</Col>
+          {(commentsAmount > 0) ?
+            <Col style={{ marginLeft: '5px' }}>
+              <Popover>
+                <div data-role="target">
+                  <Icon
+                    icon="comment"
+                    size="small"
+                  />
+                </div>
+                <p data-role="popover">
+                  <b>
+                    <FormattedMessage id="ui-users.accounts.history.staff.info" />
+                    {` ${commentsAmount} `}
+                    <FormattedMessage id="ui-users.accounts.history.of" />
+                    {` ${commentsAmount}`}
+                    :
+                  </b>
+                  {` ${myComments[commentsAmount - 1]} `}
+                  <Link to={`/users/${feeFine.userId}/accounts/view/${feeFine.id}`}>
+                    <FormattedMessage id="ui-users.accounts.history.link.details" />
+                  </Link>
+                </p>
+              </Popover>
+            </Col>
+            : null}
+        </Row>
+      </div>
+    );
+  }
+
   getAccountsFormatter() {
     const accounts = this.props.selectedAccounts;
     return {
@@ -183,7 +226,7 @@ class ViewFeesFines extends React.Component {
       ),
       'metadata.createdDate': f => (f.metadata ? <FormattedDate value={f.metadata.createdDate} /> : '-'),
       'metadata.updatedDate': f => (f.metadata && f.metadata.createdDate !== f.metadata.updatedDate ? <FormattedDate value={f.metadata.updatedDate} /> : '-'),
-      'feeFineType': f => (f.feeFineType ?? '-'),
+      'feeFineType': f => (f.feeFineType ? this.comments(f) : '-'),
       'amount': f => (f.amount ? parseFloat(f.amount).toFixed(2) : '-'),
       'remaining': f => parseFloat(f.remaining).toFixed(2) || '0.00',
       'paymentStatus.name': f => (f.paymentStatus || {}).name || '-',
