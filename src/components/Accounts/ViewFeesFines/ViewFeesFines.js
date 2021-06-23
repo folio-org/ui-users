@@ -173,7 +173,7 @@ class ViewFeesFines extends React.Component {
     />;
   }
 
-  comments = (feeFine) => {
+  showComments = (feeFine) => {
     const feeFineType = feeFine.feeFineType ? feeFine.feeFineType : '';
     const comments = _.get(this.props.resources, ['comments', 'records'], []);
     const actions = _.orderBy(comments.filter(c => c.accountId === feeFine.id), ['dateAction'], ['asc']);
@@ -226,7 +226,7 @@ class ViewFeesFines extends React.Component {
       ),
       'metadata.createdDate': f => (f.metadata ? <FormattedDate value={f.metadata.createdDate} /> : '-'),
       'metadata.updatedDate': f => (f.metadata && f.metadata.createdDate !== f.metadata.updatedDate ? <FormattedDate value={f.metadata.updatedDate} /> : '-'),
-      'feeFineType': f => (f.feeFineType ? this.comments(f) : '-'),
+      'feeFineType': f => (f.feeFineType ? this.showComments(f) : '-'),
       'amount': f => (f.amount ? parseFloat(f.amount).toFixed(2) : '-'),
       'remaining': f => parseFloat(f.remaining).toFixed(2) || '0.00',
       'paymentStatus.name': f => (f.paymentStatus || {}).name || '-',
