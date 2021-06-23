@@ -30,7 +30,7 @@ class UserRecordContainer extends React.Component {
     delUser: {
       type: 'okapi',
       path: 'bl-users/by-id/:{id}',
-      shouldRefresh: () => false,
+      fetch: false,
     },
     // As the transaction check spans multiple modules the checks need to be done in mod-users-bl
     // https://issues.folio.org/browse/UXPROD-2904
