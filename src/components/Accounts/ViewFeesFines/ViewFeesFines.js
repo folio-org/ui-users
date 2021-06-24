@@ -28,6 +28,7 @@ import {
   isRefundAllowed,
   isCancelAllowed,
 } from '../accountFunctions';
+import css from './ViewFeesFines.css';
 
 class ViewFeesFines extends React.Component {
   static propTypes = {
@@ -184,8 +185,8 @@ class ViewFeesFines extends React.Component {
       <div>
         <Row>
           <Col>{feeFineType}</Col>
-          {(commentsAmount > 0) ?
-            <Col style={{ marginLeft: '5px' }}>
+          {commentsAmount ?
+            <Col className={css.iconColumn}>
               <Popover>
                 <div data-role="target">
                   <Icon
