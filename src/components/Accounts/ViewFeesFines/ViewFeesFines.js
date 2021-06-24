@@ -195,11 +195,10 @@ class ViewFeesFines extends React.Component {
                 </div>
                 <p data-role="popover">
                   <b>
-                    <FormattedMessage id="ui-users.accounts.history.staff.info" />
-                    {` ${commentsAmount} `}
-                    <FormattedMessage id="ui-users.accounts.history.of" />
-                    {` ${commentsAmount}`}
-                    :
+                    <FormattedMessage
+                      id="ui-users.accounts.history.staff.info"
+                      values={{ count: commentsAmount }}
+                    />
                   </b>
                   {` ${myComments[commentsAmount - 1]} `}
                   <Link to={`/users/${feeFine.userId}/accounts/view/${feeFine.id}`}>
