@@ -122,8 +122,6 @@ refundTransfers = async (loan, props) => {
       createRefundActionTemplate(account, actions, refundClaimReturned.CREDITED_ACTION).then(
         createRefundActionTemplate(account, actions, refundClaimReturned.REFUNDED_ACTION)
       );
-      const updateRecord = setPaymentStatus(account);
-      persistAccountRecord(updateRecord);
     }
   };
 
@@ -178,8 +176,13 @@ refundTransfers = async (loan, props) => {
 
     if (isAgedToLostItem || isDeclaredLostItem) {
       const accounts = await getAccounts();
-      const accountsActions = await Promise.all(
+      const updatedAccounts = await Promise.all(
         accounts
+          .map(setPaymentStatus)
+          .map(persistAccountRecord)
+      );
+      const accountsActions = await Promise.all(
+        updatedAccounts
           .map(getAccountActions)
       );
       const transferredActions = accountsActions
