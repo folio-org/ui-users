@@ -11,6 +11,7 @@ import { injectIntl, FormattedMessage } from 'react-intl';
 
 import {
   AppIcon,
+  CalloutContext,
   IfPermission,
   IfInterface,
   TitleManager,
@@ -135,6 +136,8 @@ class UserDetail extends React.Component {
     paneWidth: '44%'
   };
 
+  static contextType = CalloutContext;
+
   constructor(props) {
     super(props);
 
@@ -189,16 +192,32 @@ class UserDetail extends React.Component {
   }
 
   handleDeleteUser = (id) => {
-    const { history, location, mutator } = this.props;
-    mutator.delUser.DELETE({ id })
-      .then(() => history.replace(
-        {
-          pathname: '/users',
-          search: `${location.search}`,
-          state: { deletedUserId: id }
-        }
-      ));
-  };
+    const { history, location, mutator, intl } = this.props;
+    const user = this.getUser();
+    const fullNameOfUser = getFullName(user);
+
+    try {
+      mutator.delUser.DELETE({ id })
+        .then(() => history.replace(
+          {
+            pathname: '/users',
+            search: `${location.search}`,
+            state: { deletedUserId: id }
+          }
+        ))
+        .then(() => {
+          this.context.sendCallout({
+            type: 'success',
+            message: intl.formatMessage({ id: 'ui-users.details.deleteUser.success' }, { name: fullNameOfUser }),
+          });
+        });
+    } catch (error) {
+      this.context.sendCallout({
+        type: 'error',
+        message: intl.formatMessage({ id: 'ui-users.details.deleteUser.failed' }, { name: fullNameOfUser }),
+      });
+    }
+  }
 
   checkScope = () => {
     return document.getElementById('ModuleContainer').contains(document.activeElement);
