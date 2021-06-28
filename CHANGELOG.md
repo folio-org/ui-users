@@ -6,6 +6,7 @@
 * Delete user with check for open transactions. Refs UIU-1971.
 * Prevent fetching resource delUser Refs UIU-2191.
 * Delete user through UI: change dialog text for no open transactions. Refs UIU-2192.
+* Delete user confirmation message. Refs UIU-2193.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
