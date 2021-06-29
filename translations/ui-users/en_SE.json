@@ -922,5 +922,7 @@
     "details.openBlocks": "Open blocks",
     "details.openUnexpiredProxy": "Open unexpired proxy",
     "permission.delete": "Users: Can delete user profile if user does not have any open transactions",
-    "permission.opentransactions": "Users: Can check open transactions"
+    "permission.opentransactions": "Users: Can check open transactions",
+    "details.deleteUser.success": "User <strong>{name}</strong> deleted successfully.",
+    "details.deleteUser.failed": "User <strong>{name}</strong> could not be deleted."
 }
