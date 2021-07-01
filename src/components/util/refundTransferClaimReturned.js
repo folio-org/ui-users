@@ -120,7 +120,7 @@ refundTransfers = async (loan, props) => {
   const createRefunds = async (account, actions) => {
     if (actions.length > 0) {
       createRefundActionTemplate(account, actions, refundClaimReturned.CREDITED_ACTION).then(
-        createRefundActionTemplate(account, actions, refundClaimReturned.REFUNDED_ACTION)
+        () => createRefundActionTemplate(account, actions, refundClaimReturned.REFUNDED_ACTION)
       );
     }
   };

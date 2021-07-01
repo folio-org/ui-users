@@ -922,5 +922,7 @@
     "details.openBlocks": "كتل مفتوحة",
     "details.openUnexpiredProxy": "فتح البروكسي غبر المنتهي",
     "permission.delete": "المستخدمين: إمكانية حذف بروفايل مستخدم إذا لم يكن لديه أي معاملات مفتوحة",
-    "permission.opentransactions": "المستخدمين: إمكانية التحقق من وجود معاملات مفتوحة"
+    "permission.opentransactions": "المستخدمين: إمكانية التحقق من وجود معاملات مفتوحة",
+    "details.deleteUser.success": "User <strong>{name}</strong> deleted successfully.",
+    "details.deleteUser.failed": "User <strong>{name}</strong> could not be deleted."
 }
