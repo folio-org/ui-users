@@ -77,9 +77,9 @@ jobs:
       - name: Run yarn test
         run: xvfb-run --server-args="-screen 0 1024x768x24" yarn test $YARN_TEST_OPTIONS
         
-      - name: Run yarn formatjs-compile
-        if : ${{ env.COMPILE_TRANSLATION_FILES }}
-        run: yarn formatjs-compile
+      # - name: Run yarn formatjs-compile
+      #   if : ${{ env.COMPILE_TRANSLATION_FILES }}
+      #   run: yarn formatjs-compile
 
       - name: Generate Module descriptor
         if: ${{ env.PUBLISH_MOD_DESCRIPTOR }}
