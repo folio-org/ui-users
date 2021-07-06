@@ -297,7 +297,6 @@
     "accounts.history.button.transfer": "تحويل",
     "accounts.history.button.loanDetails": "تفاصيل الإعارة",
     "accounts.history.comment": "بيانات إضافية",
-    "accounts.history.of": "من",
     "accounts.waive.error.amount": "يجب أن يكون المبلغ المعفي > 0",
     "accounts.waive.error.exceeds": "يتجاوز المبلغ المعفي المبلغ المحدد",
     "proxy.addProxy": "إضافة",
@@ -737,7 +736,7 @@
     "reports.inProgress": "التصدير قيد التقدم",
     "departments": "الأقسام",
     "index.username": "اسم المستخدم",
-    "index.all": "الكلمة المفتاحية (العنوان، البريد الإلكتروني، المعرّف)",
+    "index.all": "الكلمة الرئيسية (العنوان، البريد الإلكتروني، المعرّف)",
     "index.lastName": "اللقب",
     "index.barcode": "الباركود",
     "loans.confirmDeclaredLost": "تأكيد حالة المادة: تم الإعلان عن ضياعها",
@@ -912,7 +911,7 @@
     "details.label.loanAnonymized": "بدون تعريف",
     "accounts.history.button.loanAnonymized": "تفاصيل الإعارة (بدون تعريف)",
     "details.checkDelete": "التحقق من وجود معاملات مفتوحة/حذف المستخدم",
-    "details.checkDelete.confirmation": "هل أنت متأكد من أنك تريد حذف المستخدم <strong>{name}</strong>؟",
+    "details.checkDelete.confirmation": "لا توجد معاملات مفتوحة للمستخدم <strong>{name}</strong>. <p>هل أنت متأكد من أنك تريد حذف هذا المستخدم؟</p>",
     "details.openTransactions": "معاملات مفتوحة",
     "details.openTransactions.info": "لدى المستخدم <strong>{name}</strong> المعاملات المفتوحة التالية:",
     "details.openTransactions.resolve": "يرجى حل المعاملات للمتابعة في حذف المستخدم.",
@@ -922,5 +921,9 @@
     "details.openBlocks": "كتل مفتوحة",
     "details.openUnexpiredProxy": "فتح البروكسي غبر المنتهي",
     "permission.delete": "المستخدمين: إمكانية حذف بروفايل مستخدم إذا لم يكن لديه أي معاملات مفتوحة",
-    "permission.opentransactions": "المستخدمين: إمكانية التحقق من وجود معاملات مفتوحة"
+    "permission.opentransactions": "المستخدمين: إمكانية التحقق من وجود معاملات مفتوحة",
+    "details.deleteUser.success": "تم حذف المستخدم <strong>{name}</strong> بنجاح.",
+    "details.deleteUser.failed": "تعذر حذف المستخدم <strong>{name}</strong>.",
+    "accounts.history.staff.info": "معلومات الموظف {count, number} لـ {count, number}:",
+    "accounts.history.link.details": "اذهب إلى التفاصيل"
 }

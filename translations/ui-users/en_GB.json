@@ -297,7 +297,6 @@
     "accounts.history.button.transfer": "Transfer",
     "accounts.history.button.loanDetails": " Loan details",
     "accounts.history.comment": "Additional information",
-    "accounts.history.of": "of",
     "accounts.waive.error.amount": "Waive amount must be > 0",
     "accounts.waive.error.exceeds": "Waive amount exceeds the selected amount",
     "proxy.addProxy": "Add",
@@ -922,5 +921,9 @@
     "details.openBlocks": "Open blocks",
     "details.openUnexpiredProxy": "Open unexpired proxy",
     "permission.delete": "Users: Can delete user profile if user does not have any open transactions",
-    "permission.opentransactions": "Users: Can check open transactions"
+    "permission.opentransactions": "Users: Can check open transactions",
+    "details.deleteUser.success": "User <strong>{name}</strong> deleted successfully.",
+    "details.deleteUser.failed": "User <strong>{name}</strong> could not be deleted.",
+    "accounts.history.staff.info": "Staff info {count, number} of {count, number}:",
+    "accounts.history.link.details": "Go to details"
 }
