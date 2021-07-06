@@ -96,6 +96,24 @@
         "visible": true
       },
       {
+        "permissionName": "ui-users.delete",
+        "displayName": "Users: Can delete user profile if user does not have any open transactions",
+        "description": "Delete user when user does not have any open transactions",
+        "subPermissions": [
+          "users-bl.item.delete"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.opentransactions",
+        "displayName": "Users: Can check open transactions",
+        "description": "Check if user does have any open transactions",
+        "subPermissions": [
+          "users-bl.transactions.get"
+        ],
+        "visible": true
+      },
+      {
         "permissionName": "ui-users.create",
         "displayName": "Users: Can create new user",
         "description": "Some subperms can be deleted later when bl does updates and ModulePermissions can be used",
@@ -811,9 +829,12 @@
     "formatjs-compile": "formatjs compile-folder --ast --format simple ./translations/ui-users ./translations/users/compiled"
   },
   "devDependencies": {
+    "@babel/core": "^7.9.0",
     "@babel/plugin-proposal-class-properties": "^7.13.0",
     "@babel/plugin-proposal-decorators": "^7.13.5",
     "@babel/plugin-transform-runtime": "^7.13.10",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-react": "^7.9.0",
     "@bigtest/interactor": "^0.7.2",
     "@bigtest/mocha": "^0.5.2",
     "@bigtest/react": "^0.1.2",

@@ -27,6 +27,19 @@ class UserRecordContainer extends React.Component {
       },
       throwErrors: false,
     },
+    delUser: {
+      type: 'okapi',
+      path: 'bl-users/by-id/:{id}',
+      fetch: false,
+    },
+    // As the transaction check spans multiple modules the checks need to be done in mod-users-bl
+    // https://issues.folio.org/browse/UXPROD-2904
+    openTransactions: {
+      type: 'okapi',
+      accumulate: 'true',
+      path: 'bl-users/by-id/:{id}/open-transactions',
+      fetch: false,
+    },
     hasManualPatronBlocks: {
       type: 'okapi',
       records: 'manualblocks',
@@ -136,6 +149,7 @@ class UserRecordContainer extends React.Component {
       GET: {
         path: 'perms/users/:{id}/permissions',
         params: { full: 'true', indexField: 'userId' },
+        resourceShouldRefresh: true,
       },
       PUT: {
         path: 'perms/users/%{permUserId}',
@@ -212,6 +226,12 @@ class UserRecordContainer extends React.Component {
       }).isRequired,
     }),
     mutator: PropTypes.shape({
+      delUser: PropTypes.shape({
+        DELETE: PropTypes.func.isRequired,
+      }).isRequired,
+      openTransactions: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+      }).isRequired,
       selUser: PropTypes.shape({
         PUT: PropTypes.func.isRequired,
       }),

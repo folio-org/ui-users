@@ -63,6 +63,7 @@ import proxyItemCSS from '../../../src/components/ProxyGroup/ProxyItem/ProxyItem
   actionMenuEditUserButton = scoped('[data-test-actions-menu-edit]');
   actionMenuExportFeeFineReport = scoped('[data-test-export-fee-fine-report]');
   actionMenuExportFeeFineReportButton = scoped('[data-test-export-fee-fine-report]', ButtonInteractor);
+  actionMenuCheckDelete = scoped('[data-test-actions-menu-check-delete]');
   userNotFoundPanePresent = isPresent('#pane-user-not-found-content');
 
   callout = new CalloutInteractor();
