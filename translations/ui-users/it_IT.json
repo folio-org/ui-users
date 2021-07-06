@@ -297,7 +297,6 @@
     "accounts.history.button.transfer": "Trasferimento",
     "accounts.history.button.loanDetails": " Dettagli prestito",
     "accounts.history.comment": "Informazioni aggiuntive",
-    "accounts.history.of": "di",
     "accounts.waive.error.amount": "L'importo della revoca deve essere > 0",
     "accounts.waive.error.exceeds": "L'importo della revoca supera l'importo selezionato",
     "proxy.addProxy": "Aggiungi",
@@ -924,5 +923,7 @@
     "permission.delete": "Users: Can delete user profile if user does not have any open transactions",
     "permission.opentransactions": "Users: Can check open transactions",
     "details.deleteUser.success": "User <strong>{name}</strong> deleted successfully.",
-    "details.deleteUser.failed": "User <strong>{name}</strong> could not be deleted."
+    "details.deleteUser.failed": "User <strong>{name}</strong> could not be deleted.",
+    "accounts.history.staff.info": "Staff info {count, number} of {count, number}:",
+    "accounts.history.link.details": "Go to details"
 }
