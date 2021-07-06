@@ -177,16 +177,8 @@ class UserSearch extends React.Component {
     this._mounted = false;
   }
 
-  changeRefundReportModalState = (modalState) => {
-    this.setState({ showRefundsReportModal: modalState });
-  };
-
-  changeCashDrawerReportModalState = (modalState) => {
-    this.setState({ showCashDrawerReportModal: modalState });
-  }
-
-  changeFinancialTransactionsReportModalState = (modalState) => {
-    this.setState({ showFinancialTransactionsReportModal: modalState });
+  changeModalState = (modal, modalState) => {
+    this.setState({ [modal]: modalState });
   }
 
   getColumnMapping = () => {
@@ -314,7 +306,7 @@ class UserSearch extends React.Component {
                 id="cash-drawer-report"
                 onClick={() => {
                   onToggle();
-                  this.changeCashDrawerReportModalState(true);
+                  this.changeModalState('showCashDrawerReportModal', true);
                 }}
               >
                 <Icon icon="download">
@@ -328,7 +320,7 @@ class UserSearch extends React.Component {
                 id="financial-transaction-report"
                 onClick={() => {
                   onToggle();
-                  this.changeFinancialTransactionsReportModalState(true);
+                  this.changeModalState('showFinancialTransactionsReportModal', true);
                 }}
               >
                 <Icon icon="download">
@@ -342,7 +334,7 @@ class UserSearch extends React.Component {
                 id="export-refunds-report"
                 onClick={() => {
                   onToggle();
-                  this.changeRefundReportModalState(true);
+                  this.changeModalState('showRefundsReportModal', true);
                 }}
               >
                 <Icon icon="download">
@@ -861,7 +853,7 @@ class UserSearch extends React.Component {
               open
               label={formatMessage({ id:'ui-users.reports.refunds.modal.label' })}
               owners={owners}
-              onClose={() => { this.changeRefundReportModalState(false); }}
+              onClose={() => { this.changeModalState('showRefundsReportModal', false); }}
               onSubmit={this.handleRefundsReportFormSubmit}
               timezone={timezone}
             />
@@ -871,7 +863,7 @@ class UserSearch extends React.Component {
               open
               label={formatMessage({ id:'ui-users.reports.cash.drawer.modal.label' })}
               servicePoints={servicePoints}
-              onClose={() => { this.changeCashDrawerReportModalState(false); }}
+              onClose={() => { this.changeModalState('showCashDrawerReportModal', false); }}
               onSubmit={this.handleCashDrawerReportFormSubmit}
               timezone={timezone}
               initialValues={initialCashDrawerReportValues}
@@ -882,7 +874,7 @@ class UserSearch extends React.Component {
             <FinancialTransactionsReportModal
               open
               label={formatMessage({ id:'ui-users.reports.financial.trans.modal.label' })}
-              onClose={() => { this.changeFinancialTransactionsReportModalState(false); }}
+              onClose={() => { this.changeModalState('showFinancialTransactionsReportModal', false); }}
               onSubmit={this.handleFinancialTransactionsReportFormSubmit}
               timezone={timezone}
               owners={owners}
