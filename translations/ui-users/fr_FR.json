@@ -297,7 +297,6 @@
     "accounts.history.button.transfer": "Transfert/transférer",
     "accounts.history.button.loanDetails": "Détails du prêt",
     "accounts.history.comment": "Informations complémentaires",
-    "accounts.history.of": "de",
     "accounts.waive.error.amount": "Le montant de la renonciation doit être > 0",
     "accounts.waive.error.exceeds": "Le montant de la renonciation dépasse le montant sélectionné",
     "proxy.addProxy": "Ajouter",
@@ -924,5 +923,7 @@
     "permission.delete": "Utilisateurs : peuvent supprimer le profil utilisateur si l'utilisateur n'a aucune transaction ouverte",
     "permission.opentransactions": "Utilisateurs : peuvent vérifier les transactions en cours",
     "details.deleteUser.success": "L'utilisateur <strong> {name} </strong> a été supprimé avec succès.",
-    "details.deleteUser.failed": "L'utilisateur <strong> {name} </strong> n'a pas pu être supprimé."
+    "details.deleteUser.failed": "L'utilisateur <strong> {name} </strong> n'a pas pu être supprimé.",
+    "accounts.history.staff.info": "Staff info {count, number} of {count, number}:",
+    "accounts.history.link.details": "Aller aux détails"
 }

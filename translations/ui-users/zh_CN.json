@@ -297,7 +297,6 @@
     "accounts.history.button.transfer": "转移",
     "accounts.history.button.loanDetails": "借阅详情",
     "accounts.history.comment": "附加信息",
-    "accounts.history.of": "的",
     "accounts.waive.error.amount": "豁免金额必须 > 0",
     "accounts.waive.error.exceeds": "豁免金额超过所选金额",
     "proxy.addProxy": "添加",
@@ -924,5 +923,7 @@
     "permission.delete": "用户：如果用户没有任何未结事务，可以删除用户资料",
     "permission.opentransactions": "用户：可以查看未结事务",
     "details.deleteUser.success": "User <strong>{name}</strong> deleted successfully.",
-    "details.deleteUser.failed": "User <strong>{name}</strong> could not be deleted."
+    "details.deleteUser.failed": "User <strong>{name}</strong> could not be deleted.",
+    "accounts.history.staff.info": "Staff info {count, number} of {count, number}:",
+    "accounts.history.link.details": "Go to details"
 }
