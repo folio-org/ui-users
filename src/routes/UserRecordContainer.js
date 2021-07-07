@@ -149,6 +149,7 @@ class UserRecordContainer extends React.Component {
       GET: {
         path: 'perms/users/:{id}/permissions',
         params: { full: 'true', indexField: 'userId' },
+        resourceShouldRefresh: true,
       },
       PUT: {
         path: 'perms/users/%{permUserId}',
