@@ -825,7 +825,8 @@
     "lint": "eslint .",
     "test": "yarn run test:jest",
     "test:bigtest": "stripes test karma",
-    "test:jest": "jest"
+    "test:jest": "jest",
+    "formatjs-compile": "formatjs compile-folder --ast --format simple ./translations/ui-users ./translations/users/compiled"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
@@ -843,6 +844,7 @@
     "@folio/stripes-components": "^9.0.0",
     "@folio/stripes-core": "^7.0.0",
     "@folio/stripes-final-form": "^5.0.0",
+    "@formatjs/cli": "^4.2.20",
     "@jest/globals": "^26.6.2",
     "@testing-library/dom": "^7.26.3",
     "@testing-library/jest-dom": "^5.11.9",
@@ -854,11 +856,11 @@
     "core-js": "^3.6.4",
     "eslint": "^6.2.1",
     "faker": "^4.1.0",
+    "history": "^5.0.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.6.3",
     "jest-canvas-mock": "^2.3.0",
     "jest-junit": "^12.0.0",
-    "history": "^5.0.0",
     "miragejs": "^0.1.32",
     "mocha": "^5.2.0",
     "react": "^16.5.0",
@@ -874,6 +876,8 @@
     "@folio/react-intl-safe-html": "^3.0.0",
     "final-form-set-field-data": "^1.0.2",
     "hashcode": "^1.0.3",
+    "jspdf": "^2.3.1",
+    "jspdf-autotable": "^3.5.14",
     "lodash": "^4.17.4",
     "moment": "~2.24.0",
     "moment-timezone": "^0.5.14",
@@ -884,9 +888,7 @@
     "react-final-form-listeners": "^1.0.3",
     "react-hot-loader": "^4.3.12",
     "react-router-prop-types": "^1.0.4",
-    "uuid": "^3.0.1",
-    "jspdf": "^2.3.1",
-    "jspdf-autotable": "^3.5.14"
+    "uuid": "^3.0.1"
   },
   "peerDependencies": {
     "@folio/stripes": "^6.0.0",

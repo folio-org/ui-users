@@ -5,6 +5,8 @@ buildNPM {
   runLint = 'yes'
   runRegression = 'no'
   runSonarqube = true
-  runTest = 'yes'
-  runTestOptions = '--ci --coverage --colors'
+  runScripts = [
+   ['formatjs-compile': ''],
+   ['test':'--ci --coverage --colors'],
+  ]
 }
