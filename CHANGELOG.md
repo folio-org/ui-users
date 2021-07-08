@@ -1,13 +1,15 @@
 # Change history for ui-users
 
-## 6.0.7 IN PROGRESS
+## [6.0.7](https://github.com/folio-org/ui-users/tree/v6.0.7) (2021-07-08)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.6...v6.0.7)
 
 * Handle search of ASTified translation values. Refs UIU-2142.
+* Add permissions type filter to users settings permissions sets. Refs UIU-2164.
 
 ## [6.0.6](https://github.com/folio-org/ui-users/tree/v6.0.6) (2021-06-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.5...v6.0.6)
 
-Restore missing "Claimed returned" report button. Refs UIU-2188.
+* Restore missing "Claimed returned" report button. Refs UIU-2188.
 
 ## [6.0.5](https://github.com/folio-org/ui-users/tree/v6.0.5) (2021-04-29)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.4...v6.0.5)
