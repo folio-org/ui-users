@@ -21,6 +21,7 @@ import {
 } from '@folio/stripes/components';
 
 import { DATE_FORMAT } from '../../constants';
+import css from './ReportModal.css';
 
 export const validate = (options) => {
   const errors = {};
@@ -100,7 +101,10 @@ const FinancialTransactionsReportModal = (props) => {
       label={props.label}
       onClose={props.onClose}
     >
-      <form onSubmit={props.handleSubmit}>
+      <form
+        className={css.content}
+        onSubmit={props.handleSubmit}
+      >
         <Row>
           <Col xs={6}>
             <Field
