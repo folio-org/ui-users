@@ -4,7 +4,11 @@ import { isEmpty } from 'lodash';
 import { exportCsv } from '@folio/stripes/util';
 
 import { financialTransactionsMainReportColumns } from '../../../constants';
-import { formatCurrencyAmount, formatDateAndTime, getValue } from '../../util';
+import {
+  formatCurrencyAmount,
+  formatDateAndTime,
+  getValue,
+} from '../../util';
 
 class FinancialTransactionsReport {
   constructor({
@@ -153,7 +157,7 @@ class FinancialTransactionsReport {
             ...row,
             feeFineDetails: `=HYPERLINK("${origin}/users/${row.patronId}/accounts/view/${row.feeFineId}", "${row.feeFineId}")`,
             patronBarcode: `=HYPERLINK("${origin}/users/preview/${row.patronId}", "${row.patronBarcode}")`,
-            patronEmail: ``,
+            patronEmail: `=HYPERLINK("mailto:${row.patronEmail}", "${row.patronEmail}")`,
             itemBarcode: `=HYPERLINK("${origin}/inventory/view/${row.instanceId}/${row.holdingsRecordId}/${row.itemId}", "${row.itemBarcode}")`,
             loanPolicy: `=HYPERLINK("${origin}/settings/circulation/loan-policies/${row.loanPolicyId}, "${row.loanPolicyName}")`,
             overduePolicy: `=HYPERLINK("${origin}/settings/circulation/fine-policies/${row.overdueFinePolicyId}", "${row.overdueFinePolicyName}")`,

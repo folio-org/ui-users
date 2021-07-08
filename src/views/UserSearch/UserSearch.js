@@ -43,6 +43,7 @@ import CsvReport from '../../components/data/reports';
 import RefundsReport from '../../components/data/reports/RefundReport';
 import CashDrawerReconciliationReportPDF from '../../components/data/reports/cashDrawerReconciliationReportPDF';
 import CashDrawerReconciliationReportCSV from '../../components/data/reports/cashDrawerReconciliationReportCSV';
+import FinancialTransactionsReport from '../../components/data/reports/FinancialTransactionsReport';
 import Filters from './Filters';
 import css from './UserSearch.css';
 
@@ -617,7 +618,18 @@ class UserSearch extends React.Component {
           message: <FormattedMessage id="ui-users.reports.noItemsFound" />,
         });
       } else {
-        // TODO: report formatting
+        const headerData = {
+          ...reportParameters,
+          createdAt: reportParameters.createdAt.join(', '),
+        };
+        const reportParams = {
+          data: reportData,
+          intl,
+          headerData,
+        };
+        const report = new FinancialTransactionsReport(reportParams);
+
+        report.toCSV();
       }
     } catch (error) {
       if (error) {
