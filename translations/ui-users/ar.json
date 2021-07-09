@@ -925,5 +925,11 @@
     "details.deleteUser.success": "تم حذف المستخدم <strong>{name}</strong> بنجاح.",
     "details.deleteUser.failed": "تعذر حذف المستخدم <strong>{name}</strong>.",
     "accounts.history.staff.info": "معلومات الموظف {count, number} لـ {count, number}:",
-    "accounts.history.link.details": "اذهب إلى التفاصيل"
+    "accounts.history.link.details": "اذهب إلى التفاصيل",
+    "reports.financial.trans.modal.owners.error": "\"جهة تحصيل الرسم/الغرامة\" مطلوبة",
+    "reports.financial.trans.modal.label": "تقرير تفاصيل المعاملات المالية",
+    "reports.financial.trans.modal.owners": "جهة تحصيل الغرامة/الرسم",
+    "reports.financial.trans.modal.owners.placeholder": "اختر جهة تحصيل الغرامة/الرسم",
+    "reports.financial.trans.modal.servicePoint": "نقاط الخدمة المرتبطة",
+    "reports.financial.trans.modal.servicePoint.placeholder": "حدد نقطة الخدمة"
 }
