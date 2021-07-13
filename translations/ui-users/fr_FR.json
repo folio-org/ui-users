@@ -925,5 +925,11 @@
     "details.deleteUser.success": "L'utilisateur <strong> {name} </strong> a été supprimé avec succès.",
     "details.deleteUser.failed": "L'utilisateur <strong> {name} </strong> n'a pas pu être supprimé.",
     "accounts.history.staff.info": "Staff info {count, number} of {count, number}:",
-    "accounts.history.link.details": "Aller aux détails"
+    "accounts.history.link.details": "Aller aux détails",
+    "reports.financial.trans.modal.owners.error": "\"Fee/fine owner\" is required",
+    "reports.financial.trans.modal.label": "Financial transaction detail report",
+    "reports.financial.trans.modal.owners": "Fee/fine owner",
+    "reports.financial.trans.modal.owners.placeholder": "Select fee/fine owner",
+    "reports.financial.trans.modal.servicePoint": "Associated service points",
+    "reports.financial.trans.modal.servicePoint.placeholder": "Select service point(s)"
 }
