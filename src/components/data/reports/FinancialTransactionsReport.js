@@ -42,7 +42,7 @@ class FinancialTransactionsReport {
     return this.formatMessage(
       { id: 'ui-users.reports.financial.header' },
       {
-        owner: this.headerData.owner,
+        owner: this.headerData.feeFineOwner,
         servicePoints: this.headerData.servicePoints,
         startDate: this.formatDate(this.headerData.startDate),
         endDate: this.formatDate(this.headerData.endDate) || moment().format('YYYY/MM/DD') // if no endDate then show date='today'
@@ -60,15 +60,15 @@ class FinancialTransactionsReport {
     container.push(emptyLine);
     container.push({
       feeFineOwner: this.generateTranslation(firstColumnName),
-      paymentMethod: this.generateTranslation('totalAmount'),
-      paymentAmount: this.generateTranslation('totalCount'),
+      feeFineType: this.generateTranslation('totalAmount'),
+      feeFineBilledAmount: this.generateTranslation('totalCount'),
     });
 
     dataToParse.forEach((row) => {
       const rowValues = {
         feeFineOwner: getValue(row.name),
-        paymentMethod: formatCurrencyAmount(row.totalAmount),
-        paymentAmount: getValue(row.totalCount),
+        feeFineType: formatCurrencyAmount(row.totalAmount),
+        feeFineBilledAmount: getValue(row.totalCount),
       };
 
       container.push(rowValues);
@@ -81,7 +81,7 @@ class FinancialTransactionsReport {
     const data = [];
     const {
       reportData,
-      reportTotals: {
+      reportStats: {
         byFeeFineOwner,
         byFeeFineType,
         byAction,
@@ -126,6 +126,21 @@ class FinancialTransactionsReport {
         loanDate: formatDateAndTime(row.loanDate, this.formatTime),
         dueDate: formatDateAndTime(row.dueDate, this.formatTime),
         returnDate: formatDateAndTime(row.returnDate, this.formatTime),
+        patronId: getValue(row.patronId),
+        feeFineId: getValue(row.feeFineId),
+        patronBarcode: getValue(row.patronBarcode),
+        patronEmail: getValue(row.patronEmail),
+        instanceId: getValue(row.instanceId),
+        holdingsRecordId: getValue(row.holdingsRecordId),
+        itemId: getValue(row.itemId),
+        itemBarcode: getValue(row.itemBarcode),
+        loanPolicyId: getValue(row.loanPolicyId),
+        loanPolicyName: getValue(row.loanPolicyName),
+        overdueFinePolicyId: getValue(row.overdueFinePolicyId),
+        overdueFinePolicyName: getValue(row.overdueFinePolicyName),
+        lostItemPolicyId: getValue(row.lostItemPolicyId),
+        lostItemPolicyName: getValue(row.lostItemPolicyName),
+        loanId: getValue(row.loanId),
       };
 
       data.push(reportDataRowFormatter);
@@ -152,14 +167,14 @@ class FinancialTransactionsReport {
 
     if (this.reportData) {
       const partOfReport = this.reportData.map(row => {
-        if (row.feeFineId) {
+        if (row.action) {
           return {
             ...row,
             feeFineDetails: `=HYPERLINK("${origin}/users/${row.patronId}/accounts/view/${row.feeFineId}", "${row.feeFineId}")`,
             patronBarcode: `=HYPERLINK("${origin}/users/preview/${row.patronId}", "${row.patronBarcode}")`,
             patronEmail: `=HYPERLINK("mailto:${row.patronEmail}", "${row.patronEmail}")`,
             itemBarcode: `=HYPERLINK("${origin}/inventory/view/${row.instanceId}/${row.holdingsRecordId}/${row.itemId}", "${row.itemBarcode}")`,
-            loanPolicy: `=HYPERLINK("${origin}/settings/circulation/loan-policies/${row.loanPolicyId}, "${row.loanPolicyName}")`,
+            loanPolicy: `=HYPERLINK("${origin}/settings/circulation/loan-policies/${row.loanPolicyId}", "${row.loanPolicyName}")`,
             overduePolicy: `=HYPERLINK("${origin}/settings/circulation/fine-policies/${row.overdueFinePolicyId}", "${row.overdueFinePolicyName}")`,
             lostItemPolicy: `=HYPERLINK("${origin}/settings/circulation/lost-item-fee-policy/${row.lostItemPolicyId}", "${row.lostItemPolicyName}")`,
             loanDetails: `=HYPERLINK("${origin}/users/${row.patronId}/loans/view/${row.loanId}", "${row.loanId}")`,

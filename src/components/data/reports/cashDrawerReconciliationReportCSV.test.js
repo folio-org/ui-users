@@ -17,7 +17,6 @@ describe('Cash Drawer Reconciliation Report in CSV format', () => {
   });
 });
 
-
 describe('Cash Drawer Reconciliation Report in CSV format (empty data)', () => {
   const report = new CashDrawerReconciliationReportCSV(emptyOptions);
 

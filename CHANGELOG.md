@@ -10,6 +10,7 @@
 * Comment icon is missing again on Fee/Fine History page. Refs UIU-2185.
 * Add `resourceShouldRefresh` to `permissions` resource to refresh permissions. Fixes UIU-2183.
 * Add modal for `Financial transactions detail report`. Refs UIU-1960.
+* Create `Financial transactions detail report`. Refs UIU-1962.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)

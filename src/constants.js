@@ -266,6 +266,7 @@ export const financialTransactionsMainReportColumns = [
   'feeFineBilledDate',
   'feeFineCreated',
   'feeFineSource',
+  'feeFineDetails',
   'action',
   'actionAmount',
   'actionDate',
