@@ -44,15 +44,15 @@ const settingsGeneral = [
     component: DepartmentsSettings,
     perm: 'ui-users.settings.departments.view'
   },
-//   Profile pictures are currently unsupported in Folio and the existence of this setting has
-//   confused implementers. Commenting out for now as opposed to deleting it so the existing 
-//   files and components aren't orphaned.
-//   { 
-//     route: 'profilepictures',
-//     label: <FormattedMessage id="ui-users.settings.profilePictures" />,
-//     component: ProfilePictureSettings,
-//     perm: 'ui-users.settings.profilePictures'
-//   },
+  //   Profile pictures are currently unsupported in Folio and the existence of this setting has
+  //   confused implementers. Commenting out for now as opposed to deleting it so the existing 
+  //   files and components aren't orphaned.
+  //   { 
+  //     route: 'profilepictures',
+  //     label: <FormattedMessage id="ui-users.settings.profilePictures" />,
+  //     component: ProfilePictureSettings,
+  //     perm: 'ui-users.settings.profilePictures'
+  //   },
   {
     route: 'custom-fields',
     label: <FormattedMessage id="ui-users.settings.customFields" />,
