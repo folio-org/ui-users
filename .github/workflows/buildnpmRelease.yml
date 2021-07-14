@@ -12,10 +12,10 @@
 #   - COMPILE_TRANSLATION_FILES (boolean 'true' or 'false')
 
 name: buildNPM release
-on:
-    release:
-      tags:
-        - 'v*.*.*'
+on: [push, pull_request]
+    # release:
+    #   tags:
+    #     - 'v*.*.*'
 jobs:
   Build:
     env:
@@ -80,8 +80,17 @@ jobs:
         if: ${{ env.PUBLISH_MOD_DESCRIPTOR }}
         run: cat module-descriptor.json
 
-      - name: Okapi Module Dependency check
-        run: echo "Mod dep check"
+      - name: Docker registry login
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login https://docker.io/v2/ -u "${{ secrets.DOCKER_USER }}" --password-stdin
+
+      - name: Okapi image pull and ip extraction
+        run: |
+          docker pull folioorg/okapi:latest
+          docker run --name okapiLatest folioorg/okapi:latest dev
+          echo "OKAPI_IP = $(docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}} okapiLatest)" >> $GITHUB_ENV
+          echo ${{ env.OKAPI_IP }} 
+        
+      
 
       - name: Publish Jest unit test results
         uses: docker://ghcr.io/enricomi/publish-unit-test-result-action:v1
