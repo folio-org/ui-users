@@ -202,7 +202,7 @@ jobs:
           method: 'POST'
           contentType: 'application/json; charset=utf-8'
           customHeaders: '{ "Accept": "application/json; charset=utf-8" }'
-          data: ${{ env.OKAPI_PULL }}
+          
 
       - name: Post the generated Module descriptors'
         uses: fjogeleit/http-request-action@master
