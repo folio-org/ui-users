@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## 6.1.2 IN PROGRESS
+
+* Shared manual fees/fines not showing up for new fee/fine owner. Refs UIU-2208.
+
 ## [6.1.1](https://github.com/folio-org/ui-users/tree/v6.1.1) (2021-07-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.1.0...v6.1.1)
 
