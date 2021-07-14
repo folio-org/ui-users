@@ -66,7 +66,9 @@ jobs:
         continue-on-error: true
 
       - name: Run yarn test
-        run: xvfb-run --server-args="-screen 0 1024x768x24" yarn test $YARN_TEST_OPTIONS
+        run: |
+          cd /home/runner/work/ui-users
+          xvfb-run --server-args="-screen 0 1024x768x24" yarn test $YARN_TEST_OPTIONS
 
       - name: Run yarn formatjs-compile
         if : ${{ env.COMPILE_TRANSLATION_FILES }}
