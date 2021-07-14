@@ -21,7 +21,7 @@ jobs:
     env:
       YARN_TEST_OPTIONS: '--ci --coverage --colors'
       FOLIO_NAME: folio_users
-      FOLIO_NPM_REGISTRY: 'https://repository.folio.org/repository/npm-folio-test/'
+      FOLIO_NPM_REGISTRY: 'https://repository.folio.org/repository/npm-folio/'
       NODEJS_VERSION: '12'
       JEST_JUNIT_OUTPUT_DIR: 'artifacts/jest-junit'
       JEST_COVERAGE_REPORT_DIR: 'artifacts/coverage-jest/lcov-report/'
