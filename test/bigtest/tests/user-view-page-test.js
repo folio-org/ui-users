@@ -59,6 +59,10 @@ describe('User view', () => {
         it('should display export fee fine report button', () => {
           expect(InstanceViewPage.actionMenuExportFeeFineReport.isPresent).to.be.true;
         });
+
+        it('should display check delete user button', () => {
+          expect(InstanceViewPage.actionMenuCheckDelete.isPresent).to.be.true;
+        });
       });
 
       describe('Export Fees/Fines report', () => {

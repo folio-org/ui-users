@@ -40,6 +40,8 @@ import CashDrawerReportModal from '../../components/ReportModals/CashDrawerRepor
 
 import CsvReport from '../../components/data/reports';
 import RefundsReport from '../../components/data/reports/RefundReport';
+import CashDrawerReconciliationReportPDF from '../../components/data/reports/cashDrawerReconciliationReportPDF';
+import CashDrawerReconciliationReportCSV from '../../components/data/reports/cashDrawerReconciliationReportCSV';
 import Filters from './Filters';
 import css from './UserSearch.css';
 
@@ -82,7 +84,7 @@ class UserSearch extends React.Component {
       patronGroups: PropTypes.object,
       departments: PropTypes.object,
       owners: PropTypes.object,
-      servicePointsUsers: PropTypes.object.isRequired,
+      servicePointsUsers: PropTypes.object,
       query: PropTypes.shape({
         qindex: PropTypes.string,
       }).isRequired,
@@ -499,6 +501,7 @@ class UserSearch extends React.Component {
       endDate,
       servicePoint,
       sources = [],
+      format,
     } = data;
 
     if (this.state.cashDrawerReportInProgress) {
@@ -510,7 +513,11 @@ class UserSearch extends React.Component {
       showCashDrawerReportModal: false,
     });
 
-    const { mutator: { cashDrawerReport } } = this.props;
+    const {
+      mutator: { cashDrawerReport },
+      okapi: { currentUser },
+      intl,
+    } = this.props;
     const reportParameters = {
       createdAt: servicePoint,
       sources: sources.map(s => s.label),
@@ -520,15 +527,43 @@ class UserSearch extends React.Component {
 
     try {
       this.context.sendCallout({ message: <FormattedMessage id="ui-users.reports.inProgress" /> });
-      const { reportData } = await cashDrawerReport.POST(reportParameters);
+      const reportData = await cashDrawerReport.POST(reportParameters);
 
-      if (isEmpty(reportData)) {
+      if (isEmpty(reportData?.reportData)) {
         this.context.sendCallout({
           type: 'error',
           message: <FormattedMessage id="ui-users.reports.noItemsFound" />,
         });
       } else {
-        // TODO: form the report depends on format
+        const servicePoints = currentUser.servicePoints;
+        const chosenServicePoint = servicePoints.find(sp => sp.id === servicePoint);
+        const headerData = {
+          ...reportParameters,
+          createdAt: chosenServicePoint?.name ?? '',
+          sources: reportParameters.sources.join(', '),
+        };
+        const reportParams = {
+          data: reportData,
+          intl,
+          headerData,
+        };
+        const reportPDF = new CashDrawerReconciliationReportPDF(reportParams);
+        const reportCSV = new CashDrawerReconciliationReportCSV(reportParams);
+
+        switch (format) {
+          case 'pdf':
+            reportPDF.toPDF();
+            break;
+          case 'csv':
+            reportCSV.toCSV();
+            break;
+          case 'both':
+            reportPDF.toPDF();
+            reportCSV.toCSV();
+            break;
+          default:
+            reportPDF.toPDF();
+        }
       }
     } catch (error) {
       if (error) {

@@ -437,6 +437,9 @@ describe('Claim returned', () => {
             it('Suspended claim returned payment status', () => {
               expect(FeeFineHistoryInteractor.mclViewFeesFines.rows(0).cells(6).text).to.equal(refundClaimReturned.PAYMENT_STATUS);
             });
+            it('Remaining claim returned', () => {
+              expect(FeeFineHistoryInteractor.mclViewFeesFines.rows(0).cells(5).text).to.equal('200.00');
+            });
 
             describe('visit Fee/fine details', () => {
               beforeEach(async function () {
@@ -444,23 +447,22 @@ describe('Claim returned', () => {
                 await FeeFineHistoryInteractor.rows(0).click();
               });
               it('Refunded fully-Claim returned  Action', () => {
-                expect(FeeFineHistoryInteractor.mclAccountActions.rows(0).cells(1).text).to.equal(refundClaimReturned.REFUNDED_ACTION);
+                expect(FeeFineHistoryInteractor.mclAccountActions.rows(1).cells(1).text).to.equal(refundClaimReturned.REFUNDED_ACTION);
               });
-
               it('Credited fully-Claim returned  Action', () => {
-                expect(FeeFineHistoryInteractor.mclAccountActions.rows(1).cells(1).text).to.equal(refundClaimReturned.CREDITED_ACTION);
-              });
-              it('Credited fully-Claim returned Balance', () => {
-                expect(FeeFineHistoryInteractor.mclAccountActions.rows(0).cells(3).text).to.equal('200.00');
-              });
-              it('Credited fully-Claim returned  Amount', () => {
-                expect(FeeFineHistoryInteractor.mclAccountActions.rows(0).cells(2).text).to.equal('180.00');
+                expect(FeeFineHistoryInteractor.mclAccountActions.rows(0).cells(1).text).to.equal(refundClaimReturned.CREDITED_ACTION);
               });
               it('Refunded fully-Claim returned Balance', () => {
-                expect(FeeFineHistoryInteractor.mclAccountActions.rows(1).cells(3).text).to.equal('-');
+                expect(FeeFineHistoryInteractor.mclAccountActions.rows(1).cells(3).text).to.equal('200.00');
               });
               it('Refunded fully-Claim returned  Amount', () => {
                 expect(FeeFineHistoryInteractor.mclAccountActions.rows(1).cells(2).text).to.equal('180.00');
+              });
+              it('Credited fully-Claim returned Balance', () => {
+                expect(FeeFineHistoryInteractor.mclAccountActions.rows(0).cells(3).text).to.equal('-');
+              });
+              it('Credited fully-Claim returned  Amount', () => {
+                expect(FeeFineHistoryInteractor.mclAccountActions.rows(0).cells(2).text).to.equal('180.00');
               });
             });
           });
@@ -580,6 +582,9 @@ describe('Claim returned', () => {
             it('Suspended claim returned payment status', () => {
               expect(FeeFineHistoryInteractor.mclViewFeesFines.rows(0).cells(6).text).to.equal(refundClaimReturned.PAYMENT_STATUS);
             });
+            it('Remaining claim returned', () => {
+              expect(FeeFineHistoryInteractor.mclViewFeesFines.rows(0).cells(5).text).to.equal('200.00');
+            });
 
             describe('visit Fee/fine details', () => {
               beforeEach(async function () {
@@ -587,23 +592,23 @@ describe('Claim returned', () => {
                 await FeeFineHistoryInteractor.rows(0).click();
               });
               it('Refunded fully-Claim returned  Action', () => {
-                expect(FeeFineHistoryInteractor.mclAccountActions.rows(0).cells(1).text).to.equal(refundClaimReturned.REFUNDED_ACTION);
+                expect(FeeFineHistoryInteractor.mclAccountActions.rows(1).cells(1).text).to.equal(refundClaimReturned.REFUNDED_ACTION);
               });
 
               it('Credited fully-Claim returned  Action', () => {
-                expect(FeeFineHistoryInteractor.mclAccountActions.rows(1).cells(1).text).to.equal(refundClaimReturned.CREDITED_ACTION);
-              });
-              it('Credited fully-Claim returned Balance', () => {
-                expect(FeeFineHistoryInteractor.mclAccountActions.rows(0).cells(3).text).to.equal('200.00');
-              });
-              it('Credited fully-Claim returned  Amount', () => {
-                expect(FeeFineHistoryInteractor.mclAccountActions.rows(0).cells(2).text).to.equal('180.00');
+                expect(FeeFineHistoryInteractor.mclAccountActions.rows(0).cells(1).text).to.equal(refundClaimReturned.CREDITED_ACTION);
               });
               it('Refunded fully-Claim returned Balance', () => {
-                expect(FeeFineHistoryInteractor.mclAccountActions.rows(1).cells(3).text).to.equal('-');
+                expect(FeeFineHistoryInteractor.mclAccountActions.rows(1).cells(3).text).to.equal('200.00');
               });
               it('Refunded fully-Claim returned  Amount', () => {
                 expect(FeeFineHistoryInteractor.mclAccountActions.rows(1).cells(2).text).to.equal('180.00');
+              });
+              it('Credited fully-Claim returned Balance', () => {
+                expect(FeeFineHistoryInteractor.mclAccountActions.rows(0).cells(3).text).to.equal('-');
+              });
+              it('Credited fully-Claim returned  Amount', () => {
+                expect(FeeFineHistoryInteractor.mclAccountActions.rows(0).cells(2).text).to.equal('180.00');
               });
             });
           });
@@ -753,6 +758,9 @@ describe('Claim returned', () => {
             it('Suspended claim returned payment status', () => {
               expect(FeeFineHistoryInteractor.mclViewFeesFines.rows(0).cells(6).text).to.equal(refundClaimReturned.PAYMENT_STATUS);
             });
+            it('Remaining claim returned', () => {
+              expect(FeeFineHistoryInteractor.mclViewFeesFines.rows(0).cells(5).text).to.equal('200.00');
+            });
 
             describe('visit Fee/fine details', () => {
               beforeEach(async function () {
@@ -760,14 +768,14 @@ describe('Claim returned', () => {
                 await FeeFineHistoryInteractor.rows(0).click();
               });
               it('Refunded fully-Claim returned  Action', () => {
-                expect(FeeFineHistoryInteractor.mclAccountActions.rows(0).cells(1).text).to.equal(refundClaimReturned.REFUNDED_ACTION);
+                expect(FeeFineHistoryInteractor.mclAccountActions.rows(1).cells(1).text).to.equal(refundClaimReturned.REFUNDED_ACTION);
               });
 
               it('Credited fully-Claim returned  Action', () => {
-                expect(FeeFineHistoryInteractor.mclAccountActions.rows(1).cells(1).text).to.equal(refundClaimReturned.CREDITED_ACTION);
+                expect(FeeFineHistoryInteractor.mclAccountActions.rows(0).cells(1).text).to.equal(refundClaimReturned.CREDITED_ACTION);
               });
-              it('Refunded fully-Claim returned Balance', () => {
-                expect(FeeFineHistoryInteractor.mclAccountActions.rows(1).cells(3).text).to.equal('-');
+              it('Credited fully-Claim returned Balance', () => {
+                expect(FeeFineHistoryInteractor.mclAccountActions.rows(0).cells(3).text).to.equal('-');
               });
             });
           });

@@ -26,7 +26,7 @@ import {
 
 import { DATE_FORMAT } from '../../constants';
 
-const validate = (options) => {
+export const validate = (options) => {
   const errors = {};
   const { startDate, endDate, servicePoint } = options;
 
@@ -46,10 +46,6 @@ const validate = (options) => {
     errors.servicePoint = <FormattedMessage id="ui-users.reports.cash.drawer.report.servicePoint.error" />;
   }
 
-  if (!options.format) {
-    options.format = 'both';
-  }
-
   return errors;
 };
 
@@ -65,24 +61,20 @@ const CashDrawerReportModal = (props) => {
     value: id,
     label: name,
   }));
-  const getSources = async (value) => {
-    if (!value) {
-      return undefined;
+
+  useMemo(() => {
+    if (servicePointsValue) {
+      cashDrawerReportSources.POST({ createdAt: servicePointsValue })
+        .then(response => {
+          const responseSources = response?.sources ?? [];
+          const formatSources = responseSources.map((sourceName, index) => ({
+            value: `source-${index}`,
+            label: sourceName,
+          }));
+          setSources(formatSources || []);
+        });
     }
-
-    const response = await cashDrawerReportSources.POST({ createdAt: value });
-    const responseSources = response?.sources ?? [];
-    const formatSources = responseSources.map((sourceName, index) => ({
-      value: `source-${index}`,
-      label: sourceName,
-    }));
-    setSources(formatSources || []);
-
-    return undefined;
-  };
-
-  useMemo(() => getSources(servicePointsValue), [servicePointsValue])
-    .then(response => response);
+  }, [cashDrawerReportSources, servicePointsValue]);
 
   const footer = (
     <ModalFooter>
@@ -131,7 +123,6 @@ const CashDrawerReportModal = (props) => {
             <Field
               label={<FormattedMessage id="ui-users.reports.refunds.modal.endDate" />}
               name="endDate"
-              required
               component={Datepicker}
               parse={parseDate}
             />

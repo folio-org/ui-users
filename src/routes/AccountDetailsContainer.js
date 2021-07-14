@@ -175,6 +175,7 @@ class AccountDetailsContainer extends React.Component {
     const overdueFinePolicyId = currentRecord[0]?.overdueFinePolicyId;
     const lostItemPolicyName = currentRecord[0]?.lostItemPolicy?.name;
     const lostItemPolicyId = currentRecord[0]?.lostItemPolicyId;
+    const statusItemName = currentRecord[0]?.item.status?.name;
 
     return {
       overdueFinePolicyId,
@@ -182,6 +183,7 @@ class AccountDetailsContainer extends React.Component {
       contributors,
       overdueFinePolicyName,
       lostItemPolicyName,
+      statusItemName,
     };
   }
 

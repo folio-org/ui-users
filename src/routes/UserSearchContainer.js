@@ -58,6 +58,10 @@ class UserSearchContainer extends React.Component {
         },
         staticFallback: { params: {} },
       },
+      shouldRefresh: (resource, action, refresh) => {
+        const { path } = action.meta;
+        return refresh || (path && path.match(/users/));
+      },
     },
     patronGroups: {
       type: 'okapi',

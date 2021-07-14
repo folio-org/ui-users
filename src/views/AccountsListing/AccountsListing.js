@@ -202,6 +202,9 @@ class AccountsHistory extends React.Component {
     const filter = _.get(this.props.resources, ['filter', 'records'], []);
     const nextFilter = _.get(nextProps.resources, ['filter', 'records'], []);
     const accounts = _.get(this.props.resources, ['feefineshistory', 'records'], []);
+    const loans = _.get(this.props.resources, ['loans', 'records'], []);
+    const nextLoans = _.get(nextProps.resources, ['loans', 'records'], []);
+
     const nextAccounts = _.get(nextProps.resources, ['feefineshistory', 'records'], []);
     const comments = _.get(this.props.resources, ['comments', 'records'], []);
     const nextComments = _.get(nextProps.resources, ['comments', 'records'], []);
@@ -221,6 +224,7 @@ class AccountsHistory extends React.Component {
     return this.state !== nextState ||
       filter !== nextFilter ||
       accounts !== nextAccounts ||
+      loans !== nextLoans ||
       comments !== nextComments;
   }
 
@@ -438,6 +442,7 @@ class AccountsHistory extends React.Component {
       patronGroup,
       resources,
       intl,
+      loans
     } = this.props;
     const query = location.search ? queryString.parse(location.search) : {};
     let accounts = _.get(resources, ['feefineshistory', 'records'], []);
@@ -640,6 +645,7 @@ class AccountsHistory extends React.Component {
                 {params.accountstatus === 'open' &&
                   (<ViewFeesFines
                     {...this.props}
+                    loans={loans}
                     accounts={this.filterAccountsByStatus(accounts, 'open')}
                     feeFineActions={feeFineActions}
                     visibleColumns={visibleColumns}
@@ -651,6 +657,7 @@ class AccountsHistory extends React.Component {
                 {params.accountstatus === 'closed' &&
                   (<ViewFeesFines
                     {...this.props}
+                    loans={loans}
                     accounts={this.filterAccountsByStatus(accounts, 'closed')}
                     visibleColumns={visibleColumns}
                     feeFineActions={feeFineActions}
@@ -662,6 +669,7 @@ class AccountsHistory extends React.Component {
                 {params.accountstatus === 'all' &&
                   (<ViewFeesFines
                     {...this.props}
+                    loans={loans}
                     accounts={userOwned ? accounts : []}
                     feeFineActions={feeFineActions}
                     visibleColumns={visibleColumns}

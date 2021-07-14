@@ -20,6 +20,9 @@ module.exports = {
   },
   testMatch: ['**/(lib|src)/**/?(*.)test.{js,jsx}'],
   testPathIgnorePatterns: ['/node_modules/', '/test/bigtest/', '/test/ui-testing/'],
-  setupFiles: [path.join(__dirname, './test/jest/setupTests.js')],
+  setupFiles: [
+    path.join(__dirname, './test/jest/setupTests.js'),
+    'jest-canvas-mock'
+  ],
   setupFilesAfterEnv: [path.join(__dirname, './test/jest/jest.setup.js')],
 };

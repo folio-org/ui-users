@@ -1,13 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  Button,
-  Dropdown,
-  DropdownMenu,
-  MultiColumnList,
-} from '@folio/stripes/components';
-
+import { Link } from 'react-router-dom';
 import {
   FormattedDate,
   FormattedMessage,
@@ -15,15 +9,26 @@ import {
 } from 'react-intl';
 
 import {
+  Button,
+  Dropdown,
+  DropdownMenu,
+  MultiColumnList,
+  Popover,
+  Row,
+  Col,
+  Icon,
+} from '@folio/stripes/components';
+
+import { itemStatuses } from '../../../constants';
+import {
   calculateSortParams,
   nav,
 } from '../../util';
-
 import {
   isRefundAllowed,
   isCancelAllowed,
 } from '../accountFunctions';
-
+import css from './ViewFeesFines.css';
 
 class ViewFeesFines extends React.Component {
   static propTypes = {
@@ -169,6 +174,46 @@ class ViewFeesFines extends React.Component {
     />;
   }
 
+  showComments = (feeFine) => {
+    const feeFineType = feeFine.feeFineType ? feeFine.feeFineType : '';
+    const comments = _.get(this.props.resources, ['comments', 'records'], []);
+    const actions = _.orderBy(comments.filter(c => c.accountId === feeFine.id), ['dateAction'], ['asc']);
+    const myComments = actions.filter(a => a.comments).map(a => a.comments);
+    const commentsAmount = myComments.length;
+
+    return (
+      <div>
+        <Row>
+          <Col>{feeFineType}</Col>
+          {commentsAmount ?
+            <Col className={css.iconColumn}>
+              <Popover>
+                <div data-role="target">
+                  <Icon
+                    icon="comment"
+                    size="small"
+                  />
+                </div>
+                <p data-role="popover">
+                  <b>
+                    <FormattedMessage
+                      id="ui-users.accounts.history.staff.info"
+                      values={{ count: commentsAmount }}
+                    />
+                  </b>
+                  {` ${myComments[commentsAmount - 1]} `}
+                  <Link to={`/users/${feeFine.userId}/accounts/view/${feeFine.id}`}>
+                    <FormattedMessage id="ui-users.accounts.history.link.details" />
+                  </Link>
+                </p>
+              </Popover>
+            </Col>
+            : null}
+        </Row>
+      </div>
+    );
+  }
+
   getAccountsFormatter() {
     const accounts = this.props.selectedAccounts;
     return {
@@ -181,7 +226,7 @@ class ViewFeesFines extends React.Component {
       ),
       'metadata.createdDate': f => (f.metadata ? <FormattedDate value={f.metadata.createdDate} /> : '-'),
       'metadata.updatedDate': f => (f.metadata && f.metadata.createdDate !== f.metadata.updatedDate ? <FormattedDate value={f.metadata.updatedDate} /> : '-'),
-      'feeFineType': f => (f.feeFineType ?? '-'),
+      'feeFineType': f => (f.feeFineType ? this.showComments(f) : '-'),
       'amount': f => (f.amount ? parseFloat(f.amount).toFixed(2) : '-'),
       'remaining': f => parseFloat(f.remaining).toFixed(2) || '0.00',
       'paymentStatus.name': f => (f.paymentStatus || {}).name || '-',
@@ -191,7 +236,7 @@ class ViewFeesFines extends React.Component {
       'callNumber': f => (f.callNumber ? f.callNumber : '-'),
       'dueDate': f => (f.dueDate ? this.formatDateTime(f.dueDate) : '-'),
       'returnedDate': f => (this.getLoan(f).returnDate ? this.formatDateTime(this.getLoan(f).returnDate) : '-'),
-      ' ': f => this.renderActions(f),
+      ' ': f => this.renderActions(f, this.getLoan(f)),
     };
   }
 
@@ -209,23 +254,7 @@ class ViewFeesFines extends React.Component {
 
     const allChecked = _.size(checkedAccounts) === this.props.accounts.length;
     this.setState({ allChecked });
-    const values = Object.values(checkedAccounts);
-    let selected = 0;
-    values.forEach((v) => {
-      selected += (v.remaining * 100);
-    });
-
-    selected /= 100;
-    this.props.onChangeSelected(parseFloat(selected).toFixed(2), values);
-
-    const open = selected > 0;
-    const closed = values.length > 0;
-    this.props.onChangeActions({
-      waive: open,
-      transfer: open,
-      refund: open || closed,
-      regularpayment: open,
-    });
+    this.updateToggle(checkedAccounts);
   }
 
   toggleAll(e) {
@@ -233,11 +262,22 @@ class ViewFeesFines extends React.Component {
     const checkedAccounts = (e.target.checked)
       ? accounts.reduce((memo, a) => (Object.assign(memo, { [a.id]: a })), {})
       : {};
+
+    this.updateToggle(checkedAccounts);
+    this.setState(({ allChecked }) => ({
+      allChecked: !allChecked
+    }));
+  }
+
+  updateToggle(checkedAccounts) {
     const values = Object.values(checkedAccounts);
 
     let selected = 0;
+    let someIsClaimReturnedItem = false;
     values.forEach((v) => {
       selected += (v.remaining * 100);
+      const loan = this.getLoan(v);
+      someIsClaimReturnedItem = (someIsClaimReturnedItem || (loan.item && loan.item.status && loan.item.status.name && loan.item.status.name === itemStatuses.CLAIMED_RETURNED));
     });
     selected /= 100;
     this.props.onChangeSelected(parseFloat(selected).toFixed(2), values);
@@ -245,15 +285,11 @@ class ViewFeesFines extends React.Component {
     const open = selected > 0;
     const closed = values.length > 0;
     this.props.onChangeActions({
-      waive: open,
-      transfer: open,
-      refund: open || closed,
-      regularpayment: open,
+      waive: open && !someIsClaimReturnedItem,
+      transfer: open && !someIsClaimReturnedItem,
+      refund: ((open && !someIsClaimReturnedItem) || closed),
+      regularpayment: open && !someIsClaimReturnedItem,
     });
-
-    this.setState(({ allChecked }) => ({
-      allChecked: !allChecked
-    }));
   }
 
   rowUpdater = (f) => {
@@ -353,7 +389,7 @@ class ViewFeesFines extends React.Component {
    * return the ellipses menu, a <Dropdown>
    * @param a object: an account
    */
-  renderActions(a) {
+  renderActions(a, loan) {
     const { feeFineActions = [] } = this.props;
 
     // disable ellipses menu actions based on account-status
@@ -369,31 +405,32 @@ class ViewFeesFines extends React.Component {
 
     // disable ellipses menu actions based on permissions
     const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
-
+    const isClaimReturnedItem = (loan.item && loan.item.status && loan.item.status.name && loan.item.status.name === itemStatuses.CLAIMED_RETURNED);
+    const loanText = isDisabled.loan ? 'ui-users.accounts.history.button.loanAnonymized' : 'ui-users.accounts.history.button.loanDetails';
     return (
       <Dropdown
         renderTrigger={this.renderToggle}
         usePortal
       >
         <DropdownMenu id="ellipsis-drop-down">
-          <this.MenuButton disabled={isDisabled.pay || buttonDisabled} account={a} action="pay">
+          <this.MenuButton disabled={isDisabled.pay || buttonDisabled || isClaimReturnedItem} account={a} action="pay">
             <FormattedMessage id="ui-users.accounts.history.button.pay" />
           </this.MenuButton>
-          <this.MenuButton disabled={isDisabled.waive || buttonDisabled} account={a} action="waive">
+          <this.MenuButton disabled={isDisabled.waive || buttonDisabled || isClaimReturnedItem} account={a} action="waive">
             <FormattedMessage id="ui-users.accounts.history.button.waive" />
           </this.MenuButton>
-          <this.MenuButton disabled={isDisabled.refund || buttonDisabled} account={a} action="refund">
+          <this.MenuButton disabled={isDisabled.refund || buttonDisabled || isClaimReturnedItem} account={a} action="refund">
             <FormattedMessage id="ui-users.accounts.history.button.refund" />
           </this.MenuButton>
-          <this.MenuButton disabled={isDisabled.transfer || buttonDisabled} account={a} action="transfer">
+          <this.MenuButton disabled={isDisabled.transfer || buttonDisabled || isClaimReturnedItem} account={a} action="transfer">
             <FormattedMessage id="ui-users.accounts.history.button.transfer" />
           </this.MenuButton>
-          <this.MenuButton disabled={isDisabled.error || buttonDisabled} account={a} action="cancel">
+          <this.MenuButton disabled={isDisabled.error || buttonDisabled || isClaimReturnedItem} account={a} action="cancel">
             <FormattedMessage id="ui-users.accounts.button.error" />
           </this.MenuButton>
           <hr />
           <this.MenuButton disabled={isDisabled.loan || buttonDisabled} account={a} action="loanDetails">
-            <FormattedMessage id="ui-users.accounts.history.button.loanDetails" />
+            <FormattedMessage id={loanText} />
           </this.MenuButton>
         </DropdownMenu>
       </Dropdown>

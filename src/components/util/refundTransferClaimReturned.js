@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import moment from 'moment';
-import { refundClaimReturned, itemStatuses } from '../../constants';
+import { refundClaimReturned, itemStatuses, accountStatuses } from '../../constants';
 
 
 class RefundTransferCR {
@@ -30,6 +30,8 @@ refundTransfers = async (loan, props) => {
   const setPaymentStatus = record => {
     const updatedRec = _.cloneDeep(record);
     updatedRec.paymentStatus.name = refundClaimReturned.PAYMENT_STATUS;
+    updatedRec.remaining = record.amount;
+    updatedRec.status.name = accountStatuses.OPEN;
     return updatedRec;
   };
 
@@ -115,10 +117,10 @@ refundTransfers = async (loan, props) => {
     return persistRefundAction(newAction);
   };
 
-  const createRefunds = (account, actions) => {
+  const createRefunds = async (account, actions) => {
     if (actions.length > 0) {
-      createRefundActionTemplate(account, actions, refundClaimReturned.REFUNDED_ACTION).then(
-        createRefundActionTemplate(account, actions, refundClaimReturned.CREDITED_ACTION)
+      createRefundActionTemplate(account, actions, refundClaimReturned.CREDITED_ACTION).then(
+        () => createRefundActionTemplate(account, actions, refundClaimReturned.REFUNDED_ACTION)
       );
     }
   };
@@ -190,7 +192,7 @@ refundTransfers = async (loan, props) => {
           return {
             idFeeFineOwner: account.ownerId,
             account,
-            actions: transferredActions[index]
+            actions: transferredActions[index],
           };
         });
       const groupByOwner = _(accountsWithTransferredActions)
