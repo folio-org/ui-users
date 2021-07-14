@@ -205,7 +205,6 @@ jobs:
           data: ${{ env.OKAPI_PULL }}
 
       - name: Post the generated Module descriptors'
-        id: modDescriptorPost
         uses: fjogeleit/http-request-action@master
         with:
           url: 'http://${{ env.OKAPI_IP }}:9130/_/proxy/modules?preRelease=false&npmSnapshot=false'
