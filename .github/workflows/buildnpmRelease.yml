@@ -91,11 +91,8 @@ jobs:
         run: |
           docker pull folioorg/okapi:latest
           docker run --name okapiLatest -t -detach folioorg/okapi:latest dev
-          echo "OKAPI_IP = $(echo docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' okapiLatest)" >> $GITHUB_ENV
-          echo ${{ env.OKAPI_IP }} 
+          docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' okapiLatest
         
-      
-
       - name: Publish Jest unit test results
         uses: docker://ghcr.io/enricomi/publish-unit-test-result-action:v1
         if: always()
