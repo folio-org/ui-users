@@ -1,5 +1,11 @@
 # Change history for ui-users
 
+## [6.1.1](https://github.com/folio-org/ui-users/tree/v6.1.1) (2021-07-15)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v6.1.0...v6.1.1)
+
+* Fix order refund and credit actions. Refs UIU-2178.
+* Lost Item Processing Fee changes from outstanding to suspended. Refs UIU-2177.
+
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
 
