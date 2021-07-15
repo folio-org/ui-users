@@ -198,11 +198,13 @@ jobs:
       - name: Pull all Module descriptors
         uses: fjogeleit/http-request-action@master
         with:
-          url: http://env.OKAPI_IP:9130/_/proxy/pull/modules
+          url: http://$OKAPI_IP2:9130/_/proxy/pull/modules
           method: 'POST'
           contentType: 'application/json; charset=utf-8'
           customHeaders: '{ "Accept": "application/json; charset=utf-8" }'
           data: ${{ env.OKAPI_PULL }}
+        env:
+          OKAPI_IP2: ${{ env.OKAPI_IP }}
 
       - name: Post the generated Module descriptors'
         uses: fjogeleit/http-request-action@master
