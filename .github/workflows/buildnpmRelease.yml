@@ -21,7 +21,7 @@ jobs:
     env:
       YARN_TEST_OPTIONS: '--ci --coverage --colors'
       FOLIO_NAME: folio_users
-      FOLIO_NPM_REGISTRY: 'https://repository.folio.org/repository/npm-folio/'
+      FOLIO_NPM_REGISTRY: 'https://folio-registry.folio-dev.folio.org/'
       NODEJS_VERSION: '12'
       JEST_JUNIT_OUTPUT_DIR: 'artifacts/jest-junit'
       JEST_COVERAGE_REPORT_DIR: 'artifacts/coverage-jest/lcov-report/'
@@ -203,8 +203,6 @@ jobs:
           contentType: 'application/json; charset=utf-8'
           customHeaders: '{ "Accept": "application/json; charset=utf-8" }'
           data: ${{ env.OKAPI_PULL }}
-
-          
 
       - name: Post the generated Module descriptors'
         uses: fjogeleit/http-request-action@master
