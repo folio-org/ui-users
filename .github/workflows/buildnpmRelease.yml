@@ -198,7 +198,7 @@ jobs:
       - name: Pull all Module descriptors
         uses: fjogeleit/http-request-action@master
         with:
-          url: http://${{ env.OKAPI_IP }}/_/proxy/pull/modules
+          url: http://172.17.0.2:9130/_/proxy/pull/modules
           method: 'POST'
           contentType: 'application/json; charset=utf-8'
           customHeaders: '{ "Accept": "application/json; charset=utf-8" }'
