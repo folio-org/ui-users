@@ -28,7 +28,7 @@ jobs:
       BIGTEST_JUNIT_OUTPUT_DIR: 'artifacts/runTest'
       BIGTEST_COVERAGE_REPORT_DIR: 'artifacts/coverage/lcov-report/'
       PUBLISH_MOD_DESCRIPTOR: true
-      OKAPI_PULL: '{ "urls" : [ "https://repository.folio.org/repository/npm-folio-test/" ] }'
+      OKAPI_PULL: '{ "urls" : [ "https://folio-registry.folio-dev.folio.org" ] }'
       SQ_ROOT_DIR: './src'
       COMPILE_TRANSLATION_FILES: true
       SQ_LCOV_REPORT: 'artifacts/coverage-jest/lcov.info'
@@ -198,7 +198,7 @@ jobs:
       - name: Pull all Module descriptors
         uses: fjogeleit/http-request-action@master
         with:
-          url: http://172.17.0.2:9130/_/proxy/pull/modules
+          url: http://env.OKAPI_IP:9130/_/proxy/pull/modules
           method: 'POST'
           contentType: 'application/json; charset=utf-8'
           customHeaders: '{ "Accept": "application/json; charset=utf-8" }'
