@@ -21,14 +21,14 @@ jobs:
     env:
       YARN_TEST_OPTIONS: '--ci --coverage --colors'
       FOLIO_NAME: folio_users
-      FOLIO_NPM_REGISTRY: 'https://folio-registry.folio-dev.folio.org/'
+      FOLIO_NPM_REGISTRY: 'https://repository.folio.org/repository/npm-folio/'
       NODEJS_VERSION: '12'
       JEST_JUNIT_OUTPUT_DIR: 'artifacts/jest-junit'
       JEST_COVERAGE_REPORT_DIR: 'artifacts/coverage-jest/lcov-report/'
       BIGTEST_JUNIT_OUTPUT_DIR: 'artifacts/runTest'
       BIGTEST_COVERAGE_REPORT_DIR: 'artifacts/coverage/lcov-report/'
       PUBLISH_MOD_DESCRIPTOR: true
-      OKAPI_PULL: '{ "urls" : [ "https://repository.folio.org/repository/npm-folio-test/" ] }'
+      OKAPI_PULL: '{ "urls" : [ "https://folio-registry.folio-dev.folio.org/" ] }'
       SQ_ROOT_DIR: './src'
       COMPILE_TRANSLATION_FILES: true
       SQ_LCOV_REPORT: 'artifacts/coverage-jest/lcov.info'
