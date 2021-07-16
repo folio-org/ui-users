@@ -680,8 +680,8 @@ class UserDetail extends React.Component {
                   backendModuleName="users"
                   entityType="user"
                   customFieldsValues={customFields}
-                  customFieldsLabel="ui-users.custom.customFields"
-                  noCustomFieldsFoundLabel="ui-users.custom.noCustomFieldsFound"
+                  customFieldsLabel={<FormattedMessage id="ui-users.custom.customFields" />}
+                  noCustomFieldsFoundLabel={<FormattedMessage id="ui-users.custom.noCustomFieldsFound" />}
                 />
                 <IfPermission perm="proxiesfor.collection.get">
                   <ProxyPermissions
