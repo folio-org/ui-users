@@ -13,6 +13,7 @@
 * The `date picker` for report modals is cut off and user is not able select date. Refs UIU-2204.
 * Shared manual fees/fines not showing up for new fee/fine owner. Refs UIU-2208.
 * Create `Financial transactions detail report`. Refs UIU-1962.
+* Add translations for Custom fields. Refs UIU-2210.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)

@@ -294,6 +294,8 @@
   "information.recalculate.modal.label": "Set expiration date?",
   "information.recalculate.will.reactivate.user": "User will reactivate after saving",
 
+  "custom.customFields": "Custom fields",
+  "custom.noCustomFieldsFound": "No custom fields found",
   "proxy.addProxy": "Add",
   "proxy.relationshipCreated": "Relationship Created",
   "proxy.relationshipStatus": "Relationship Status",
