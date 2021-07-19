@@ -785,13 +785,17 @@ class UserDetail extends React.Component {
             </Pane>
             { helperApp && <HelperApp appName={helperApp} onClose={this.closeHelperApp} /> }
             <Callout ref={(ref) => { this.callout = ref; }} />
-            <NotePopupModal
-              id="user-popup-note-modal"
-              domainName="users"
-              entityType="user"
-              popUpPropertyName="popUpOnUser"
-              entityId={user?.id}
-            />
+            <IfInterface name="notes">
+              <IfPermission perm="ui-notes.item.view">
+                <NotePopupModal
+                  id="user-popup-note-modal"
+                  domainName="users"
+                  entityType="user"
+                  popUpPropertyName="popUpOnUser"
+                  entityId={user?.id}
+                />
+              </IfPermission>
+            </IfInterface>
             {this.state.showDeleteUserModal &&
             <DeleteUserModal
               onCloseModal={this.doCloseTransactionDeleteModal}
