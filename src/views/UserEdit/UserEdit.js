@@ -173,6 +173,10 @@ class UserEdit extends React.Component {
     user.personal.email = user.personal.email.trim();
     user.departments = compact(user.departments);
 
+    if (!user.username) {
+      delete user.username;
+    }
+
     mutator.records.POST(user)
       .then(() => {
         this.createRequestPreferences(requestPreferences, user.id);

@@ -15,6 +15,7 @@
 * Create `Financial transactions detail report`. Refs UIU-1962.
 * Add translations for Custom fields. Refs UIU-2210.
 * Error window when opening or saving user data. Fixes UIU-2212.
+* Omit empty `username` during user creation. Fixes UIU-2214.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
