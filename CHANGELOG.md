@@ -5,6 +5,7 @@
 * Shared manual fees/fines not showing up for new fee/fine owner. Refs UIU-2208.
 * Error window when opening or saving user data. Fixes UIU-2212.
 * Omit empty `username` during user creation. Fixes UIU-2214.
+* Fix `Total owed amount`/`Total paid amount` on `Fee/Fine Details`. Refs UIU-2211.
 
 ## [6.1.1](https://github.com/folio-org/ui-users/tree/v6.1.1) (2021-07-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.1.0...v6.1.1)
