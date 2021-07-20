@@ -480,7 +480,7 @@ class ChargeFeeFine extends React.Component {
     const servicePointOwnerId = loadServicePoints({ owners: (shared ? owners : list), defaultServicePointId, servicePointsIds });
     const initialOwnerId = ownerId !== '0' ? ownerId : servicePointOwnerId;
     const selectedFeeFine = feefines.find(f => f.id === feeFineTypeId);
-    const currentOwnerFeeFineTypes = feefines.filter(f => f.ownerId === resources.activeRecord.ownerId);
+    const currentOwnerFeeFineTypes = feefines.filter(f => f.ownerId === resources.activeRecord.ownerId || f.ownerId === resources.activeRecord.shared);
     const selectedOwner = owners.find(o => o.id === initialOwnerId);
 
     const initialChargeValues = {

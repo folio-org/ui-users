@@ -11,6 +11,11 @@
 * Add `resourceShouldRefresh` to `permissions` resource to refresh permissions. Fixes UIU-2183.
 * Add modal for `Financial transactions detail report`. Refs UIU-1960.
 * The `date picker` for report modals is cut off and user is not able select date. Refs UIU-2204.
+* Shared manual fees/fines not showing up for new fee/fine owner. Refs UIU-2208.
+* Create `Financial transactions detail report`. Refs UIU-1962.
+* Add translations for Custom fields. Refs UIU-2210.
+* Error window when opening or saving user data. Fixes UIU-2212.
+* Omit empty `username` during user creation. Fixes UIU-2214.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
@@ -57,6 +62,7 @@
 * Handle empty report data in `CashDrawerReconciliationReportCSV`. Refs UIU-2184.
 * Fee/fine owners not available for selection on Transfer Fee/Fine modal. Refs UIU-2174.
 * Save the patron expiration with the time set to 23:59:59. Refs UIU-2182.
+* Compile translations to AST. Refs UIU-2115.
 
 ## [6.0.6](https://github.com/folio-org/ui-users/tree/v6.0.6) (2021-06-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.5...v6.0.6)
