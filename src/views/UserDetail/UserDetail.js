@@ -680,6 +680,8 @@ class UserDetail extends React.Component {
                   backendModuleName="users"
                   entityType="user"
                   customFieldsValues={customFields}
+                  customFieldsLabel={<FormattedMessage id="ui-users.custom.customFields" />}
+                  noCustomFieldsFoundLabel={<FormattedMessage id="ui-users.custom.noCustomFieldsFound" />}
                 />
                 <IfPermission perm="proxiesfor.collection.get">
                   <ProxyPermissions
@@ -783,13 +785,17 @@ class UserDetail extends React.Component {
             </Pane>
             { helperApp && <HelperApp appName={helperApp} onClose={this.closeHelperApp} /> }
             <Callout ref={(ref) => { this.callout = ref; }} />
-            <NotePopupModal
-              id="user-popup-note-modal"
-              domainName="users"
-              entityType="user"
-              popUpPropertyName="popUpOnUser"
-              entityId={user?.id}
-            />
+            <IfInterface name="notes">
+              <IfPermission perm="ui-notes.item.view">
+                <NotePopupModal
+                  id="user-popup-note-modal"
+                  domainName="users"
+                  entityType="user"
+                  popUpPropertyName="popUpOnUser"
+                  entityId={user?.id}
+                />
+              </IfPermission>
+            </IfInterface>
             {this.state.showDeleteUserModal &&
             <DeleteUserModal
               onCloseModal={this.doCloseTransactionDeleteModal}

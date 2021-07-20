@@ -9,6 +9,13 @@
 * Delete user confirmation message. Refs UIU-2193.
 * Comment icon is missing again on Fee/Fine History page. Refs UIU-2185.
 * Add `resourceShouldRefresh` to `permissions` resource to refresh permissions. Fixes UIU-2183.
+* Add modal for `Financial transactions detail report`. Refs UIU-1960.
+* The `date picker` for report modals is cut off and user is not able select date. Refs UIU-2204.
+* Shared manual fees/fines not showing up for new fee/fine owner. Refs UIU-2208.
+* Create `Financial transactions detail report`. Refs UIU-1962.
+* Add translations for Custom fields. Refs UIU-2210.
+* Error window when opening or saving user data. Fixes UIU-2212.
+* Omit empty `username` during user creation. Fixes UIU-2214.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
