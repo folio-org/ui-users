@@ -12,6 +12,11 @@ import { LoadingView } from '@folio/stripes/components';
 import { MAX_RECORDS } from '../constants';
 import { calculateOwedFeeFines } from '../components/Accounts/accountFunctions';
 import { AccountDetails } from '../views';
+import {
+  filterConfig,
+  queryFunction,
+  args,
+} from './feeFineConfig';
 
 class AccountDetailsContainer extends React.Component {
   static manifest = Object.freeze({
@@ -56,6 +61,7 @@ class AccountDetailsContainer extends React.Component {
     activeRecord: {
       accountId: '0',
       instanceId: '',
+      records: MAX_RECORDS,
     },
     loans: {
       type: 'okapi',
@@ -65,7 +71,32 @@ class AccountDetailsContainer extends React.Component {
     instance: {
       type: 'okapi',
       path: 'instance-storage/instances/%{activeRecord.instanceId}',
-    }
+    },
+    query: { initialValue: {} },
+    feefineshistory: {
+      type: 'okapi',
+      records: 'accounts',
+      path: 'accounts',
+      recordsRequired: '%{activeRecord.records}',
+      perRequest: MAX_RECORDS,
+      GET: {
+        params: {
+          query: queryFunction(
+            'feeFineType=*',
+            'feeFineType="%{query.query}*" or barcode="%{query.query}*" or materialType="%{query.query}" or title="%{query.query}*    " or feeFineOwner="%{query.query}*" or paymentStatus.name="%{query.query}"',
+            { userId: 'userId' },
+            filterConfig,
+            0,
+            { query: 'q', filters: 'f' },
+            args,
+          ),
+        },
+        staticFallback: { params: {} },
+      },
+      shouldRefresh: (resource, action, refresh) => {
+        return refresh || action.meta.path === 'accounts-bulk';
+      },
+    },
   });
 
   static propTypes = {
@@ -86,6 +117,9 @@ class AccountDetailsContainer extends React.Component {
       instance: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
+      feefineshistory: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
     }),
     match: PropTypes.shape({
       params: PropTypes.shape({
@@ -98,6 +132,18 @@ class AccountDetailsContainer extends React.Component {
         update: PropTypes.func.isRequired
       }).isRequired
     }),
+  }
+
+  componentDidMount() {
+    const {
+      match: {
+        params,
+      },
+    } = this.props;
+
+    this.props.mutator.activeRecord.update({ records: 50, userId: params.id });
+
+    args[0].value = params.id;
   }
 
   getUser = () => {
