@@ -62,6 +62,7 @@
 * Handle empty report data in `CashDrawerReconciliationReportCSV`. Refs UIU-2184.
 * Fee/fine owners not available for selection on Transfer Fee/Fine modal. Refs UIU-2174.
 * Save the patron expiration with the time set to 23:59:59. Refs UIU-2182.
+* Compile translations to AST. Refs UIU-2115.
 
 ## [6.0.6](https://github.com/folio-org/ui-users/tree/v6.0.6) (2021-06-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.5...v6.0.6)
