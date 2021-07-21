@@ -6,6 +6,7 @@
 * Error window when opening or saving user data. Fixes UIU-2212.
 * Omit empty `username` during user creation. Fixes UIU-2214.
 * Fix `Total owed amount`/`Total paid amount` on `Fee/Fine Details`. Refs UIU-2211.
+* Default notice not sent to patron when Transfer done in one of the three ways. Refs UIU-2215.
 
 ## [6.1.1](https://github.com/folio-org/ui-users/tree/v6.1.1) (2021-07-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.1.0...v6.1.1)
