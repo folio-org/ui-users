@@ -35,7 +35,10 @@ import {
   isCancelAllowed,
 } from '../../components/Accounts/accountFunctions';
 import FeeFineReport from '../../components/data/reports/FeeFineReport';
-import { itemStatuses } from '../../constants';
+import {
+  itemStatuses,
+  refundClaimReturned,
+} from '../../constants';
 
 import css from './AccountDetails.css';
 
@@ -65,6 +68,9 @@ class AccountDetails extends React.Component {
   static propTypes = {
     stripes: PropTypes.object,
     resources: PropTypes.shape({
+      feefineshistory: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
       accountActions: PropTypes.object,
       accounts: PropTypes.object.isRequired,
       feefineactions: PropTypes.object.isRequired,
@@ -324,6 +330,17 @@ class AccountDetails extends React.Component {
       itemDetails,
     } = this.props;
 
+    const allAccounts = _.get(resources, ['feefineshistory', 'records'], []);
+    let balance = 0;
+
+    allAccounts.forEach((a) => {
+      if (a.paymentStatus.name !== refundClaimReturned.PAYMENT_STATUS) {
+        balance += (parseFloat(a.remaining) * 100);
+      }
+    });
+
+    balance /= 100;
+
     account.remaining = this.state.remaining;
 
     const columnMapping = {
@@ -362,7 +379,7 @@ class AccountDetails extends React.Component {
 
     const isAccountsPending = _.get(resources, ['accounts', 'isPending'], true);
     const isActionsPending = _.get(resources, ['accountActions', 'isPending'], true);
-    const feeFineActions = _.get(resources, ['accountActions', 'records'], []);
+    const feeFineActions = _.get(resources, ['feefineactions', 'records'], []);
     const allFeeFineActions = _.get(resources, ['feefineactions', 'records'], []);
     const latestPaymentStatus = account.paymentStatus.name;
     const isClaimReturnedItem = (itemDetails?.statusItemName === itemStatuses.CLAIMED_RETURNED);
@@ -381,7 +398,7 @@ class AccountDetails extends React.Component {
     const lostItemPolicyName = itemDetails?.lostItemPolicyName;
     const contributors = itemDetails?.contributors.join(', ');
 
-    const totalPaidAmount = calculateTotalPaymentAmount(resources?.accounts?.records, feeFineActions);
+    const totalPaidAmount = calculateTotalPaymentAmount(resources?.feefineshistory?.records, feeFineActions);
     const refundAllowed = isRefundAllowed(account, feeFineActions);
     const cancelAllowed = isCancelAllowed(account);
 
@@ -643,7 +660,7 @@ class AccountDetails extends React.Component {
             onChangeActions={this.onChangeActions}
             user={user}
             stripes={stripes}
-            balance={account.remaining || 0}
+            balance={balance}
             totalPaidAmount={totalPaidAmount}
             owedAmount={owedAmount}
             accounts={[account]}
