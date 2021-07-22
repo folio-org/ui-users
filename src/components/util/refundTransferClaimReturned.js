@@ -207,7 +207,7 @@ refundTransfers = async (loan, props) => {
         data => map(data, (accountsByOwner, idOwner) => {
           return {
             idFeeFineOwner: idOwner,
-            accountsO: accountsByOwner
+            accountsO: accountsByOwner,
           };
         }),
       )(accountsWithTransferredActions);
