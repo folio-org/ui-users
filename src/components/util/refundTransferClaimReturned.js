@@ -1,4 +1,10 @@
-import _ from 'lodash';
+import {
+  groupBy,
+  orderBy,
+  cloneDeep,
+  flow,
+  map,
+} from 'lodash';
 import moment from 'moment';
 import { refundClaimReturned, itemStatuses, accountStatuses } from '../../constants';
 
@@ -28,7 +34,7 @@ refundTransfers = async (loan, props) => {
   };
 
   const setPaymentStatus = record => {
-    const updatedRec = _.cloneDeep(record);
+    const updatedRec = cloneDeep(record);
     updatedRec.paymentStatus.name = refundClaimReturned.PAYMENT_STATUS;
     updatedRec.remaining = record.amount;
     updatedRec.status.name = accountStatuses.OPEN;
@@ -89,7 +95,7 @@ refundTransfers = async (loan, props) => {
         },
       },
     } = props;
-    const orderedActions = _.orderBy(transferredActions, ['dateAction'], ['desc']);
+    const orderedActions = orderBy(transferredActions, ['dateAction'], ['desc']);
     const now = moment().format();
     const amount = transferredActions.reduce((acc, record) => acc + record.amountAction, 0.0);
     const lastBalance = orderedActions[0].balance + amount;
@@ -153,7 +159,7 @@ refundTransfers = async (loan, props) => {
   };
 
   const setAgedToLostBlank = record => {
-    const updatedRec = _.cloneDeep(record);
+    const updatedRec = cloneDeep(record);
     updatedRec.agedToLostDelayedBilling.lostItemHasBeenBilled = '';
     updatedRec.agedToLostDelayedBilling.dateLostItemShouldBeBilled = '';
     return updatedRec;
@@ -195,14 +201,16 @@ refundTransfers = async (loan, props) => {
             actions: transferredActions[index],
           };
         });
-      const groupByOwner = _(accountsWithTransferredActions)
-        .groupBy('idFeeFineOwner')
-        .map((accountsByOwner, idOwner) => {
+
+      const groupByOwner = flow(
+        data => groupBy(data, 'idFeeFineOwner'),
+        data => map(data, (accountsByOwner, idOwner) => {
           return {
             idFeeFineOwner: idOwner,
-            accountsO: accountsByOwner,
+            accountsO: accountsByOwner
           };
-        }).value();
+        }),
+      )(accountsWithTransferredActions);
 
       await Promise.all(groupByOwner.map(a => a.accountsO.map(({ account, actions }) => createRefunds(account, actions))));
     }
