@@ -972,6 +972,6 @@
     "reports.financial.loanDetails": "Détails du prêt",
     "reports.financial.totalAmount": "Montant total",
     "reports.financial.totalCount": "Nombre total",
-    "custom.customFields": "Custom fields",
+    "custom.customFields": "Champs personnalisés",
     "custom.noCustomFieldsFound": "No custom fields found"
 }
