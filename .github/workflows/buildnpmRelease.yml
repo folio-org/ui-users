@@ -95,6 +95,12 @@ jobs:
           docker run --name okapiLatest -t -detach folioorg/okapi:latest dev
           echo "OKAPI_IP = $(docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' okapiLatest)" >> $GITHUB_ENV
       
+      - name: debug Okapi container
+        if: ${{ env.PUBLISH_MOD_DESCRIPTOR }}
+        run: |
+          docker ps -a
+          docker inspect okapiLatest
+ 
       - name: Pull all Module descriptors
         if: ${{ env.PUBLISH_MOD_DESCRIPTOR }}
         uses: fjogeleit/http-request-action@master
