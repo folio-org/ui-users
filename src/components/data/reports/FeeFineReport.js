@@ -77,6 +77,11 @@ class FeeFineReport {
 
     map(feeFineActions, (action) => {
       const account = accounts.find(({ id }) => id === action.accountId);
+
+      if (!account) {
+        return;
+      }
+
       const loan = account.loanId ? loans.find(({ id }) => id === account.loanId) : {};
       const { actionInfoStaff, actionInfoPatron } = extractComments(action);
       const reportRowFormatter = {
