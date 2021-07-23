@@ -85,10 +85,17 @@ jobs:
         if: ${{ env.PUBLISH_MOD_DESCRIPTOR }}
         run: cat module-descriptor.json
 
+      - name: Read module descriptor
+        if: ${{ env.PUBLISH_MOD_DESCRIPTOR && github.ref == 'refs/heads/master' || github.ref  == 'refs/heads/main' || github.ref == 'refs/heads/FOLIO-3067-Ankita' }}
+        id: moduleDescriptor
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ./module-descriptor.json
+
       - name: Docker registry login
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login https://docker.io/v2/ -u "${{ secrets.DOCKER_USER }}" --password-stdin
 
-      - name: Okapi image pull and ip extraction
+      - name: Start a local instance of Okapi
         if: ${{ env.PUBLISH_MOD_DESCRIPTOR }}
         run: |
           docker pull folioorg/okapi:latest
@@ -102,7 +109,7 @@ jobs:
           docker ps -a
           docker inspect okapiLatest
  
-      - name: Pull all Module descriptors
+      - name: Pull all Module descriptors to local Okapi instance
         if: ${{ env.PUBLISH_MOD_DESCRIPTOR }}
         uses: fjogeleit/http-request-action@master
         with:
@@ -113,11 +120,13 @@ jobs:
           data: ${{ env.OKAPI_PULL }}
           timeout: 60000
 
-      - name: Post the generated Module descriptors'
+      - name: Perform local Okapi dependency check
         if: ${{ env.PUBLISH_MOD_DESCRIPTOR }}
         uses: fjogeleit/http-request-action@master
         with:
-          url: 'http://172.17.0.2:9130/_/proxy/modules?preRelease=false&npmSnapshot=false'
+          #url: 'http://172.17.0.2:9130/_/proxy/modules?preRelease=false&npmSnapshot=false'
+          # line below is for testing only
+          url: 'http://172.17.0.2:9130/_/proxy/modules'
           method: 'POST'
           contentType: 'application/json; charset=utf-8'
           customHeaders: '{ "Accept": "application/json; charset=utf-8" }'
@@ -198,20 +207,13 @@ jobs:
         env: 
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Publish NPM
+      - name: Publish NPM to FOLIO NPM registry
         if: ${{ github.ref == 'refs/heads/master' || github.ref  == 'refs/heads/main' || github.ref == 'refs/heads/FOLIO-3067-Ankita' }}
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       
-      - name: Read module descriptor
-        if: ${{ env.PUBLISH_MOD_DESCRIPTOR && github.ref == 'refs/heads/master' || github.ref  == 'refs/heads/main' || github.ref == 'refs/heads/FOLIO-3067-Ankita' }}
-        id: moduleDescriptor
-        uses: juliangruber/read-file-action@v1
-        with: 
-          path: ./module-descriptor.json
-
-      - name: Publish module descriptor
+      - name: Publish module descriptor to FOLIO registry
         if: ${{ env.PUBLISH_MOD_DESCRIPTOR && github.ref == 'refs/heads/master' || github.ref  == 'refs/heads/main' || github.ref == 'refs/heads/FOLIO-3067-Ankita' }} 
         id: modDescriptorPost
         uses: fjogeleit/http-request-action@master
