@@ -35,8 +35,8 @@ describe('User view', () => {
         expect(InstanceViewPage.title).to.equal(user.username);
       });
 
-      it('should display empty department name', () => {
-        expect(InstanceViewPage.departmentName).to.equal('-');
+      it('should not display empty department name', () => {
+        expect(InstanceViewPage.departmentNameIsPresent).to.be.false;
       });
 
       it('should display action menu', () => {

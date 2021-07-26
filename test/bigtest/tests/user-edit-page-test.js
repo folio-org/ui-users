@@ -45,8 +45,8 @@ describe('User Edit Page', () => {
       expect(UserFormPage.resetPasswordLink.text).to.equal(translations['extended.sendResetPassword']);
     });
 
-    it('should display department name without fields', () => {
-      expect(UserFormPage.departmentName.items.length).to.equal(0);
+    it('should not display department name', () => {
+      expect(UserFormPage.departmentName.isPresent).to.be.false;
     });
 
     it('should display action menu', () => {
