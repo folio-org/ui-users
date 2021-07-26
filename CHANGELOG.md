@@ -19,6 +19,7 @@
 * Fix `Total owed amount`/`Total paid amount` on `Fee/Fine Details`. Refs UIU-2211.
 * Whitespace should not mark loan-action forms dirty. Refs UIU-2227.
 * Default notice not sent to patron when Transfer done in one of the three ways. Refs UIU-2215.
+* Hide Department label in User's Detail and Edit views if there are no depts set up in Settings. Refs UIU-2012.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
