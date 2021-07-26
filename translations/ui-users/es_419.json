@@ -969,9 +969,9 @@
     "reports.financial.loanPolicy": "Loan policy",
     "reports.financial.overduePolicy": "Overdue policy",
     "reports.financial.lostItemPolicy": "Lost item policy",
-    "reports.financial.loanDetails": "Loan details",
-    "reports.financial.totalAmount": "Total amount",
-    "reports.financial.totalCount": "Total count",
+    "reports.financial.loanDetails": "Detalles del préstamo",
+    "reports.financial.totalAmount": "Cantidad total",
+    "reports.financial.totalCount": "Cuenta total",
     "custom.customFields": "Campos Personalizados",
     "custom.noCustomFieldsFound": "No custom fields found"
 }
