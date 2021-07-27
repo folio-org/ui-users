@@ -3,7 +3,8 @@ import userEvent from '@testing-library/user-event';
 import { render, screen } from '@testing-library/react';
 import { useStripes } from '@folio/stripes/core';
 import { StripesContext } from '@folio/stripes-core/src/StripesContext';
-import '../../../test/jest/__mock__';
+import '@folio/stripes-testing/mocks';
+
 import UserDetail from './UserDetail';
 
 const resources = {

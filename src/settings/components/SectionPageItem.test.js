@@ -6,8 +6,8 @@ import {
 } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { FormattedMessage } from 'react-intl';
+import '@folio/stripes-testing/mocks';
 
-import '../../../test/jest/__mock__';
 import SectionPageItem from './SectionPageItem';
 
 const renderSectionPageItem = ({ setting, path }) => {

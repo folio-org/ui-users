@@ -7,8 +7,8 @@ import {
 } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { forEach } from 'lodash';
+import '@folio/stripes-testing/mocks';
 
-import '../../../test/jest/__mock__';
 import CashDrawerReportModal, { validate } from './CashDrawerReportModal';
 
 const modalHeader = 'Cash drawer reconciliation modal';

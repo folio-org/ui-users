@@ -5,8 +5,8 @@ import {
   render,
 } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
+import '@folio/stripes-testing/mocks';
 
-import '../../../test/jest/__mock__';
 import TransferCriteriaSettings from './TransferCriteriaSettings';
 
 const renderTransferCriteriaSettings = () => {

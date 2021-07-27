@@ -3,8 +3,8 @@ import { MemoryRouter } from 'react-router-dom';
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { StripesContext } from '@folio/stripes-core/src/StripesContext';
+import '@folio/stripes-testing/mocks';
 
-import '../../../../../test/jest/__mock__';
 import OpenTransactionModal from './OpenTransactionModal';
 
 const fakeStripes = {
