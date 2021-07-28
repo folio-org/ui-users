@@ -23,6 +23,7 @@ export default function getListDataFormatter(
   getFeeFine,
   getContributorslist,
   feeFineCount,
+  user,
 ) {
   return {
     '  ' : {
@@ -150,6 +151,7 @@ export default function getListDataFormatter(
               itemRequestCount={itemRequestCount}
               disableFeeFineDetails={disableFeeFineDetails}
               handleOptionsChange={handleOptionsChange}
+              user={user}
             />
           </div>
         );

@@ -25,6 +25,7 @@ import {
   hasEveryLoanItemStatus,
   hasAnyLoanItemStatus,
   getRenewalPatronBlocksFromPatronBlocks,
+  checkUserActive,
 } from '../../../../util';
 
 import css from './OpenLoansSubHeader.css';
@@ -52,6 +53,7 @@ class OpenLoansSubHeader extends React.Component {
     openBulkClaimReturnedModal: PropTypes.func.isRequired,
     openPatronBlockedModal: PropTypes.func.isRequired,
     showChangeDueDateDialog: PropTypes.func.isRequired,
+    user: PropTypes.object.isRequired,
   };
 
   constructor(props) {
@@ -137,6 +139,7 @@ class OpenLoansSubHeader extends React.Component {
       patronBlocks,
       openPatronBlockedModal,
       openBulkClaimReturnedModal,
+      user,
     } = this.props;
 
     const {
@@ -151,6 +154,7 @@ class OpenLoansSubHeader extends React.Component {
     const countRenews = getRenewalPatronBlocksFromPatronBlocks(patronBlocks);
     const onlyClaimedReturnedItemsSelected = hasEveryLoanItemStatus(checkedLoans, itemStatuses.CLAIMED_RETURNED);
     const onlyLostyItemsSelected = hasAnyLoanItemStatus(checkedLoans, lostItemStatuses);
+    const isUserActive = checkUserActive(user);
 
     return (
       <ActionsBar
@@ -191,7 +195,7 @@ class OpenLoansSubHeader extends React.Component {
               <Button
                 marginBottom0
                 id="renew-all"
-                disabled={noSelectedLoans || onlyClaimedReturnedItemsSelected}
+                disabled={noSelectedLoans || onlyClaimedReturnedItemsSelected || !isUserActive}
                 onClick={!isEmpty(countRenews)
                   ? openPatronBlockedModal
                   : () => renewSelected()
