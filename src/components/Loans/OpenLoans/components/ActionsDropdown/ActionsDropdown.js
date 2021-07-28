@@ -17,6 +17,7 @@ import {
 import {
   getChargeFineToLoanPath,
   getOpenRequestsPath,
+  checkUserActive,
 } from '../../../../util';
 
 import { itemStatuses } from '../../../../../constants';
@@ -33,6 +34,7 @@ class ActionsDropdown extends React.Component {
       params: PropTypes.object
     }),
     intl: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired,
   };
 
   renderMenu = ({ onToggle }) => {
@@ -44,12 +46,14 @@ class ActionsDropdown extends React.Component {
       stripes,
       disableFeeFineDetails,
       match: { params },
+      user,
     } = this.props;
 
     const itemStatusName = loan?.item?.status?.name;
     const itemDetailsLink = `/inventory/view/${loan.item.instanceId}/${loan.item.holdingsRecordId}/${loan.itemId}`;
     const loanPolicyLink = `/settings/circulation/loan-policies/${loan.loanPolicyId}`;
     const buttonDisabled = !stripes.hasPerm('ui-users.feesfines.actions.all');
+    const isUserActive = checkUserActive(user);
 
     return (
       <DropdownMenu data-role="menu">
@@ -62,7 +66,7 @@ class ActionsDropdown extends React.Component {
           </Button>
         </IfPermission>
         <IfPermission perm="ui-users.loans.renew">
-          { itemStatusName !== itemStatuses.CLAIMED_RETURNED &&
+          { isUserActive && itemStatusName !== itemStatuses.CLAIMED_RETURNED &&
           <Button
             buttonStyle="dropdownItem"
             data-test-dropdown-content-renew-button

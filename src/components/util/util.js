@@ -145,3 +145,9 @@ export function accountsMatchStatus(accounts, status) {
 export function getValue(value) {
   return value || '';
 }
+
+// Given a user record, test whether the user is active. Checking the `active` property ought to
+// be sufficient, but test the expiration date as well just to be sure.
+export function checkUserActive(user) {
+  return user.active && (new Date(user.expirationDate) >= new Date());
+}

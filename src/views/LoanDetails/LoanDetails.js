@@ -39,6 +39,7 @@ import {
   getOpenRequestsPath,
   getRenewalPatronBlocksFromPatronBlocks,
   accountsMatchStatus,
+  checkUserActive,
 } from '../../components/util';
 import { itemStatuses, loanActions, refundClaimReturned } from '../../constants';
 import {
@@ -438,6 +439,7 @@ class LoanDetails extends React.Component {
       </p>
     );
     const patronBlocksForModal = getRenewalPatronBlocksFromPatronBlocks(patronBlocks);
+    const isUserActive = checkUserActive(user);
 
     return (
       <div data-test-loan-actions-history>
@@ -458,7 +460,7 @@ class LoanDetails extends React.Component {
                 <IfPermission perm="ui-users.loans.renew">
                   <Button
                     data-test-renew-button
-                    disabled={buttonDisabled || isClaimedReturnedItem}
+                    disabled={buttonDisabled || isClaimedReturnedItem || !isUserActive}
                     buttonStyle="primary"
                     onClick={this.renew}
                   >
