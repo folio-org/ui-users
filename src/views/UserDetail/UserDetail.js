@@ -699,21 +699,6 @@ class UserDetail extends React.Component {
                 />
               </IfPermission>
             </IfInterface>
-            {this.state.showDeleteUserModal &&
-            <DeleteUserModal
-              onCloseModal={this.doCloseTransactionDeleteModal}
-              username={fullNameOfUser}
-              userId={userId}
-              deleteUser={this.handleDeleteUser}
-            />
-            }
-            {this.state.showOpenTransactionModal &&
-            <OpenTransactionModal
-              onCloseModal={this.doCloseTransactionDeleteModal}
-              openTransactions={this.state.openTransactions}
-              username={fullNameOfUser}
-            />
-            }
           </>
         </HasCommand>
       );
