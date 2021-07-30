@@ -1,23 +1,20 @@
 # Change history for ui-users
 
-## 6.1.2 IN PROGRESS
+## [6.1.2](https://github.com/folio-org/ui-users/tree/v6.1.2) (2021-07-30)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v6.1.1...v6.1.2)
 
 * Shared manual fees/fines not showing up for new fee/fine owner. Refs UIU-2208.
 * Error window when opening or saving user data. Fixes UIU-2212.
 * Omit empty `username` during user creation. Fixes UIU-2214.
 * Fix `Total owed amount`/`Total paid amount` on `Fee/Fine Details`. Refs UIU-2211.
-<<<<<<< HEAD
 * Default notice not sent to patron when Transfer done in one of the three ways. Refs UIU-2215.
+* Fix Export of fees/fines. Refs UIU-2209.
 
 ## [6.1.1](https://github.com/folio-org/ui-users/tree/v6.1.1) (2021-07-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.1.0...v6.1.1)
 
 * Fix order refund and credit actions. Refs UIU-2178.
 * Lost Item Processing Fee changes from outstanding to suspended. Refs UIU-2177.
-=======
-* Whitespace should not mark loan-action forms dirty. Refs UIU-2227.
-* Fix Export of fees/fines. Refs UIU-2209.
->>>>>>> 7482b13c (UIU-2209: Fix Export of fees/fines.)
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
