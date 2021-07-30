@@ -31,7 +31,6 @@ describe('checkUserActive', () => {
   });
 
   it('returns true for active users without an expiration date', () => {
-    const expDate = new Date();
     const user = {
       active: true,
       expirationDate: undefined,
