@@ -22,6 +22,7 @@
 * Hide Department label in User's Detail and Edit views if there are no depts set up in Settings. Refs UIU-2012.
 * Disable renewals for inactive users. Fixes UIU-2229.
 * Fix Export of fees/fines. Refs UIU-2209.
+* Fix user Departments value is not visible in the user view. Fixes UIU-2238.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
