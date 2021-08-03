@@ -52,13 +52,9 @@ jobs:
       - name: Set yarn config
         run: yarn config set @folio:registry $FOLIO_NPM_REGISTRY
 
-      - name: Set FOLIO NPM snapshot version
+      - name: Set FOLIO NPM  release version from package.json
         run: | 
-          git clone https://github.com/folio-org/folio-tools.git
-          npm --no-git-tag-version version `folio-tools/github-actions-scripts/folioci_npmver.sh`
-          rm -rf folio-tools
-        env: 
-          JOB_ID: ${{ github.run_number }}
+          PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag v$PACKAGE_VERSION
 
       - name: Run yarn install
         run: yarn install --ignore-scripts
