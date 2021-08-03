@@ -10,8 +10,7 @@ import {
   Col,
   Headline,
   KeyValue,
-  NoValue,
-  Row
+  Row,
 } from '@folio/stripes/components';
 
 import { requestPreferencesShape } from '../../../shapes';
@@ -70,18 +69,20 @@ const ExtendedInfo = (props) => {
           />
         </Col>
       </Row>
-      <Row>
-        <Col
-          xs={12}
-          md={6}
-        >
-          <KeyValue label={<FormattedMessage id="ui-users.extended.department.name" />}>
-            <span data-test-department-name>
-              {departments.length ? departments.join(', ') : <NoValue />}
-            </span>
-          </KeyValue>
-        </Col>
-      </Row>
+      {departments.length
+        ? (
+          <Row>
+            <Col xs={12} md={6}>
+              <KeyValue label={<FormattedMessage id="ui-users.extended.department.name" />}>
+                <span data-test-department-name>
+                  {departments.join(', ')}
+                </span>
+              </KeyValue>
+            </Col>
+          </Row>
+        )
+        : null
+      }
       <Row>
         <Col xs={12} md={6}>
           <KeyValue label={<FormattedMessage id="ui-users.information.username" />}>

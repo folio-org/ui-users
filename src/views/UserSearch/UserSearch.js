@@ -37,11 +37,13 @@ import {
 
 import RefundsReportModal from '../../components/ReportModals/RefundsReportModal';
 import CashDrawerReportModal from '../../components/ReportModals/CashDrawerReportModal';
+import FinancialTransactionsReportModal from '../../components/ReportModals/FinancialTransactionsReportModal';
 
 import CsvReport from '../../components/data/reports';
 import RefundsReport from '../../components/data/reports/RefundReport';
 import CashDrawerReconciliationReportPDF from '../../components/data/reports/cashDrawerReconciliationReportPDF';
 import CashDrawerReconciliationReportCSV from '../../components/data/reports/cashDrawerReconciliationReportCSV';
+import FinancialTransactionsReport from '../../components/data/reports/FinancialTransactionsReport';
 import Filters from './Filters';
 import css from './UserSearch.css';
 
@@ -106,6 +108,9 @@ class UserSearch extends React.Component {
       cashDrawerReportSources: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }).isRequired,
+      financialTransactionsReport: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }).isRequired,
     }).isRequired,
     okapi: PropTypes.shape({
       currentUser: PropTypes.shape({
@@ -135,6 +140,8 @@ class UserSearch extends React.Component {
       refundExportInProgress: false,
       showCashDrawerReportModal: false,
       cashDrawerReportInProgress: false,
+      showFinancialTransactionsReportModal: false,
+      financialTransactionsReportInProgress: false,
     };
 
     this.resultsPaneTitleRef = createRef();
@@ -171,12 +178,8 @@ class UserSearch extends React.Component {
     this._mounted = false;
   }
 
-  changeRefundReportModalState = (modalState) => {
-    this.setState({ showRefundsReportModal: modalState });
-  };
-
-  changeCashDrawerReportModalState = (modalState) => {
-    this.setState({ showCashDrawerReportModal: modalState });
+  changeModalState = (modal, modalState) => {
+    this.setState({ [modal]: modalState });
   }
 
   getColumnMapping = () => {
@@ -304,7 +307,7 @@ class UserSearch extends React.Component {
                 id="cash-drawer-report"
                 onClick={() => {
                   onToggle();
-                  this.changeCashDrawerReportModalState(true);
+                  this.changeModalState('showCashDrawerReportModal', true);
                 }}
               >
                 <Icon icon="download">
@@ -318,6 +321,7 @@ class UserSearch extends React.Component {
                 id="financial-transaction-report"
                 onClick={() => {
                   onToggle();
+                  this.changeModalState('showFinancialTransactionsReportModal', true);
                 }}
               >
                 <Icon icon="download">
@@ -331,7 +335,7 @@ class UserSearch extends React.Component {
                 id="export-refunds-report"
                 onClick={() => {
                   onToggle();
-                  this.changeRefundReportModalState(true);
+                  this.changeModalState('showRefundsReportModal', true);
                 }}
               >
                 <Icon icon="download">
@@ -577,6 +581,71 @@ class UserSearch extends React.Component {
     }
   }
 
+  handleFinancialTransactionsReportFormSubmit = async (data) => {
+    if (this.state.financialTransactionsReportInProgress) {
+      return;
+    }
+
+    this.setState({
+      financialTransactionsReportInProgress: true,
+      showFinancialTransactionsReportModal: false,
+    });
+
+    const {
+      startDate,
+      endDate,
+      servicePoint,
+      feeFineOwner,
+    } = data;
+    const {
+      resources,
+      mutator: { financialTransactionsReport },
+      intl,
+    } = this.props;
+    const reportParameters = {
+      createdAt: servicePoint.map(s => s.value),
+      feeFineOwner,
+      startDate,
+      endDate,
+    };
+
+    try {
+      this.context.sendCallout({ message: <FormattedMessage id="ui-users.reports.inProgress" /> });
+      const reportData = await financialTransactionsReport.POST(reportParameters);
+
+      if (isEmpty(reportData?.reportData)) {
+        this.context.sendCallout({
+          type: 'error',
+          message: <FormattedMessage id="ui-users.reports.noItemsFound" />,
+        });
+      } else {
+        const selectedOwner = resources.owners.records.find(({ id }) => id === feeFineOwner);
+        const headerData = {
+          ...reportParameters,
+          createdAt: reportParameters.createdAt.join(', '),
+          feeFineOwner: selectedOwner.owner,
+        };
+        const reportParams = {
+          data: reportData,
+          intl,
+          headerData,
+        };
+        const report = new FinancialTransactionsReport(reportParams);
+
+        report.toCSV();
+      }
+    } catch (error) {
+      if (error) {
+        this.context.sendCallout({
+          type: 'error',
+          message: <FormattedMessage id="ui-users.reports.callout.error" />,
+        });
+      }
+    } finally {
+      this.setState({ financialTransactionsReportInProgress: false });
+    }
+  }
+
   render() {
     const {
       onComponentWillUnmount,
@@ -591,7 +660,14 @@ class UserSearch extends React.Component {
       mutator: { resultOffset, cashDrawerReportSources },
       stripes: { timezone },
       okapi: { currentUser },
+      intl: { formatMessage },
     } = this.props;
+    const {
+      filterPaneIsVisible,
+      showRefundsReportModal,
+      showCashDrawerReportModal,
+      showFinancialTransactionsReportModal,
+    } = this.state;
     if (!searchableIndexes) {
       searchableIndexes = rawSearchableIndexes.map(x => (
         { value: x.value, label: this.props.intl.formatMessage({ id: x.label }) }
@@ -669,7 +745,7 @@ class UserSearch extends React.Component {
               }) => {
                 return (
                   <Paneset id={`${idPrefix}-paneset`}>
-                    {this.state.filterPaneIsVisible &&
+                    {filterPaneIsVisible &&
                       <Pane
                         defaultWidth="22%"
                         paneTitle={<FormattedMessage id="ui-users.userSearch" />}
@@ -787,26 +863,36 @@ class UserSearch extends React.Component {
                 );
               }}
           </SearchAndSortQuery>
-          { this.state.showRefundsReportModal && (
+          {showRefundsReportModal && (
             <RefundsReportModal
               open
-              label={this.props.intl.formatMessage({ id:'ui-users.reports.refunds.modal.label' })}
+              label={formatMessage({ id:'ui-users.reports.refunds.modal.label' })}
               owners={owners}
-              onClose={() => { this.changeRefundReportModalState(false); }}
+              onClose={() => { this.changeModalState('showRefundsReportModal', false); }}
               onSubmit={this.handleRefundsReportFormSubmit}
               timezone={timezone}
             />
           )}
-          { this.state.showCashDrawerReportModal && (
+          {showCashDrawerReportModal && (
             <CashDrawerReportModal
               open
-              label={this.props.intl.formatMessage({ id:'ui-users.reports.cash.drawer.modal.label' })}
+              label={formatMessage({ id:'ui-users.reports.cash.drawer.modal.label' })}
               servicePoints={servicePoints}
-              onClose={() => { this.changeCashDrawerReportModalState(false); }}
+              onClose={() => { this.changeModalState('showCashDrawerReportModal', false); }}
               onSubmit={this.handleCashDrawerReportFormSubmit}
               timezone={timezone}
               initialValues={initialCashDrawerReportValues}
               cashDrawerReportSources={cashDrawerReportSources}
+            />
+          )}
+          {showFinancialTransactionsReportModal && (
+            <FinancialTransactionsReportModal
+              open
+              label={formatMessage({ id:'ui-users.reports.financial.trans.modal.label' })}
+              onClose={() => { this.changeModalState('showFinancialTransactionsReportModal', false); }}
+              onSubmit={this.handleFinancialTransactionsReportFormSubmit}
+              timezone={timezone}
+              owners={owners}
             />
           )}
         </div>

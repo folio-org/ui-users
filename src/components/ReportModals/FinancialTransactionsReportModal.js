@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { Field } from 'react-final-form';
@@ -9,7 +9,6 @@ import {
 } from 'react-intl';
 
 import stripesFinalForm from '@folio/stripes/final-form';
-
 import {
   Modal,
   Button,
@@ -19,9 +18,6 @@ import {
   ModalFooter,
   MultiSelection,
   Select,
-  RadioButtonGroup,
-  RadioButton,
-  Label,
 } from '@folio/stripes/components';
 
 import { DATE_FORMAT } from '../../constants';
@@ -29,7 +25,7 @@ import css from './ReportModal.css';
 
 export const validate = (options) => {
   const errors = {};
-  const { startDate, endDate, servicePoint } = options;
+  const { startDate, endDate, feeFineOwner } = options;
 
   if (isEmpty(startDate) && isEmpty(endDate)) {
     errors.startDate = <FormattedMessage id="ui-users.reports.cash.drawer.report.startDate.error" />;
@@ -43,39 +39,36 @@ export const validate = (options) => {
     errors.endDate = <FormattedMessage id="ui-users.reports.cash.drawer.report.endDate.error" />;
   }
 
-  if (!servicePoint) {
-    errors.servicePoint = <FormattedMessage id="ui-users.reports.cash.drawer.report.servicePoint.error" />;
+  if (!feeFineOwner) {
+    errors.feeFineOwner = <FormattedMessage id="ui-users.reports.financial.trans.modal.owners.error" />;
   }
 
   return errors;
 };
 
-const CashDrawerReportModal = (props) => {
+const FinancialTransactionsReportModal = (props) => {
   const { valid } = props.form.getState();
   const {
-    values: { servicePoint: servicePointsValue = '' },
-    cashDrawerReportSources,
+    values: { feeFineOwner: ownerValue = '' },
+    owners,
   } = props;
-  const [sources, setSources] = useState([]);
   const parseDate = (date) => (date ? moment.tz(date, props.timezone).format(DATE_FORMAT) : date);
-  const servicePoints = props.servicePoints.map(({ id, name }) => ({
+  const formattedOwners = owners.map(({ id, owner }) => ({
     value: id,
-    label: name,
+    label: owner,
   }));
+  const selectedServicePoint = owners?.find(({ id }) => id === ownerValue) ?? {};
+  const formattedServicePoints = selectedServicePoint?.servicePointOwner?.map(({ value, label }) => ({
+    value,
+    label,
+  })) ?? [];
 
-  useMemo(() => {
-    if (servicePointsValue) {
-      cashDrawerReportSources.POST({ createdAt: servicePointsValue })
-        .then(response => {
-          const responseSources = response?.sources ?? [];
-          const formatSources = responseSources.map((sourceName, index) => ({
-            value: `source-${index}`,
-            label: sourceName,
-          }));
-          setSources(formatSources || []);
-        });
-    }
-  }, [cashDrawerReportSources, servicePointsValue]);
+  const onChangeOwner = (feeFineOwner) => {
+    const { form: { change } } = props;
+
+    change('feeFineOwner', feeFineOwner);
+    change('servicePoint', []);
+  };
 
   const footer = (
     <ModalFooter>
@@ -99,8 +92,8 @@ const CashDrawerReportModal = (props) => {
 
   return (
     <Modal
-      data-test-cash-drawer-report-modal
-      id="cash-drawer-report-modal"
+      data-test-financial-transactions-report-modal
+      id="financial-transactions-report-modal"
       size="small"
       footer={footer}
       dismissible
@@ -133,48 +126,26 @@ const CashDrawerReportModal = (props) => {
           </Col>
           <Col xs={12}>
             <Field
-              name="servicePoint"
+              data-test-financial-transactions-report-owner
+              name="feeFineOwner"
               component={Select}
-              label={<FormattedMessage id="ui-users.reports.cash.drawer.servicePoint" />}
-              placeholder={props.intl.formatMessage({ id: 'ui-users.reports.cash.drawer.servicePoint.placeholder' })}
-              dataOptions={servicePoints}
+              label={<FormattedMessage id="ui-users.reports.financial.trans.modal.owners" />}
+              placeholder={props.intl.formatMessage({ id: 'ui-users.reports.financial.trans.modal.owners.placeholder' })}
+              dataOptions={formattedOwners}
+              onChange={(e) => onChangeOwner(e.target.value)}
               required
             />
           </Col>
           <Col xs={12}>
             <Field
-              name="sources"
+              data-test-financial-transactions-report-servicePoint
+              name="servicePoint"
               component={MultiSelection}
-              label={<FormattedMessage id="ui-users.reports.cash.drawer.sources" />}
-              placeholder={props.intl.formatMessage({ id: 'ui-users.reports.cash.drawer.sources.placeholder' })}
-              dataOptions={sources}
-              disabled={!servicePointsValue}
+              label={<FormattedMessage id="ui-users.reports.financial.trans.modal.servicePoint" />}
+              placeholder={props.intl.formatMessage({ id: 'ui-users.reports.financial.trans.modal.servicePoint.placeholder' })}
+              dataOptions={formattedServicePoints}
+              disabled={!ownerValue}
             />
-          </Col>
-          <Col xs={12}>
-            <Label>
-              <FormattedMessage id="ui-users.reports.cash.drawer.report.format" />
-            </Label>
-            <Field
-              name="format"
-              component={RadioButtonGroup}
-            >
-              <RadioButton
-                label={<FormattedMessage id="ui-users.reports.cash.drawer.report.format.csv" />}
-                id="csv-format"
-                value="csv"
-              />
-              <RadioButton
-                label={<FormattedMessage id="ui-users.reports.cash.drawer.report.format.pdf" />}
-                id="pdf-format"
-                value="pdf"
-              />
-              <RadioButton
-                label={<FormattedMessage id="ui-users.reports.cash.drawer.report.format.both" />}
-                id="both-format"
-                value="both"
-              />
-            </Field>
           </Col>
         </Row>
       </form>
@@ -182,21 +153,18 @@ const CashDrawerReportModal = (props) => {
   );
 };
 
-CashDrawerReportModal.propTypes = {
+FinancialTransactionsReportModal.propTypes = {
   form: PropTypes.object.isRequired,
   intl: PropTypes.object.isRequired,
   label: PropTypes.string.isRequired,
-  servicePoints: PropTypes.arrayOf(PropTypes.object).isRequired,
+  owners: PropTypes.arrayOf(PropTypes.object).isRequired,
   onClose: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   timezone: PropTypes.string.isRequired,
   values: PropTypes.object.isRequired,
-  cashDrawerReportSources: PropTypes.shape({
-    POST: PropTypes.func.isRequired,
-  }).isRequired,
 };
 
 export default stripesFinalForm({
   validate,
   subscription: { values: true },
-})(injectIntl(CashDrawerReportModal));
+})(injectIntl(FinancialTransactionsReportModal));

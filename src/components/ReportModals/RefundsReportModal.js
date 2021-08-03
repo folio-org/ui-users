@@ -21,7 +21,7 @@ import {
   MultiSelection,
 } from '@folio/stripes/components';
 
-import css from './RefundsReportModal.css';
+import css from './ReportModal.css';
 
 const validate = ({ startDate, endDate }) => {
   const errors = {};

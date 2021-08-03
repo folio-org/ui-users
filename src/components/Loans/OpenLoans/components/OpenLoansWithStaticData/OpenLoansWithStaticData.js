@@ -76,6 +76,7 @@ class OpenLoansWithStaticData extends React.Component {
       handleOptionsChange,
       stripes,
       feeFineCount,
+      user,
     } = this.props;
 
     this.tableData = getListDataFormatter(
@@ -91,6 +92,7 @@ class OpenLoansWithStaticData extends React.Component {
       this.getFeeFine,
       this.getContributorslist,
       feeFineCount,
+      user,
     );
 
     this.sortMap = this.getSortMap();
@@ -246,6 +248,7 @@ class OpenLoansWithStaticData extends React.Component {
         {!isEmpty(loans) &&
         <OpenLoansSubHeader
           loans={loans}
+          user={user}
           patronBlocks={patronBlocks}
           columnMapping={this.columnMapping}
           checkedLoans={checkedLoans}

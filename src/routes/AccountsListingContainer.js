@@ -1,49 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+
 import { stripesConnect } from '@folio/stripes/core';
-import { makeQueryFunction } from '@folio/stripes/smart-components';
 import { LoadingView } from '@folio/stripes/components';
 
 import { AccountsListing } from '../views';
-
-const filterConfig = [
-  {
-    label: <FormattedMessage id="ui-users.feefines.ownerLabel" />,
-    name: 'owner',
-    cql: 'feeFineOwner',
-    values: [],
-  }, {
-    label: <FormattedMessage id="ui-users.accounts.history.columns.status" />,
-    name: 'status',
-    cql: 'paymentStatus.name',
-    values: [],
-  }, {
-    label: <FormattedMessage id="ui-users.details.field.feetype" />,
-    name: 'type',
-    cql: 'feeFineType',
-    values: [],
-  }, {
-    label: <FormattedMessage id="ui-users.details.field.type" />,
-    name: 'material',
-    cql: 'materialType',
-    values: [],
-  },
-];
-
-const queryFunction = (findAll, queryTemplate, sortMap, fConfig, failOnCondition, nsParams, a) => {
-  const getCql = makeQueryFunction(findAll, queryTemplate, sortMap, fConfig, failOnCondition, nsParams);
-  return (queryParams, pathComponents, resourceValues, logger) => {
-    let cql = getCql(queryParams, pathComponents, resourceValues, logger);
-    const userId = a[0].value;
-    if (cql === undefined) { cql = `userId==${userId}`; } else { cql = `(${cql}) and (userId==${userId})`; }
-    return cql;
-  };
-};
-
-const args = [
-  { name: 'user', value: 'x' },
-];
+import { MAX_RECORDS } from '../constants';
+import {
+  filterConfig,
+  queryFunction,
+  args,
+} from './feeFineConfig';
 
 class AccountsListingContainer extends React.Component {
   static manifest = Object.freeze({
@@ -79,7 +47,7 @@ class AccountsListingContainer extends React.Component {
       type: 'okapi',
       records: 'accounts',
       recordsRequired: '%{activeRecord.records}',
-      path: 'accounts?query=userId==:{id}&limit=10000',
+      path: `accounts?query=userId==:{id}&limit=${MAX_RECORDS}`,
     },
     loans: {
       type: 'okapi',
@@ -92,7 +60,7 @@ class AccountsListingContainer extends React.Component {
       records: 'accounts',
       path: 'accounts',
       recordsRequired: '%{activeRecord.records}',
-      perRequest: 10000,
+      perRequest: MAX_RECORDS,
       GET: {
         params: {
           query: queryFunction(
@@ -111,7 +79,9 @@ class AccountsListingContainer extends React.Component {
         return refresh || action.meta.path === 'accounts-bulk';
       },
     },
-    activeRecord: { records: 10000 },
+    activeRecord: {
+      records: MAX_RECORDS,
+    },
     user: {},
   });
 
