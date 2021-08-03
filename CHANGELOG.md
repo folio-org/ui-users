@@ -3,6 +3,7 @@
 ## [6.1.3] IN PROGRESS
 
 * Disable renewals for inactive users. Fixes UIU-2229.
+* Show dates in local time when generating CSV reports. Fixes UIU-2224.
 
 ## [6.1.2](https://github.com/folio-org/ui-users/tree/v6.1.2) (2021-07-30)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.1.1...v6.1.2)
