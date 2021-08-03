@@ -147,10 +147,8 @@ class UserSearch extends React.Component {
     this.resultsPaneTitleRef = createRef();
     this.SRStatusRef = createRef();
 
-    const { formatMessage } = props.intl;
-    this.CsvReport = new CsvReport({
-      formatMessage
-    });
+    const { intl } = props;
+    this.CsvReport = new CsvReport({ intl });
   }
 
   static getDerivedStateFromProps(props) {

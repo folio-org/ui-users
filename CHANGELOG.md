@@ -24,6 +24,7 @@
 * Fix Export of fees/fines. Refs UIU-2209.
 * `Financial transactions detail report:` date with empty value columns says "Unix Epoch". Refs UIU-2239.
 * Make sure users module builds with `babel-plugin-lodash` present. Fixes UIU-2228.
+* Show dates in local time when generating CSV reports. Fixes UIU-2224.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)

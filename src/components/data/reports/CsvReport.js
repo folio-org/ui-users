@@ -1,12 +1,20 @@
-import { get } from 'lodash';
+import { forOwn, get } from 'lodash';
 import { exportCsv } from '@folio/stripes/util';
 import settings from './settings';
 import { reportColumns } from '../../../constants';
+import { formatDateAndTime } from '../../util';
 
 class CsvReport {
   constructor(options) {
-    const { formatMessage } = options;
+    const {
+      intl: {
+        formatMessage,
+        formatTime,
+      },
+    } = options;
+
     this.formatMessage = formatMessage;
+    this.formatTime = formatTime;
   }
 
   setUp(type) {
@@ -53,24 +61,42 @@ class CsvReport {
     } else { throw new Error('noItemsFound'); }
   }
 
+  parseDates(record) {
+    const result = {};
+
+    forOwn(record, (value, key) => {
+      if (key.match(/date/i)) {
+        result[key] = formatDateAndTime(value, this.formatTime);
+      } else {
+        result[key] = value;
+      }
+    });
+
+    return result;
+  }
+
   parse(records) {
-    return records.map(r => ({
-      ...r,
-      borrower: {
-        ...r.borrower,
-        name: `${r.borrower.lastName}, ${r.borrower.firstName} ${r.borrower.middleName || ''}`,
-      },
-      borrowerId: r.userId,
-      loanId: r.id,
-      feeFine: get(r, 'feesAndFines.amountRemainingToPay'),
-      item: {
-        ...r.item,
-        contributors: get(r, 'item.contributors', [])
-          .filter(c => c)
-          .map(c => c.name)
-          .join('; '),
-      },
-    }));
+    return records.map(record => {
+      const r = this.parseDates(record);
+
+      return {
+        ...r,
+        borrower: {
+          ...r.borrower,
+          name: `${r.borrower.lastName}, ${r.borrower.firstName} ${r.borrower.middleName || ''}`,
+        },
+        borrowerId: r.userId,
+        loanId: r.id,
+        feeFine: get(r, 'feesAndFines.amountRemainingToPay'),
+        item: {
+          ...r.item,
+          contributors: get(r, 'item.contributors', [])
+            .filter(c => c)
+            .map(c => c.name)
+            .join('; '),
+        },
+      };
+    });
   }
 
   toCSV(records) {
