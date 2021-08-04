@@ -27,6 +27,7 @@
 * Show dates in local time when generating CSV reports. Fixes UIU-2224.
 * Fix user Departments value is not visible in the user view. Fixes UIU-2238.
 * Filter out non existing service points. Fixes UIU-2245.
+* Fix hyperlink in `Financial transactions detail report`. Refs UIU-2217.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
