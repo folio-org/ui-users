@@ -97,7 +97,7 @@ jobs:
           docker pull folioorg/okapi:latest
           docker run --name okapiLatest -t -detach folioorg/okapi:latest dev
           sleep 3
-          echo "OKAPI_IP = $(docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' okapiLatest)" >> $GITHUB_ENV
+          echo "OKAPI_IP=$(docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' okapiLatest)" >> $GITHUB_ENV
           sleep 10
       
       - name: Pull all Module descriptors to local Okapi instance
