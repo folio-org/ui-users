@@ -12,10 +12,10 @@
 #   - COMPILE_TRANSLATION_FILES (boolean 'true' or 'false')
 
 name: buildNPM release
-on: [push, pull_request]
-    # release:
-    #   tags:
-    #     - 'v*.*.*'
+on: 
+    release:
+      tags:
+        - 'v*.*.*'
 jobs:
   Build:
     env:
@@ -39,6 +39,20 @@ jobs:
       - uses: folio-org/checkout@v2
         with:
           fetch-depth: 0
+
+      - name: Extract tag 
+        run: echo "TAG=$(echo ${GITHUB_REF##*/})" >> $GITHUB_ENV
+
+      - name: Get version from package.json
+        id: version
+        uses: notiz-dev/github-action-json-property@release
+        with: 
+          path: 'package.json'
+          prop_path: 'version'
+      
+      - name: Check matching tag and version in package.json
+        if: ${{ env.TAG != steps.version.outputs.prop }}
+        run: exit 1
 
       - name: Setup kernel for react native, increase watchers
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
