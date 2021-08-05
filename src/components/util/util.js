@@ -25,7 +25,9 @@ export const formatActionDescription = (action) => {
 
 export const formatCurrencyAmount = (amount = 0) => parseFloat(amount).toFixed(2);
 
-export const formatDateAndTime = (date, formatter) => formatter(date, { day: 'numeric', month: 'numeric', year: 'numeric' });
+export const formatDateAndTime = (date, formatter) => {
+  return date ? formatter(date, { day: 'numeric', month: 'numeric', year: 'numeric' }) : '';
+};
 
 export const getServicePointOfCurrentAction = (action, servicePoints = []) => {
   const servicePoint = servicePoints.find(sp => sp.id === action.createdAt);
@@ -149,5 +151,6 @@ export function getValue(value) {
 // Given a user record, test whether the user is active. Checking the `active` property ought to
 // be sufficient, but test the expiration date as well just to be sure.
 export function checkUserActive(user) {
+  if (user.expirationDate == null || user.expirationDate === undefined) return user.active;
   return user.active && (new Date(user.expirationDate) >= new Date());
 }

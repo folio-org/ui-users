@@ -7,7 +7,10 @@ import {
   omit,
   size,
 } from 'lodash';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  injectIntl,
+} from 'react-intl';
 
 import { stripesShape } from '@folio/stripes/core';
 import { LoadingView } from '@folio/stripes/components';
@@ -15,7 +18,9 @@ import { LoadingView } from '@folio/stripes/components';
 import {
   nav,
   getRenewalPatronBlocksFromPatronBlocks,
+  formatDateAndTime,
 } from '../../util';
+
 import {
   withRenew,
   withDeclareLost,
@@ -26,6 +31,7 @@ import TableModel from './components/OpenLoansWithStaticData';
 
 class OpenLoansControl extends React.Component {
   static propTypes = {
+    intl: PropTypes.object.isRequired,
     stripes: stripesShape.isRequired,
     mutator: PropTypes.shape({
       query: PropTypes.object.isRequired,
@@ -286,23 +292,37 @@ class OpenLoansControl extends React.Component {
     return accountsLoan.length;
   };
 
-  buildRecords(records) {
-    return records.map((record) => {
-      const {
-        item,
-        item: { contributors },
-      } = record;
+  parseContributors(record) {
+    const {
+      item,
+      item: { contributors },
+    } = record;
 
-      return isArray(contributors) ?
-        {
-          ...record,
-          item: {
-            ...item,
-            contributors: contributors
-              .map((currentContributor) => currentContributor.name)
-              .join('; ')
-          }
-        } : record;
+    return isArray(contributors) ?
+      {
+        ...record,
+        item: {
+          ...item,
+          contributors: contributors
+            .map((currentContributor) => currentContributor.name)
+            .join('; ')
+        }
+      } : record;
+  }
+
+  buildRecords = (records) => {
+    const {
+      intl: {
+        formatTime,
+      },
+    } = this.props;
+
+    return records.map(record => {
+      const result = this.parseContributors(record);
+
+      result.dueDate = formatDateAndTime(result.dueDate, formatTime);
+      result.loanDate = formatDateAndTime(result.loanDate, formatTime);
+      return result;
     });
   }
 
@@ -378,4 +398,5 @@ export default compose(
   withDeclareLost,
   withClaimReturned,
   withMarkAsMissing,
+  injectIntl,
 )(OpenLoansControl);
