@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { get } from 'lodash';
+import { get, keyBy } from 'lodash';
 
 import {
   stripesShape,
@@ -95,10 +95,11 @@ const withServicePoints = WrappedComponent => class WithServicePointsComponent e
       const userServicePointsIds = get(nextProps.resources.servicePointsUsers, ['records', 0, 'servicePointsIds'], []);
       const servicePoints = get(nextProps.resources.servicePoints, ['records'], []);
       if ((userServicePointsIds.length !== state.userServicePoints.length) && servicePoints.length) {
+        const servicePointsById = keyBy(servicePoints, 'id');
         const userServicePoints = userServicePointsIds
-          .map(usp => servicePoints.find(sp => sp.id === usp))
+          .filter(id => servicePointsById[id])
+          .map(id => servicePointsById[id])
           .sort(((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true })));
-
         const userPreferredServicePoint = get(nextProps.resources.servicePointsUsers, ['records', 0, 'defaultServicePointId'], '-');
 
         return {
