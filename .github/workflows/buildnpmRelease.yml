@@ -68,7 +68,7 @@ jobs:
 
       - name: Set FOLIO NPM  release version from package.json
         run: | 
-          PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag v$PACKAGE_VERSION
+          PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]')
 
       - name: Run yarn install
         run: yarn install --ignore-scripts
@@ -95,7 +95,7 @@ jobs:
         if: ${{ env.PUBLISH_MOD_DESCRIPTOR }}
         run: cat module-descriptor.json
 
-      - name: Read module descriptor
+      - name: Read module descriptor 
         if: ${{ env.PUBLISH_MOD_DESCRIPTOR && github.ref == 'refs/heads/master' || github.ref  == 'refs/heads/main' || github.ref == 'refs/heads/FOLIO-3067-Ankita' }}
         id: moduleDescriptor
         uses: juliangruber/read-file-action@v1
@@ -110,14 +110,15 @@ jobs:
         run: |
           docker pull folioorg/okapi:latest
           docker run --name okapiLatest -t -detach folioorg/okapi:latest dev
-          echo "OKAPI_IP = $(docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' okapiLatest)" >> $GITHUB_ENV
+          sleep 3
+          echo "OKAPI_IP=$(docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' okapiLatest)" >> $GITHUB_ENV
           sleep 10
       
       - name: Pull all Module descriptors to local Okapi instance
         if: ${{ env.PUBLISH_MOD_DESCRIPTOR }}
         uses: fjogeleit/http-request-action@master
         with:
-          url: http://172.17.0.2:9130/_/proxy/pull/modules
+          url: http://${{ env.OKAPI_IP }}:9130/_/proxy/pull/modules
           method: 'POST'
           contentType: 'application/json; charset=utf-8'
           customHeaders: '{ "Accept": "application/json; charset=utf-8" }'
@@ -180,6 +181,7 @@ jobs:
           name: yarn.lock
           path: yarn.lock
           retention-days: 5
+
       - name: Fetch branches for SonarCloud
         run: git fetch --no-tags ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY} +refs/heads/master:refs/remotes/origin/master
         
