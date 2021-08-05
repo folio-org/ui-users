@@ -12,11 +12,11 @@
 #   - COMPILE_TRANSLATION_FILES (boolean 'true' or 'false')
 
 name: buildNPM release
-on: [push,pull_request]
-#     create:
+on: 
+     create:
 jobs:
   Build:
-#     if : ${{ startsWith(github.ref, 'refs/tags/v') }}
+    if : ${{ startsWith(github.ref, 'refs/tags/v') }}
     env:
       YARN_TEST_OPTIONS: '--ci --coverage --colors'
       FOLIO_NAME: folio_users
