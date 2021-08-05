@@ -12,10 +12,10 @@
 #   - COMPILE_TRANSLATION_FILES (boolean 'true' or 'false')
 
 name: buildNPM release
-on: 
-    release:
-      tags:
-        - 'v*.*.*'
+on: [push]
+    # release:
+    #   tags:
+    #     - 'v*.*.*'
 jobs:
   Build:
     env:
