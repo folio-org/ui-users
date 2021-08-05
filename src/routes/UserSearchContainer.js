@@ -92,7 +92,7 @@ class UserSearchContainer extends React.Component {
     },
     departments: {
       type: 'okapi',
-      path: 'departments',
+      path: `departments?query=cql.allRecords=1 sortby name&limit=${MAX_RECORDS}`,
       records: 'departments',
     },
     owners: {
