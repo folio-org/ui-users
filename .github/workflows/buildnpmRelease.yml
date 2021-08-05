@@ -51,7 +51,7 @@ jobs:
           prop_path: 'version'
       
       - name: Check matching tag and version in package.json
-        if: ${{ env.TAG == steps.version.outputs.prop }}
+        if: ${{ env.TAG != steps.version.outputs.prop }}
         run: exit 1
 
       - name: Setup kernel for react native, increase watchers
@@ -113,6 +113,9 @@ jobs:
           sleep 3
           echo "OKAPI_IP=$(docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' okapiLatest)" >> $GITHUB_ENV
           sleep 10
+
+      - name: Set Module descriptor pull url with OKAPI_IP
+        run: echo "OKAPI_URL = $(http://${{ env.OKAPI_IP }}:9130/_/proxy/pull/modules)"
       
       - name: Pull all Module descriptors to local Okapi instance
         if: ${{ env.PUBLISH_MOD_DESCRIPTOR }}
