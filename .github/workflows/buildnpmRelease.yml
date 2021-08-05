@@ -51,7 +51,7 @@ jobs:
           prop_path: 'version'
       
       - name: Check matching tag and version in package.json
-        if: ${{ env.TAG != steps.version.outputs.prop }}
+        if: ${{ env.TAG == steps.version.outputs.prop }}
         run: exit 1
 
       - name: Setup kernel for react native, increase watchers
