@@ -11,6 +11,7 @@ import {
 } from '../../util';
 
 import {
+  getPatronBarcodeHyperlink,
   getItemBarcodeHyperlink,
   getLoanPolicyHyperlink,
   getOverduePolicyHyperlink,
@@ -179,7 +180,7 @@ class FinancialTransactionsReport {
           return {
             ...row,
             feeFineDetails: `=HYPERLINK("${origin}/users/${row.patronId}/accounts/view/${row.feeFineId}", "${row.feeFineId}")`,
-            patronBarcode: `=HYPERLINK("${origin}/users/preview/${row.patronId}", "${row.patronBarcode}")`,
+            patronBarcode: getPatronBarcodeHyperlink(origin, row, this.formatMessage({ id: 'ui-users.reports.financial.patronBarcode.noBarcode' })),
             patronEmail: `=HYPERLINK("mailto:${row.patronEmail}", "${row.patronEmail}")`,
             itemBarcode: getItemBarcodeHyperlink(origin, row),
             loanPolicy: getLoanPolicyHyperlink(origin, row),
