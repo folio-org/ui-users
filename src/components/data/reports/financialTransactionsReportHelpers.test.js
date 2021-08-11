@@ -1,4 +1,5 @@
 import {
+  getPatronBarcodeHyperlink,
   getItemBarcodeHyperlink,
   getLoanPolicyHyperlink,
   getOverduePolicyHyperlink,
@@ -10,6 +11,39 @@ import {
 describe('financial transactions report helpers', () => {
   const origin = 'test';
   const emptyOrigin = '';
+
+  describe('patron barcode hyperlink', () => {
+    const emptyBarcodeValue = 'emptyBarcodeValue';
+    const row = {
+      patronId: 'patronId',
+      patronBarcode: 'patronBarcode',
+    };
+
+    it('should get hyperlink when all the necessary present', () => {
+      expect(getPatronBarcodeHyperlink(origin, row, emptyBarcodeValue))
+        .toBe('=HYPERLINK("test/users/preview/patronId", "patronBarcode")');
+    });
+
+    it('should get empty hyperlink when absent origin', () => {
+      expect(getPatronBarcodeHyperlink(emptyOrigin, row, emptyBarcodeValue)).toBe(EMPTY_HYPERLINK_VALUE);
+    });
+
+    it('should get empty hyperlink when absent patronId', () => {
+      expect(getPatronBarcodeHyperlink(origin, {
+        ...row,
+        patronId: '',
+      },
+      emptyBarcodeValue)).toBe(EMPTY_HYPERLINK_VALUE);
+    });
+
+    it('should get hyperlink with noBarcode value when absent patronBarcode', () => {
+      expect(getPatronBarcodeHyperlink(origin, {
+        ...row,
+        patronBarcode: '',
+      },
+      emptyBarcodeValue)).toBe(`=HYPERLINK("test/users/preview/patronId", "${emptyBarcodeValue}")`);
+    });
+  });
 
   describe('item barcode hyperlink', () => {
     const row = {

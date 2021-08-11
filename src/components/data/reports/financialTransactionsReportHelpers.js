@@ -1,5 +1,13 @@
 export const EMPTY_HYPERLINK_VALUE = '';
 
+export const getPatronBarcodeHyperlink = (origin, row, noBarcode) => {
+  const patronBarcodeLabel = row.patronBarcode || noBarcode;
+
+  return origin && row.patronId
+    ? `=HYPERLINK("${origin}/users/preview/${row.patronId}", "${patronBarcodeLabel}")`
+    : EMPTY_HYPERLINK_VALUE;
+};
+
 export const getItemBarcodeHyperlink = (origin, row) => (
   origin && row.instanceId && row.holdingsRecordId && row.itemId && row.itemBarcode
     ? `=HYPERLINK("${origin}/inventory/view/${row.instanceId}/${row.holdingsRecordId}/${row.itemId}", "${row.itemBarcode}")`

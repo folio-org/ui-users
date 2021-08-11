@@ -860,6 +860,7 @@
   "reports.financial.transferAccount": "Transfer account",
   "reports.financial.patronName": "Patron name",
   "reports.financial.patronBarcode": "Patron barcode",
+  "reports.financial.patronBarcode.noBarcode": "[no barcode]",
   "reports.financial.patronGroup": "Patron group",
   "reports.financial.patronEmail": "Patron email address",
   "reports.financial.instance": "Instance",
