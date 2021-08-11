@@ -10,6 +10,14 @@ import {
   getValue,
 } from '../../util';
 
+import {
+  getItemBarcodeHyperlink,
+  getLoanPolicyHyperlink,
+  getOverduePolicyHyperlink,
+  getLostItemPolicyHyperlink,
+  getLoanDetailsHyperlink,
+} from './financialTransactionsReportHelpers';
+
 class FinancialTransactionsReport {
   constructor({
     data,
@@ -173,11 +181,11 @@ class FinancialTransactionsReport {
             feeFineDetails: `=HYPERLINK("${origin}/users/${row.patronId}/accounts/view/${row.feeFineId}", "${row.feeFineId}")`,
             patronBarcode: `=HYPERLINK("${origin}/users/preview/${row.patronId}", "${row.patronBarcode}")`,
             patronEmail: `=HYPERLINK("mailto:${row.patronEmail}", "${row.patronEmail}")`,
-            itemBarcode: `=HYPERLINK("${origin}/inventory/view/${row.instanceId}/${row.holdingsRecordId}/${row.itemId}", "${row.itemBarcode}")`,
-            loanPolicy: `=HYPERLINK("${origin}/settings/circulation/loan-policies/${row.loanPolicyId}", "${row.loanPolicyName}")`,
-            overduePolicy: `=HYPERLINK("${origin}/settings/circulation/fine-policies/${row.overdueFinePolicyId}", "${row.overdueFinePolicyName}")`,
-            lostItemPolicy: `=HYPERLINK("${origin}/settings/circulation/lost-item-fee-policy/${row.lostItemPolicyId}", "${row.lostItemPolicyName}")`,
-            loanDetails: `=HYPERLINK("${origin}/users/${row.patronId}/loans/view/${row.loanId}", "${row.loanId}")`,
+            itemBarcode: getItemBarcodeHyperlink(origin, row),
+            loanPolicy: getLoanPolicyHyperlink(origin, row),
+            overduePolicy: getOverduePolicyHyperlink(origin, row),
+            lostItemPolicy: getLostItemPolicyHyperlink(origin, row),
+            loanDetails: getLoanDetailsHyperlink(origin, row),
           };
         } else {
           return row;
