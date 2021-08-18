@@ -973,5 +973,6 @@
     "reports.financial.totalAmount": "Total amount",
     "reports.financial.totalCount": "Total count",
     "custom.customFields": "Custom fields",
-    "custom.noCustomFieldsFound": "No custom fields found"
+    "custom.noCustomFieldsFound": "No custom fields found",
+    "reports.financial.patronBarcode.noBarcode": "[no barcode]"
 }

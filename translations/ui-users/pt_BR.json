@@ -917,7 +917,7 @@
     "details.openTransactions.resolve": "Please resolve the transactions to proceed to delete the user.",
     "details.openLoans": "Empréstimos ativos",
     "details.openRequests": "Requisições abertas",
-    "details.openFeesFines": "Open fees/fines",
+    "details.openFeesFines": "Taxas/multas em aberto",
     "details.openBlocks": "Blocos abertos",
     "details.openUnexpiredProxy": "Open unexpired proxy",
     "permission.delete": "Users: Can delete user profile if user does not have any open transactions",
@@ -973,5 +973,6 @@
     "reports.financial.totalAmount": "Valor total",
     "reports.financial.totalCount": "Contagem total",
     "custom.customFields": "Campos personalizados",
-    "custom.noCustomFieldsFound": "Nenhum campo personalizado encontrado"
+    "custom.noCustomFieldsFound": "Nenhum campo personalizado encontrado",
+    "reports.financial.patronBarcode.noBarcode": "[sem código de barras]"
 }
