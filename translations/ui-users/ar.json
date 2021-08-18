@@ -973,5 +973,6 @@
     "reports.financial.totalAmount": "المبلغ الإجمالي",
     "reports.financial.totalCount": "العدد الإجمالي",
     "custom.customFields": "حقول مخصصة",
-    "custom.noCustomFieldsFound": "لم يتم العثور على حقول مخصصة"
+    "custom.noCustomFieldsFound": "لم يتم العثور على حقول مخصصة",
+    "reports.financial.patronBarcode.noBarcode": "[بدون باركود]"
 }

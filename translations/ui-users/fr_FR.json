@@ -931,7 +931,7 @@
     "reports.financial.trans.modal.owners": "Fee/fine owner",
     "reports.financial.trans.modal.owners.placeholder": "Select fee/fine owner",
     "reports.financial.trans.modal.servicePoint": "Associated service points",
-    "reports.financial.trans.modal.servicePoint.placeholder": "Select service point(s)",
+    "reports.financial.trans.modal.servicePoint.placeholder": "Sélectionnez le(s) point(s) de service",
     "reports.financial.name": "Financial Transactions Detail Report",
     "reports.financial.header": "Financial Transactions Detail Report for {owner}, Service Point(s) {servicePoints} - {startDate} to {endDate}",
     "reports.financial.feeFineOwner": "Fee/fine owner",
@@ -973,5 +973,6 @@
     "reports.financial.totalAmount": "Montant total",
     "reports.financial.totalCount": "Nombre total",
     "custom.customFields": "Champs personnalisés",
-    "custom.noCustomFieldsFound": "No custom fields found"
+    "custom.noCustomFieldsFound": "No custom fields found",
+    "reports.financial.patronBarcode.noBarcode": "[pas de code-barres]"
 }
