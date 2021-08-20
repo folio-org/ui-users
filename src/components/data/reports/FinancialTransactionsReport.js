@@ -6,7 +6,6 @@ import { exportCsv } from '@folio/stripes/util';
 import { financialTransactionsMainReportColumns } from '../../../constants';
 import {
   formatCurrencyAmount,
-  formatDateAndTime,
   getValue,
 } from '../../util';
 
@@ -24,20 +23,18 @@ class FinancialTransactionsReport {
     data,
     intl: {
       formatMessage,
-      formatTime,
-      formatDate
+      formatDate,
     },
-    headerData
+    headerData,
   }) {
     this.data = data;
     this.formatMessage = formatMessage;
-    this.formatTime = formatTime;
     this.formatDate = formatDate;
     this.headerData = headerData;
 
     this.columnsMap = financialTransactionsMainReportColumns.map(value => ({
       label: this.formatMessage({ id: `ui-users.reports.financial.${value}` }),
-      value
+      value,
     }));
   }
 
@@ -54,7 +51,7 @@ class FinancialTransactionsReport {
         owner: this.headerData.feeFineOwner,
         servicePoints: this.headerData.servicePoints,
         startDate: this.formatDate(this.headerData.startDate),
-        endDate: this.formatDate(this.headerData.endDate) || moment().format('YYYY/MM/DD') // if no endDate then show date='today'
+        endDate: this.formatDate(this.headerData.endDate) || moment().format('YYYY/MM/DD'), // if no endDate then show date='today'
       }
     );
   }
@@ -98,7 +95,7 @@ class FinancialTransactionsReport {
         byWaiveReason,
         byRefundReason,
         byTransferAccount,
-      }
+      },
     } = this.data;
 
     if (isEmpty(reportData)) {
@@ -110,12 +107,12 @@ class FinancialTransactionsReport {
         feeFineOwner: getValue(row.feeFineOwner),
         feeFineType: getValue(row.feeFineType),
         feeFineBilledAmount: getValue(row.billedAmount),
-        feeFineBilledDate: formatDateAndTime(row.dateBilled, this.formatTime),
+        feeFineBilledDate: getValue(row.dateBilled),
         feeFineCreated: getValue(row.feeFineCreatedAt),
         feeFineSource: getValue(row.feeFineSource),
         action: getValue(row.action),
         actionAmount: formatCurrencyAmount(row.actionAmount),
-        actionDate: formatDateAndTime(row.actionDate, this.formatTime),
+        actionDate: getValue(row.actionDate),
         actionCreated: getValue(row.actionCreatedAt),
         actionSource: getValue(row.actionSource),
         actionStatus: getValue(row.actionStatus),
@@ -132,9 +129,9 @@ class FinancialTransactionsReport {
         contributors: getValue(row.contributors),
         callNumber: getValue(row.callNumber),
         effectiveLocation: getValue(row.effectiveLocation),
-        loanDate: formatDateAndTime(row.loanDate, this.formatTime),
-        dueDate: formatDateAndTime(row.dueDate, this.formatTime),
-        returnDate: formatDateAndTime(row.returnDate, this.formatTime),
+        loanDate: getValue(row.loanDate),
+        dueDate: getValue(row.dueDate),
+        returnDate: getValue(row.returnDate),
         patronId: getValue(row.patronId),
         feeFineId: getValue(row.feeFineId),
         patronBarcode: getValue(row.patronBarcode),
