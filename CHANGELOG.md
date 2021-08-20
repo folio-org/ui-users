@@ -30,6 +30,7 @@
 * Fix hyperlink in `Financial transactions detail report`. Refs UIU-2217.
 * Fix hyperlink with missing `Patron barcode`. Refs UIU-2242.
 * Fix `Invalid date` for `Financial transaction detail report`. Refs UIU-2251.
+* Support `feesfines` interface version `17.0`. Refs UIU-2248.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
