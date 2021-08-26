@@ -10,6 +10,7 @@
 #   - FOLIO_NAME
 #   - PUBLISH_MOD_DESCRIPTOR (boolean 'true' or 'false')
 #   - COMPILE_TRANSLATION_FILES (boolean 'true' or 'false')
+#   - DEFAULT_BRANCH (set the dafault-branch 'master' or 'main')
 
 
 name: buildNPM Snapshot
@@ -19,16 +20,17 @@ jobs:
   Build:
     env:
       YARN_TEST_OPTIONS: '--ci --coverage --colors'
-      FOLIO_NAME: folio_users
+      SQ_ROOT_DIR: './src'
+      PUBLISH_MOD_DESCRIPTOR: 'true'
+      COMPILE_TRANSLATION_FILES: 'true'
+      DEFAULT_BRANCH: master
       FOLIO_NPM_REGISTRY: 'https://repository.folio.org/repository/npm-folioci/'
+      FOLIO_MD_REGISTRY: 'https://folio-registry.dev.folio.org'
       NODEJS_VERSION: '12'
       JEST_JUNIT_OUTPUT_DIR: 'artifacts/jest-junit'
       JEST_COVERAGE_REPORT_DIR: 'artifacts/coverage-jest/lcov-report/'
       BIGTEST_JUNIT_OUTPUT_DIR: 'artifacts/runTest'
       BIGTEST_COVERAGE_REPORT_DIR: 'artifacts/coverage/lcov-report/'
-      PUBLISH_MOD_DESCRIPTOR: 'true'
-      SQ_ROOT_DIR: './src'
-      COMPILE_TRANSLATION_FILES: 'true'
       SQ_LCOV_REPORT: 'artifacts/coverage-jest/lcov.info'
       SQ_EXCLUSIONS: '**/platform/alias-service.js,**/docs/**,**/node_modules/**,**/examples/**,**/artifacts/**,**/ci/**,Jenkinsfile,**/LICENSE,**/*.css,**/*.md,**/*.json,**/tests/**,**/stories/*.js,**/test/**,**/.stories.js,**/resources/bigtest/interactors/**,**/resources/bigtest/network/**,**/*-test.js,**/*.test.js,**/*-spec.js,**/karma.conf.js,**/jest.config.js'
 
@@ -128,7 +130,7 @@ jobs:
           retention-days: 5
 
       - name: Fetch branches for SonarCloud
-        run: git fetch --no-tags ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY} +refs/heads/master:refs/remotes/origin/master
+        run: git fetch --no-tags ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY} +refs/heads/${{ env.DEFAULT_BRANCH }}:refs/remotes/origin/${{ env.DEFAULT_BRANCH }}
 
       - name: Run SonarCloud scan
         uses: sonarsource/sonarcloud-github-action@master
@@ -177,7 +179,7 @@ jobs:
         id: modDescriptorPost
         uses: fjogeleit/http-request-action@master
         with:
-          url: 'http://ec2-3-88-110-24.compute-1.amazonaws.com/_/proxy/modules'
+          url: ${{ env.FOLIO_MD_REGISTRY }}/_/proxy/modules
           method: 'POST'
           contentType: 'application/json; charset=utf-8'
           customHeaders: '{ "Accept": "application/json; charset=utf-8" }'
