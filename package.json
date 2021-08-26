@@ -169,7 +169,9 @@
           "ui-users.edit",
           "ui-users.viewuserservicepoints",
           "inventory-storage.service-points-users.item.post",
-          "inventory-storage.service-points-users.item.put"
+          "inventory-storage.service-points-users.item.put",
+          "circulation-storage.request-preferences.item.post",
+          "circulation-storage.request-preferences.item.put"
         ],
         "visible": true
       },
