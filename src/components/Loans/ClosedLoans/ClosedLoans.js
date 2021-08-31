@@ -230,10 +230,10 @@ class ClosedLoans extends React.Component {
       'returnDate': loan => {
         return loan.returnDate
           ? (<FormattedTime
-            value={loan.returnDate}
-            day="numeric"
-            month="numeric"
-            year="numeric"
+              value={loan.returnDate}
+              day="numeric"
+              month="numeric"
+              year="numeric"
           />)
           : '-';
       },

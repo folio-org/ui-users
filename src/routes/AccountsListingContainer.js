@@ -156,7 +156,7 @@ class AccountsListingContainer extends React.Component {
       resources
     } = this.props;
     const user = this.getUser();
-    const loans = resources.loans ? resources.loans.records : [];
+    const loans = resources?.loans ? resources.loans.records : [];
     const patronGroup = this.getPatronGroup();
     if (!user) {
       return (
