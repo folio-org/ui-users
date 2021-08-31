@@ -41,7 +41,7 @@
     "optionalOkapiInterfaces": {
       "automated-patron-blocks": "0.1",
       "circulation": "9.0 10.0 11.0",
-      "feesfines": "16.1",
+      "feesfines": "16.1 17.0",
       "loan-policy-storage": "1.0 2.0",
       "loan-storage": "4.0 5.0 6.0 7.0",
       "notes": "2.0",
@@ -169,7 +169,9 @@
           "ui-users.edit",
           "ui-users.viewuserservicepoints",
           "inventory-storage.service-points-users.item.post",
-          "inventory-storage.service-points-users.item.put"
+          "inventory-storage.service-points-users.item.put",
+          "circulation-storage.request-preferences.item.post",
+          "circulation-storage.request-preferences.item.put"
         ],
         "visible": true
       },
