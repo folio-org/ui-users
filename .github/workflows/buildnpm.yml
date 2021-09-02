@@ -91,7 +91,7 @@ jobs:
           github_token: ${{ github.token }}
           files: "${{ env.JEST_JUNIT_OUTPUT_DIR }}/*.xml"
           check_name: Jest Unit Test Results
-          comment_on_pr: true
+          comment_mode: update last
           comment_title: Jest Unit Test Statistics
 
       - name: Publish Jest coverage report
@@ -109,7 +109,7 @@ jobs:
           github_token: ${{ github.token }}
           files: "${{ env.BIGTEST_JUNIT_OUTPUT_DIR }}/*.xml"
           check_name: BigTest Unit Test Results
-          comment_on_pr: true
+          comment_mode: update last
           comment_title: BigTest Unit Test Statistics
 
       - name: Publish BigTest coverage report
