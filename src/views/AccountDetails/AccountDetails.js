@@ -489,10 +489,10 @@ class AccountDetails extends React.Component {
                 value={(
                   _.get(account, ['metadata', 'createdDate'])
                     ? <FormattedTime
-                      value={_.get(account, ['metadata', 'createdDate'])}
-                      day="numeric"
-                      month="numeric"
-                      year="numeric"
+                        value={_.get(account, ['metadata', 'createdDate'])}
+                        day="numeric"
+                        month="numeric"
+                        year="numeric"
                     />
                     : '-'
                 )}
@@ -595,10 +595,10 @@ class AccountDetails extends React.Component {
                 value={
                   account.dueDate
                     ? <FormattedTime
-                      value={account.dueDate}
-                      day="numeric"
-                      month="numeric"
-                      year="numeric"
+                        value={account.dueDate}
+                        day="numeric"
+                        month="numeric"
+                        year="numeric"
                     />
                     : '-'
                 }
@@ -610,10 +610,10 @@ class AccountDetails extends React.Component {
                 value={
                   account.returnedDate
                     ? <FormattedTime
-                      value={account.returnedDate}
-                      day="numeric"
-                      month="numeric"
-                      year="numeric"
+                        value={account.returnedDate}
+                        day="numeric"
+                        month="numeric"
+                        year="numeric"
                     />
                     : '-'
                 }
