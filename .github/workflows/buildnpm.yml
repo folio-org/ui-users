@@ -10,7 +10,7 @@
 #   - FOLIO_NAME
 #   - PUBLISH_MOD_DESCRIPTOR (boolean 'true' or 'false')
 #   - COMPILE_TRANSLATION_FILES (boolean 'true' or 'false')
-#   - DEFAULT_BRANCH (set the dafault-branch 'master' or 'main')
+
 
 
 name: buildNPM Snapshot
@@ -23,7 +23,6 @@ jobs:
       SQ_ROOT_DIR: './src'
       PUBLISH_MOD_DESCRIPTOR: 'true'
       COMPILE_TRANSLATION_FILES: 'true'
-      DEFAULT_BRANCH: master
       FOLIO_NPM_REGISTRY: 'https://repository.folio.org/repository/npm-folioci/'
       FOLIO_MD_REGISTRY: 'https://folio-registry.dev.folio.org'
       NODEJS_VERSION: '12'
@@ -128,6 +127,9 @@ jobs:
           name: yarn.lock
           path: yarn.lock
           retention-days: 5
+
+      - name: Set default branch as env variable
+        run: echo "DEFAULT_BRANCH=${{ github.event.repository.default_branch }}" >> $GITHUB_ENV
 
       - name: Fetch branches for SonarCloud
         run: git fetch --no-tags ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY} +refs/heads/${{ env.DEFAULT_BRANCH }}:refs/remotes/origin/${{ env.DEFAULT_BRANCH }}
