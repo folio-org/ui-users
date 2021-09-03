@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -7,12 +6,26 @@ import {
   sortTypes,
 } from '../../constants';
 
+/**
+ * getFullName
+ * return "last, first middle", derived from user.personal.
+ *
+ * @param {object} user
+ * @returns string
+ */
 export function getFullName(user) {
-  const lastName = _.get(user, 'personal.lastName', '');
-  const firstName = _.get(user, 'personal.firstName', '');
-  const middleName = _.get(user, 'personal.middleName', '');
+  let fullName = user?.personal?.lastName ?? '';
+  let givenName = user?.personal?.firstName ?? '';
+  const middleName = user?.personal?.middleName ?? '';
+  if (middleName) {
+    givenName += `${givenName ? ' ' : ''}${middleName}`;
+  }
 
-  return `${lastName}${firstName ? ', ' : ' '}${firstName}${middleName ? ' ' : ''}${middleName}`;
+  if (givenName) {
+    fullName += `${fullName ? ', ' : ''}${givenName}`;
+  }
+
+  return fullName;
 }
 
 export const formatActionDescription = (action) => {
@@ -132,12 +145,12 @@ export function calculateSortParams({
 
 // Return true if every item in loans has the status itemStatus
 export function hasEveryLoanItemStatus(loans, itemStatus) {
-  return _.every(Object.values(loans), loan => loan?.item?.status?.name === itemStatus);
+  return loans.every(loan => loan?.item?.status?.name === itemStatus);
 }
 
 // Return true if every item in loans has one of the statuses in the itemStatuses array
 export function hasAnyLoanItemStatus(loans, itemStatuses) {
-  return _.every(Object.values(loans), loan => itemStatuses.includes(loan?.item?.status?.name));
+  return loans.every(loan => itemStatuses.includes(loan?.item?.status?.name));
 }
 
 export function accountsMatchStatus(accounts, status) {
