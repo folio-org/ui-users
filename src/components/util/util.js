@@ -7,12 +7,26 @@ import {
   sortTypes,
 } from '../../constants';
 
+/**
+ * getFullName
+ * return "last, first middle", derived from user.personal.
+ *
+ * @param {object} user
+ * @returns string
+ */
 export function getFullName(user) {
-  const lastName = _.get(user, 'personal.lastName', '');
-  const firstName = _.get(user, 'personal.firstName', '');
-  const middleName = _.get(user, 'personal.middleName', '');
+  let fullName = user?.personal?.lastName ?? '';
+  let givenName = user?.personal?.firstName ?? '';
+  const middleName = user?.personal?.middleName ?? '';
+  if (middleName) {
+    givenName += `${givenName ? ' ' : ''}${middleName}`;
+  }
 
-  return `${lastName}${firstName ? ', ' : ' '}${firstName}${middleName ? ' ' : ''}${middleName}`;
+  if (givenName) {
+    fullName += `${fullName ? ', ' : ''}${givenName}`;
+  }
+
+  return fullName;
 }
 
 export const formatActionDescription = (action) => {

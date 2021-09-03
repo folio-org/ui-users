@@ -262,7 +262,17 @@ describe('getFullName', () => {
       },
     };
 
-    expect(getFullName(user)).toBe(`${lastName}, ${firstName}`);
+    expect(getFullName(user)).toBe(`${lastName}, ${middleName}`);
+  });
+
+  it('handles missing last name', () => {
+    const user = {
+      personal: {
+        firstName,
+      },
+    };
+
+    expect(getFullName(user)).toBe(`${firstName}`);
   });
 
   it('handles missing first and middle names', () => {
@@ -272,7 +282,27 @@ describe('getFullName', () => {
       },
     };
 
-    expect(getFullName(user)).toBe(`${lastName}`);
+    expect(getFullName(user)).toBe(lastName);
+  });
+
+  it('handles missing first and last names', () => {
+    const user = {
+      personal: {
+        middleName,
+      },
+    };
+
+    expect(getFullName(user)).toBe(middleName);
+  });
+
+  it('handles missing last and middle names', () => {
+    const user = {
+      personal: {
+        firstName,
+      },
+    };
+
+    expect(getFullName(user)).toBe(firstName);
   });
 });
 
