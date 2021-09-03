@@ -14,8 +14,8 @@ jest.mock('@folio/stripes/components', () => ({
     </button>
   )),
   Col: jest.fn(({ children }) => <div className="col">{ children }</div>),
-  ExpandAllButton: jest.fn(({ children, ...rest }) => (
-    <span {...rest}>{children}</span>
+  ExpandAllButton: jest.fn(({ children }) => (
+    <span>{children}</span>
   )),
   AccordionSet: jest.fn(({ children, ...rest }) => (
     <span {...rest}>{children}</span>
@@ -26,8 +26,8 @@ jest.mock('@folio/stripes/components', () => ({
   Callout: jest.fn(({ children, ...rest }) => (
     <span {...rest}>{children}</span>
   )),
-  HasCommand: jest.fn(({ children, ...rest }) => (
-    <span {...rest}>{children}</span>
+  HasCommand: jest.fn(({ children }) => (
+    <span>{children}</span>
   )),
   KeyValue: jest.fn(({ label, children, value }) => (
     <>
@@ -108,7 +108,9 @@ jest.mock('@folio/stripes/components', () => ({
   NavListSection: jest.fn(({ children, className, ...rest }) => (
     <div className={className} {...rest}>{children}</div>
   )),
-  Pane: jest.fn(({ children, className, defaultWidth, paneTitle, firstMenu, lastMenu, actionMenu, ...rest }) => {
+  // destructure appIcon and dismissible so they aren't incorrectly
+  // applied as DOM attributes via ...rest.
+  Pane: jest.fn(({ children, className, defaultWidth, paneTitle, firstMenu, lastMenu, actionMenu, appIcon, dismissible, ...rest }) => {
     return (
       <div className={className} {...rest} style={{ width: defaultWidth }}>
         <div>
