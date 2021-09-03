@@ -1,141 +1,21 @@
 import '../../../test/jest/__mock__';
 import {
   accountsMatchStatus,
-  calculateRemainingAmount,
-  calculateSortParams,
   checkUserActive,
   formatActionDescription,
   formatCurrencyAmount,
-  formatDateAndTime,
   getChargeFineToLoanPath,
-  getClosedRequestStatusesFilterString,
-  getFilterStatusesString,
   getFullName,
-  getOpenRequestsPath,
-  getOpenRequestStatusesFilterString,
-  getRecordObject,
-  getServicePointOfCurrentAction,
-  getValue,
   hasAnyLoanItemStatus,
   hasEveryLoanItemStatus,
-  retrieveNoteReferredEntityDataFromLocationState,
-  validate,
 } from './util';
-
-/*
-
-
-
-export const formatDateAndTime = (date, formatter) => {
-  return date ? formatter(date, { day: 'numeric', month: 'numeric', year: 'numeric' }) : '';
-};
-
-export const getServicePointOfCurrentAction = (action, servicePoints = []) => {
-  const servicePoint = servicePoints.find(sp => sp.id === action.createdAt);
-
-  return servicePoint ? servicePoint.name : action.createdAt;
-};
-
-export const calculateRemainingAmount = (remaining) => (parseFloat(remaining) * 100) / 100;
-
-export function validate(item, index, items, field, label) {
-  const error = {};
-  for (let i = 0; i < items.length; i++) {
-    const obj = items[i];
-    if ((index !== i) && ((obj[field] || '').localeCompare(item[field], 'sv', { sensitivity: 'base' }) === 0)) {
-      error[field] = (
-        <FormattedMessage
-          id="ui-users.duplicated"
-          values={{ field: label }}
-        />
-      );
-    }
-  }
-  return error;
-}
-
-export function getRecordObject(resources, ...args) {
-  const res = {};
-  args.forEach((resource) => {
-    res[resource] = resources[resource].records;
-  });
-  return res;
-}
-
-export function retrieveNoteReferredEntityDataFromLocationState(state) {
-  if (state) {
-    return {
-      name: state.entityName,
-      type: state.entityType,
-      id: state.entityId,
-    };
-  }
-
-  return null;
-}
-
-export function getFilterStatusesString(statuses) {
-  return statuses.map(status => `requestStatus.${status}`).join(',');
-}
-
-export function getClosedRequestStatusesFilterString() {
-  const closedStatusesArr = [
-    requestStatuses.PICKUP_EXPIRED,
-    requestStatuses.CANCELLED,
-    requestStatuses.FILLED,
-    requestStatuses.UNFILLED,
-  ];
-
-  return getFilterStatusesString(closedStatusesArr);
-}
-
-export function getOpenRequestStatusesFilterString() {
-  const openStatusesArr = [
-    requestStatuses.AWAITING_PICKUP,
-    requestStatuses.AWAITING_DELIVERY,
-    requestStatuses.IN_TRANSIT,
-    requestStatuses.NOT_YET_FILLED,
-  ];
-
-  return getFilterStatusesString(openStatusesArr);
-}
-
-
-export function calculateSortParams({
-  sortOrder,
-  sortValue,
-  sortDirection,
-  secondarySortOrderIndex = 0,
-  secondarySortDirectionIndex = 0,
-}) {
-  const sortParams = {};
-
-  if (sortOrder[0] !== sortValue) {
-    sortParams.sortOrder = [sortValue, sortOrder[secondarySortOrderIndex]];
-    sortParams.sortDirection = [sortTypes.ASC, sortDirection[secondarySortDirectionIndex]];
-  } else {
-    const direction = sortDirection[0] === sortTypes.DESC ? sortTypes.ASC : sortTypes.DESC;
-
-    sortParams.sortDirection = [direction, sortDirection[1]];
-  }
-
-  return sortParams;
-}
-
-
-
-export function getValue(value) {
-  return value || '';
-}
-
-*/
 
 describe('accountsMatchStatus', () => {
   it('returns true if all accounts match', () => {
     const status = 'monkey';
     const accounts = [
-      { id: '1234', status: { name: status }},
-      { id: 'abcd', status: { name: status }},
+      { id: '1234', status: { name: status } },
+      { id: 'abcd', status: { name: status } },
     ];
 
     expect(accountsMatchStatus(accounts, status)).toBe(true);
@@ -144,8 +24,8 @@ describe('accountsMatchStatus', () => {
   it('returns false if any account does not match', () => {
     const status = 'monkey';
     const accounts = [
-      { id: '1234', status: { name: status }},
-      { id: 'abcd', status: { name: 'bagel' }},
+      { id: '1234', status: { name: status } },
+      { id: 'abcd', status: { name: 'bagel' } },
     ];
 
     expect(accountsMatchStatus(accounts, status)).toBe(false);
