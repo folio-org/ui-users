@@ -332,8 +332,8 @@ describe('hasEveryLoanItemStatus', () => {
   it('returns true if all accounts match', () => {
     const status = 'monkey';
     const loans = [
-      { id: '1234', item: { status: { name: 'monkey' } } },
-      { id: 'abcd', item: { status: { name: 'bagel' } } },
+      { id: '1234', item: { status: { name: status } } },
+      { id: 'abcd', item: { status: { name: status } } },
     ];
 
     expect(hasEveryLoanItemStatus(loans, status)).toBe(true);
@@ -342,7 +342,7 @@ describe('hasEveryLoanItemStatus', () => {
   it('returns false if any account does not match', () => {
     const status = 'monkey';
     const loans = [
-      { id: '1234', item: { status: { name: 'monkey' } } },
+      { id: '1234', item: { status: { name: status } } },
       { id: 'abcd', item: { status: { name: 'bagel' } } },
     ];
 
