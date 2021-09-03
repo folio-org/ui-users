@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -146,12 +145,12 @@ export function calculateSortParams({
 
 // Return true if every item in loans has the status itemStatus
 export function hasEveryLoanItemStatus(loans, itemStatus) {
-  return _.every(Object.values(loans), loan => loan?.item?.status?.name === itemStatus);
+  return loans.every(loan => loan?.item?.status?.name === itemStatus);
 }
 
 // Return true if every item in loans has one of the statuses in the itemStatuses array
 export function hasAnyLoanItemStatus(loans, itemStatuses) {
-  return _.every(Object.values(loans), loan => itemStatuses.includes(loan?.item?.status?.name));
+  return loans.every(loan => itemStatuses.includes(loan?.item?.status?.name));
 }
 
 export function accountsMatchStatus(accounts, status) {
