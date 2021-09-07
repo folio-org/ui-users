@@ -31,6 +31,12 @@ describe('Charge fee/fine', () => {
         { feeFineType: 'testFineType',
           ownerId: owner.id,
           defaultAmount: 500.00 });
+      this.server.create('feefine', {
+        feeFineType: 'automaticFineType',
+        automatic: true,
+        ownerId: owner.id,
+        defaultAmount: 10.00
+      });
       loan = this.server.create('loan', { status: { name: 'Open' } });
       visit(`/users/preview/${loan.userId}`);
       await userDetail.whenLoaded();
@@ -48,6 +54,10 @@ describe('Charge fee/fine', () => {
 
       it('displays the "Charge fee fine" form', () => {
         expect(chargeForm.form.isPresent).to.be.true;
+      });
+
+      it('should show only manual fee.fine types', () => {
+        expect(chargeForm.typeSelect.optionCount).to.equal(1);
       });
 
       describe('cancel the charge', () => {
