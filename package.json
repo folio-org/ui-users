@@ -706,19 +706,6 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.settings.profilePictures",
-        "displayName": "Settings (Users): Can create, edit and remove permission sets",
-        "description": "",
-        "subPermissions": [
-          "settings.users.enabled",
-          "configuration.entries.collection.get",
-          "configuration.entries.item.get",
-          "configuration.entries.item.post",
-          "configuration.entries.item.put"
-        ],
-        "visible": true
-      },
-      {
         "permissionName": "ui-users.settings.departments.view",
         "displayName": "Settings (Users): View departments",
         "subPermissions": [
