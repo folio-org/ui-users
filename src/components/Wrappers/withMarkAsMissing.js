@@ -12,12 +12,14 @@ const withMarkAsMissing = WrappedComponent => class withMarkAsMissingComponent e
     this.state = {
       markAsMissingDialogOpen: false,
       loan: null,
+      itemRequestCount: 0,
     };
   }
 
-  openMarkAsMissingDialog = loan => {
+  openMarkAsMissingDialog = (loan, itemRequestCount) => {
     this.setState({
       loan,
+      itemRequestCount,
       markAsMissingDialogOpen: true,
     });
   }
@@ -30,9 +32,10 @@ const withMarkAsMissing = WrappedComponent => class withMarkAsMissingComponent e
     const {
       markAsMissingDialogOpen,
       loan,
+      itemRequestCount,
     } = this.state;
 
-    const modalLabel = <FormattedMessage id="ui-users.loans.confirmAsMissing" />;
+    const modalLabel = <FormattedMessage id="ui-users.loans.confirmMissing" />;
 
     return (
       <>
@@ -43,6 +46,7 @@ const withMarkAsMissing = WrappedComponent => class withMarkAsMissingComponent e
         { loan &&
           <LoanActionDialog
             loan={loan}
+            itemRequestCount={itemRequestCount}
             loanAction={loanActionMutators.MARK_AS_MISSING}
             modalLabel={modalLabel}
             open={markAsMissingDialogOpen}

@@ -4,7 +4,7 @@ import {
   injectIntl,
   FormattedMessage,
 } from 'react-intl';
-import { Field } from 'redux-form';
+import { Field } from 'react-final-form';
 import {
   Select,
   Label,
@@ -126,6 +126,7 @@ class PaymentSettings extends React.Component {
         sortby="nameMethod"
         validate={(item, index, items) => validate(item, index, items, 'nameMethod', label)}
         visibleFields={['nameMethod', 'allowedRefundMethod']}
+        formType="final-form"
       />
     );
   }

@@ -3,7 +3,7 @@
 .firstMenuItems {
   margin-left: calc(var(--gutter-static-two-thirds) * 2);
 
-  &:last-of-type: {
+  &:last-of-type {
     margin-left: var(--gutter-static-two-thirds);
   }
 }

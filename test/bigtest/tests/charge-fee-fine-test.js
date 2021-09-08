@@ -31,6 +31,12 @@ describe('Charge fee/fine', () => {
         { feeFineType: 'testFineType',
           ownerId: owner.id,
           defaultAmount: 500.00 });
+      this.server.create('feefine', {
+        feeFineType: 'automaticFineType',
+        automatic: true,
+        ownerId: owner.id,
+        defaultAmount: 10.00
+      });
       loan = this.server.create('loan', { status: { name: 'Open' } });
       visit(`/users/preview/${loan.userId}`);
       await userDetail.whenLoaded();
@@ -50,6 +56,20 @@ describe('Charge fee/fine', () => {
         expect(chargeForm.form.isPresent).to.be.true;
       });
 
+      it('should show only manual fee.fine types', () => {
+        expect(chargeForm.typeSelect.optionCount).to.equal(1);
+      });
+
+      describe('cancel the charge', () => {
+        beforeEach(async () => {
+          await chargeForm.clickCancel();
+        });
+
+        it('navigate to previous page', function () {
+          expect(this.location.pathname).to.equal(`/users/${loan.userId}/accounts/open`);
+        });
+      });
+
       describe('set the owner', () => {
         beforeEach(async () => {
           await chargeForm.ownerSelect.selectAndBlur('testOwner');
@@ -66,17 +86,6 @@ describe('Charge fee/fine', () => {
 
           it('should apply the amount', () => {
             expect(chargeForm.amountField.value).to.equal('500.00');
-          });
-
-          describe('cancel the charge', () => {
-            beforeEach(async () => {
-              await chargeForm.clickCancel();
-              await chargeForm.clickConfirmCancel();
-            });
-
-            it('navigate to previous page', function () {
-              expect(this.location.pathname).to.equal(`/users/${loan.userId}/accounts/open`);
-            });
           });
 
           describe('submit the charge', () => {

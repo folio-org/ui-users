@@ -1,3 +1,11 @@
+import { isEmpty } from 'lodash';
+
+import {
+  paymentStatusesAllowedToRefund,
+  waiveStatuses,
+  refundStatuses,
+} from '../../constants';
+
 export function count(array) {
   const list = [];
   const countList = [];
@@ -39,11 +47,32 @@ export function handleFilterClear(name) {
   return state;
 }
 
-export function calculateSelectedAmount(accounts) {
-  const selected = accounts.reduce((s, { remaining }) => {
-    return s + parseFloat(remaining * 100);
+function getWaiveActions(feeFineActions = []) {
+  return feeFineActions.filter(({ typeAction }) => waiveStatuses.includes(typeAction));
+}
+
+export function calculateSelectedAmount(accounts, isRefundAction = false, feeFineActions = []) {
+  const selected = accounts.reduce((s, { amount, remaining, id }) => {
+    if (isRefundAction) {
+      const accountFeeFineActions = feeFineActions.filter(({ accountId }) => accountId === id);
+      const waiveActions = getWaiveActions(accountFeeFineActions);
+      const waivedAmount = waiveActions.reduce((a, { amountAction }) => {
+        return a + parseFloat(amountAction * 100);
+      }, 0);
+
+      return s + parseFloat((amount - remaining) * 100) - waivedAmount;
+    } else {
+      return s + parseFloat(remaining * 100);
+    }
   }, 0);
+
   return parseFloat(selected / 100).toFixed(2);
+}
+
+export function calculateRemainingAmount(amount, balance, selected, action) {
+  return action === 'refund'
+    ? parseFloat(selected - amount).toFixed(2)
+    : amount > 0 ? parseFloat(balance - amount).toFixed(2) : parseFloat(balance).toFixed(2);
 }
 
 export function loadServicePoints(values) {
@@ -74,4 +103,51 @@ export function loadServicePoints(values) {
     });
   }
   return ownerId;
+}
+
+export function accountRefundInfo(account, feeFineActions = []) {
+  const accountFeeFinesActions = feeFineActions.filter(({ accountId }) => accountId === account.id);
+  const hasBeenPaid = accountFeeFinesActions.some(({ typeAction }) => {
+    return paymentStatusesAllowedToRefund.includes(typeAction);
+  });
+
+  const paidAmount = (parseFloat(account.amount - account.remaining) * 100) / 100;
+
+  return { hasBeenPaid, paidAmount };
+}
+
+export function hasBeenFullyRefunded(accountId, feeFineActions) {
+  const refundActions = feeFineActions.filter(action => {
+    return action.accountId === accountId && action.typeAction === refundStatuses.RefundedFully;
+  });
+
+  return !isEmpty(refundActions);
+}
+
+export function isRefundAllowed(account, feeFineActions) {
+  const { hasBeenPaid, paidAmount } = accountRefundInfo(account, feeFineActions);
+  const isAccountRefunded = hasBeenFullyRefunded(account.id, feeFineActions);
+
+  return !isAccountRefunded && hasBeenPaid && paidAmount > 0;
+}
+
+export function calculateTotalPaymentAmount(accounts = [], feeFineActions = []) {
+  return accounts.reduce((amount, account) => {
+    const { hasBeenPaid, paidAmount } = accountRefundInfo(account, feeFineActions);
+    return hasBeenPaid ? amount + paidAmount : amount;
+  }, 0);
+}
+
+export function calculateOwedFeeFines(accounts = []) {
+  return accounts.reduce((owed, account) => {
+    return account?.status?.name === 'Open' ? parseFloat(owed + account.remaining) : owed;
+  }, 0);
+}
+
+export function isCancelAllowed(account) {
+  return account.paymentStatus.name === 'Outstanding';
+}
+
+export function deleteOptionalActionFields(actionData, ...fields) {
+  fields.forEach((field) => (!actionData[field] ? delete actionData[field] : null));
 }

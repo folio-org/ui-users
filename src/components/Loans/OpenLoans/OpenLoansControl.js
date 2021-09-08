@@ -7,12 +7,20 @@ import {
   omit,
   size,
 } from 'lodash';
-import { FormattedMessage } from 'react-intl';
+import {
+  FormattedMessage,
+  injectIntl,
+} from 'react-intl';
 
 import { stripesShape } from '@folio/stripes/core';
 import { LoadingView } from '@folio/stripes/components';
 
-import { nav } from '../../util';
+import {
+  nav,
+  getRenewalPatronBlocksFromPatronBlocks,
+  formatDateAndTime,
+} from '../../util';
+
 import {
   withRenew,
   withDeclareLost,
@@ -23,6 +31,7 @@ import TableModel from './components/OpenLoansWithStaticData';
 
 class OpenLoansControl extends React.Component {
   static propTypes = {
+    intl: PropTypes.object.isRequired,
     stripes: stripesShape.isRequired,
     mutator: PropTypes.shape({
       query: PropTypes.object.isRequired,
@@ -37,6 +46,7 @@ class OpenLoansControl extends React.Component {
       }),
     }),
     resources: PropTypes.shape({
+      loanAccount: PropTypes.object,
       query: PropTypes.object,
       requests: PropTypes.shape({
         GET: PropTypes.func,
@@ -70,7 +80,7 @@ class OpenLoansControl extends React.Component {
       'dueDate',
       'requests',
       'barcode',
-      'Fee/Fine',
+      'feefineIncurred',
       'callNumber',
       'Contributors',
       'renewals',
@@ -87,7 +97,7 @@ class OpenLoansControl extends React.Component {
       'dueDate',
       'requests',
       'barcode',
-      'Fee/Fine',
+      'feefineIncurred',
       'callNumber',
       'Contributors',
       'renewals',
@@ -96,13 +106,20 @@ class OpenLoansControl extends React.Component {
       'loanDate',
     ];
 
+    this.excludedDefault = [
+      'loanDate',
+      'Contributors',
+      'location'
+    ];
+
     this.state = {
       checkedLoans: {},
       allChecked: false,
-      visibleColumns: this.controllableColumns.map(columnName => ({
-        title: columnName,
-        status: true,
-      })),
+      visibleColumns: this.controllableColumns
+        .map(columnName => ({
+          title: columnName,
+          status: !this.excludedDefault.includes(columnName),
+        })),
       patronBlockedModal: false,
       changeDueDateDialogOpen:false,
       activeLoan: null,
@@ -164,7 +181,7 @@ class OpenLoansControl extends React.Component {
     }));
   };
 
-  renewSelected = async () => {
+  renewSelected = async (additionalInfo = '') => {
     const { checkedLoans } = this.state;
     const {
       renew,
@@ -173,7 +190,8 @@ class OpenLoansControl extends React.Component {
     const selectedLoans = Object.values(checkedLoans);
 
     this.setState({ renewing: true });
-    await renew(selectedLoans, user);
+
+    await renew(selectedLoans, user, additionalInfo);
     this.setState({ checkedLoans: {}, allChecked: false, renewing: false });
   };
 
@@ -206,10 +224,11 @@ class OpenLoansControl extends React.Component {
     const {
       loan,
       action,
+      itemRequestCount,
     } = itemMeta;
 
     if (action && this[action]) {
-      this[action](loan);
+      this[action](loan, itemRequestCount);
     }
   };
 
@@ -224,6 +243,7 @@ class OpenLoansControl extends React.Component {
     if (isEmpty(countRenew)) {
       renew([loan], user);
     } else {
+      this.setState({ checkedLoans: [loan] });
       this.openPatronBlockedModal();
     }
   };
@@ -235,11 +255,11 @@ class OpenLoansControl extends React.Component {
     });
   };
 
-  declareLost = loan => this.props.declareLost(loan);
+  declareLost = (loan, itemRequestCount) => this.props.declareLost(loan, itemRequestCount);
 
-  claimReturned = loan => this.props.claimReturned(loan);
+  claimReturned = (loan, itemRequestCount) => this.props.claimReturned(loan, itemRequestCount);
 
-  markAsMissing = loan => this.props.markAsMissing(loan);
+  markAsMissing = (loan, itemRequestCount) => this.props.markAsMissing(loan, itemRequestCount);
 
   feefineDetails = (loan, e) => {
     const {
@@ -272,23 +292,37 @@ class OpenLoansControl extends React.Component {
     return accountsLoan.length;
   };
 
-  buildRecords(records) {
-    return records.map((record) => {
-      const {
-        item,
-        item: { contributors },
-      } = record;
+  parseContributors(record) {
+    const {
+      item,
+      item: { contributors },
+    } = record;
 
-      return isArray(contributors) ?
-        {
-          ...record,
-          item: {
-            ...item,
-            contributors: contributors
-              .map((currentContributor) => currentContributor.name)
-              .join('; ')
-          }
-        } : record;
+    return isArray(contributors) ?
+      {
+        ...record,
+        item: {
+          ...item,
+          contributors: contributors
+            .map((currentContributor) => currentContributor.name)
+            .join('; ')
+        }
+      } : record;
+  }
+
+  buildRecords = (records) => {
+    const {
+      intl: {
+        formatTime,
+      },
+    } = this.props;
+
+    return records.map(record => {
+      const result = this.parseContributors(record);
+
+      result.dueDate = formatDateAndTime(result.dueDate, formatTime);
+      result.loanDate = formatDateAndTime(result.loanDate, formatTime);
+      return result;
     });
   }
 
@@ -321,37 +355,37 @@ class OpenLoansControl extends React.Component {
         {renewing
           ? <LoadingView data-test-form-page paneTitle={<FormattedMessage id="ui-users.renewInProgress" />} defaultWidth="100%" />
           : <TableModel
-            patronBlockedModal={patronBlockedModal}
-            onClosePatronBlockedModal={this.onClosePatronBlockedModal}
-            openPatronBlockedModal={this.openPatronBlockedModal}
-            patronBlocks={patronBlocks}
-            patronGroup={patronGroup}
-            buildRecords={this.buildRecords}
-            visibleColumns={visibleColumns}
-            checkedLoans={checkedLoans}
-            requestCounts={requestCounts}
-            activeLoan={activeLoan}
-            changeDueDateDialogOpen={changeDueDateDialogOpen}
-            loans={loans}
-            stripes={stripes}
-            feeFineCount={this.feeFineCount}
-            history={history}
-            location={location}
-            match={match}
-            user={user}
-            toggleAll={this.toggleAll}
-            toggleItem={this.toggleItem}
-            isLoanChecked={this.isLoanChecked}
-            requestRecords={(resources.requests || {}).records || []}
-            resources={resources}
-            getLoanPolicy={this.getLoanPolicy}
-            handleOptionsChange={this.handleOptionsChange}
-            possibleColumns={this.possibleColumns}
-            hideChangeDueDateDialog={this.hideChangeDueDateDialog}
-            renewSelected={this.renewSelected}
-            showChangeDueDateDialog={this.showChangeDueDateDialog}
-            toggleColumn={this.toggleColumn}
-            allChecked={allChecked}
+              patronBlockedModal={patronBlockedModal}
+              onClosePatronBlockedModal={this.onClosePatronBlockedModal}
+              openPatronBlockedModal={this.openPatronBlockedModal}
+              patronBlocks={getRenewalPatronBlocksFromPatronBlocks(patronBlocks)}
+              patronGroup={patronGroup}
+              buildRecords={this.buildRecords}
+              visibleColumns={visibleColumns}
+              checkedLoans={checkedLoans}
+              requestCounts={requestCounts}
+              activeLoan={activeLoan}
+              changeDueDateDialogOpen={changeDueDateDialogOpen}
+              loans={loans}
+              stripes={stripes}
+              feeFineCount={this.feeFineCount}
+              history={history}
+              location={location}
+              match={match}
+              user={user}
+              toggleAll={this.toggleAll}
+              toggleItem={this.toggleItem}
+              isLoanChecked={this.isLoanChecked}
+              requestRecords={(resources.requests || {}).records || []}
+              resources={resources}
+              getLoanPolicy={this.getLoanPolicy}
+              handleOptionsChange={this.handleOptionsChange}
+              possibleColumns={this.possibleColumns}
+              hideChangeDueDateDialog={this.hideChangeDueDateDialog}
+              renewSelected={this.renewSelected}
+              showChangeDueDateDialog={this.showChangeDueDateDialog}
+              toggleColumn={this.toggleColumn}
+              allChecked={allChecked}
           />
         }
       </div>
@@ -364,4 +398,5 @@ export default compose(
   withDeclareLost,
   withClaimReturned,
   withMarkAsMissing,
+  injectIntl,
 )(OpenLoansControl);

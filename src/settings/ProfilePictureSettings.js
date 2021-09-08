@@ -6,7 +6,7 @@ import {
   Col,
   Checkbox,
 } from '@folio/stripes/components';
-import { Field } from 'redux-form';
+import { Field } from 'react-final-form';
 import { ConfigManager } from '@folio/stripes/smart-components';
 import { withStripes } from '@folio/stripes/core';
 
@@ -35,6 +35,7 @@ class ProfilePictureSettings extends React.Component {
         label={<FormattedMessage id="ui-users.settings.profilePictures" />}
         moduleName="USERS"
         configName="profile_pictures"
+        formType="final-form"
       >
         <Row>
           <Col xs={12}>

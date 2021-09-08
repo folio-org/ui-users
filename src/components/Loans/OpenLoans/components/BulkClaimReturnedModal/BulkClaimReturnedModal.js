@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedDate, injectIntl } from 'react-intl';
+import { Link } from 'react-router-dom';
 import { isEmpty } from 'lodash';
 import moment from 'moment';
 
@@ -16,6 +17,9 @@ import {
 } from '@folio/stripes-components';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
+import { getOpenRequestsPath } from '../../../../util';
+import refundTransferClaimReturned from '../../../../util/refundTransferClaimReturned';
+
 import css from '../../../../ModalContent';
 
 class BulkClaimReturnedModal extends React.Component {
@@ -28,6 +32,23 @@ class BulkClaimReturnedModal extends React.Component {
         path: 'circulation/loans/%{loanId}/claim-item-returned',
       },
     },
+    feefineactions: {
+      type: 'okapi',
+      records: 'feefineactions',
+      path: 'feefineactions',
+      fetch: false,
+      accumulate: true,
+    },
+    accounts: {
+      type: 'okapi',
+      records: 'accounts',
+      PUT: {
+        path: 'accounts/%{activeAccount.id}',
+      },
+      fetch: false,
+      accumulate: true,
+    },
+    activeAccount: {},
     loanId: {},
   });
 
@@ -41,6 +62,24 @@ class BulkClaimReturnedModal extends React.Component {
       loanId: PropTypes.shape({
         replace: PropTypes.func.isRequired,
       }).isRequired,
+      accounts: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+        PUT: PropTypes.func.isRequired,
+      }),
+      feefineactions: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+        POST: PropTypes.func.isRequired,
+      }),
+      activeAccount: PropTypes.shape({
+        update: PropTypes.func,
+      }).isRequired,
+    }).isRequired,
+    okapi: PropTypes.shape({
+      currentUser: PropTypes.object.isRequired,
+    }).isRequired,
+    stripes: PropTypes.shape({
+      connect: PropTypes.func.isRequired,
+      hasPerm: PropTypes.func,
     }),
     onCancel: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
@@ -61,10 +100,29 @@ class BulkClaimReturnedModal extends React.Component {
   // requestCounts is an object of the form {<item id>: <number of requests>},
   // with keys present only if the item in question has >0 requests. Thus, if
   // none of the selected items have any requests on them, requestCounts === {}.
-  getRequestCountForItem = id => this.props.requestCounts[id] || 0;
+  getRequestCountForItem = id => {
+    const {
+      requestCounts,
+      stripes,
+    } = this.props;
+
+    const itemRequestCount = requestCounts[id] || 0;
+
+    if (itemRequestCount && stripes.hasPerm('ui-users.requests.all')) {
+      return (
+        <Link
+          data-test-item-request-count
+          to={getOpenRequestsPath(id)}
+        >
+          {itemRequestCount}
+        </Link>);
+    }
+
+    return itemRequestCount;
+  }
 
   handleAdditionalInfoChange = e => {
-    this.setState({ additionalInfo: e.target.value });
+    this.setState({ additionalInfo: e.target.value.trim() });
   };
 
   claimItemReturned = (loan) => {
@@ -82,7 +140,9 @@ class BulkClaimReturnedModal extends React.Component {
   claimAllReturned = () => {
     const promises = Object
       .values(this.props.checkedLoansIndex)
-      .map(loan => this.claimItemReturned(loan).catch(e => e));
+      .map(loan => this.claimItemReturned(loan)
+        .then(refundTransferClaimReturned.refundTransfers(loan, this.props))
+        .catch(e => e));
     Promise.all(promises)
       .then(results => this.finishClaims(results));
   }
@@ -145,6 +205,7 @@ class BulkClaimReturnedModal extends React.Component {
       <ModalFooter>
         <Layout className="textRight">
           <Button
+            data-test-bulk-cr-close-button
             buttonStyle="primary"
             onClick={this.onCancel}
           >
@@ -224,6 +285,7 @@ class BulkClaimReturnedModal extends React.Component {
         {operationState === 'pre' &&
           <Col sm={12} className={css.additionalInformation}>
             <TextArea
+              data-test-bulk-claim-returned-additionalInfo
               label={<FormattedMessage id="ui-users.additionalInfo.label" />}
               placeholder={intl.formatMessage({ id: 'ui-users.bulkClaimReturned.moreInfoPlaceholder' })}
               required

@@ -13,7 +13,6 @@ import UserFormPage from '../interactors/user-form-page';
 import UsersInteractor from '../interactors/users';
 import FindUserInteractor from '../interactors/find-user';
 import FindUserInstancesInteractor from '../interactors/FindUserInstances';
-
 import translations from '../../../translations/ui-users/en';
 
 describe('User Edit: Proxy/Sponsor', function () {

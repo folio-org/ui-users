@@ -56,7 +56,7 @@ class PatronBlockLayer extends React.Component {
     item.type = 'Manual';
     item.userId = (params.id);
     if (item.expirationDate) {
-      item.expirationDate = moment(item.expirationDate).format();
+      item.expirationDate = moment.utc(item.expirationDate).startOf('day');
     }
     return this.props.mutator.manualPatronBlocks.POST(item).then(() => {
       this.props.mutator.activeRecord.update({ blockid: item.userId });
@@ -81,7 +81,7 @@ class PatronBlockLayer extends React.Component {
 
   onUpdateItem = (item) => {
     if (item.expirationDate) {
-      item.expirationDate = moment(item.expirationDate).format();
+      item.expirationDate = moment.utc(item.expirationDate).startOf('day');
     }
     delete item.metadata;
     this.props.mutator.activeRecord.update({ blockid: item.id });
@@ -137,11 +137,21 @@ class PatronBlockLayer extends React.Component {
       ? manualPatronBlocks.find(pb => pb.id === params.patronblockid)
       : selectedPatronBlock;
 
-    const initialValues = _get(selectedItem, 'id') ? selectedItem : {
+    const patronBlockSettings = _get(selectedItem, 'id') ? selectedItem : {
       borrowing: true,
       renewals: true,
       requests: true,
     };
+
+    const initialValues = {
+      desc: '',
+      staffInformation: '',
+      patronMessage: '',
+      expirationDate: '',
+      ...patronBlockSettings,
+    };
+
+    const blockTemplates = _get(resources, 'blockTemplates.records', []);
 
     const message = !_isEmpty(selectedItem) ?
       <span>
@@ -161,6 +171,7 @@ class PatronBlockLayer extends React.Component {
           onSubmit={this.onSubmit}
           initialValues={initialValues}
           params={params}
+          blockTemplates={blockTemplates}
         />
         <ConfirmationModal
           id="patron-block-confirmation-modal"

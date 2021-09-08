@@ -25,7 +25,7 @@ const ProxyPermissions = (props) => {
 
   const isProxyFor = <FormattedMessage id="ui-users.permissions.isProxyFor" values={{ name: fullName }} />;
   const isSponsorOf = <FormattedMessage id="ui-users.permissions.isSponsorOf" values={{ name: fullName }} />;
-  const proxySponsor = <FormattedMessage id="ui-users.permissions.proxySponsor" />;
+  const proxySponsor = <FormattedMessage id="ui-users.permissions.proxy.sponsor" />;
 
   return (
     <Accordion

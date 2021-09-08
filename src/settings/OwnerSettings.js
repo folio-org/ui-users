@@ -5,7 +5,7 @@ import {
   injectIntl,
   FormattedMessage,
 } from 'react-intl';
-import { Field } from 'redux-form';
+import { Field } from 'react-final-form';
 import {
   MultiSelection,
   Label,
@@ -126,12 +126,11 @@ class OwnerSettings extends React.Component {
           {...fieldProps}
           id="owner-service-point"
           component={MultiSelection}
-          onChange={this.onChangeSelection}
           dataOptions={options}
           renderToOverlay
           marginBottom0
           validationEnabled
-          onBlur={e => { e.preventDefault(); }}
+          onBlur={e => e.preventDefault()}
         />
       )
     };
@@ -139,7 +138,7 @@ class OwnerSettings extends React.Component {
     const formatter = {
       'servicePointOwner': (value) => {
         const asp = value.servicePointOwner || [];
-        const items = asp.map(a => <li>{a.label}</li>);
+        const items = asp.map(a => <li key={a.label}>{a.label}</li>);
         return <ul>{items}</ul>;
       }
     };
@@ -162,6 +161,7 @@ class OwnerSettings extends React.Component {
         validate={this.validateItem}
         visibleFields={['owner', 'desc', 'servicePointOwner']}
         warn={this.warn}
+        formType="final-form"
       />
     );
   }

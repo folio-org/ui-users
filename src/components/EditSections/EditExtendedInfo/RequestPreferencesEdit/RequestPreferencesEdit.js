@@ -2,11 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import {
-  Field,
-  formValueSelector,
-  change,
-} from 'redux-form';
+import { Field } from 'react-final-form';
 import {
   get,
   isEmpty,
@@ -45,12 +41,16 @@ class RequestPreferencesEdit extends Component {
     if (this.isDefaultDeliveryAddressResetNeeded(prevProps.addresses, this.props.addresses)) {
       this.resetDefaultDeliveryAddress();
     }
+
+    if (prevProps.deliveryAvailable !== this.props.deliveryAvailable) {
+      this.onDeliveryCheckboxChange(this.props.deliveryAvailable);
+    }
   }
 
   isDefaultDeliveryAddressResetNeeded(prevAddresses, currentAddresses) {
     const byAddressType = address => get(address, 'addressType');
-    const prevAddressTypeIds = prevAddresses.map(byAddressType);
-    const currentAddressTypeIds = currentAddresses.map(byAddressType);
+    const prevAddressTypeIds = (prevAddresses ?? []).map(byAddressType);
+    const currentAddressTypeIds = (currentAddresses ?? []).map(byAddressType);
     const addressTypesAreChanged = difference(prevAddressTypeIds, currentAddressTypeIds).length !== 0;
 
     const defaultAddressTypeNotExists = !currentAddressTypeIds
@@ -163,9 +163,9 @@ class RequestPreferencesEdit extends Component {
     this.props.setFieldValue('requestPreferences.defaultDeliveryAddressTypeId', null);
   }
 
-  onDeliveryCheckboxChange = (event) => {
+  onDeliveryCheckboxChange = (deliveryAvailable) => {
     const { setFieldValue } = this.props;
-    const fulfillmentValue = event.target.checked ? deliveryFulfillmentValues.HOLD_SHELF : null;
+    const fulfillmentValue = deliveryAvailable ? deliveryFulfillmentValues.HOLD_SHELF : null;
 
     setFieldValue('requestPreferences.fulfillment', fulfillmentValue);
     this.resetDefaultDeliveryAddress();
@@ -177,7 +177,7 @@ class RequestPreferencesEdit extends Component {
     } = this.props;
 
     return (
-      <Col xs={12} md={6}>
+      <Col xs={12}>
         <Row>
           <Col
             xs={12}
@@ -199,6 +199,7 @@ class RequestPreferencesEdit extends Component {
               checked
               disabled
               component={Checkbox}
+              type="checkbox"
             />
           </Col>
           <Col xs={12} md={6}>
@@ -206,9 +207,8 @@ class RequestPreferencesEdit extends Component {
               data-test-delivery-checkbox
               name="requestPreferences.delivery"
               label={<FormattedMessage id="ui-users.requests.delivery" />}
-              checked={deliveryAvailable}
               component={Checkbox}
-              onChange={this.onDeliveryCheckboxChange}
+              type="checkbox"
             />
           </Col>
         </Row>
@@ -230,25 +230,17 @@ class RequestPreferencesEdit extends Component {
   }
 }
 
-const selectFormValue = formValueSelector('userForm');
-const selectNonEmptyAddresses = fp.pipe([
-  store => selectFormValue(store, 'personal.addresses') || [],
-  fp.filter(address => !isEmpty(address)),
-]);
 const selectServicePointsWithPickupLocation = fp.pipe([
   fp.getOr([], 'folio_users_service_points.records'),
   fp.filter(servicePoint => servicePoint.pickupLocation),
+  fp.uniqBy('id'),
   fp.sortBy('name'),
 ]);
 
 export default connect(
   store => ({
-    addresses: selectNonEmptyAddresses(store),
-    defaultDeliveryAddressTypeId: selectFormValue(store, 'requestPreferences.defaultDeliveryAddressTypeId'),
-    deliveryAvailable: selectFormValue(store, 'requestPreferences.delivery'),
-    servicePoints: selectServicePointsWithPickupLocation(store)
-  }),
-  dispatch => ({
-    setFieldValue(fieldName, fieldValue) { dispatch(change('userForm', fieldName, fieldValue)); }
+    servicePoints: selectServicePointsWithPickupLocation(store),
   }),
 )(injectIntl(RequestPreferencesEdit));
+
+

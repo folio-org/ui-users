@@ -5,24 +5,40 @@ import { Link } from 'react-router-dom';
 import {
   FormattedMessage,
   FormattedTime,
+  injectIntl,
 } from 'react-intl';
 
 import {
-  Paneset,
-  Pane,
   Button,
-  Row,
+  Callout,
   Col,
   KeyValue,
   MultiColumnList,
   NoValue,
+  Pane,
+  Paneset,
+  Row,
 } from '@folio/stripes/components';
 
-import { Actions } from '../../components/Accounts/Actions';
+import Actions from '../../components/Accounts/Actions/FeeFineActions';
 import {
-  getFullName,
   calculateSortParams,
+  getFullName,
+  formatActionDescription,
+  formatCurrencyAmount,
+  getServicePointOfCurrentAction,
 } from '../../components/util';
+
+import {
+  calculateTotalPaymentAmount,
+  isRefundAllowed,
+  isCancelAllowed,
+} from '../../components/Accounts/accountFunctions';
+import FeeFineReport from '../../components/data/reports/FeeFineReport';
+import {
+  itemStatuses,
+  refundClaimReturned,
+} from '../../constants';
 
 import css from './AccountDetails.css';
 
@@ -52,7 +68,13 @@ class AccountDetails extends React.Component {
   static propTypes = {
     stripes: PropTypes.object,
     resources: PropTypes.shape({
+      feefineshistory: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
       accountActions: PropTypes.object,
+      accounts: PropTypes.object.isRequired,
+      feefineactions: PropTypes.object.isRequired,
+      loans: PropTypes.object.isRequired,
     }),
     mutator: PropTypes.shape({
       activeRecord: PropTypes.shape({
@@ -66,23 +88,35 @@ class AccountDetails extends React.Component {
       }),
     }),
     num: PropTypes.number.isRequired,
-    user: PropTypes.object,
+    user: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }).isRequired,
     history: PropTypes.object,
     match: PropTypes.object,
-    patronGroup: PropTypes.object,
+    patronGroup: PropTypes.shape({
+      group: PropTypes.string.isRequired,
+    }).isRequired,
     itemDetails: PropTypes.object,
-    okapi: PropTypes.object,
+    okapi: PropTypes.shape({
+      currentUser: PropTypes.shape({
+        servicePoints: PropTypes.arrayOf(PropTypes.object).isRequired,
+      }).isRequired,
+    }).isRequired,
+    account: PropTypes.object,
+    owedAmount: PropTypes.number,
+    intl: PropTypes.object.isRequired,
   };
 
   static defaultProps = {
     itemDetails: {},
+    account: {},
+    owedAmount: 0,
   }
 
   constructor(props) {
     super(props);
     this.onSort = this.onSort.bind(this);
     this.onChangeActions = this.onChangeActions.bind(this);
-    // this.connectedActions = connect(Actions);
     this.error = this.error.bind(this);
     this.comment = this.comment.bind(this);
     this.num = props.num;
@@ -107,12 +141,16 @@ class AccountDetails extends React.Component {
         comment: false,
         regular: false,
         transferModal: false,
+        refundModal: false,
+        refundMany: false,
       },
       sortOrder: ['date', 'date'],
       sortDirection: ['desc', 'desc'],
       remaining: 0,
-      paymentStatus: '',
+      exportReportInProgress: false,
     };
+
+    this.callout = null;
   }
 
   static getDerivedStateFromProps(props) {
@@ -143,9 +181,7 @@ class AccountDetails extends React.Component {
   }
 
   onChangeActions(actions) {
-    this.setState({
-      actions,
-    });
+    this.setState({ actions });
   }
 
   waive = () => {
@@ -168,6 +204,77 @@ class AccountDetails extends React.Component {
     this.onChangeActions({ transferModal: true });
   }
 
+  refund = () => {
+    this.onChangeActions({ refundModal: true });
+  }
+
+  getFeesFinesReportData = () => {
+    const {
+      user,
+      okapi: {
+        currentUser: {
+          servicePoints,
+        },
+      },
+      patronGroup: {
+        group,
+      },
+      resources,
+      intl,
+    } = this.props;
+    const feeFineActions = _.get(resources, ['feefineactions', 'records'], []);
+    const accounts = _.get(resources, ['accounts', 'records'], []);
+    const loans = _.get(resources, ['loans', 'records'], []);
+
+    return {
+      intl,
+      data: {
+        user,
+        servicePoints,
+        patronGroup: group,
+        accounts,
+        loans,
+        feeFineActions,
+      },
+    };
+  }
+
+  generateFeesFinesReport = () => {
+    const feesFinesReportData = this.getFeesFinesReportData();
+    const {
+      exportReportInProgress,
+    } = this.state;
+
+    if (exportReportInProgress) {
+      return;
+    }
+
+    this.setState({
+      exportReportInProgress: true,
+    }, () => {
+      this.callout.sendCallout({
+        type: 'success',
+        message: <FormattedMessage id="ui-users.reports.inProgress" />,
+      });
+
+      try {
+        const report = new FeeFineReport(feesFinesReportData);
+        report.toCSV();
+      } catch (error) {
+        if (error) {
+          this.callout.sendCallout({
+            type: 'error',
+            message: <FormattedMessage id="ui-users.settings.limits.callout.error" />,
+          });
+        }
+      } finally {
+        this.setState({
+          exportReportInProgress: false,
+        });
+      }
+    });
+  };
+
   onSort(e, meta) {
     if (!this.sortMap[meta.name] || e.target.type === 'button' || e.target.id === 'button') return;
 
@@ -186,8 +293,7 @@ class AccountDetails extends React.Component {
   }
 
   getInstanceInfo = () => {
-    const { resources } = this.props;
-    const account = resources?.accountHistory?.records[0] ?? {};
+    const { account } = this.props;
     const instanceTitle = account?.title;
     const instanceType = account?.materialType;
     const instanceTypeString = instanceType ? `(${instanceType})` : '';
@@ -197,12 +303,11 @@ class AccountDetails extends React.Component {
 
   handleClose = () => {
     const {
+      account,
       history,
       match: { params },
-      resources
     } = this.props;
 
-    const account = _.get(resources, ['accountHistory', 'records', 0]) || {};
     const status = account?.status?.name?.toLowerCase() || 'all';
 
     history.push({ pathname: `/users/${params.id}/accounts/${status}` });
@@ -215,6 +320,8 @@ class AccountDetails extends React.Component {
     } = this.state;
 
     const {
+      account,
+      owedAmount,
       patronGroup: patron,
       resources,
       stripes,
@@ -223,7 +330,17 @@ class AccountDetails extends React.Component {
       itemDetails,
     } = this.props;
 
-    const account = _.get(resources, ['accountHistory', 'records', 0]) || {};
+    const allAccounts = _.get(resources, ['feefineshistory', 'records'], []);
+    let balance = 0;
+
+    allAccounts.forEach((a) => {
+      if (a.paymentStatus.name !== refundClaimReturned.PAYMENT_STATUS) {
+        balance += (parseFloat(a.remaining) * 100);
+      }
+    });
+
+    balance /= 100;
+
     account.remaining = this.state.remaining;
 
     const columnMapping = {
@@ -251,21 +368,25 @@ class AccountDetails extends React.Component {
     const accountActionsFormatter = {
       // Action: aa => loanActionMap[la.action],
       date: action => <FormattedTime value={action.dateAction} day="numeric" month="numeric" year="numeric" />,
-      action: action => action.typeAction + (action.paymentMethod ? ('-' + action.paymentMethod) : ' '),
-      amount: action => (action.amountAction > 0 ? parseFloat(action.amountAction).toFixed(2) : '-'),
-      balance: action => (action.balance > 0 ? parseFloat(action.balance).toFixed(2) : '-'),
+      action: action => formatActionDescription(action),
+      amount: action => (action.amountAction > 0 ? formatCurrencyAmount(action.amountAction) : '-'),
+      balance: action => (action.balance > 0 ? formatCurrencyAmount(action.balance) : '-'),
       transactioninfo: action => action.transactionInformation || '-',
-      created: action => (this.props.okapi.currentUser.servicePoints.find(sp => sp.id === action.createdAt) || {}).name,
+      created: action => getServicePointOfCurrentAction(action, this.props.okapi.currentUser.servicePoints),
       source: action => action.source,
       comments: action => (action.comments ? (<div>{action.comments.split('\n').map(c => (<Row><Col>{c}</Col></Row>))}</div>) : ''),
     };
 
-    const isAccountsPending = _.get(resources, ['accountHistory', 'isPending'], true);
+    const isAccountsPending = _.get(resources, ['accounts', 'isPending'], true);
     const isActionsPending = _.get(resources, ['accountActions', 'isPending'], true);
+    const feeFineActions = _.get(resources, ['feefineactions', 'records'], []);
+    const allFeeFineActions = _.get(resources, ['feefineactions', 'records'], []);
+    const latestPaymentStatus = account.paymentStatus.name;
+    const isClaimReturnedItem = (itemDetails?.statusItemName === itemStatuses.CLAIMED_RETURNED);
 
     const actions = this.state.data || [];
     const actionsSort = _.orderBy(actions, [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
-    const amount = (account.amount) ? parseFloat(account.amount).toFixed(2) : '-';
+    const amount = account.amount ? formatCurrencyAmount(account.amount) : '-';
     const loanId = account.loanId || '';
     const disabled = account.remaining === 0;
     const isAccountId = actions[0] && actions[0].accountId === account.id;
@@ -276,6 +397,10 @@ class AccountDetails extends React.Component {
     const lostItemPolicyId = itemDetails?.lostItemPolicyId;
     const lostItemPolicyName = itemDetails?.lostItemPolicyName;
     const contributors = itemDetails?.contributors.join(', ');
+
+    const totalPaidAmount = calculateTotalPaymentAmount(resources?.feefineshistory?.records, feeFineActions);
+    const refundAllowed = isRefundAllowed(account, feeFineActions);
+    const cancelAllowed = isCancelAllowed(account);
 
     return (
       <Paneset isRoot>
@@ -295,15 +420,15 @@ class AccountDetails extends React.Component {
             <Col xs={12}>
               <Button
                 id="payAccountActionsHistory"
-                disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending}
+                disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending || isClaimReturnedItem}
                 buttonStyle="primary"
                 onClick={this.pay}
               >
                 <FormattedMessage id="ui-users.accounts.history.button.pay" />
               </Button>
               <Button
-                id="waveAccountActionsHistory"
-                disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending}
+                id="waiveAccountActionsHistory"
+                disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending || isClaimReturnedItem}
                 buttonStyle="primary"
                 onClick={this.waive}
               >
@@ -311,14 +436,15 @@ class AccountDetails extends React.Component {
               </Button>
               <Button
                 id="refundAccountActionsHistory"
-                disabled
+                disabled={!refundAllowed || buttonDisabled || isActionsPending || isAccountsPending || isClaimReturnedItem}
                 buttonStyle="primary"
+                onClick={this.refund}
               >
                 <FormattedMessage id="ui-users.accounts.history.button.refund" />
               </Button>
               <Button
                 id="transferAccountActionsHistory"
-                disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending}
+                disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending || isClaimReturnedItem}
                 buttonStyle="primary"
                 onClick={this.transfer}
               >
@@ -326,11 +452,20 @@ class AccountDetails extends React.Component {
               </Button>
               <Button
                 id="errorAccountActionsHistory"
-                disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending}
+                disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending || !cancelAllowed || isClaimReturnedItem}
                 buttonStyle="primary"
                 onClick={this.error}
               >
                 <FormattedMessage id="ui-users.accounts.button.error" />
+              </Button>
+              <Button
+                id="exportAccountActionsHistoryReport"
+                data-test-export-account-actions-history-report
+                buttonStyle="primary"
+                disabled={_.isEmpty(allFeeFineActions)}
+                onClick={this.generateFeesFinesReport}
+              >
+                <FormattedMessage id="ui-users.export.button" />
               </Button>
             </Col>
           </Row>
@@ -354,10 +489,10 @@ class AccountDetails extends React.Component {
                 value={(
                   _.get(account, ['metadata', 'createdDate'])
                     ? <FormattedTime
-                      value={_.get(account, ['metadata', 'createdDate'])}
-                      day="numeric"
-                      month="numeric"
-                      year="numeric"
+                        value={_.get(account, ['metadata', 'createdDate'])}
+                        day="numeric"
+                        month="numeric"
+                        year="numeric"
                     />
                     : '-'
                 )}
@@ -372,13 +507,16 @@ class AccountDetails extends React.Component {
             <Col xs={1.5}>
               <KeyValue
                 label={<FormattedMessage id="ui-users.details.field.remainingamount" />}
-                value={parseFloat(this.state.remaining).toFixed(2)}
+                value={formatCurrencyAmount(this.state.remaining)}
               />
             </Col>
-            <Col xs={1.5}>
+            <Col
+              data-test-latestPaymentStatus
+              xs={1.5}
+            >
               <KeyValue
                 label={<FormattedMessage id="ui-users.details.field.latest" />}
-                value={this.state.paymentStatus}
+                value={latestPaymentStatus}
               />
             </Col>
             <Col
@@ -457,10 +595,10 @@ class AccountDetails extends React.Component {
                 value={
                   account.dueDate
                     ? <FormattedTime
-                      value={account.dueDate}
-                      day="numeric"
-                      month="numeric"
-                      year="numeric"
+                        value={account.dueDate}
+                        day="numeric"
+                        month="numeric"
+                        year="numeric"
                     />
                     : '-'
                 }
@@ -472,17 +610,20 @@ class AccountDetails extends React.Component {
                 value={
                   account.returnedDate
                     ? <FormattedTime
-                      value={account.returnedDate}
-                      day="numeric"
-                      month="numeric"
-                      year="numeric"
+                        value={account.returnedDate}
+                        day="numeric"
+                        month="numeric"
+                        year="numeric"
                     />
                     : '-'
                 }
               />
             </Col>
-            <Col xs={1.5}>
-              {(loanId !== '0' && user.id === account.userId) ?
+            <Col
+              data-test-loan-details
+              xs={1.5}
+            >
+              {(loanId && user.id === account.userId) ?
                 <KeyValue
                   label={<FormattedMessage id="ui-users.details.label.loanDetails" />}
                   value={(
@@ -496,7 +637,7 @@ class AccountDetails extends React.Component {
                 :
                 <KeyValue
                   label={<FormattedMessage id="ui-users.details.label.loanDetails" />}
-                  value="-"
+                  value={<FormattedMessage id="ui-users.details.label.loanAnonymized" />}
                 />
               }
             </Col>
@@ -519,7 +660,9 @@ class AccountDetails extends React.Component {
             onChangeActions={this.onChangeActions}
             user={user}
             stripes={stripes}
-            balance={account.remaining || 0}
+            balance={balance}
+            totalPaidAmount={totalPaidAmount}
+            owedAmount={owedAmount}
             accounts={[account]}
             handleEdit={() => {
               // Neither of the following two functions exists after refactoring
@@ -531,11 +674,11 @@ class AccountDetails extends React.Component {
               this.props.mutator.accountActions.GET();
             }}
           />
-
+          <Callout ref={(ref) => { this.callout = ref; }} />
         </Pane>
       </Paneset>
     );
   }
 }
 
-export default AccountDetails;
+export default injectIntl(AccountDetails);

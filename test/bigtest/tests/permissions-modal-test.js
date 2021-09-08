@@ -18,7 +18,7 @@ describe('Permissions modal', () => {
 
   setupApplication({ scenarios: ['comments'] });
 
-  describe('visit user-edit', () => {
+  describe('visit user-preview', () => {
     beforeEach(async function () {
       this.server.createList('permission', permissionsAmount);
       permissionSets = this.server.createList('permission', permissionSetsAmount, { mutable: true });
@@ -113,7 +113,7 @@ describe('Permissions modal', () => {
 });
 
 describe('Permission set form', () => {
-  const permissionsAmount = 10;
+  let permissionsAmount = 10;
   let permissions;
 
   setupApplication({ scenarios: ['comments'] });
@@ -121,6 +121,12 @@ describe('Permission set form', () => {
   describe('visit users-settings: permissions', () => {
     beforeEach(async function () {
       permissions = this.server.createList('permission', permissionsAmount);
+      this.server.create('permission',
+        {
+          permissionName: 'ui-users.patron_blocks',
+          displayName: 'Users: Can create, edit and remove patron blocks',
+        });
+      permissionsAmount += 1;
       this.visit('/settings/users/perms?layer=add');
       await PermissionSetForm.whenLoaded();
     });
@@ -174,6 +180,19 @@ describe('Permission set form', () => {
 
                 it('should be proper permission', () => {
                   expect(PermissionSetForm.permissionsModal.permissionsList.permissions(0).name.text).to.equal(permissions[0].displayName);
+                });
+
+                describe('searching translations', () => {
+                  beforeEach(async function () {
+                    permissions[0].displayName = '';
+                    permissions[0].permissionName = 'permission.patron_blocks';  // 'Users: Can create, edit and remove patron blocks'
+                    await PermissionSetForm.permissionsModal.searchForm.searchField.fill('remove');
+                    await PermissionSetForm.permissionsModal.searchForm.submitButton.click();
+                  });
+
+                  it('should find a permission by searching translations', () => {
+                    expect(PermissionSetForm.permissionsModal.permissionsList.permissions().length).to.equal(1);
+                  });
                 });
               });
 

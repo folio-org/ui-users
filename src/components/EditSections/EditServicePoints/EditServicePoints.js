@@ -4,8 +4,11 @@ import {
   injectIntl,
 } from 'react-intl';
 import PropTypes from 'prop-types';
-import { get, uniqBy } from 'lodash';
-import { Field, FieldArray } from 'redux-form';
+import { uniqBy } from 'lodash';
+import { Field } from 'react-final-form';
+import { FieldArray } from 'react-final-form-arrays';
+import { OnChange } from 'react-final-form-listeners';
+
 import {
   Icon,
   Button,
@@ -30,11 +33,12 @@ class EditServicePoints extends React.Component {
     accordionId: PropTypes.string.isRequired,
     expanded: PropTypes.bool,
     initialValues: PropTypes.shape({
-      servicePoints: PropTypes.array,
+      servicePoints: PropTypes.arrayOf(PropTypes.object),
     }).isRequired,
     onToggle: PropTypes.func,
     formData: PropTypes.object.isRequired,
     intl: PropTypes.object.isRequired,
+    form: PropTypes.object,
   };
 
   constructor(props) {
@@ -46,13 +50,13 @@ class EditServicePoints extends React.Component {
     };
   }
 
-  onAddServicePoints = (newServicePoints) => {
-    const userServicePoints = uniqBy([
-      ...this.userServicePoints.getAll(),
-      ...newServicePoints,
-    ], 'id').sort(((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true })));
+  onAddServicePoints = newServicePoints => {
+    const { form } = this.props;
+    const userServicePoints = newServicePoints.sort(
+      (a, b) => a.name.localeCompare(b.name, undefined, { numeric: true })
+    );
 
-    this.userServicePoints.removeAll();
+    form.change('servicePoints', []);
     userServicePoints.map(sp => this.userServicePoints.push(sp));
   }
 
@@ -61,10 +65,13 @@ class EditServicePoints extends React.Component {
   }
 
   renderServicePoint = (_, index) => {
-    const sp = this.userServicePoints.get(index);
+    const sp = this.userServicePoints.value[index];
 
     return (
-      <li key={sp.id}>
+      <li
+        data-test-service-point={sp.id}
+        key={sp.id}
+      >
         {sp.name}
         <FormattedMessage id="ui-users.sp.removeServicePoint">
           {aria => (
@@ -85,15 +92,7 @@ class EditServicePoints extends React.Component {
   }
 
   renderServicePointsComponent = ({ fields }) => {
-    // redux-form sets the userServicePoints array asynchronously via redux. Since we rely on
-    // the list of the user's service points to populate the preferred service point
-    // <Select>, we need to store the array in local state as well. This doesn't feel
-    // great since we're duplicating data but other solutions are hackish in that they
-    // assume behaviour from redux-form which may not stay constant going forward.
-    this.setState({ userServicePoints: fields.getAll() });
-
     this.userServicePoints = fields;
-
     return (
       <List
         items={this.userServicePoints}
@@ -121,6 +120,7 @@ class EditServicePoints extends React.Component {
   }
 
   renderPreferredServicePointSelect() {
+    const { intl } = this.props;
     const { userServicePoints } = this.state;
 
     if (userServicePoints.length === 0) return null;
@@ -136,22 +136,14 @@ class EditServicePoints extends React.Component {
     return (
       <Row>
         <Col xs={12} md={6}>
-          <FormattedMessage id="ui-users.sp.selectServicePoint">
-            {placeholder => (
-              <Field
-                label={(
-                  <FormattedMessage id="ui-users.sp.servicePointPreference">
-                    {(msg) => msg + ' *'}
-                  </FormattedMessage>
-                )}
-                name="preferredServicePoint"
-                id="servicePointPreference"
-                component={Select}
-                placeholder={placeholder}
-                dataOptions={dataOptions}
-              />
-            )}
-          </FormattedMessage>
+          <Field
+            label={`${intl.formatMessage({ id: 'ui-users.sp.servicePointPreference' })}} *`}
+            name="preferredServicePoint"
+            id="servicePointPreference"
+            component={Select}
+            placeholder={intl.formatMessage({ id: 'ui-users.sp.selectServicePoint' })}
+            dataOptions={dataOptions}
+          />
         </Col>
       </Row>
     );
@@ -171,14 +163,20 @@ class EditServicePoints extends React.Component {
   }
 
   renderAddServicePointModal() {
-    const servicePoints = get(this.props.formData, 'servicePoints', []);
+    const {
+      addingServicePoint,
+      userServicePoints,
+    } = this.state;
+
+    const servicePoints = uniqBy(this.props.formData?.servicePoints, 'id');
 
     return (
       <AddServicePointModal
         onClose={() => this.setState({ addingServicePoint: false })}
         onSave={this.onAddServicePoints}
-        open={this.state.addingServicePoint}
+        open={addingServicePoint}
         servicePoints={servicePoints}
+        assignedServicePoints={userServicePoints}
       />
     );
   }
@@ -199,6 +197,9 @@ class EditServicePoints extends React.Component {
             {this.renderServicePoints()}
             {this.renderAddServicePointModal()}
           </Accordion>
+          <OnChange name="servicePoints">
+            {userServicePoints => this.setState({ userServicePoints })}
+          </OnChange>
         </IfInterface>
       </IfPermission>
     );

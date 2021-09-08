@@ -1,4 +1,12 @@
 {
-  "parser": "babel-eslint",
-  "extends": "@folio/eslint-config-stripes"
+  "extends": "@folio/eslint-config-stripes",
+  "parser": "@babel/eslint-parser",
+  "overrides": [
+    {
+      "files": [ "src/**/tests/*", "test/**/*" ],
+    }
+  ],
+  "env": {
+    "jest": true
+  }
 }

@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { compose } from 'redux';
 
 import {
   stripesConnect,
@@ -8,6 +7,7 @@ import {
 } from '@folio/stripes/core';
 
 import { ChargeFeeFine } from '../components/Accounts';
+import { MAX_RECORDS } from '../constants';
 
 class ChargeFeesFinesContainer extends React.Component {
   static manifest = Object.freeze({
@@ -48,7 +48,7 @@ class ChargeFeesFinesContainer extends React.Component {
     },
     curUserServicePoint: {
       type: 'okapi',
-      path: 'service-points-users?query=(userId==:{id})',
+      path: `service-points-users?query=(userId==:{id})&limit=${MAX_RECORDS}`,
       records: 'servicePointsUsers',
     },
     items: {
@@ -68,26 +68,32 @@ class ChargeFeesFinesContainer extends React.Component {
       type: 'okapi',
       records: 'feefines',
       GET: {
-        path: 'feefines?query=(ownerId==%{activeRecord.ownerId} or ownerId==%{activeRecord.shared})&limit=10000',
+        path: `feefines?query=(ownerId==%{activeRecord.ownerId} or ownerId==%{activeRecord.shared})&limit=${MAX_RECORDS}`,
       },
     },
     feefineactions: {
       type: 'okapi',
       records: 'feefineactions',
-      path: 'feefineactions?limit=10000',
+      path: `feefineactions?query=(userId==:{id})&limit=${MAX_RECORDS}`,
     },
     accounts: {
       type: 'okapi',
       records: 'accounts',
-      path: 'accounts',
+      GET: {
+        path: `accounts?query=(userId==:{id})&limit=${MAX_RECORDS}`,
+      },
       PUT: {
         path: 'accounts/%{activeRecord.id}'
+      },
+      POST: {
+        path: 'accounts'
       },
     },
     account: {
       type: 'okapi',
       resource: 'accounts',
       accumulate: 'true',
+      fetch: false,
       path: 'accounts',
     },
     owners: {
@@ -98,17 +104,24 @@ class ChargeFeesFinesContainer extends React.Component {
     payments: {
       type: 'okapi',
       records: 'payments',
-      path: 'payments',
+      path: `payments?limit=${MAX_RECORDS}`,
     },
     commentRequired: {
       type: 'okapi',
       records: 'comments',
-      path: 'comments',
+      path: `comments?limit=${MAX_RECORDS}`,
     },
     allfeefines: {
       type: 'okapi',
       records: 'feefines',
-      path: 'feefines?limit=10000',
+      path: `feefines?limit=${MAX_RECORDS}`,
+    },
+    pay: {
+      type: 'okapi',
+      path: 'accounts/%{activeRecord.id}/pay',
+      fetch: false,
+      accumulate: 'true',
+      clientGeneratePk: false,
     },
     activeRecord: {},
   });
@@ -145,6 +158,9 @@ class ChargeFeesFinesContainer extends React.Component {
       }),
       account: PropTypes.shape({
         GET: PropTypes.func,
+      }),
+      pay: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
       }),
     }).isRequired,
     stripes: PropTypes.object.isRequired,
@@ -185,7 +201,4 @@ class ChargeFeesFinesContainer extends React.Component {
   }
 }
 
-export default compose(
-  stripesConnect,
-  withStripes,
-)(ChargeFeesFinesContainer);
+export default stripesConnect(withStripes(ChargeFeesFinesContainer));

@@ -4,5 +4,11 @@
 node_modules
 yarn.lock
 yarn-error.log
+debug.log
 ModuleDescriptor.json
 artifacts
+*.idea*
+
+# stripes
+.stripesclirc
+stripes.config.js.local

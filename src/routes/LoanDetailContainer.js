@@ -45,7 +45,7 @@ class LoanDetailContainer extends React.Component {
     loanHistory: {
       type: 'okapi',
       records: 'loans',
-      path: 'circulation/loans?query=(userId==:{id}) sortby id&limit=100',
+      path: 'circulation/loans?query=(userId==:{id}) sortby id&limit=2000',
       permissionsRequired: 'circulation.loans.collection.get',
     },
     requests: {
@@ -58,7 +58,7 @@ class LoanDetailContainer extends React.Component {
     },
     loanActions: {
       type: 'okapi',
-      path: 'loan-storage/loan-history?query=(loan.id==:{loanid})&limit=100',
+      path: 'loan-storage/loan-history?query=(loan.id==:{loanid})&limit=2000',
       records: 'loansHistory',
       resourceShouldRefresh: true,
       shouldRefresh: (resource, action, refresh) => {
@@ -70,7 +70,7 @@ class LoanDetailContainer extends React.Component {
     loanAccountsActions: {
       type: 'okapi',
       records: 'accounts',
-      path: 'accounts?query=(loanId=:{loanid})&limit=1000',
+      path: 'accounts?query=(loanId==:{loanid})&limit=2000',
       resourceShouldRefresh: true,
       shouldRefresh: (_, action, refresh) => refresh || (action?.meta?.path ?? '').match(/circulation/),
     },
@@ -84,13 +84,13 @@ class LoanDetailContainer extends React.Component {
     hasManualPatronBlocks: {
       type: 'okapi',
       records: 'manualblocks',
-      path: 'manualblocks?query=(userId==:{id})&limit=100',
+      path: 'manualblocks?query=(userId==:{id})&limit=2000',
       permissionsRequired: 'manualblocks.collection.get',
     },
     hasAutomatedPatronBlocks: {
       type: 'okapi',
       records: 'automatedPatronBlocks',
-      path: 'automated-patron-blocks/:{id}?limit=100',
+      path: 'automated-patron-blocks/:{id}?limit=2000',
       permissionsRequired: 'automated-patron-blocks.collection.get',
     },
     renew: {
@@ -108,6 +108,7 @@ class LoanDetailContainer extends React.Component {
     resources: PropTypes.shape({
       loanHistory: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
+        hasLoaded: PropTypes.bool.isRequired,
       }),
       hasManualPatronBlocks: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
@@ -119,6 +120,9 @@ class LoanDetailContainer extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
       selUser: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      loanAccountsActions: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
       loanActions: PropTypes.object,
@@ -138,6 +142,18 @@ class LoanDetailContainer extends React.Component {
     if (userLoans.length === 0 || !loanid) return undefined;
     const loan = userLoans.find(l => l.id === loanid) || {};
     return loan;
+  }
+
+  getLoanAccountActions = () => {
+    const {
+      resources,
+      match: {
+        params: { loanid }
+      }
+    } = this.props;
+    const loanAccountActions = (resources.loanAccountsActions || {}).records || [];
+
+    return loanAccountActions.filter(l => l.loanId === loanid) || [];
   }
 
   getUser = () => {
@@ -172,7 +188,8 @@ class LoanDetailContainer extends React.Component {
       const userMap = users.records.reduce((memo, user) => {
         return Object.assign(memo, { [user.id]: user });
       }, {});
-      const records = loanActions.records.map(la => {
+
+      const records = loanActions.records.filter(la => la?.loan?.action).map(la => {
         return { ...la.loan, user: userMap[la.loan.metadata.updatedByUserId] };
       });
 
@@ -182,10 +199,30 @@ class LoanDetailContainer extends React.Component {
     return [];
   }
 
+  isLoading = () => {
+    const {
+      resources: {
+        loanActions,
+        loanHistory,
+        users,
+      },
+    } = this.props;
+    const loan = this.getLoan();
+    const user = this.getUser();
+
+    return !loanActions.hasLoaded ||
+      !loanHistory.hasLoaded ||
+      !users.hasLoaded ||
+      !loan ||
+      !user ||
+      loan?.userId !== user?.id;
+  }
+
   render() {
     const {
-      resources : {
+      resources: {
         loanActions,
+        loanHistory,
         users,
       }
     } = this.props;
@@ -201,9 +238,12 @@ class LoanDetailContainer extends React.Component {
         loans={isEmpty(loan) ? [] : [loan]}
         loanActionsWithUser={loanActionsWithUser}
         loan={loan}
+        loanAccountActions={this.getLoanAccountActions()}
+        loanIsMissing={isEmpty(loan) && loanHistory.hasLoaded}
         user={this.getUser()}
         patronGroup={this.getPatronGroup()}
         patronBlocks={this.getPatronBlocks()}
+        isLoading={this.isLoading()}
         {...this.props}
       />
     );

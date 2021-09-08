@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -7,18 +6,49 @@ import {
   sortTypes,
 } from '../../constants';
 
+/**
+ * getFullName
+ * return "last, first middle", derived from user.personal.
+ *
+ * @param {object} user
+ * @returns string
+ */
 export function getFullName(user) {
-  const lastName = _.get(user, 'personal.lastName', '');
-  const firstName = _.get(user, 'personal.firstName', '');
-  const middleName = _.get(user, 'personal.middleName', '');
+  let fullName = user?.personal?.lastName ?? '';
+  let givenName = user?.personal?.firstName ?? '';
+  const middleName = user?.personal?.middleName ?? '';
+  if (middleName) {
+    givenName += `${givenName ? ' ' : ''}${middleName}`;
+  }
 
-  return `${lastName}${firstName ? ', ' : ' '}${firstName}${middleName ? ' ' : ''}${middleName}`;
+  if (givenName) {
+    fullName += `${fullName ? ', ' : ''}${givenName}`;
+  }
+
+  return fullName;
 }
 
-export function eachPromise(arr, fn) {
-  if (!Array.isArray(arr)) return Promise.reject(new Error('Array not found'));
-  return arr.reduce((prev, cur) => (prev.then(() => fn(cur))), Promise.resolve());
-}
+export const formatActionDescription = (action) => {
+  return action.typeAction +
+    (action.paymentMethod
+      ? ('-' + action.paymentMethod)
+      : ' '
+    );
+};
+
+export const formatCurrencyAmount = (amount = 0) => parseFloat(amount).toFixed(2);
+
+export const formatDateAndTime = (date, formatter) => {
+  return date ? formatter(date, { day: 'numeric', month: 'numeric', year: 'numeric' }) : '';
+};
+
+export const getServicePointOfCurrentAction = (action, servicePoints = []) => {
+  const servicePoint = servicePoints.find(sp => sp.id === action.createdAt);
+
+  return servicePoint ? servicePoint.name : action.createdAt;
+};
+
+export const calculateRemainingAmount = (remaining) => (parseFloat(remaining) * 100) / 100;
 
 export function validate(item, index, items, field, label) {
   const error = {};
@@ -82,10 +112,10 @@ export function getOpenRequestStatusesFilterString() {
   return getFilterStatusesString(openStatusesArr);
 }
 
-export function getOpenRequestsPath(barcode) {
+export function getOpenRequestsPath(itemId) {
   const filterString = getOpenRequestStatusesFilterString();
 
-  return `/requests?filters=${filterString}&query=${barcode}&sort=Request Date`;
+  return `/requests?filters=${filterString}&query=${itemId}&sort=Request Date`;
 }
 
 export function getChargeFineToLoanPath(userId, loanId) {
@@ -113,6 +143,27 @@ export function calculateSortParams({
   return sortParams;
 }
 
+// Return true if every item in loans has the status itemStatus
 export function hasEveryLoanItemStatus(loans, itemStatus) {
-  return _.every(Object.values(loans), loan => loan?.item?.status?.name === itemStatus);
+  return !!loans && loans.every(loan => loan?.item?.status?.name === itemStatus);
+}
+
+// Return true if every item in loans has one of the statuses in the itemStatuses array
+export function hasAnyLoanItemStatus(loans, itemStatuses) {
+  return !!loans && loans.every(loan => itemStatuses.includes(loan?.item?.status?.name));
+}
+
+export function accountsMatchStatus(accounts, status) {
+  return !!accounts && accounts.every((account) => account.status.name.toLowerCase() === status.toLowerCase());
+}
+
+export function getValue(value) {
+  return value || '';
+}
+
+// Given a user record, test whether the user is active. Checking the `active` property ought to
+// be sufficient, but test the expiration date as well just to be sure.
+export function checkUserActive(user) {
+  if (user.expirationDate == null || user.expirationDate === undefined) return user.active;
+  return user.active && (new Date(user.expirationDate) >= new Date());
 }

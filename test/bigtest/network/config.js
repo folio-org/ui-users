@@ -9,6 +9,11 @@ export default function config() {
   // okapi endpoints
   this.get('/_/version', () => '0.0.0');
 
+  this.get('/refunds', {
+    refunds: [],
+    totalRecords: 0
+  });
+
   this.get('_/proxy/tenants/:id/modules', [
     {
       id: 'mod-circulation-16.0.0-SNAPSHOT.253',
@@ -98,6 +103,7 @@ export default function config() {
       'group': 'staff',
       'desc': 'Staff Member',
       'id': 'group6',
+      'expirationOffsetInDays': 730,
     }, {
       'group': 'undergrad',
       'desc': 'Undergraduate Student',
@@ -140,6 +146,10 @@ export default function config() {
       // get the CQL query param from 'query=' until the amphersand or end of the string
       let query = /query=(\(.*\)|%28.*%29)/.exec(request.url)[1];
       const filterField = 'active';
+      const departmentsField = 'departments';
+      const usernameField = 'username';
+      const lastNameField = 'personal.lastName';
+      const barcodeField = 'barcode';
       if (/^%28/.test(query)) {
         query = decodeURIComponent(query);
       }
@@ -155,6 +165,26 @@ export default function config() {
       if (field === filterField) {
         return users.where({
           [filterField]: term === 'true'
+        });
+      }
+      if (field === departmentsField) {
+        return users.where({
+          [departmentsField]: [term],
+        });
+      }
+      if (field === usernameField) {
+        return users.where({
+          [usernameField]: term.replace('*', '')
+        });
+      }
+      if (field === lastNameField) {
+        return users.where(u => {
+          return (u.personal.lastName === term.replace('*', ''));
+        });
+      }
+      if (field === barcodeField) {
+        return users.where({
+          [barcodeField]: term.replace('*', '')
         });
       }
     }
@@ -241,9 +271,8 @@ export default function config() {
     return this.serializerOrRegistry.serialize(loans.all());
   });
 
-  this.get('loan-storage/loans/:loanid', {
-    loans: [],
-    totalRecords: 0
+  this.get('/loan-storage/loans/:id', ({ loans }, request) => {
+    return loans.find(request.params.id).attrs;
   });
 
   this.get('loan-storage/loan-history', ({ loanactions }, request) => {
@@ -271,6 +300,10 @@ export default function config() {
       loansHistory: [],
       totalRecords: 0,
     };
+  });
+
+  this.put('/loan-storage/loans/:id', (_, request) => {
+    return JSON.parse(request.requestBody);
   });
 
   this.get('/circulation/requests', function ({ requests }) {
@@ -326,6 +359,12 @@ export default function config() {
   this.post('/accounts', function (schema, { requestBody }) {
     const acct = JSON.parse(requestBody);
     return server.create('account', acct);
+  });
+
+  this.put('/accounts/:id', ({ accounts }, { params, requestBody }) => {
+    const account = JSON.parse(requestBody);
+
+    return accounts.find(params.id).update(account);
   });
 
   this.get('/waives', {
@@ -410,6 +449,7 @@ export default function config() {
   this.post('/perms/users/:id/permissions?indexField=userId');
 
   this.post('/circulation/loans/:loanId/declare-item-lost', []);
+  this.post('/circulation/loans/:loanId/claim-item-returned', []);
 
   this.get('/feefineactions', ({ feefineactions }) => {
     return this.serializerOrRegistry.serialize(feefineactions.all());
@@ -419,6 +459,8 @@ export default function config() {
     const ffAction = JSON.parse(requestBody);
     return server.create('feefineaction', ffAction);
   });
+
+  this.get('/feefines');
 
   this.get('/owners', ({ owners }) => {
     return this.serializerOrRegistry.serialize(owners.all());
@@ -467,7 +509,6 @@ export default function config() {
       }
     });
   });
-
 
   this.put('/note-links/type/:type/id/:id', ({ notes }, { params, requestBody }) => {
     const body = JSON.parse(requestBody);
@@ -657,5 +698,236 @@ export default function config() {
   this.get('/automated-patron-blocks/:id', {
     automatedPatronBlocks: [],
     totalRecords: 0,
+  });
+
+  this.get('/departments', {
+    departments: [{
+      id: 'test-1',
+      name: 'Test1',
+      code: 'test1',
+      usageNumber: 0,
+      metadata: {
+        createdDate: () => '2019-02-05T18:49:20.839+0000',
+        createdByUserId: () => 'ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd',
+        updatedDate: () => '2019-02-05T18:49:20.839+0000',
+        updatedByUserId: () => 'ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd'
+      },
+    },
+    {
+      id: 'test-2',
+      name: 'Test2',
+      code: 'test2',
+      usageNumber: 1,
+      metadata: {
+        createdDate: () => '2019-02-05T18:49:20.839+0000',
+        createdByUserId: () => 'ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd',
+        updatedDate: () => '2019-02-05T18:49:20.839+0000',
+        updatedByUserId: () => 'ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd'
+      },
+    }]
+  });
+
+  this.post('/accounts/:id/check-pay', ({ accounts }, request) => {
+    const account = accounts.find(request.params.id).attrs;
+
+    return {
+      accountId: account.id,
+      amount: '500.00',
+      allowed: true,
+      remainingAmount: '0.00'
+    };
+  });
+
+  this.post('/accounts/:id/check-waive', ({ accounts }, request) => {
+    const account = accounts.find(request.params.id).attrs;
+
+    return {
+      accountId: account.id,
+      amount: '500.00',
+      allowed: true,
+      remainingAmount: '0.00'
+    };
+  });
+
+  this.post('/accounts/:id/check-transfer', ({ accounts }, request) => {
+    const account = accounts.find(request.params.id).attrs;
+
+    return {
+      accountId: account.id,
+      amount: '500.00',
+      allowed: true,
+      remainingAmount: '0.00'
+    };
+  });
+
+  this.post('/accounts/:id/check-refund', ({ accounts }, request) => {
+    const account = accounts.find(request.params.id).attrs;
+
+    return {
+      accountId: account.id,
+      amount: '100.00',
+      allowed: true,
+      remainingAmount: '0.00'
+    };
+  });
+
+  this.post('/accounts/:id/pay', ({ accounts }, request) => {
+    const account = accounts.find(request.params.id).attrs;
+
+    return {
+      accountId: account.id,
+      amount: account.amount
+    };
+  });
+
+  this.post('/accounts/:id/waive', ({ accounts }, request) => {
+    const account = accounts.find(request.params.id).attrs;
+
+    return {
+      accountId: account.id,
+      amount: account.amount
+    };
+  });
+
+  this.post('/accounts/:id/transfer', ({ accounts }, request) => {
+    const account = accounts.find(request.params.id).attrs;
+
+    return {
+      accountId: account.id,
+      amount: account.amount
+    };
+  });
+
+  this.post('/accounts/:id/refund', ({ accounts }, request) => {
+    const account = accounts.find(request.params.id).attrs;
+
+    return {
+      accountId: account.id,
+      amount: account.amount
+    };
+  });
+
+  this.post('/accounts/:id/cancel', ({ accounts }, request) => {
+    const account = accounts.find(request.params.id).attrs;
+
+    return { accountId: account.id };
+  });
+
+  this.post('/accounts-bulk/check-transfer', () => {
+    return {
+      amounts: [
+        {
+          accountId: 'id1',
+          amount: 100
+        },
+        {
+          accountId: 'id2',
+          amount: 100
+        }
+      ],
+      allowed: true,
+      amount: 100,
+      remainingAmount: 100
+    };
+  });
+
+  this.post('/accounts-bulk/transfer', () => {
+    return {
+      accountIds: ['id1', 'id2', 'id3', 'id4'],
+      feefineactions: [
+        {
+          typeAction: 'Transferred partially',
+          amountAction: 10.0,
+          balance: 980.0,
+          paymentMethod: 'account',
+          accountId: 'id1',
+          userId: 'id4',
+          id: 'id5'
+        },
+        {
+          typeAction: 'Transferred partially',
+          amountAction: 10.0,
+          balance: 980.0,
+          paymentMethod: 'account',
+          accountId: 'id2',
+          userId: 'id4',
+          id: 'id6'
+        },
+        {
+          typeAction: 'Transferred partially',
+          amountAction: 10.0,
+          balance: 980.0,
+          paymentMethod: 'account',
+          accountId: 'id3',
+          userId: 'id4',
+          id: 'id7'
+        },
+        {
+          typeAction: 'Transferred partially',
+          amountAction: 10.0,
+          balance: 980.0,
+          paymentMethod: 'account',
+          accountId: 'id4',
+          userId: 'id4',
+          id: 'id8'
+        },
+      ],
+      amount : 40.00
+    };
+  });
+
+  this.post('/accounts-bulk/check-refund', () => {
+    return {
+      amounts: [
+        {
+          accountId: 'r1',
+          amount: 100
+        },
+        {
+          accountId: 'r2',
+          amount: 200
+        },
+        {
+          accountId: 'r3',
+          amount: 100
+        }
+      ],
+      allowed: true,
+      amount: 400,
+      remainingAmount: 100
+    };
+  });
+
+  this.post('/accounts-bulk/refund', () => {
+    return {
+      accountIds: ['r1', 'r2', 'r3'],
+      feefineactions: [
+        {
+          typeAction: 'Refunded fully',
+          amountAction: 100.0,
+          balance: 500.0,
+          accountId: 'r1',
+          userId: 'user1',
+          id: 'w1'
+        },
+        {
+          typeAction: 'Refunded fully',
+          amountAction: 200.0,
+          balance: 400.0,
+          accountId: 'r2',
+          userId: 'user1',
+          id: 'w2'
+        },
+        {
+          typeAction: 'Refunded fully',
+          amountAction: 100.0,
+          balance: 500.0,
+          accountId: 'r3',
+          userId: 'user1',
+          id: 'w3'
+        },
+      ],
+      amount : 400.00
+    };
   });
 }

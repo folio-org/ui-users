@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 import { ChangeDueDateDialog } from '@folio/stripes/smart-components';
 import { stripesShape } from '@folio/stripes/core';
 
-// eslint-disable-next-line
-import PatronBlockModal from '@folio/users/src/components/PatronBlock/PatronBlockModal';
+import PatronBlockModalWithOverrideModal from '../../../../PatronBlock/PatronBlockModalWithOverrideModal';
 import BulkClaimedReturnedModal from '../BulkClaimReturnedModal';
 
 class Modals extends React.Component {
@@ -21,6 +20,8 @@ class Modals extends React.Component {
     hideChangeDueDateDialog: PropTypes.func.isRequired,
     changeDueDateDialogOpen: PropTypes.bool.isRequired,
     onClosePatronBlockedModal: PropTypes.func.isRequired,
+    openPatronBlockedModal: PropTypes.func.isRequired,
+    renewSelected: PropTypes.func.isRequired,
     requestCounts: PropTypes.object.isRequired,
     onBulkClaimReturnedCancel: PropTypes.func.isRequired,
     showBulkClaimReturnedModal: PropTypes.bool.isRequired,
@@ -50,6 +51,8 @@ class Modals extends React.Component {
       patronBlocks,
       patronBlockedModal,
       onClosePatronBlockedModal,
+      openPatronBlockedModal,
+      renewSelected,
       patronGroup,
       requestCounts,
       showBulkClaimReturnedModal,
@@ -71,13 +74,16 @@ class Modals extends React.Component {
             onClose={hideChangeDueDateDialog}
           />
         }
-        <PatronBlockModal
-          open={patronBlockedModal}
+        <PatronBlockModalWithOverrideModal
+          patronBlockedModalOpen={patronBlockedModal}
+          onClosePatronBlockedModal={onClosePatronBlockedModal}
+          onOpenPatronBlockedModal={openPatronBlockedModal}
+          onRenew={renewSelected}
           patronBlocks={patronBlocks}
-          onClose={onClosePatronBlockedModal}
           viewUserPath={`/users/view/${(user || {}).id}?filters=pg.${patronGroup.group}&sort=name`}
         />
         <this.connectedBulkClaimReturnedDialog
+          stripes={stripes}
           checkedLoansIndex={checkedLoans}
           requestCounts={requestCounts}
           open={showBulkClaimReturnedModal}

@@ -15,9 +15,11 @@ import {
 } from '@bigtest/interactor';
 
 import ButtonInteractor from '@folio/stripes-components/lib/Button/tests/interactor'; // eslint-disable-line
+import RepeatableFieldInteractor from '@folio/stripes-components/lib/RepeatableField/tests/interactor';
 import ModalInteractor from '@folio/stripes-components/lib/Modal/tests/interactor'; // eslint-disable-line
 import SelectInteractor from '@folio/stripes-components/lib/Select/tests/interactor'; // eslint-disable-line
 import PermissionsModal from './permissions-modal';
+import ServicePointsModal from './service-points-modal';
 import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/ProxyEditItem.css';
 
 @interactor class InputFieldInteractor {
@@ -83,11 +85,15 @@ import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/P
           .blurInput();
       }
     }),
-    popoverIsPresent: isPresent('[class^=popoverTarget---]'),
+    popoverIsPresent: isPresent('[class^=infoPopover---]'),
     validationMessage: text('[class^=feedbackError---]'),
   });
 
   label = text('[class*="labelArea---"]');
+}
+
+@interactor class ServicePointInteractor {
+  deleteServicePoint = clickable('[id*=clickable-remove-service-point-]')
 }
 
 @interactor class UserFormPage {
@@ -110,6 +116,16 @@ import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/P
   cancelButton = new ButtonInteractor('[data-test-user-form-cancel-button]');
   submitButton = new ButtonInteractor('[data-test-user-form-submit-button]');
   submitButtonIsDisabled = property('[data-test-user-form-submit-button]', 'disabled');
+  actionMenuButton = new ButtonInteractor('[data-test-actions-menu]');
+  actionMenuCreateRequestButton = scoped('[data-test-actions-menu-create-request]');
+  actionMenuCreateFeeFinesButton = scoped('[data-test-actions-menu-create-feesfines]');
+  actionMenuCreatePatronBlocksButton = scoped('[data-test-actions-menu-create-patronblocks]');
+
+  toggleSPAccordionButton = scoped('#accordion-toggle-button-servicePoints');
+  addServicePointButton = scoped('#add-service-point-btn');
+  servicePoints = collection('[data-test-service-point]', ServicePointInteractor);
+  servicePointsModal = new ServicePointsModal();
+
   togglePermissionAccordionButton = scoped('#accordion-toggle-button-permissions');
   addPermissionButton = scoped('#clickable-add-permission');
   permissionsModal = new PermissionsModal();
@@ -130,7 +146,15 @@ import proxyEditItemCSS from '../../../src/components/ProxyGroup/ProxyEditItem/P
   secondAddressTypeField = new SelectFieldInteractor('[name="personal.addresses[1].addressType"]');
   defaultAddressTypeField = new SelectFieldInteractor('[data-test-default-delivery-address-field] select');
   statusField = new SelectFieldInteractor('#useractive');
+  patronGroupField = new SelectFieldInteractor('#adduser_group');
+  recalculateExpirationdateModal = new ModalInteractor('#recalculate_expirationdate_modal');
+  recalculateExpirationdateButton = scoped('#recalculate-expirationDate-btn');
+  expirationdateModalCancelButton = new ButtonInteractor('#expirationDate-modal-recalculate-btn');
+  expirationdateModalRecalculateButton = new ButtonInteractor('#expirationDate-modal-cancel-btn');
+  usersExpirationdateField = scoped('#adduser_expirationdate');
+  userWillReactivateMessage = scoped('#saving-will-reactivate-user');
   customFieldsSection = scoped('#customFields', CustomFieldsSectionInteractor);
+  departmentName = new RepeatableFieldInteractor('#department-name');
 }
 
 export default new UserFormPage('[data-test-form-page]');

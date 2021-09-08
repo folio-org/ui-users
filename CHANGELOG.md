@@ -1,7 +1,267 @@
 # Change history for ui-users
 
-## [4.1.0] (IN PROGRESS)
+## 6.2.0 (IN PROGRESS)
 
+* Update local babel config to handle new JSX transform. Refs UIU-2190.
+* Delete user with check for open transactions. Refs UIU-1971.
+* Prevent fetching resource delUser Refs UIU-2191.
+* Delete user through UI: change dialog text for no open transactions. Refs UIU-2192.
+* Delete user confirmation message. Refs UIU-2193.
+* Comment icon is missing again on Fee/Fine History page. Refs UIU-2185.
+* Add `resourceShouldRefresh` to `permissions` resource to refresh permissions. Fixes UIU-2183.
+* Add modal for `Financial transactions detail report`. Refs UIU-1960.
+* The `date picker` for report modals is cut off and user is not able select date. Refs UIU-2204.
+* Shared manual fees/fines not showing up for new fee/fine owner. Refs UIU-2208.
+* Create `Financial transactions detail report`. Refs UIU-1962.
+* Add translations for Custom fields. Refs UIU-2210.
+* Error window when opening or saving user data. Fixes UIU-2212.
+* Omit empty `username` during user creation. Fixes UIU-2214.
+* Fix `Total owed amount`/`Total paid amount` on `Fee/Fine Details`. Refs UIU-2211.
+* Whitespace should not mark loan-action forms dirty. Refs UIU-2227.
+* Default notice not sent to patron when Transfer done in one of the three ways. Refs UIU-2215.
+* Hide Department label in User's Detail and Edit views if there are no depts set up in Settings. Refs UIU-2012.
+* Disable renewals for inactive users. Fixes UIU-2229.
+* Fix Export of fees/fines. Refs UIU-2209.
+* `Financial transactions detail report:` date with empty value columns says "Unix Epoch". Refs UIU-2239.
+* Make sure users module builds with `babel-plugin-lodash` present. Fixes UIU-2228.
+* Show dates in local time when generating CSV reports. Fixes UIU-2224.
+* Fix user Departments value is not visible in the user view. Fixes UIU-2238.
+* Filter out non existing service points. Fixes UIU-2245.
+* Fix hyperlink in `Financial transactions detail report`. Refs UIU-2217.
+* Fix hyperlink with missing `Patron barcode`. Refs UIU-2242.
+* Fix `Invalid date` for `Financial transaction detail report`. Refs UIU-2251.
+* Support `feesfines` interface version `17.0`. Refs UIU-2248.
+* Update sub permissions in `ui-users.edituserservicepoints` permission set. Fixes UIU-2244.
+* Replace `babel-eslint` with `@babel/eslint-parser`; import global babel config. Refs UIU-2253, UIU-2254.
+* Automatic fees/fines are appearing in New Fee/Fine `Fee/fine type` drop-down. Refs UIU-2411.
+
+## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
+
+* Configure Jest/RTL. Refs UIU-2112.
+* Show user-readable message when user is not found. Fixes UIU-2081.
+* Fix Custom Fields error message by adding a missing permission. Fixes UIU-2104.
+* Add changes to indicate clickable for cursor. Refs UIU-2052.
+* Migrate from string notation to column mapping for PatronBlock. Refs UIU-2091.
+* Add Cash Drawer Reconciliaton report & Financial transactions detail report permissions to reports. Refs UIU-2088.
+* Add new fee/fine reports as options to User Actions drop-down. Refs UIU-2083.
+* Show claimed returned report only if user has necessary permission. Refs UIU-1884.
+* Fix Note Edit Page - doesn't return to record page after click on `Save&Close`. Fixes UIU-2087.
+* Fix Notify patron box behavior for New fee/fine when default patron notice is set. Refs UIU-2111.
+* Close "New fee/fine" page after fee/fine created. Refs UIU-2117.
+* Fix disabling "Save & close" button for Manual patron block. Refs UIU-2123.
+* Fix the possibility of create manual patron block with expiration date of today. Refs UIU-2122.
+* Fix permission error for "Refunds to Process Manually" report. Refs UIU-2126.
+* Also support `circulation` `10.0`. Refs UIU-2135.
+* Show the "Refunds to process manually" report conditionally based on permissions. Refs UIU-2125.
+* Fetch some search container routes conditionally based on permissions. Refs UIU-2132.
+* Handle search of ASTified translation values. Refs UIU-2142.
+* Fix optional dependencies to be actually optional and add a few. UIU-2140.
+* Include missing `limit` clause in request-count query. Refs UIU-2143.
+* Replace local KeyboardShortcutsModal component with import. Refs UIU-2151.
+* Clean up prop-types that generate bogus console warnings. Refs UIU-2158.
+* Provide useful `aria-label` values to loan action (ellipses) menues. Refs UIU-1635.
+* Allow a user to assign an existing permission set to a permission set. Refs UIU-1630.
+* Add permissions type filter to users settings permissions sets. Refs UIU-2164.
+* Avoid querying for an empty list of loan policies. Refs UIU-2163.
+* Show `Pop-up on User` and `Pop-up on Checkout` fields to Notes forms. Refs UIU-2155.
+* Show loading indicator on Loans details screen. Fixes UIU-2120.
+* Add type column to users settings permissions sets. Refs UIU-2167.
+* Add modal for 'Cash drawer reconciliation report'. Refs UIU-1959.
+* Provide `key` when rendering list elements. Refs UIU-2168.
+* Create 'Cash drawer reconciliation report' in PDF format. Refs UIU-2084.
+* Create 'Cash drawer reconciliation report' in CSV format. Refs UIU-1961.
+* Migrate to `renew-by-barcode`. Refs UIU-2096.
+* Move Tenant/Bursar exports to Users/Transfer criteria. Refs UIU-2098.
+* Add possible for enter correct values for Fee/Fine amount. Refs UIU-2156.
+* Added `NotePopupModal` to User Details page. Refs UIU-2008.
+* Fix selecting current fee fine type. Refs UIU-2157.
+* Fix validation error with END DATE for `Cash drawer reconciliation report` modal. Refs UIU-2175.
+* Handle empty report data in `CashDrawerReconciliationReportCSV`. Refs UIU-2184.
+* Fee/fine owners not available for selection on Transfer Fee/Fine modal. Refs UIU-2174.
+* Save the patron expiration with the time set to 23:59:59. Refs UIU-2182.
+* Compile translations to AST. Refs UIU-2115.
+
+## [6.0.6](https://github.com/folio-org/ui-users/tree/v6.0.6) (2021-06-17)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.5...v6.0.6)
+
+* Restore missing "Claimed returned" report button. Refs UIU-2188.
+
+## [6.0.5](https://github.com/folio-org/ui-users/tree/v6.0.5) (2021-04-29)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.4...v6.0.5)
+
+* Import `react` because we are building without new JSX transforms. Refs UIU-2081.
+
+## [6.0.4](https://github.com/folio-org/ui-users/tree/v6.0.4) (2021-04-27)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.3...v6.0.4)
+
+* Show user-readable message when user is not found. Fixes UIU-2081.
+
+## [6.0.3](https://github.com/folio-org/ui-users/tree/v6.0.3) (2021-04-23)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.2...v6.0.3)
+
+* Include missing `limit` clause in request-count query. Refs UIU-2143.
+* Fetch some search container routes conditionally based on permissions. Refs UIU-2132.
+* Show the "Refunds to process manually" report conditionally based on permissions. Refs UIU-2125.
+
+## [6.0.2](https://github.com/folio-org/ui-users/tree/v6.0.2) (2021-04-22)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.1...v6.0.2)
+
+* Close "New fee/fine" page after fee/fine created. Refs UIU-2117.
+* Fix the possibility of create manual patron block with expiration date of today. Refs UIU-2122.
+* Outstanding balance displays incorrectly on closed fee/fines pane. UIU-2085.
+
+## [6.0.1](https://github.com/folio-org/ui-users/tree/v6.0.1) (2021-04-19)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.0.1)
+
+* Configure Jest/RTL. Refs UIU-2112.
+* Lock stripes-cli to ~2.1.1, and thus stripes-webpack to ~1.1.0. Refs UIU-2137.
+* Fix Custom Fields error message by adding a missing permission. Fixes UIU-2104.
+* Fix Notify patron box behavior for New fee/fine when default patron notice is set. Refs UIU-2111.
+* Fix disabling "Save & close" button for Manual patron block. Refs UIU-2123.
+* Fix permission error for "Refunds to Process Manually" report. Refs UIU-2126.
+
+## [6.0.0](https://github.com/folio-org/ui-users/tree/v6.0.0) (2021-03-18)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.9...v6.0.0)
+
+* Add create request, create fee/fine and create block options to the actions menu. Refs UIU-775.
+* Fix bug showing duplicated service points in add service point dialog. Fixes UIU-1892.
+* Add report icon for report menu items. Refs UIU-1505.
+* Allow search by username. Refs UIU-1707.
+* Use more efficient queries for `accounts` records. Refs UIU-1913.
+* Relocate the username/password in the create/edit and detail view screens. Refs UIU-1035.
+* Allow search by last name. Refs UIU-1706.
+* Add user's fees/fines permissions. Refs UIU-1918.
+* Allow cancel fee/fine as error only if any 'actions' has not been applied. Refs UIU-1894.
+* Allow search by barcode. Refs UIU-1708.
+* Work with multiple and single `refund` action. Refs UIU-1897.
+* Show the number of open requests in `LoanActionDialog`. Refs UIU-1890.
+* Remove optional `action` fields if no value was setted. Refs UIU-1773.
+* Show the number of open requests in the Claim returned bulk action modal. Refs UIU-1891.
+* Add column 'Expiration date offset (days)' to patron group table. Refs UIU-1908.
+* On `Create Fee/fine` page `ConfirmationModal` shows again. Refs UIU-1933.
+* Fix incorrect display of the header for `Contributors` column in `Overdue loans report`. Fixes UIU-1937.
+* Fix filtering by tags. Fixes UITAG-34.
+* Manual patron block not fully going away after expired. Refs UIU-1943.
+* Manual patron block expiration date changing when patron block viewed. Refs UIU-1942.
+* Case-insensitive sort of filter options. Refs UIIN-1948.
+* Increment `@folio/stripes` to `^5.0.2`. Refs UIU-1932, UIU-1935.
+* Allow override for not loanable items when loan policy is not recognised. Fixes UIU-1930.
+* Show correct number of due date changes. Fixes UIU-1952.
+* Add "Users: User loans anonymize" permission. Refs UIU-1535.
+* Refund fees/fines: Report of refunds to process manually. Refs UIU-1164.
+* New Fee/Fine page not listing Fee/Fine Types for selected Fee/Fine Owner. Refs UIU-1968.
+* `Limits` not refreshing when `Patron group` added, modified or deleted. Refs UIU-1944.
+* Validate 'Expiration date offset (days)' of patron groups. Refs UIU-1951.
+* Create manual patron block templates in settings. Refs UIU-1909.
+* Show an error message, not a spinner, when a loan is missing. Refs UIU-1045.
+* Populate expiration date based on pre-defined offset for patron group. Refs UIU-1907.
+* Remove "Users: User loan edit" permission.
+* Add "Users: User loans change due date" permission.
+* Show correct source of fee/fine in payment 'action' for 'Charge & pay now'. Refs UIU-1981.
+* Change `limit=100` to `limit=2000` across the board; patrons have more than 100 things. All. The. Time. Refs UIU-1987.
+* Fix the selection of service points from the `Add service points` popup to display in the user record. Fixes UIU-1912.
+* Retrieve up to 10k tags instead of 10. Refs UIU-2003
+* Increment `notes` interface to `2.0`
+* Refactor to avoid deprecated props to `<Dropdown>`. Refs UIU-2007, STCOM-791.
+* Use patron block templates to populate fields in create block screen. Refs UIU-1910.
+* Hitting 'Charge only' button multiple times results in more than one fee/fine being created. Refs UIU-1993.
+* Set informative message when error declaring item lost. Fixes UIU-2004.
+* Change 'Reason for cancellation' to 'Additional information for staff' on Cancel Fee/Fine page. Refs UIU-1999.
+* Add fee/fine owner column to refund report. Refs UIU-2016.
+* Increment `react-redux` to `v7`, `redux-form` to `v8`. Refs UIU-2017, STRIPES=721.
+* Accessibility: Invalid ARIA attribute. Refs UIU-1685.
+* Wrong error message appears when required field not selected on Pay/Waive/Transfer modal. Refs UIU-1991.
+* Create fees/fines EXPORT spreadsheet for single patron and add EXPORT option to Fees/Fines History. Refs UIU-1955, UIU-1958.
+* Add 'User: Can override patron blocks' permission. Refs UIU-2025.
+* Add 'User: Can override item blocks' permission. Refs UIU-2019.
+* Add Fee/fine owner as criteria for 'Refunds to process manually report'. Refs UIU-2013.
+* Add EXPORT option to User Information. Refs UIU-1957.
+* Add EXPORT option to fees/fines Details. Refs UIU-1956.
+* Change Overdue loans and Claims reports icons in action menu. Refs UIU-2030.
+* Add plus-sign to create buttons in action menu and switch button order. Refs UIU-2031.
+* Calculate new expiration date not only from today. Refs UIU-2046.
+* Unable to select today's date for refund report. Refs UIU-2033.
+* Increment `@folio/stripes-cli` to `v2`. Refs UIU-2047.
+* Inconsistent behavior of payment action when transaction info is blank. Refs UIU-2048.
+* Fix wrong value on reset data for Refunds to process manually report (CSV). Refs UIU-2050.
+* Add app dropdown menu. Refs UIU-1915.
+* Add Modal with Shortcut Keys List. Refs UIU-1916.
+* Add Callout for Refund report. Refs UIU-2035.
+* Allow 0 as valid entry for Patron Block Limits. Refs UIU-1998.
+* Add "Save and close" button should be active immediately on refund report criteria modal. Refs UIU-2034.
+* Expiration date modal opens every time when editing a user. Refs UIU-2059.
+* Rewording for text on expiration date modal. Refs UIU-2058.
+* Patron blocks: Allow for override of Renewing when logged in user has credentials. Refs UIU-1954.
+* Loan Details no longer displays Fines incurred. Refs UIU-2045.
+* Fix eslint error in `LoanDetails.js`. Refs UIU-2068.
+* Improve fetching account data by making sure fetch happens only once. Fixes UIU-2063.
+* Update `@folio/plugin-find-user` for compatibility with `@folio/stripes` `v6`.
+* Fix behavior of Confirm button when `Mark as missing` option is selected in `Resolve claim` menu. Fixes UIU-2077.
+
+## [5.0.9](https://github.com/folio-org/ui-users/tree/v5.0.9) (2020-12-10)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.8...v5.0.9)
+
+* Change `limit=100` to `limit=2000` across the board; patrons have more than 100 things. All. The. Time. Refs UIU-1987.
+
+## [5.0.8](https://github.com/folio-org/ui-users/tree/v5.0.8) (2020-11-25)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.7...v5.0.8)
+
+* Disable `Charge & pay` button. Refs UIU-1980.
+
+## [5.0.7](https://github.com/folio-org/ui-users/tree/v5.0.7) (2020-11-24)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.6...v5.0.7)
+
+* Fix empty payments select. Refs UIU-1975.
+
+## [5.0.6](https://github.com/folio-org/ui-users/tree/v5.0.6) (2020-11-17)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.5...v5.0.6)
+
+* New Fee/Fine page not listing Fee/Fine Types for selected Fee/Fine Owner. Refs UIU-1968.
+
+## [5.0.5](https://github.com/folio-org/ui-users/tree/v5.0.5) (2020-11-13)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.4...v5.0.5)
+
+* Qualify queries to `feefineactions`, `feefines` from "Open fee/fine" page. Refs UIU-1895.
+* Use more efficient queries for `accounts` records. Refs UIU-1913.
+* Fix filtering by tags. Fixes UITAG-34.
+* Show correct number of due date changes. Fixes UIU-1952.
+* Allow cancel fee/fine as error only if any 'actions' has not been applied. Refs UIU-1894.
+
+## [5.0.4](https://github.com/folio-org/ui-users/tree/v5.0.4) (2020-11-09)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.3...v5.0.4)
+
+* Fix bug showing duplicated service points in add service point dialog. Fixes UIU-1892.
+* On `Create Fee/fine` page `ConfirmationModal` shows again. Refs UIU-1933.
+* Fix incorrect display of the header for `Contributors` column in `Overdue loans report`. Fixes UIU-1937.
+* Manual patron block not fully going away after expired. Refs UIU-1943.
+* Manual patron block expiration date changing when patron block viewed. Refs UIU-1942.
+* Case-insensitive sort of filter options. Refs UIIN-1948.
+* Increment `@folio/stripes` to `^5.0.2`. Refs UIU-1932, UIU-1935.
+
+## [5.0.3](https://github.com/folio-org/ui-users/tree/v5.0.3) (2020-10-27)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.2...v5.0.3)
+
+* Add user's fees/fines permissions. Refs UIU-1918.
+
+## [5.0.2](https://github.com/folio-org/ui-users/tree/v5.0.2) (2020-10-27)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.1...v5.0.2)
+
+* Use correct `dateFormat` for `<Datepicker>`. Refs UIU-1896.
+
+## [5.0.1](https://github.com/folio-org/ui-users/tree/v5.0.1) (2020-10-15)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v5.0.0...v5.0.1)
+
+* Update plugins to `stripes v5`-compatible versions. Refs UIU-1901.
+
+## [5.0.0](https://github.com/folio-org/ui-users/tree/v5.0.0) (2020-10-14)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v4.0.0...v5.0.0)
+
+* modified the lost date display to include aged to lost status. Fixes UIU-1804.
+* Fixing breaking tests.
+* Adding fix for UIU-1801.  Removing temporary fixes to tests.
+* Temporary fix for broken tests relating to UIU-1801.  Does not resolve that issue.
+* changed user search to filter based on tag name rather than ID.  Fixes UIU-1750
 * Trim email address in user record to remove blanks. Fixes UIU-1528.
 * `withRenew` should include in-transit items when calculating the open-request-count. Fixes UIU-1254.
 * Restore `CommandList`, `HasCommand` wrappers now that they don't leak memory. Refs UIU-1457.
@@ -10,6 +270,51 @@
 * Increment `@folio/plugin-find-user` to `v3.0.0` for `@folio/stripes` `v4.0` compatibility.
 * Refresh Fine incurred field when item declared lost. Fixes UIU-1669.
 * Add validation to integer values for patron block limits. Refs UIU-1675.
+* Increase limits for `ChargeFeesFines`. Refs UIU-1722.
+* Fix Custom Fields related error toast notification in User Details page. Fixes UIU-1736.
+* Generate overdue loans report via pagination. Fixes UIU-1747.
+* Prevent declaring an item lost if it is already lost. Fixes UIU-1714.
+* Add `servicePointId` property when overriding a loan. Refs UIU-1712.
+* Change capitalization of sections in User Information. Refs UIU-1754.
+* Fix buttons layout in `Warning modal`. Refs UIU-1756.
+* Change `-` to `Default` if default notice exists at Fee/Fine: Manual Charges. Refs UIU-1755.
+* `Fee/fines details` not always include `Service Point` as `Created at`. Refs UIU-1725.
+* Add permission to anonymize manually closed loans. Fixes UIU-1757.
+* Include tag-related permissions in `ui-users.edit` permission. Refs UITAG-29.
+* Increment `@folio/stripes` to `v5.0`, `react-router` to `v5.2`.
+* Support ability to search by Preferred first name. Refs UIU-1767.
+* Handle display of loan details for `Aged to lost`, and for unknown statuses as well. Refs UIU-1791.
+* Settings > Users > Departments CRUD. Refs UIU-1211.
+* Reorder volume/enum/chron fields in loans export (CSV). Refs UIU-1504.
+* Use item id instead of barcode for links to `ui-requests` module. Fixes UIU-1727.
+* Add departments to User crate/edit/view pages. Refs UIU-1224.
+* Enable renewal override for Aged to lost items. Refs UIU-1464.
+* Handle Aged to lost items in bulk due date change. Refs UIU-1495.
+* Include Aged to lost in loan details action history. Refs UIU-1803.
+* Add permissions for Departments CRUD. Refs UIU-1778.
+* Add missing permission `departments.collection.get` permission. Fixes UIU-1812.
+* Prevent UI crashing when loading loan with deleted item. Fixes UIU-1819.
+* Remove user count from patron groups. Fixes UIU-1562.
+* Assign user permissions more efficiently. Fixes UIU-1369.
+* Filter out blank actions on loan details UI. Fixes UIU-1820.
+* Increment `react-intl` to `v5` for `@folio/stripes` `v5` compatibility. Refs STRIPES-694.
+* Only set `servicePointUserId` when it's present. Fixes UIU-1849.
+* Modify default columns and MCL columnWidths on Loans Listing. Fixes UIU-1844
+* Refactoring of `pay`, `waive` fee/fine single actions. Refs UIU-1793.
+* Refactoring of `error` fee/fine single action. Refs UIU-1796.
+* Refactoring of `transfer` fee/fine single action. Refs UIU-1795.
+* Clean up invalid fee/fine type-popover code.
+* Consistent spacing around barcode link.
+* Refactoring of `charge & pay` fee/fine form. Refs UIU-1836.
+* Correctly handle permissions modal display over edit pane. Fixes UIU-1857.
+* Adding of `refund` fee/fine single action. Refs UIU-1850.
+* Refactor actions for single list item. Refs UIU-1797.
+* Search translations of permission names. Refs UIU-1859.
+* Hide the Overdue loans report option when user doesn't have view loans permissions. Refs UIU-1858.
+* Allow renewal override if due date isn't changed. Refs UIU-1853.
+* Make the assigned service points for the user have been checked in the Add service points modal. Fixes UIU-1560.
+* Add Departments filter. Refs UIU-1355.
+* Always show the `Title` field for a loan, even if it is empty. Fixes UIU-1573.
 
 ## [4.0.0](https://github.com/folio-org/ui-users/tree/v4.0.0) (2020-06-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v3.0.0...v4.0.0)

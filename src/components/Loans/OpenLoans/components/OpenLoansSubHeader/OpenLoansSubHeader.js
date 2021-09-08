@@ -21,9 +21,23 @@ import {
 
 import ActionsBar from '../../../components/ActionsBar/ActionsBar';
 import { itemStatuses } from '../../../../../constants';
-import { hasEveryLoanItemStatus } from '../../../../util';
+import {
+  hasEveryLoanItemStatus,
+  hasAnyLoanItemStatus,
+  getRenewalPatronBlocksFromPatronBlocks,
+  checkUserActive,
+} from '../../../../util';
 
 import css from './OpenLoansSubHeader.css';
+
+// For convenience of enabling or disabling buttons for similar item states,
+// this groups together all the relevant item statuses for items that are
+// lost in one way or another ('losty' items?).
+const lostItemStatuses = [
+  itemStatuses.AGED_TO_LOST,
+  itemStatuses.CLAIMED_RETURNED,
+  itemStatuses.DECLARED_LOST,
+];
 
 class OpenLoansSubHeader extends React.Component {
   static propTypes = {
@@ -39,6 +53,7 @@ class OpenLoansSubHeader extends React.Component {
     openBulkClaimReturnedModal: PropTypes.func.isRequired,
     openPatronBlockedModal: PropTypes.func.isRequired,
     showChangeDueDateDialog: PropTypes.func.isRequired,
+    user: PropTypes.object.isRequired,
   };
 
   constructor(props) {
@@ -56,8 +71,10 @@ class OpenLoansSubHeader extends React.Component {
       'item.callNumberComponents.prefix',
       'item.callNumberComponents.callNumber',
       'item.callNumberComponents.suffix',
-      'item.enumeration',
       'item.volume',
+      'item.enumeration',
+      'item.chronology',
+      'item.copyNumber',
       'item.contributors',
       'item.holdingsRecordId',
       'item.instanceId',
@@ -122,6 +139,7 @@ class OpenLoansSubHeader extends React.Component {
       patronBlocks,
       openPatronBlockedModal,
       openBulkClaimReturnedModal,
+      user,
     } = this.props;
 
     const {
@@ -133,17 +151,20 @@ class OpenLoansSubHeader extends React.Component {
     const claimedReturnedCount = loans.filter(l => l?.item?.status?.name === itemStatuses.CLAIMED_RETURNED).length;
     const clonedLoans = cloneDeep(loans);
     const recordsToCSV = buildRecords(clonedLoans);
-    const countRenews = patronBlocks.filter(p => p.renewals === true);
-    const onlyLostItemsSelected = hasEveryLoanItemStatus(checkedLoans, itemStatuses.DECLARED_LOST);
+    const countRenews = getRenewalPatronBlocksFromPatronBlocks(patronBlocks);
     const onlyClaimedReturnedItemsSelected = hasEveryLoanItemStatus(checkedLoans, itemStatuses.CLAIMED_RETURNED);
+    const onlyLostyItemsSelected = hasAnyLoanItemStatus(checkedLoans, lostItemStatuses);
+    const isUserActive = checkUserActive(user);
 
     return (
       <ActionsBar
         contentStart={
           <span style={{ display: 'flex' }}>
             <span id="loan-count">
-              {resultCount} {claimedReturnedCount > 0 &&
-                <FormattedMessage id="ui-users.loans.numClaimedReturnedLoans" values={{ count: claimedReturnedCount }} />
+              {resultCount}
+              {' '}
+              {claimedReturnedCount > 0 &&
+              <FormattedMessage id="ui-users.loans.numClaimedReturnedLoans" values={{ count: claimedReturnedCount }} />
               }
             </span>
             <Dropdown
@@ -153,19 +174,14 @@ class OpenLoansSubHeader extends React.Component {
               pullRight
               onToggle={this.onDropdownClick}
               open={toggleDropdownState}
+              label={<FormattedMessage id="ui-users.selectColumns" />}
+              buttonProps={{
+                align: 'end',
+                bottomMargin0: true,
+                'aria-haspopup': true,
+              }}
             >
-              <Button
-                data-role="toggle"
-                align="end"
-                bottomMargin0
-                aria-haspopup="true"
-              >
-                <FormattedMessage id="ui-users.selectColumns" />
-              </Button>
-              <DropdownMenu
-                data-role="menu"
-                aria-label="available permissions"
-              >
+              <DropdownMenu aria-label="available permissions">
                 <ul>
                   {this.renderCheckboxList(columnMapping)}
                 </ul>
@@ -179,10 +195,10 @@ class OpenLoansSubHeader extends React.Component {
               <Button
                 marginBottom0
                 id="renew-all"
-                disabled={noSelectedLoans || onlyClaimedReturnedItemsSelected}
+                disabled={noSelectedLoans || onlyClaimedReturnedItemsSelected || !isUserActive}
                 onClick={!isEmpty(countRenews)
                   ? openPatronBlockedModal
-                  : renewSelected
+                  : () => renewSelected()
                 }
               >
                 <FormattedMessage id="ui-users.renew" />
@@ -196,11 +212,11 @@ class OpenLoansSubHeader extends React.Component {
             >
               <FormattedMessage id="ui-users.loans.claimReturned" />
             </Button>
-            <IfPermission perm="ui-users.loans.edit">
+            <IfPermission perm="ui-users.loans.change-due-date">
               <Button
                 marginBottom0
                 id="change-due-date-all"
-                disabled={noSelectedLoans || onlyLostItemsSelected || onlyClaimedReturnedItemsSelected}
+                disabled={noSelectedLoans || onlyLostyItemsSelected}
                 onClick={showChangeDueDateDialog}
               >
                 <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />

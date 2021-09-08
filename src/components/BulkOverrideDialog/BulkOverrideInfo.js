@@ -22,18 +22,23 @@ import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 import BulkOverrideLoansList from './BulkOverrideLoansList';
 
+import {
+  OVERRIDE_BLOCKS_FIELDS,
+} from '../../constants';
+
 class BulkOverrideInfo extends React.Component {
   static manifest = Object.freeze({
     renew: {
       type: 'okapi',
       fetch: false,
       POST: {
-        path: 'circulation/override-renewal-by-barcode',
+        path: 'circulation/renew-by-barcode',
       },
     },
   });
 
   static propTypes = {
+    additionalInfo: PropTypes.string.isRequired,
     stripes: stripesShape.isRequired,
     mutator: PropTypes.shape({
       renew: PropTypes.shape({
@@ -68,6 +73,14 @@ class BulkOverrideInfo extends React.Component {
     };
     this.INVALIDE_DATE_MESSAGE = 'Invalid date';
     this.connectedLoanList = props.stripes.connect(BulkOverrideLoansList);
+  }
+
+  componentDidMount() {
+    const {
+      additionalInfo,
+    } = this.props;
+
+    this.handleAdditionalInfoChange(additionalInfo);
   }
 
   toggleAll = (e) => {
@@ -114,8 +127,8 @@ class BulkOverrideInfo extends React.Component {
     }
   };
 
-  handleAdditionalInfoChange = (event) => {
-    this.setState({ additionalInfo: event.target.value });
+  handleAdditionalInfoChange = (value) => {
+    this.setState({ additionalInfo: value });
   };
 
   submitOverride = () => {
@@ -126,6 +139,7 @@ class BulkOverrideInfo extends React.Component {
     } = this.state;
 
     const {
+      additionalInfo: additionalInfoFromPatronBlocksOverrideDialog,
       mutator: {
         renew: {
           POST,
@@ -133,6 +147,13 @@ class BulkOverrideInfo extends React.Component {
       },
       user: {
         barcode: userBarcode
+      },
+      stripes: {
+        user: {
+          user: {
+            curServicePoint,
+          },
+        },
       },
       onCancel,
       onCloseRenewModal,
@@ -148,8 +169,23 @@ class BulkOverrideInfo extends React.Component {
           {
             userBarcode,
             itemBarcode: barcode,
-            comment: additionalInfo,
-            ...(datetime && { dueDate: datetime })
+            servicePointId: curServicePoint?.id,
+            [OVERRIDE_BLOCKS_FIELDS.OVERRIDE_BLOCKS]: {
+              ...(additionalInfoFromPatronBlocksOverrideDialog && {
+                [OVERRIDE_BLOCKS_FIELDS.PATRON_BLOCK]: {},
+              }),
+              [OVERRIDE_BLOCKS_FIELDS.COMMENT]: additionalInfo,
+              ...(datetime
+                ? {
+                  [OVERRIDE_BLOCKS_FIELDS.RENEWAL_DUE_DATE_REQUIRED_BLOCK]: {
+                    [OVERRIDE_BLOCKS_FIELDS.RENEWAL_DUE_DATE]: datetime,
+                  },
+                }
+                : {
+                  [OVERRIDE_BLOCKS_FIELDS.RENEWAL_BLOCK]: {},
+                }
+              ),
+            },
           }
         );
       }
@@ -218,7 +254,8 @@ class BulkOverrideInfo extends React.Component {
                   label={<FormattedMessage id="ui-users.additionalInfo.label" />}
                   placeholder={placeholder}
                   required
-                  onChange={this.handleAdditionalInfoChange}
+                  value={additionalInfo}
+                  onChange={(event) => this.handleAdditionalInfoChange(event.target.value)}
                 />
               )}
             </FormattedMessage>

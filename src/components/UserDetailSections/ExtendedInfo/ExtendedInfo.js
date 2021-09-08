@@ -10,7 +10,7 @@ import {
   Col,
   Headline,
   KeyValue,
-  Row
+  Row,
 } from '@folio/stripes/components';
 
 import { requestPreferencesShape } from '../../../shapes';
@@ -26,6 +26,7 @@ const ExtendedInfo = (props) => {
     requestPreferences,
     defaultServicePointName,
     defaultDeliveryAddressTypeName,
+    departments,
   } = props;
 
   return (
@@ -60,17 +61,33 @@ const ExtendedInfo = (props) => {
         </Col>
       </Row>
       <Row>
-        <Col xs={3}>
-          <KeyValue label={<FormattedMessage id="ui-users.information.username" />}>
-            {get(user, ['username'], '')}
-          </KeyValue>
-        </Col>
-        <Col xs={9}>
+        <Col xs={12} md={9}>
           <RequestPreferencesView
             requestPreferences={requestPreferences}
             defaultServicePointName={defaultServicePointName}
             defaultDeliveryAddressTypeName={defaultDeliveryAddressTypeName}
           />
+        </Col>
+      </Row>
+      {departments.length
+        ? (
+          <Row>
+            <Col xs={12} md={6}>
+              <KeyValue label={<FormattedMessage id="ui-users.extended.department.name" />}>
+                <span data-test-department-name>
+                  {departments.join(', ')}
+                </span>
+              </KeyValue>
+            </Col>
+          </Row>
+        )
+        : null
+      }
+      <Row>
+        <Col xs={12} md={6}>
+          <KeyValue label={<FormattedMessage id="ui-users.information.username" />}>
+            {get(user, ['username'], '')}
+          </KeyValue>
         </Col>
       </Row>
     </Accordion>
@@ -85,6 +102,7 @@ ExtendedInfo.propTypes = {
   defaultServicePointName: PropTypes.string,
   requestPreferences: requestPreferencesShape,
   defaultDeliveryAddressTypeName: PropTypes.string.isRequired,
+  departments: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default ExtendedInfo;
