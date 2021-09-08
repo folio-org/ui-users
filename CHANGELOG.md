@@ -34,6 +34,7 @@
 * Update sub permissions in `ui-users.edituserservicepoints` permission set. Fixes UIU-2244.
 * Replace `babel-eslint` with `@babel/eslint-parser`; import global babel config. Refs UIU-2253, UIU-2254.
 * Automatic fees/fines are appearing in New Fee/Fine `Fee/fine type` drop-down. Refs UIU-2411.
+* Remove unused permission set. Fixes UIU-2247.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
