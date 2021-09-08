@@ -161,12 +161,17 @@ class EditExtendedInfo extends Component {
               />
             </Row>
           </Col>
-          <Col
-            xs={12}
-            md={3}
-          >
-            <DepartmentsNameEdit departments={departments} />
-          </Col>
+          {departments.length
+            ? (
+              <Col
+                xs={12}
+                md={3}
+              >
+                <DepartmentsNameEdit departments={departments} />
+              </Col>
+            )
+            : null
+          }
         </Row>
         <Row>
           <Col

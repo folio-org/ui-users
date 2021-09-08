@@ -1,27 +1,39 @@
 # Change history for ui-users
 
-## [6.1.3](https://github.com/folio-org/ui-users/tree/v6.1.3) (2021-08-05)
-[Full Changelog](https://github.com/folio-org/ui-users/compare/v6.1.2...v6.1.3)
+## 6.2.0 (IN PROGRESS)
 
-* Disable renewals for inactive users. Fixes UIU-2229.
-* Show dates in local time when generating CSV reports. Fixes UIU-2224.
-* Filter out non existing service points. Fixes UIU-2245.
-
-## [6.1.2](https://github.com/folio-org/ui-users/tree/v6.1.2) (2021-07-30)
-[Full Changelog](https://github.com/folio-org/ui-users/compare/v6.1.1...v6.1.2)
-
+* Update local babel config to handle new JSX transform. Refs UIU-2190.
+* Delete user with check for open transactions. Refs UIU-1971.
+* Prevent fetching resource delUser Refs UIU-2191.
+* Delete user through UI: change dialog text for no open transactions. Refs UIU-2192.
+* Delete user confirmation message. Refs UIU-2193.
+* Comment icon is missing again on Fee/Fine History page. Refs UIU-2185.
+* Add `resourceShouldRefresh` to `permissions` resource to refresh permissions. Fixes UIU-2183.
+* Add modal for `Financial transactions detail report`. Refs UIU-1960.
+* The `date picker` for report modals is cut off and user is not able select date. Refs UIU-2204.
 * Shared manual fees/fines not showing up for new fee/fine owner. Refs UIU-2208.
+* Create `Financial transactions detail report`. Refs UIU-1962.
+* Add translations for Custom fields. Refs UIU-2210.
 * Error window when opening or saving user data. Fixes UIU-2212.
 * Omit empty `username` during user creation. Fixes UIU-2214.
 * Fix `Total owed amount`/`Total paid amount` on `Fee/Fine Details`. Refs UIU-2211.
+* Whitespace should not mark loan-action forms dirty. Refs UIU-2227.
 * Default notice not sent to patron when Transfer done in one of the three ways. Refs UIU-2215.
+* Hide Department label in User's Detail and Edit views if there are no depts set up in Settings. Refs UIU-2012.
+* Disable renewals for inactive users. Fixes UIU-2229.
 * Fix Export of fees/fines. Refs UIU-2209.
-
-## [6.1.1](https://github.com/folio-org/ui-users/tree/v6.1.1) (2021-07-15)
-[Full Changelog](https://github.com/folio-org/ui-users/compare/v6.1.0...v6.1.1)
-
-* Fix order refund and credit actions. Refs UIU-2178.
-* Lost Item Processing Fee changes from outstanding to suspended. Refs UIU-2177.
+* `Financial transactions detail report:` date with empty value columns says "Unix Epoch". Refs UIU-2239.
+* Make sure users module builds with `babel-plugin-lodash` present. Fixes UIU-2228.
+* Show dates in local time when generating CSV reports. Fixes UIU-2224.
+* Fix user Departments value is not visible in the user view. Fixes UIU-2238.
+* Filter out non existing service points. Fixes UIU-2245.
+* Fix hyperlink in `Financial transactions detail report`. Refs UIU-2217.
+* Fix hyperlink with missing `Patron barcode`. Refs UIU-2242.
+* Fix `Invalid date` for `Financial transaction detail report`. Refs UIU-2251.
+* Support `feesfines` interface version `17.0`. Refs UIU-2248.
+* Update sub permissions in `ui-users.edituserservicepoints` permission set. Fixes UIU-2244.
+* Replace `babel-eslint` with `@babel/eslint-parser`; import global babel config. Refs UIU-2253, UIU-2254.
+* Automatic fees/fines are appearing in New Fee/Fine `Fee/fine type` drop-down. Refs UIU-2411.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
@@ -68,6 +80,7 @@
 * Handle empty report data in `CashDrawerReconciliationReportCSV`. Refs UIU-2184.
 * Fee/fine owners not available for selection on Transfer Fee/Fine modal. Refs UIU-2174.
 * Save the patron expiration with the time set to 23:59:59. Refs UIU-2182.
+* Compile translations to AST. Refs UIU-2115.
 
 ## [6.0.6](https://github.com/folio-org/ui-users/tree/v6.0.6) (2021-06-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.5...v6.0.6)

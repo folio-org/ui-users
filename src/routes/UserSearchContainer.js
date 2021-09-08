@@ -58,6 +58,10 @@ class UserSearchContainer extends React.Component {
         },
         staticFallback: { params: {} },
       },
+      shouldRefresh: (resource, action, refresh) => {
+        const { path } = action.meta;
+        return refresh || (path && path.match(/users/));
+      },
     },
     patronGroups: {
       type: 'okapi',
@@ -88,7 +92,7 @@ class UserSearchContainer extends React.Component {
     },
     departments: {
       type: 'okapi',
-      path: 'departments',
+      path: `departments?query=cql.allRecords=1 sortby name&limit=${MAX_RECORDS}`,
       records: 'departments',
     },
     owners: {
@@ -116,6 +120,13 @@ class UserSearchContainer extends React.Component {
       type: 'okapi',
       records: 'cashDrawerReportSources',
       path: 'feefine-reports/cash-drawer-reconciliation/sources',
+      clientGeneratePk: false,
+      fetch: false,
+    },
+    financialTransactionsReport: {
+      type: 'okapi',
+      records: 'financialTransactionsReport',
+      path: 'feefine-reports/financial-transactions-detail',
       clientGeneratePk: false,
       fetch: false,
     },
@@ -156,6 +167,9 @@ class UserSearchContainer extends React.Component {
         POST: PropTypes.func.isRequired,
       }),
       cashDrawerReportSources: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      financialTransactionsReport: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }),
     }).isRequired,

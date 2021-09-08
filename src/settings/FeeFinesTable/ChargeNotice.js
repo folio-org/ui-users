@@ -19,9 +19,9 @@ const Item = ({ edit, value, name, dataOptions }) => {
     <div id={name}>
       {(edit)
         ? <Field
-          name={name}
-          component={Select}
-          dataOptions={dataOptions}
+            name={name}
+            component={Select}
+            dataOptions={dataOptions}
         />
         : (value || '-')
       }
@@ -138,4 +138,3 @@ export default stripesFinalForm({
   navigationCheck: false,
   enableReinitialize: false,
 })(ChargeNotice);
-

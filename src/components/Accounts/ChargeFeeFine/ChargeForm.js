@@ -182,10 +182,12 @@ class ChargeForm extends React.Component {
     });
 
     feeFineTypeOptions.forEach((feefineItem) => {
-      const fee = {};
-      fee.label = feefineItem.feeFineType;
-      fee.value = feefineItem.id;
-      feefineList.push(fee);
+      if (!feefineItem.automatic) {
+        const fee = {};
+        fee.label = feefineItem.feeFineType;
+        fee.value = feefineItem.id;
+        feefineList.push(fee);
+      }
     });
 
     let showNotify = false;

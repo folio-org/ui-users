@@ -5,7 +5,6 @@ import { sortBy } from 'lodash';
 import PermissionSets from './permissions/PermissionSets';
 import PatronGroupsSettings from './PatronGroupsSettings';
 import AddressTypesSettings from './AddressTypesSettings';
-import ProfilePictureSettings from './ProfilePictureSettings';
 import OwnerSettings from './OwnerSettings';
 import FeeFineSettings from './FeeFineSettings';
 import WaiveSettings from './WaiveSettings';
@@ -45,12 +44,15 @@ const settingsGeneral = [
     component: DepartmentsSettings,
     perm: 'ui-users.settings.departments.view'
   },
-  {
-    route: 'profilepictures',
-    label: <FormattedMessage id="ui-users.settings.profilePictures" />,
-    component: ProfilePictureSettings,
-    perm: 'ui-users.settings.profilePictures'
-  },
+  //   Profile pictures are currently unsupported in Folio and the existence of this setting has
+  //   confused implementers. Commenting out for now as opposed to deleting it so the existing
+  //   files and components aren't orphaned.
+  //   {
+  //     route: 'profilepictures',
+  //     label: <FormattedMessage id="ui-users.settings.profilePictures" />,
+  //     component: ProfilePictureSettings,
+  //     perm: 'ui-users.settings.profilePictures'
+  //   },
   {
     route: 'custom-fields',
     label: <FormattedMessage id="ui-users.settings.customFields" />,

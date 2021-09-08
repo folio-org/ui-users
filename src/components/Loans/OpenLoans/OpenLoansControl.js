@@ -355,37 +355,37 @@ class OpenLoansControl extends React.Component {
         {renewing
           ? <LoadingView data-test-form-page paneTitle={<FormattedMessage id="ui-users.renewInProgress" />} defaultWidth="100%" />
           : <TableModel
-            patronBlockedModal={patronBlockedModal}
-            onClosePatronBlockedModal={this.onClosePatronBlockedModal}
-            openPatronBlockedModal={this.openPatronBlockedModal}
-            patronBlocks={getRenewalPatronBlocksFromPatronBlocks(patronBlocks)}
-            patronGroup={patronGroup}
-            buildRecords={this.buildRecords}
-            visibleColumns={visibleColumns}
-            checkedLoans={checkedLoans}
-            requestCounts={requestCounts}
-            activeLoan={activeLoan}
-            changeDueDateDialogOpen={changeDueDateDialogOpen}
-            loans={loans}
-            stripes={stripes}
-            feeFineCount={this.feeFineCount}
-            history={history}
-            location={location}
-            match={match}
-            user={user}
-            toggleAll={this.toggleAll}
-            toggleItem={this.toggleItem}
-            isLoanChecked={this.isLoanChecked}
-            requestRecords={(resources.requests || {}).records || []}
-            resources={resources}
-            getLoanPolicy={this.getLoanPolicy}
-            handleOptionsChange={this.handleOptionsChange}
-            possibleColumns={this.possibleColumns}
-            hideChangeDueDateDialog={this.hideChangeDueDateDialog}
-            renewSelected={this.renewSelected}
-            showChangeDueDateDialog={this.showChangeDueDateDialog}
-            toggleColumn={this.toggleColumn}
-            allChecked={allChecked}
+              patronBlockedModal={patronBlockedModal}
+              onClosePatronBlockedModal={this.onClosePatronBlockedModal}
+              openPatronBlockedModal={this.openPatronBlockedModal}
+              patronBlocks={getRenewalPatronBlocksFromPatronBlocks(patronBlocks)}
+              patronGroup={patronGroup}
+              buildRecords={this.buildRecords}
+              visibleColumns={visibleColumns}
+              checkedLoans={checkedLoans}
+              requestCounts={requestCounts}
+              activeLoan={activeLoan}
+              changeDueDateDialogOpen={changeDueDateDialogOpen}
+              loans={loans}
+              stripes={stripes}
+              feeFineCount={this.feeFineCount}
+              history={history}
+              location={location}
+              match={match}
+              user={user}
+              toggleAll={this.toggleAll}
+              toggleItem={this.toggleItem}
+              isLoanChecked={this.isLoanChecked}
+              requestRecords={(resources.requests || {}).records || []}
+              resources={resources}
+              getLoanPolicy={this.getLoanPolicy}
+              handleOptionsChange={this.handleOptionsChange}
+              possibleColumns={this.possibleColumns}
+              hideChangeDueDateDialog={this.hideChangeDueDateDialog}
+              renewSelected={this.renewSelected}
+              showChangeDueDateDialog={this.showChangeDueDateDialog}
+              toggleColumn={this.toggleColumn}
+              allChecked={allChecked}
           />
         }
       </div>

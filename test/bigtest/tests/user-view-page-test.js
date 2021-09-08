@@ -35,8 +35,8 @@ describe('User view', () => {
         expect(InstanceViewPage.title).to.equal(user.username);
       });
 
-      it('should display empty department name', () => {
-        expect(InstanceViewPage.departmentName).to.equal('-');
+      it('should not display empty department name', () => {
+        expect(InstanceViewPage.departmentNameIsPresent).to.be.false;
       });
 
       it('should display action menu', () => {
@@ -58,6 +58,10 @@ describe('User view', () => {
 
         it('should display export fee fine report button', () => {
           expect(InstanceViewPage.actionMenuExportFeeFineReport.isPresent).to.be.true;
+        });
+
+        it('should display check delete user button', () => {
+          expect(InstanceViewPage.actionMenuCheckDelete.isPresent).to.be.true;
         });
       });
 

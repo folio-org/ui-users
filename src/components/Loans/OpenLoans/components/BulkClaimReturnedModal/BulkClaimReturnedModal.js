@@ -122,7 +122,7 @@ class BulkClaimReturnedModal extends React.Component {
   }
 
   handleAdditionalInfoChange = e => {
-    this.setState({ additionalInfo: e.target.value });
+    this.setState({ additionalInfo: e.target.value.trim() });
   };
 
   claimItemReturned = (loan) => {

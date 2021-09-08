@@ -111,7 +111,7 @@ class ModalContent extends React.Component {
   }
 
   handleAdditionalInfoChange = event => {
-    this.setState({ additionalInfo: event.target.value });
+    this.setState({ additionalInfo: event.target.value.trim() });
   };
 
   submit = async () => {
