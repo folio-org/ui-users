@@ -399,7 +399,7 @@ class ViewFeesFines extends React.Component {
       waive: isClosed,
       transfer: isClosed,
       error: isClosed || !isCancelAllowed(a),
-      loan: (a.loanId === '0' || !a.loanId),
+      loan: (!loan.id || a.loanId === '0' || !a.loanId),
       refund: !isRefundAllowed(a, feeFineActions),
     };
 
