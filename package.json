@@ -91,7 +91,9 @@
           "users.item.put",
           "login.item.put",
           "tags.collection.get",
-          "tags.item.post"
+          "tags.item.post",
+          "circulation-storage.request-preferences.item.post",
+          "circulation-storage.request-preferences.item.put"
         ],
         "visible": true
       },
@@ -169,9 +171,7 @@
           "ui-users.edit",
           "ui-users.viewuserservicepoints",
           "inventory-storage.service-points-users.item.post",
-          "inventory-storage.service-points-users.item.put",
-          "circulation-storage.request-preferences.item.post",
-          "circulation-storage.request-preferences.item.put"
+          "inventory-storage.service-points-users.item.put"
         ],
         "visible": true
       },
