@@ -36,6 +36,7 @@
 * Automatic fees/fines are appearing in New Fee/Fine `Fee/fine type` drop-down. Refs UIU-2411.
 * Remove unused permission set. Fixes UIU-2247.
 * Don't choke when editing minimal user object. Fixes UIU-2435.
+* Patron groups displayed as Patron block LIMITS are not in same 'case' as actual Patron groups. Fixes UIU-1763.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
