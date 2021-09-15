@@ -8,6 +8,7 @@ import {
   getFullName,
   hasAnyLoanItemStatus,
   hasEveryLoanItemStatus,
+  getContributors,
 } from './util';
 
 describe('accountsMatchStatus', () => {
@@ -244,5 +245,33 @@ describe('hasEveryLoanItemStatus', () => {
     const loans = null;
 
     expect(hasEveryLoanItemStatus(loans, status)).toBe(true);
+  });
+});
+
+describe('getContributors', () => {
+  it('should return undefined if nothing is passed', () => {
+    expect(getContributors()).toBe();
+  });
+
+  it('should return contributors from `account` if it passed', () => {
+    const mockedAccount = {
+      contributors: [{ name: 'Bond,James' }, { name: 'Doe,John' }],
+    };
+    const mockedInstance = {
+      contributors: [{ name: 'test' }],
+    };
+    const expectedResult = ['James, Bond', 'John, Doe'];
+
+    expect(getContributors(mockedAccount, mockedInstance)).toEqual(expectedResult);
+  });
+
+  it('should return contributors from `instance` if `account` have no contributors', () => {
+    const mockedAccount = {};
+    const mockedInstance = {
+      contributors: [{ name: 'Bond,James' }, { name: 'Doe,John' }],
+    };
+    const expectedResult = ['James, Bond', 'John, Doe'];
+
+    expect(getContributors(mockedAccount, mockedInstance)).toEqual(expectedResult);
   });
 });
