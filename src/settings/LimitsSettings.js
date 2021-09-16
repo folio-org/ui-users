@@ -6,7 +6,6 @@ import {
 } from 'react-intl';
 import {
   isEmpty,
-  capitalize,
 } from 'lodash';
 
 import {
@@ -101,13 +100,12 @@ class LimitsSettings extends Component {
         id,
         group: patronGroup,
       } = group;
-      const capitilizedPatronGroup = capitalize(patronGroup);
       const renderLimits = () => {
         return (
           <Limits
             key={id}
             patronGroupId={id}
-            patronGroup={capitilizedPatronGroup}
+            patronGroup={patronGroup}
             patronBlockConditions={this.getPatronBlockConditions()}
             patronBlockLimits={this.getPatronBlockLimits()}
           />
@@ -116,7 +114,7 @@ class LimitsSettings extends Component {
 
       routes.push({
         route: id,
-        label: capitilizedPatronGroup,
+        label: patronGroup,
         component: renderLimits,
       });
     });
