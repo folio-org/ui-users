@@ -974,5 +974,6 @@
     "reports.financial.totalCount": "Nombre total",
     "custom.customFields": "Champs personnalisés",
     "custom.noCustomFieldsFound": "No custom fields found",
-    "reports.financial.patronBarcode.noBarcode": "[pas de code-barres]"
+    "reports.financial.patronBarcode.noBarcode": "[pas de code-barres]",
+    "settings.manualBlockTemplates.paneTitle": "Patron block templates"
 }
