@@ -74,7 +74,7 @@ const UserAccounts = ({
     const openTotal = open.reduce((acc, { remaining }) => (acc + parseFloat(remaining)), 0) - claimTotal;
 
     setTotals({
-      openAccountsCount: open.length,
+      openAccountsCount: open.length - claim.length,
       closedAccountsCount: closed.length,
       claimAccountsCount: claim.length,
       refundedAccountsCount: refunded.length,
