@@ -448,8 +448,10 @@ class AccountsHistory extends React.Component {
     let accounts = _.get(resources, ['feefineshistory', 'records'], []);
     const allAccounts = accounts;
     const feeFineActions = _.get(resources, ['comments', 'records'], []);
+    let queryLoan = '';
     if (query.loan) {
       accounts = accounts.filter(a => a.loanId === query.loan);
+      queryLoan = `?loan=${query.loan}`;
     }
     // const open = accounts.filter(a => a.status.name === 'Open') || [];// a.status.name
     // const closed = accounts.filter(a => a.status.name === 'Closed') || [];// a.status.name
@@ -518,7 +520,7 @@ class AccountsHistory extends React.Component {
               buttonStyle={params.accountstatus === 'open' ? 'primary' : 'default'}
               bottomMargin0
               id="open-accounts"
-              to={`/users/${params.id}/accounts/open`}
+              to={`/users/${params.id}/accounts/open${queryLoan}`}
               replace
               onClick={this.handleActivate}
             >
@@ -528,7 +530,7 @@ class AccountsHistory extends React.Component {
               buttonStyle={params.accountstatus === 'closed' ? 'primary' : 'default'}
               bottomMargin0
               id="closed-accounts"
-              to={`/users/${params.id}/accounts/closed`}
+              to={`/users/${params.id}/accounts/closed${queryLoan}`}
               replace
               onClick={this.handleActivate}
             >
@@ -538,7 +540,7 @@ class AccountsHistory extends React.Component {
               buttonStyle={params.accountstatus === 'all' ? 'primary' : 'default'}
               bottomMargin0
               id="all-accounts"
-              to={`/users/${params.id}/accounts/all`}
+              to={`/users/${params.id}/accounts/all${queryLoan}`}
               replace
               onClick={this.handleActivate}
             >
@@ -634,6 +636,7 @@ class AccountsHistory extends React.Component {
                 selected={selected}
                 selectedAccounts={selectedAccounts}
                 feeFineActions={feeFineActions}
+                accounts={accounts}
                 actions={this.state.actions}
                 query={query}
                 onChangeActions={this.onChangeActions}
