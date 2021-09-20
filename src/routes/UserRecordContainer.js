@@ -141,6 +141,7 @@ class UserRecordContainer extends React.Component {
       type: 'okapi',
       records: 'permissionNames',
       throwErrors: false,
+      resourceShouldRefresh: true,
       DELETE: {
         pk: 'permissionName',
         path: 'perms/users/:{id}/permissions',
@@ -149,7 +150,6 @@ class UserRecordContainer extends React.Component {
       GET: {
         path: 'perms/users/:{id}/permissions',
         params: { full: 'true', indexField: 'userId' },
-        resourceShouldRefresh: true,
       },
       PUT: {
         path: 'perms/users/%{permUserId}',

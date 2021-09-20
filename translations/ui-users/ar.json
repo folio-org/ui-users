@@ -746,7 +746,7 @@
     "reports.item.contributors": "المساهمون",
     "permission.loans.anonymize": "المستخدمين: تجاهل إعارات المستخدم",
     "information.patronGroup.expirationOffset.error": "يجب أن يكون فارغاً أو عدداً صحيحاً > 0",
-    "settings.manualBlockTemplates": "قالب حظر المستفيد",
+    "settings.manualBlockTemplates": "القوالب",
     "manualBlockTemplates.templateInformation": "معلومات القالب",
     "manualBlockTemplates.templateName": "اسم القالب",
     "manualBlockTemplates.blockCode": "كود الحظر",
@@ -974,5 +974,6 @@
     "reports.financial.totalCount": "العدد الإجمالي",
     "custom.customFields": "حقول مخصصة",
     "custom.noCustomFieldsFound": "لم يتم العثور على حقول مخصصة",
-    "reports.financial.patronBarcode.noBarcode": "[بدون باركود]"
+    "reports.financial.patronBarcode.noBarcode": "[بدون باركود]",
+    "settings.manualBlockTemplates.paneTitle": "قوالب حظر المستفيد"
 }

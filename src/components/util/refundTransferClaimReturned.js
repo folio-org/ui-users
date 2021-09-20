@@ -8,7 +8,6 @@ import {
 import moment from 'moment';
 import { refundClaimReturned, itemStatuses, accountStatuses } from '../../constants';
 
-
 class RefundTransferCR {
 refundTransfers = async (loan, props) => {
   const getAccounts = () => {
@@ -70,7 +69,8 @@ refundTransfers = async (loan, props) => {
 
   const filterTransferredActions = actions => actions
     .filter(
-      record => record.typeAction && record.typeAction.startsWith(refundClaimReturned.TYPE_ACTION)
+      record => record.typeAction && (record.typeAction.startsWith(refundClaimReturned.TRANSFERRED_ACTION) ||
+         record.typeAction.startsWith(refundClaimReturned.PAID_ACTION))
     );
 
   const persistRefundAction = action => {
@@ -84,7 +84,7 @@ refundTransfers = async (loan, props) => {
     return POST(action);
   };
 
-  const createRefundActionTemplate = (account, transferredActions, type) => {
+  const createRefundActionTemplate = (transferredActions, type) => {
     const {
       okapi: {
         currentUser: {
@@ -106,6 +106,8 @@ refundTransfers = async (loan, props) => {
       ? refundClaimReturned.TRANSACTION_VERB_REFUND
       : refundClaimReturned.TRANSACTION_VERB_REFUNDED;
 
+    const [findPaid] = orderedActions.map(a => (!!a.typeAction.startsWith(refundClaimReturned.PAID_ACTION)));
+    const informationPayment = (findPaid === true) ? 'Patron' : orderedActions[0].paymentMethod;
     const newAction = {
       dateAction: now,
       typeAction: type,
@@ -113,20 +115,20 @@ refundTransfers = async (loan, props) => {
       notify: false,
       amountAction: amount,
       balance: balanceTotal,
-      transactionInformation: `${transactionVerb} to ${orderedActions[0].paymentMethod}`,
+      transactionInformation: `${transactionVerb} to ${informationPayment}`,
       source: orderedActions[0].source,
       paymentMethod: '',
-      accountId: account.id,
+      accountId: orderedActions[0].accountId,
       userId: currentUserId,
       createdAt: servicePointId,
     };
     return persistRefundAction(newAction);
   };
 
-  const createRefunds = async (account, actions) => {
-    if (actions.length > 0) {
-      createRefundActionTemplate(account, actions, refundClaimReturned.CREDITED_ACTION).then(
-        () => createRefundActionTemplate(account, actions, refundClaimReturned.REFUNDED_ACTION)
+  const createRefunds = async ({ actionsO }) => {
+    if (actionsO.length > 0) {
+      createRefundActionTemplate(actionsO, refundClaimReturned.CREDITED_ACTION).then(
+        () => createRefundActionTemplate(actionsO, refundClaimReturned.REFUNDED_ACTION)
       );
     }
   };
@@ -191,28 +193,23 @@ refundTransfers = async (loan, props) => {
         updatedAccounts
           .map(getAccountActions)
       );
+
       const transferredActions = accountsActions
         .map(filterTransferredActions);
-      const accountsWithTransferredActions = accounts
-        .map((account, index) => {
-          return {
-            idFeeFineOwner: account.ownerId,
-            account,
-            actions: transferredActions[index],
-          };
-        });
 
-      const groupByOwner = flow(
-        data => groupBy(data, 'idFeeFineOwner'),
-        data => map(data, (accountsByOwner, idOwner) => {
+      const AccountsByPayment = (ActionT) => flow(
+        data => groupBy(data, 'paymentMethod'),
+        data => map(data, ((actions, paymentMethodS) => {
           return {
-            idFeeFineOwner: idOwner,
-            accountsO: accountsByOwner,
+            paymentMethod: paymentMethodS,
+            actionsO: actions,
           };
-        }),
-      )(accountsWithTransferredActions);
+        }))
+      )(ActionT);
 
-      await Promise.all(groupByOwner.map(a => a.accountsO.map(({ account, actions }) => createRefunds(account, actions))));
+      const orderActions = transferredActions.map((actionT) => AccountsByPayment(actionT));
+
+      await Promise.all(orderActions.map(a => a.map(({ actionsO }) => createRefunds({ actionsO }))));
     }
   };
 

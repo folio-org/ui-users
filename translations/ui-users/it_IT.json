@@ -746,7 +746,7 @@
     "reports.item.contributors": "Contributori",
     "permission.loans.anonymize": "Users: User loans anonymize",
     "information.patronGroup.expirationOffset.error": "Must be empty or an integer > 0",
-    "settings.manualBlockTemplates": "Patron block templates",
+    "settings.manualBlockTemplates": "Templates",
     "manualBlockTemplates.templateInformation": "Template information",
     "manualBlockTemplates.templateName": "Template name",
     "manualBlockTemplates.blockCode": "Block code",
@@ -974,5 +974,6 @@
     "reports.financial.totalCount": "Total count",
     "custom.customFields": "Custom fields",
     "custom.noCustomFieldsFound": "No custom fields found",
-    "reports.financial.patronBarcode.noBarcode": "[no barcode]"
+    "reports.financial.patronBarcode.noBarcode": "[no barcode]",
+    "settings.manualBlockTemplates.paneTitle": "Patron block templates"
 }

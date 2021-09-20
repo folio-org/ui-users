@@ -120,17 +120,17 @@ const settingsPatronBlocks = [
     perm: 'ui-users.settings.conditions',
   },
   {
-    route: 'limits',
-    label: <FormattedMessage id="ui-users.settings.limits" />,
-    component: LimitsSettings,
-    perm: 'ui-users.settings.limits',
-  },
-  {
     route: 'manual-block-templates',
     label: <FormattedMessage id="ui-users.settings.manualBlockTemplates" />,
     component: BlockTemplates,
     perm: 'ui-users.settings.patron-block-templates',
     interface: 'feesfines',
+  },
+  {
+    route: 'limits',
+    label: <FormattedMessage id="ui-users.settings.limits" />,
+    component: LimitsSettings,
+    perm: 'ui-users.settings.limits',
   },
 ];
 

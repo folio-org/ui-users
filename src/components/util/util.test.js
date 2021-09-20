@@ -31,9 +31,9 @@ describe('accountsMatchStatus', () => {
     expect(accountsMatchStatus(accounts, status)).toBe(false);
   });
 
-  it('returns false if accounts array is empty', () => {
+  it('returns true if accounts array is empty (vacuous truth)', () => {
     const status = 'monkey';
-    expect(accountsMatchStatus(null, status)).toBe(false);
+    expect(accountsMatchStatus(null, status)).toBe(true);
   });
 });
 
@@ -212,9 +212,9 @@ describe('hasAnyLoanItemStatus', () => {
     expect(hasAnyLoanItemStatus(loans, statuses)).toBe(false);
   });
 
-  it('returns false if loans array is empty', () => {
+  it('returns true if loans array is empty (vacuous truth)', () => {
     const statuses = ['monkey', 'bagel'];
-    expect(hasAnyLoanItemStatus(null, statuses)).toBe(false);
+    expect(hasAnyLoanItemStatus(null, statuses)).toBe(true);
   });
 });
 
@@ -239,10 +239,10 @@ describe('hasEveryLoanItemStatus', () => {
     expect(hasEveryLoanItemStatus(loans, status)).toBe(false);
   });
 
-  it('returns false if loans array is empty', () => {
+  it('returns true if loans array is empty (vacuous truth)', () => {
     const status = 'monkey';
     const loans = null;
 
-    expect(hasEveryLoanItemStatus(loans, status)).toBe(false);
+    expect(hasEveryLoanItemStatus(loans, status)).toBe(true);
   });
 });
