@@ -63,14 +63,15 @@ refundTransfers = async (loan, props) => {
         }
       }
     } = props;
-    const path = `feefineactions?query=(accountId==${account.id})&orderBy=dateAction&order=desc`;
+    const path = `feefineactions?query=(accountId==${account.id})&orderBy=dateAction&order=desc&limit=20`;
     return GET({ path });
   };
 
   const filterTransferredActions = actions => actions
     .filter(
       record => record.typeAction && (record.typeAction.startsWith(refundClaimReturned.TRANSFERRED_ACTION) ||
-         record.typeAction.startsWith(refundClaimReturned.PAID_ACTION))
+      record.typeAction.startsWith(refundClaimReturned.PAID_ACTION) ||
+      record.typeAction.startsWith(refundClaimReturned.REFUNDED_TYPE_ACTION))
     );
 
   const persistRefundAction = action => {
@@ -84,7 +85,7 @@ refundTransfers = async (loan, props) => {
     return POST(action);
   };
 
-  const createRefundActionTemplate = (transferredActions, type) => {
+  const createRefundActionTemplate = (actionsAccount, actions, type) => {
     const {
       okapi: {
         currentUser: {
@@ -95,40 +96,58 @@ refundTransfers = async (loan, props) => {
         },
       },
     } = props;
-    const orderedActions = orderBy(transferredActions, ['dateAction'], ['desc']);
-    const now = moment().format();
-    const amount = transferredActions.reduce((acc, record) => acc + record.amountAction, 0.0);
-    const lastBalance = orderedActions[0].balance + amount;
-    const balanceTotal = type.startsWith(refundClaimReturned.TRANSACTION_CREDITED)
-      ? 0.0
-      : lastBalance;
-    const transactionVerb = type.startsWith(refundClaimReturned.TRANSACTION_CREDITED)
-      ? refundClaimReturned.TRANSACTION_VERB_REFUND
-      : refundClaimReturned.TRANSACTION_VERB_REFUNDED;
+    if (actions[0].typeAction.startsWith(refundClaimReturned.TRANSFERRED_ACTION) ||
+      actions[0].typeAction.startsWith(refundClaimReturned.PAID_ACTION)) {
+      const orderedActions = orderBy(actions, ['dateAction'], ['desc']);
+      const now = moment().format();
 
-    const [findPaid] = orderedActions.map(a => (!!a.typeAction.startsWith(refundClaimReturned.PAID_ACTION)));
-    const informationPayment = (findPaid === true) ? 'Patron' : orderedActions[0].paymentMethod;
-    const newAction = {
-      dateAction: now,
-      typeAction: type,
-      comments: '',
-      notify: false,
-      amountAction: amount,
-      balance: balanceTotal,
-      transactionInformation: `${transactionVerb} to ${informationPayment}`,
-      source: orderedActions[0].source,
-      paymentMethod: '',
-      accountId: orderedActions[0].accountId,
-      userId: currentUserId,
-      createdAt: servicePointId,
-    };
-    return persistRefundAction(newAction);
+      const amount = actions.reduce((acc, record) => acc + record.amountAction, 0.0);
+      const lastBalance = orderedActions[0].balance + amount;
+      const balanceTotal = type.startsWith(refundClaimReturned.TRANSACTION_CREDITED)
+        ? 0.0
+        : lastBalance;
+
+      const transactionVerb = type.startsWith(refundClaimReturned.TRANSACTION_CREDITED)
+        ? refundClaimReturned.TRANSACTION_VERB_REFUND
+        : refundClaimReturned.TRANSACTION_VERB_REFUNDED;
+
+      const [findPaid] = orderedActions.map(a => (!!a.typeAction.startsWith(refundClaimReturned.PAID_ACTION)));
+      const informationPayment = (findPaid === true) ? 'patron' : orderedActions[0].paymentMethod;
+
+      const refundActions = actionsAccount.filter(a => (a.typeAction.startsWith(refundClaimReturned.REFUNDED_TYPE_ACTION) &&
+       a.transactionInformation.includes(orderedActions[0].paymentMethod)));
+      const refundPaid = actionsAccount.filter(a => (a.typeAction.startsWith(refundClaimReturned.REFUNDED_TYPE_ACTION) &&
+       a.transactionInformation.includes('patron')));
+      const amountRefund = (orderedActions[0].transactionInformation === '') ?
+        refundPaid.reduce((acc, record) => acc + record.amountAction, 0.0)
+        : refundActions.reduce((acc, record) => acc + record.amountAction, 0.0);
+      const totalAmount = amount - amountRefund;
+
+      if (totalAmount > 0) {
+        const newAction = {
+          dateAction: now,
+          typeAction: type,
+          comments: '',
+          notify: false,
+          amountAction: totalAmount,
+          balance: balanceTotal,
+          transactionInformation: `${transactionVerb} to ${informationPayment}`,
+          source: orderedActions[0].source,
+          paymentMethod: '',
+          accountId: orderedActions[0].accountId,
+          userId: currentUserId,
+          createdAt: servicePointId,
+        };
+        return persistRefundAction(newAction);
+      }
+    }
+    return Promise.resolve();
   };
 
-  const createRefunds = async ({ actionsO }) => {
-    if (actionsO.length > 0) {
-      createRefundActionTemplate(actionsO, refundClaimReturned.CREDITED_ACTION).then(
-        () => createRefundActionTemplate(actionsO, refundClaimReturned.REFUNDED_ACTION)
+  const createRefunds = async ({ actionT, actionsO }) => {
+    if (actionT && actionT.length > 0) {
+      createRefundActionTemplate(actionT, actionsO, refundClaimReturned.CREDITED_ACTION).then(
+        () => createRefundActionTemplate(actionT, actionsO, refundClaimReturned.REFUNDED_ACTION)
       );
     }
   };
@@ -203,13 +222,14 @@ refundTransfers = async (loan, props) => {
           return {
             paymentMethod: paymentMethodS,
             actionsO: actions,
+            actionT: ActionT,
           };
         }))
       )(ActionT);
 
       const orderActions = transferredActions.map((actionT) => AccountsByPayment(actionT));
 
-      await Promise.all(orderActions.map(a => a.map(({ actionsO }) => createRefunds({ actionsO }))));
+      await Promise.all(orderActions.map(a => a.map(({ actionT, actionsO }) => createRefunds({ actionT, actionsO }))));
     }
   };
 
