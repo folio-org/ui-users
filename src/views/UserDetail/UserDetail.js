@@ -508,6 +508,33 @@ class UserDetail extends React.Component {
     return this.props.resources?.selUser?.failed?.httpStatus === 404;
   }
 
+  getPatronBlocks() {
+    const {
+      resources,
+    } = this.props;
+    let patronBlocks = [];
+
+    if (resources.hasManualPatronBlocks.isPending || resources.hasAutomatedPatronBlocks.isPending) {
+      return patronBlocks;
+    }
+
+    patronBlocks = concat(
+      resources.hasManualPatronBlocks.records,
+      resources.hasAutomatedPatronBlocks.records
+    );
+
+    return patronBlocks
+      .filter(p => moment(moment(p.expirationDate).format()).isSameOrAfter(moment().format()));
+  }
+
+  get arePatronBlocksLoaded() {
+    const {
+      resources,
+    } = this.props;
+
+    return !resources.hasManualPatronBlocks.isPending && !resources.hasAutomatedPatronBlocks.isPending;
+  }
+
   render() {
     const {
       resources,
@@ -526,6 +553,7 @@ class UserDetail extends React.Component {
     const user = this.getUser();
     const fullNameOfUser = getFullName(user);
     const userId = match.params.id;
+    const patronBlocks = this.getPatronBlocks();
 
     const addressTypes = (resources.addressTypes || {}).records || [];
     const addresses = getFormAddressList(get(user, 'personal.addresses', []));
@@ -536,12 +564,7 @@ class UserDetail extends React.Component {
     const proxies = this.props.getProxies();
     const servicePoints = this.props.getUserServicePoints();
     const preferredServicePoint = this.props.getPreferredServicePoint();
-    const manualPatronBlocks = get(resources, ['hasManualPatronBlocks', 'records'], [])
-      .filter(p => moment(moment(p.expirationDate).format()).isSameOrAfter(moment().format()));
-    const automatedPatronBlocks = get(resources, ['hasAutomatedPatronBlocks', 'records'], []);
-    const totalPatronBlocks = manualPatronBlocks.length + automatedPatronBlocks.length;
-    const patronBlocks = concat(automatedPatronBlocks, manualPatronBlocks);
-    const hasPatronBlocks = totalPatronBlocks > 0;
+    const hasPatronBlocks = !!patronBlocks.length;
     const hasPatronBlocksPermissions = stripes.hasPerm('automated-patron-blocks.collection.get') || stripes.hasPerm('manualblocks.collection.get');
     const patronGroup = this.getPatronGroup(user);
     const requestPreferences = get(resources, 'requestPreferences.records.[0].requestPreferences[0]', {});
@@ -641,17 +664,16 @@ class UserDetail extends React.Component {
                 />
                 <IfInterface name="feesfines">
                   {hasPatronBlocksPermissions &&
-                  <PatronBlock
-                    accordionId="patronBlocksSection"
-                    user={user}
-                    hasPatronBlocks={hasPatronBlocks}
-                    patronBlocks={patronBlocks}
-                    automatedPatronBlocks={automatedPatronBlocks}
-                    expanded={sections.patronBlocksSection}
-                    onToggle={this.handleSectionToggle}
-                    onClickViewPatronBlock={this.onClickViewPatronBlock}
-                    {...this.props}
-                  />
+                    <PatronBlock
+                      arePatronBlocksLoaded={this.arePatronBlocksLoaded}
+                      accordionId="patronBlocksSection"
+                      hasPatronBlocks={hasPatronBlocks}
+                      patronBlocks={patronBlocks}
+                      expanded={sections.patronBlocksSection}
+                      onToggle={this.handleSectionToggle}
+                      onClickViewPatronBlock={this.onClickViewPatronBlock}
+                      {...this.props}
+                    />
                   }
                 </IfInterface>
                 <ExtendedInfo
