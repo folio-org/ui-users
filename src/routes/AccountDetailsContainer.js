@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   first,
-  isEmpty,
 } from 'lodash';
 import { FormattedMessage } from 'react-intl';
 
@@ -17,6 +16,7 @@ import {
   queryFunction,
   args,
 } from './feeFineConfig';
+import { getContributors } from '../components/util';
 
 class AccountDetailsContainer extends React.Component {
   static manifest = Object.freeze({
@@ -209,9 +209,7 @@ class AccountDetailsContainer extends React.Component {
       ? first(resources?.instance?.records)
       : [];
     const loanRecords = resources?.loans?.records ?? [];
-    const contributors = !isEmpty(instance)
-      ? instance.contributors.map(({ name }) => name.split(',').reverse().join(', '))
-      : [];
+    const contributors = getContributors(account, instance);
     const loanId = account?.loanId;
 
     if (loanId === '0') return { contributors };
