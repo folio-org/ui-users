@@ -133,6 +133,7 @@ class ChargeFeeFine extends React.Component {
     type.materialType = (item.materialType || {}).name;
     type.materialTypeId = (selectedLoan.id) ? undefined : (item.materialType || {}).id || undefined;
 
+    if (item.contributorNames) { type.contributors = item.contributorNames; }
     if (selectedLoan.dueDate) type.dueDate = selectedLoan.dueDate;
     if (selectedLoan.returnDate) type.returnedDate = selectedLoan.returnDate;
     type.id = uuid();
