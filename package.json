@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "6.2.0",
+  "version": "7.0.0",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -888,7 +888,7 @@
     "react-router-dom": "^5.2.0"
   },
   "optionalDependencies": {
-    "@folio/plugin-find-user": "^5.0.0"
+    "@folio/plugin-find-user": "^6.0.0"
   },
   "resolutions": {
     "moment": "~2.24.0"
