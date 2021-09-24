@@ -974,5 +974,6 @@
     "reports.financial.totalCount": "总数",
     "custom.customFields": "自定义字段",
     "custom.noCustomFieldsFound": "未找到自定义字段",
-    "reports.financial.patronBarcode.noBarcode": "[无条码]"
+    "reports.financial.patronBarcode.noBarcode": "[无条码]",
+    "settings.manualBlockTemplates.paneTitle": "Patron block templates"
 }

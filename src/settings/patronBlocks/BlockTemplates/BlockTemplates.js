@@ -36,7 +36,7 @@ function BlockTemplates(props) {
       resourceKey="manualBlockTemplates"
       detailComponent={BlockTemplateDetails}
       paneTitle={
-        <FormattedMessage id="ui-users.settings.manualBlockTemplates" />
+        <FormattedMessage id="ui-users.settings.manualBlockTemplates.paneTitle" />
       }
       entryLabel={formatMessage({ id: 'ui-users.manualBlockTemplate' })}
       entryFormComponent={BlockTemplateForm}

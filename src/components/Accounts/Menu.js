@@ -23,16 +23,15 @@ const Menu = (props) => {
     match: { params },
     filters,
     selected,
-    resources,
     selectedAccounts,
     feeFineActions,
     actions,
+    accounts
   } = props;
 
   let balanceOutstanding = 0;
   let balanceSuspended = 0;
   if (params.accountstatus !== 'closed') {
-    const accounts = _.get(resources, ['feefineshistory', 'records'], []);
     accounts.forEach((a) => {
       if (a.paymentStatus.name === refundClaimReturned.PAYMENT_STATUS) {
         balanceSuspended += (parseFloat(a.remaining) * 100);
@@ -169,9 +168,9 @@ Menu.propTypes = {
   patronGroup: PropTypes.object,
   selectedAccounts: PropTypes.arrayOf(PropTypes.object).isRequired,
   feeFineActions: PropTypes.arrayOf(PropTypes.object).isRequired,
+  accounts: PropTypes.arrayOf(PropTypes.object).isRequired,
   onChangeActions: PropTypes.func,
   onExportFeesFinesReport: PropTypes.func.isRequired,
-  resources: PropTypes.object.isRequired,
 };
 
 export default Menu;
