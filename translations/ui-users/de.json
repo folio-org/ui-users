@@ -131,7 +131,7 @@
     "noItemFound": "No {item} found",
     "deleteSponsorPrompt": "Vollmachtgeber/-in löschen?",
     "deleteProxyPrompt": "Vollmachtnehmer/-in löschen?",
-    "proxyWillBeDeleted": "Die Vollmacht von <strong>{name1}</strong> zu <strong>{name2}</strong> wird gelöscht.",
+    "proxyWillBeDeleted": "Die Vollmachtverknüpfung von <strong>{name1}</strong> zu <strong>{name2}</strong> wird gelöscht.",
     "errors.userExpired": "Nutzungsberechtigung ist abgelaufen",
     "errors.proxyrelationship.expired": "Die Vollmacht ist abgelaufen",
     "errors.proxies.expired": "Konto der/des Vollmachtnehmers/-in ist abgelaufen.",
