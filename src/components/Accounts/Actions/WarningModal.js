@@ -19,8 +19,10 @@ import {
   size,
 } from 'lodash';
 
-import { calculateSortParams } from '../../util';
-import { isRefundAllowed } from '../accountFunctions';
+import {
+  calculateSortParams,
+  isRefundAllowed,
+} from '../../util';
 
 import css from './modal.css';
 

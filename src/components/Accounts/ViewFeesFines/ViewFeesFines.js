@@ -23,9 +23,9 @@ import { itemStatuses } from '../../../constants';
 import {
   calculateSortParams,
   nav,
+  isRefundAllowed,
 } from '../../util';
 import {
-  isRefundAllowed,
   isCancelAllowed,
 } from '../accountFunctions';
 import css from './ViewFeesFines.css';
