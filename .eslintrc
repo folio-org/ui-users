@@ -4,9 +4,26 @@
   "overrides": [
     {
       "files": [ "src/**/tests/*", "test/**/*" ],
+      "settings": {
+        "import/resolver": {
+          "babel-module": {
+            "extensions": [".js"]
+          }
+        }
+      }
     }
   ],
   "env": {
     "jest": true
+  },
+  "settings": {
+    "import/resolver": {
+      "alias": {
+        "map": [
+          ["__mock__", "./test/jest/__mock__"],
+          ["fixtures", "./test/jest/fixtures"]
+        ]
+      }
+    }
   }
 }

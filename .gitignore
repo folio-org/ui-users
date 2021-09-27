@@ -8,6 +8,7 @@ debug.log
 ModuleDescriptor.json
 artifacts
 *.idea*
+junit.xml
 
 # stripes
 .stripesclirc
