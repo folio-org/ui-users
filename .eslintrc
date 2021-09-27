@@ -3,14 +3,7 @@
   "parser": "@babel/eslint-parser",
   "overrides": [
     {
-      "files": [ "src/**/tests/*", "test/**/*" ],
-      "settings": {
-        "import/resolver": {
-          "babel-module": {
-            "extensions": [".js"]
-          }
-        }
-      }
+      "files": [ "src/**/tests/*", "test/**/*" ]
     }
   ],
   "env": {
