@@ -14,8 +14,8 @@ const props = {
   failedRenewals: [],
   successRenewals: [],
   requestCounts: {},
-  loanPolicies:loanPolicyNames,
-  errorMessages:{},
+  loanPolicies: loanPolicyNames,
+  errorMessages: {},
 };
 
 const renderBulkRenewedLoansList = (extraProps = {}) => render(<BulkRenewedLoansList {...props} {...extraProps} />);
