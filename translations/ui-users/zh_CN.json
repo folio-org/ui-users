@@ -746,7 +746,7 @@
     "reports.item.contributors": "贡献者",
     "permission.loans.anonymize": "用户：用户借阅匿名化",
     "information.patronGroup.expirationOffset.error": "必须为空或> 0的整数",
-    "settings.manualBlockTemplates": "读者冻结模板",
+    "settings.manualBlockTemplates": "模板",
     "manualBlockTemplates.templateInformation": "模板信息",
     "manualBlockTemplates.templateName": "模板名称",
     "manualBlockTemplates.blockCode": "冻结代码",
@@ -975,5 +975,5 @@
     "custom.customFields": "自定义字段",
     "custom.noCustomFieldsFound": "未找到自定义字段",
     "reports.financial.patronBarcode.noBarcode": "[无条码]",
-    "settings.manualBlockTemplates.paneTitle": "Patron block templates"
+    "settings.manualBlockTemplates.paneTitle": "读者冻结模板"
 }
