@@ -31,7 +31,7 @@
     "loans.items.renewed.callout.details": "查看详情",
     "loans.items.renewed.label": "成功续借",
     "loans.details.location": "馆藏地",
-    "loans.details.requestQueue": "预约队列",
+    "loans.details.requestQueue": "请求队列",
     "loans.details.claimedReturned": "声称已还",
     "loans.details.loanPolicy": "借阅政策",
     "loans.details.lost": "丢失",
@@ -321,7 +321,7 @@
     "requests.title": "请求",
     "requests.createRequest": "创建请求",
     "requests.numOpenRequests": "{count, number} {count, plural, one {未结请求} other {未结请求}}",
-    "requests.numClosedRequests": "{count, number} {count, plural, one {已关闭的请求} other {已关闭的请求}}",
+    "requests.numClosedRequests": "{count, number} {count, plural, one {已结请求} other {已结请求}}",
     "expandAll": "展开全部",
     "collapseAll": "全部收缩",
     "loans.details.checkinServicePoint": "归还服务点",
@@ -746,7 +746,7 @@
     "reports.item.contributors": "贡献者",
     "permission.loans.anonymize": "用户：用户借阅匿名化",
     "information.patronGroup.expirationOffset.error": "必须为空或> 0的整数",
-    "settings.manualBlockTemplates": "读者冻结模板",
+    "settings.manualBlockTemplates": "模板",
     "manualBlockTemplates.templateInformation": "模板信息",
     "manualBlockTemplates.templateName": "模板名称",
     "manualBlockTemplates.blockCode": "冻结代码",
@@ -869,7 +869,7 @@
     "accounts.outstanding.page": "页面的未结余额： {amount}",
     "accounts.suspended.page": "页面的暂停余额： {amount}",
     "accounts.selected.balance": "已选费用/罚款余额： {amount}",
-    "permission.manualProcessRefundsReport": "用户：创建并下载退款以手动处理报告",
+    "permission.manualProcessRefundsReport": "用户：创建并下载退款以人工处理报告",
     "reports.cash.drawer.modal.label": "现金抽屉对帐报告",
     "reports.cash.drawer.servicePoint": "服务点",
     "reports.cash.drawer.servicePoint.placeholder": "选择服务点",
@@ -974,5 +974,6 @@
     "reports.financial.totalCount": "总数",
     "custom.customFields": "自定义字段",
     "custom.noCustomFieldsFound": "未找到自定义字段",
-    "reports.financial.patronBarcode.noBarcode": "[no barcode]"
+    "reports.financial.patronBarcode.noBarcode": "[无条码]",
+    "settings.manualBlockTemplates.paneTitle": "读者冻结模板"
 }

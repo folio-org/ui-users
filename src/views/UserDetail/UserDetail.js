@@ -369,7 +369,7 @@ class UserDetail extends React.Component {
   }
 
   selectModal(transactions) {
-    if (!transactions.hasOpenTransactions) {
+    if (!transactions?.hasOpenTransactions) {
       this.showDeleteUserModal();
     } else {
       this.showOpenTransactionsModal(transactions);

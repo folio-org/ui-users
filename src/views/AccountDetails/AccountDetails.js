@@ -331,6 +331,8 @@ class AccountDetails extends React.Component {
     } = this.props;
 
     const allAccounts = _.get(resources, ['feefineshistory', 'records'], []);
+    const loan = _.get(resources, ['loans', 'records'], []).filter((l) => l.id === account.loanId);
+    const isLoanAnonymized = loan.length === 0;
     let balance = 0;
 
     allAccounts.forEach((a) => {
@@ -396,7 +398,7 @@ class AccountDetails extends React.Component {
     const overdueFinePolicyName = itemDetails?.overdueFinePolicyName;
     const lostItemPolicyId = itemDetails?.lostItemPolicyId;
     const lostItemPolicyName = itemDetails?.lostItemPolicyName;
-    const contributors = itemDetails?.contributors.join(', ');
+    const contributors = itemDetails?.contributors?.join('; ');
 
     const totalPaidAmount = calculateTotalPaymentAmount(resources?.feefineshistory?.records, feeFineActions);
     const refundAllowed = isRefundAllowed(account, feeFineActions);
@@ -489,10 +491,10 @@ class AccountDetails extends React.Component {
                 value={(
                   _.get(account, ['metadata', 'createdDate'])
                     ? <FormattedTime
-                      value={_.get(account, ['metadata', 'createdDate'])}
-                      day="numeric"
-                      month="numeric"
-                      year="numeric"
+                        value={_.get(account, ['metadata', 'createdDate'])}
+                        day="numeric"
+                        month="numeric"
+                        year="numeric"
                     />
                     : '-'
                 )}
@@ -595,10 +597,10 @@ class AccountDetails extends React.Component {
                 value={
                   account.dueDate
                     ? <FormattedTime
-                      value={account.dueDate}
-                      day="numeric"
-                      month="numeric"
-                      year="numeric"
+                        value={account.dueDate}
+                        day="numeric"
+                        month="numeric"
+                        year="numeric"
                     />
                     : '-'
                 }
@@ -610,10 +612,10 @@ class AccountDetails extends React.Component {
                 value={
                   account.returnedDate
                     ? <FormattedTime
-                      value={account.returnedDate}
-                      day="numeric"
-                      month="numeric"
-                      year="numeric"
+                        value={account.returnedDate}
+                        day="numeric"
+                        month="numeric"
+                        year="numeric"
                     />
                     : '-'
                 }
@@ -623,7 +625,7 @@ class AccountDetails extends React.Component {
               data-test-loan-details
               xs={1.5}
             >
-              {(loanId && user.id === account.userId) ?
+              {(loanId && user.id === account.userId && !isLoanAnonymized) ?
                 <KeyValue
                   label={<FormattedMessage id="ui-users.details.label.loanDetails" />}
                   value={(

@@ -156,18 +156,18 @@ class ActionModal extends React.Component {
           <Col xs id="action-selection">
             {_.isEmpty(options)
               ? <Field
-                name="method"
-                component={Select}
-                dataOptions={options}
-                placeholder={formatMessage({ id: `ui-users.accounts.${action}.method.placeholder` })}
-                error={formatMessage({ id: `ui-users.accounts.${action}.error.select` })}
+                  name="method"
+                  component={Select}
+                  dataOptions={options}
+                  placeholder={formatMessage({ id: `ui-users.accounts.${action}.method.placeholder` })}
+                  error={formatMessage({ id: `ui-users.accounts.${action}.error.select` })}
               />
               : <Field
-                name="method"
-                component={Select}
-                dataOptions={options}
-                placeholder={formatMessage({ id: `ui-users.accounts.${action}.method.placeholder` })}
-                validate={this.validateMethod}
+                  name="method"
+                  component={Select}
+                  dataOptions={options}
+                  placeholder={formatMessage({ id: `ui-users.accounts.${action}.method.placeholder` })}
+                  validate={this.validateMethod}
               />
             }
           </Col>

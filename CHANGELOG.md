@@ -1,6 +1,6 @@
 # Change history for ui-users
 
-## 6.2.0 (IN PROGRESS)
+## 7.0.0 (IN PROGRESS)
 
 * Update local babel config to handle new JSX transform. Refs UIU-2190.
 * Delete user with check for open transactions. Refs UIU-1971.
@@ -31,6 +31,15 @@
 * Fix hyperlink with missing `Patron barcode`. Refs UIU-2242.
 * Fix `Invalid date` for `Financial transaction detail report`. Refs UIU-2251.
 * Support `feesfines` interface version `17.0`. Refs UIU-2248.
+* Update sub permissions in `ui-users.edituserservicepoints` permission set. Fixes UIU-2244.
+* Replace `babel-eslint` with `@babel/eslint-parser`; import global babel config. Refs UIU-2253, UIU-2254.
+* Automatic fees/fines are appearing in New Fee/Fine `Fee/fine type` drop-down. Refs UIU-2411.
+* Remove unused permission set. Fixes UIU-2247.
+* Don't choke when editing minimal user object. Fixes UIU-2435.
+* Patron groups displayed as Patron block LIMITS are not in same 'case' as actual Patron groups. Fixes UIU-1763.
+* Change setting "Patron block templates" to "Templates". Refs UIU-2412.
+* Add Contributors field to account request. Refs UIU-2203.
+* Increment stripes to v7. Refs UIU-2250.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
