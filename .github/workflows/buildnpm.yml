@@ -21,7 +21,6 @@ on:
 
 jobs:
   build-npm:
-    if: contains(github.event.pull_request.labels.*.name, 'safe fork')
     env:
       YARN_TEST_OPTIONS: '--ci --coverage --colors'
       FOLIO_NAME: folio_users
