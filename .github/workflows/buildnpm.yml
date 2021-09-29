@@ -13,10 +13,15 @@
 
 
 name: buildNPM Snapshot
-on: [push, pull_request]
+on: 
+   push:
+   pull_request:
+   pull_request_target:
+     types: [labeled]
 
 jobs:
-  Build:
+  build-npm:
+    if: contains(github.event.pull_request.labels.*.name, 'safe fork')
     env:
       YARN_TEST_OPTIONS: '--ci --coverage --colors'
       FOLIO_NAME: folio_users
