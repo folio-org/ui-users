@@ -172,5 +172,5 @@ export function checkUserActive(user) {
 export const getContributors = (account, instance) => {
   const contributors = account?.contributors || instance?.contributors;
 
-  return contributors && contributors.map(({ name }) => name.split(',').reverse().join(', '));
+  return contributors && contributors.map(({ name }) => name);
 };
