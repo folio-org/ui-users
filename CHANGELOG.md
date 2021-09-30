@@ -40,6 +40,7 @@
 * Change setting "Patron block templates" to "Templates". Refs UIU-2412.
 * Add Contributors field to account request. Refs UIU-2203.
 * Increment stripes to v7. Refs UIU-2250.
+* Create Jest/RTL test for BulkRenewedLoansList. Refs UIU-2259.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)

@@ -1,0 +1,80 @@
+[
+  {
+  "id" : "b6475706-4505-4b20-9ed0-aadcda2b72ee",
+  "userId" : "011a6a83-e6fe-4b85-959f-ece14a4077db",
+  "itemId" : "b2f142bf-ccc4-4cbf-a1ac-7d6df0d9c2da",
+  "itemEffectiveLocationIdAtCheckOut" : "b9dc25a2-a7fb-48ad-8da5-8f68e35ba0af",
+  "status" : {
+    "name" : "Open"
+  },
+  "loanDate" : "2022-02-25T12:58:59",
+  "dueDate" : "2022-05-29T23:59:59.000+00:00",
+  "action" : "renewed",
+  "renewalCount" : 1,
+  "loanPolicyId" : "985fd5a1-3634-4b0d-8c13-0d4fcf0b8afa",
+  "checkoutServicePointId" : "3a7de149-f17d-4602-adfe-0b09bf8e884a",
+  "overdueFinePolicyId" : "0f8193f2-8338-4def-b53d-893acaa6f20a",
+  "lostItemPolicyId" : "7fbea346-8846-4643-900a-d6f3874717c9",
+  "metadata" : {
+    "createdDate" : "2021-07-06T08:14:12.135+00:00",
+    "createdByUserId" : "9eb67301-6f6e-468f-9b1a-6134dc39a684",
+    "updatedDate" : "2021-09-27T15:37:46.902+00:00",
+    "updatedByUserId" : "9eb67301-6f6e-468f-9b1a-6134dc39a684"
+  },
+  "patronGroupAtCheckout" : {
+    "id" : "1302457c-ddc3-4205-ad19-5bda613d0914",
+    "name" : "UIC Faculty, 16/4 Weeks"
+  },
+  "item" : {
+    "id" : "b2f142bf-ccc4-4cbf-a1ac-7d6df0d9c2da",
+    "holdingsRecordId" : "f318533c-4e67-4130-a765-52e2dcc62e3a",
+    "instanceId" : "63714bc2-52f0-4aa1-8cda-048c4430c481",
+    "title" : "Monetary statesmanship,by Norman Lombard ...",
+    "barcode" : "095916539",
+    "contributors" : [ {
+      "name" : "Lombard, Norman, 1884-"
+    } ],
+    "callNumber" : "HG538.L8",
+    "copyNumber" : "c.1",
+    "callNumberComponents" : {
+      "callNumber" : "HG538.L8"
+    },
+    "status" : {
+      "name" : "Checked out",
+      "date" : "2021-07-06T08:14:12.095+00:00"
+    },
+    "location" : {
+      "name" : "UC/HP/JRL/Gen"
+    },
+    "materialType" : {
+      "name" : "book"
+    }
+  },
+  "checkoutServicePoint" : {
+    "name" : "Regenstein Circulation, 1st Floor",
+    "code" : "JRLMAIN",
+    "discoveryDisplayName" : "Regenstein Circulation, 1st Floor",
+    "description" : null,
+    "shelvingLagTime" : 1440,
+    "pickupLocation" : true
+  },
+  "borrower" : {
+    "firstName" : "Diane",
+    "lastName" : "Abdo",
+    "middleName" : "C",
+    "barcode" : "0000062538"
+  },
+  "loanPolicy" : {
+    "name" : "3 day"
+  },
+  "overdueFinePolicy" : {
+    "name" : "nofine"
+  },
+  "lostItemPolicy" : {
+    "name" : "lostsetnofine"
+  },
+  "feesAndFines" : {
+    "amountRemainingToPay" : 0.0
+  }
+}
+]

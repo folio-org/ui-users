@@ -1,5 +1,6 @@
+import options from '__mock__/cashDrawerReconciliationReportData.mock';
 import CashDrawerReconciliationReportPDF from './cashDrawerReconciliationReportPDF';
-import options from '../../../../test/jest/__mock__/cashDrawerReconciliationReportData.mock';
+
 
 describe('Cash Drawer Reconciliation Report in PDF format', () => {
   const report = new CashDrawerReconciliationReportPDF(options);
