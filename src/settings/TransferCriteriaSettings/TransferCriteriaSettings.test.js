@@ -6,7 +6,7 @@ import {
 } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 
-import '../../../test/jest/__mock__';
+import '__mock__';
 import TransferCriteriaSettings from './TransferCriteriaSettings';
 
 const renderTransferCriteriaSettings = () => {

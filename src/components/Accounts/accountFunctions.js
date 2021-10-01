@@ -1,9 +1,6 @@
-import { isEmpty } from 'lodash';
-
 import {
   paymentStatusesAllowedToRefund,
   waiveStatuses,
-  refundStatuses,
 } from '../../constants';
 
 export function count(array) {
@@ -114,21 +111,6 @@ export function accountRefundInfo(account, feeFineActions = []) {
   const paidAmount = (parseFloat(account.amount - account.remaining) * 100) / 100;
 
   return { hasBeenPaid, paidAmount };
-}
-
-export function hasBeenFullyRefunded(accountId, feeFineActions) {
-  const refundActions = feeFineActions.filter(action => {
-    return action.accountId === accountId && action.typeAction === refundStatuses.RefundedFully;
-  });
-
-  return !isEmpty(refundActions);
-}
-
-export function isRefundAllowed(account, feeFineActions) {
-  const { hasBeenPaid, paidAmount } = accountRefundInfo(account, feeFineActions);
-  const isAccountRefunded = hasBeenFullyRefunded(account.id, feeFineActions);
-
-  return !isAccountRefunded && hasBeenPaid && paidAmount > 0;
 }
 
 export function calculateTotalPaymentAmount(accounts = [], feeFineActions = []) {

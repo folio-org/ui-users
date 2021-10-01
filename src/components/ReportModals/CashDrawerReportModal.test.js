@@ -8,7 +8,7 @@ import {
 import { createMemoryHistory } from 'history';
 import { forEach } from 'lodash';
 
-import '../../../test/jest/__mock__';
+import '__mock__';
 import CashDrawerReportModal, { validate } from './CashDrawerReportModal';
 
 const modalHeader = 'Cash drawer reconciliation modal';
