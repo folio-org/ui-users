@@ -96,12 +96,15 @@ refundTransfers = async (loan, props) => {
       },
     } = props;
     const orderedActions = orderBy(transferredActions, ['dateAction'], ['desc']);
-    const now = moment().format();
     const amount = transferredActions.reduce((acc, record) => acc + record.amountAction, 0.0);
     const lastBalance = orderedActions[0].balance + amount;
     const balanceTotal = type.startsWith(refundClaimReturned.TRANSACTION_CREDITED)
       ? 0.0
       : lastBalance;
+    const now = type.startsWith(refundClaimReturned.TRANSACTION_CREDITED)
+      ? moment().format()
+      : moment().add(2, 'seconds').format();
+
     const transactionVerb = type.startsWith(refundClaimReturned.TRANSACTION_CREDITED)
       ? refundClaimReturned.TRANSACTION_VERB_REFUND
       : refundClaimReturned.TRANSACTION_VERB_REFUNDED;

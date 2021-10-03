@@ -1,4 +1,4 @@
-import '../../../test/jest/__mock__';
+import '__mock__';
 import {
   accountsMatchStatus,
   checkUserActive,
@@ -255,12 +255,12 @@ describe('getContributors', () => {
 
   it('should return contributors from `account` if it passed', () => {
     const mockedAccount = {
-      contributors: [{ name: 'Bond,James' }, { name: 'Doe,John' }],
+      contributors: [{ name: 'Bond, James' }, { name: 'Doe, John' }],
     };
     const mockedInstance = {
       contributors: [{ name: 'test' }],
     };
-    const expectedResult = ['James, Bond', 'John, Doe'];
+    const expectedResult = ['Bond, James', 'Doe, John'];
 
     expect(getContributors(mockedAccount, mockedInstance)).toEqual(expectedResult);
   });
@@ -268,9 +268,9 @@ describe('getContributors', () => {
   it('should return contributors from `instance` if `account` have no contributors', () => {
     const mockedAccount = {};
     const mockedInstance = {
-      contributors: [{ name: 'Bond,James' }, { name: 'Doe,John' }],
+      contributors: [{ name: 'Bond, James' }, { name: 'Doe, John' }],
     };
-    const expectedResult = ['James, Bond', 'John, Doe'];
+    const expectedResult = ['Bond, James', 'Doe, John'];
 
     expect(getContributors(mockedAccount, mockedInstance)).toEqual(expectedResult);
   });

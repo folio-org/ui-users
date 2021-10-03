@@ -1,6 +1,7 @@
+import options from '__mock__/financialTransactionsReportData.mock';
+import emptyOptions from '__mock__/financialTransactionsReportEmptyData.mock';
+
 import FinancialTransactionsReport from './FinancialTransactionsReport';
-import options from '../../../../test/jest/__mock__/financialTransactionsReportData.mock';
-import emptyOptions from '../../../../test/jest/__mock__/financialTransactionsReportEmptyData.mock';
 
 describe('Financial Transactions Report in CSV format', () => {
   const report = new FinancialTransactionsReport(options);
