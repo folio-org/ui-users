@@ -66,7 +66,7 @@ const UserAccounts = ({
     const loansClaim = resources.loansHistory.records?.filter(loan => loan?.action === loanActions.CLAIMED_RETURNED);
     let claim = [];
     loansClaim.forEach((loan) => {
-      claim = claim.concat(records.filter(account => account?.loanId === loan.id));
+      claim = claim.concat(open.filter(account => account?.loanId === loan.id));
     });
 
     const claimTotal = claim.reduce((acc, { remaining }) => (acc + parseFloat(remaining)), 0);
