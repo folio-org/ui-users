@@ -43,6 +43,7 @@
 * Create Jest/RTL test for BulkRenewedLoansList. Refs UIU-2259.
 * Fix issue when `refund` button became inactive before the user was returned entire amount of money. Refs UIU-2438.
 * Display `contributors name` consistent with other modules. Refs UIU-2440.
+* Create Jest/RTL test for `contactTypes`. Refs UIU-2368.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
