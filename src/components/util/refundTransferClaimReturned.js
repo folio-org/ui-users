@@ -96,6 +96,7 @@ refundTransfers = async (loan, props) => {
         },
       },
     } = props;
+
     if (actions[0].typeAction.startsWith(refundClaimReturned.TRANSFERRED_ACTION) ||
       actions[0].typeAction.startsWith(refundClaimReturned.PAID_ACTION)) {
       const orderedActions = orderBy(actions, ['dateAction'], ['desc']);

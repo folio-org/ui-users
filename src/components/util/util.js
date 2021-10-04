@@ -168,3 +168,9 @@ export function checkUserActive(user) {
   if (user.expirationDate == null || user.expirationDate === undefined) return user.active;
   return user.active && (new Date(user.expirationDate) >= new Date());
 }
+
+export const getContributors = (account, instance) => {
+  const contributors = account?.contributors || instance?.contributors;
+
+  return contributors && contributors.map(({ name }) => name);
+};

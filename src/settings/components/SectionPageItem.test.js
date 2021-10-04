@@ -7,7 +7,7 @@ import {
 import { createMemoryHistory } from 'history';
 import { FormattedMessage } from 'react-intl';
 
-import '../../../test/jest/__mock__';
+import '__mock__';
 import SectionPageItem from './SectionPageItem';
 
 const renderSectionPageItem = ({ setting, path }) => {

@@ -27,11 +27,11 @@ import {
   formatActionDescription,
   formatCurrencyAmount,
   getServicePointOfCurrentAction,
+  isRefundAllowed,
 } from '../../components/util';
 
 import {
   calculateTotalPaymentAmount,
-  isRefundAllowed,
   isCancelAllowed,
 } from '../../components/Accounts/accountFunctions';
 import FeeFineReport from '../../components/data/reports/FeeFineReport';
@@ -398,7 +398,7 @@ class AccountDetails extends React.Component {
     const overdueFinePolicyName = itemDetails?.overdueFinePolicyName;
     const lostItemPolicyId = itemDetails?.lostItemPolicyId;
     const lostItemPolicyName = itemDetails?.lostItemPolicyName;
-    const contributors = itemDetails?.contributors.join(', ');
+    const contributors = itemDetails?.contributors?.join('; ');
 
     const totalPaidAmount = calculateTotalPaymentAmount(resources?.feefineshistory?.records, feeFineActions);
     const refundAllowed = isRefundAllowed(account, feeFineActions);
