@@ -1,5 +1,5 @@
 # This workflow will do a clean install of node dependencies, build the source code,
-# run unit tests, and perform a SonarCloud scan ONLY on a `release`.
+# run unit tests, and perform a SonarCloud scan.
 
 # For more information see:
 # https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
@@ -13,29 +13,28 @@
 
 
 
-name: buildNPM Release
+name: buildNPM Snapshot
 on: 
-  push:
-    tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+*'
-  workflow_dispatch:
-  
+   push:
+   pull_request:
+   pull_request_target:
+     types: [labeled]
+
 jobs:
-  build-npm-release:
-    if : ${{ startsWith(github.ref, 'refs/tags/v') }}
+  build-npm:
+    if: ${{ github.event.pull_request.labels.*.name == 'safe fork' }}
     env:
       YARN_TEST_OPTIONS: '--ci --coverage --colors'
       SQ_ROOT_DIR: './src'
       PUBLISH_MOD_DESCRIPTOR: 'true'
       COMPILE_TRANSLATION_FILES: 'true'
-      FOLIO_NPM_REGISTRY: 'https://repository.folio.org/repository/npm-folio/'
+      FOLIO_NPM_REGISTRY: 'https://repository.folio.org/repository/npm-folioci/'
       FOLIO_MD_REGISTRY: 'https://folio-registry.dev.folio.org'
       NODEJS_VERSION: '12'
       JEST_JUNIT_OUTPUT_DIR: 'artifacts/jest-junit'
       JEST_COVERAGE_REPORT_DIR: 'artifacts/coverage-jest/lcov-report/'
       BIGTEST_JUNIT_OUTPUT_DIR: 'artifacts/runTest'
       BIGTEST_COVERAGE_REPORT_DIR: 'artifacts/coverage/lcov-report/'
-      OKAPI_PULL: '{ "urls" : [ "https://folio-registry.dev.folio.org" ] }'
       SQ_LCOV_REPORT: 'artifacts/coverage-jest/lcov.info'
       SQ_EXCLUSIONS: '**/platform/alias-service.js,**/docs/**,**/node_modules/**,**/examples/**,**/artifacts/**,**/ci/**,Jenkinsfile,**/LICENSE,**/*.css,**/*.md,**/*.json,**/tests/**,**/stories/*.js,**/test/**,**/.stories.js,**/resources/bigtest/interactors/**,**/resources/bigtest/network/**,**/*-test.js,**/*.test.js,**/*-spec.js,**/karma.conf.js,**/jest.config.js'
 
@@ -44,23 +43,6 @@ jobs:
       - uses: folio-org/checkout@v2
         with:
           fetch-depth: 0
-
-      - name: Extract tag 
-        run: echo "TAG=$(echo ${GITHUB_REF##*/})" >> $GITHUB_ENV
-
-      - name: Get version from package.json
-        id: version
-        uses: notiz-dev/github-action-json-property@release
-        with: 
-          path: 'package.json'
-          prop_path: 'version'
-          
-      - name: Set package.json version with a 'v' prefix.
-        run: echo "PACKAGE_VERSION = $(v${{ steps.version.outputs.prop }})" >> $GITHUB_ENV
-      
-      - name: Check matching tag and version in package.json
-        if: ${{ env.TAG != env.PACKAGE_VERSION }}
-        run: exit 1
 
       - name: Setup kernel for react native, increase watchers
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
@@ -73,6 +55,14 @@ jobs:
 
       - name: Set yarn config
         run: yarn config set @folio:registry $FOLIO_NPM_REGISTRY
+
+      - name: Set FOLIO NPM snapshot version
+        run: |
+          git clone https://github.com/folio-org/folio-tools.git
+          npm --no-git-tag-version version `folio-tools/github-actions-scripts/folioci_npmver.sh`
+          rm -rf folio-tools
+        env:
+          JOB_ID: ${{ github.run_number }}
 
       - name: Run yarn install
         run: yarn install --ignore-scripts
@@ -99,45 +89,6 @@ jobs:
         if: ${{ env.PUBLISH_MOD_DESCRIPTOR == 'true' }}
         run: cat module-descriptor.json
 
-      - name: Read module descriptor
-        if: ${{ env.PUBLISH_MOD_DESCRIPTOR == 'true' }}
-        id: moduleDescriptor
-        uses: juliangruber/read-file-action@v1
-        with:
-          path: ./module-descriptor.json
-
-      - name: Docker registry login
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login https://docker.io/v2/ -u "${{ secrets.DOCKER_USER }}" --password-stdin
-
-      - name: Start a local instance of Okapi
-        if: ${{ env.PUBLISH_MOD_DESCRIPTOR == 'true' }}
-        run: |
-          docker pull folioorg/okapi:latest
-          docker run --name okapiLatest -t -detach folioorg/okapi:latest dev
-          echo "OKAPI_IP = $(docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' okapiLatest)" >> $GITHUB_ENV
-          sleep 10
-
-      - name: Pull all Module descriptors to local Okapi instance
-        if: ${{ env.PUBLISH_MOD_DESCRIPTOR == 'true' }}
-        uses: fjogeleit/http-request-action@master
-        with:
-          url: http://${{ env.OKAPI_IP }}:9130/_/proxy/pull/modules
-          method: 'POST'
-          contentType: 'application/json; charset=utf-8'
-          customHeaders: '{ "Accept": "application/json; charset=utf-8" }'
-          data: ${{ env.OKAPI_PULL }}
-          timeout: 60000
-
-      - name: Perform local Okapi dependency check
-        if: ${{ env.PUBLISH_MOD_DESCRIPTOR == 'true' }}
-        uses: fjogeleit/http-request-action@master
-        with:
-          url: 'http://172.17.0.2:9130/_/proxy/modules?preRelease=false&npmSnapshot=false'
-          method: 'POST'
-          contentType: 'application/json; charset=utf-8'
-          customHeaders: '{ "Accept": "application/json; charset=utf-8" }'
-          data: ${{ steps.moduleDescriptor.outputs.content }}
-
       - name: Publish Jest unit test results
         uses: docker://ghcr.io/enricomi/publish-unit-test-result-action:v1
         if: always()
@@ -145,7 +96,7 @@ jobs:
           github_token: ${{ github.token }}
           files: "${{ env.JEST_JUNIT_OUTPUT_DIR }}/*.xml"
           check_name: Jest Unit Test Results
-          comment_on_pr: true
+          comment_mode: update last
           comment_title: Jest Unit Test Statistics
 
       - name: Publish Jest coverage report
@@ -163,7 +114,7 @@ jobs:
           github_token: ${{ github.token }}
           files: "${{ env.BIGTEST_JUNIT_OUTPUT_DIR }}/*.xml"
           check_name: BigTest Unit Test Results
-          comment_on_pr: true
+          comment_mode: update last
           comment_title: BigTest Unit Test Statistics
 
       - name: Publish BigTest coverage report
@@ -184,7 +135,7 @@ jobs:
 
       - name: Set default branch as env variable
         run: echo "DEFAULT_BRANCH=${{ github.event.repository.default_branch }}" >> $GITHUB_ENV
-          
+
       - name: Fetch branches for SonarCloud
         run: git fetch --no-tags ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY} +refs/heads/${{ env.DEFAULT_BRANCH }}:refs/remotes/origin/${{ env.DEFAULT_BRANCH }}
 
@@ -204,6 +155,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Set up NPM environment for publishing
+        if: ${{ github.ref == 'refs/heads/master' || github.ref  == 'refs/heads/main' }}
         uses: actions/setup-node@v2
         with:
           node-version: ${{ env.NODEJS_VERSION }}
@@ -211,17 +163,26 @@ jobs:
           always-auth: true
 
       - name: Set _auth in .npmrc
-        run: npm config set @folio:registry https://repository.folio.org/repository/npm-folio/ &&  npm config set _auth ${{ env.NODE_AUTH_TOKEN }}
+        if: ${{ github.ref == 'refs/heads/master' || github.ref  == 'refs/heads/main' }}
+        run: npm config set @folio:registry ${{ env.FOLIO_NPM_REGISTRY }} &&  npm config set _auth ${{ env.NODE_AUTH_TOKEN }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Publish NPM to FOLIO NPM registry
+      - name: Publish NPM
+        if: ${{ github.ref == 'refs/heads/master' || github.ref  == 'refs/heads/main' }}
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Publish module descriptor to FOLIO registry
-        if: ${{ env.PUBLISH_MOD_DESCRIPTOR == 'true' }}
+      - name: Read module descriptor
+        if: ${{ env.PUBLISH_MOD_DESCRIPTOR == 'true' && github.ref == 'refs/heads/master' || github.ref  == 'refs/heads/main' }}
+        id: moduleDescriptor
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ./module-descriptor.json
+
+      - name: Publish module descriptor
+        if: ${{ env.PUBLISH_MOD_DESCRIPTOR == 'true' && github.ref == 'refs/heads/master' || github.ref  == 'refs/heads/main' }}
         id: modDescriptorPost
         uses: fjogeleit/http-request-action@master
         with:
@@ -232,4 +193,3 @@ jobs:
           data: ${{ steps.moduleDescriptor.outputs.content }}
           username: ${{ secrets.FOLIO_REGISTRY_USERNAME }}
           password: ${{ secrets.FOLIO_REGISTRY_PASSWORD }}
-

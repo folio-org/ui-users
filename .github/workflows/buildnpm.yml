@@ -14,12 +14,7 @@
 
 
 name: buildNPM Snapshot
-on: 
-   push:
-   pull_request:
-   pull_request_target:
-     types: [labeled]
-
+on: [push, pull_request]
 jobs:
   build-npm:
     env:
