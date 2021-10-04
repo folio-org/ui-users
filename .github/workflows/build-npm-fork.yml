@@ -13,7 +13,7 @@
 
 
 
-name: buildNPM Snapshot
+name: buildNPM Snapshot Fork
 on: 
    push:
    pull_request:
