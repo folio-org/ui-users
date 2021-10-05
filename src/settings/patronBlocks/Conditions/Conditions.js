@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { stripesConnect } from '@folio/stripes/core';
 import { Callout } from '@folio/stripes/components';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
+import FormattedMessage from 'react-intl';
 
 import ConditionsForm from './ConditionsForm';
 import css from '../patronBlocks.css';
@@ -60,7 +60,7 @@ class Conditions extends Component {
     }).then(() => {
       if (this.callout) {
         this.callout.current.sendCallout({
-          message: <SafeHTMLMessage
+          message: <FormattedMessage
             id="ui-users.settings.callout.message"
             values={{ name: value.name }}
           />
