@@ -3,72 +3,36 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-import { noop } from 'lodash';
-
-import '__mock__';
-import '__mock__/currencyData.mock';
+import buildStripes from '__mock__/stripes.mock';
+import '__mock__/stripesCore.mock';
 
 import PermissionSetForm from './PermissionSetForm';
 
-import stripesFinalForm  from '@folio/stripes/final-form';
-
 jest.unmock('@folio/stripes/components');
 
-// jest.mock('@folio/stripes/final-form', () =>  ({
-//     stripesFinalForm : jest.fn(),
-//       default: jest.fn(),
-
-// }));
-
-// Component => props => {( <Component {...props} />)} );
-
-const stripesDefaultProps = {
-    okapi: { url: '' },
-    logger: { log: noop },
-    hasPerm: () => {},
-    connect: Component => props => (
-      <Component
-        {...props}
-        mutator={{}}
-        resources={resources}
-        hasPerm={()=>{}}
-      />
-    ),
-  };
-const connect = Component => props => (
-    <Component
-      {...props}
-      mutator={{}}
-      resources={resources}
-      hasPerm={()=>{}}
-    />
-  );
-
-const initialValues= {};
-
+const initialValues = {};
 const handleSubmit = () => ({});
 
 const renderPermissionSetForm = () => {
   const component = (
     <Router>
-          <PermissionSetForm
-        stripes={stripesDefaultProps}
+      <PermissionSetForm
+        stripes={buildStripes()}
         handleSubmit={handleSubmit}
         onSubmit={handleSubmit}
         initialValues={initialValues}
-        connect={connect}
-    />
-    </Router>  
+      />
+    </Router>
   );
-    return  render(component);
-     };
 
-describe('Actions Bar component', () => {
- // AfterEach( () => jest.clearAllMocks());
+  return render(component);
+};
 
-    it('show is true component renders data', () => {
-       renderPermissionSetForm();
-    });
-  
+describe('PermissionSetForm', () => {
+  it('show is true component renders data', () => {
+    const { debug } = renderPermissionSetForm();
 
+    debug();
+    expect(screen.getByText('ui-users.saveAndClose')).toBeDefined();
+  });
 });
