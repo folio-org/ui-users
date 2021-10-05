@@ -17,10 +17,12 @@ import CommentModal from './CommentModal';
 import WarningModal from './WarningModal';
 import ActionModal from './ActionModal';
 import { MAX_RECORDS } from '../../../constants';
-import { getFullName } from '../../util';
+import {
+  getFullName,
+  isRefundAllowed,
+} from '../../util';
 import {
   calculateSelectedAmount,
-  isRefundAllowed,
   loadServicePoints,
 } from '../accountFunctions';
 
