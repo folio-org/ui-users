@@ -16,13 +16,12 @@
 name: buildNPM Snapshot Fork
 on: 
    push:
-   pull_request:
    pull_request_target:
      types: [labeled]
 
 jobs:
-  build-npm:
-    if: ${{ github.event.pull_request.labels.*.name == 'safe fork' }}
+  build-npm-fork:
+    if: contains(github.event.pull_request.labels.*.name, 'safe fork')
     env:
       YARN_TEST_OPTIONS: '--ci --coverage --colors'
       SQ_ROOT_DIR: './src'
