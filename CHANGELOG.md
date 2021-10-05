@@ -43,6 +43,7 @@
 * Create Jest/RTL test for BulkRenewedLoansList. Refs UIU-2259.
 * Fix issue when `refund` button became inactive before the user was returned entire amount of money. Refs UIU-2438.
 * Display `contributors name` consistent with other modules. Refs UIU-2440.
+* Create Jest/RTL test for `OpenLoans`. Refs UIU-2314.
 * Create Jest/RTL test for `contactTypes`. Refs UIU-2368.
 * Create Jest/RTL test for `withMarkAsMissing`. Refs UIU-2265.
 
