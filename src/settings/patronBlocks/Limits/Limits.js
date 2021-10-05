@@ -12,7 +12,7 @@ import {
 
 import { stripesConnect } from '@folio/stripes/core';
 import { Callout } from '@folio/stripes/components';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
+import FormattedMessage from 'react-intl';
 
 import LimitsForm from './LimitsForm';
 
@@ -206,7 +206,7 @@ class Limits extends Component {
     const { patronGroup } = this.props;
     const limits = this.saveLimits(value);
     const showSuccessMessage = (
-      <SafeHTMLMessage
+      <FormattedMessage
         id="ui-users.settings.limits.callout.message"
         values={{ patronGroup }}
       />
