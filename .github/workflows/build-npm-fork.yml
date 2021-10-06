@@ -21,7 +21,6 @@ on:
 
 jobs:
   build-npm-fork:
-    if: contains(github.event.pull_request.labels.*.name, 'safe fork')
     env:
       YARN_TEST_OPTIONS: '--ci --coverage --colors'
       SQ_ROOT_DIR: './src'
