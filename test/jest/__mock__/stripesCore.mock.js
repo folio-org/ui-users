@@ -49,7 +49,9 @@ jest.mock('@folio/stripes/core', () => {
         return children;
       } else if (perm.startsWith('ui-users')) {
         return children;
-      } else {
+      } else if (perm.startsWith('perms')){
+        return children;
+      }else {
         return null;
       }
     }),

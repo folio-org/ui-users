@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import buildStripes from '__mock__/stripes.mock';
@@ -10,10 +10,19 @@ import PermissionSetForm from './PermissionSetForm';
 
 jest.unmock('@folio/stripes/components');
 
-const initialValues = {};
 const handleSubmit = () => ({});
+const onRemove = () => ({});
 
-const renderPermissionSetForm = () => {
+const initialValues = {};
+const initialValuesWithData = {
+  id: '14c7a734-f029-4350-8fe0-0bbef7942ce5',
+  displayName: 'test-permission-set',
+  metadata: { 
+    createdDate : '',
+  },
+};
+
+const renderPermissionSetForm = initialValues => {
   const component = (
     <Router>
       <PermissionSetForm
@@ -21,6 +30,7 @@ const renderPermissionSetForm = () => {
         handleSubmit={handleSubmit}
         onSubmit={handleSubmit}
         initialValues={initialValues}
+        onRemove={onRemove}
       />
     </Router>
   );
@@ -28,11 +38,56 @@ const renderPermissionSetForm = () => {
   return render(component);
 };
 
-describe('PermissionSetForm', () => {
-  it('show is true component renders data', () => {
-    const { debug } = renderPermissionSetForm();
 
-    debug();
+describe('PermissionSetForm', () => {
+  it('show if component renders data with no inital values', () => {
+    renderPermissionSetForm();
+
     expect(screen.getByText('ui-users.saveAndClose')).toBeDefined();
+  });
+  it('show if component renders data with empty inital values', () => {
+    renderPermissionSetForm(initialValues);
+
+    expect(screen.getByText('ui-users.saveAndClose')).toBeDefined();
+  });
+  it('Permission list check', () => {
+    renderPermissionSetForm(initialValues);
+
+    expect(screen.getByText('ui-users.permissions.newPermissionSet')).toBeDefined();
+  });
+  it('General info check', () => {
+    renderPermissionSetForm(initialValues);
+
+    expect(screen.getByText('ui-users.permissions.generalInformation')).toBeDefined();
+  });
+  it('description check', () => {
+    renderPermissionSetForm(initialValues);
+
+    expect(screen.getByText('ui-users.description')).toBeDefined();
+  });
+  it('oncancel delete modal check', () => {
+    renderPermissionSetForm(initialValuesWithData);
+
+    expect(screen.getByText('ui-users.delete')).toBeDefined();
+    fireEvent.click(screen.getByText('ui-users.delete'));
+    fireEvent.click(screen.getByText('stripes-components.cancel'));
+  });
+  it('delete check', () => {
+    renderPermissionSetForm(initialValuesWithData);
+
+    expect(screen.getByText('ui-users.delete')).toBeDefined();
+    fireEvent.click(screen.getByText('ui-users.delete'));
+    fireEvent.click(document.querySelector('[data-test-confirmation-modal-confirm-button="true"]'));
+  });
+  it('expand collapse check', () => {
+    renderPermissionSetForm(initialValuesWithData);
+
+    expect(screen.getByText('stripes-components.collapseAll')).toBeDefined();
+    fireEvent.click(screen.getByText('stripes-components.collapseAll'));   
+  });
+  it('toggle accordion check', () => {
+    renderPermissionSetForm(initialValuesWithData);
+
+    fireEvent.click(screen.getByText('ui-users.permissions.generalInformation'));
   });
 });
