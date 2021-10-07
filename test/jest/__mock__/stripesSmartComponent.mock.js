@@ -36,33 +36,12 @@ jest.mock('@folio/stripes/smart-components', () => {
     withOkapi: true,
   };
   return {
-  ...jest.requireActual('@folio/stripes/smart-components'),
-  Settings: Component => ({pages, ...props}) => {
-    const fakePages  = pages || [];
-    const fakeStripes =  STRIPES;
-    const fakeAdditionalRoutes = {};
-    const fakeMatch = {
-      path: '/settings/users/limits',
-      url: '/settings/users/limits',
-      isExact: true,
-    };
-    const fakeSection = [{
-      label: '',
-      pages: props.pages || [],
-    }];
-    
-    fakeSection.pages.map(page => ({
-      page,
-      component: page.component(),
-    }));
-
-    return <Component pages={fakePages} additionalRoutes={fakeAdditionalRoutes} stripes={fakeStripes} section={fakeSection} />;
-  },
-  LocationLookup: () => <div>LocationLookup</div>,
-  NotesSmartAccordion: () => <div>NotesSmartAccordion</div>,
-  ViewMetaData: (...props) => <div>ViewMetaData</div>,
-  AddressEditList: () => <div>AddressEditList</div>,
-  NotePopupModal: () => <div>NotePopupModal</div>,
-  ViewCustomFieldsRecord: () => <div>ViewCustomFieldsRecord</div>,
-}
+    ...jest.requireActual('@folio/stripes/smart-components'),
+    LocationLookup: () => <div>LocationLookup</div>,
+    NotesSmartAccordion: () => <div>NotesSmartAccordion</div>,
+    ViewMetaData: () => <div>ViewMetaData</div>,
+    AddressEditList: () => <div>AddressEditList</div>,
+    NotePopupModal: () => <div>NotePopupModal</div>,
+    ViewCustomFieldsRecord: () => <div>ViewCustomFieldsRecord</div>,
+  };
 });
