@@ -47,6 +47,7 @@
 * Create Jest/RTL test for `OpenLoans`. Refs UIU-2314.
 * Create Jest/RTL test for `contactTypes`. Refs UIU-2368.
 * Create Jest/RTL test for `withMarkAsMissing`. Refs UIU-2265.
+* create Jest/RTL test for `PermissionSetForm.js` . Refs UIU-2407.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
