@@ -1,7 +1,7 @@
 # Change history for ui-users
 
-## [7.0.0](https://github.com/folio-org/ui-users/tree/v7.0.0) (2021-10-06)
-[Full Changelog](https://github.com/folio-org/ui-users/compare/v6.1.0...v7.0.0)
+## [7.0.1](https://github.com/folio-org/ui-users/tree/v7.0.1) (2021-10-07)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v6.1.0...v7.0.1)
 
 * Update local babel config to handle new JSX transform. Refs UIU-2190.
 * Delete user with check for open transactions. Refs UIU-1971.
