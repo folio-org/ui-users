@@ -13,11 +13,11 @@ jest.unmock('@folio/stripes/components');
 const handleSubmit = () => ({});
 const onRemove = () => ({});
 
-const initialValues = {};
-const initialValuesWithData = {
+const initialVal = {};
+const initialValData = {
   id: '14c7a734-f029-4350-8fe0-0bbef7942ce5',
   displayName: 'test-permission-set',
-  metadata: { 
+  metadata: {
     createdDate : '',
   },
 };
@@ -46,47 +46,47 @@ describe('PermissionSetForm', () => {
     expect(screen.getByText('ui-users.saveAndClose')).toBeDefined();
   });
   it('show if component renders data with empty inital values', () => {
-    renderPermissionSetForm(initialValues);
+    renderPermissionSetForm(initialVal);
 
     expect(screen.getByText('ui-users.saveAndClose')).toBeDefined();
   });
   it('Permission list check', () => {
-    renderPermissionSetForm(initialValues);
+    renderPermissionSetForm(initialVal);
 
     expect(screen.getByText('ui-users.permissions.newPermissionSet')).toBeDefined();
   });
   it('General info check', () => {
-    renderPermissionSetForm(initialValues);
+    renderPermissionSetForm(initialVal);
 
     expect(screen.getByText('ui-users.permissions.generalInformation')).toBeDefined();
   });
   it('description check', () => {
-    renderPermissionSetForm(initialValues);
+    renderPermissionSetForm(initialVal);
 
     expect(screen.getByText('ui-users.description')).toBeDefined();
   });
   it('oncancel delete modal check', () => {
-    renderPermissionSetForm(initialValuesWithData);
+    renderPermissionSetForm(initialValData);
 
     expect(screen.getByText('ui-users.delete')).toBeDefined();
     fireEvent.click(screen.getByText('ui-users.delete'));
     fireEvent.click(screen.getByText('stripes-components.cancel'));
   });
   it('delete check', () => {
-    renderPermissionSetForm(initialValuesWithData);
+    renderPermissionSetForm(initialValData);
 
     expect(screen.getByText('ui-users.delete')).toBeDefined();
     fireEvent.click(screen.getByText('ui-users.delete'));
     fireEvent.click(document.querySelector('[data-test-confirmation-modal-confirm-button="true"]'));
   });
   it('expand collapse check', () => {
-    renderPermissionSetForm(initialValuesWithData);
+    renderPermissionSetForm(initialValData);
 
     expect(screen.getByText('stripes-components.collapseAll')).toBeDefined();
-    fireEvent.click(screen.getByText('stripes-components.collapseAll'));   
+    fireEvent.click(screen.getByText('stripes-components.collapseAll'));
   });
   it('toggle accordion check', () => {
-    renderPermissionSetForm(initialValuesWithData);
+    renderPermissionSetForm(initialValData);
 
     fireEvent.click(screen.getByText('ui-users.permissions.generalInformation'));
   });
