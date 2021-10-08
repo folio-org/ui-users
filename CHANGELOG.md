@@ -51,6 +51,7 @@
 * Create Jest/RTL test for `OpenLoans`. Refs UIU-2314.
 * Create Jest/RTL test for `contactTypes`. Refs UIU-2368.
 * Create Jest/RTL test for `withMarkAsMissing`. Refs UIU-2265.
+* create Jest/RTL test for `PermissionSetForm.js` . Refs UIU-2407.
 * Create Jest/RTL test for `ActionsBar`. Refs UIU-2301.
 * Fix issue User Information page 'Patron block' accordion should be open if patron block exists and closed if not. Refs UIU-1996.
 
