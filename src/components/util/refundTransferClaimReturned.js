@@ -105,11 +105,11 @@ refundTransfers = async (loan, props) => {
       const balanceTotal = type.startsWith(refundClaimReturned.TRANSACTION_CREDITED)
         ? 0.0
         : lastBalance;
-      
+
       const now = type.startsWith(refundClaimReturned.TRANSACTION_CREDITED)
         ? moment().format()
         : moment().add(2, 'seconds').format();
-      
+
       const transactionVerb = type.startsWith(refundClaimReturned.TRANSACTION_CREDITED)
         ? refundClaimReturned.TRANSACTION_VERB_REFUND
         : refundClaimReturned.TRANSACTION_VERB_REFUNDED;
