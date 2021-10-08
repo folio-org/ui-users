@@ -54,6 +54,7 @@
 * create Jest/RTL test for `PermissionSetForm.js` . Refs UIU-2407.
 * Create Jest/RTL test for `ActionsBar`. Refs UIU-2301.
 * Fix issue User Information page 'Patron block' accordion should be open if patron block exists and closed if not. Refs UIU-1996.
+* Create Jest/RTL test for `LimitsSettings`. Refs UIU-2392.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
