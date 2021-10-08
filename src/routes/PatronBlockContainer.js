@@ -18,7 +18,6 @@ class PatronBlockContainer extends React.Component {
       type: 'okapi',
       records: 'manualblocks',
       path:'manualblocks',
-      fetch: false,
       PUT: {
         path: 'manualblocks/%{activeRecord.blockid}',
       },
