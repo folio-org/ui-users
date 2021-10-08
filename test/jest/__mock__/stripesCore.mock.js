@@ -49,13 +49,14 @@ jest.mock('@folio/stripes/core', () => {
         return children;
       } else if (perm.startsWith('ui-users')) {
         return children;
-      } else if (perm.startsWith('perms')){
+      } else if (perm.startsWith('perms')) {
         return children;
-      }else {
+      } else {
         return null;
       }
     }),
     Pluggable: jest.fn(({ children }) => [children]),
+    // eslint-disable-next-line react/prop-types
     stripesConnect: Component => ({ mutator, resources, stripes, ...rest }) => {
       const fakeMutator = mutator || Object.keys(Component.manifest || {}).reduce((acc, mutatorName) => {
         const returnValue = Component.manifest[mutatorName].records ? [] : {};
