@@ -1,10 +1,20 @@
 import React from 'react';
 import userEvent from '@testing-library/user-event';
-import { render, screen } from '@testing-library/react';
-import { useStripes } from '@folio/stripes/core';
+import {
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
+import {
+  useStripes,
+  IfInterface,
+} from '@folio/stripes/core';
 import { StripesContext } from '@folio/stripes-core/src/StripesContext';
 import '__mock__';
 import UserDetail from './UserDetail';
+import {
+  PatronBlock,
+} from '../../components/UserDetailSections';
 
 const resources = {
   accounts: {},
@@ -66,9 +76,17 @@ const resources = {
 
 const doFetchOpenTransactions = jest.fn(() => Promise.resolve());
 const mutator = {
-  delUser: jest.fn,
+  delUser: {
+    DELETE: jest.fn(),
+  },
   openTransactions: {
     GET: doFetchOpenTransactions,
+  },
+  hasManualPatronBlocks: {
+    GET: jest.fn(),
+  },
+  hasAutomatedPatronBlocks: {
+    GET: jest.fn(),
   },
 };
 
@@ -80,11 +98,36 @@ jest.mock(
 );
 
 jest.mock(
+  '../../components/PatronBlock',
+  () => ({
+    PatronBlockMessage: jest.fn(() => null),
+  })
+);
+
+jest.mock(
+  '../../components/UserDetailSections',
+  () => ({
+    UserInfo: jest.fn(() => null),
+    ExtendedInfo: jest.fn(() => null),
+    ContactInfo: jest.fn(() => null),
+    ProxyPermissions: jest.fn(() => null),
+    PatronBlock: jest.fn(() => null),
+    UserPermissions: jest.fn(() => null),
+    UserLoans: jest.fn(() => null),
+    UserRequests: jest.fn(() => null),
+    UserAccounts: jest.fn(() => null),
+    UserServicePoints: jest.fn(() => null),
+  })
+);
+
+jest.mock(
   '../../../icons/app.png',
   () => {
     return () => <span>AppIcon</span>;
   }
 );
+
+IfInterface.mockImplementation(({ children }) => children);
 
 const match = {
   isExact: false,
@@ -143,9 +186,75 @@ describe('UserDetail', () => {
 
   beforeEach(() => {
     stripes = useStripes();
+    mutator.hasManualPatronBlocks.GET.mockImplementation(() => Promise.resolve([]));
+    mutator.hasAutomatedPatronBlocks.GET.mockImplementation(() => Promise.resolve([]));
+  });
+
+  afterEach(() => {
+    mutator.hasManualPatronBlocks.GET.mockClear();
+    mutator.hasAutomatedPatronBlocks.GET.mockClear();
+    PatronBlock.mockClear();
   });
 
   describe('render UserDetail', () => {
+    [
+      [],
+      [{
+        type: 'Manual',
+        desc: 'test',
+        staffInformation: '',
+        patronMessage: '',
+        borrowing: true,
+        renewals: true,
+        requests: true,
+        userId: 'e14b1bc1-8784-4b55-bfbe-e5ec8ce0b07a',
+        metadata: {
+          createdDate: '2021-10-07T21:05:16.506+00:00',
+          createdByUserId: 'b027a9f8-39d7-5428-b876-d95be29fd183',
+          updatedDate: '2021-10-07T21:05:16.506+00:00',
+          updatedByUserId: 'b027a9f8-39d7-5428-b876-d95be29fd183',
+        },
+        id: 'bdf32aee-e8e6-42ff-847f-7bd9bf6dc485',
+      }],
+    ].forEach((manualPatronBlocks) => {
+      describe(`when manual patron blocks${manualPatronBlocks.length ? '' : ' do not'} exist`, () => {
+        [
+          [],
+          [{
+            patronBlockConditionId: '3d7c52dc-c732-4223-8bf8-e5917801386f',
+            blockBorrowing: true,
+            blockRenewals: false,
+            blockRequests: false,
+            message: 'test charged out',
+          }],
+        ].forEach((automatedPatronBlocks) => {
+          describe(`
+            when automated patron blocks${automatedPatronBlocks.length ? '' : ' do not'} exist
+          `, () => {
+            beforeEach(() => {
+              mutator.hasManualPatronBlocks
+                .GET.mockImplementation(() => Promise.resolve(manualPatronBlocks));
+              mutator.hasAutomatedPatronBlocks
+                .GET.mockImplementation(() => Promise.resolve(automatedPatronBlocks));
+
+              renderUserDetail(stripes);
+            });
+
+            it('should render PatronBlock', async () => {
+              await waitFor(() => expect(mutator.hasManualPatronBlocks.GET).toHaveBeenCalledTimes(1));
+              await waitFor(() => expect(mutator.hasAutomatedPatronBlocks.GET).toHaveBeenCalledTimes(1));
+              await waitFor(() => expect(PatronBlock).toHaveBeenLastCalledWith(
+                expect.objectContaining({
+                  expanded: !!(automatedPatronBlocks.length || manualPatronBlocks.length),
+                }),
+                {}
+              ));
+            });
+          });
+        });
+      });
+    });
+
     test('UserDetail pane should be present', async () => {
       renderUserDetail(stripes);
       expect(document.querySelector('#pane-userdetails')).toBeInTheDocument();
