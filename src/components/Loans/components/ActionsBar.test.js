@@ -2,7 +2,7 @@ import React from 'react';
 
 import { render, screen } from '@testing-library/react';
 
-import  ActionsBar  from './ActionsBar';
+import ActionsBar from './ActionsBar';
 
 const renderActionBar = ({
   show,
@@ -11,29 +11,25 @@ const renderActionBar = ({
 }) => {
   const component = (
     <ActionsBar
-    show={show}
-    contentStart={contentStart}
-    contentEnd={contentEnd}
+      show={show}
+      contentStart={contentStart}
+      contentEnd={contentEnd}
     />
   );
-     render(component);
-     };
+  render(component);
+};
 
 describe('Actions Bar component', () => {
-    it('show is true component renders data', () => {
-      renderActionBar({
-        show: true,
-        contentStart: <div>testData</div>,
-        contentEnd: <div>testDataEnd</div>, });
+  it('show is true component renders data', () => {
+    renderActionBar({ show: true,
+      contentStart: <div>testData</div>,
+      contentEnd: <div>testDataEnd</div> });
 
-      expect(screen.queryByText('testData')).toBeInTheDocument();
-    });
-    it('show is false component not defined', () => {
-
-      expect(renderActionBar({
-        show: false,
-        contentStart: <div>testData</div>,
-        contentEnd: <div>testDataEnd</div>, })).not.toBeDefined();
-    });
-
+    expect(screen.queryByText('testData')).toBeInTheDocument();
+  });
+  it('show is false component not defined', () => {
+    expect(renderActionBar({ show: false,
+      contentStart: <div>testData</div>,
+      contentEnd: <div>testDataEnd</div> })).not.toBeDefined();
+  });
 });
