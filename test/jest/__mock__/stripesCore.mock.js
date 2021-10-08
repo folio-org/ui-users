@@ -36,6 +36,7 @@ jest.mock('@folio/stripes/core', () => {
     withOkapi: true,
   };
   return {
+    ...jest.requireActual('@folio/stripes/core'),
     AppIcon: jest.fn(({ ariaLabel }) => <span>{ariaLabel}</span>),
     TitleManager: jest.fn(({ children, ...rest }) => (
       <span {...rest}>{children}</span>
@@ -48,12 +49,42 @@ jest.mock('@folio/stripes/core', () => {
         return children;
       } else if (perm.startsWith('ui-users')) {
         return children;
-      } else {
+      } else if (perm.startsWith('perms')){
+        return children;
+      }else {
         return null;
       }
     }),
     Pluggable: jest.fn(({ children }) => [children]),
-    stripesConnect: (Component) => (props) => <Component {...props} />,
+    stripesConnect: Component => ({ mutator, resources, stripes, ...rest }) => {
+      const fakeMutator = mutator || Object.keys(Component.manifest || {}).reduce((acc, mutatorName) => {
+        const returnValue = Component.manifest[mutatorName].records ? [] : {};
+
+        acc[mutatorName] = {
+          GET: jest.fn().mockReturnValue(Promise.resolve(returnValue)),
+          PUT: jest.fn().mockReturnValue(Promise.resolve()),
+          POST: jest.fn().mockReturnValue(Promise.resolve()),
+          DELETE: jest.fn().mockReturnValue(Promise.resolve()),
+          reset: jest.fn(),
+          update: jest.fn(),
+          replace: jest.fn(),
+        };
+
+        return acc;
+      }, {});
+
+      const fakeResources = resources || Object.keys(Component.manifest || {}).reduce((acc, resourceName) => {
+        acc[resourceName] = {
+          records: [],
+        };
+
+        return acc;
+      }, {});
+
+      const fakeStripes = stripes || STRIPES;
+
+      return <Component {...rest} mutator={fakeMutator} resources={fakeResources} stripes={fakeStripes} />;
+    },
     useStripes: () => STRIPES,
     withStripes:
       // eslint-disable-next-line react/prop-types
