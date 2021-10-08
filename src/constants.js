@@ -70,6 +70,7 @@ export const refundClaimReturned = {
   LOST_ITEM_PROCESSING_FEE: 'Lost item processing fee',
   TRANSFERRED_ACTION: 'Transferred',
   PAID_ACTION: 'Paid',
+  REFUNDED_TYPE_ACTION: 'Refund',
   CREDITED_ACTION: 'Credited fully-Claim returned',
   REFUNDED_ACTION: 'Refunded fully-Claim returned',
   TRANSACTION_CREDITED: 'Credited',
