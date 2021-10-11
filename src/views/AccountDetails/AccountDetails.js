@@ -27,11 +27,11 @@ import {
   formatActionDescription,
   formatCurrencyAmount,
   getServicePointOfCurrentAction,
+  isRefundAllowed,
 } from '../../components/util';
 
 import {
   calculateTotalPaymentAmount,
-  isRefundAllowed,
   isCancelAllowed,
 } from '../../components/Accounts/accountFunctions';
 import FeeFineReport from '../../components/data/reports/FeeFineReport';

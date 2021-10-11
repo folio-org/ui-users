@@ -1,11 +1,9 @@
-import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
   FormattedMessage,
   injectIntl,
 } from 'react-intl';
-import moment from 'moment';
 
 import {
   Row,
@@ -29,20 +27,6 @@ const PATRON_BLOCKS_COLUMNS = {
 };
 
 class PatronBlock extends React.Component {
-  static manifest = Object.freeze({
-    manualPatronBlocks: {
-      type: 'okapi',
-      records: 'manualblocks',
-      path: 'manualblocks',
-      accumulate: 'true',
-      fetch: false,
-      DELETE: {
-        path: 'manualblocks/%{activeRecord.blockId}',
-      },
-    },
-    activeRecord: {},
-  });
-
   static propTypes = {
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func,
@@ -54,25 +38,15 @@ class PatronBlock extends React.Component {
     expanded: PropTypes.bool,
     accordionId: PropTypes.string,
     patronBlocks: PropTypes.arrayOf(PropTypes.object),
-    automatedPatronBlocks: PropTypes.arrayOf(PropTypes.object),
-    manualPatronBlocks: PropTypes.arrayOf(PropTypes.object),
-    hasPatronBlocks: PropTypes.bool,
     mutator: PropTypes.shape({
       activeRecord: PropTypes.shape({
         update: PropTypes.func,
       }),
-      manualPatronBlocks: PropTypes.shape({
-        DELETE: PropTypes.func,
-        GET: PropTypes.func,
-        reset: PropTypes.func,
-      }),
     }),
-    user: PropTypes.object,
   };
 
   static defaultProps = {
     patronBlocks: [],
-    automatedPatronBlocks: [],
   };
 
   constructor(props) {
@@ -96,33 +70,6 @@ class PatronBlock extends React.Component {
       ],
       sortDirection: ['desc', 'asc'],
     };
-  }
-
-  componentDidMount() {
-    const {
-      mutator: {
-        manualPatronBlocks,
-      },
-      user,
-      onToggle,
-      expanded,
-      accordionId,
-      automatedPatronBlocks,
-    } = this.props;
-    const query = `userId==${user.id}`;
-
-    manualPatronBlocks.reset();
-    manualPatronBlocks.GET({ params: { query } })
-      .then(records => {
-        const blocks = records.filter(p => moment(moment(p.expirationDate).endOf('day')).isSameOrAfter(moment().endOf('day')));
-        if ((blocks.length > 0 && !expanded) || (!blocks.length && expanded)) {
-          onToggle({ id: accordionId });
-        }
-      });
-
-    if ((automatedPatronBlocks.length && !expanded) || (!automatedPatronBlocks.length && expanded)) {
-      onToggle({ id: accordionId });
-    }
   }
 
   onSort(e, meta) {
@@ -227,15 +174,12 @@ class PatronBlock extends React.Component {
       onToggle,
       accordionId,
       patronBlocks,
-      hasPatronBlocks,
       match: { params },
     } = this.props;
     const {
       sortOrder,
-      sortDirection
+      sortDirection,
     } = this.state;
-    let contentData = patronBlocks.filter(p => moment(moment(p.expirationDate).endOf('day')).isSameOrAfter(moment().endOf('day')));
-    contentData = _.orderBy(contentData, ['metadata.createdDate'], ['desc']);
 
     const buttonDisabled = this.props.stripes.hasPerm('ui-users.patron_blocks');
     const displayWhenOpen =
@@ -246,7 +190,7 @@ class PatronBlock extends React.Component {
       <MultiColumnList
         id="patron-block-mcl"
         interactive={false}
-        contentData={contentData}
+        contentData={patronBlocks}
         formatter={this.getPatronFormatter()}
         visibleColumns={this.visibleColumns}
         onHeaderClick={this.onSort}
@@ -259,7 +203,7 @@ class PatronBlock extends React.Component {
     const title =
       <Headline size="large" tag="h3">
         <FormattedMessage id="ui-users.settings.patronBlocks" />
-        {(hasPatronBlocks) ? <Icon size="medium" icon="exclamation-circle" status="error" /> : ''}
+        {(patronBlocks.length) ? <Icon size="medium" icon="exclamation-circle" status="error" /> : ''}
       </Headline>;
 
     return (

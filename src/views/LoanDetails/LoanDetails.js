@@ -199,7 +199,7 @@ class LoanDetails extends React.Component {
           { value }
         </button>
       :
-      { value };
+      value;
 
     return <>{ valueDisplay }<br />{ suspendedMessage }</>;
   }
