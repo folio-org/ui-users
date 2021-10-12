@@ -160,4 +160,12 @@ describe('withProxy', () => {
 
     expect(mutator.proxiesFor.POST).toHaveBeenCalled();
   });
+
+  test('rerender with a different user id', () => {
+    const { rerender } = renderWithProxy();
+
+    rerender(<WrappedComponent {...props} match={{ params: { id: '2' } }} />);
+
+    expect(mutator.proxiesFor.GET).toHaveBeenCalled();
+  });
 });
