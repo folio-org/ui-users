@@ -3,8 +3,9 @@
 ## 7.something (IN PROGRESS)
 
 * Correctly show fee/fine for users without `ui-users.accounts` permission. Refs UIU-2446.
-* Create Jest/RTL test for ` RequestFeeFineBlockButtons`. Refs UIU-2287.
+* Create Jest/RTL test for `RequestFeeFineBlockButtons`. Refs UIU-2287.
 * Restrict `loans.all` permissions. Refs UIU-2256.
+* Create Jest/RTL test for `withProxy`. Refs UIU-2315.
 
 ## [7.0.1](https://github.com/folio-org/ui-users/tree/v7.0.1) (2021-10-07)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.1.0...v7.0.1)
