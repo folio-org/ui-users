@@ -923,7 +923,7 @@
     "permission.delete": "Usuários: pode excluir o perfil do usuário se o usuário não tiver nenhuma transação aberta",
     "permission.opentransactions": "Usuários: pode verificar transações abertas",
     "details.deleteUser.success": "Usuário <strong> {name} </strong> excluído com sucesso.",
-    "details.deleteUser.failed": "O usuário <strong>{nome}</strong> não pôde ser excluído.",
+    "details.deleteUser.failed": "O usuário <strong>{name}</strong> não pôde ser excluído.",
     "accounts.history.staff.info": "Informações da equipe {count, number} de {count, number} :",
     "accounts.history.link.details": "Ir para detalhes",
     "reports.financial.trans.modal.owners.error": "\"Proprietário de taxa/multa\" é necessário",
