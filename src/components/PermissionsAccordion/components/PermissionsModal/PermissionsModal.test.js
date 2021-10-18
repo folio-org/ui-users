@@ -214,11 +214,12 @@ describe('PermissionsModal', () => {
         okapiReady: true,
         authFailure: [],
         bindings: {},
+        translations: {},
       },
       open: true,
     };
     await expect(renderPermissionsModal(props)).toBeDefined();
-    fireEvent.change(document.querySelector('[data-test-search-field="true"]'), { target : { value: 'Search' } });
+    fireEvent.change(document.querySelector('[data-test-search-field="true"]'), { target : { value: 'Permissions' } });
     fireEvent.click(screen.getByText('ui-users.search'));
     expect(screen.getAllByText('stripes-components.tableEmpty')).toBeDefined();
   });
@@ -282,6 +283,9 @@ describe('PermissionsModal', () => {
     fireEvent.click(document.querySelector('[data-test-clear-button="true"]'));
 
     fireEvent.click(screen.getByText('permissionsss'));
+
+    fireEvent.click(screen.getByText('assigned'));
+    fireEvent.click(document.querySelector('[data-test-clear-button="true"]'));
   });
 
   it('Save and toggle Permissions', async () => {

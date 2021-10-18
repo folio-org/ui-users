@@ -14,6 +14,14 @@ jest.mock('@folio/stripes/core', () => {
     okapi: {
       tenant: 'diku',
       url: 'https://folio-testing-okapi.dev.folio.org',
+      translations: {
+        'stripes-components.Datepicker.calendar': 'calendar',
+        'stripes-components.Datepicker.calendarDaysList': 'calendar days list.',
+        'stripes-core.button.cancel': [{ type: 0, value: 'Cancel' }],
+        'ui-users.permission.modal.list.pane.header': 'Permissions',
+        'ui-users.permission.modal.list.pane.header.array': [{ type: 0, value: 'Permissions' }],
+        default: false,
+      },
     },
     store: {
       getState: () => ({
