@@ -1,6 +1,12 @@
 import React from 'react';
 
 jest.mock('@folio/stripes/smart-components', () => {
+  // *****************************************************
+  // The STRIPES mock props is not used as of now
+  // in any smart components so have commented it out
+  // for any future usage while mocking any smart component
+  // *****************************************************
+  //
   // const STRIPES = {
   //   connect: (Component) => Component,
   //   config: {},
