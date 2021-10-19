@@ -1,8 +1,5 @@
 import React from 'react';
-import { createMemoryHistory } from 'history';
-
-import { Router } from 'react-router-dom';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 
 import '__mock__/stripesCore.mock';
 import '__mock__/stripesSmartComponent.mock';
@@ -11,176 +8,31 @@ import ModalContent from './ModalContent';
 
 jest.unmock('@folio/stripes/components');
 
-const resourcesData = {
-  activeRecord: {
-    user: '47f7eaea-1a18-4058-907c-62b7d095c61b',
-  },
-  cancel: {
-    failed: false,
-    failedMutations: [],
-    hasLoaded: false,
-    isPending: false,
-    pendingMutations: [],
-    records: [],
-    successfulMutations: [],
-  },
-  claimReturned: {
-    failed: false,
-    failedMutations: [],
-    hasLoaded: false,
-    isPending: false,
-    pendingMutations: [],
-    records: [],
-    successfulMutations: [],
-  },
-  declareLost: {
-    failed: false,
-    failedMutations: [],
-    hasLoaded: false,
-    isPending: false,
-    pendingMutations: [],
-    records: [],
-    successfulMutations: [],
-  },
-  feefineshistory: {
-    dataKey: undefined,
-    failed: false,
-    failedMutations: [],
-    hasLoaded: true,
-    httpStatus: 200,
-    isPending: false,
-    module: '@folio/users',
-    other: {
-      resultInfo: {
-        diagnostics: [],
-        facets: [],
-      },
-      totalRecords: 0,
-    },
-    pendingMutations: [],
-    records: [
-      {
-        loanId: '40f5e9d9-38ac-458e-ade7-7795bd821652',
-        status: {
-          name: 'Open'
+const resources = (records = {}) => {
+  return {
+    feefineshistory: {
+      dataKey: undefined,
+      failed: false,
+      failedMutations: [],
+      hasLoaded: true,
+      httpStatus: 200,
+      isPending: false,
+      module: '@folio/users',
+      other: {
+        resultInfo: {
+          diagnostics: [],
+          facets: [],
         },
-        feeFineType: 'Lost item processing fee',
-      }],
-    resource: 'feefineshistory',
-    successfulMutations: [],
-    throwErrors: true,
-    url: 'https://folio-testing-okapi.dev.folio.org/accounts?query=(userId==47f7eaea-1a18-4058-907c-62b7d095c61b)&limit=10000',
-  },
-  markAsMissing: {
-    failed: false,
-    failedMutations: [],
-    hasLoaded: false,
-    isPending: false,
-    pendingMutations: [],
-    records: [],
-    successfulMutations: [],
-  }
-};
-
-const resourceFine = {
-  feefineshistory: {
-    dataKey: undefined,
-    failed: false,
-    failedMutations: [],
-    hasLoaded: true,
-    httpStatus: 200,
-    isPending: false,
-    module: '@folio/users',
-    other: {
-      resultInfo: {
-        diagnostics: [],
-        facets: [],
+        totalRecords: 0,
       },
-      totalRecords: 0,
+      pendingMutations: [],
+      records,
+      resource: 'feefineshistory',
+      successfulMutations: [],
+      throwErrors: true,
+      url: 'https://folio-testing-okapi.dev.folio.org/accounts?query=(userId==47f7eaea-1a18-4058-907c-62b7d095c61b)&limit=10000',
     },
-    pendingMutations: [],
-    records: [{
-      loanId: '40f5e9d9-38ac-458e-ade7-7795bd821652',
-      status: {
-        name: 'Closed'
-      },
-      feeFineType: 'Lost item processing fee',
-    }],
-    resource: 'feefineshistory',
-    successfulMutations: [],
-    throwErrors: true,
-    url: 'https://folio-testing-okapi.dev.folio.org/accounts?query=(userId==47f7eaea-1a18-4058-907c-62b7d095c61b)&limit=10000',
-  },
-};
-const resources = {
-  activeRecord: {
-    user: '47f7eaea-1a18-4058-907c-62b7d095c61b',
-  },
-  cancel: {
-    failed: false,
-    failedMutations: [],
-    hasLoaded: false,
-    isPending: false,
-    pendingMutations: [],
-    records: [],
-    successfulMutations: [],
-  },
-  claimReturned: {
-    failed: false,
-    failedMutations: [],
-    hasLoaded: false,
-    isPending: false,
-    pendingMutations: [],
-    records: [],
-    successfulMutations: [],
-  },
-  declareLost: {
-    failed: false,
-    failedMutations: [],
-    hasLoaded: false,
-    isPending: false,
-    pendingMutations: [],
-    records: [],
-    successfulMutations: [],
-  },
-  feefineshistory: {
-    dataKey: undefined,
-    failed: false,
-    failedMutations: [],
-    hasLoaded: true,
-    httpStatus: 200,
-    isPending: false,
-    module: '@folio/users',
-    other: {
-      resultInfo: {
-        diagnostics: [],
-        facets: [],
-      },
-      totalRecords: 0,
-    },
-    pendingMutations: [],
-    records: [
-      {
-        loanId: '40f5e9d9-38ac-458e-ade7-7795bd821652',
-        status: {
-          name: 'Open'
-        },
-        feeFineType: 'Lost item fee',
-      }],
-    resource: 'feefineshistory',
-    successfulMutations: [],
-    throwErrors: true,
-    url: 'https://folio-testing-okapi.dev.folio.org/accounts?query=(userId==47f7eaea-1a18-4058-907c-62b7d095c61b)&limit=10000',
-  },
-  markAsMissing: {
-    failed: false,
-    failedMutations: [],
-    hasLoaded: false,
-    isPending: false,
-    pendingMutations: [],
-    records: [],
-    successfulMutations: [],
-  }
+  };
 };
 
 const httpHeaders = {
@@ -275,7 +127,7 @@ const mutator = {
   },
   declareLost: {
     // eslint-disable-next-line prefer-promise-reject-errors
-    POST: () => new Promise((_, reject) => {
+    POST: jest.fn(() => new Promise((resolve, reject) => {
       const error = { headers: new Headers(httpHeaders),
         error: {
           errors: [
@@ -284,8 +136,12 @@ const mutator = {
             },
           ],
         } };
-      reject(error);
-    }),
+      const res = {
+        json: () => Promise.resolve(error),
+        headers: new Headers(httpHeaders),
+      };
+      reject(res);
+    })),
     PUT: jest.fn(),
     DELETE: jest.fn(),
     cancel: jest.fn(),
@@ -358,85 +214,54 @@ const currentUser = {
   username: 'diku_admin',
 };
 
-const loan = {
-  action: 'recallrequested',
-  borrower: { firstName: 'Justen', lastName: 'Hilll', middleName: 'Else', barcode: '344058867767195' },
-  dueDate: '2017-03-19T18:32:31.000+00:00',
-  feesAndFines: { amountRemainingToPay: 0 },
-  id: '40f5e9d9-38ac-458e-ade7-7795bd821652',
-  item: {
-    id: '1b6d3338-186e-4e35-9e75-1b886b0da53e',
-    holdingsRecordId: '65cb2bf0-d4c2-4886-8ad0-b76f1ba75d61',
-    instanceId: '7fbd5d84-62d1-44c6-9c45-6cb173998bbd',
-    title: "Bridget Jones's Baby: the diaries",
-    barcode: '453987605438',
-    callNumber: 'PR6056.I4588 B749 2016',
-    callNumberComponents: { callNumber: 'PR6056.I4588 B749 2016' },
-    contributors: [
-      {
-        name: 'Fielding, Helen',
-      }],
-    copyNumber: 'Copy 1',
-    location: { name: 'Main Library' },
-    materialType: { name: 'book' },
-    status: { name: 'Checked out', date: '2021-10-14T03:22:56.490+00:00' },
-  },
-  itemId: '1b6d3338-186e-4e35-9e75-1b886b0da53e',
-  loanDate: '2017-03-05T18:32:31Z',
-  loanPolicy: { name: null },
-  lostItemPolicy: { name: null },
-  metadata: { createdDate: '2021-10-14T03:23:01.455+00:00', updatedDate: '2021-10-14T03:23:01.455+00:00' },
-  overdueFinePolicy: { name: null },
-  renewalCount: 0,
-  status: { name: 'Open' },
-  userId: '47f7eaea-1a18-4058-907c-62b7d095c61b',
-};
-
-const loanData = {
-  action: 'claimedReturned',
-  borrower: { firstName: 'Justen', lastName: 'Hilll', middleName: 'Else', barcode: '344058867767195' },
-  dueDate: '2017-03-19T18:32:31.000+00:00',
-  feesAndFines: {
-    amountRemainingToPay: 0,
-  },
-  id: '40f5e9d9-38ac-458e-ade7-7795bd821652',
-  item: {
-    id: '1b6d3338-186e-4e35-9e75-1b886b0da53e',
-    holdingsRecordId: '65cb2bf0-d4c2-4886-8ad0-b76f1ba75d61',
-    instanceId: '7fbd5d84-62d1-44c6-9c45-6cb173998bbd',
-    title: "Bridget Jones's Baby: the diaries",
-    barcode: '453987605438',
-    callNumber: 'PR6056.I4588 B749 2016',
-    callNumberComponents: { callNumber: 'PR6056.I4588 B749 2016' },
-    contributors: [
-      {
-        name: 'Fielding, Helen',
-      }],
-    copyNumber: 'Copy 1',
-    location: { name: 'Main Library' },
-    materialType: { name: 'book' },
-    status: { name: 'Checked out', date: '2021-10-14T03:22:56.490+00:00' },
-  },
-  itemId: '1b6d3338-186e-4e35-9e75-1b886b0da53e',
-  loanDate: '2017-03-05T18:32:31Z',
-  loanPolicy: { name: null },
-  lostItemPolicy: { name: null },
-  metadata: { createdDate: '2021-10-14T03:23:01.455+00:00', updatedDate: '2021-10-14T03:23:01.455+00:00' },
-  overdueFinePolicy: { name: null },
-  renewalCount: 0,
-  status: { name: 'Open' },
-  userId: '47f7eaea-1a18-4058-907c-62b7d095c61b',
+const loan = (actionName) => {
+  return {
+    action: actionName,
+    borrower: { firstName: 'Justen', lastName: 'Hilll', middleName: 'Else', barcode: '344058867767195' },
+    dueDate: '2017-03-19T18:32:31.000+00:00',
+    feesAndFines: {
+      amountRemainingToPay: 0,
+    },
+    id: '40f5e9d9-38ac-458e-ade7-7795bd821652',
+    item: {
+      id: '1b6d3338-186e-4e35-9e75-1b886b0da53e',
+      holdingsRecordId: '65cb2bf0-d4c2-4886-8ad0-b76f1ba75d61',
+      instanceId: '7fbd5d84-62d1-44c6-9c45-6cb173998bbd',
+      title: "Bridget Jones's Baby: the diaries",
+      barcode: '453987605438',
+      callNumber: 'PR6056.I4588 B749 2016',
+      callNumberComponents: { callNumber: 'PR6056.I4588 B749 2016' },
+      contributors: [
+        {
+          name: 'Fielding, Helen',
+        }],
+      copyNumber: 'Copy 1',
+      location: { name: 'Main Library' },
+      materialType: { name: 'book' },
+      status: { name: 'Checked out', date: '2021-10-14T03:22:56.490+00:00' },
+    },
+    itemId: '1b6d3338-186e-4e35-9e75-1b886b0da53e',
+    loanDate: '2017-03-05T18:32:31Z',
+    loanPolicy: { name: null },
+    lostItemPolicy: { name: null },
+    metadata: { createdDate: '2021-10-14T03:23:01.455+00:00', updatedDate: '2021-10-14T03:23:01.455+00:00' },
+    overdueFinePolicy: { name: null },
+    renewalCount: 0,
+    status: { name: 'Open' },
+    userId: '47f7eaea-1a18-4058-907c-62b7d095c61b',
+  };
 };
 
 const renderModalContent = (props) => render(<ModalContent {...props} />);
 
 describe('Modal Content', () => {
   it('Declare Lost Confirm Dialog box', async () => {
+    const actionName = 'recallrequested';
     const props = {
       isLoading: false,
       resources,
       mutator,
-      loan,
+      loan: loan(actionName),
       loanAction: 'declareLost',
       itemRequestCount: 0,
       activeRecord: {},
@@ -464,11 +289,12 @@ describe('Modal Content', () => {
   });
 
   it('Cancel Dialog box', async () => {
+    const actionName = 'recallrequested';
     const props = {
       isLoading: false,
       resources,
       mutator,
-      loan,
+      loan: loan(actionName),
       loanAction: 'declareLost',
       itemRequestCount: 0,
       activeRecord: {},
@@ -496,11 +322,12 @@ describe('Modal Content', () => {
   });
 
   it('ClaimedReturn confirm dialog box', async () => {
+    const actionName = 'recallrequested';
     const props = {
       isLoading: false,
       resources,
       mutator,
-      loan,
+      loan: loan(actionName),
       loanAction: 'claimReturned',
       itemRequestCount: 0,
       activeRecord: {},
@@ -527,11 +354,12 @@ describe('Modal Content', () => {
   });
 
   it('Claimed return for missing item check', async () => {
+    const actionName = 'claimedReturned';
     const props = {
       isLoading: false,
       resources,
       mutator,
-      loan: loanData,
+      loan: loan(actionName),
       loanAction: 'markAsMissing',
       itemRequestCount: 0,
       activeRecord: {},
@@ -561,11 +389,20 @@ describe('Modal Content', () => {
     fireEvent.click(document.querySelector('[data-test-dialog-confirm-button="true"]'));
   });
   it('Claimed return for Lost item check', async () => {
+    const record = [
+      {
+        loanId: '40f5e9d9-38ac-458e-ade7-7795bd821652',
+        status: {
+          name: 'Open'
+        },
+        feeFineType: 'Lost item fee',
+      }];
+    const actionName = 'claimedReturned';
     const props = {
       isLoading: false,
-      resources,
+      resources: resources(record),
       mutator,
-      loan: loanData,
+      loan: loan(actionName),
       loanAction: 'declareLost',
       itemRequestCount: 0,
       activeRecord: {},
@@ -593,11 +430,20 @@ describe('Modal Content', () => {
   });
 
   it('Check if users have open fine', async () => {
+    const record = [
+      {
+        loanId: '40f5e9d9-38ac-458e-ade7-7795bd821652',
+        status: {
+          name: 'Open'
+        },
+        feeFineType: 'Lost item processing fee',
+      }];
+    const actionName = 'claimedReturned';
     const props = {
       isLoading: false,
-      resources: resourcesData,
+      resources: resources(record),
       mutator,
-      loan: loanData,
+      loan: loan(actionName),
       loanAction: 'declareLost',
       itemRequestCount: 0,
       activeRecord: {},
@@ -623,11 +469,19 @@ describe('Modal Content', () => {
     fireEvent.click(document.querySelector('[data-test-dialog-confirm-button="true"]'));
   });
   it('Checking if the user has closed fine', async () => {
+    const record = [{
+      loanId: '40f5e9d9-38ac-458e-ade7-7795bd821652',
+      status: {
+        name: 'Closed'
+      },
+      feeFineType: 'Lost item processing fee',
+    }];
+    const actionName = 'claimedReturned';
     const props = {
       isLoading: false,
-      resources: resourceFine,
+      resources: resources(record),
       mutator: mutatorSuccess,
-      loan: loanData,
+      loan: loan(actionName),
       loanAction: 'declareLost',
       itemRequestCount: 0,
       activeRecord: {},
