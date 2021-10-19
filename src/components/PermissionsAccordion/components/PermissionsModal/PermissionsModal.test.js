@@ -130,7 +130,7 @@ const filtersConfig = [
   },
   {
     cql: 'status',
-    filter: jest.fn((permissions, filters, assignedPermissionIds) => {
+    filter: jest.fn((permissions) => {
       return permissions;
     }),
     label: <div>status</div>,
