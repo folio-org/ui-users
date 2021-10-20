@@ -15,10 +15,10 @@ import {
   Headline
 } from '@folio/stripes/components';
 import {
+  stripesShape,
   IfPermission,
   stripesConnect,
-  stripesShape,
-} from '@folio/stripes-core';
+} from '@folio/stripes/core';
 
 import { getPermissionLabelString } from '../data/converters/permission';
 import PermissionModal from './components/PermissionsModal';

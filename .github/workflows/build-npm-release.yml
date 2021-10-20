@@ -45,22 +45,27 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Extract tag 
-        run: echo "TAG=$(echo ${GITHUB_REF##*/})" >> $GITHUB_ENV
+      # Runs a single command using the runners shell
+      - name: Print tag info
+        run: echo "Building release tag, ${GITHUB_REF}"
+
+      - name: Set TAG_VERSION
+        run: echo "TAG_VERSION=$(echo ${GITHUB_REF#refs/tags/v})" >> $GITHUB_ENV
 
       - name: Get version from package.json
-        id: version
+        id: package_version
         uses: notiz-dev/github-action-json-property@release
-        with: 
+        with:
           path: 'package.json'
           prop_path: 'version'
-          
-      - name: Set package.json version with a 'v' prefix.
-        run: echo "PACKAGE_VERSION = $(v${{ steps.version.outputs.prop }})" >> $GITHUB_ENV
-      
+
       - name: Check matching tag and version in package.json
-        if: ${{ env.TAG != env.PACKAGE_VERSION }}
-        run: exit 1
+        if: ${{ env.TAG_VERSION != steps.package_version.outputs.prop }}
+        run: |
+          echo "Tag version, ${TAG_VERSION}, does not match package.json version, ${PACKAGE_VERSION}."
+          exit 1
+        env:
+          PACKAGE_VERSION: ${{ steps.package_version.outputs.prop }}
 
       - name: Setup kernel for react native, increase watchers
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
@@ -91,11 +96,11 @@ jobs:
         if : ${{ env.COMPILE_TRANSLATION_FILES == 'true' }}
         run: yarn formatjs-compile
 
-      - name: Generate Module descriptor
+      - name: Generate FOLIO module descriptor
         if: ${{ env.PUBLISH_MOD_DESCRIPTOR == 'true' }}
         run: yarn build-mod-descriptor
 
-      - name: debug mod descriptor
+      - name: Print FOLIO module descriptor
         if: ${{ env.PUBLISH_MOD_DESCRIPTOR == 'true' }}
         run: cat module-descriptor.json
 
@@ -113,8 +118,8 @@ jobs:
         if: ${{ env.PUBLISH_MOD_DESCRIPTOR == 'true' }}
         run: |
           docker pull folioorg/okapi:latest
-          docker run --name okapiLatest -t -detach folioorg/okapi:latest dev
-          echo "OKAPI_IP = $(docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' okapiLatest)" >> $GITHUB_ENV
+          docker run --name okapi -t -detach folioorg/okapi:latest dev
+          echo "OKAPI_IP=$(docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' okapi)" >> $GITHUB_ENV
           sleep 10
 
       - name: Pull all Module descriptors to local Okapi instance
@@ -132,7 +137,7 @@ jobs:
         if: ${{ env.PUBLISH_MOD_DESCRIPTOR == 'true' }}
         uses: fjogeleit/http-request-action@master
         with:
-          url: 'http://172.17.0.2:9130/_/proxy/modules?preRelease=false&npmSnapshot=false'
+          url: http://${{ env.OKAPI_IP }}:9130/_/proxy/modules?preRelease=false&npmSnapshot=false
           method: 'POST'
           contentType: 'application/json; charset=utf-8'
           customHeaders: '{ "Accept": "application/json; charset=utf-8" }'
@@ -145,7 +150,7 @@ jobs:
           github_token: ${{ github.token }}
           files: "${{ env.JEST_JUNIT_OUTPUT_DIR }}/*.xml"
           check_name: Jest Unit Test Results
-          comment_on_pr: true
+          comment_mode: update last
           comment_title: Jest Unit Test Statistics
 
       - name: Publish Jest coverage report
@@ -163,7 +168,7 @@ jobs:
           github_token: ${{ github.token }}
           files: "${{ env.BIGTEST_JUNIT_OUTPUT_DIR }}/*.xml"
           check_name: BigTest Unit Test Results
-          comment_on_pr: true
+          comment_mode: update last
           comment_title: BigTest Unit Test Statistics
 
       - name: Publish BigTest coverage report
@@ -184,7 +189,7 @@ jobs:
 
       - name: Set default branch as env variable
         run: echo "DEFAULT_BRANCH=${{ github.event.repository.default_branch }}" >> $GITHUB_ENV
-          
+
       - name: Fetch branches for SonarCloud
         run: git fetch --no-tags ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY} +refs/heads/${{ env.DEFAULT_BRANCH }}:refs/remotes/origin/${{ env.DEFAULT_BRANCH }}
 
@@ -211,9 +216,17 @@ jobs:
           always-auth: true
 
       - name: Set _auth in .npmrc
-        run: npm config set @folio:registry https://repository.folio.org/repository/npm-folio/ &&  npm config set _auth ${{ env.NODE_AUTH_TOKEN }}
+        run: |
+          npm config set @folio:registry $FOLIO_NPM_REGISTRY
+          npm config set _auth $NODE_AUTH_TOKEN
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Exclude some CI-generated artifacts in package
+        run: |
+          echo ".github" >> .npmignore
+          echo ".scannerwork" >> .npmignore
+          cat .npmignore
 
       - name: Publish NPM to FOLIO NPM registry
         run: npm publish

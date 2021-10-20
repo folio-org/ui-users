@@ -9,8 +9,10 @@ import {
 } from '@folio/stripes/components';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
-import { getFullName } from '../util';
-import { isRefundAllowed } from './accountFunctions';
+import {
+  getFullName,
+  isRefundAllowed,
+} from '../util';
 
 import { refundClaimReturned } from '../../constants';
 

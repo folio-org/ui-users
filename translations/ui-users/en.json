@@ -914,7 +914,7 @@
   "permission.edituserservicepoints": "Users: Can assign and unassign service points to users",
   "permission.feefineactions": "Fee/Fine Details: Can create, edit and remove fee/fine actions",
   "permission.feesfines.actions.all": "Users: Can create, edit and remove fees/fines",
-  "permission.loans.all": "Users: User loans view, edit, renew (all)",
+  "permission.loans.all": "Users: User loans view, change due date, renew",
   "permission.loans.anonymize": "Users: User loans anonymize",
   "permission.loans.change-due-date": "Users: User loans change due date",
   "permission.loans.claim-item-returned": "Users: User loans claim returned",

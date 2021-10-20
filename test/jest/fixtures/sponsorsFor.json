@@ -1,0 +1,17 @@
+[
+  {
+    "userId" : "bec20636-fb68-41fd-84ea-2cf910673599",
+    "proxyUserId" : "2205005b-ca51-4a04-87fd-938eefa8f6de",
+    "id" : "0b8ca4d4-1fe8-456c-ad68-12bb4bf8e8c7",
+    "requestForSponsor" : "Yes",
+    "notificationsTo" : "Sponsor",
+    "accrueTo" : "Sponsor",
+    "status" : "Active",
+    "metadata" : {
+      "createdDate" : "2021-10-11T19:45:53.149+00:00",
+      "createdByUserId" : "dae881f7-9432-5723-ba4e-7fab613efe77",
+      "updatedDate" : "2021-10-11T19:45:53.149+00:00",
+      "updatedByUserId" : "dae881f7-9432-5723-ba4e-7fab613efe77"
+    }
+  }
+]
