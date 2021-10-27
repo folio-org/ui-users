@@ -30,52 +30,55 @@ const testData = {
   },
 };
 
+describe('FeeFineReport', () => {
+  describe('Generate Fee/Fine Report in CSV format', () => {
+    describe('(Valid Data)', () => {
+      const fee = new FeeFineReport(reportData);
 
-describe('Generate Fee/Fine Report in CSV format', () => {
-  const fee = new FeeFineReport(reportData);
+      it('Return correct report data', async () => {
+        expect(fee.data).toBe(reportData.data);
+      });
 
-  it('Return correct report data', async () => {
-    expect(fee.data).toBe(reportData.data);
-  });
-
-  it('CSV method must be called', async () => {
-    const toCSVSpy = jest.spyOn(fee, 'toCSV');
-    fee.toCSV();
-
-    expect(toCSVSpy).toHaveBeenCalled();
-  });
-});
-
-describe('Generate Fee/Fine Report in CSV format (Empty Data)', () => {
-  const fee = new FeeFineReport(emptyReportData);
-
-  it('Return empty data', async () => {
-    expect(fee.data).toBe(emptyReportData.data);
-  });
-
-  it('CSV method must throw error in map', async () => {
-    const toCSVSpy = jest.spyOn(fee, 'toCSV');
-    try {
-      fee.toCSV();
-    } catch (error) {
-      expect(toCSVSpy).toThrowError("Cannot read property 'columnsMap' of undefined");
-    }
-  });
-});
-
-describe('Generate Fee/Fine Report in CSV format (Invalid Data)', () => {
-  describe('Fee reports are found and account details are invalid', () => {
-    const fee = new FeeFineReport(testData);
-
-    it('Return correct report data', async () => {
-      expect(fee.data).toBe(testData.data);
+      it('CSV method must be called', async () => {
+        const toCSVSpy = jest.spyOn(fee, 'toCSV');
+        fee.toCSV();
+        expect(toCSVSpy).toHaveBeenCalled();
+      });
     });
 
-    it('CSV method must be called', async () => {
-      const toCSVSpy = jest.spyOn(fee, 'toCSV');
-      fee.toCSV();
+    describe('(Empty Data)', () => {
+      const fee = new FeeFineReport(emptyReportData);
 
-      expect(toCSVSpy).toHaveBeenCalled();
+      it('Return empty data', async () => {
+        expect(fee.data).toBe(emptyReportData.data);
+      });
+
+      it('CSV method must throw error in map', async () => {
+        const toCSVSpy = jest.spyOn(fee, 'toCSV');
+        try {
+          fee.toCSV();
+        } catch (error) {
+          expect(toCSVSpy).toThrowError("Cannot read property 'columnsMap' of undefined");
+        }
+      });
+    });
+
+    describe('(Invalid Data)', () => {
+      describe('Fee reports are found and account details are invalid', () => {
+        const fee = new FeeFineReport(testData);
+
+        it('Return correct report data', async () => {
+          expect(fee.data).toBe(testData.data);
+        });
+
+        it('CSV method must be called', async () => {
+          const toCSVSpy = jest.spyOn(fee, 'toCSV');
+          fee.toCSV();
+
+          expect(toCSVSpy).toHaveBeenCalled();
+        });
+      });
     });
   });
 });
+
