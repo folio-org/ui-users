@@ -21,6 +21,10 @@ import {
   ChargeNotice,
 } from './FeeFinesTable';
 
+import {
+  MAX_RECORDS,
+} from '../constants';
+
 const columnMapping = {
   feeFineType: (
     <Label
@@ -58,7 +62,7 @@ class FeeFineSettings extends React.Component {
     templates: {
       type: 'okapi',
       records: 'templates',
-      path: 'templates?limit=50&query=cql.allRecords=1 AND category=""',
+      path: `templates?limit=${MAX_RECORDS}&query=cql.allRecords=1 AND category=""`,
       accumulate: 'true',
     },
     activeRecord: {},

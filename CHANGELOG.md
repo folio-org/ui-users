@@ -1,8 +1,9 @@
 # Change history for ui-users
 
 ## 7.0.3 IN PROGRESS
-* Fix the issue when fee/fine details doesn't open up in loans. Refs UIU-2459.
 
+* Fix the issue when fee/fine details doesn't open up in loans. Refs UIU-2459.
+* Fix FeeFineAction and FeeFineCharge notice templates not appearing in Manual Charges settings. Refs UIU-2452.
 
 ## [7.0.2](https://github.com/folio-org/ui-users/tree/v7.0.2) (2021-10-25)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v7.0.1...v7.0.2)
