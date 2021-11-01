@@ -603,7 +603,7 @@
     "permission.edituserservicepoints": "用户：可以为用户分配和取消分配服务点",
     "permission.feefineactions": "费用/罚款详情：可以创建、编辑和移除费用/罚款操作",
     "permission.feesfines.actions.all": "用户：可以创建、编辑和移除费用/罚款",
-    "permission.loans.all": "用户：用户借阅查看、编辑、续借（全部）",
+    "permission.loans.all": "用户：用户借阅查看、改变到期日、续借",
     "permission.loans.claim-item-returned": "用户：用户借阅声称已还",
     "permission.loans.declare-item-lost": "用户：用户借阅声称遗失",
     "permission.loans.renew-override": "用户：用户通过越权续借",
