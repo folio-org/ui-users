@@ -1,0 +1,54 @@
+{
+  "addresses": [],
+  "curServicePoint": {
+    "id": "7c5abc9f-f3d7-4856-b8d7-6712462ca007",
+    "name": "Online",
+    "code": "Online",
+    "discoveryDisplayName": "Online",
+    "shelvingLagTime": 0,
+    "pickupLocation": false,
+    "locationIds": [],
+    "metadata": { "createdDate": "2021-10-14T03:22:53.897+00:00", "updatedDate": "2021-10-14T03:22:53.897+00:00" },
+    "staffSlips": []
+  },
+  "email": "admin@diku.example.org",
+  "firstName": "DIKU",
+  "id": "a51df26e-b472-5c06-8362-01025b90238b",
+  "lastName": "ADMINISTRATOR",
+  "servicePoints": [
+    {
+      "code": "Online",
+      "discoveryDisplayName": "Online",
+      "id": "7c5abc9f-f3d7-4856-b8d7-6712462ca007",
+      "locationIds": [],
+      "metadata": { "createdDate": "2021-10-14T03:22:53.897+00:00", "updatedDate": "2021-10-14T03:22:53.897+00:00" },
+      "name": "Online",
+      "pickupLocation": false,
+      "shelvingLagTime": 0,
+      "staffSlips": []
+    },
+    {
+      "code": "cd2",
+      "discoveryDisplayName": "Circulation Desk -- Back Entrance",
+      "holdShelfExpiryPeriod": { "duration": 5, "intervalId": "Days" },
+      "id": "c4c90014-c8c9-4ade-8f24-b5e313319f4b",
+      "locationIds": [],
+      "metadata": { "createdDate": "2021-10-14T03:22:53.906+00:00", "updatedDate": "2021-10-14T03:22:53.906+00:00" },
+      "name": "Circ Desk 2",
+      "pickupLocation": true,
+      "staffSlips": []
+    },
+    {
+      "code": "cd1",
+      "discoveryDisplayName": "Circulation Desk -- Hallway",
+      "holdShelfExpiryPeriod": { "duration": 3, "intervalId": "Weeks" },
+      "id": "3a40852d-49fd-4df2-a1f9-6e2641a6e91f",
+      "locationIds": [],
+      "metadata": { "createdDate": "2021-10-14T03:22:53.912+00:00", "updatedDate": "2021-10-14T03:22:53.912+00:00" },
+      "name": "Circ Desk 1",
+      "pickupLocation": true,
+      "staffSlips": []
+    }
+  ],
+  "username": "diku_admin"
+}

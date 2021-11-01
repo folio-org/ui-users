@@ -332,7 +332,12 @@ class AccountDetails extends React.Component {
 
     const allAccounts = _.get(resources, ['feefineshistory', 'records'], []);
     const loan = _.get(resources, ['loans', 'records'], []).filter((l) => l.id === account.loanId);
-    const isLoanAnonymized = loan.length === 0;
+
+    // not all accounts are attached to loans. for those that are
+    const hasLoan = !!account.barcode;
+
+    // after loan anonymization, the loan will be empty but the barcode will not be
+    const isLoanAnonymized = loan.length === 0 && hasLoan;
     let balance = 0;
 
     allAccounts.forEach((a) => {
@@ -403,6 +408,26 @@ class AccountDetails extends React.Component {
     const totalPaidAmount = calculateTotalPaymentAmount(resources?.feefineshistory?.records, feeFineActions);
     const refundAllowed = isRefundAllowed(account, feeFineActions);
     const cancelAllowed = isCancelAllowed(account);
+
+    // the loan-details display is special.
+    // other loan-related fields use <NoValue /> when a loan has been anonymized,
+    // but the loan-details value needs to show "Anonymized" instead.
+    // OTOH, if an account was never attached to a loan in the first place,
+    // then the loan-details value _should_ be <NoValue />.
+    let loanDetailsValue = <NoValue />;
+    if (hasLoan) {
+      if (isLoanAnonymized) {
+        loanDetailsValue = <FormattedMessage id="ui-users.details.label.loanAnonymized" />;
+      } else {
+        loanDetailsValue = (
+          <Link
+            to={`/users/${params.id}/loans/view/${loanId}`}
+          >
+            <FormattedMessage id="ui-users.details.field.loan" />
+          </Link>
+        );
+      }
+    }
 
     return (
       <Paneset isRoot>
@@ -513,7 +538,7 @@ class AccountDetails extends React.Component {
               />
             </Col>
             <Col
-              data-test-latestPaymentStatus
+              data-test-latest-payment-status
               xs={1.5}
             >
               <KeyValue
@@ -622,26 +647,13 @@ class AccountDetails extends React.Component {
               />
             </Col>
             <Col
-              data-test-loan-details
+              data-testid="loan-details"
               xs={1.5}
             >
-              {(loanId && user.id === account.userId && !isLoanAnonymized) ?
-                <KeyValue
-                  label={<FormattedMessage id="ui-users.details.label.loanDetails" />}
-                  value={(
-                    <Link
-                      to={`/users/${params.id}/loans/view/${loanId}`}
-                    >
-                      <FormattedMessage id="ui-users.details.field.loan" />
-                    </Link>
-                  )}
-                />
-                :
-                <KeyValue
-                  label={<FormattedMessage id="ui-users.details.label.loanDetails" />}
-                  value={<FormattedMessage id="ui-users.details.label.loanAnonymized" />}
-                />
-              }
+              <KeyValue
+                label={<FormattedMessage id="ui-users.details.label.loanDetails" />}
+                value={loanDetailsValue}
+              />
             </Col>
           </Row>
           <br />
