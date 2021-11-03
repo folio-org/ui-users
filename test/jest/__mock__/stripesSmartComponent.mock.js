@@ -1,5 +1,7 @@
 import React from 'react';
 
+/* eslint-disable */
+
 jest.mock('@folio/stripes/smart-components', () => {
   // *****************************************************
   // The STRIPES mock props is not used as of now
@@ -43,11 +45,12 @@ jest.mock('@folio/stripes/smart-components', () => {
   // };
   return {
     ...jest.requireActual('@folio/stripes/smart-components'),
+    AddressEditList: () => <div data-testid="address-edit-list">AddressEditList</div>,
+    ControlledVocab: ({ validate }) => <div data-testid="controlled-vocab">ControlledVocab</div>,
     LocationLookup: () => <div>LocationLookup</div>,
-    NotesSmartAccordion: () => <div>NotesSmartAccordion</div>,
-    ViewMetaData: () => <div>ViewMetaData</div>,
-    AddressEditList: () => <div>AddressEditList</div>,
     NotePopupModal: () => <div>NotePopupModal</div>,
+    NotesSmartAccordion: () => <div>NotesSmartAccordion</div>,
     ViewCustomFieldsRecord: () => <div>ViewCustomFieldsRecord</div>,
+    ViewMetaData: () => <div>ViewMetaData</div>,
   };
 });
