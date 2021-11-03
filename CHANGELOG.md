@@ -66,6 +66,7 @@
 * Create Jest/RTL test for `ModalContent`. Refs UIU-2284.
 * Create Jest/RTL test for `filtersConfig`. Refs UIU-2354.
 * Create Jest/RTL test for `FeeFineReport`. Refs UIU-2294.
+* Create Jest/RTL test for `refundTransferClaimReturned`. Refs UIU-2332.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
