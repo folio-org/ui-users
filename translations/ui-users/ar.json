@@ -603,7 +603,7 @@
     "permission.edituserservicepoints": "المستخدمين: إمكانية تعيين نقاط الخدمة إلى المستخدمين وإلغاء تعيينها",
     "permission.feefineactions": "تفاصيل الرسوم والغرامات: إمكانية إنشاء، وتحرير، وإزالة إجراءات الرسوم والغرامات",
     "permission.feesfines.actions.all": "المستخدمين: إمكانية إنشاء، وتحرير وإزالة الرسوم والغرامات",
-    "permission.loans.all": "المستخدمين: عرض وتحرير وتجديد إعارات المستخدم (الكل)",
+    "permission.loans.all": "المستخدمين: عرض إعارات المستخدم، تغيير تاريخ الاستحقاق، تجديد",
     "permission.loans.claim-item-returned": "المستخدمين: إعارات المستخدم المدعى إعادتها",
     "permission.loans.declare-item-lost": "المستخدمين: إعارات المستخدم المعلن ضياعها",
     "permission.loans.renew-override": "المستخدمين: تجديد إعارات المستخدم عبر التخطي",
