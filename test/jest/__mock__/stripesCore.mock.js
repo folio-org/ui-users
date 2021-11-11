@@ -44,7 +44,7 @@ jest.mock('@folio/stripes/core', () => {
     withOkapi: true,
   };
 
-      // eslint-disable-next-line react/prop-types
+  // eslint-disable-next-line react/prop-types
   const stripesConnect = Component => ({ mutator, resources, stripes, ...rest }) => {
     const fakeMutator = mutator || Object.keys(Component.manifest || {}).reduce((acc, mutatorName) => {
       const returnValue = Component.manifest[mutatorName].records ? [] : {};
