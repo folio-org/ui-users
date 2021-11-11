@@ -11,6 +11,7 @@
 * Fix FeeFineAction and FeeFineCharge notice templates not appearing in Manual Charges settings. Refs UIU-2452.
 * Fix the issue when fee/fine details doesn't open up in loans. Refs UIU-2459.
 * Fix the issue when fee/fine is partially paid, then refunded, User Details show the full amount of the fee/fine as refunded. Refs UIU-2455.
+* Fix the issue when a fee/fine is refunded due to a CLAIMED RETURNED, the refund amount does not appear in User Details. Refs UIU-2469.
 
 ## [7.0.1](https://github.com/folio-org/ui-users/tree/v7.0.1) (2021-10-07)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.1.0...v7.0.1)
