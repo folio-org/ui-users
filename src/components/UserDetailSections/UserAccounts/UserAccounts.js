@@ -15,7 +15,12 @@ import {
 } from '@folio/stripes/components';
 import { useStripes } from '@folio/stripes/core';
 
-import { accountStatuses, refundStatuses, loanActions } from '../../../constants';
+import {
+  accountStatuses,
+  refundStatuses,
+  refundClaimReturned,
+  loanActions,
+} from '../../../constants';
 
 
 /**
@@ -64,7 +69,10 @@ const UserAccounts = ({
     const closed = records.filter(account => account?.status?.name === accountStatuses.CLOSED);
 
     // get refunded actions and refunds total amount
-    const refundStatusesValues = Object.values(refundStatuses);
+    const refundStatusesValues = [
+      ...Object.values(refundStatuses),
+      refundClaimReturned.REFUNDED_ACTION,
+    ];
     const feeFineActions = resources.feefineactions.records ?? [];
     const refunded = feeFineActions.filter((feeFineAction) => refundStatusesValues.includes(feeFineAction.typeAction));
     const refundedTotal = refunded.reduce((acc, { amountAction }) => (acc + amountAction), 0);

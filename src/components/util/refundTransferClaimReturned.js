@@ -89,11 +89,13 @@ refundTransfers = async (loan, props) => {
     const {
       okapi: {
         currentUser: {
-          id: currentUserId,
           curServicePoint: {
             id: servicePointId
           }
         },
+      },
+      user: {
+        id: userId,
       },
     } = props;
 
@@ -138,7 +140,7 @@ refundTransfers = async (loan, props) => {
           source: orderedActions[0].source,
           paymentMethod: '',
           accountId: orderedActions[0].accountId,
-          userId: currentUserId,
+          userId,
           createdAt: servicePointId,
         };
         return persistRefundAction(newAction);
