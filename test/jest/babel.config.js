@@ -6,6 +6,7 @@ babelOptions.plugins.push([
     'alias': {
       '__mock__': './test/jest/__mock__',
       'fixtures': './test/jest/fixtures',
+      'helpers': './test/jest/helpers',
     },
   },
 ]);
