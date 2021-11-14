@@ -18,7 +18,6 @@ import {
 import { stripesShape } from '@folio/stripes/core';
 
 import { DueDatePicker } from '@folio/stripes/smart-components';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 import BulkOverrideLoansList from './BulkOverrideLoansList';
 
@@ -219,7 +218,7 @@ class BulkOverrideInfo extends React.Component {
 
     return (
       <div>
-        <SafeHTMLMessage
+        <FormattedMessage
           id="ui-users.brd.itemsSelected"
           values={{ count: selectedItems }}
         />

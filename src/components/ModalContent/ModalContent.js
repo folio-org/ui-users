@@ -12,7 +12,6 @@ import {
   Col,
 } from '@folio/stripes/components';
 import { stripesConnect } from '@folio/stripes/core';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 import { getOpenRequestsPath } from '../util';
 
@@ -247,7 +246,7 @@ class ModalContent extends React.Component {
 
     return (
       <div>
-        <SafeHTMLMessage
+        <FormattedMessage
           id={`ui-users.loans.${loanAction}DialogBody`}
           values={{
             title: loan?.item?.title,

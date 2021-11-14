@@ -7,7 +7,6 @@ import {
   Modal,
   ModalFooter,
 } from '@folio/stripes/components';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 import ErrorModal from '../ErrorModal';
 import ModalContent from '../ModalContent';
@@ -46,9 +45,9 @@ class LoanActionDialog extends React.Component {
 
     const informativeErrorMessage = (
       <>
-        <SafeHTMLMessage id="ui-users.feefines.errors.notBilledMessage" />
+        <FormattedMessage id="ui-users.feefines.errors.notBilledMessage" />
         <br />
-        <SafeHTMLMessage id="ui-users.feefines.errors.updateOwnerMessage" />
+        <FormattedMessage id="ui-users.feefines.errors.updateOwnerMessage" />
       </>
     );
 
