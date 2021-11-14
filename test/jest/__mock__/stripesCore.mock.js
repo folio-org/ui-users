@@ -1,20 +1,5 @@
 import React from 'react';
 
-/*
-  user: PropTypes.shape({
-    user: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      username: PropTypes.string.isRequired,
-      firstName: PropTypes.string,
-      lastName: PropTypes.string,
-      email: PropTypes.string,
-      addresses: PropTypes.arrayOf(PropTypes.object),
-    }),
-    perms: PropTypes.object,
-  }),
-});
-*/
-
 jest.mock('@folio/stripes/core', () => {
   const STRIPES = {
     actionNames: [],
