@@ -239,7 +239,7 @@ const renderLimitsSettings = (props) => renderWithRouter(<LimitsSettings {...pro
 describe('LimitsSettings', () => {
   it('Component should render', () => {
     const props = {
-      resources: {},
+      resources,
       match: { path: '/settings/users/limits' },
       location: { pathname: '/settings/users/limits' },
       mutators: mutator,
