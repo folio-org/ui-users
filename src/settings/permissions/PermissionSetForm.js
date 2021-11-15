@@ -1,6 +1,6 @@
 import { cloneDeep } from 'lodash';
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import {
   Paneset,
@@ -39,6 +39,7 @@ class PermissionSetForm extends React.Component {
       connect: PropTypes.func.isRequired,
     }).isRequired,
     initialValues: PropTypes.object,
+    intl: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
     onCancel: PropTypes.func,
     onRemove: PropTypes.func,
@@ -67,16 +68,12 @@ class PermissionSetForm extends React.Component {
   addFirstMenu() {
     return (
       <PaneMenu>
-        <FormattedMessage id="ui-users.permissions.closePermissionSetDialog">
-          { ariaLabel => (
-            <PaneHeaderIconButton
-              id="clickable-close-permission-set"
-              onClick={this.props.onCancel}
-              icon="times"
-              aria-label={ariaLabel}
-            />
-          )}
-        </FormattedMessage>
+        <PaneHeaderIconButton
+          id="clickable-close-permission-set"
+          onClick={this.props.onCancel}
+          icon="times"
+          aria-label={this.props.intl.formatMessage({ id: 'ui-users.permissions.closePermissionSetDialog' })}
+        />
       </PaneMenu>
     );
   }
@@ -312,7 +309,7 @@ class PermissionSetForm extends React.Component {
   }
 }
 
-export default stripesFinalForm({
+export default injectIntl(stripesFinalForm({
   navigationCheck: true,
   enableReinitialize: false,
-})(PermissionSetForm);
+})(PermissionSetForm));
