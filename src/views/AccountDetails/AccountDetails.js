@@ -19,6 +19,7 @@ import {
   Paneset,
   Row,
 } from '@folio/stripes/components';
+import { IfPermission } from '@folio/stripes-core';
 
 import Actions from '../../components/Accounts/Actions/FeeFineActions';
 import {
@@ -361,13 +362,15 @@ class AccountDetails extends React.Component {
       comments: (
         <span className={css.commentsWrapper}>
           <FormattedMessage id="ui-users.details.columns.comments" />
-          <Button
-            id="accountActionHistory-add-comment"
-            buttonClass={css.addCommentBtn}
-            onClick={this.comment}
-          >
-            <span id="button"><FormattedMessage id="ui-users.details.button.new" /></span>
-          </Button>
+          <IfPermission perm="ui-users.feesfines.actions.all">
+            <Button
+              id="accountActionHistory-add-comment"
+              buttonClass={css.addCommentBtn}
+              onClick={this.comment}
+            >
+              <span id="button"><FormattedMessage id="ui-users.details.button.new" /></span>
+            </Button>
+          </IfPermission>
         </span>
       ),
     };
@@ -427,6 +430,23 @@ class AccountDetails extends React.Component {
           </Link>
         );
       }
+    }
+
+    // if an account record includes a barcode, itemId, holdingsRecordId, and
+    // instanceId then we can link to it. An account may not have those fields
+    // if, for instance, it isn't associated with a loan at all, the loan it
+    // was associated with has been anonymized, or the user in question simply
+    // doesn't have permission to view inventory records.
+    let itemBarcodeLink = <NoValue />;
+    if (account.barcode && account.instanceId && account.holdingsRecordId && account.itemId) {
+      itemBarcodeLink = (
+        <Link
+          to={`/inventory/view/${account.instanceId}/${account.holdingsRecordId}/${account.itemId}`}
+        >
+          {account.barcode}
+        </Link>);
+    } else if (account.barcode) {
+      itemBarcodeLink = account.barcode;
     }
 
     return (
@@ -593,15 +613,7 @@ class AccountDetails extends React.Component {
             <Col xs={1.5}>
               <KeyValue
                 label={<FormattedMessage id="ui-users.details.field.barcode" />}
-                value={
-                  (_.get(account, ['barcode'])) ? (
-                    <Link
-                      to={`/inventory/view/${_.get(account, ['instanceId'], '')}/${_.get(account, ['holdingsRecordId'], '')}/${_.get(account, ['itemId'], '')}`}
-                    >
-                      {_.get(account, ['barcode'], '')}
-                    </Link>
-                  ) : <NoValue />
-                }
+                value={itemBarcodeLink}
               />
             </Col>
             <Col xs={1.5}>
