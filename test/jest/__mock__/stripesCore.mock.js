@@ -2,18 +2,44 @@ import React from 'react';
 
 jest.mock('@folio/stripes/core', () => {
   const STRIPES = {
+    actionNames: [],
+    bindings: {},
+    clone: jest.fn(),
     connect: (Component) => Component,
-    config: {},
+    config: {
+      logCategories: '',
+      logPrefix: '',
+      logTimestamp: true,
+      showPerms: true,
+      showHomeLink: true,
+      listInvisiblePerms: true,
+      disableAuth: false,
+      hasAllPerms: false,
+    },
     currency: 'USD',
+    discovery: {
+      interfaces: {},
+      isFinished: true,
+      modules: {},
+      okapi: {},
+    },
+    epics: {
+      add: jest.fn(),
+      middleware: jest.fn(),
+    },
     hasInterface: () => true,
     hasPerm: jest.fn().mockReturnValue(true),
+    icons: {},
     locale: 'en-US',
     logger: {
       log: () => {},
     },
+    metadata: {},
     okapi: {
+      authFailure: false,
+      okapiReady: true,
       tenant: 'diku',
-      url: 'https://folio-testing-okapi.dev.folio.org',
+      token: 'c0ffee',
       translations: {
         'stripes-components.Datepicker.calendar': 'calendar',
         'stripes-components.Datepicker.calendarDaysList': 'calendar days list.',
@@ -22,7 +48,16 @@ jest.mock('@folio/stripes/core', () => {
         'ui-users.permission.modal.list.pane.header.array': [{ type: 0, value: 'Permissions' }],
         default: false,
       },
+      url: 'https://folio-testing-okapi.dev.folio.org',
+      withoutOkapi: false,
     },
+    plugins: {},
+    setBindings: jest.fn(),
+    setCurrency: jest.fn(),
+    setLocale: jest.fn(),
+    setSinglePlugin: jest.fn(),
+    setTimezone: jest.fn(),
+    setToken: jest.fn(),
     store: {
       getState: () => ({
         okapi: {
@@ -37,6 +72,10 @@ jest.mock('@folio/stripes/core', () => {
     user: {
       perms: {},
       user: {
+        addresses: [],
+        firstName: 'Testy',
+        lastName: 'McTesterson',
+        email: 'test@folio.org',
         id: 'b1add99d-530b-5912-94f3-4091b4d87e2c',
         username: 'diku_admin',
       },

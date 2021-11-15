@@ -510,9 +510,37 @@
         "visible": true
       },
       {
+        "permissionName": "ui-users.feesfines.view",
+        "displayName": "Users: Can view fees/fines and loans",
+        "description": "Also includes basic permissions to view users and loans",
+        "subPermissions": [
+          "ui-users.view",
+          "accounts.collection.get",
+          "accounts.item.get",
+          "comments.collection.get",
+          "comments.item.get",
+          "feefineactions.collection.get",
+          "feefines.collection.get",
+          "feefines.item.get",
+          "owners.collection.get",
+          "owners.item.get",
+          "payments.collection.get",
+          "payments.item.get",
+          "refunds.collection.get",
+          "refunds.item.get",
+          "transfers.collection.get",
+          "waives.collection.get",
+          "waives.item.get",
+          "circulation.loans.collection.get",
+          "inventory-storage.service-points-users.collection.get"
+        ],
+        "visible": true
+      },
+      {
         "permissionName": "ui-users.feesfines.actions.all",
         "displayName": "Users: Can create, edit and remove fees/fines",
         "subPermissions": [
+          "ui-users.feesfines.view",
           "ui-users.manual_charge",
           "ui-users.manual_pay",
           "ui-users.manual_waive",
