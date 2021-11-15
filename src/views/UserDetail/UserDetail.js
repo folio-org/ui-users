@@ -695,7 +695,7 @@ class UserDetail extends React.Component {
                   />
                 </IfPermission>
                 <IfInterface name="feesfines">
-                  <IfPermission perm="ui-users.feesfines.actions.all">
+                  <IfPermission perm="ui-users.feesfines.view">
                     <UserAccounts
                       expanded={sections.accountsSection}
                       onToggle={this.handleSectionToggle}
