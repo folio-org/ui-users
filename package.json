@@ -512,7 +512,7 @@
       {
         "permissionName": "ui-users.feesfines.view",
         "displayName": "Users: Can view fees/fines and loans",
-        "description": "Also includes basic permissions to view users and loans",
+        "description": "Also includes basic permissions to view users",
         "subPermissions": [
           "ui-users.view",
           "accounts.collection.get",
@@ -531,7 +531,6 @@
           "transfers.collection.get",
           "waives.collection.get",
           "waives.item.get",
-          "circulation.loans.collection.get",
           "inventory-storage.service-points-users.collection.get"
         ],
         "visible": true
