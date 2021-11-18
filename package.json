@@ -515,6 +515,7 @@
         "description": "Also includes basic permissions to view users",
         "subPermissions": [
           "ui-users.view",
+          "ui-users.loans.view",
           "accounts.collection.get",
           "accounts.item.get",
           "comments.collection.get",
