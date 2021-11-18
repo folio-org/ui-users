@@ -19,10 +19,18 @@ import { MAX_RECORDS } from '../constants';
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
 
-const compileQuery = template(
-  '(username="%{query}*" or personal.firstName="%{query}*" or personal.preferredFirstName="%{query}*" or personal.lastName="%{query}*" or personal.email="%{query}*" or barcode="%{query}*" or id="%{query}*" or externalSystemId="%{query}*")',
-  { interpolate: /%{([\s\S]+?)}/g }
-);
+const searchFields = [
+  'username="%{query}*"',
+  'personal.firstName="%{query}*"',
+  'personal.preferredFirstName="%{query}*"',
+  'personal.lastName="%{query}*"',
+  'personal.email="%{query}*"',
+  'barcode="%{query}*"',
+  'id="%{query}*"',
+  'externalSystemId="%{query}*"',
+  'customFields="%{query}*"'
+];
+const compileQuery = template(`(${searchFields.join(' or ')})`, { interpolate: /%{([\s\S]+?)}/g });
 
 class UserSearchContainer extends React.Component {
   static manifest = Object.freeze({

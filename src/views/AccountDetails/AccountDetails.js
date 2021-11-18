@@ -421,7 +421,7 @@ class AccountDetails extends React.Component {
     if (hasLoan) {
       if (isLoanAnonymized) {
         loanDetailsValue = <FormattedMessage id="ui-users.details.label.loanAnonymized" />;
-      } else {
+      } else if (stripes.hasPerm('ui-users.loans.view')) {
         loanDetailsValue = (
           <Link
             to={`/users/${params.id}/loans/view/${loanId}`}
@@ -429,6 +429,8 @@ class AccountDetails extends React.Component {
             <FormattedMessage id="ui-users.details.field.loan" />
           </Link>
         );
+      } else {
+        loanDetailsValue = <FormattedMessage id="ui-users.details.field.loan" />;
       }
     }
 

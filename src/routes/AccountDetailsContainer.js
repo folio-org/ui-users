@@ -63,10 +63,18 @@ class AccountDetailsContainer extends React.Component {
       instanceId: '',
       records: MAX_RECORDS,
     },
+    // Many fees and fines are associated with loans, so the loans are
+    // retrieved in order to show the corresponding policies (overdue
+    // fine policy, lost item policy) and the item's current status.
+    // But! Not _all_ fees and fines are associated with loans, and not
+    // all users may have permission to view loans. For that situation,
+    // using permissionRequired allows the AccountDetails page to function
+    // as-is; it simply doesn't receive any loan information.
     loans: {
       type: 'okapi',
       records: 'loans',
       path: 'circulation/loans?query=(userId==:{id})&limit=1000',
+      permissionsRequired: 'circulation.loans.collection.get',
     },
     instance: {
       type: 'okapi',
