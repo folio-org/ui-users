@@ -512,9 +512,10 @@
       {
         "permissionName": "ui-users.feesfines.view",
         "displayName": "Users: Can view fees/fines and loans",
-        "description": "Also includes basic permissions to view users and loans",
+        "description": "Also includes basic permissions to view users",
         "subPermissions": [
           "ui-users.view",
+          "ui-users.loans.view",
           "accounts.collection.get",
           "accounts.item.get",
           "comments.collection.get",
