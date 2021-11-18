@@ -6,7 +6,6 @@ import {
 } from 'lodash';
 
 import { Callout } from '@folio/stripes/components';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 import BulkRenewalDialog from '../BulkRenewalDialog';
 import isOverridePossible from '../Loans/OpenLoans/helpers/isOverridePossible';
@@ -183,7 +182,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
   showSingleRenewCallout = (loan) => {
     const message = (
       <span>
-        <SafeHTMLMessage
+        <FormattedMessage
           id="ui-users.loans.item.renewed.callout"
           values={{ title: loan.item.title }}
         />

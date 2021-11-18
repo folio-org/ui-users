@@ -12,7 +12,6 @@ import {
   FormattedMessage,
   injectIntl,
 } from 'react-intl';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import ChargeForm from './ChargeForm';
 import ItemLookup from './ItemLookup';
 import ActionModal from '../Actions/ActionModal';
@@ -393,7 +392,7 @@ class ChargeFeeFine extends React.Component {
       ? formatMessage({ id: 'ui-users.accounts.status.partially' })
       : formatMessage({ id: 'ui-users.accounts.status.fully' }))} ${paymentStatus}`;
     return (
-      <SafeHTMLMessage
+      <FormattedMessage
         id="ui-users.accounts.confirmation.message"
         values={{ count: 1, amount, action: paymentStatus }}
       />

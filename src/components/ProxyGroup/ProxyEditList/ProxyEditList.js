@@ -5,7 +5,6 @@ import {
   FormattedMessage,
   injectIntl,
 } from 'react-intl';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import {
   Row,
   Col,
@@ -110,11 +109,11 @@ class ProxyEditList extends React.Component {
     const heading = (name === 'sponsors') ?
       <FormattedMessage id="ui-users.deleteSponsorPrompt" /> :
       <FormattedMessage id="ui-users.deleteProxyPrompt" />;
-    const sponsorsMsg = <SafeHTMLMessage
+    const sponsorsMsg = <FormattedMessage
       id="ui-users.proxyWillBeDeleted"
       values={{ name1: getFullName(initialValues), name2: getFullName(curRecord.user) }}
     />;
-    const proxyMsg = <SafeHTMLMessage
+    const proxyMsg = <FormattedMessage
       id="ui-users.proxyWillBeDeleted"
       values={{ name1: getFullName(curRecord.user), name2: getFullName(initialValues) }}
     />;
