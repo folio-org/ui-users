@@ -975,5 +975,6 @@
     "custom.customFields": "自定义字段",
     "custom.noCustomFieldsFound": "未找到自定义字段",
     "reports.financial.patronBarcode.noBarcode": "[无条码]",
-    "settings.manualBlockTemplates.paneTitle": "读者冻结模板"
+    "settings.manualBlockTemplates.paneTitle": "读者冻结模板",
+    "permission.feesfines.view": "Users: Can view fees/fines and loans"
 }

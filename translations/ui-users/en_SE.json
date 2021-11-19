@@ -603,7 +603,6 @@
     "permission.edituserservicepoints": "Users: Can assign and unassign service points to users",
     "permission.feefineactions": "Fee/Fine Details: Can create, edit and remove fee/fine actions",
     "permission.feesfines.actions.all": "Users: Can create, edit and remove fees/fines",
-    "permission.feesfines.view": "Users: Can view fees/fines and loans",
     "permission.loans.all": "Users: User loans view, edit, renew (all)",
     "permission.loans.claim-item-returned": "Users: User loans claim returned",
     "permission.loans.declare-item-lost": "Users: User loans declare lost",
@@ -976,5 +975,6 @@
     "custom.customFields": "Custom fields",
     "custom.noCustomFieldsFound": "No custom fields found",
     "reports.financial.patronBarcode.noBarcode": "[no barcode]",
-    "settings.manualBlockTemplates.paneTitle": "Patron block templates"
+    "settings.manualBlockTemplates.paneTitle": "Patron block templates",
+    "permission.feesfines.view": "Users: Can view fees/fines and loans"
 }
