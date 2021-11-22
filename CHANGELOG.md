@@ -75,6 +75,7 @@
 * Create Jest/RTL test for `PatronBlockMessage`. Refs UIU-2296.
 * Create Jest/RTL test for `PermissionLabel`. Refs UIU-2330.
 * Create Jest/RTL test for `PermissionSets`. Refs UIU-2383.
+* Create Jest/RTL test for `PermissionSetDetails`. Refs UIU-2394.
 * Create Jest/RTL test for `PermissionsList`. Refs UIU-2374.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
