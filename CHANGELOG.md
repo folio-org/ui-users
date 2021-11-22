@@ -75,6 +75,7 @@
 * Create Jest/RTL test for `PatronBlockMessage`. Refs UIU-2296.
 * Create Jest/RTL test for `PermissionLabel`. Refs UIU-2330.
 * Create Jest/RTL test for `PermissionSets`. Refs UIU-2383.
+* Create Jest/RTL test for `RenderPermissions`. Refs UIU-2267.
 * Create Jest/RTL test for `PermissionSetDetails`. Refs UIU-2394.
 * Create Jest/RTL test for `PermissionsList`. Refs UIU-2374.
 
