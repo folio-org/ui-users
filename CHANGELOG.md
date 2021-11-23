@@ -1,5 +1,11 @@
 # Change history for ui-users
 
+## [7.0.5](https://github.com/folio-org/ui-users/tree/v7.0.5) (2021-11-23)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v7.0.4...v7.0.5)
+
+* Provide read-only permission for fees/fines. Refs UIU-2472.
+
+
 ## [7.0.4](https://github.com/folio-org/ui-users/tree/v7.0.4) (2021-11-12)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v7.0.3...v7.0.4)
 
