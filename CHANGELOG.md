@@ -79,6 +79,7 @@
 * Create Jest/RTL test for `PermissionSetDetails`. Refs UIU-2394.
 * Create Jest/RTL test for `PermissionsList`. Refs UIU-2374.
 * Create Jest/RTL test for `UserPermissions`. Refs UIU-2303.
+* Create Jest/RTL test for `Owners`. Refs UIU-2408.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
