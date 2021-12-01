@@ -78,6 +78,7 @@
 * Create Jest/RTL test for `RenderPermissions`. Refs UIU-2267.
 * Create Jest/RTL test for `PermissionSetDetails`. Refs UIU-2394.
 * Create Jest/RTL test for `PermissionsList`. Refs UIU-2374.
+* Create Jest/RTL test for `ProxyPermissions`. Refs UIU-2275.
 * Create Jest/RTL test for `UserPermissions`. Refs UIU-2303.
 * Create Jest/RTL test for `Owners`. Refs UIU-2408.
 
