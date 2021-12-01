@@ -1,7 +1,6 @@
 import renderWithRouter from 'helpers/renderWithRouter';
 import Owners from './Owners';
 
-
 jest.unmock('@folio/stripes/components');
 
 const renderOwners = (props) => renderWithRouter(<Owners {...props} />);
@@ -23,7 +22,8 @@ describe('Owners component', () => {
       ]
     };
     renderOwners(props);
-    expect(renderOwners(props)).toBeTruthy();
+    expect(document.querySelector('[ value="test1256"]')).toBeFalsy();
+    expect(document.querySelector('[ value="test1234"]')).toBeTruthy();
   });
   it('Checking Shared Owners', () => {
     const props = {
@@ -37,7 +37,7 @@ describe('Owners component', () => {
       ]
     };
     renderOwners(props);
-    expect(renderOwners(props)).toBeTruthy();
+    expect(document.querySelector('[ value="test1256"]')).toBeTruthy();
   });
   it('Check for empty data', () => {
     const props = {
