@@ -81,6 +81,7 @@
 * Create Jest/RTL test for `ProxyPermissions`. Refs UIU-2275.
 * Create Jest/RTL test for `UserPermissions`. Refs UIU-2303.
 * Create Jest/RTL test for `Owners`. Refs UIU-2408.
+* Create Jest/RTL test for `Modals`. Refs UIU-2323.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)

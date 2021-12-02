@@ -46,6 +46,7 @@ jest.mock('@folio/stripes/smart-components', () => {
   return {
     ...jest.requireActual('@folio/stripes/smart-components'),
     AddressEditList: () => <div data-testid="address-edit-list">AddressEditList</div>,
+    ChangeDueDateDialog: (props) => <div data-testid="change-duedate-dialog">ChangeDueDateDialog</div>,
     ControlledVocab: ({ validate }) => <div data-testid="controlled-vocab">ControlledVocab</div>,
     LocationLookup: () => <div>LocationLookup</div>,
     NotePopupModal: () => <div>NotePopupModal</div>,
