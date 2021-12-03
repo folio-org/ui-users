@@ -975,5 +975,6 @@
     "custom.customFields": "حقول مخصصة",
     "custom.noCustomFieldsFound": "لم يتم العثور على حقول مخصصة",
     "reports.financial.patronBarcode.noBarcode": "[بدون باركود]",
-    "settings.manualBlockTemplates.paneTitle": "قوالب حظر المستفيد"
+    "settings.manualBlockTemplates.paneTitle": "قوالب حظر المستفيد",
+    "permission.feesfines.view": "المستخدمين: إمكانية عرض الرسوم والغرامات والإعارات"
 }

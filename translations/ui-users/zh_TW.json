@@ -720,7 +720,7 @@
     "reports.item.title": "单件题名",
     "reports.item.materialType.name": "资料类型",
     "reports.item.status.name": "单件状态",
-    "reports.item.barcode": "条码",
+    "reports.item.barcode": "條碼",
     "reports.item.callNumberComponents.prefix": "索书号前缀",
     "reports.item.callNumberComponents.callNumber": "索书号",
     "reports.item.callNumberComponents.suffix": "索书号后缀",
@@ -738,7 +738,7 @@
     "index.username": "用户名",
     "index.all": "关键词（名称、电子邮件、标识符）",
     "index.lastName": "姓氏",
-    "index.barcode": "条码",
+    "index.barcode": "條碼",
     "loans.confirmDeclaredLost": "确认单件状态：声称遗失",
     "loans.confirmClaimedReturned": "确认单件状态：声称已还",
     "loans.confirmMissing": "确认单件状态：缺少",
@@ -770,7 +770,7 @@
     "reports.refunds.validation.startDate": "如果提供了终止日期，则必须输入起始日期",
     "reports.refunds.validation.endDate": "终止日期必须晚于起始日期",
     "reports.refunds.patronName": "读者姓名",
-    "reports.refunds.patronBarcode": "读者条码",
+    "reports.refunds.patronBarcode": "條碼",
     "reports.refunds.patronId": "读者ID",
     "reports.refunds.patronGroup": "读者组",
     "reports.refunds.feeFineType": "費用 / 罰款 類型",
@@ -803,7 +803,7 @@
     "feefines.errors.notBilledMessage": "由于在设置“费用/罚款：所有者”中没有为单件的“主要服务点”找到“费用/罚款所有者”，因此未向读者收取遗失单件费。 <div> <b>需要人工收取遗失单件费。 </b> </div>",
     "feefines.errors.updateOwnerMessage": "为避免将来出现错误，请要求机构的适当管理员更新“费用/罚款所有者”设置，以将“主要服务点”与“费用/罚款所有者”相关联。",
     "reports.feeFine.patronName": "读者姓名",
-    "reports.feeFine.patronBarcode": "读者条码",
+    "reports.feeFine.patronBarcode": "讀者條碼",
     "reports.feeFine.patronGroup": "读者组",
     "reports.feeFine.actionDate": "操作日期",
     "reports.feeFine.actionDescription": "操作描述",
@@ -975,5 +975,6 @@
     "custom.customFields": "Custom fields",
     "custom.noCustomFieldsFound": "No custom fields found",
     "reports.financial.patronBarcode.noBarcode": "[no barcode]",
-    "settings.manualBlockTemplates.paneTitle": "Patron block templates"
+    "settings.manualBlockTemplates.paneTitle": "Patron block templates",
+    "permission.feesfines.view": "Users: Can view fees/fines and loans"
 }

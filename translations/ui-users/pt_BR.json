@@ -975,5 +975,6 @@
     "custom.customFields": "Campos personalizados",
     "custom.noCustomFieldsFound": "Nenhum campo personalizado encontrado",
     "reports.financial.patronBarcode.noBarcode": "[sem código de barras]",
-    "settings.manualBlockTemplates.paneTitle": "Modelos de bloqueios de usuário"
+    "settings.manualBlockTemplates.paneTitle": "Modelos de bloqueios de usuário",
+    "permission.feesfines.view": "Users: Can view fees/fines and loans"
 }
