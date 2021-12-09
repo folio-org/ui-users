@@ -975,5 +975,6 @@
     "custom.customFields": "Vlastní pole",
     "custom.noCustomFieldsFound": "No custom fields found",
     "reports.financial.patronBarcode.noBarcode": "[bez čárového kódu]",
-    "settings.manualBlockTemplates.paneTitle": "Patron block templates"
+    "settings.manualBlockTemplates.paneTitle": "Patron block templates",
+    "permission.feesfines.view": "Users: Can view fees/fines and loans"
 }

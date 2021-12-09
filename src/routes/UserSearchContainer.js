@@ -227,15 +227,28 @@ class UserSearchContainer extends React.Component {
   };
 
   querySetter = ({ nsValues, state }) => {
-    const { location : locationProp, history } = this.props;
+    const {
+      location: locationProp,
+      history,
+      mutator: { resultOffset },
+    } = this.props;
+
     if (nsValues.query) {
       nsValues.query = nsValues.query.replace('*', '');
     }
+
     let location = locationProp;
+
     // modifying the location hides the user detail view if a search/filter is triggered.
     if (state.changeType !== 'init.reset' && !location.pathname.endsWith('users')) {
       const pathname = '/users';
       location = { ...locationProp, pathname };
+    }
+
+    // reset offset when sort values change
+    // https://issues.folio.org/browse/UIU-2466
+    if (state.sortChanged) {
+      resultOffset.replace(0);
     }
 
     const url = buildUrl(location, nsValues);
