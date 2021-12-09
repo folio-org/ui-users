@@ -603,7 +603,7 @@
     "permission.edituserservicepoints": "用户：可以为用户分配和取消分配服务点",
     "permission.feefineactions": "费用/罚款详情：可以创建、编辑和移除费用/罚款操作",
     "permission.feesfines.actions.all": "用户：可以创建、编辑和移除费用/罚款",
-    "permission.loans.all": "用户：用户借阅查看、编辑、续借（全部）",
+    "permission.loans.all": "用户：用户借阅查看、改变到期日、续借",
     "permission.loans.claim-item-returned": "用户：用户借阅声称已还",
     "permission.loans.declare-item-lost": "用户：用户借阅声称遗失",
     "permission.loans.renew-override": "用户：用户通过越权续借",
@@ -746,7 +746,7 @@
     "reports.item.contributors": "贡献者",
     "permission.loans.anonymize": "用户：用户借阅匿名化",
     "information.patronGroup.expirationOffset.error": "必须为空或> 0的整数",
-    "settings.manualBlockTemplates": "读者冻结模板",
+    "settings.manualBlockTemplates": "模板",
     "manualBlockTemplates.templateInformation": "模板信息",
     "manualBlockTemplates.templateName": "模板名称",
     "manualBlockTemplates.blockCode": "冻结代码",
@@ -975,5 +975,6 @@
     "custom.customFields": "自定义字段",
     "custom.noCustomFieldsFound": "未找到自定义字段",
     "reports.financial.patronBarcode.noBarcode": "[无条码]",
-    "settings.manualBlockTemplates.paneTitle": "Patron block templates"
+    "settings.manualBlockTemplates.paneTitle": "读者冻结模板",
+    "permission.feesfines.view": "用户：可以查看费用/罚款和借阅"
 }

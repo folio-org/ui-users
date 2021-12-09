@@ -53,7 +53,6 @@ class ClosedLoans extends React.Component {
     intl: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
-    handleOptionsChange: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -339,7 +338,6 @@ class ClosedLoans extends React.Component {
   renderDropDownMenu = loan => () => {
     const {
       stripes,
-      handleOptionsChange,
       match: { params },
     } = this.props;
 
@@ -371,7 +369,7 @@ class ClosedLoans extends React.Component {
           disabled={_.isEmpty(accountsLoan)}
           buttonStyle="dropdownItem"
           onClick={() => {
-            handleOptionsChange({ loan, action: 'feefineDetails' });
+            this.handleOptionsChange({ loan, action: 'feefineDetails' });
           }}
         >
           <FormattedMessage id="ui-users.loans.feeFineDetails" />

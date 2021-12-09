@@ -5,6 +5,7 @@ import {
   keyBy,
   cloneDeep,
   concat,
+  orderBy,
 } from 'lodash';
 import moment from 'moment';
 import { injectIntl, FormattedMessage } from 'react-intl';
@@ -72,6 +73,7 @@ import ErrorPane from '../../components/ErrorPane';
 class UserDetail extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
+      hasInterface: PropTypes.func.isRequired,
       hasPerm: PropTypes.func.isRequired,
       connect: PropTypes.func.isRequired,
       locale: PropTypes.string.isRequired,
@@ -79,6 +81,20 @@ class UserDetail extends React.Component {
         log: PropTypes.func.isRequired,
       }).isRequired,
     }).isRequired,
+    mutator: PropTypes.shape({
+      hasManualPatronBlocks: PropTypes.shape({
+        GET: PropTypes.func,
+      }),
+      hasAutomatedPatronBlocks: PropTypes.shape({
+        GET: PropTypes.func,
+      }),
+      delUser: PropTypes.shape({
+        DELETE: PropTypes.func,
+      }),
+      openTransactions: PropTypes.shape({
+        GET: PropTypes.func,
+      }),
+    }),
     resources: PropTypes.shape({
       selUser: PropTypes.object,
       delUser: PropTypes.object,
@@ -129,7 +145,6 @@ class UserDetail extends React.Component {
     tagsEnabled: PropTypes.bool,
     paneWidth: PropTypes.string,
     intl: PropTypes.object.isRequired,
-    mutator: PropTypes.object,
   };
 
   static defaultProps = {
@@ -159,6 +174,7 @@ class UserDetail extends React.Component {
     ];
 
     this.state = {
+      patronBlocks: [],
       lastUpdate: null,
       showOpenTransactionModal: false,
       showDeleteUserModal: false,
@@ -179,6 +195,10 @@ class UserDetail extends React.Component {
     };
 
     this.callout = null;
+  }
+
+  componentDidMount() {
+    this.loadPatronBlocks();
   }
 
   getUser = () => {
@@ -508,6 +528,52 @@ class UserDetail extends React.Component {
     return this.props.resources?.selUser?.failed?.httpStatus === 404;
   }
 
+  loadPatronBlocks() {
+    const {
+      mutator: {
+        hasManualPatronBlocks,
+        hasAutomatedPatronBlocks,
+      },
+      stripes,
+    } = this.props;
+
+    const manualPatronBlocksResolver = stripes.hasInterface('feesfines')
+      && stripes.hasPerm('manualblocks.collection.get')
+      ? hasManualPatronBlocks
+        .GET().catch(() => [])
+      : Promise.resolve([]);
+    const automatedPatronBlocksResolver = stripes.hasInterface('automated-patron-blocks')
+      && stripes.hasPerm('automated-patron-blocks.collection.get')
+      ? hasAutomatedPatronBlocks
+        .GET().catch(() => [])
+      : Promise.resolve([]);
+
+    Promise.all([
+      manualPatronBlocksResolver,
+      automatedPatronBlocksResolver,
+    ]).then(([
+      manualPatronBlocks,
+      automatedPatronBlocks,
+    ]) => {
+      const { sections } = this.state;
+
+      let patronBlocks = concat(manualPatronBlocks, automatedPatronBlocks)
+        .filter((patronBlock) => {
+          return moment(patronBlock.expirationDate).endOf('day').isSameOrAfter(moment().endOf('day'));
+        });
+
+      patronBlocks = orderBy(patronBlocks, ['metadata.createdDate'], ['desc']);
+
+      this.setState({
+        patronBlocks,
+      });
+
+      if (!sections.patronBlocksSection && patronBlocks.length) {
+        this.handleSectionToggle({ id: 'patronBlocksSection' });
+      }
+    });
+  }
+
   render() {
     const {
       resources,
@@ -521,6 +587,7 @@ class UserDetail extends React.Component {
     const {
       sections,
       helperApp,
+      patronBlocks,
     } = this.state;
 
     const user = this.getUser();
@@ -536,12 +603,7 @@ class UserDetail extends React.Component {
     const proxies = this.props.getProxies();
     const servicePoints = this.props.getUserServicePoints();
     const preferredServicePoint = this.props.getPreferredServicePoint();
-    const manualPatronBlocks = get(resources, ['hasManualPatronBlocks', 'records'], [])
-      .filter(p => moment(moment(p.expirationDate).format()).isSameOrAfter(moment().format()));
-    const automatedPatronBlocks = get(resources, ['hasAutomatedPatronBlocks', 'records'], []);
-    const totalPatronBlocks = manualPatronBlocks.length + automatedPatronBlocks.length;
-    const patronBlocks = concat(automatedPatronBlocks, manualPatronBlocks);
-    const hasPatronBlocks = totalPatronBlocks > 0;
+    const hasPatronBlocks = !!patronBlocks.length;
     const hasPatronBlocksPermissions = stripes.hasPerm('automated-patron-blocks.collection.get') || stripes.hasPerm('manualblocks.collection.get');
     const patronGroup = this.getPatronGroup(user);
     const requestPreferences = get(resources, 'requestPreferences.records.[0].requestPreferences[0]', {});
@@ -641,17 +703,14 @@ class UserDetail extends React.Component {
                 />
                 <IfInterface name="feesfines">
                   {hasPatronBlocksPermissions &&
-                  <PatronBlock
-                    accordionId="patronBlocksSection"
-                    user={user}
-                    hasPatronBlocks={hasPatronBlocks}
-                    patronBlocks={patronBlocks}
-                    automatedPatronBlocks={automatedPatronBlocks}
-                    expanded={sections.patronBlocksSection}
-                    onToggle={this.handleSectionToggle}
-                    onClickViewPatronBlock={this.onClickViewPatronBlock}
-                    {...this.props}
-                  />
+                    <PatronBlock
+                      accordionId="patronBlocksSection"
+                      patronBlocks={patronBlocks}
+                      expanded={sections.patronBlocksSection}
+                      onToggle={this.handleSectionToggle}
+                      onClickViewPatronBlock={this.onClickViewPatronBlock}
+                      {...this.props}
+                    />
                   }
                 </IfInterface>
                 <ExtendedInfo
@@ -695,7 +754,7 @@ class UserDetail extends React.Component {
                   />
                 </IfPermission>
                 <IfInterface name="feesfines">
-                  <IfPermission perm="ui-users.feesfines.actions.all">
+                  <IfPermission perm="ui-users.feesfines.view">
                     <UserAccounts
                       expanded={sections.accountsSection}
                       onToggle={this.handleSectionToggle}

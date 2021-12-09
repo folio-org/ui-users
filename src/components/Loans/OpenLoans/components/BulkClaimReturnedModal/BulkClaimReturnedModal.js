@@ -15,7 +15,6 @@ import {
   Spinner,
   TextArea,
 } from '@folio/stripes-components';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 import { getOpenRequestsPath } from '../../../../util';
 import refundTransferClaimReturned from '../../../../util/refundTransferClaimReturned';
@@ -253,7 +252,7 @@ class BulkClaimReturnedModal extends React.Component {
     if (operationState === 'pre') {
       modalHeader = <FormattedMessage id="ui-users.bulkClaimReturned.preConfirm" />;
       statusMessage =
-        <SafeHTMLMessage
+        <FormattedMessage
           id="ui-users.bulkClaimReturned.summary"
           values={{ numLoans: loans.length }}
         />;
@@ -262,17 +261,17 @@ class BulkClaimReturnedModal extends React.Component {
       modalHeader = <FormattedMessage id="ui-users.bulkClaimReturned.postConfirm" />;
       statusMessage = unchangedLoans.length > 0 ?
         <>
-          <SafeHTMLMessage
+          <FormattedMessage
             id="ui-users.bulkClaimReturned.items.notOk"
             values={{ numItems: unchangedLoans.length }}
           />
           {' '}
-          <SafeHTMLMessage
+          <FormattedMessage
             id="ui-users.bulkClaimReturned.items.ok"
             values={{ numItems: numSuccessfulOperations }}
           />
         </> :
-        <SafeHTMLMessage
+        <FormattedMessage
           id="ui-users.bulkClaimReturned.items.ok"
           values={{ numItems: numSuccessfulOperations }}
         />;

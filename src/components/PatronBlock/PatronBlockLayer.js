@@ -65,12 +65,10 @@ class PatronBlockLayer extends React.Component {
 
   onDeleteItem = () => {
     const { match: { params } } = this.props;
-    const selectedItem = (params.patronblockid) ?
-      _get(this.props.resources, ['manualPatronBlocks', 'records', 0], {})
-      : this.props.selectedPatronBlock;
+    const blockid = params.patronblockid || this.props.selectedPatronBlock.id;
 
-    this.props.mutator.activeRecord.update({ blockid: selectedItem.id });
-    return this.props.mutator.manualPatronBlocks.DELETE({ id: selectedItem.id })
+    this.props.mutator.activeRecord.update({ blockid });
+    return this.props.mutator.manualPatronBlocks.DELETE({ id: blockid })
       .then(() => { this.deleteItemResolve(); })
       .catch(() => { this.deleteItemReject(); })
       .finally(() => {

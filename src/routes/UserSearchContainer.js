@@ -19,10 +19,18 @@ import { MAX_RECORDS } from '../constants';
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
 
-const compileQuery = template(
-  '(username="%{query}*" or personal.firstName="%{query}*" or personal.preferredFirstName="%{query}*" or personal.lastName="%{query}*" or personal.email="%{query}*" or barcode="%{query}*" or id="%{query}*" or externalSystemId="%{query}*")',
-  { interpolate: /%{([\s\S]+?)}/g }
-);
+const searchFields = [
+  'username="%{query}*"',
+  'personal.firstName="%{query}*"',
+  'personal.preferredFirstName="%{query}*"',
+  'personal.lastName="%{query}*"',
+  'personal.email="%{query}*"',
+  'barcode="%{query}*"',
+  'id="%{query}*"',
+  'externalSystemId="%{query}*"',
+  'customFields="%{query}*"'
+];
+const compileQuery = template(`(${searchFields.join(' or ')})`, { interpolate: /%{([\s\S]+?)}/g });
 
 class UserSearchContainer extends React.Component {
   static manifest = Object.freeze({
@@ -219,15 +227,28 @@ class UserSearchContainer extends React.Component {
   };
 
   querySetter = ({ nsValues, state }) => {
-    const { location : locationProp, history } = this.props;
+    const {
+      location: locationProp,
+      history,
+      mutator: { resultOffset },
+    } = this.props;
+
     if (nsValues.query) {
       nsValues.query = nsValues.query.replace('*', '');
     }
+
     let location = locationProp;
+
     // modifying the location hides the user detail view if a search/filter is triggered.
     if (state.changeType !== 'init.reset' && !location.pathname.endsWith('users')) {
       const pathname = '/users';
       location = { ...locationProp, pathname };
+    }
+
+    // reset offset when sort values change
+    // https://issues.folio.org/browse/UIU-2466
+    if (state.sortChanged) {
+      resultOffset.replace(0);
     }
 
     const url = buildUrl(location, nsValues);

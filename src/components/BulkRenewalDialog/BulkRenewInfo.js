@@ -8,7 +8,6 @@ import {
   Button,
   Layout,
 } from '@folio/stripes/components';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import {
   stripesShape,
   IfPermission,
@@ -108,7 +107,7 @@ class BulkRenewInfo extends React.Component {
                   icon="exclamation-circle"
                   status="warn"
                 />
-                <SafeHTMLMessage
+                <FormattedMessage
                   id="ui-users.brd.itemNotRenewed"
                   tagName="span"
                   values={{
@@ -125,7 +124,7 @@ class BulkRenewInfo extends React.Component {
                   icon="check-circle"
                   status="success"
                 />
-                <SafeHTMLMessage
+                <FormattedMessage
                   id="ui-users.brd.itemSuccessfullyRenewed"
                   tagName="span"
                   values={{

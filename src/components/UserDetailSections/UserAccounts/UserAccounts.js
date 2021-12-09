@@ -15,7 +15,12 @@ import {
 } from '@folio/stripes/components';
 import { useStripes } from '@folio/stripes/core';
 
-import { accountStatuses, refundStatuses, loanActions } from '../../../constants';
+import {
+  accountStatuses,
+  refundStatuses,
+  refundClaimReturned,
+  loanActions,
+} from '../../../constants';
 
 
 /**
@@ -62,15 +67,23 @@ const UserAccounts = ({
   useEffect(() => {
     const open = records.filter(account => account?.status?.name !== accountStatuses.CLOSED);
     const closed = records.filter(account => account?.status?.name === accountStatuses.CLOSED);
-    const refunded = records.filter(account => (account?.paymentStatus?.name === refundStatuses.RefundedFully || account?.paymentStatus?.name === refundStatuses.RefundedPartially));
+
+    // get refunded actions and refunds total amount
+    const refundStatusesValues = [
+      ...Object.values(refundStatuses),
+      refundClaimReturned.REFUNDED_ACTION,
+    ];
+    const feeFineActions = resources.feefineactions.records ?? [];
+    const refunded = feeFineActions.filter((feeFineAction) => refundStatusesValues.includes(feeFineAction.typeAction));
+    const refundedTotal = refunded.reduce((acc, { amountAction }) => (acc + amountAction), 0);
+
     const loansClaim = resources.loansHistory.records?.filter(loan => loan?.action === loanActions.CLAIMED_RETURNED);
     let claim = [];
     loansClaim.forEach((loan) => {
-      claim = claim.concat(records.filter(account => account?.loanId === loan.id));
+      claim = claim.concat(open.filter(account => account?.loanId === loan.id));
     });
 
     const claimTotal = claim.reduce((acc, { remaining }) => (acc + parseFloat(remaining)), 0);
-    const refundedTotal = refunded.reduce((acc, { remaining }) => (acc + parseFloat(remaining)), 0);
     const openTotal = open.reduce((acc, { remaining }) => (acc + parseFloat(remaining)), 0) - claimTotal;
 
     setTotals({
@@ -181,7 +194,14 @@ UserAccounts.propTypes = {
     loansHistory: PropTypes.shape({
       records: PropTypes.arrayOf(PropTypes.object),
     }),
-  })
+    feefineactions: PropTypes.shape({
+      records: PropTypes.arrayOf(
+        PropTypes.shape({
+          typeAction: PropTypes.string.isRequired,
+        })
+      ),
+    }).isRequired,
+  }).isRequired,
 };
 
 export default UserAccounts;

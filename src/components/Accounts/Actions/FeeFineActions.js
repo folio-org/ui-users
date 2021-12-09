@@ -6,7 +6,6 @@ import {
   FormattedMessage,
   injectIntl,
 } from 'react-intl';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import { stripesConnect } from '@folio/stripes/core';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import moment from 'moment';
@@ -17,10 +16,12 @@ import CommentModal from './CommentModal';
 import WarningModal from './WarningModal';
 import ActionModal from './ActionModal';
 import { MAX_RECORDS } from '../../../constants';
-import { getFullName } from '../../util';
+import {
+  getFullName,
+  isRefundAllowed,
+} from '../../util';
 import {
   calculateSelectedAmount,
-  isRefundAllowed,
   loadServicePoints,
 } from '../accountFunctions';
 
@@ -243,7 +244,7 @@ class Actions extends React.Component {
     const fullName = getFullName(user);
 
     const message = (
-      <SafeHTMLMessage
+      <FormattedMessage
         id="ui-users.accounts.actions.cancellation.success"
         values={{
           count: 1,
@@ -574,7 +575,7 @@ class Actions extends React.Component {
       this.paymentStatus = paymentStatus;
 
       return (
-        <SafeHTMLMessage
+        <FormattedMessage
           id="ui-users.accounts.confirmation.message"
           values={{ count: 1, amount, action: paymentStatus }}
         />
@@ -591,7 +592,7 @@ class Actions extends React.Component {
       this.paymentStatus = paymentStatus;
 
       return (
-        <SafeHTMLMessage
+        <FormattedMessage
           id="ui-users.accounts.confirmation.message"
           values={{ count: accounts.length, amount, action: paymentStatus }}
         />

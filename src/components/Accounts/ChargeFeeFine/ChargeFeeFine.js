@@ -12,7 +12,6 @@ import {
   FormattedMessage,
   injectIntl,
 } from 'react-intl';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import ChargeForm from './ChargeForm';
 import ItemLookup from './ItemLookup';
 import ActionModal from '../Actions/ActionModal';
@@ -133,6 +132,7 @@ class ChargeFeeFine extends React.Component {
     type.materialType = (item.materialType || {}).name;
     type.materialTypeId = (selectedLoan.id) ? undefined : (item.materialType || {}).id || undefined;
 
+    if (item.contributorNames) { type.contributors = item.contributorNames; }
     if (selectedLoan.dueDate) type.dueDate = selectedLoan.dueDate;
     if (selectedLoan.returnDate) type.returnedDate = selectedLoan.returnDate;
     type.id = uuid();
@@ -392,7 +392,7 @@ class ChargeFeeFine extends React.Component {
       ? formatMessage({ id: 'ui-users.accounts.status.partially' })
       : formatMessage({ id: 'ui-users.accounts.status.fully' }))} ${paymentStatus}`;
     return (
-      <SafeHTMLMessage
+      <FormattedMessage
         id="ui-users.accounts.confirmation.message"
         values={{ count: 1, amount, action: paymentStatus }}
       />

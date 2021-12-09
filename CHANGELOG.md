@@ -1,6 +1,24 @@
 # Change history for ui-users
 
-## 6.2.0 (IN PROGRESS)
+## 7.something (IN PROGRESS)
+
+* Correctly show fee/fine for users without `ui-users.accounts` permission. Refs UIU-2446.
+* Create Jest/RTL test for `RequestFeeFineBlockButtons`. Refs UIU-2287.
+* Restrict `loans.all` permissions. Refs UIU-2256.
+* Create Jest/RTL test for `withProxy`. Refs UIU-2315.
+* Fix the oldest manual Patron block is always removed first. Refs UIU-2442.
+* Do not label fees without loans as "Anonymized". Refs UIU-2449.
+* Fix FeeFineAction and FeeFineCharge notice templates not appearing in Manual Charges settings. Refs UIU-2452.
+* Fix the issue when fee/fine details doesn't open up in loans. Refs UIU-2459.
+* Fix the issue when fee/fine is partially paid, then refunded, User Details show the full amount of the fee/fine as refunded. Refs UIU-2455.
+* Fix the issue when a fee/fine is refunded due to a CLAIMED RETURNED, the refund amount does not appear in User Details. Refs UIU-2469.
+* Correctly check permissions for accounts routes. Refs UIU-2474.
+* Search operates on custom fields. Refs UIU-2165.
+* Refactor from `<SafeHTMLMessage>` to `<FormattedMessage>`. Refs UIU-2179.
+* Reset offset when sort values change. Fixes UIU-2466.
+
+## [7.0.1](https://github.com/folio-org/ui-users/tree/v7.0.1) (2021-10-07)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v6.1.0...v7.0.1)
 
 * Update local babel config to handle new JSX transform. Refs UIU-2190.
 * Delete user with check for open transactions. Refs UIU-1971.
@@ -38,6 +56,32 @@
 * Don't choke when editing minimal user object. Fixes UIU-2435.
 * Patron groups displayed as Patron block LIMITS are not in same 'case' as actual Patron groups. Fixes UIU-1763.
 * Change setting "Patron block templates" to "Templates". Refs UIU-2412.
+* Add Contributors field to account request. Refs UIU-2203.
+* Increment stripes to v7. Refs UIU-2250.
+* Create Jest/RTL test for BulkRenewedLoansList. Refs UIU-2259.
+* Fix issue when `refund` button became inactive before the user was returned entire amount of money. Refs UIU-2438.
+* Display `contributors name` consistent with other modules. Refs UIU-2440.
+* Create Jest/RTL test for `OpenLoans`. Refs UIU-2314.
+* Create Jest/RTL test for `contactTypes`. Refs UIU-2368.
+* Create Jest/RTL test for `withMarkAsMissing`. Refs UIU-2265.
+* create Jest/RTL test for `PermissionSetForm.js` . Refs UIU-2407.
+* Create Jest/RTL test for `ActionsBar`. Refs UIU-2301.
+* Fix issue User Information page 'Patron block' accordion should be open if patron block exists and closed if not. Refs UIU-1996.
+* Create Jest/RTL test for `LimitsSettings`. Refs UIU-2392.
+* Create Jest/RTL test for `PermissionsModal`. Refs UIU-2365.
+* Create Jest/RTL test for `ModalContent`. Refs UIU-2284.
+* Create Jest/RTL test for `filtersConfig`. Refs UIU-2354.
+* Create Jest/RTL test for `FeeFineReport`. Refs UIU-2294.
+* Create Jest/RTL test for `refundTransferClaimReturned`. Refs UIU-2332.
+* Create Jest/RTL test for `PatronBlockMessage`. Refs UIU-2296.
+* Create Jest/RTL test for `PermissionLabel`. Refs UIU-2330.
+* Create Jest/RTL test for `PermissionSets`. Refs UIU-2383.
+* Create Jest/RTL test for `RenderPermissions`. Refs UIU-2267.
+* Create Jest/RTL test for `PermissionSetDetails`. Refs UIU-2394.
+* Create Jest/RTL test for `PermissionsList`. Refs UIU-2374.
+* Create Jest/RTL test for `ProxyPermissions`. Refs UIU-2275.
+* Create Jest/RTL test for `UserPermissions`. Refs UIU-2303.
+* Create Jest/RTL test for `Owners`. Refs UIU-2408.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)

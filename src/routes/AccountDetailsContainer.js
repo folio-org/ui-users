@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   first,
-  isEmpty,
 } from 'lodash';
 import { FormattedMessage } from 'react-intl';
 
@@ -17,6 +16,7 @@ import {
   queryFunction,
   args,
 } from './feeFineConfig';
+import { getContributors } from '../components/util';
 
 class AccountDetailsContainer extends React.Component {
   static manifest = Object.freeze({
@@ -63,10 +63,18 @@ class AccountDetailsContainer extends React.Component {
       instanceId: '',
       records: MAX_RECORDS,
     },
+    // Many fees and fines are associated with loans, so the loans are
+    // retrieved in order to show the corresponding policies (overdue
+    // fine policy, lost item policy) and the item's current status.
+    // But! Not _all_ fees and fines are associated with loans, and not
+    // all users may have permission to view loans. For that situation,
+    // using permissionRequired allows the AccountDetails page to function
+    // as-is; it simply doesn't receive any loan information.
     loans: {
       type: 'okapi',
       records: 'loans',
       path: 'circulation/loans?query=(userId==:{id})&limit=1000',
+      permissionsRequired: 'circulation.loans.collection.get',
     },
     instance: {
       type: 'okapi',
@@ -209,9 +217,7 @@ class AccountDetailsContainer extends React.Component {
       ? first(resources?.instance?.records)
       : [];
     const loanRecords = resources?.loans?.records ?? [];
-    const contributors = !isEmpty(instance)
-      ? instance.contributors.map(({ name }) => name.split(',').reverse().join(', '))
-      : [];
+    const contributors = getContributors(account, instance);
     const loanId = account?.loanId;
 
     if (loanId === '0') return { contributors };

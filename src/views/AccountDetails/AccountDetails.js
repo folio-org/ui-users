@@ -19,6 +19,7 @@ import {
   Paneset,
   Row,
 } from '@folio/stripes/components';
+import { IfPermission } from '@folio/stripes-core';
 
 import Actions from '../../components/Accounts/Actions/FeeFineActions';
 import {
@@ -27,11 +28,11 @@ import {
   formatActionDescription,
   formatCurrencyAmount,
   getServicePointOfCurrentAction,
+  isRefundAllowed,
 } from '../../components/util';
 
 import {
   calculateTotalPaymentAmount,
-  isRefundAllowed,
   isCancelAllowed,
 } from '../../components/Accounts/accountFunctions';
 import FeeFineReport from '../../components/data/reports/FeeFineReport';
@@ -332,7 +333,12 @@ class AccountDetails extends React.Component {
 
     const allAccounts = _.get(resources, ['feefineshistory', 'records'], []);
     const loan = _.get(resources, ['loans', 'records'], []).filter((l) => l.id === account.loanId);
-    const isLoanAnonymized = loan.length === 0;
+
+    // not all accounts are attached to loans. for those that are
+    const hasLoan = !!account.barcode;
+
+    // after loan anonymization, the loan will be empty but the barcode will not be
+    const isLoanAnonymized = loan.length === 0 && hasLoan;
     let balance = 0;
 
     allAccounts.forEach((a) => {
@@ -356,13 +362,15 @@ class AccountDetails extends React.Component {
       comments: (
         <span className={css.commentsWrapper}>
           <FormattedMessage id="ui-users.details.columns.comments" />
-          <Button
-            id="accountActionHistory-add-comment"
-            buttonClass={css.addCommentBtn}
-            onClick={this.comment}
-          >
-            <span id="button"><FormattedMessage id="ui-users.details.button.new" /></span>
-          </Button>
+          <IfPermission perm="ui-users.feesfines.actions.all">
+            <Button
+              id="accountActionHistory-add-comment"
+              buttonClass={css.addCommentBtn}
+              onClick={this.comment}
+            >
+              <span id="button"><FormattedMessage id="ui-users.details.button.new" /></span>
+            </Button>
+          </IfPermission>
         </span>
       ),
     };
@@ -398,11 +406,50 @@ class AccountDetails extends React.Component {
     const overdueFinePolicyName = itemDetails?.overdueFinePolicyName;
     const lostItemPolicyId = itemDetails?.lostItemPolicyId;
     const lostItemPolicyName = itemDetails?.lostItemPolicyName;
-    const contributors = itemDetails?.contributors.join(', ');
+    const contributors = itemDetails?.contributors?.join('; ');
 
     const totalPaidAmount = calculateTotalPaymentAmount(resources?.feefineshistory?.records, feeFineActions);
     const refundAllowed = isRefundAllowed(account, feeFineActions);
     const cancelAllowed = isCancelAllowed(account);
+
+    // the loan-details display is special.
+    // other loan-related fields use <NoValue /> when a loan has been anonymized,
+    // but the loan-details value needs to show "Anonymized" instead.
+    // OTOH, if an account was never attached to a loan in the first place,
+    // then the loan-details value _should_ be <NoValue />.
+    let loanDetailsValue = <NoValue />;
+    if (hasLoan) {
+      if (isLoanAnonymized) {
+        loanDetailsValue = <FormattedMessage id="ui-users.details.label.loanAnonymized" />;
+      } else if (stripes.hasPerm('ui-users.loans.view')) {
+        loanDetailsValue = (
+          <Link
+            to={`/users/${params.id}/loans/view/${loanId}`}
+          >
+            <FormattedMessage id="ui-users.details.field.loan" />
+          </Link>
+        );
+      } else {
+        loanDetailsValue = <FormattedMessage id="ui-users.details.field.loan" />;
+      }
+    }
+
+    // if an account record includes a barcode, itemId, holdingsRecordId, and
+    // instanceId then we can link to it. An account may not have those fields
+    // if, for instance, it isn't associated with a loan at all, the loan it
+    // was associated with has been anonymized, or the user in question simply
+    // doesn't have permission to view inventory records.
+    let itemBarcodeLink = <NoValue />;
+    if (account.barcode && account.instanceId && account.holdingsRecordId && account.itemId) {
+      itemBarcodeLink = (
+        <Link
+          to={`/inventory/view/${account.instanceId}/${account.holdingsRecordId}/${account.itemId}`}
+        >
+          {account.barcode}
+        </Link>);
+    } else if (account.barcode) {
+      itemBarcodeLink = account.barcode;
+    }
 
     return (
       <Paneset isRoot>
@@ -513,7 +560,7 @@ class AccountDetails extends React.Component {
               />
             </Col>
             <Col
-              data-test-latestPaymentStatus
+              data-test-latest-payment-status
               xs={1.5}
             >
               <KeyValue
@@ -568,15 +615,7 @@ class AccountDetails extends React.Component {
             <Col xs={1.5}>
               <KeyValue
                 label={<FormattedMessage id="ui-users.details.field.barcode" />}
-                value={
-                  (_.get(account, ['barcode'])) ? (
-                    <Link
-                      to={`/inventory/view/${_.get(account, ['instanceId'], '')}/${_.get(account, ['holdingsRecordId'], '')}/${_.get(account, ['itemId'], '')}`}
-                    >
-                      {_.get(account, ['barcode'], '')}
-                    </Link>
-                  ) : <NoValue />
-                }
+                value={itemBarcodeLink}
               />
             </Col>
             <Col xs={1.5}>
@@ -622,26 +661,13 @@ class AccountDetails extends React.Component {
               />
             </Col>
             <Col
-              data-test-loan-details
+              data-testid="loan-details"
               xs={1.5}
             >
-              {(loanId && user.id === account.userId && !isLoanAnonymized) ?
-                <KeyValue
-                  label={<FormattedMessage id="ui-users.details.label.loanDetails" />}
-                  value={(
-                    <Link
-                      to={`/users/${params.id}/loans/view/${loanId}`}
-                    >
-                      <FormattedMessage id="ui-users.details.field.loan" />
-                    </Link>
-                  )}
-                />
-                :
-                <KeyValue
-                  label={<FormattedMessage id="ui-users.details.label.loanDetails" />}
-                  value={<FormattedMessage id="ui-users.details.label.loanAnonymized" />}
-                />
-              }
+              <KeyValue
+                label={<FormattedMessage id="ui-users.details.label.loanDetails" />}
+                value={loanDetailsValue}
+              />
             </Col>
           </Row>
           <br />
