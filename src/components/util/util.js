@@ -43,10 +43,11 @@ export const formatDateAndTime = (date, formatter) => {
   return date ? formatter(date, { day: 'numeric', month: 'numeric', year: 'numeric' }) : '';
 };
 
+
 export const getServicePointOfCurrentAction = (action, servicePoints = []) => {
   const servicePoint = servicePoints.find(sp => sp.id === action.createdAt);
-
-  return servicePoint ? servicePoint.name : action.createdAt;
+  const createAtValue = servicePoint ? servicePoint.name : action.createdAt;
+  return createAtValue || '-';
 };
 
 export const calculateRemainingAmount = (remaining) => (parseFloat(remaining) * 100) / 100;
