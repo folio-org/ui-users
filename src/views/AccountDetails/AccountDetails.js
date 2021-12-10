@@ -333,6 +333,8 @@ class AccountDetails extends React.Component {
 
     const allAccounts = _.get(resources, ['feefineshistory', 'records'], []);
     const loan = _.get(resources, ['loans', 'records'], []).filter((l) => l.id === account.loanId);
+    const loanPolicyId = loan[0]?.loanPolicyId;
+    const loanPolicyName = loan[0]?.loanPolicy.name;
 
     // not all accounts are attached to loans. for those that are
     const hasLoan = !!account.barcode;
@@ -568,28 +570,10 @@ class AccountDetails extends React.Component {
                 value={latestPaymentStatus}
               />
             </Col>
-            <Col
-              data-test-overdue-policy
-              xs={1.5}
-            >
+            <Col xs={1.5} sm={3} md={3} lg={3}>
               <KeyValue
-                label={<FormattedMessage id="ui-users.loans.details.overduePolicy" />}
-                value={overdueFinePolicyId
-                  ? <Link to={`/settings/circulation/fine-policies/${overdueFinePolicyId}`}>{overdueFinePolicyName}</Link>
-                  : '-'
-                }
-              />
-            </Col>
-            <Col
-              data-test-lost-item-policy
-              xs={1.5}
-            >
-              <KeyValue
-                label={<FormattedMessage id="ui-users.loans.details.lostItemPolicy" />}
-                value={lostItemPolicyId
-                  ? <Link to={`/settings/circulation/lost-item-fee-policy/${lostItemPolicyId}`}>{lostItemPolicyName}</Link>
-                  : '-'
-                }
+                label={<FormattedMessage id="ui-users.feefines.details.dateClose" />}
+                value="-"
               />
             </Col>
           </Row>
@@ -669,6 +653,48 @@ class AccountDetails extends React.Component {
                 value={loanDetailsValue}
               />
             </Col>
+          </Row>
+          <Row>
+            <Col xs={1.5} sm={1.5} md={1.5} lg={1.5}>
+              <KeyValue
+                label={<FormattedMessage id="ui-users.loans.details.loanPolicy" />}
+                value={loanPolicyId
+                  ? <Link to={`/settings/circulation/loan-policies/${loanPolicyId}`}>{loanPolicyName}</Link>
+                  : '-'
+                }
+              />
+            </Col>
+            <Col
+              data-test-overdue-policy
+              xs={1.5}
+              sm={1.5}
+              md={1.5}
+              lg={1.5}
+            >
+              <KeyValue
+                label={<FormattedMessage id="ui-users.loans.details.overduePolicy" />}
+                value={overdueFinePolicyId
+                  ? <Link to={`/settings/circulation/fine-policies/${overdueFinePolicyId}`}>{overdueFinePolicyName}</Link>
+                  : '-'
+                }
+              />
+            </Col>
+            <Col
+              data-test-lost-item-policy
+              xs={1.5}
+              sm={1.5}
+              md={1.5}
+              lg={1.5}
+            >
+              <KeyValue
+                label={<FormattedMessage id="ui-users.loans.details.lostItemPolicy" />}
+                value={lostItemPolicyId
+                  ? <Link to={`/settings/circulation/lost-item-fee-policy/${lostItemPolicyId}`}>{lostItemPolicyName}</Link>
+                  : '-'
+                }
+              />
+            </Col>
+            <Col xs={1.5} sm={1.5} md={1.5} lg={1.5} xsOffset={6} smOffset={6} mdOffset={6} lgOffset={6} />
           </Row>
           <br />
           <MultiColumnList
