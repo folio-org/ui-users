@@ -12,7 +12,9 @@ import {
   Accordion,
   Badge,
   List,
-  Headline
+  Headline,
+  ConfirmationModal,
+  Callout,
 } from '@folio/stripes/components';
 import {
   stripesShape,
@@ -31,6 +33,7 @@ class PermissionsAccordion extends React.Component {
     intl: PropTypes.shape({
       formatMessage: PropTypes.func.isRequired,
     }),
+    initialValues: PropTypes.object, 
     onToggle: PropTypes.func.isRequired,
     accordionId: PropTypes.string.isRequired,
     permToDelete: PropTypes.string.isRequired,
@@ -63,6 +66,7 @@ class PermissionsAccordion extends React.Component {
 
   static defaultProps = {
     excludePermissionSets: false,
+    initialValues: {},
   };
 
   constructor(props) {
@@ -70,7 +74,10 @@ class PermissionsAccordion extends React.Component {
 
     this.state = {
       permissionModalOpen: false,
+      unassignModalOpen: false,
+      fields2: null,
     };
+    this.callout = React.createRef();
   }
 
   addPermissions = (permissions) => {
@@ -162,6 +169,25 @@ class PermissionsAccordion extends React.Component {
     this.setState({ permissionModalOpen: false });
   };
 
+  openUnassignModal = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    this.setState({ unassignModalOpen: true });
+  };
+
+  closeUnassignModal = () => {
+    this.setState({ unassignModalOpen: false });
+  };
+
+  unassignAllPermissions = () => {
+    this.props.form.change(this.props.permissionsField, []);
+    this.setState({ unassignModalOpen: false });
+    this.callout.current.sendCallout({
+      type: 'success',
+      message: <FormattedMessage id="ui-users.permissions.calloutMessage"/>,
+    });
+  };
+
   render() {
     const {
       accordionId,
@@ -173,14 +199,29 @@ class PermissionsAccordion extends React.Component {
       visibleColumns,
       headlineContent,
       excludePermissionSets,
+      initialValues: { personal },
     } = this.props;
-
-    const { permissionModalOpen } = this.state;
+    const {
+      permissionModalOpen,
+      unassignModalOpen,
+    } = this.state;
+console.log(personal);
     const assignedPermissions = this.getAssignedPermissions();
 
     if (!this.props.stripes.hasPerm(this.props.permToRead)) return null;
 
     const size = assignedPermissions.length;
+    const isUnassingButtonEnable = !!size;
+
+    const message = (
+      <FormattedMessage
+        id="ui-users.permissions.modal.unassignAll.label"
+        values={{
+          firstName: personal?.firstName,
+          lastName: personal?.lastName,
+        }}
+      />
+    );
 
     return (
       <Accordion
@@ -208,6 +249,16 @@ class PermissionsAccordion extends React.Component {
           >
             <FormattedMessage id="ui-users.permissions.addPermission" />
           </Button>
+          <Button
+            type="button"
+            align="end"
+            bottomMargin0
+            disabled={!isUnassingButtonEnable}
+            id="clickable-remove-all-permissions"
+            onClick={this.openUnassignModal}
+          >
+            <FormattedMessage id="ui-users.permissions.unassignAllPermissions" />
+          </Button>
           {
             permissionModalOpen &&
             <PermissionModal
@@ -220,7 +271,20 @@ class PermissionsAccordion extends React.Component {
               onClose={this.closePermissionModal}
             />
           }
+          {
+            unassignModalOpen &&
+            <ConfirmationModal
+              open={unassignModalOpen}
+              heading={<FormattedMessage id="ui-users.permissions.modal.unassignAll.header" />}
+              message={message}
+              onConfirm={this.unassignAllPermissions}
+              onCancel={this.closeUnassignModal}
+              cancelLabel={<FormattedMessage id="ui-users.no"/>}
+              confirmLabel={<FormattedMessage id="ui-users.yes"/>}
+            />
+          }
         </IfPermission>
+        <Callout ref={this.callout}/>
       </Accordion>
     );
   }
