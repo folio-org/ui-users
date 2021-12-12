@@ -7,15 +7,15 @@ import {
   injectIntl,
 } from 'react-intl';
 import {
-  Icon,
-  Button,
   Accordion,
   Badge,
+  Button,
+  ConfirmationModal,
+  Headline,
+  Icon,
   List,
-  Headline
 } from '@folio/stripes/components';
 import {
-  stripesShape,
   IfPermission,
   stripesConnect,
 } from '@folio/stripes/core';
@@ -36,7 +36,7 @@ class PermissionsAccordion extends React.Component {
     permToDelete: PropTypes.string.isRequired,
     permToModify: PropTypes.string.isRequired,
     permToRead: PropTypes.string.isRequired,
-    stripes: stripesShape.isRequired,
+    stripes: PropTypes.object.isRequired,
     // eslint-disable-next-line react/no-unused-prop-types
     formName: PropTypes.string.isRequired,
     permissionsField: PropTypes.string.isRequired,
@@ -69,7 +69,8 @@ class PermissionsAccordion extends React.Component {
     super(props);
 
     this.state = {
-      permissionModalOpen: false,
+      permissionModalOpen: false,  // true when the change-permissions modal is visible
+      confirmEditModalOpen: false, // true when the confirm-edit modal is visible
     };
   }
 
@@ -152,10 +153,56 @@ class PermissionsAccordion extends React.Component {
     );
   };
 
+  /**
+   * confirmEdit
+   * Close the ConfirmationModal, and open the PermissionsModal. This is a
+   * callback from the ConfirmationModal to continue with editing permissions
+   * even though this means permissions with `visible: false` settings will
+   * be removed.
+   *
+   * See openPermissionsModal for a detailed explanation.
+   */
+  confirmEdit = () => {
+    this.setState({
+      confirmEditModalOpen: false,
+      permissionModalOpen: true,
+    });
+  }
+
+  /**
+   * cancelEdit
+   * Close the ConfirmationModal. This is a callback from the ConfirmationModal
+   * to cancel editing of permissions since it would result in the removal of
+   * permissions with `visible: false`.
+   *
+   * See openPermissionsModal for a detailed explanation.
+   */
+  cancelEdit = () => {
+    this.setState({
+      confirmEditModalOpen: false,
+    });
+  }
+
+  /**
+   * openPermissionModal
+   * Check whether any currently-assigned permissions contain `visible: false`.
+   * If there are any, confirm whether to continue since only `visible: true`
+   * permissions will be retained after editing (confirmation is handled by
+   * confirmEdit and cancelEdit). If there are not any, i.e. all currently-assigned
+   * permissions are `visible: true`, open PermissionModal.
+   *
+   * @param {event} e click event
+   */
   openPermissionModal = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    this.setState({ permissionModalOpen: true });
+
+    const isHiddenAssigned = !!this.getAssignedPermissions().find((p) => p.visible === false);
+    if (isHiddenAssigned) {
+      this.setState({ confirmEditModalOpen: true });
+    } else {
+      this.setState({ permissionModalOpen: true });
+    }
   };
 
   closePermissionModal = () => {
@@ -175,7 +222,6 @@ class PermissionsAccordion extends React.Component {
       excludePermissionSets,
     } = this.props;
 
-    const { permissionModalOpen } = this.state;
     const assignedPermissions = this.getAssignedPermissions();
 
     if (!this.props.stripes.hasPerm(this.props.permToRead)) return null;
@@ -183,45 +229,52 @@ class PermissionsAccordion extends React.Component {
     const size = assignedPermissions.length;
 
     return (
-      <Accordion
-        open={expanded}
-        id={accordionId}
-        onToggle={onToggle}
-        label={
-          <Headline
-            size="large"
-            tag="h3"
-          >
-            {headlineContent}
-          </Headline>
-        }
-        displayWhenClosed={<Badge>{size}</Badge>}
-      >
-        <FieldArray name={permissionsField} component={this.renderList} />
-        <IfPermission perm={permToModify}>
-          <Button
-            type="button"
-            align="end"
-            bottomMargin0
-            id="clickable-add-permission"
-            onClick={this.openPermissionModal}
-          >
-            <FormattedMessage id="ui-users.permissions.addPermission" />
-          </Button>
-          {
-            permissionModalOpen &&
+      <div data-testid={accordionId}>
+        <Accordion
+          open={expanded}
+          id={accordionId}
+          onToggle={onToggle}
+          label={
+            <Headline
+              size="large"
+              tag="h3"
+            >
+              {headlineContent}
+            </Headline>
+          }
+          displayWhenClosed={<Badge>{size}</Badge>}
+        >
+          <FieldArray name={permissionsField} component={this.renderList} />
+          <IfPermission perm={permToModify}>
+            <Button
+              type="button"
+              align="end"
+              bottomMargin0
+              id="clickable-add-permission"
+              onClick={this.openPermissionModal}
+            >
+              <FormattedMessage id="ui-users.permissions.addPermission" />
+            </Button>
             <PermissionModal
               assignedPermissions={assignedPermissions}
               addPermissions={this.addPermissions}
-              open={permissionModalOpen}
+              open={this.state.permissionModalOpen}
               excludePermissionSets={excludePermissionSets}
               visibleColumns={visibleColumns}
               filtersConfig={filtersConfig}
               onClose={this.closePermissionModal}
             />
-          }
-        </IfPermission>
-      </Accordion>
+            <ConfirmationModal
+              open={this.state.confirmEditModalOpen}
+              heading="ui-users.permissions-accordion.confirm-heading"
+              message="ui-users.permissions-accordion.confirm-message"
+              onConfirm={this.confirmEdit}
+              confirmLabel="ui-users.permissions-accordion.confirm-continue"
+              onCancel={this.cancelEdit}
+            />
+          </IfPermission>
+        </Accordion>
+      </div>
     );
   }
 }
