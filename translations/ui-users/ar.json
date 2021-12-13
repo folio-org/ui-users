@@ -176,7 +176,7 @@
     "feefines.modal.cancel": "إلغاء",
     "feefines.modal.title": "نسخ مدخلات جدول جهات تحصيل الرسوم/الغرامات؟",
     "owners.label": "رسوم/غرامات: جهات التحصيل",
-    "owners.singular": "مالك الرسم/الغرامة",
+    "owners.singular": "جهة تحصيل الرسم/الغرامة",
     "owners.columns.owner": "جهة التحصيل",
     "owners.columns.desc": "الوصف",
     "payments.label": "الرسوم/الغرامات: طرق الدفع",
