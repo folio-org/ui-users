@@ -15,6 +15,7 @@
 * Correctly check permissions for accounts routes. Refs UIU-2474.
 * Search operates on custom fields. Refs UIU-2165.
 * Refactor from `<SafeHTMLMessage>` to `<FormattedMessage>`. Refs UIU-2179.
+* Reset offset when sort values change. Fixes UIU-2466.
 * Unassign all permissions from a user with one click. Refs UIU-2477.
 
 ## [7.0.1](https://github.com/folio-org/ui-users/tree/v7.0.1) (2021-10-07)
@@ -82,6 +83,7 @@
 * Create Jest/RTL test for `ProxyPermissions`. Refs UIU-2275.
 * Create Jest/RTL test for `UserPermissions`. Refs UIU-2303.
 * Create Jest/RTL test for `Owners`. Refs UIU-2408.
+* Create Jest/RTL test for `PatronBlockModalWithOverrideModal`. Refs UIU-2370.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
