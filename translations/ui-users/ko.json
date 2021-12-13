@@ -176,7 +176,7 @@
     "feefines.modal.cancel": "Cancel",
     "feefines.modal.title": "Copy existing fee/fine owner table entries?",
     "owners.label": "Fee/fine: Owners",
-    "owners.singular": "Fee/fine Owner",
+    "owners.singular": "Fee/fine owner",
     "owners.columns.owner": "Owner",
     "owners.columns.desc": "Description",
     "payments.label": "Fee/fine: Payment methods",
