@@ -72,7 +72,7 @@ const checkedLoans = {
     },
     itemId: '1b6d3338-186e-4e35-9e75-1b886b0da53e',
     loanDate: '2017-03-05T18:32:31Z',
-    loanPolicy: { name: null },
+    loanPolicy: { name: 'testPolicy' },
     lostItemPolicy: { name: null },
     metadata: { createdDate: '2021-12-09T03:24:20.123+00:00', updatedDate: '2021-12-09T03:24:20.123+00:00' },
     overdueFinePolicy: { name: null },
@@ -98,6 +98,10 @@ const mutator = {
   loanId: {
     replace: jest.fn(),
   },
+  activeAccount: {
+    GET: jest.fn(),
+    POST: jest.fn(),
+  },
 };
 
 const mutatorFailed = {
@@ -118,6 +122,10 @@ const mutatorFailed = {
   },
   loanId: {
     replace: jest.fn(),
+  },
+  activeAccount: {
+    GET: jest.fn(),
+    POST: jest.fn(),
   },
 };
 
@@ -141,7 +149,7 @@ describe('BulkClaimReturnedModal component', () => {
     expect(renderBulkClaimReturnedModal(props)).toBeTruthy();
 
     // Checking Confirmation dialog
-    userEvent.type(document.querySelector('[data-test-bulk-claim-returned-additionalinfo="true"]'), 'test');
+    userEvent.type(document.querySelector('[data-test-bulk-claim-returned-additional-info="true"]'), 'test');
     userEvent.click(document.querySelector('[data-test-bulk-cr-confirm-button="true"]'));
 
     // checking loan data
@@ -164,7 +172,7 @@ describe('BulkClaimReturnedModal component', () => {
 
     // Additional information confirmation box must be displayed
     expect(screen.getByText('ui-users.additionalInfo.label')).toBeTruthy();
-    userEvent.type(document.querySelector('[data-test-bulk-claim-returned-additionalinfo="true"]'), 'test');
+    userEvent.type(document.querySelector('[data-test-bulk-claim-returned-additional-info="true"]'), 'test');
     userEvent.click(document.querySelector('[data-test-bulk-cr-confirm-button="true"]'));
 
     // Only checked loans must be provided
@@ -184,6 +192,7 @@ describe('BulkClaimReturnedModal component', () => {
         currentUser: okapiCurrentUser,
       },
       mutator: mutatorFailed,
+      checkedLoansIndex: {},
     };
     renderBulkClaimReturnedModal(props);
     // Preconfirm model must be returned
