@@ -111,6 +111,8 @@ class PermissionsModal extends React.Component {
   constructor(props) {
     super(props);
 
+    this._isMounted = false;
+
     this.state = {
       filterPaneIsVisible: true,
       permissions: [],
@@ -129,10 +131,20 @@ class PermissionsModal extends React.Component {
       }
     } = this.props;
 
+    this._isMounted = true;
+
     await reset();
     const permissions = await GET();
 
-    this.setState({ permissions });
+    // don't set state if the component has unmounted,
+    // which it may have since this function is async
+    if (this._isMounted) {
+      this.setState({ permissions });
+    }
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   // Search for permissions
