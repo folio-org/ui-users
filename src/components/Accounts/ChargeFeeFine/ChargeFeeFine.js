@@ -427,6 +427,11 @@ class ChargeFeeFine extends React.Component {
       match: {
         params: { loanid },
       },
+      okapi: {
+        currentUser: {
+          curServicePoint,
+        }
+      },
     } = this.props;
     const {
       ownerId,
@@ -449,7 +454,7 @@ class ChargeFeeFine extends React.Component {
     const accounts = _.get(resources, ['accounts', 'records'], []);
     const settings = _.get(resources, ['commentRequired', 'records', 0], {});
     const barcode = _.get(resources, 'activeRecord.barcode');
-    const defaultServicePointId = _.get(resources, ['curUserServicePoint', 'records', 0, 'defaultServicePointId'], '-');
+    const defaultServicePointId = curServicePoint.id;
     const servicePointsIds = _.get(resources, ['curUserServicePoint', 'records', 0, 'servicePointsIds'], []);
     let selected = parseFloat(0);
     accounts.forEach(a => {
@@ -480,11 +485,11 @@ class ChargeFeeFine extends React.Component {
     const servicePointOwnerId = loadServicePoints({ owners: (shared ? owners : list), defaultServicePointId, servicePointsIds });
     const initialOwnerId = ownerId !== '0' ? ownerId : servicePointOwnerId;
     const selectedFeeFine = feefines.find(f => f.id === feeFineTypeId);
-    const currentOwnerFeeFineTypes = feefines.filter(f => f.ownerId === resources.activeRecord.ownerId || f.ownerId === resources.activeRecord.shared);
+    const currentOwnerFeeFineTypes = feefines.filter(f => f.ownerId === initialOwnerId || f.ownerId === resources.activeRecord.shared);
     const selectedOwner = owners.find(o => o.id === initialOwnerId);
 
     const initialChargeValues = {
-      ownerId: resources.activeRecord.ownerId || '',
+      ownerId: initialOwnerId,
       notify: !!(selectedFeeFine?.chargeNoticeId || selectedOwner?.defaultChargeNoticeId),
       feeFineId: '',
       amount: ''
