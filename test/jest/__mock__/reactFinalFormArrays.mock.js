@@ -7,4 +7,3 @@ jest.mock('react-final-form-arrays', () => {
     FieldArray: () => <div>FieldArray</div>,
   };
 });
-

@@ -12,22 +12,18 @@ import {
   Button,
   ConfirmationModal,
   Headline,
-  Icon,
-  List,
 } from '@folio/stripes/components';
 import {
   IfPermission,
   stripesConnect,
 } from '@folio/stripes/core';
 
-import { getPermissionLabelString } from '../data/converters/permission';
 import PermissionModal from './components/PermissionsModal';
-import PermissionLabel from '../PermissionLabel';
-import css from './PermissionsAccordion.css';
+import PermissionsAccordionList from './PermissionsAccordionList';
 
 class PermissionsAccordion extends React.Component {
   static propTypes = {
-    expanded: PropTypes.bool.isRequired,
+    expanded: PropTypes.bool,
     intl: PropTypes.shape({
       formatMessage: PropTypes.func.isRequired,
     }),
@@ -83,37 +79,6 @@ class PermissionsAccordion extends React.Component {
     change(permissionsField, permissions);
   }
 
-  renderItem(item, index, fields, showPerms) {
-    return (
-      <li
-        key={item.id}
-        data-permission-name={`${item.permissionName}`}
-      >
-        <PermissionLabel permission={item} showRaw={showPerms} />
-        <IfPermission perm={this.props.permToDelete}>
-          <FormattedMessage id="ui-users.permissions.removePermission">
-            {aria => (
-              <Button
-                buttonStyle="fieldControl"
-                align="end"
-                type="button"
-                id={`clickable-remove-permission-${item.permissionName}`}
-                onClick={() => fields.remove(index)}
-                aria-label={`${aria}: ${item.permissionName}`}
-              >
-                <Icon
-                  icon="times-circle"
-                  iconClassName={css.removePermissionIcon}
-                  iconRootClass={css.removePermissionButton}
-                />
-              </Button>
-            )}
-          </FormattedMessage>
-        </IfPermission>
-      </li>
-    );
-  }
-
   getAssignedPermissions = () => {
     const {
       form: { getFieldState },
@@ -122,36 +87,6 @@ class PermissionsAccordion extends React.Component {
 
     return getFieldState(permissionsField)?.value ?? [];
   }
-
-  renderList = ({ fields }) => {
-    const {
-      intl: { formatMessage },
-    } = this.props;
-    const showPerms = this.props.stripes?.config?.showPerms;
-    const assignedPermissions = this.getAssignedPermissions();
-
-    const listFormatter = (_fieldName, index) => {
-      if (fields.value[index]) {
-        return this.renderItem(fields.value[index], index, fields, showPerms);
-      }
-      return null;
-    };
-
-    const sortedItems = (assignedPermissions).sort((a, b) => {
-      const permA = getPermissionLabelString(a, formatMessage, showPerms);
-      const permB = getPermissionLabelString(b, formatMessage, showPerms);
-
-      return permA.localeCompare(permB);
-    });
-
-    return (
-      <List
-        items={sortedItems}
-        itemFormatter={listFormatter}
-        isEmptyMessage={<FormattedMessage id="ui-users.permissions.empty" />}
-      />
-    );
-  };
 
   /**
    * confirmEdit
@@ -244,7 +179,13 @@ class PermissionsAccordion extends React.Component {
           }
           displayWhenClosed={<Badge>{size}</Badge>}
         >
-          <FieldArray name={permissionsField} component={this.renderList} />
+          <FieldArray
+            name={permissionsField}
+            component={PermissionsAccordionList}
+            getAssignedPermissions={this.getAssignedPermissions}
+            showPerms={!!this.props.stripes?.config?.showPerms}
+            permToDelete={this.props.permToDelete}
+          />
           <IfPermission perm={permToModify}>
             <Button
               type="button"

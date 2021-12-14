@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitForElementToBeRemoved } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { IfPermission } from '@folio/stripes/core';
@@ -33,21 +33,9 @@ const paProps = {
 };
 
 jest.mock('./components/PermissionsModal', () => {
-  return () => <div>PermissionsModal</div>;
+  // eslint-disable-next-line react/prop-types
+  return ({ open }) => (open ? <div>PermissionsModal</div> : null);
 });
-
-
-// if (!this.props.stripes.hasPerm(this.props.permToRead)) return null;
-
-// const renderPermissionsAccordion = (extraProps = {}) => (
-//   render(<Form
-//     onSubmit={jest.fn()}
-//     mutators={{ ...arrayMutators }}
-//     render={props => (
-//       <PermissionsAccordion {...props} {...paProps} {...extraProps} />
-//     )}
-//   />)
-// );
 
 const renderPermissionsAccordion = (extraProps = {}) => render(<PermissionsAccordion {...paProps} {...extraProps} />);
 
@@ -59,7 +47,7 @@ describe('PermissionsAccordion', () => {
       },
     });
 
-    expect(screen.queryByTestId(paProps.accordionId)).toBeTruthy();
+    expect(screen.getByTestId(paProps.accordionId)).toBeTruthy();
   });
 
 
@@ -75,7 +63,7 @@ describe('PermissionsAccordion', () => {
       },
     });
 
-    expect(screen.queryByTestId(paProps.accordionId)).toBeTruthy();
+    expect(screen.getByTestId(paProps.accordionId)).toBeTruthy();
   });
 
   test('without credentials, renders nothing', async () => {
@@ -86,7 +74,7 @@ describe('PermissionsAccordion', () => {
       },
     });
 
-    expect(screen.queryByTestId(paProps.accordionId)).toBeFalsy();
+    expect(screen.queryByTestId(paProps.accordionId)).not.toBeInTheDocument();
   });
 
   test('without credentials, hides add-permission button', async () => {
@@ -98,7 +86,7 @@ describe('PermissionsAccordion', () => {
       permToModify: 'funky-chicken'
     });
 
-    expect(screen.queryByText('ui-users.permissions.addPermission')).toBeFalsy();
+    expect(screen.queryByText('ui-users.permissions.addPermission')).not.toBeInTheDocument();
   });
 
   describe('with credentials', () => {
@@ -109,15 +97,16 @@ describe('PermissionsAccordion', () => {
 
       renderPermissionsAccordion();
 
-      expect(screen.queryByText('ui-users.permissions.addPermission')).toBeTruthy();
+      expect(screen.getByText('ui-users.permissions.addPermission')).toBeInTheDocument();
     });
 
     describe('when only "visible: true" permissions are assigned', () => {
       test('shows permissions-dialog', async () => {
         renderPermissionsAccordion();
 
+        expect(screen.queryByText('PermissionsModal')).not.toBeInTheDocument();
         userEvent.click(screen.getByText('ui-users.permissions.addPermission'));
-        expect(screen.getByText('PermissionsModal')).toBeTruthy();
+        expect(await screen.findByText('PermissionsModal')).toBeInTheDocument();
       });
     });
 
@@ -135,19 +124,52 @@ describe('PermissionsAccordion', () => {
         });
 
         userEvent.click(screen.getByText('ui-users.permissions.addPermission'));
-        expect(screen.getByText('ui-users.permissions-accordion.confirm-heading')).toBeTruthy();
+        expect(await screen.findByText('ui-users.permissions-accordion.confirm-heading')).toBeInTheDocument();
       });
 
-      test.skip('hides prompt on cancel', async () => {
-        renderPermissionsAccordion();
+      test('hides prompt on cancel', async () => {
+        renderPermissionsAccordion({
+          form: {
+            getFieldState: () => ({
+              value: [
+                { name: 'foo', visible: true },
+                { name: 'bar', visible: false },
+              ]
+            }),
+          },
+        });
 
-        expect(screen.queryByText('ui-users.brd.successfulRenewal')).toBeInTheDocument();
+        userEvent.click(screen.getByText('ui-users.permissions.addPermission'));
+        const cancelButton = await screen.findByRole('button', { name: 'stripes-components.cancel' });
+        userEvent.click(cancelButton);
+
+        await waitForElementToBeRemoved(() => screen.getByText('ui-users.permissions-accordion.confirm-heading'));
       });
 
-      test.skip('shows permissions-dialog on confirm', async () => {
-        renderPermissionsAccordion();
+      test('shows permissions-dialog on confirm', async () => {
+        renderPermissionsAccordion({
+          form: {
+            getFieldState: () => ({
+              value: [
+                { name: 'foo', visible: true },
+                { name: 'bar', visible: false },
+              ]
+            }),
+          },
+        });
 
-        expect(screen.queryByText('ui-users.brd.successfulRenewal')).toBeInTheDocument();
+        // PermissionsModal is _not_ present
+        expect(screen.queryByText('PermissionsModal')).not.toBeInTheDocument();
+
+        userEvent.click(screen.getByText('ui-users.permissions.addPermission'));
+        const cancelButton = await screen.findByRole('button', { name: 'ui-users.permissions-accordion.confirm-continue' });
+        userEvent.click(cancelButton);
+
+        // closes the ConfirmModal
+        await waitForElementToBeRemoved(() => screen.getByText('ui-users.permissions-accordion.confirm-heading'));
+
+        // PermissionsModal _is_ present
+        expect(await screen.findByText('PermissionsModal')).toBeInTheDocument();
       });
     });
   });
