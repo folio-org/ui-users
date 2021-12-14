@@ -135,6 +135,6 @@ describe('UserPermissions component', () => {
       intl: {},
     };
     renderModals(props);
-    expect(document.querySelector('[data-test-bulk-claim-returned-additionalinfo="true"]')).toBeTruthy();
+    expect(document.querySelector('[data-test-bulk-claim-returned-additional-info="true"]')).toBeTruthy();
   });
 });
