@@ -8,25 +8,20 @@ import {
   injectIntl,
 } from 'react-intl';
 import {
-  Icon,
-  Button,
   Accordion,
   Badge,
-  List,
-  Headline,
   ConfirmationModal,
   Callout,
+  Button,
+  Headline,
 } from '@folio/stripes/components';
 import {
-  stripesShape,
   IfPermission,
   stripesConnect,
 } from '@folio/stripes/core';
 
-import { getPermissionLabelString } from '../data/converters/permission';
 import PermissionModal from './components/PermissionsModal';
-import PermissionLabel from '../PermissionLabel';
-import css from './PermissionsAccordion.css';
+import PermissionsAccordionList from './PermissionsAccordionList';
 
 const PermissionsAccordion = (props) => {
   const {
@@ -34,6 +29,7 @@ const PermissionsAccordion = (props) => {
     expanded,
     onToggle,
     permToModify,
+    permToDelete,
     permissionsField,
     filtersConfig,
     visibleColumns,
@@ -54,6 +50,7 @@ const PermissionsAccordion = (props) => {
   const [permissionModalOpen, setPermissionModalOpen] = useState(false);
   const [unassignModalOpen, setUnassignModalOpen] = useState(false);
   const [isUnassignButtonEnable, setIsUnassignButtonEnable] = useState(false);
+  const [confirmEditModalOpen, setConfirmEditModalOpen] = useState(false);
 
   const calloutRef = useRef();
 
@@ -65,69 +62,52 @@ const PermissionsAccordion = (props) => {
     change(permissionsField, permissions);
   };
 
-  const renderItem = (item, index, fields, showPerms) => {
-    return (
-      <li
-        key={item.id}
-        data-permission-name={`${item.permissionName}`}
-      >
-        <PermissionLabel permission={item} showRaw={showPerms} />
-        <IfPermission perm={props.permToDelete}>
-          <FormattedMessage id="ui-users.permissions.removePermission">
-            {aria => (
-              <Button
-                buttonStyle="fieldControl"
-                align="end"
-                type="button"
-                id={`clickable-remove-permission-${item.permissionName}`}
-                onClick={() => fields.remove(index)}
-                aria-label={`${aria}: ${item.permissionName}`}
-              >
-                <Icon
-                  icon="times-circle"
-                  iconClassName={css.removePermissionIcon}
-                  iconRootClass={css.removePermissionButton}
-                />
-              </Button>
-            )}
-          </FormattedMessage>
-        </IfPermission>
-      </li>
-    );
+  /**
+   * confirmEdit
+   * Close the ConfirmationModal, and open the PermissionsModal. This is a
+   * callback from the ConfirmationModal to continue with editing permissions
+   * even though this means permissions with `visible: false` settings will
+   * be removed.
+   *
+   * See openPermissionsModal for a detailed explanation.
+   */
+  const confirmEdit = () => {
+    setConfirmEditModalOpen(false);
+    setPermissionModalOpen(true);
   };
 
-  const renderList = ({ fields }) => {
-    const { intl: { formatMessage } } = props;
-    const showPerms = props.stripes?.config?.showPerms;
-    const assignedPermissions = getAssignedPermissions();
-
-    const listFormatter = (_fieldName, index) => {
-      if (fields.value[index]) {
-        return renderItem(fields.value[index], index, fields, showPerms);
-      }
-      return null;
-    };
-
-    const sortedItems = (assignedPermissions).sort((a, b) => {
-      const permA = getPermissionLabelString(a, formatMessage, showPerms);
-      const permB = getPermissionLabelString(b, formatMessage, showPerms);
-
-      return permA.localeCompare(permB);
-    });
-
-    return (
-      <List
-        items={sortedItems}
-        itemFormatter={listFormatter}
-        isEmptyMessage={<FormattedMessage id="ui-users.permissions.empty" />}
-      />
-    );
+  /**
+   * cancelEdit
+   * Close the ConfirmationModal. This is a callback from the ConfirmationModal
+   * to cancel editing of permissions since it would result in the removal of
+   * permissions with `visible: false`.
+   *
+   * See openPermissionsModal for a detailed explanation.
+   */
+  const cancelEdit = () => {
+    setConfirmEditModalOpen(false);
   };
 
+  /**
+   * openPermissionModal
+   * Check whether any currently-assigned permissions contain `visible: false`.
+   * If there are any, confirm whether to continue since only `visible: true`
+   * permissions will be retained after editing (confirmation is handled by
+   * confirmEdit and cancelEdit). If there are not any, i.e. all currently-assigned
+   * permissions are `visible: true`, open PermissionModal.
+   *
+   * @param {event} e click event
+   */
   const openPermissionModal = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    setPermissionModalOpen(true);
+
+    const isHiddenAssigned = !!getAssignedPermissions().find((p) => p.visible === false);
+    if (isHiddenAssigned) {
+      setConfirmEditModalOpen(true);
+    } else {
+      setPermissionModalOpen(true);
+    }
   };
 
   const closePermissionModal = () => {
@@ -170,43 +150,48 @@ const PermissionsAccordion = (props) => {
   );
 
   return (
-    <Accordion
-      open={expanded}
-      id={accordionId}
-      onToggle={onToggle}
-      label={
-        <Headline
-          size="large"
-          tag="h3"
-        >
-          {headlineContent}
-        </Headline>
-      }
-      displayWhenClosed={<Badge>{permissionsAmount}</Badge>}
-    >
-      <FieldArray name={permissionsField} component={renderList} />
-      <IfPermission perm={permToModify}>
-        <Button
-          type="button"
-          align="end"
-          bottomMargin0
-          id="clickable-add-permission"
-          onClick={openPermissionModal}
-        >
-          <FormattedMessage id="ui-users.permissions.addPermission" />
-        </Button>
-        <Button
-          type="button"
-          align="end"
-          bottomMargin0
-          disabled={!isUnassignButtonEnable}
-          id="clickable-remove-all-permissions"
-          onClick={openUnassignModal}
-        >
-          <FormattedMessage id="ui-users.permissions.unassignAllPermissions" />
-        </Button>
-        {
-          permissionModalOpen &&
+    <div data-testid={accordionId}>
+      <Accordion
+        open={expanded}
+        id={accordionId}
+        onToggle={onToggle}
+        label={
+          <Headline
+            size="large"
+            tag="h3"
+          >
+            {headlineContent}
+          </Headline>
+        }
+        displayWhenClosed={<Badge>{permissionsAmount}</Badge>}
+      >
+        <FieldArray
+          name={permissionsField}
+          component={PermissionsAccordionList}
+          getAssignedPermissions={getAssignedPermissions}
+          showPerms={!!props.stripes?.config?.showPerms}
+          permToDelete={permToDelete}
+        />
+        <IfPermission perm={permToModify}>
+          <Button
+            type="button"
+            align="end"
+            bottomMargin0
+            id="clickable-add-permission"
+            onClick={openPermissionModal}
+          >
+            <FormattedMessage id="ui-users.permissions.addPermission" />
+          </Button>
+          <Button
+            type="button"
+            align="end"
+            bottomMargin0
+            disabled={!isUnassignButtonEnable}
+            id="clickable-remove-all-permissions"
+            onClick={openUnassignModal}
+          >
+            <FormattedMessage id="ui-users.permissions.unassignAllPermissions" />
+          </Button>
           <PermissionModal
             assignedPermissions={assignedPermissions}
             addPermissions={addPermissions}
@@ -216,30 +201,38 @@ const PermissionsAccordion = (props) => {
             filtersConfig={filtersConfig}
             onClose={closePermissionModal}
           />
-        }
-        {
-          unassignModalOpen &&
           <ConfirmationModal
-            open={unassignModalOpen}
-            heading={<FormattedMessage id="ui-users.permissions.modal.unassignAll.header" />}
-            message={message}
-            onConfirm={unassignAllPermissions}
-            onCancel={closeUnassignModal}
-            cancelLabel={<FormattedMessage id="ui-users.no" />}
-            confirmLabel={<FormattedMessage id="ui-users.yes" />}
+            open={confirmEditModalOpen}
+            heading="ui-users.permissions-accordion.confirm-heading"
+            message="ui-users.permissions-accordion.confirm-message"
+            onConfirm={confirmEdit}
+            confirmLabel="ui-users.permissions-accordion.confirm-continue"
+            onCancel={cancelEdit}
           />
-        }
-        <OnChange name={permissionsField}>
-          {() => { setIsUnassignButtonEnable(() => !!getAssignedPermissions().length); }}
-        </OnChange>
-      </IfPermission>
-      <Callout ref={calloutRef} />
-    </Accordion>
+          {
+            unassignModalOpen &&
+            <ConfirmationModal
+              open={unassignModalOpen}
+              heading={<FormattedMessage id="ui-users.permissions.modal.unassignAll.header" />}
+              message={message}
+              onConfirm={unassignAllPermissions}
+              onCancel={closeUnassignModal}
+              cancelLabel={<FormattedMessage id="ui-users.no" />}
+              confirmLabel={<FormattedMessage id="ui-users.yes" />}
+            />
+          }
+          <OnChange name={permissionsField}>
+            {() => { setIsUnassignButtonEnable(() => !!getAssignedPermissions().length); }}
+          </OnChange>
+        </IfPermission>
+        <Callout ref={calloutRef} />
+      </Accordion>
+    </div>
   );
 };
 
 PermissionsAccordion.propTypes = {
-  expanded: PropTypes.bool.isRequired,
+  expanded: PropTypes.bool,
   intl: PropTypes.shape({
     formatMessage: PropTypes.func.isRequired,
   }),
@@ -249,7 +242,7 @@ PermissionsAccordion.propTypes = {
   permToDelete: PropTypes.string.isRequired,
   permToModify: PropTypes.string.isRequired,
   permToRead: PropTypes.string.isRequired,
-  stripes: stripesShape.isRequired,
+  stripes: PropTypes.object.isRequired,
   // eslint-disable-next-line react/no-unused-prop-types
   formName: PropTypes.string.isRequired,
   permissionsField: PropTypes.string.isRequired,
