@@ -16,6 +16,7 @@
 * Search operates on custom fields. Refs UIU-2165.
 * Refactor from `<SafeHTMLMessage>` to `<FormattedMessage>`. Refs UIU-2179.
 * Reset offset when sort values change. Fixes UIU-2466.
+* Prompt if changing permissions will remove those with `visible: false`. Refs UIU-2409.
 
 ## [7.0.1](https://github.com/folio-org/ui-users/tree/v7.0.1) (2021-10-07)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.1.0...v7.0.1)
@@ -84,6 +85,7 @@
 * Create Jest/RTL test for `Owners`. Refs UIU-2408.
 * Create Jest/RTL test for `Modals`. Refs UIU-2323.
 * Create Jest/RTL test for `BulkClaimReturnedModal`. Refs UIU-2317.
+* Create Jest/RTL test for `PatronBlockModalWithOverrideModal`. Refs UIU-2370.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
