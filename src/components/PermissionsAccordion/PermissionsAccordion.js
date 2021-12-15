@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { FieldArray } from 'react-final-form-arrays';
 import { OnChange } from 'react-final-form-listeners';
@@ -53,12 +53,12 @@ const PermissionsAccordion = (props) => {
 
   const [permissionModalOpen, setPermissionModalOpen] = useState(false);
   const [unassignModalOpen, setUnassignModalOpen] = useState(false);
-  const [isUnassingButtonEnable, setIsUnassingButtonEnable] = useState(false);
+  const [isUnassignButtonEnable, setIsUnassignButtonEnable] = useState(false);
 
-  const callout = React.createRef();
+  const calloutRef = useRef();
 
   useEffect(() => {
-    setIsUnassingButtonEnable(isAllowedPermissions);
+    setIsUnassignButtonEnable(isAllowedPermissions);
   }, [isAllowedPermissions]);
 
   const addPermissions = (permissions) => {
@@ -147,7 +147,7 @@ const PermissionsAccordion = (props) => {
   const unassignAllPermissions = () => {
     change(permissionsField, []);
     setUnassignModalOpen(false);
-    callout.current.sendCallout({
+    calloutRef.current.sendCallout({
       type: 'success',
       message: <FormattedMessage id="ui-users.permissions.calloutMessage" />,
     });
@@ -157,7 +157,7 @@ const PermissionsAccordion = (props) => {
 
   if (!props.stripes.hasPerm(props.permToRead)) return null;
 
-  const size = assignedPermissions.length;
+  const permissionsAmount = assignedPermissions.length;
 
   const message = (
     <FormattedMessage
@@ -182,7 +182,7 @@ const PermissionsAccordion = (props) => {
           {headlineContent}
         </Headline>
       }
-      displayWhenClosed={<Badge>{size}</Badge>}
+      displayWhenClosed={<Badge>{permissionsAmount}</Badge>}
     >
       <FieldArray name={permissionsField} component={renderList} />
       <IfPermission perm={permToModify}>
@@ -199,7 +199,7 @@ const PermissionsAccordion = (props) => {
           type="button"
           align="end"
           bottomMargin0
-          disabled={!isUnassingButtonEnable}
+          disabled={!isUnassignButtonEnable}
           id="clickable-remove-all-permissions"
           onClick={openUnassignModal}
         >
@@ -230,10 +230,10 @@ const PermissionsAccordion = (props) => {
           />
         }
         <OnChange name={permissionsField}>
-          {() => { setIsUnassingButtonEnable(() => !!getAssignedPermissions().length); }}
+          {() => { setIsUnassignButtonEnable(() => !!getAssignedPermissions().length); }}
         </OnChange>
       </IfPermission>
-      <Callout ref={callout} />
+      <Callout ref={calloutRef} />
     </Accordion>
   );
 };
