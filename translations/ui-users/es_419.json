@@ -975,5 +975,6 @@
     "custom.customFields": "Campos Personalizados",
     "custom.noCustomFieldsFound": "No se encontraron campos personalizados",
     "reports.financial.patronBarcode.noBarcode": "[sin código de barras]",
-    "settings.manualBlockTemplates.paneTitle": "Patron block templates"
+    "settings.manualBlockTemplates.paneTitle": "Patron block templates",
+    "permission.feesfines.view": "Users: Can view fees/fines and loans"
 }

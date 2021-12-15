@@ -110,7 +110,7 @@
     "expirationDate": "Ablaufdatum",
     "by": "durch",
     "delete": "Löschen",
-    "saveAndClose": "Speichern & Schließen",
+    "saveAndClose": "Speichern & schließen",
     "edit": "Bearbeiten",
     "description": "Beschreibung",
     "renew": "Verlängern",
@@ -975,5 +975,6 @@
     "custom.customFields": "Benutzerdefinierte Felder",
     "custom.noCustomFieldsFound": "Keine benutzerdefinierten Felder gefunden",
     "reports.financial.patronBarcode.noBarcode": "Kein Barcode",
-    "settings.manualBlockTemplates.paneTitle": "Vorlagen für Kontosperren"
+    "settings.manualBlockTemplates.paneTitle": "Vorlagen für Kontosperren",
+    "permission.feesfines.view": "Users: Can view fees/fines and loans"
 }
