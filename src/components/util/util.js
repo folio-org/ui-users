@@ -1,6 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { every } from 'lodash';
+import { NoValue } from '@folio/stripes/components';
 
 import {
   requestStatuses,
@@ -43,10 +44,11 @@ export const formatDateAndTime = (date, formatter) => {
   return date ? formatter(date, { day: 'numeric', month: 'numeric', year: 'numeric' }) : '';
 };
 
+
 export const getServicePointOfCurrentAction = (action, servicePoints = []) => {
   const servicePoint = servicePoints.find(sp => sp.id === action.createdAt);
-
-  return servicePoint ? servicePoint.name : action.createdAt;
+  const createAtValue = servicePoint ? servicePoint.name : action.createdAt;
+  return createAtValue || <NoValue />;
 };
 
 export const calculateRemainingAmount = (remaining) => (parseFloat(remaining) * 100) / 100;
