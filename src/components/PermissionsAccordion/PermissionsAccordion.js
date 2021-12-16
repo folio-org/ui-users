@@ -22,6 +22,7 @@ import {
 
 import PermissionModal from './components/PermissionsModal';
 import PermissionsAccordionList from './PermissionsAccordionList';
+import EnableUnassignAll from './EnableUnassignAll';
 
 const PermissionsAccordion = (props) => {
   const {
@@ -209,21 +210,20 @@ const PermissionsAccordion = (props) => {
             confirmLabel="ui-users.permissions-accordion.confirm-continue"
             onCancel={cancelEdit}
           />
-          {
-            unassignModalOpen &&
-            <ConfirmationModal
-              open={unassignModalOpen}
-              heading={<FormattedMessage id="ui-users.permissions.modal.unassignAll.header" />}
-              message={message}
-              onConfirm={unassignAllPermissions}
-              onCancel={closeUnassignModal}
-              cancelLabel={<FormattedMessage id="ui-users.no" />}
-              confirmLabel={<FormattedMessage id="ui-users.yes" />}
-            />
-          }
-          <OnChange name={permissionsField}>
-            {() => { setIsUnassignButtonEnable(() => !!getAssignedPermissions().length); }}
-          </OnChange>
+          <ConfirmationModal
+            open={unassignModalOpen}
+            heading={<FormattedMessage id="ui-users.permissions.modal.unassignAll.header" />}
+            message={message}
+            onConfirm={unassignAllPermissions}
+            onCancel={closeUnassignModal}
+            cancelLabel={<FormattedMessage id="ui-users.no" />}
+            confirmLabel={<FormattedMessage id="ui-users.yes" />}
+          />
+          <EnableUnassignAll
+            permissionsField={permissionsField}
+            callback={setIsUnassignButtonEnable}
+            isEnabled={!!getAssignedPermissions().length}
+          />
         </IfPermission>
         <Callout ref={calloutRef} />
       </Accordion>

@@ -37,6 +37,16 @@ jest.mock('./components/PermissionsModal', () => {
   return ({ open }) => (open ? <div>PermissionsModal</div> : null);
 });
 
+
+jest.mock('react-final-form-listeners', () => {
+  return {
+    ...jest.requireActual('react-final-form-listeners'),
+
+    OnChange: () => <div>OnChange</div>,
+  };
+});
+
+
 const renderPermissionsAccordion = (extraProps = {}) => render(<PermissionsAccordion {...paProps} {...extraProps} />);
 
 describe('PermissionsAccordion', () => {
