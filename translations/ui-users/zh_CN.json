@@ -976,5 +976,8 @@
     "custom.noCustomFieldsFound": "未找到自定义字段",
     "reports.financial.patronBarcode.noBarcode": "[无条码]",
     "settings.manualBlockTemplates.paneTitle": "读者冻结模板",
-    "permission.feesfines.view": "用户：可以查看费用/罚款和借阅"
+    "permission.feesfines.view": "用户：可以查看费用/罚款和借阅",
+    "permissions-accordion.confirm-heading": "Continue changing permissions? ",
+    "permissions-accordion.confirm-message": "Invisible permissions are part of this set and will be removed when changes are saved. Would you like to continue?",
+    "permissions-accordion.confirm-continue": "Continue"
 }
