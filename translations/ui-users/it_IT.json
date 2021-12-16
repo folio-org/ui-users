@@ -976,5 +976,8 @@
     "custom.noCustomFieldsFound": "No custom fields found",
     "reports.financial.patronBarcode.noBarcode": "[no barcode]",
     "settings.manualBlockTemplates.paneTitle": "Modelli per i blocchi utente",
-    "permission.feesfines.view": "Users: Can view fees/fines and loans"
+    "permission.feesfines.view": "Users: Can view fees/fines and loans",
+    "permissions-accordion.confirm-heading": "Continue changing permissions? ",
+    "permissions-accordion.confirm-message": "Invisible permissions are part of this set and will be removed when changes are saved. Would you like to continue?",
+    "permissions-accordion.confirm-continue": "Continue"
 }
