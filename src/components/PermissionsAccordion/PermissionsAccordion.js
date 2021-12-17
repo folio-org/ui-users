@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { FieldArray } from 'react-final-form-arrays';
-import { OnChange } from 'react-final-form-listeners';
 
 import {
   FormattedMessage,
