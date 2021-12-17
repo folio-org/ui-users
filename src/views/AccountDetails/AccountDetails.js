@@ -335,7 +335,7 @@ class AccountDetails extends React.Component {
     const loan = _.get(resources, ['loans', 'records'], []).filter((l) => l.id === account.loanId);
     const loanPolicyId = loan[0]?.loanPolicyId;
     const loanPolicyName = loan[0]?.loanPolicy.name;
-
+    const loanCloseDate = loan[0]?.loanCloseDate;
     // not all accounts are attached to loans. for those that are
     const hasLoan = !!account.barcode;
 
@@ -573,7 +573,7 @@ class AccountDetails extends React.Component {
             <Col xs={1.5} sm={3} md={3} lg={3}>
               <KeyValue
                 label={<FormattedMessage id="ui-users.feefines.details.dateClose" />}
-                value="-"
+                value={loanCloseDate ? <FormattedTime value={loanCloseDate} /> : <NoValue />}
               />
             </Col>
           </Row>
@@ -655,7 +655,7 @@ class AccountDetails extends React.Component {
             </Col>
           </Row>
           <Row>
-            <Col xs={1.5} sm={1.5} md={1.5} lg={1.5}>
+            <Col xs={1.5}>
               <KeyValue
                 label={<FormattedMessage id="ui-users.loans.details.loanPolicy" />}
                 value={loanPolicyId
