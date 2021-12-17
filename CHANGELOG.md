@@ -17,6 +17,7 @@
 * Refactor from `<SafeHTMLMessage>` to `<FormattedMessage>`. Refs UIU-2179.
 * Reset offset when sort values change. Fixes UIU-2466.
 * Prompt if changing permissions will remove those with `visible: false`. Refs UIU-2409.
+* Unassign all permissions from a user with one click. Refs UIU-2477.
 
 ## [7.0.1](https://github.com/folio-org/ui-users/tree/v7.0.1) (2021-10-07)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.1.0...v7.0.1)

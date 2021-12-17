@@ -9,6 +9,8 @@ ModuleDescriptor.json
 artifacts
 *.idea*
 junit.xml
+.pdf
+output
 
 # stripes
 .stripesclirc
