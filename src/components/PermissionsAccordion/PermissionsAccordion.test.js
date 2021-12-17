@@ -13,7 +13,6 @@ import PermissionsAccordion from './PermissionsAccordion';
 jest.unmock('@folio/stripes/components');
 
 const changeFormMock = jest.fn();
-
 const paProps = {
   accordionId: 'permissions-accordion',
   expanded: true,
