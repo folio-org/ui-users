@@ -525,13 +525,13 @@ class AccountDetails extends React.Component {
             <Col xs={1.5}>
               <KeyValue
                 label={<FormattedMessage id="ui-users.details.field.feetype" />}
-                value={_.get(account, ['feeFineType'], '-')}
+                value={_.get(account, ['feeFineType'], <NoValue />)}
               />
             </Col>
             <Col xs={1.5}>
               <KeyValue
                 label={<FormattedMessage id="ui-users.details.field.owner" />}
-                value={_.get(account, ['feeFineOwner'], '-')}
+                value={_.get(account, ['feeFineOwner'], <NoValue />)}
               />
             </Col>
             <Col xs={1.5}>
@@ -545,7 +545,7 @@ class AccountDetails extends React.Component {
                         month="numeric"
                         year="numeric"
                     />
-                    : '-'
+                    : <NoValue />
                 )}
               />
             </Col>
@@ -570,7 +570,7 @@ class AccountDetails extends React.Component {
                 value={latestPaymentStatus}
               />
             </Col>
-            <Col xs={1.5} sm={3} md={3} lg={3}>
+            <Col xs={1.5} sm={3}>
               <KeyValue
                 label={<FormattedMessage id="ui-users.feefines.details.dateClose" />}
                 value={loanCloseDate ? <FormattedTime value={loanCloseDate} /> : <NoValue />}
@@ -593,7 +593,7 @@ class AccountDetails extends React.Component {
             >
               <KeyValue
                 label={<FormattedMessage id="ui-users.reports.overdue.item.contributors" />}
-                value={contributors || '-'}
+                value={contributors || <NoValue />}
               />
             </Col>
             <Col xs={1.5}>
@@ -605,13 +605,13 @@ class AccountDetails extends React.Component {
             <Col xs={1.5}>
               <KeyValue
                 label={<FormattedMessage id="ui-users.details.field.callnumber" />}
-                value={_.get(account, ['callNumber'], '-')}
+                value={_.get(account, ['callNumber'], <NoValue />)}
               />
             </Col>
             <Col xs={1.5}>
               <KeyValue
                 label={<FormattedMessage id="ui-users.details.field.location" />}
-                value={_.get(account, ['location'], '-')}
+                value={_.get(account, ['location'], <NoValue />)}
               />
             </Col>
             <Col xs={1.5}>
@@ -625,7 +625,7 @@ class AccountDetails extends React.Component {
                         month="numeric"
                         year="numeric"
                     />
-                    : '-'
+                    : <NoValue />
                 }
               />
             </Col>
@@ -640,7 +640,7 @@ class AccountDetails extends React.Component {
                         month="numeric"
                         year="numeric"
                     />
-                    : '-'
+                    : <NoValue />
                 }
               />
             </Col>
@@ -660,41 +660,35 @@ class AccountDetails extends React.Component {
                 label={<FormattedMessage id="ui-users.loans.details.loanPolicy" />}
                 value={loanPolicyId
                   ? <Link to={`/settings/circulation/loan-policies/${loanPolicyId}`}>{loanPolicyName}</Link>
-                  : '-'
+                  : <NoValue />
                 }
               />
             </Col>
             <Col
               data-test-overdue-policy
               xs={1.5}
-              sm={1.5}
-              md={1.5}
-              lg={1.5}
             >
               <KeyValue
                 label={<FormattedMessage id="ui-users.loans.details.overduePolicy" />}
                 value={overdueFinePolicyId
                   ? <Link to={`/settings/circulation/fine-policies/${overdueFinePolicyId}`}>{overdueFinePolicyName}</Link>
-                  : '-'
+                  : <NoValue />
                 }
               />
             </Col>
             <Col
               data-test-lost-item-policy
               xs={1.5}
-              sm={1.5}
-              md={1.5}
-              lg={1.5}
             >
               <KeyValue
                 label={<FormattedMessage id="ui-users.loans.details.lostItemPolicy" />}
                 value={lostItemPolicyId
                   ? <Link to={`/settings/circulation/lost-item-fee-policy/${lostItemPolicyId}`}>{lostItemPolicyName}</Link>
-                  : '-'
+                  : <NoValue />
                 }
               />
             </Col>
-            <Col xs={1.5} sm={1.5} md={1.5} lg={1.5} xsOffset={6} smOffset={6} mdOffset={6} lgOffset={6} />
+            <Col xs={1.5} xsOffset={6} />
           </Row>
           <br />
           <MultiColumnList
