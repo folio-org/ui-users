@@ -6,10 +6,10 @@ import '__mock__/reactFinalFormListeners.mock';
 
 import EnableUnassignAll from './EnableUnassignAll';
 
-const onChengeMock = jest.fn();
+const onChangeMock = jest.fn();
 
 const enableUnassignAllProps = {
-  callback: onChengeMock,
+  callback: onChangeMock,
   isEnabled: true,
   permissionsField: 'permissions',
 };
@@ -31,6 +31,6 @@ describe('EnableUnassignAll', () => {
     const element = screen.getByRole('textbox');
     fireEvent.change(element, { target: { value: 'test' } });
 
-    expect(onChengeMock).toHaveBeenCalled();
+    expect(onChangeMock).toHaveBeenCalled();
   });
 });

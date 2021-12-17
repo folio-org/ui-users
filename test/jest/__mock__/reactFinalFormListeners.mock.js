@@ -4,6 +4,6 @@ jest.mock('react-final-form-listeners', () => {
   return {
     ...jest.requireActual('react-final-form-listeners'),
 
-    OnChange: ({ children }) => <>{children()}</>,
+    OnChange: jest.fn(({ children }) => <>{children()}</>),
   };
 });
