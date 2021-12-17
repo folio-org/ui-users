@@ -343,7 +343,7 @@
     "accounts.header": "Fee/fine details - {userName} ({patronGroup})",
     "owners.error": "Error",
     "owners.warning": "Warning: Overdue fines/lost item fees will not be collected without a service point",
-    "feefines.singular": "Fee/Fine Type",
+    "feefines.singular": "Fee/fine type",
     "blocks.columns.type": "Type",
     "blocks.columns.desc": "Display description",
     "blocks.columns.blocked": "Blocked actions",
@@ -436,10 +436,10 @@
     "blocks.layer.newBlockTitle": "New Block",
     "accounts.totalOpenAccounts": "(Total: {amount})",
     "accounts.status.outstanding": "Outstanding",
-    "feefines.defaultChargeNotice": "Default Charge Notice",
-    "feefines.defaultActionNotice": "Default Action Notice",
-    "feefines.columns.chargeNotice": "Charge Notice",
-    "feefines.columns.actionNotice": "Action Notice",
+    "feefines.defaultChargeNotice": "Default charge notice",
+    "feefines.defaultActionNotice": "Default action notice",
+    "feefines.columns.chargeNotice": "Charge notice",
+    "feefines.columns.actionNotice": "Action notice",
     "feefines.nodata": "There are no Fee/fine: Manual charges",
     "owners.nodata": "There are no Fee/fine: Owners",
     "settings.transferAccounts": "Transfer accounts",
@@ -976,5 +976,8 @@
     "custom.noCustomFieldsFound": "No custom fields found",
     "reports.financial.patronBarcode.noBarcode": "[no barcode]",
     "settings.manualBlockTemplates.paneTitle": "Patron block templates",
-    "permission.feesfines.view": "Users: Can view fees/fines and loans"
+    "permission.feesfines.view": "Users: Can view fees/fines and loans",
+    "permissions-accordion.confirm-heading": "Continue changing permissions? ",
+    "permissions-accordion.confirm-message": "Invisible permissions are part of this set and will be removed when changes are saved. Would you like to continue?",
+    "permissions-accordion.confirm-continue": "Continue"
 }
