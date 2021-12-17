@@ -979,5 +979,6 @@
     "permission.feesfines.view": "المستخدمين: إمكانية عرض الرسوم والغرامات والإعارات",
     "permissions-accordion.confirm-heading": "هل تريد الاستمرار في تغيير الصلاحيات؟",
     "permissions-accordion.confirm-message": "هناك صلاحيات غير مرئية تمثل جزءاً من هذه المجموعة وستتم إزالتها عند حفظ التغييرات. هل ترغب في المتابعة؟",
-    "permissions-accordion.confirm-continue": "متابعة"
+    "permissions-accordion.confirm-continue": "متابعة",
+    "feefines.details.dateClose": "Date fee/fine closed"
 }

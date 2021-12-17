@@ -979,5 +979,6 @@
     "permission.feesfines.view": "用户：可以查看费用/罚款和借阅",
     "permissions-accordion.confirm-heading": "Continue changing permissions? ",
     "permissions-accordion.confirm-message": "Invisible permissions are part of this set and will be removed when changes are saved. Would you like to continue?",
-    "permissions-accordion.confirm-continue": "Continue"
+    "permissions-accordion.confirm-continue": "Continue",
+    "feefines.details.dateClose": "Date fee/fine closed"
 }
