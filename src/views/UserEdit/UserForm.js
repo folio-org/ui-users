@@ -396,6 +396,7 @@ class UserForm extends React.Component {
                         fullName={fullName}
                       />
                       <PermissionsAccordion
+                        initialValues={initialValues}
                         filtersConfig={[
                           permissionTypeFilterConfig,
                           statusFilterConfig,

@@ -414,7 +414,7 @@
     "cddd.dateRequired": "Date*",
     "cddd.timeRequired": "Heure*",
     "additionalInfo.label": "Informations complémentaires",
-    "additionalInfo.placeholder": "Enter more information about the override (required)",
+    "additionalInfo.placeholder": "Entrez plus d'informations pour l'outrepassement (obligatoire).",
     "button.override": "Substituer",
     "override.emptyNewDueDate": "Sélectionner la date d'échéance ci-dessus",
     "loans.feeFineDetails": "Détails des frais / amendes",
@@ -976,5 +976,13 @@
     "custom.noCustomFieldsFound": "No custom fields found",
     "reports.financial.patronBarcode.noBarcode": "[pas de code-barres]",
     "settings.manualBlockTemplates.paneTitle": "Patron block templates",
-    "permission.feesfines.view": "Users: Can view fees/fines and loans"
+    "permission.feesfines.view": "Utilisateurs: peuvent consulter les frais / amendes et les prêts",
+    "permissions-accordion.confirm-heading": "Continue changing permissions? ",
+    "permissions-accordion.confirm-message": "Invisible permissions are part of this set and will be removed when changes are saved. Would you like to continue?",
+    "permissions-accordion.confirm-continue": "Continue",
+    "feefines.details.dateClose": "Date fee/fine closed",
+    "permissions.unassignAllPermissions": "Unassign all permissions",
+    "permissions.calloutMessage": "User's permissions are all unassigned.",
+    "permissions.modal.unassignAll.header": "Unassign all permissions",
+    "permissions.modal.unassignAll.label": "You are unassigning from the user <strong>{lastName}, {firstName}</strong> <p><strong>Are you sure?</strong></p>"
 }

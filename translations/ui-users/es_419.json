@@ -976,5 +976,13 @@
     "custom.noCustomFieldsFound": "No se encontraron campos personalizados",
     "reports.financial.patronBarcode.noBarcode": "[sin código de barras]",
     "settings.manualBlockTemplates.paneTitle": "Patron block templates",
-    "permission.feesfines.view": "Users: Can view fees/fines and loans"
+    "permission.feesfines.view": "Users: Can view fees/fines and loans",
+    "permissions-accordion.confirm-heading": "Continue changing permissions? ",
+    "permissions-accordion.confirm-message": "Invisible permissions are part of this set and will be removed when changes are saved. Would you like to continue?",
+    "permissions-accordion.confirm-continue": "Continue",
+    "feefines.details.dateClose": "Date fee/fine closed",
+    "permissions.unassignAllPermissions": "Unassign all permissions",
+    "permissions.calloutMessage": "User's permissions are all unassigned.",
+    "permissions.modal.unassignAll.header": "Unassign all permissions",
+    "permissions.modal.unassignAll.label": "You are unassigning from the user <strong>{lastName}, {firstName}</strong> <p><strong>Are you sure?</strong></p>"
 }
