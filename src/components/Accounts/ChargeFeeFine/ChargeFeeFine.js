@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import uuid from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import _ from 'lodash';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import moment from 'moment';
@@ -135,7 +135,7 @@ class ChargeFeeFine extends React.Component {
     if (item.contributorNames) { type.contributors = item.contributorNames; }
     if (selectedLoan.dueDate) type.dueDate = selectedLoan.dueDate;
     if (selectedLoan.returnDate) type.returnedDate = selectedLoan.returnDate;
-    type.id = uuid();
+    type.id = uuidv4();
     type.loanId = selectedLoan.id;
     type.userId = this.props.user.id;
     type.itemId = this.item.id;
