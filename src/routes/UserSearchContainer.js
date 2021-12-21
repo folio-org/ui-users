@@ -252,7 +252,13 @@ class UserSearchContainer extends React.Component {
     }
 
     const url = buildUrl(location, nsValues);
-    history.push(url);
+    const { pathname, search } = locationProp;
+
+    // Do not push to history if the url didn't change
+    // https://issues.folio.org/browse/UIU-2490
+    if (`${pathname}${search}` !== url) {
+      history.push(url);
+    }
   }
 
   queryGetter = () => {
