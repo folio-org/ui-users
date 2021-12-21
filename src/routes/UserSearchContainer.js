@@ -252,7 +252,11 @@ class UserSearchContainer extends React.Component {
     }
 
     const url = buildUrl(location, nsValues);
-    history.push(url);
+    const { pathname, search } = locationProp;
+
+    if (`${pathname}${search}` !== url) {
+      history.push(url);
+    }
   }
 
   queryGetter = () => {
