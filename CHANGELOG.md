@@ -18,6 +18,7 @@
 * Reset offset when sort values change. Fixes UIU-2466.
 * Prompt if changing permissions will remove those with `visible: false`. Refs UIU-2409.
 * Unassign all permissions from a user with one click. Refs UIU-2477.
+* Use supported `uuid`. Refs UIU-2488.
 * Do not push to history if the url didn't change. Fixes UIU-2490.
 
 ## [7.0.1](https://github.com/folio-org/ui-users/tree/v7.0.1) (2021-10-07)
@@ -86,6 +87,7 @@
 * Create Jest/RTL test for `UserPermissions`. Refs UIU-2303.
 * Create Jest/RTL test for `Owners`. Refs UIU-2408.
 * Create Jest/RTL test for `Modals`. Refs UIU-2323.
+* Create Jest/RTL test for `BulkClaimReturnedModal`. Refs UIU-2317.
 * Create Jest/RTL test for `PatronBlockModalWithOverrideModal`. Refs UIU-2370.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)

@@ -906,7 +906,7 @@
   "permissions.modal.showSearchPane": "Show search and filters pane.",
   "permissions.modal.numberOfFilters": "{count, number} {count, plural, one {applied filter} other {applied filters}}",
   "permissions.modal.unassignAll.header": "Unassign all permissions",
-  "permissions.modal.unassignAll.label": "You are unassigning from the user <strong>{lastName}, {firstName}</strong> <p><strong>Are you sure?</strong></p>",
+  "permissions.modal.unassignAll.label": "You are unassigning all permissions from the user <strong>{lastName}, {firstName}</strong> <p><strong>Are you sure?</strong></p>",
   "anonymization.confirmation.header": "Anonymization prevented",
   "anonymization.confirmation.message": "{amount} loan(s) had associated fees/fines and could not be anonymized.",
   "addAddressError": "Please, add at least one address inside \"Addresses\" section",
