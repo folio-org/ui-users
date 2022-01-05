@@ -911,7 +911,7 @@
     "details.label.loanAnonymized": "Anonymisé",
     "accounts.history.button.loanAnonymized": "Détails du prêt (anonymisé)",
     "details.checkDelete": "Check for open transactions/delete user",
-    "details.checkDelete.confirmation": "Voulez-vous vraiment supprimer cet utilisateur <strong> {name} </strong> ?",
+    "details.checkDelete.confirmation": "No open transactions for user <strong>{name}</strong>. <p>Are you sure you want to delete this user?</p>",
     "details.openTransactions": "Transactions ouvertes",
     "details.openTransactions.info": "L'utilisateur <strong> {name} </strong> a les transactions ouvertes suivantes :",
     "details.openTransactions.resolve": "Please resolve the transactions to proceed to delete the user.",
@@ -979,5 +979,10 @@
     "permission.feesfines.view": "Utilisateurs: peuvent consulter les frais / amendes et les prêts",
     "permissions-accordion.confirm-heading": "Continue changing permissions? ",
     "permissions-accordion.confirm-message": "Invisible permissions are part of this set and will be removed when changes are saved. Would you like to continue?",
-    "permissions-accordion.confirm-continue": "Continue"
+    "permissions-accordion.confirm-continue": "Continuer",
+    "feefines.details.dateClose": "Date fee/fine closed",
+    "permissions.unassignAllPermissions": "Unassign all permissions",
+    "permissions.calloutMessage": "User's permissions are all unassigned.",
+    "permissions.modal.unassignAll.header": "Unassign all permissions",
+    "permissions.modal.unassignAll.label": "You are unassigning all permissions from the user <strong>{lastName}, {firstName}</strong> <p><strong>Are you sure?</strong></p>"
 }
