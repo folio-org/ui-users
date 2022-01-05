@@ -35,7 +35,7 @@ class EditExtendedInfo extends Component {
     accordionId: PropTypes.string.isRequired,
     userFirstName: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,
-    onToggle: PropTypes.func.isRequired,
+    onToggle: PropTypes.func,
     change: PropTypes.func.isRequired,
     values: PropTypes.object,
     uniquenessValidator: PropTypes.object,
