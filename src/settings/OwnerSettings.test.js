@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { screen, fireEvent, act } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import renderWithRouter from 'helpers/renderWithRouter';
 import { buildResources } from 'helpers/buildResources';
@@ -164,33 +165,17 @@ describe('Owner settings', () => {
     expect(screen.getByText('ui-users.owners.columns.asp')).toBeTruthy();
   });
   it('Delete functionality in component', () => {
-    act(() => {
-      renderOwnerSettings(propData);
-    });
-    act(() => {
-      fireEvent.click(document.querySelector('[id="clickable-delete-settings-owners-1"]'));
-    });
-    act(() => {
-      fireEvent.click(document.querySelector('[id="clickable-delete-controlled-vocab-entry-confirmation-cancel"]'));
-    });
+    renderOwnerSettings(propData);
+    userEvent.click(document.querySelector('[id="clickable-delete-settings-owners-1"]'));
+    userEvent.click(document.querySelector('[id="clickable-delete-controlled-vocab-entry-confirmation-cancel"]'));
     expect(document.querySelector('[data-test-confirmation-modal-message="true"]')).toBeTruthy();
   });
   it('Create and edit functionality', () => {
-    act(() => {
-      renderOwnerSettings(propData);
-    });
-    act(() => {
-      fireEvent.click(document.querySelector('[id="clickable-add-settings-owners"]'));
-    });
-    act(() => {
-      fireEvent.change(document.querySelector('[id="text-input-12"]'), { target: { value: 'tesst' } });
-    });
-    act(() => {
-      fireEvent.change(document.querySelector('[id="multiselect-input-owner-service-point"]'), { target: { value: 'Online' } });
-    });
-    act(() => {
-      fireEvent.click(document.querySelector('[id="clickable-save-settings-owners-0"]'));
-    });
+    renderOwnerSettings(propData);
+    userEvent.click(document.querySelector('[id="clickable-add-settings-owners"]'));
+    userEvent.type(document.querySelector('[id="text-input-12"]'), { target: { value: 'tesst' } });
+    userEvent.type(document.querySelector('[id="multiselect-input-owner-service-point"]'), { target: { value: 'Online' } });
+    userEvent.click(document.querySelector('[id="clickable-save-settings-owners-0"]'));
     expect(screen.getByText('stripes-core.button.save')).toBeTruthy();
   });
 });
