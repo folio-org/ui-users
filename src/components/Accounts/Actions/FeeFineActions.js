@@ -356,7 +356,7 @@ class Actions extends React.Component {
     const info = formatMessage({ id: 'ui-users.accounts.comment.staffInfo' });
     const account = this.props.accounts[0] || '';
     const id = this.props.accounts[0].id || '';
-    const createAt = this.props.accounts[0].feeFineOwner || '';
+    const createAt = this.props.okapi.currentUser.curServicePoint.id;
     const balance = this.props.balance || 0;
     const tagStaff = formatMessage({ id: 'ui-users.accounts.actions.tag.staff' });
     const comment = `${tagStaff} : ${values.comment}`;
