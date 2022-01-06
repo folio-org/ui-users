@@ -911,7 +911,7 @@
     "details.label.loanAnonymized": "Anonymisé",
     "accounts.history.button.loanAnonymized": "Détails du prêt (anonymisé)",
     "details.checkDelete": "Check for open transactions/delete user",
-    "details.checkDelete.confirmation": "Voulez-vous vraiment supprimer cet utilisateur <strong> {name} </strong> ?",
+    "details.checkDelete.confirmation": "No open transactions for user <strong>{name}</strong>. <p>Are you sure you want to delete this user?</p>",
     "details.openTransactions": "Transactions ouvertes",
     "details.openTransactions.info": "L'utilisateur <strong> {name} </strong> a les transactions ouvertes suivantes :",
     "details.openTransactions.resolve": "Please resolve the transactions to proceed to delete the user.",

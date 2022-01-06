@@ -236,7 +236,7 @@ PermissionsAccordion.propTypes = {
     formatMessage: PropTypes.func.isRequired,
   }),
   initialValues: PropTypes.object,
-  onToggle: PropTypes.func.isRequired,
+  onToggle: PropTypes.func,
   accordionId: PropTypes.string.isRequired,
   permToDelete: PropTypes.string.isRequired,
   permToModify: PropTypes.string.isRequired,
