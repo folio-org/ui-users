@@ -460,7 +460,7 @@ class ActionModal extends React.Component {
                       dataOptions={ownerOptions}
                       placeholder={formatMessage({ id: 'ui-users.accounts.payment.owner.placeholder' })}
                       onChange={this.onChangeOwner}
-                      value={ownerId}
+                      defaultValue={ownerId}
                     />
                   </Col>
                 </Row>

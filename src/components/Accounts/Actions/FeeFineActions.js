@@ -616,9 +616,17 @@ class Actions extends React.Component {
       submitting
     } = this.state;
 
+    const {
+      okapi: {
+        currentUser: {
+          curServicePoint,
+        }
+      },
+    } = this.props;
+
     const account = this.props.accounts[0] || {};
     const feeFineActions = _.get(resources, ['feefineactions', 'records'], []);
-    const defaultServicePointId = _.get(resources, ['curUserServicePoint', 'records', 0, 'defaultServicePointId'], '-');
+    const defaultServicePointId = curServicePoint.id;
     const servicePointsIds = _.get(resources, ['curUserServicePoint', 'records', 0, 'servicePointsIds'], []);
     const payments = _.get(resources, ['payments', 'records'], []);
     const refunds = _.get(resources, ['refunds', 'records'], []);
@@ -643,7 +651,7 @@ class Actions extends React.Component {
 
     const servicePointOwnerId = loadServicePoints({ owners, defaultServicePointId, servicePointsIds });
     const currentFeeFineType = feefines.find(({ id }) => id === account?.feeFineId);
-    const currentOwnerId = servicePointOwnerId || currentFeeFineType?.ownerId || account?.ownerId;
+    const currentOwnerId = servicePointOwnerId;
     const currentOwner = owners.find(o => o.id === currentOwnerId) || {};
     const initialValues = {
       ownerId: currentOwnerId,
