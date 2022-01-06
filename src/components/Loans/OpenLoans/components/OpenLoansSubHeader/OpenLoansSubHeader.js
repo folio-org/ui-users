@@ -204,14 +204,16 @@ class OpenLoansSubHeader extends React.Component {
                 <FormattedMessage id="ui-users.renew" />
               </Button>
             </IfPermission>
-            <Button
-              marginBottom0
-              id="bulk-claim-returned"
-              disabled={noSelectedLoans || onlyClaimedReturnedItemsSelected}
-              onClick={openBulkClaimReturnedModal}
-            >
-              <FormattedMessage id="ui-users.loans.claimReturned" />
-            </Button>
+            <IfPermission perm="ui-users.loans.claim-item-returned">
+              <Button
+                marginBottom0
+                id="bulk-claim-returned"
+                disabled={noSelectedLoans || onlyClaimedReturnedItemsSelected}
+                onClick={openBulkClaimReturnedModal}
+              >
+                <FormattedMessage id="ui-users.loans.claimReturned" />
+              </Button>
+            </IfPermission>
             <IfPermission perm="ui-users.loans.change-due-date">
               <Button
                 marginBottom0
