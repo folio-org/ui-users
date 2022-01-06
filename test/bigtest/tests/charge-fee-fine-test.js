@@ -18,7 +18,11 @@ import ChargeFeeFineInteractor from '../interactors/charge-fee-fine';
 
 describe('Charge fee/fine', () => {
   const chargeForm = new ChargeFeeFineInteractor();
-  setupApplication();
+  setupApplication({
+    currentUser: {
+      curServicePoint: { id: 1 },
+    },
+  });
 
   describe('from the user detail view', () => {
     const userDetail = InstanceViewPage;
@@ -26,7 +30,7 @@ describe('Charge fee/fine', () => {
     const actionButton = new Interactor('a[href*=charge]');
     let loan;
     beforeEach(async function () {
-      const owner = this.server.create('owner', { owner: 'testOwner' });
+      const owner = this.server.create('owner', { owner: 'testOwner', id: '1', servicePointOwner: [{ value: 1, label: 'Test Point' }] });
       this.server.create('feefine',
         { feeFineType: 'testFineType',
           ownerId: owner.id,
@@ -67,6 +71,12 @@ describe('Charge fee/fine', () => {
 
         it('navigate to previous page', function () {
           expect(this.location.pathname).to.equal(`/users/${loan.userId}/accounts/open`);
+        });
+      });
+
+      describe('initial owner desk', () => {
+        it('should show owner desk', () => {
+          expect(chargeForm.ownerSelect.value).to.equal('1');
         });
       });
 
