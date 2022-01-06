@@ -18,6 +18,7 @@ import {
   Button,
   HasCommand,
   Icon,
+  TextLink,
   MultiColumnList,
   Pane,
   PaneMenu,
@@ -184,8 +185,8 @@ class UserSearch extends React.Component {
     const { intl } = this.props;
 
     return {
-      active: intl.formatMessage({ id: 'ui-users.active' }),
       name: intl.formatMessage({ id: 'ui-users.information.name' }),
+      active: intl.formatMessage({ id: 'ui-users.active' }),
       barcode: intl.formatMessage({ id: 'ui-users.information.barcode' }),
       patronGroup: intl.formatMessage({ id: 'ui-users.information.patronGroup' }),
       username: intl.formatMessage({ id: 'ui-users.information.username' }),
@@ -704,12 +705,12 @@ class UserSearch extends React.Component {
     }
 
     const resultsFormatter = {
-      active: user => (
+      active: user => { return user.active ? <FormattedMessage id="ui-users.active" /> : <FormattedMessage id="ui-users.inactive" />; },
+      name: user => (
         <AppIcon app="users" size="small" className={user.active ? undefined : css.inactiveAppIcon}>
-          {user.active ? <FormattedMessage id="ui-users.active" /> : <FormattedMessage id="ui-users.inactive" />}
+          <TextLink to={this.getRowURL(user.id)}>{getFullName(user)}</TextLink>
         </AppIcon>
       ),
-      name: user => getFullName(user),
       barcode: user => user.barcode,
       patronGroup: (user) => {
         const pg = patronGroups.filter(g => g.id === user.patronGroup)[0];
@@ -840,7 +841,6 @@ class UserSearch extends React.Component {
                             totalCount={count}
                             columnMapping={columnMapping}
                             formatter={resultsFormatter}
-                            rowFormatter={this.anchoredRowFormatter}
                             onNeedMoreData={onNeedMoreData}
                             onHeaderClick={onSort}
                             sortOrder={sortOrder.replace(/^-/, '').replace(/,.*/, '')}
