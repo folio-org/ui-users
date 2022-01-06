@@ -376,33 +376,6 @@ class UserSearch extends React.Component {
     return `${path}/preview/${id}${search}`;
   }
 
-  // custom row formatter to wrap rows in anchor tags.
-  anchoredRowFormatter = (row) => {
-    const {
-      rowIndex,
-      rowClass,
-      rowData,
-      cells,
-      rowProps,
-      labelStrings
-    } = row;
-
-    return (
-      <div
-        key={`row-${rowIndex}`}
-      >
-        <Link
-          to={this.getRowURL(rowData.id)}
-          data-label={labelStrings && labelStrings.join('...')}
-          className={rowClass}
-          {...rowProps}
-        >
-          {cells}
-        </Link>
-      </div>
-    );
-  };
-
   rowUpdater = (rowData) => {
     const { resources: { patronGroups } } = this.props;
     const groupObj = patronGroups ? patronGroups.records.filter(g => g.id === rowData.patronGroup)[0] : null;
