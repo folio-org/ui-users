@@ -669,7 +669,8 @@
           "waives.collection.get",
           "inventory-storage.locations.collection.get",
           "inventory-storage.location-units.libraries.collection.get",
-          "inventory-storage.material-types.collection.get"
+          "inventory-storage.material-types.collection.get",
+          "manualblocks.collection.get"
         ],
         "visible": true
       },
