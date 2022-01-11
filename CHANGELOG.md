@@ -93,6 +93,7 @@
 * Create Jest/RTL test for `BulkClaimReturnedModal`. Refs UIU-2317.
 * Create Jest/RTL test for `PatronBlockModalWithOverrideModal`. Refs UIU-2370.
 * Create Jest/RTL test for `PatronBlockModal`. Refs UIU-2278.
+* Create Jest/RTL test for `OverrideModal`. Refs UIU-2358.
 * Create Jest/RTL test for `OwnerSettings`. Refs UIU-2406.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
