@@ -61,6 +61,7 @@ describe('PatronBlockModal component', () => {
       const data = [];
       renderPatronBlockModal(props(data));
       userEvent.click(document.querySelector('[data-test-open-override-modal="true"]'));
+      expect(screen.getByText('ui-users.blocks.reason')).toBeTruthy();
     });
   });
 });
