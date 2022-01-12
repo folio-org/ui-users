@@ -1,4 +1,3 @@
-
 import { useMemo } from 'react';
 
 import { useStripes } from '@folio/stripes/core';
