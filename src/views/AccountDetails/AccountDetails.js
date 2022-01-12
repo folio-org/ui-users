@@ -76,6 +76,7 @@ class AccountDetails extends React.Component {
       accounts: PropTypes.object.isRequired,
       feefineactions: PropTypes.object.isRequired,
       loans: PropTypes.object.isRequired,
+      servicePoints: PropTypes.object.isRequired,
     }),
     mutator: PropTypes.shape({
       activeRecord: PropTypes.shape({
@@ -384,7 +385,7 @@ class AccountDetails extends React.Component {
       amount: action => (action.amountAction > 0 ? formatCurrencyAmount(action.amountAction) : '-'),
       balance: action => (action.balance > 0 ? formatCurrencyAmount(action.balance) : '-'),
       transactioninfo: action => action.transactionInformation || '-',
-      created: action => getServicePointOfCurrentAction(action, this.props.okapi.currentUser.servicePoints),
+      created: action => getServicePointOfCurrentAction(action, this.props.resources.servicePoints.records),
       source: action => action.source,
       comments: action => (action.comments ? (<div>{action.comments.split('\n').map(c => (<Row><Col>{c}</Col></Row>))}</div>) : ''),
     };
