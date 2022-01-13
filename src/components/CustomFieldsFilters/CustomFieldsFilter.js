@@ -10,7 +10,7 @@ import {
   CheckboxFilter
 } from '@folio/stripes/smart-components';
 
-// map custom field types to specific filters
+// Map custom field types to specific filters
 const customFieldTypeToFilterMap = {
   MULTI_SELECT_DROPDOWN: MultiSelectionFilter,
   RADIO_BUTTON: CheckboxFilter,
@@ -34,9 +34,9 @@ const CustomFieldsFilter = ({
     name,
     selectField: {
       options: {
-        values
-      }
-    }
+        values,
+      },
+    },
   } = customField;
   const filterName = `customFields-${refId}`;
   const selectedValues = activeFilters[filterName];
@@ -49,7 +49,7 @@ const CustomFieldsFilter = ({
       header={FilterAccordionHeader}
       label={name}
       separator={false}
-      onClearFilter={() => clearGroup(refId)}
+      onClearFilter={() => clearGroup(filterName)}
     >
       <FilterComponent
         dataOptions={dataOptions}
