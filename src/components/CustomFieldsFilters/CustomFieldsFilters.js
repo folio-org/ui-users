@@ -1,8 +1,9 @@
-import useCustomFields from './useCustomFilters';
+import { useCustomFields } from '@folio/stripes/smart-components';
+
 import CustomFieldsFilter from './CustomFieldsFilter';
 
 const CustomFieldsFilters = props => {
-  const customFields = useCustomFields();
+  const [customFields] = useCustomFields('users', 'user');
 
   if (!customFields) return null;
 
