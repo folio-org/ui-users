@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { IfInterface } from '@folio/stripes/core';
 import {
+  Headline,
   NavList,
   NavListSection,
   Pane,
@@ -24,7 +25,11 @@ const SettingsPage = ({ sections, path }) => {
   return (
     <Pane
       defaultWidth="20%"
-      paneTitle={<FormattedMessage id="ui-users.settings.label" />}
+      paneTitle={
+        <Headline tag="h3" margin="none">
+          <FormattedMessage id="ui-users.settings.label" />
+        </Headline>
+      }
       firstMenu={<PaneBackLink to="/settings" />}
       paneTitleRef={paneTitleRef}
     >
