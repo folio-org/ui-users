@@ -435,7 +435,7 @@ class UserDetail extends React.Component {
           suppress = !!JSON.parse(value).list.find(i => i === id);
         }
       } catch (e) {
-        console.error("could not parse JSON", value)
+        console.error("could not parse JSON", this.props.resources.suppressEdit?.records?.[0])
       }
     }
 
