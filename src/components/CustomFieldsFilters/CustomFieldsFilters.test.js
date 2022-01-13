@@ -12,8 +12,10 @@ jest.unmock('@folio/stripes/components');
 jest.unmock('@folio/stripes/smart-components');
 
 jest.mock('@folio/stripes/smart-components', () => {
+  // eslint-disable-next-line global-require
   const customField = require('fixtures/multiSelectCustomField');
   return {
+    // eslint-disable-next-line global-require
     ...jest.requireActual('@folio/stripes/smart-components'),
     useCustomFields: jest.fn(() => [[customField]]),
   };
