@@ -73,9 +73,8 @@ class EditUserInfo extends React.Component {
 
   calculateNewExpirationDate = () => {
     const offsetOfSelectedPatronGroup = this.state.selectedPatronGroup ? this.getPatronGroupOffset() : '';
-    const recalculatedDate = (moment().add(offsetOfSelectedPatronGroup, 'd').format('YYYY-MM-DD'));
 
-    return recalculatedDate;
+    return moment().add(offsetOfSelectedPatronGroup, 'd').format('YYYY-MM-DD');
   }
 
   getPatronGroupOffset = () => {
