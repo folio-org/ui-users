@@ -7,7 +7,7 @@ import {
 } from '@folio/stripes-components';
 import {
   MultiSelectionFilter,
-  CheckboxFilter
+  CheckboxFilter,
 } from '@folio/stripes/smart-components';
 
 // Map custom field types to specific filters

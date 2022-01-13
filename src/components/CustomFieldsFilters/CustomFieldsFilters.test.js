@@ -15,7 +15,7 @@ jest.mock('@folio/stripes/smart-components', () => {
   const customField = require('fixtures/multiSelectCustomField');
   return {
     ...jest.requireActual('@folio/stripes/smart-components'),
-    useCustomFields: jest.fn(() => [[customField]])
+    useCustomFields: jest.fn(() => [[customField]]),
   };
 });
 
