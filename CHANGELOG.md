@@ -96,6 +96,7 @@
 * Create Jest/RTL test for `OverrideModal`. Refs UIU-2358.
 * Create Jest/RTL test for `OwnerSettings`. Refs UIU-2406.
 * Create Jest/RTL test for `PaymentSettings`. Refs UIU-2389.
+* Create Jest/RTL test for `FeeFineSettings`. Refs UIU-2378.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
