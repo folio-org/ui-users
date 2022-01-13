@@ -122,6 +122,9 @@ class UserDetail extends React.Component {
       loansHistory: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
+      suppressEdit: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
     }),
     match: PropTypes.shape({
       path: PropTypes.string.isRequired,
@@ -406,6 +409,61 @@ class UserDetail extends React.Component {
       });
   }
 
+  /**
+   * actionMenuEditButton
+   * Handle display of the "Edit" button in the Action menu.
+   * Some users should not be editable in the UI; these are stored in a
+   * serialized array in a configuration entry:
+   * {
+   *   "module": "@folio/users",
+   *   "configName": "suppressEdit",
+   *   "value": "SERIALIZED_JSON_ARRAY"
+   * }
+   *
+   * This function checks the ID from the URL against that list.
+   *
+   * @returns component
+   */
+  actionMenuEditButton() {
+    const { resources, match: { params: { id } } } = this.props;
+
+    let suppress = false;
+    if (this.props.resources.suppressEdit?.records?.[0]) {
+      try {
+        const value = this.props.resources.suppressEdit?.records?.[0]?.value;
+        if (value) {
+          suppress = !!JSON.parse(value).list.find(i => i === id);
+        }
+      } catch (e) {
+        console.error("could not parse JSON", value)
+      }
+    }
+
+    let button = <></>;
+    if (!suppress) {
+      button = (
+        <IfPermission perm="ui-users.edit">
+          <Button
+            buttonStyle="dropdownItem"
+            data-test-actions-menu-edit
+            id="clickable-edituser"
+            onClick={() => {
+              onToggle();
+              this.goToEdit();
+            }}
+            buttonRef={this.editButton}
+          >
+            <Icon icon="edit">
+              <FormattedMessage id="ui-users.edit" />
+            </Icon>
+          </Button>
+        </IfPermission>
+      );
+    }
+
+    return button;
+  }
+
   getActionMenu = barcode => ({ onToggle }) => {
     const {
       okapi: {
@@ -446,22 +504,7 @@ class UserDetail extends React.Component {
               userId={this.props.match.params.id}
             />
           </IfInterface>
-          <IfPermission perm="ui-users.edit">
-            <Button
-              buttonStyle="dropdownItem"
-              data-test-actions-menu-edit
-              id="clickable-edituser"
-              onClick={() => {
-                onToggle();
-                this.goToEdit();
-              }}
-              buttonRef={this.editButton}
-            >
-              <Icon icon="edit">
-                <FormattedMessage id="ui-users.edit" />
-              </Icon>
-            </Button>
-          </IfPermission>
+          {this.actionMenuEditButton()}
           <IfInterface name="feesfines">
             <ExportFeesFinesReportButton
               feesFinesReportData={feesFinesReportData}
