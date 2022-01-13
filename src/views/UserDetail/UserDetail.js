@@ -436,6 +436,7 @@ class UserDetail extends React.Component {
         }
       } catch (e) {
         console.error("could not parse JSON", this.props.resources.suppressEdit?.records?.[0])
+        console.error(e);
       }
     }
 
