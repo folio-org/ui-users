@@ -424,7 +424,7 @@ class UserDetail extends React.Component {
    *
    * @returns component
    */
-  actionMenuEditButton() {
+  actionMenuEditButton(onToggle) {
     const { resources, match: { params: { id } } } = this.props;
 
     let suppress = false;
@@ -432,7 +432,10 @@ class UserDetail extends React.Component {
       try {
         const value = this.props.resources.suppressEdit?.records?.[0]?.value;
         if (value) {
-          suppress = !!JSON.parse(value).list.find(i => i === id);
+          const list = JSON.parse(value);
+          if (Array.isArray(list)) {
+            suppress = !!list.find(i => i === id);
+          }
         }
       } catch (e) {
         console.error("could not parse JSON", this.props.resources.suppressEdit?.records?.[0])
@@ -505,7 +508,7 @@ class UserDetail extends React.Component {
               userId={this.props.match.params.id}
             />
           </IfInterface>
-          {this.actionMenuEditButton()}
+          {this.actionMenuEditButton(onToggle)}
           <IfInterface name="feesfines">
             <ExportFeesFinesReportButton
               feesFinesReportData={feesFinesReportData}
