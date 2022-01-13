@@ -23,6 +23,7 @@
 * Also support `circulation` `12.0`. Refs UIU-2480.
 * Also support `request-storage` `4.0` (TLR). Refs UIU-2495, UIU-2480.
 * Fix problems with permissions for claim returned, renewals. Refs UIU-2256.
+* Properly show service point name in fee/fine details. Fixes UIU-2473.
 
 ## [7.0.1](https://github.com/folio-org/ui-users/tree/v7.0.1) (2021-10-07)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.1.0...v7.0.1)
