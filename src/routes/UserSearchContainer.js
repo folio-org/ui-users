@@ -33,7 +33,7 @@ const searchFields = [
 ];
 const compileQuery = template(`(${searchFields.join(' or ')})`, { interpolate: /%{([\s\S]+?)}/g });
 
-// Generate filter config in a dynamic fashion for currently
+// Generates a filter config in a dynamic fashion for currently
 // registerd custom fields.
 // This function loops through all currently applied filters
 // and it looks for filters which contain 'customFields` name.
