@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {
+  useRef,
+  useEffect,
+} from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { IfInterface } from '@folio/stripes/core';
 import {
-  Headline,
   NavList,
   NavListSection,
   Pane,
@@ -12,28 +14,33 @@ import {
 
 import SectionPageItem from './SectionPageItem';
 
-const SettingsPage = ({ sections, path }) => (
-  <Pane
-    defaultWidth="20%"
-    paneTitle={
-      <Headline tag="h3" margin="none">
-        <FormattedMessage id="ui-users.settings.label" />
-      </Headline>
-    }
-    firstMenu={<PaneBackLink to="/settings" />}
-  >
-    <NavList>
-      {sections.map((section, index) => {
-        const sectionInner = (
-          <NavListSection key={index} label={section.label} data-test-settingspage>
-            {section.pages.map((setting) => <SectionPageItem setting={setting} path={path} key={setting.route} />)}
-          </NavListSection>
-        );
-        return section.interface ? <IfInterface name={section.interface} key={index}>{sectionInner}</IfInterface> : sectionInner;
-      })}
-    </NavList>
-  </Pane>
-);
+const SettingsPage = ({ sections, path }) => {
+  const paneTitleRef = useRef(null);
+
+  useEffect(() => {
+    paneTitleRef.current.focus();
+  }, []);
+
+  return (
+    <Pane
+      defaultWidth="20%"
+      paneTitle={<FormattedMessage id="ui-users.settings.label" />}
+      firstMenu={<PaneBackLink to="/settings" />}
+      paneTitleRef={paneTitleRef}
+    >
+      <NavList>
+        {sections.map((section, index) => {
+          const sectionInner = (
+            <NavListSection key={index} label={section.label} data-test-settingspage>
+              {section.pages.map((setting) => <SectionPageItem setting={setting} path={path} key={setting.route} />)}
+            </NavListSection>
+          );
+          return section.interface ? <IfInterface name={section.interface} key={index}>{sectionInner}</IfInterface> : sectionInner;
+        })}
+      </NavList>
+    </Pane>
+  );
+};
 
 SettingsPage.propTypes = {
   path: PropTypes.string.isRequired,
