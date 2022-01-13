@@ -23,6 +23,7 @@
 * Also support `circulation` `12.0`. Refs UIU-2480.
 * Also support `request-storage` `4.0` (TLR). Refs UIU-2495, UIU-2480.
 * Fix problems with permissions for claim returned, renewals. Refs UIU-2256.
+* Properly show service point name in fee/fine details. Fixes UIU-2473.
 * Suppress edit of users stored in a configuration entry. Refs UIU-2499.
 
 ## [7.0.1](https://github.com/folio-org/ui-users/tree/v7.0.1) (2021-10-07)
@@ -94,7 +95,9 @@
 * Create Jest/RTL test for `BulkClaimReturnedModal`. Refs UIU-2317.
 * Create Jest/RTL test for `PatronBlockModalWithOverrideModal`. Refs UIU-2370.
 * Create Jest/RTL test for `PatronBlockModal`. Refs UIU-2278.
+* Create Jest/RTL test for `OverrideModal`. Refs UIU-2358.
 * Create Jest/RTL test for `OwnerSettings`. Refs UIU-2406.
+* Create Jest/RTL test for `PaymentSettings`. Refs UIU-2389.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
