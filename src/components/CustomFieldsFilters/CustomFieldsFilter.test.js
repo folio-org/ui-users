@@ -19,9 +19,7 @@ const props = {
   activeFilters: {},
 };
 
-const renderCustomFieldsFilter = (extraProps) => {
-  return render(<CustomFieldsFilter {...props} {...extraProps} />);
-};
+const renderCustomFieldsFilter = (extraProps) => render(<CustomFieldsFilter {...props} {...extraProps} />);
 
 describe('CustomFieldsFilter', () => {
   it('renders multi select filter', () => {
