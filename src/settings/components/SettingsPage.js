@@ -19,7 +19,9 @@ const SettingsPage = ({ sections, path }) => {
   const paneTitleRef = useRef(null);
 
   useEffect(() => {
-    paneTitleRef.current.focus();
+    if (paneTitleRef.current) {
+      paneTitleRef.current.focus();
+    }
   }, []);
 
   return (
