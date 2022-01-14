@@ -23,6 +23,7 @@
 * Also support `circulation` `12.0`. Refs UIU-2480.
 * Also support `request-storage` `4.0` (TLR). Refs UIU-2495, UIU-2480.
 * Fix problems with permissions for claim returned, renewals. Refs UIU-2256.
+* Add custom fields filters. Refs UIU-2170.
 * Properly show service point name in fee/fine details. Fixes UIU-2473.
 * Suppress edit of users stored in a configuration entry. Refs UIU-2499.
 
