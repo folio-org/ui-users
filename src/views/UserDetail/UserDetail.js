@@ -69,6 +69,7 @@ import OpenTransactionModal from './components/OpenTransactionModal';
 import DeleteUserModal from './components/DeleteUserModal';
 import ExportFeesFinesReportButton from './components';
 import ErrorPane from '../../components/ErrorPane';
+import ActionMenuEditOption from './components/ActionMenuEditOption';
 
 class UserDetail extends React.Component {
   static propTypes = {
@@ -409,65 +410,6 @@ class UserDetail extends React.Component {
       });
   }
 
-  /**
-   * actionMenuEditButton
-   * Handle display of the "Edit" button in the Action menu.
-   * Some users should not be editable in the UI; these are stored in a
-   * serialized array in a configuration entry:
-   * {
-   *   "module": "@folio/users",
-   *   "configName": "suppressEdit",
-   *   "value": "SERIALIZED_JSON_ARRAY"
-   * }
-   *
-   * This function checks the ID from the URL against that list.
-   *
-   * @returns component
-   */
-  actionMenuEditButton(onToggle) {
-    const { resources, match: { params: { id } } } = this.props;
-
-    let suppress = false;
-    if (this.props.resources.suppressEdit?.records?.[0]) {
-      try {
-        const value = this.props.resources.suppressEdit?.records?.[0]?.value;
-        if (value) {
-          const list = JSON.parse(value);
-          if (Array.isArray(list)) {
-            suppress = !!list.find(i => i === id);
-          }
-        }
-      } catch (e) {
-        console.error("could not parse JSON", this.props.resources.suppressEdit?.records?.[0])
-        console.error(e);
-      }
-    }
-
-    let button = <></>;
-    if (!suppress) {
-      button = (
-        <IfPermission perm="ui-users.edit">
-          <Button
-            buttonStyle="dropdownItem"
-            data-test-actions-menu-edit
-            id="clickable-edituser"
-            onClick={() => {
-              onToggle();
-              this.goToEdit();
-            }}
-            buttonRef={this.editButton}
-          >
-            <Icon icon="edit">
-              <FormattedMessage id="ui-users.edit" />
-            </Icon>
-          </Button>
-        </IfPermission>
-      );
-    }
-
-    return button;
-  }
-
   getActionMenu = barcode => ({ onToggle }) => {
     const {
       okapi: {
@@ -508,7 +450,13 @@ class UserDetail extends React.Component {
               userId={this.props.match.params.id}
             />
           </IfInterface>
-          {this.actionMenuEditButton(onToggle)}
+          <ActionMenuEditOption
+            id={this.props.match.params.id}
+            suppressEdit={this.props.resources.suppressEdit}
+            onToggle={onToggle}
+            goToEdit={this.goToEdit}
+            editButton={this.editButton}
+          />
           <IfInterface name="feesfines">
             <ExportFeesFinesReportButton
               feesFinesReportData={feesFinesReportData}
