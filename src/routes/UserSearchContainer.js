@@ -10,6 +10,7 @@ import {
   makeQueryFunction,
   StripesConnectedSource,
   buildUrl,
+  parseFilters,
 } from '@folio/stripes/smart-components';
 
 import filterConfig from './filterConfig';
@@ -32,6 +33,54 @@ const searchFields = [
 ];
 const compileQuery = template(`(${searchFields.join(' or ')})`, { interpolate: /%{([\s\S]+?)}/g });
 
+// Generates a filter config in a dynamic fashion for currently
+// registerd custom fields.
+// This function loops through all currently applied filters
+// and it looks for filters which contain 'customFields` name.
+// It then generates a custom config for each of them
+// replacing the name "customFields-fieldName"
+// with "customFields.fieldName" for CQL representation.
+function buildFilterConfig(filters) {
+  const customFilterConfig = [];
+  const parsedFilters = parseFilters(filters);
+
+  Object.keys(parsedFilters).forEach(name => {
+    if (name.match('customFields')) {
+      customFilterConfig.push(
+        {
+          name,
+          cql: name.split('-').join('.'),
+          values: [],
+          operator: '=',
+        },
+      );
+    }
+  });
+  return customFilterConfig;
+}
+
+function buildQuery(queryParams, pathComponents, resourceData, logger, props) {
+  const customFilterConfig = buildFilterConfig(queryParams.filters);
+
+  return makeQueryFunction(
+    'cql.allRecords=1',
+    // TODO: Refactor/remove this after work on FOLIO-2066 and RMB-385 is done
+    (parsedQuery, _, localProps) => localProps.query.query.trim().replace('*', '').split(/\s+/)
+      .map(query => compileQuery({ query }))
+      .join(' and '),
+    {
+      'active': 'active',
+      'name': 'personal.lastName personal.firstName',
+      'patronGroup': 'patronGroup.group',
+      'username': 'username',
+      'barcode': 'barcode',
+      'email': 'personal.email',
+    },
+    [...filterConfig, ...customFilterConfig],
+    2,
+  )(queryParams, pathComponents, resourceData, logger, props);
+}
+
 class UserSearchContainer extends React.Component {
   static manifest = Object.freeze({
     initializedFilterConfig: { initialValue: false },
@@ -45,25 +94,7 @@ class UserSearchContainer extends React.Component {
       perRequest: 100,
       path: 'users',
       GET: {
-        params: {
-          query: makeQueryFunction(
-            'cql.allRecords=1',
-            // TODO: Refactor/remove this after work on FOLIO-2066 and RMB-385 is done
-            (parsedQuery, props, localProps) => localProps.query.query.trim().replace('*', '').split(/\s+/)
-              .map(query => compileQuery({ query }))
-              .join(' and '),
-            {
-              'active': 'active',
-              'name': 'personal.lastName personal.firstName',
-              'patronGroup': 'patronGroup.group',
-              'username': 'username',
-              'barcode': 'barcode',
-              'email': 'personal.email',
-            },
-            filterConfig,
-            2,
-          ),
-        },
+        params: { query: buildQuery },
         staticFallback: { params: {} },
       },
       shouldRefresh: (resource, action, refresh) => {

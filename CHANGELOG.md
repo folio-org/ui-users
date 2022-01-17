@@ -24,6 +24,8 @@
 * Also support `request-storage` `4.0` (TLR). Refs UIU-2495, UIU-2480.
 * Fix problems with permissions for claim returned, renewals. Refs UIU-2256.
 * Correct calcualtion for expiration date. Refs UIU-2498.
+* Add custom fields filters. Refs UIU-2170.
+* Properly show service point name in fee/fine details. Fixes UIU-2473.
 
 ## [7.0.1](https://github.com/folio-org/ui-users/tree/v7.0.1) (2021-10-07)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.1.0...v7.0.1)
@@ -96,6 +98,7 @@
 * Create Jest/RTL test for `PatronBlockModal`. Refs UIU-2278.
 * Create Jest/RTL test for `OverrideModal`. Refs UIU-2358.
 * Create Jest/RTL test for `OwnerSettings`. Refs UIU-2406.
+* Create Jest/RTL test for `PaymentSettings`. Refs UIU-2389.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)

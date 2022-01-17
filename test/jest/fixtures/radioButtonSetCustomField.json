@@ -1,0 +1,27 @@
+{
+  "id" : "59238c67-a9c4-4aab-bedf-2a76c9c6522e",
+  "name" : "radio-button-set",
+  "refId" : "radiobuttonset",
+  "type" : "RADIO_BUTTON",
+  "entityType" : "user",
+  "visible" : true,
+  "required" : false,
+  "isRepeatable" : false,
+  "order" : 2,
+  "helpText" : "",
+  "selectField" : {
+    "multiSelect" : false,
+    "options" : {
+      "values" : [ {
+        "id" : "opt_0",
+        "value" : "button1",
+        "default" : false
+      }, {
+        "id" : "opt_1",
+        "value" : "button2",
+        "default" : false
+      } ],
+      "sortingOrder" : "CUSTOM"
+    }
+  }
+}

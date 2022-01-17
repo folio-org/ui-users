@@ -1,6 +1,8 @@
 export const buildResources = ({
   resourceName,
+  updaterName,
   records = [],
+  updaterRecords = [],
   hasLoaded = true,
   isPending = false,
   otherResources = {},
@@ -9,6 +11,12 @@ export const buildResources = ({
     query: {},
     [resourceName]: {
       records,
+      hasLoaded,
+      isPending,
+      other: { totalRecords: records.length },
+    },
+    [updaterName]: {
+      updaterRecords,
       hasLoaded,
       isPending,
       other: { totalRecords: records.length },
