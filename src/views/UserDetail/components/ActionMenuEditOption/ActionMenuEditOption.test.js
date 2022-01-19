@@ -68,9 +68,11 @@ describe('render ActionMenuEditOption', () => {
 
     describe('logs error on invalid JSON', () => {
       beforeAll(() => {
-        console.error = jest.fn()
+        // eslint-disable-next-line no-console
+        console.error = jest.fn();
       });
       afterAll(() => {
+        // eslint-disable-next-line no-console
         console.error.mockRestore();
       });
 
@@ -85,11 +87,10 @@ describe('render ActionMenuEditOption', () => {
 
         render(<ActionMenuEditOption {...props} />);
 
+        // eslint-disable-next-line no-console
         expect(console.error).toHaveBeenCalledTimes(1);
-
       });
-
-    })
+    });
   });
 
   describe('does not render', () => {
