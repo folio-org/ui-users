@@ -453,7 +453,7 @@ class ViewFeesFines extends React.Component {
       'remaining': intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' }),
       'paymentStatus.name': intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' }),
       'feeFineOwner': intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' }),
-      'title': intl.formatMessage({ id: 'ui-users.accounts.history.columns.instance' }),
+      'title': intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' }),
       'barcode': intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' }),
       'callNumber': intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' }),
       'dueDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),
