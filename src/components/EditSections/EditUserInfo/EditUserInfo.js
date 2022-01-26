@@ -63,18 +63,26 @@ class EditUserInfo extends React.Component {
     this.setState({ showRecalculateModal: false });
   }
 
-  setRecalculatedExpirationDate = () => {
+  setRecalculatedExpirationDate = (startCalcToday) => {
     const { form: { change } } = this.props;
-    const recalculatedDate = this.calculateNewExpirationDate();
+    const recalculatedDate = this.calculateNewExpirationDate(startCalcToday);
 
     change('expirationDate', recalculatedDate);
     this.setState({ showRecalculateModal: false });
   }
 
-  calculateNewExpirationDate = () => {
+  calculateNewExpirationDate = (startCalcToday) => {
+    const { initialValues } = this.props;
+    const expirationDate = new Date(initialValues.expirationDate);
+    const now = Date.now();
     const offsetOfSelectedPatronGroup = this.state.selectedPatronGroup ? this.getPatronGroupOffset() : '';
-
-    return moment().add(offsetOfSelectedPatronGroup, 'd').format('YYYY-MM-DD');
+    let recalculatedDate;
+    if (startCalcToday || initialValues.expirationDate === undefined || expirationDate <= now) {
+      recalculatedDate = (moment().add(offsetOfSelectedPatronGroup, 'd').format('YYYY-MM-DD'));
+    } else {
+      recalculatedDate = (moment(expirationDate).add(offsetOfSelectedPatronGroup, 'd').format('YYYY-MM-DD'));
+    }
+    return recalculatedDate;
   }
 
   getPatronGroupOffset = () => {
@@ -157,13 +165,13 @@ class EditUserInfo extends React.Component {
 
     const offset = this.getPatronGroupOffset();
     const group = _.get(this.props.patronGroups.find(i => i.id === this.state.selectedPatronGroup), 'group', '');
-    const date = moment(this.calculateNewExpirationDate()).format('LL');
+    const date = moment(this.calculateNewExpirationDate(true)).format('LL');
 
     const modalFooter = (
       <ModalFooter>
         <Button
           id="expirationDate-modal-recalculate-btn"
-          onClick={this.setRecalculatedExpirationDate}
+          onClick={() => this.setRecalculatedExpirationDate(true)}
         >
           <FormattedMessage id="ui-users.information.recalculate.modal.button" />
         </Button>
@@ -290,7 +298,7 @@ class EditUserInfo extends React.Component {
               {checkShowRecalculateButton() && (
                 <Button
                   id="recalculate-expirationDate-btn"
-                  onClick={this.setRecalculatedExpirationDate}
+                  onClick={() => this.setRecalculatedExpirationDate(false)}
                 >
                   <FormattedMessage id="ui-users.information.recalculate.expirationDate" />
                 </Button>
@@ -315,6 +323,7 @@ class EditUserInfo extends React.Component {
           open={this.state.showRecalculateModal}
         >
           <div>
+            das wird nur bei patron group gezeigt
             <FormattedMessage
               id="ui-users.information.recalculate.modal.text"
               values={{ group, offset, date }}
