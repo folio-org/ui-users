@@ -323,7 +323,6 @@ class EditUserInfo extends React.Component {
           open={this.state.showRecalculateModal}
         >
           <div>
-            das wird nur bei patron group gezeigt
             <FormattedMessage
               id="ui-users.information.recalculate.modal.text"
               values={{ group, offset, date }}

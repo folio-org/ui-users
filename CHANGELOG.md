@@ -29,7 +29,7 @@
 * Suppress edit of users stored in a configuration entry. Refs UIU-2499.
 * Also support `circulation` `13.0`. Refs UIU-2483.
 * Fix unexpected increase of fee/fine remaining balance. Refs UIU-2506.
-* Correct calcualtion for expiration date. Refs UIU-2498.
+* Correct calculation for expiration date. Refs UIU-2498.
 
 ## [7.0.1](https://github.com/folio-org/ui-users/tree/v7.0.1) (2021-10-07)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.1.0...v7.0.1)
