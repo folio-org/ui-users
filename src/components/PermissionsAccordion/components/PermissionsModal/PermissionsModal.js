@@ -240,12 +240,19 @@ class PermissionsModal extends React.Component {
     const { assignedPermissionIds } = this.state;
     const {
       addPermissions,
+      assignedPermissions,
       onClose,
     } = this.props;
     const permissions = get(this.props, 'resources.availablePermissions.records', []);
     const filteredPermissions = permissions.filter(({ id }) => assignedPermissionIds.includes(id));
 
-    addPermissions(filteredPermissions);
+    // Invisible permissions assigned to a user are lost in the permissions selection process,
+    // so we want to make sure that they get saved along with any visible selections. This renders
+    // it impossible to *remove* invisible permissions in the UI, but that's probably better
+    // than making it impossible to *keep* invisible permissions in the UI.
+    const invisiblePermissions = assignedPermissions.filter(p => !p.visible);
+
+    addPermissions([...filteredPermissions, ...invisiblePermissions]);
     onClose();
   };
 
