@@ -403,7 +403,7 @@
   "feefines.errors.amountNumeric": "Default Amount must be numeric",
   "feefines.errors.amountPositive": "Default Amount must be positive",
   "feefines.errors.exist": "Fee/fine type exists",
-  "feefines.errors.existShared": "Fee/fine type exists for owner {owner}",
+  "feefines.errors.existShared": "Fee/fine type exists for other Fee/fine owner(s)",
   "feefines.errors.reservedName": "Fee/fine type already exists as automated fee/fine",
   "feefines.errors.notBilledTitle": "Lost item fee(s) not billed to patron",
   "feefines.errors.notBilledMessage": "Lost item fee(s) not billed to patron because 'Fee/fine owner' not found for item's 'Primary service point' in Setting 'Fee/fine: Owners'.<div><b>Need to bill lost item fee(s) manually.</b></div>",
