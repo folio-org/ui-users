@@ -68,6 +68,7 @@ const PermissionsAccordion = (props) => {
    * callback from the ConfirmationModal to continue with editing permissions
    * even though this means permissions with `visible: false` settings will
    * be removed.
+   * 
    *
    * See openPermissionsModal for a detailed explanation.
    */
@@ -95,6 +96,11 @@ const PermissionsAccordion = (props) => {
    * permissions will be retained after editing (confirmation is handled by
    * confirmEdit and cancelEdit). If there are not any, i.e. all currently-assigned
    * permissions are `visible: true`, open PermissionModal.
+   * 
+   * UPDATE: With the work done for UIU-2075, invisible permissions are no
+   * longer removed, so showing the ConfirmationModal isn't necessary. Since we might
+   * have need of a confirmation step in the future, leave the code in place for now;
+   * but the `visible: true` check below has been disabled.
    *
    * @param {event} e click event
    */
@@ -102,12 +108,14 @@ const PermissionsAccordion = (props) => {
     e.preventDefault();
     e.stopPropagation();
 
-    const isHiddenAssigned = !!getAssignedPermissions().find((p) => p.visible === false);
-    if (isHiddenAssigned) {
-      setConfirmEditModalOpen(true);
-    } else {
-      setPermissionModalOpen(true);
-    }
+    setPermissionModalOpen(true);
+
+    // const isHiddenAssigned = !!getAssignedPermissions().find((p) => p.visible === false);
+    // if (isHiddenAssigned) {
+    //   setConfirmEditModalOpen(true);
+    // } else {
+    //   setPermissionModalOpen(true);
+    // }
   };
 
   const closePermissionModal = () => {
