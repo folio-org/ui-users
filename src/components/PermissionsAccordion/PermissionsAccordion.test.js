@@ -112,7 +112,10 @@ describe('PermissionsAccordion', () => {
       });
     });
 
-    describe('when "visible: false" permissions are also assigned', () => {
+    // NOTE: The 'visible: false permissions' tests are being skipped because the
+    // confirmation modal is now being skipped in the actual code (because it's 
+    // not needed for the time being).
+    describe.skip('when "visible: false" permissions are also assigned', () => {
       test('shows prompt', async () => {
         renderPermissionsAccordion({
           form: {

@@ -346,4 +346,46 @@ describe('PermissionsModal', () => {
     fireEvent.change(document.querySelector('[data-test-search-field="true"]'), { target : { value: 'Search' } });
     fireEvent.click(screen.getByText('ui-users.search'));
   });
+
+  it('Saves invisible permissions', async () => {
+    const initialPerms = [
+      {
+        'permissionName' : 'ui-mystery.invisible',
+        'displayName' : '',
+        'id' : '607d641c-b67f-42a9-aee3-c44061613300',
+        'description' : 'Hi, this is an invisible permission!',
+        'visible' : false,
+        'subPermissions' : [],
+        'dummy' : false,
+        'mutable' : false,
+      }
+    ];
+    const props = {
+      resources: resourcesNull,
+      addPermissions: jest.fn(perms => perms.length),
+      assignedPermissions: initialPerms,
+      visibleColumns: ['selected', 'permissionName', 'type', 'status'],
+      filtersConfig,
+      onClose: jest.fn(),
+      refreshRemote: jest.fn(),
+      mutator,
+      okapi: {
+        url: 'https://folio-testing-okapi.dev.folio.org',
+        tenant: 'diku',
+        okapiReady: true,
+        authFailure: [],
+        bindings: {},
+      },
+      open: true,
+    };
+    const beforeCount = initialPerms.length;
+
+    expect.assertions(2);
+    await waitFor(() => expect(renderPermissionsModal(props)).toBeDefined());
+    fireEvent.click(screen.getByText('ui-users.saveAndClose'));
+    // Previously, saving a new set of permissions via the modal would delete
+    // any invisible permissions that were assigned. Thus, we should have the
+    // same number of (invisible) perms that we started with.
+    expect(props.addPermissions).toHaveLastReturnedWith(beforeCount);
+  });
 });
