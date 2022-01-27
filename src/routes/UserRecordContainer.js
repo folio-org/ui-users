@@ -179,6 +179,11 @@ class UserRecordContainer extends React.Component {
         },
       }
     },
+    suppressEdit: {
+      type: 'okapi',
+      path: 'configurations/entries?query=module=="@folio/users" AND configName=="suppressEdit"',
+      records: 'configs',
+    },
   });
 
   static propTypes = {

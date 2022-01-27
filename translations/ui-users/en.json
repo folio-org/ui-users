@@ -528,7 +528,7 @@
   "accounts.payment.error.select": "No Payment methods exist for Fee/fine owner",
   "accounts.waive.error.select": "No Waive reasons exist",
   "accounts.transfer.error.select": "No Transfer accounts exist for Fee/fine owner",
-  "accounts.history.columns.title": "Instance (Item type)",
+  "accounts.history.columns.title": "Instance title (material type)",
   "accounts.history.columns.instance": "Instance (Material type)",
   "accounts.history.columns.amount": "Billed",
   "accounts.history.columns.remaining": "Remaining",
