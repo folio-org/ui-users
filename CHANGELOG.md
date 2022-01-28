@@ -1,5 +1,8 @@
 # Change history for ui-users
 
+## [7.0.6](https://github.com/folio-org/ui-users/tree/v7.0.6) (2022-01-28)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v7.0.5...v7.0.6)
+
 * Fix unexpected increase of fee/fine remaining balance. Refs UIU-2506.
 
 ## [7.0.5](https://github.com/folio-org/ui-users/tree/v7.0.5) (2021-11-23)
