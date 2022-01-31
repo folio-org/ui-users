@@ -167,7 +167,7 @@
     "feefines.errors.amountNumeric": "Default Amount must be numeric",
     "feefines.errors.amountPositive": "Default Amount must be positive",
     "feefines.errors.exist": "Fee/fine type exists",
-    "feefines.errors.existShared": "Fee/fine type exists for owner {owner}",
+    "feefines.errors.existShared": "Fee/fine type exists for other Fee/fine owner(s)",
     "feefines.modal.error": "Select one to continue",
     "feefines.modal.yes": "Yes",
     "feefines.modal.no": "No",

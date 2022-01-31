@@ -167,7 +167,7 @@
     "feefines.errors.amountNumeric": "Сумма по умолчанию должна быть числом",
     "feefines.errors.amountPositive": "Сумма по умолчанию должна быть положительной",
     "feefines.errors.exist": "Fee/fine type exists",
-    "feefines.errors.existShared": "Fee/fine type exists for owner {owner}",
+    "feefines.errors.existShared": "Fee/fine type exists for other Fee/fine owner(s)",
     "feefines.modal.error": "Выберите один для продолжения",
     "feefines.modal.yes": "Да",
     "feefines.modal.no": "Нет",
