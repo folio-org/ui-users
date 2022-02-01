@@ -111,7 +111,7 @@ class ChargeFeeFine extends React.Component {
 
   onFormAccountData(type) {
     const owners = _.get(this.props.resources, ['owners', 'records'], []);
-    const feefines = _.get(this.props.resources, ['feefines', 'records'], []);
+    const feefines = _.get(this.props.resources, ['allfeefines', 'records'], []);
     const selectedLoan = this.props.selectedLoan || {};
     const { intl: { formatMessage } } = this.props;
     const item = (selectedLoan.id) ? selectedLoan.item : this.item;
@@ -439,17 +439,19 @@ class ChargeFeeFine extends React.Component {
       pay,
     } = this.state;
     this.item = _.get(resources, ['items', 'records', [0]], {});
-    const allfeefines = _.get(resources, ['allfeefines', 'records'], []);
+    const feefines = _.get(resources, ['allfeefines', 'records'], []);
     const owners = _.get(resources, ['owners', 'records'], []);
     const list = [];
     const shared = owners.find(o => o.owner === 'Shared');
-    allfeefines.forEach(f => {
+    feefines.forEach(f => {
       if (!list.find(o => (o || {}).id === f.ownerId)) {
         const owner = owners.find(o => (o || {}).id === f.ownerId);
-        if (owner !== undefined) { list.push(owner); }
+
+        if (owner) {
+          list.push(owner);
+        }
       }
     });
-    const feefines = _.get(resources, ['allfeefines', 'records'], []);
     const payments = _.get(resources, ['payments', 'records'], []);
     const accounts = _.get(resources, ['accounts', 'records'], []);
     const settings = _.get(resources, ['commentRequired', 'records', 0], {});
@@ -477,7 +479,7 @@ class ChargeFeeFine extends React.Component {
 
     const isPending = {
       owners: _.get(resources, ['owners', 'isPending'], false),
-      feefines: _.get(resources, ['feefines', 'isPending'], false),
+      feefines: _.get(resources, ['allfeefines', 'isPending'], false),
       servicePoints: _.get(resources, ['curUserServicePoint', 'isPending'], true)
     };
 

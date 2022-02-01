@@ -32,6 +32,7 @@
 * Correct calculation for expiration date. Refs UIU-2498.
 * Preserve invisible permissions during edit. Fixes UIU-2075.
 * Column selector dropdown does not match column headings. Refs UIU-2504.
+* Fee/Fine Type not showing/saving for first manual fee/fine created. Refs UIU-2508.
 
 ## [7.0.1](https://github.com/folio-org/ui-users/tree/v7.0.1) (2021-10-07)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.1.0...v7.0.1)
