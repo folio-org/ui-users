@@ -16,7 +16,7 @@ const SettingsPage = ({ sections, path }) => (
   <Pane
     defaultWidth="20%"
     paneTitle={
-      <Headline tag="h3" margin="none">
+      <Headline tag="h2" margin="none">
         <FormattedMessage id="ui-users.settings.label" />
       </Headline>
     }
