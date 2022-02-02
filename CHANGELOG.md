@@ -33,6 +33,7 @@
 * Preserve invisible permissions during edit. Fixes UIU-2075.
 * Column selector dropdown does not match column headings. Refs UIU-2504.
 * Fee/Fine Type not showing/saving for first manual fee/fine created. Refs UIU-2508.
+* Add Jest/RTL tests for `CommentModal` business logic in `FeeFineActions` component. Refs UIU-2515.
 * Retrieve up to 50 proxies/sponsors. Refs UIU-2510.
 
 ## [7.0.1](https://github.com/folio-org/ui-users/tree/v7.0.1) (2021-10-07)
