@@ -25,7 +25,7 @@ const SettingsPage = ({ sections, path }) => (
     <NavList>
       {sections.map((section, index) => {
         const sectionInner = (
-          <NavListSection key={index} label={section.label} data-test-settingspage>
+          <NavListSection key={index} label={section.label} tag="h3" data-test-settingspage>
             {section.pages.map((setting) => <SectionPageItem setting={setting} path={path} key={setting.route} />)}
           </NavListSection>
         );
