@@ -12,7 +12,7 @@ const CreatePasswordModalBody = ({ email }) => {
   return (
     <>
       <FormattedMessage id="ui-users.extended.createPasswordModal.linkWasSent" />
-      <Layout class="padding-all-gutter">
+      <Layout className="padding-all-gutter">
         <strong>{email}</strong>
       </Layout>
       <FormattedMessage id="ui-users.extended.createPasswordModal.linkInstructions" />
