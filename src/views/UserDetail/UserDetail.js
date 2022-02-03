@@ -69,6 +69,7 @@ import OpenTransactionModal from './components/OpenTransactionModal';
 import DeleteUserModal from './components/DeleteUserModal';
 import ExportFeesFinesReportButton from './components';
 import ErrorPane from '../../components/ErrorPane';
+import ActionMenuEditOption from './components/ActionMenuEditOption';
 
 class UserDetail extends React.Component {
   static propTypes = {
@@ -120,6 +121,9 @@ class UserDetail extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
       loansHistory: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      suppressEdit: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }),
@@ -446,22 +450,13 @@ class UserDetail extends React.Component {
               userId={this.props.match.params.id}
             />
           </IfInterface>
-          <IfPermission perm="ui-users.edit">
-            <Button
-              buttonStyle="dropdownItem"
-              data-test-actions-menu-edit
-              id="clickable-edituser"
-              onClick={() => {
-                onToggle();
-                this.goToEdit();
-              }}
-              buttonRef={this.editButton}
-            >
-              <Icon icon="edit">
-                <FormattedMessage id="ui-users.edit" />
-              </Icon>
-            </Button>
-          </IfPermission>
+          <ActionMenuEditOption
+            id={this.props.match.params.id}
+            suppressEdit={this.props.resources.suppressEdit}
+            onToggle={onToggle}
+            goToEdit={this.goToEdit}
+            editButton={this.editButton}
+          />
           <IfInterface name="feesfines">
             <ExportFeesFinesReportButton
               feesFinesReportData={feesFinesReportData}
@@ -787,7 +782,7 @@ class UserDetail extends React.Component {
                 </IfPermission>
 
                 <IfPermission perm="ui-users.requests.all">
-                  <IfInterface name="request-storage" version="2.5 3.0">
+                  <IfInterface name="request-storage" version="2.5 3.0 4.0">
                     <IfInterface name="circulation">
                       <UserRequests
                         expanded={sections.requestsSection}

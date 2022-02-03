@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import uuid from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import _ from 'lodash';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import moment from 'moment';
@@ -111,7 +111,7 @@ class ChargeFeeFine extends React.Component {
 
   onFormAccountData(type) {
     const owners = _.get(this.props.resources, ['owners', 'records'], []);
-    const feefines = _.get(this.props.resources, ['feefines', 'records'], []);
+    const feefines = _.get(this.props.resources, ['allfeefines', 'records'], []);
     const selectedLoan = this.props.selectedLoan || {};
     const { intl: { formatMessage } } = this.props;
     const item = (selectedLoan.id) ? selectedLoan.item : this.item;
@@ -135,7 +135,7 @@ class ChargeFeeFine extends React.Component {
     if (item.contributorNames) { type.contributors = item.contributorNames; }
     if (selectedLoan.dueDate) type.dueDate = selectedLoan.dueDate;
     if (selectedLoan.returnDate) type.returnedDate = selectedLoan.returnDate;
-    type.id = uuid();
+    type.id = uuidv4();
     type.loanId = selectedLoan.id;
     type.userId = this.props.user.id;
     type.itemId = this.item.id;
@@ -427,6 +427,11 @@ class ChargeFeeFine extends React.Component {
       match: {
         params: { loanid },
       },
+      okapi: {
+        currentUser: {
+          curServicePoint,
+        }
+      },
     } = this.props;
     const {
       ownerId,
@@ -434,22 +439,24 @@ class ChargeFeeFine extends React.Component {
       pay,
     } = this.state;
     this.item = _.get(resources, ['items', 'records', [0]], {});
-    const allfeefines = _.get(resources, ['allfeefines', 'records'], []);
+    const feefines = _.get(resources, ['allfeefines', 'records'], []);
     const owners = _.get(resources, ['owners', 'records'], []);
     const list = [];
     const shared = owners.find(o => o.owner === 'Shared');
-    allfeefines.forEach(f => {
+    feefines.forEach(f => {
       if (!list.find(o => (o || {}).id === f.ownerId)) {
         const owner = owners.find(o => (o || {}).id === f.ownerId);
-        if (owner !== undefined) { list.push(owner); }
+
+        if (owner) {
+          list.push(owner);
+        }
       }
     });
-    const feefines = _.get(resources, ['allfeefines', 'records'], []);
     const payments = _.get(resources, ['payments', 'records'], []);
     const accounts = _.get(resources, ['accounts', 'records'], []);
     const settings = _.get(resources, ['commentRequired', 'records', 0], {});
     const barcode = _.get(resources, 'activeRecord.barcode');
-    const defaultServicePointId = _.get(resources, ['curUserServicePoint', 'records', 0, 'defaultServicePointId'], '-');
+    const defaultServicePointId = curServicePoint.id;
     const servicePointsIds = _.get(resources, ['curUserServicePoint', 'records', 0, 'servicePointsIds'], []);
     let selected = parseFloat(0);
     accounts.forEach(a => {
@@ -472,7 +479,7 @@ class ChargeFeeFine extends React.Component {
 
     const isPending = {
       owners: _.get(resources, ['owners', 'isPending'], false),
-      feefines: _.get(resources, ['feefines', 'isPending'], false),
+      feefines: _.get(resources, ['allfeefines', 'isPending'], false),
       servicePoints: _.get(resources, ['curUserServicePoint', 'isPending'], true)
     };
 
@@ -480,11 +487,11 @@ class ChargeFeeFine extends React.Component {
     const servicePointOwnerId = loadServicePoints({ owners: (shared ? owners : list), defaultServicePointId, servicePointsIds });
     const initialOwnerId = ownerId !== '0' ? ownerId : servicePointOwnerId;
     const selectedFeeFine = feefines.find(f => f.id === feeFineTypeId);
-    const currentOwnerFeeFineTypes = feefines.filter(f => f.ownerId === resources.activeRecord.ownerId || f.ownerId === resources.activeRecord.shared);
+    const currentOwnerFeeFineTypes = feefines.filter(f => f.ownerId === initialOwnerId || f.ownerId === resources.activeRecord.shared);
     const selectedOwner = owners.find(o => o.id === initialOwnerId);
 
     const initialChargeValues = {
-      ownerId: resources.activeRecord.ownerId || '',
+      ownerId: initialOwnerId,
       notify: !!(selectedFeeFine?.chargeNoticeId || selectedOwner?.defaultChargeNoticeId),
       feeFineId: '',
       amount: ''

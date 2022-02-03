@@ -284,7 +284,7 @@ class BulkClaimReturnedModal extends React.Component {
         {operationState === 'pre' &&
           <Col sm={12} className={css.additionalInformation}>
             <TextArea
-              data-test-bulk-claim-returned-additionalInfo
+              data-test-bulk-claim-returned-additional-info
               label={<FormattedMessage id="ui-users.additionalInfo.label" />}
               placeholder={intl.formatMessage({ id: 'ui-users.bulkClaimReturned.moreInfoPlaceholder' })}
               required

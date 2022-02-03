@@ -17,6 +17,23 @@
 * Refactor from `<SafeHTMLMessage>` to `<FormattedMessage>`. Refs UIU-2179.
 * Reset offset when sort values change. Fixes UIU-2466.
 * Prompt if changing permissions will remove those with `visible: false`. Refs UIU-2409.
+* Unassign all permissions from a user with one click. Refs UIU-2477.
+* Use supported `uuid`. Refs UIU-2488.
+* Do not push to history if the url didn't change. Fixes UIU-2490.
+* Also support `circulation` `12.0`. Refs UIU-2480.
+* Also support `request-storage` `4.0` (TLR). Refs UIU-2495, UIU-2480.
+* Fix problems with permissions for claim returned, renewals. Refs UIU-2256.
+* Settings > Users > change focus. Refs UIU-2036.
+* Add custom fields filters. Refs UIU-2170.
+* Properly show service point name in fee/fine details. Fixes UIU-2473.
+* Suppress edit of users stored in a configuration entry. Refs UIU-2499.
+* Also support `circulation` `13.0`. Refs UIU-2483.
+* Fix unexpected increase of fee/fine remaining balance. Refs UIU-2506.
+* Correct calculation for expiration date. Refs UIU-2498.
+* Preserve invisible permissions during edit. Fixes UIU-2075.
+* Column selector dropdown does not match column headings. Refs UIU-2504.
+* Fee/Fine Type not showing/saving for first manual fee/fine created. Refs UIU-2508.
+* Add Jest/RTL tests for `CommentModal` business logic in `FeeFineActions` component. Refs UIU-2515.
 
 ## [7.0.1](https://github.com/folio-org/ui-users/tree/v7.0.1) (2021-10-07)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.1.0...v7.0.1)
@@ -84,7 +101,18 @@
 * Create Jest/RTL test for `UserPermissions`. Refs UIU-2303.
 * Create Jest/RTL test for `Owners`. Refs UIU-2408.
 * Create Jest/RTL test for `Modals`. Refs UIU-2323.
+* Create Jest/RTL test for `BulkClaimReturnedModal`. Refs UIU-2317.
 * Create Jest/RTL test for `PatronBlockModalWithOverrideModal`. Refs UIU-2370.
+* Create Jest/RTL test for `PatronBlockModal`. Refs UIU-2278.
+* Create Jest/RTL test for `OverrideModal`. Refs UIU-2358.
+* Create Jest/RTL test for `OwnerSettings`. Refs UIU-2406.
+* Create Jest/RTL test for `PaymentSettings`. Refs UIU-2389.
+* Create Jest/RTL test for `FeeFineSettings`. Refs UIU-2378.
+* Create Jest/RTL test for `ActionModal`. Refs UIU-2286.
+* Create Jest/RTL test for `ErrorModal`. Refs UIU-2318.
+* Create Jest/RTL test for `WithCopyModal`. Refs UIU-2268.
+* Create Jest/RTL test for `CancellationModal`. Refs UIU-2342.
+* Create Jest/RTL test for `CommentModal`. Refs UIU-2280.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)

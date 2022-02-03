@@ -1,0 +1,27 @@
+{
+  "id" : "86f66c9e-d000-495f-9827-a9a76bcb415a",
+  "name" : "multi-select",
+  "refId" : "multiselect",
+  "type" : "MULTI_SELECT_DROPDOWN",
+  "entityType" : "user",
+  "visible" : true,
+  "required" : false,
+  "isRepeatable" : false,
+  "order" : 1,
+  "helpText" : "",
+  "selectField" : {
+    "multiSelect" : true,
+    "options" : {
+      "values" : [ {
+        "id" : "opt_0",
+        "value" : "label1",
+        "default" : false
+      }, {
+        "id" : "opt_1",
+        "value" : "label2",
+        "default" : false
+      } ],
+      "sortingOrder" : "CUSTOM"
+    }
+  }
+}

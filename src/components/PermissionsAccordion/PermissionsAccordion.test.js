@@ -5,12 +5,14 @@ import userEvent from '@testing-library/user-event';
 import { IfPermission } from '@folio/stripes/core';
 
 import '__mock__/reactFinalFormArrays.mock';
+import '__mock__/reactFinalFormListeners.mock';
 import '__mock__/intl.mock';
 
 import PermissionsAccordion from './PermissionsAccordion';
 
 jest.unmock('@folio/stripes/components');
 
+const changeFormMock = jest.fn();
 const paProps = {
   accordionId: 'permissions-accordion',
   expanded: true,
@@ -110,7 +112,10 @@ describe('PermissionsAccordion', () => {
       });
     });
 
-    describe('when "visible: false" permissions are also assigned', () => {
+    // NOTE: The 'visible: false permissions' tests are being skipped because the
+    // confirmation modal is now being skipped in the actual code (because it's
+    // not needed for the time being).
+    describe.skip('when "visible: false" permissions are also assigned', () => {
       test('shows prompt', async () => {
         renderPermissionsAccordion({
           form: {
@@ -170,6 +175,57 @@ describe('PermissionsAccordion', () => {
 
         // PermissionsModal _is_ present
         expect(await screen.findByText('PermissionsModal')).toBeInTheDocument();
+      });
+    });
+
+    describe('when click "Unassign all permissions" button', () => {
+      test('unassign modal window should be shown', async () => {
+        renderPermissionsAccordion();
+
+        const unassignAllButton = await screen.findByRole('button', { name: 'ui-users.permissions.unassignAllPermissions' });
+        userEvent.click(unassignAllButton);
+
+        expect(await screen.findByText('ui-users.permissions.modal.unassignAll.header')).toBeInTheDocument();
+      });
+
+      describe('when confirm unassigning', () => {
+        test('unassign function should be called', async () => {
+          renderPermissionsAccordion({
+            form: {
+              getFieldState: () => ({
+                value: [
+                  { name: 'foo', visible: true },
+                  { name: 'bar', visible: false },
+                ]
+              }),
+              change: changeFormMock,
+            },
+          });
+
+          const unassignAllButton = await screen.findByRole('button', { name: 'ui-users.permissions.unassignAllPermissions' });
+          userEvent.click(unassignAllButton);
+
+          const confirmButton = await screen.findByRole('button', { name: 'ui-users.yes' });
+          userEvent.click(confirmButton);
+
+          expect(changeFormMock).toHaveBeenCalled();
+        });
+      });
+
+      describe('when cancel unassigning', () => {
+        test('unassign modal window should be closed', async () => {
+          renderPermissionsAccordion();
+
+          const unassignAllButton = await screen.findByRole('button', { name: 'ui-users.permissions.unassignAllPermissions' });
+          userEvent.click(unassignAllButton);
+
+          const cancelButton = await screen.findByRole('button', { name: 'ui-users.no' });
+          userEvent.click(cancelButton);
+
+          await waitForElementToBeRemoved(() => screen.getByText('ui-users.permissions.modal.unassignAll.header'));
+
+          expect(await screen.queryByText('ui-users.permissions.modal.unassignAll.header')).not.toBeInTheDocument();
+        });
       });
     });
   });
