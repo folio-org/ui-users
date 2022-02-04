@@ -285,12 +285,14 @@ class PermissionsModal extends React.Component {
   };
 
   resetSearchForm = () => {
-    const permissions = this.state.allPermissions || [];
+    this.setState(prevState => {
+      const permissions = prevState.allPermissions || [];
 
-    this.setState({
-      filters: {},
-      permissions,
-      assignedPermissionIds: this.props.assignedPermissions.map(({ id }) => id),
+      return ({
+        filters: {},
+        permissions,
+        assignedPermissionIds: this.props.assignedPermissions.map(({ id }) => id)
+      });
     });
   };
 
