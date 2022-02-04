@@ -113,10 +113,17 @@ class PermissionsModal extends React.Component {
     this._isMounted = false;
 
     this.state = {
-      filterPaneIsVisible: true,
+      // There are two 'permissions' vars in play here:
+      // `allPermissions` is intended to be a fixed copy of the records from the
+      // availablePermissions resource. Using this as a source of truth prevents
+      // the permissions duplication problem specified in UIU-2496.
+      // `permissions` begins as a second copy of the resource records, but it can
+      // change in response to a search query.
+      allPermissions: [],
       permissions: [],
-      filters: getInitialFiltersState(props.filtersConfig),
-      assignedPermissionIds: []
+      assignedPermissionIds: [],
+      filterPaneIsVisible: true,
+      filters: getInitialFiltersState(props.filtersConfig)
     };
   }
 
