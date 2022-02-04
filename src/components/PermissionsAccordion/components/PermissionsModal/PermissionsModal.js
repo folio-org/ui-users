@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  get,
   mapKeys,
   pickBy,
   remove,
@@ -140,6 +139,7 @@ class PermissionsModal extends React.Component {
     // which it may have since this function is async
     if (this._isMounted) {
       this.setState({
+        allPermissions: permissions,
         permissions,
         assignedPermissionIds: this.props.assignedPermissions.map(({ id }) => id)
       });
@@ -152,7 +152,7 @@ class PermissionsModal extends React.Component {
 
   // Search for permissions
   onSubmitSearch = (searchText) => {
-    const permissions = this.props.resources?.availablePermissions?.records || [];
+    const permissions = this.state.allPermissions || [];
     // Need a bit of extra work to search for terms that might appear only in a translated label
     const translationResults = this.getMatchedTranslations(searchText, permissions);
 
@@ -240,14 +240,16 @@ class PermissionsModal extends React.Component {
   };
 
   onSave = () => {
-    const { assignedPermissionIds } = this.state;
+    const {
+      allPermissions,
+      assignedPermissionIds,
+    } = this.state;
     const {
       addPermissions,
       assignedPermissions,
       onClose,
     } = this.props;
-    const permissions = get(this.props, 'resources.availablePermissions.records', []);
-    const filteredPermissions = permissions.filter(({ id }) => assignedPermissionIds.includes(id));
+    const filteredPermissions = allPermissions.filter(({ id }) => assignedPermissionIds.includes(id));
 
     // Invisible permissions assigned to a user are lost in the permissions selection process,
     // so we want to make sure that they get saved along with any visible selections. This renders
@@ -276,7 +278,7 @@ class PermissionsModal extends React.Component {
   };
 
   resetSearchForm = () => {
-    const permissions = get(this.props, 'resources.availablePermissions.records', []);
+    const permissions = this.state.allPermissions || [];
 
     this.setState({
       filters: {},
