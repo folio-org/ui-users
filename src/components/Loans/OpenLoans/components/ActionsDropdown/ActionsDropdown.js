@@ -21,6 +21,7 @@ import {
 } from '../../../../util';
 
 import { itemStatuses } from '../../../../../constants';
+import ItemDetailsOption from './ItemDetailsOption';
 
 class ActionsDropdown extends React.Component {
   static propTypes = {
@@ -50,21 +51,13 @@ class ActionsDropdown extends React.Component {
     } = this.props;
 
     const itemStatusName = loan?.item?.status?.name;
-    const itemDetailsLink = `/inventory/view/${loan.item.instanceId}/${loan.item.holdingsRecordId}/${loan.itemId}`;
     const loanPolicyLink = `/settings/circulation/loan-policies/${loan.loanPolicyId}`;
     const buttonDisabled = !stripes.hasPerm('ui-users.feesfines.actions.all');
     const isUserActive = checkUserActive(user);
 
     return (
       <DropdownMenu data-role="menu">
-        <IfPermission perm="inventory.items.item.get">
-          <Button
-            buttonStyle="dropdownItem"
-            to={itemDetailsLink}
-          >
-            <FormattedMessage id="ui-users.itemDetails" />
-          </Button>
-        </IfPermission>
+        <ItemDetailsOption loan={loan} />
         <IfPermission perm="ui-users.loans.renew">
           { isUserActive && itemStatusName !== itemStatuses.CLAIMED_RETURNED &&
           <Button
