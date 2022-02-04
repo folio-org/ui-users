@@ -117,7 +117,7 @@ class PermissionsModal extends React.Component {
       filterPaneIsVisible: true,
       permissions: [],
       filters: getInitialFiltersState(props.filtersConfig),
-      assignedPermissionIds: props.assignedPermissions.map(({ id }) => id)
+      assignedPermissionIds: []
     };
   }
 
@@ -139,7 +139,10 @@ class PermissionsModal extends React.Component {
     // don't set state if the component has unmounted,
     // which it may have since this function is async
     if (this._isMounted) {
-      this.setState({ permissions });
+      this.setState({
+        permissions,
+        assignedPermissionIds: this.props.assignedPermissions.map(({ id }) => id)
+      });
     }
   }
 
