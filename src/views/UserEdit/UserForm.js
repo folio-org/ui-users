@@ -329,13 +329,15 @@ class UserForm extends React.Component {
               onClose={onCancel}
               defaultWidth="fill"
             >
-              <Headline
-                size="xx-large"
-                tag="h2"
-                data-test-header-title
-              >
-                {fullName}
-              </Headline>
+              {fullName && (
+                <Headline
+                  size="xx-large"
+                  tag="h2"
+                  data-test-header-title
+                >
+                  {fullName}
+                </Headline>
+              )}
               <AccordionStatus ref={this.accordionStatusRef}>
                 <Row end="xs">
                   <Col xs>
