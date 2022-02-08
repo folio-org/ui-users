@@ -28,7 +28,7 @@ const SettingsPage = ({ sections, path }) => {
     <Pane
       defaultWidth="20%"
       paneTitle={
-        <Headline tag="h3" margin="none">
+        <Headline tag="h2" margin="none">
           <FormattedMessage id="ui-users.settings.label" />
         </Headline>
       }
@@ -38,7 +38,7 @@ const SettingsPage = ({ sections, path }) => {
       <NavList>
         {sections.map((section, index) => {
           const sectionInner = (
-            <NavListSection key={index} label={section.label} data-test-settingspage>
+            <NavListSection key={index} label={section.label} tag="h3" data-test-settingspage>
               {section.pages.map((setting) => <SectionPageItem setting={setting} path={path} key={setting.route} />)}
             </NavListSection>
           );
