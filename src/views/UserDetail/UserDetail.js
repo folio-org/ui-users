@@ -489,8 +489,8 @@ class UserDetail extends React.Component {
   checkScope = () => true;
 
   goToEdit = () => {
-    const { history, match: { params } } = this.props;
-    history.push(`/users/${params.id}/edit`);
+    const { history, location: { search }, match: { params } } = this.props;
+    history.push(`/users/${params.id}/edit${search}`);
   }
 
   shortcuts = [
