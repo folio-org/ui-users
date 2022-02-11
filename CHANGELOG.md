@@ -36,6 +36,7 @@
 * Add Jest/RTL tests for `CommentModal` business logic in `FeeFineActions` component. Refs UIU-2515.
 * Add `limit` clauses to `withRenew` queries to enable retrieval of more than 10 records. Refs UIU-2520.
 * Accessibility: Document has multiple static elements with the same ID attribute. Refs UIU-1688.
+* Open Loans List: Form does not include label. Refs UIU-1638.
 
 ## [7.0.1](https://github.com/folio-org/ui-users/tree/v7.0.1) (2021-10-07)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.1.0...v7.0.1)

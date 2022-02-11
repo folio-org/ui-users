@@ -153,6 +153,7 @@ class OpenLoansWithStaticData extends React.Component {
               type="checkbox"
               checked={allChecked}
               name="check-all"
+              aria-label="Select all loans"
               onChange={toggleAll}
             />
           );

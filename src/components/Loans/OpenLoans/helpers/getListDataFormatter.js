@@ -34,6 +34,7 @@ export default function getListDataFormatter(
           onClick={e => toggleItem(e, loan)}
           onChange={e => toggleItem(e, loan)}
           type="checkbox"
+          aria-label="Select loan"
         />
       ),
     },
