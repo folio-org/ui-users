@@ -133,6 +133,7 @@ class OpenLoansWithStaticData extends React.Component {
   };
 
   getColumnMapping = () => {
+    const { intl:{ formatMessage } } = this.props;
     return Object.keys(this.tableData).reduce(
       (columnMapping, objKey) => {
         const {
@@ -153,6 +154,7 @@ class OpenLoansWithStaticData extends React.Component {
               type="checkbox"
               checked={allChecked}
               name="check-all"
+              aria-label={formatMessage({ id: 'ui-users.loans.selectAllLoans' })}
               onChange={toggleAll}
             />
           );

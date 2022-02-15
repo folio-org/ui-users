@@ -34,6 +34,12 @@
 * Column selector dropdown does not match column headings. Refs UIU-2504.
 * Fee/Fine Type not showing/saving for first manual fee/fine created. Refs UIU-2508.
 * Add Jest/RTL tests for `CommentModal` business logic in `FeeFineActions` component. Refs UIU-2515.
+* Add `limit` clauses to `withRenew` queries to enable retrieval of more than 10 records. Refs UIU-2520.
+* Accessibility: Document has multiple static elements with the same ID attribute. Refs UIU-1688.
+* Preserve search filters during user edit. Fixes UIU-2484.
+* Retrieve up to 50 proxies/sponsors. Refs UIU-2510.
+* Open Loans List: Form does not include label. Refs UIU-1638.
+* Accessibility: Headings must not be empty. Refs UIU-1695.
 * Prevent duplication of permissions in `<PermissionsModal>` and related logic. Fixes UIU-2486, UIU-2496.
 
 ## [7.0.1](https://github.com/folio-org/ui-users/tree/v7.0.1) (2021-10-07)
