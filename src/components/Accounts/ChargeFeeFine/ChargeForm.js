@@ -266,6 +266,7 @@ class ChargeForm extends React.Component {
                 <Field
                   id="comments"
                   name="comments"
+                  aria-label="Comments"
                   component={TextArea}
                   fullWidth
                 />

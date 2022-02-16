@@ -78,6 +78,7 @@ class FeeFineInfo extends React.Component {
                   <Col xs={12}>
                     <Field
                       name="ownerId"
+                      aria-label="Owner id"
                       id="ownerId"
                       type="select"
                       component={Select}
@@ -101,6 +102,7 @@ class FeeFineInfo extends React.Component {
                   <Col xs={12}>
                     <Field
                       name="feeFineId"
+                      aria-label="Fee/fine id"
                       id="feeFineType"
                       type="select"
                       component={Select}
@@ -124,6 +126,7 @@ class FeeFineInfo extends React.Component {
                   <Col xs={12}>
                     <Field
                       name="amount"
+                      aria-label="amount"
                       id="amount"
                       type="number"
                       component={TextField}

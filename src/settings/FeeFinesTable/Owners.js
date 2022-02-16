@@ -52,6 +52,7 @@ const Owners = ({ dataOptions, onChange, filterShared }) => {
           <Select
             id="select-owner"
             onChange={onChange}
+            aria-label="Select owner"
           >
             {options}
           </Select>
