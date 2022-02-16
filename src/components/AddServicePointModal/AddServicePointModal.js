@@ -107,7 +107,7 @@ class AddServicePointModal extends React.Component {
     const {
       open,
       onClose,
-      intl,
+      intl: { formatMessage },
       servicePoints,
     } = this.props;
 
@@ -136,17 +136,19 @@ class AddServicePointModal extends React.Component {
             selected: (
               <Checkbox
                 data-test-sp-modal-checkbox="select-all"
+                aria-label={formatMessage({ id: 'ui-users.sp.selectAllServicePoints' })}
                 name="selected-all"
                 checked={!isEmpty(selection) && every(selection, el => el === true)}
                 onChange={this.onToggleBulkSelection}
               />
             ),
-            name: intl.formatMessage({ id: 'ui-users.sp.column.name' }),
+            name: formatMessage({ id: 'ui-users.sp.column.name' }),
           }}
           columnWidths={{ selected: 35 }}
           formatter={{
             selected: sp => <Checkbox
               data-test-sp-modal-checkbox={sp.id}
+              aria-label={`checkbox-${sp.id}`}
               name={`selected-${sp.id}`}
               checked={selection[sp.id]}
               onChange={() => this.onToggleSelection(sp)}
