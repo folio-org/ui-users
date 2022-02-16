@@ -38,6 +38,7 @@
 * Accessibility: Document has multiple static elements with the same ID attribute. Refs UIU-1688.
 * Preserve search filters during user edit. Fixes UIU-2484.
 * Retrieve up to 50 proxies/sponsors. Refs UIU-2510.
+* Add Service Point modal: Ensure every form element has label. Refs UIU-1699.
 
 ## [7.0.1](https://github.com/folio-org/ui-users/tree/v7.0.1) (2021-10-07)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.1.0...v7.0.1)
