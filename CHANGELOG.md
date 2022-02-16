@@ -38,6 +38,9 @@
 * Accessibility: Document has multiple static elements with the same ID attribute. Refs UIU-1688.
 * Preserve search filters during user edit. Fixes UIU-2484.
 * Retrieve up to 50 proxies/sponsors. Refs UIU-2510.
+* Open Loans List: Form does not include label. Refs UIU-1638.
+* Accessibility: Headings must not be empty. Refs UIU-1695.
+* Prevent duplication of permissions in `<PermissionsModal>` and related logic. Fixes UIU-2486, UIU-2496.
 * Add Service Point modal: Ensure every form element has label. Refs UIU-1699.
 
 ## [7.0.1](https://github.com/folio-org/ui-users/tree/v7.0.1) (2021-10-07)
