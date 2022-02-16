@@ -108,6 +108,8 @@
   "loans.history": "Loan action history",
   "loans.resolveClaim": "Resolve claim",
   "loans.action.source.system": "System",
+  "loans.rows.select": "Select loan",
+  "loans.selectAllLoans": "Select all loans",
   "settings.label": "Users",
   "settings.general": "General",
   "settings.feefine": "Fee/fine",
