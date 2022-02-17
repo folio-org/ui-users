@@ -43,15 +43,14 @@ const showValidationErrors = ({
   expirationDate,
 }) => {
   const errors = {};
-  const patronBlockError = ' ';
 
   if (!desc) {
     errors.desc = <FormattedMessage id="ui-users.blocks.form.validate.desc" />;
   }
   if (!borrowing && !renewals && !requests) {
-    errors.borrowing = patronBlockError;
-    errors.renewals = patronBlockError;
-    errors.requests = patronBlockError;
+    errors.borrowing = ' ';
+    errors.renewals = ' ';
+    errors.requests = ' ';
   }
   if (expirationDate && moment(moment(expirationDate).endOf('day')).isBefore(moment().endOf('day').add(1, 'days'))) {
     errors.expirationDate = <FormattedMessage id="ui-users.blocks.form.validate.future" />;
