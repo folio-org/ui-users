@@ -1,5 +1,5 @@
 
-import { screen, cleanup } from '@testing-library/react';
+import { cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import '__mock__/matchMedia.mock';
