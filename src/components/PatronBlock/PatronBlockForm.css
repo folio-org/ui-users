@@ -1,0 +1,11 @@
+@import "@folio/stripes-components/lib/variables";
+
+.labelWrapper {
+  font-size: var(--font-size-form-label);
+  line-height: var(--line-height);
+  padding: 0 .5rem var(--control-label-margin-bottom);
+
+    & span {
+        color: var(--error);
+    }
+}
