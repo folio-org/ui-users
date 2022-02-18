@@ -141,13 +141,14 @@ const withProxy = WrappedComponent => class WithProxyComponent extends React.Com
       const resource = mutator[resourceName];
       const resourceFor = mutator[`${resourceName}For`];
       const query = `(${queryKey}=="${userId}")`;
+      const limit = '50';
       if (resources[resourceName] && !resources[resourceName].isPending) {
         resourceFor.reset();
         resource.reset();
-        resourceFor.GET({ params: { query } }).then((recordsFor) => {
+        resourceFor.GET({ params: { query, limit } }).then((recordsFor) => {
           if (!recordsFor.length) return;
           const ids = recordsFor.map(pf => `id=="${pf[recordKey]}"`).join(' or ');
-          resource.GET({ params: { query: `(${ids})` } });
+          resource.GET({ params: { query: `(${ids})`, limit } });
         });
       }
     }

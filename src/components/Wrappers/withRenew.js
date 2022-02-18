@@ -11,7 +11,6 @@ import BulkRenewalDialog from '../BulkRenewalDialog';
 import isOverridePossible from '../Loans/OpenLoans/helpers/isOverridePossible';
 import {
   requestStatuses,
-  MAX_RECORDS,
   OVERRIDE_BLOCKS_FIELDS,
 } from '../../constants';
 
@@ -265,13 +264,12 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
 
     for (let i = 0; i < loans.length; i += step) {
       const loansSlice = loans.slice(i, i + step);
-      const q = loansSlice
+      const itemIdList = loansSlice
         .filter(loan => loan.itemId)
-        .map(loan => loan.itemId)
-        .join(' or ');
-      const query = `(itemId==(${q})) and status==(${statusList}) sortby requestDate desc`;
+        .map(loan => loan.itemId);
+      const query = `(itemId==(${itemIdList.join(' or ')})) and status==(${statusList}) sortby requestDate desc`;
       reset();
-      GET({ params: { query, limit: MAX_RECORDS } })
+      GET({ params: { query, limit: itemIdList.length } })
         .then((requestRecords) => {
           const requestCountObject = requestRecords.reduce((map, record) => {
             map[record.itemId] = map[record.itemId]
@@ -308,12 +306,12 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
     // the same policy; we only need to retrieve that policy once.
     const ids = [...new Set(this.state.loans
       .filter(loan => loan.loanPolicyId)
-      .map(loan => loan.loanPolicyId))]
-      .join(' or ');
+      .map(loan => loan.loanPolicyId))];
+    const query = `id==(${ids.join(' or ')})`;
 
     if (ids.length) {
       reset();
-      GET({ params: { query: `id==(${ids})` } })
+      GET({ params: { query, limit: `${ids.length}` } })
         .then((loanPolicies) => {
           const loanPolicyObject = loanPolicies.reduce((map, loanPolicy) => {
             map[loanPolicy.id] = loanPolicy.name;

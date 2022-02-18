@@ -33,6 +33,8 @@ import {
 import { getFullName } from '../util';
 import UserInfo from '../Accounts/ChargeFeeFine/UserInfo';
 
+import css from './PatronBlockForm.css';
+
 const showValidationErrors = ({
   desc,
   borrowing,
@@ -41,15 +43,14 @@ const showValidationErrors = ({
   expirationDate,
 }) => {
   const errors = {};
-  const patronBlockError = <FormattedMessage id="ui-users.blocks.form.validate.any" />;
 
   if (!desc) {
     errors.desc = <FormattedMessage id="ui-users.blocks.form.validate.desc" />;
   }
   if (!borrowing && !renewals && !requests) {
-    errors.borrowing = patronBlockError;
-    errors.renewals = patronBlockError;
-    errors.requests = patronBlockError;
+    errors.borrowing = ' ';
+    errors.renewals = ' ';
+    errors.requests = ' ';
   }
   if (expirationDate && moment(moment(expirationDate).endOf('day')).isBefore(moment().endOf('day').add(1, 'days'))) {
     errors.expirationDate = <FormattedMessage id="ui-users.blocks.form.validate.future" />;
@@ -265,6 +266,8 @@ class PatronBlockForm extends React.Component {
                         name="desc"
                         label={<FormattedMessage id="ui-users.blocks.form.label.display" />}
                         component={TextArea}
+                        required
+                        aria-required="true"
                         placeholder={intl.formatMessage({ id: 'ui-users.blocks.form.placeholder.desc' })}
                         fullWidth
                       />
@@ -305,7 +308,9 @@ class PatronBlockForm extends React.Component {
                     </Col>
                   </Row>
                   <Row>
-                    <Col><FormattedMessage id="ui-users.blocks.form.label.block" /></Col>
+                    <Col>
+                      <div className={css.labelWrapper}><FormattedMessage id="ui-users.blocks.form.label.block" /></div>
+                    </Col>
                   </Row>
                   <Row>
                     <Col id="patronBlockForm-borrowing" xs={12} sm={10} md={7} lg={5}>
