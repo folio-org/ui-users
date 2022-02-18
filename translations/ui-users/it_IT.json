@@ -890,7 +890,7 @@
     "reports.cash.paymentAmount": "Payment amount",
     "reports.cash.feeFineOwner": "Fee/fine owner",
     "reports.cash.feeFineType": "Fee/fine type",
-    "reports.cash.paymentDateTime": "Payment date/time",
+    "reports.cash.paymentDateTime": "Data/ora di pagamento",
     "reports.cash.paymentStatus": "Payment status",
     "reports.cash.transactionInfo": "Transaction information",
     "reports.cash.additionalStaffInfo": "Payment additional staff information",
@@ -903,7 +903,7 @@
     "reports.cash.ownerTotal": "Fee/fine owner totals",
     "reports.cash.paymentTotal": "Payment method totals",
     "loans.details.accounts.suspended": "{amount} Suspended",
-    "accounts.suspended": "Suspended",
+    "accounts.suspended": "Sospeso",
     "accounts.numClaimAccounts": "{count, number} {count, plural, one {suspended claim returned fee/fine} other {suspended claim returned fees/fines}}",
     "accounts.numRefundedAccounts": "{count, number} {count, plural, one {refunded fee/fine} other {refunded fees/fines}}",
     "settings.transferCriteria": "Transfer criteria",
@@ -984,5 +984,8 @@
     "permissions.unassignAllPermissions": "Unassign all permissions",
     "permissions.calloutMessage": "User's permissions are all unassigned.",
     "permissions.modal.unassignAll.header": "Unassign all permissions",
-    "permissions.modal.unassignAll.label": "You are unassigning all permissions from the user <strong>{lastName}, {firstName}</strong> <p><strong>Are you sure?</strong></p>"
+    "permissions.modal.unassignAll.label": "You are unassigning all permissions from the user <strong>{lastName}, {firstName}</strong> <p><strong>Are you sure?</strong></p>",
+    "loans.rows.select": "Select loan",
+    "loans.selectAllLoans": "Select all loans",
+    "sp.selectAllServicePoints": "Select all service points"
 }
