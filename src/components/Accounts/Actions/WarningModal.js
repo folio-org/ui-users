@@ -132,7 +132,7 @@ class WarningModal extends React.Component {
       ' ': a => (
         <input
           checked={!!(checkedAccounts[a.id])}
-          onClick={e => this.toggleItem(e, a)}
+          onChange={e => this.toggleItem(e, a)}
           type="checkbox"
         />
       ),
