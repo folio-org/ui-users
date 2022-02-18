@@ -70,14 +70,13 @@ describe('RefundsReportModal component', () => {
   });
   it('start Date Validation', () => {
     renderRefundsReportModal(propData);
-    userEvent.type(document.querySelector('[id="dp-7"]'), '10/02/2022');
+    userEvent.type(screen.getByLabelText('ui-users.reports.refunds.modal.endDate'), '13/02/2022');
     expect(screen.getAllByRole('alert')[0]).toBeTruthy();
   });
   it('end Date must be greater Validation', () => {
     renderRefundsReportModal(propData);
-    screen.debug();
-    userEvent.type(document.querySelector('[id="dp-24"]'), '10/02/2022');
-    userEvent.type(document.querySelector('[id="dp-25"]'), '01/02/2022');
+    userEvent.type(screen.getByLabelText('ui-users.reports.refunds.modal.startDate'), '15/02/2022');
+    userEvent.type(screen.getByLabelText('ui-users.reports.refunds.modal.endDate'), '03/02/2022');
     expect(screen.getAllByRole('alert')[1]).toBeTruthy();
   });
 });
