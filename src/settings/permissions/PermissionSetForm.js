@@ -1,6 +1,6 @@
-import { cloneDeep, omit } from 'lodash';
+import { cloneDeep } from 'lodash';
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import {
   Paneset,
@@ -21,11 +21,14 @@ import {
 import { IfPermission } from '@folio/stripes/core';
 import { ViewMetaData } from '@folio/stripes/smart-components';
 
-import stripesForm from '@folio/stripes/form';
-import { Field } from 'redux-form';
+import stripesFinalForm from '@folio/stripes/final-form';
+import { Field } from 'react-final-form';
 
 import PermissionsAccordion from '../../components/PermissionsAccordion';
-import { statusFilterConfig } from '../../components/PermissionsAccordion/helpers/filtersConfig';
+import {
+  statusFilterConfig,
+  permissionTypeFilterConfig,
+} from '../../components/PermissionsAccordion/helpers/filtersConfig';
 
 import styles from './PermissionSetForm.css';
 
@@ -36,18 +39,18 @@ class PermissionSetForm extends React.Component {
       connect: PropTypes.func.isRequired,
     }).isRequired,
     initialValues: PropTypes.object,
+    intl: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
-    onSave: PropTypes.func,
     onCancel: PropTypes.func,
     onRemove: PropTypes.func,
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
+    form: PropTypes.object,
   };
 
   constructor(props) {
     super(props);
 
-    this.saveSet = this.saveSet.bind(this);
     this.beginDelete = this.beginDelete.bind(this);
     this.confirmDeleteSet = this.confirmDeleteSet.bind(this);
     this.handleExpandAll = this.handleExpandAll.bind(this);
@@ -65,16 +68,12 @@ class PermissionSetForm extends React.Component {
   addFirstMenu() {
     return (
       <PaneMenu>
-        <FormattedMessage id="ui-users.permissions.closePermissionSetDialog">
-          { ariaLabel => (
-            <PaneHeaderIconButton
-              id="clickable-close-permission-set"
-              onClick={this.props.onCancel}
-              icon="times"
-              aria-label={ariaLabel}
-            />
-          )}
-        </FormattedMessage>
+        <PaneHeaderIconButton
+          id="clickable-close-permission-set"
+          onClick={this.props.onCancel}
+          icon="times"
+          aria-label={this.props.intl.formatMessage({ id: 'ui-users.permissions.closePermissionSetDialog' })}
+        />
       </PaneMenu>
     );
   }
@@ -169,17 +168,6 @@ class PermissionSetForm extends React.Component {
     );
   }
 
-  saveSet(data) {
-    const filtered = omit(data, ['childOf', 'grantedTo', 'dummy']);
-    const permSet = {
-      ...filtered,
-      mutable: true,
-      subPermissions: (data.subPermissions || []).map(p => p.permissionName)
-    };
-
-    this.props.onSave(permSet);
-  }
-
   renderPaneTitle() {
     const { initialValues } = this.props;
     const selectedSet = initialValues || {};
@@ -198,14 +186,14 @@ class PermissionSetForm extends React.Component {
   render() {
     const {
       stripes,
-      handleSubmit,
       initialValues,
+      handleSubmit,
+      form,
     } = this.props;
 
     const selectedSet = initialValues || {};
     const { confirmDelete, sections } = this.state;
     const disabled = !stripes.hasPerm('perms.permissions.item.put');
-
     const selectedName = selectedSet.displayName ||
       <FormattedMessage id="ui-users.permissions.untitledPermissionSet" />;
 
@@ -227,7 +215,7 @@ class PermissionSetForm extends React.Component {
       <form
         id="form-permission-set"
         className={styles.permSetForm}
-        onSubmit={handleSubmit(this.saveSet)}
+        onSubmit={handleSubmit}
       >
         <Paneset isRoot>
           <Pane
@@ -293,11 +281,15 @@ class PermissionSetForm extends React.Component {
               confirmLabel={<FormattedMessage id="ui-users.delete" />}
             />
             <PermissionsAccordion
-              filtersConfig={[statusFilterConfig]}
+              filtersConfig={[
+                permissionTypeFilterConfig,
+                statusFilterConfig,
+              ]}
               expanded={sections.permSection}
               visibleColumns={[
                 'selected',
                 'permissionName',
+                'type',
                 'status',
               ]}
               headlineContent={<FormattedMessage id="ui-users.permissions.assignedPermissions" />}
@@ -308,7 +300,7 @@ class PermissionSetForm extends React.Component {
               permToModify="perms.permissions.item.put"
               formName="permissionSetForm"
               permissionsField="subPermissions"
-              excludePermissionSets
+              form={form}
             />
           </Pane>
         </Paneset>
@@ -317,8 +309,7 @@ class PermissionSetForm extends React.Component {
   }
 }
 
-export default stripesForm({
-  form: 'permissionSetForm',
+export default injectIntl(stripesFinalForm({
   navigationCheck: true,
   enableReinitialize: false,
-})(PermissionSetForm);
+})(PermissionSetForm));

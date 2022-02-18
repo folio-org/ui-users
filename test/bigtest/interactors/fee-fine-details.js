@@ -51,10 +51,13 @@ import KeyValue from './KeyValue';
 @interactor class FeeFineDetails {
   static defaultScope = '[data-test-fee-fine-details]';
 
+  latestPaymentStatus = scoped('[data-test-latestPaymentStatus] div', KeyValue);
   overduePolicy = scoped('[data-test-overdue-policy] div', KeyValue);
   overduePolicyClick = clickable('[data-test-overdue-policy] a');
   lostItemPolicy = scoped('[data-test-lost-item-policy] div', KeyValue);
   lostItemPolicyClick = clickable('[data-test-lost-item-policy] a');
+  loanDetails = scoped('[data-test-loan-details] div', KeyValue);
+  loanDetailsClick = clickable('[data-test-loan-details] a');
   instanceAndType = scoped('[data-test-instance] div', KeyValue);
   contributors = scoped('[data-test-contributors] div', KeyValue);
   payButton = new ButtonInteractor('#payAccountActionsHistory');
@@ -63,6 +66,8 @@ import KeyValue from './KeyValue';
   refundButton = new ButtonInteractor('#refundAccountActionsHistory');
   errorButton = new ButtonInteractor('#errorAccountActionsHistory');
   errorButtonIsDisabled = is('#errorAccountActionsHistory[disabled]');
+  exportAccountActionsHistoryReport = scoped('[data-test-export-account-actions-history-report]');
+  exportAccountActionsHistoryReportButton = scoped('[data-test-export-account-actions-history-report]', ButtonInteractor);
   errorModal = new ModalInteractor('#error-modal');
   errorComment = new TextAreaInteractor('[class*=textArea---]');
   errorModalSubmit = new ButtonInteractor('[data-test-error-submit]');

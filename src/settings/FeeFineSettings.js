@@ -5,7 +5,7 @@ import {
   injectIntl,
   FormattedMessage,
 } from 'react-intl';
-import { Field } from 'redux-form';
+import { Field } from 'react-final-form';
 import {
   Select,
   Label,
@@ -20,6 +20,10 @@ import {
   CopyModal,
   ChargeNotice,
 } from './FeeFinesTable';
+
+import {
+  MAX_RECORDS,
+} from '../constants';
 
 const columnMapping = {
   feeFineType: (
@@ -58,7 +62,7 @@ class FeeFineSettings extends React.Component {
     templates: {
       type: 'okapi',
       records: 'templates',
-      path: 'templates?limit=50&query=cql.allRecords=1 AND category=""',
+      path: `templates?limit=${MAX_RECORDS}&query=cql.allRecords=1 AND category=""`,
       accumulate: 'true',
     },
     activeRecord: {},
@@ -99,7 +103,6 @@ class FeeFineSettings extends React.Component {
     this.connectedControlledVocab = props.stripes.connect(ControlledVocab);
     this.onChangeOwner = this.onChangeOwner.bind(this);
     this.onCopyFeeFines = this.onCopyFeeFines.bind(this);
-    this.onUpdateOwner = this.onUpdateOwner.bind(this);
     this.hideCopyDialog = this.hideCopyDialog.bind(this);
   }
 
@@ -230,7 +233,7 @@ class FeeFineSettings extends React.Component {
     };
   }
 
-  onUpdateOwner(item) {
+  onUpdateOwner = (item) => {
     const { owners, ownerId } = this.state;
     const owner = owners.find(o => o.id === ownerId) || {};
     owner.defaultChargeNoticeId = item.defaultChargeNoticeId;
@@ -309,7 +312,13 @@ class FeeFineSettings extends React.Component {
     const rowFilter =
       <div>
         <Owners filterShared={false} dataOptions={owners} onChange={this.onChangeOwner} />
-        <ChargeNotice owner={owner} templates={templates} templateCharge={templateCharge} templateAction={templateAction} onSubmit={(values) => { this.onUpdateOwner(values); }} />
+        <ChargeNotice
+          owner={owner}
+          templates={templates}
+          templateCharge={templateCharge}
+          templateAction={templateAction}
+          onSubmit={this.onUpdateOwner}
+        />
         <CopyModal
           {...this.props}
           openModal={this.state.showCopyDialog}
@@ -340,6 +349,7 @@ class FeeFineSettings extends React.Component {
         sortby="feeFineType"
         validate={this.validate}
         visibleFields={['feeFineType', 'defaultAmount', 'chargeNoticeId', 'actionNoticeId']}
+        formType="final-form"
       />
     );
   }

@@ -6,7 +6,6 @@ import { Field } from 'react-final-form';
 import setFieldData from 'final-form-set-field-data';
 
 import stripesFinalForm from '@folio/stripes/final-form';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import {
   Modal,
   Button,
@@ -93,7 +92,7 @@ class CancellationModal extends React.Component {
           <Row>
             <Col xs>
               <span>
-                <SafeHTMLMessage
+                <FormattedMessage
                   id="ui-users.accounts.cancellation.feeFinewillBeCancelled"
                   values={{
                     amount: parseFloat(amount).toFixed(2),
@@ -106,10 +105,9 @@ class CancellationModal extends React.Component {
           <br />
           <Row>
             <Col xs>
-              <FormattedMessage id="ui-users.accounts.cancellation.field.reason" />
+              <FormattedMessage id="ui-users.accounts.commentStaff" />*
             </Col>
           </Row>
-          <br />
           <Row>
             <Col xs>
               <Field
@@ -142,7 +140,6 @@ class CancellationModal extends React.Component {
                   <FormattedMessage id="ui-users.accounts.field.infoPatron" />
                 </Col>
               </Row>
-              <br />
               <Row>
                 <Col xs>
                   <Field
@@ -151,9 +148,9 @@ class CancellationModal extends React.Component {
                   />
                 </Col>
               </Row>
+              <br />
             </div>
           }
-          <br />
           <Row>
             <Col xs>
               <Button

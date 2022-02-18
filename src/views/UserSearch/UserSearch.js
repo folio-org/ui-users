@@ -4,11 +4,16 @@ import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 import { matchPath } from 'react-router';
 
-import noop from 'lodash/noop';
-import get from 'lodash/get';
+import {
+  assign,
+  get,
+  each,
+  noop,
+  isEmpty,
+} from 'lodash';
 import { Link } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { IntlConsumer, IfPermission, AppIcon, CalloutContext } from '@folio/stripes/core';
+import { IfPermission, IfInterface, AppIcon, CalloutContext } from '@folio/stripes/core';
 import {
   Button,
   HasCommand,
@@ -19,6 +24,7 @@ import {
   Paneset,
   SearchField,
   SRStatus,
+  MenuSection,
 } from '@folio/stripes/components';
 
 import {
@@ -26,11 +32,23 @@ import {
   SearchAndSortNoResultsMessage as NoResultsMessage,
   ExpandFilterPaneButton,
   CollapseFilterPaneButton,
+  ColumnManager,
 } from '@folio/stripes/smart-components';
 
+import RefundsReportModal from '../../components/ReportModals/RefundsReportModal';
+import CashDrawerReportModal from '../../components/ReportModals/CashDrawerReportModal';
+import FinancialTransactionsReportModal from '../../components/ReportModals/FinancialTransactionsReportModal';
+
 import CsvReport from '../../components/data/reports';
+import RefundsReport from '../../components/data/reports/RefundReport';
+import CashDrawerReconciliationReportPDF from '../../components/data/reports/cashDrawerReconciliationReportPDF';
+import CashDrawerReconciliationReportCSV from '../../components/data/reports/cashDrawerReconciliationReportCSV';
+import FinancialTransactionsReport from '../../components/data/reports/FinancialTransactionsReport';
 import Filters from './Filters';
 import css from './UserSearch.css';
+
+const VISIBLE_COLUMNS_STORAGE_KEY = 'users-visible-columns';
+const NON_TOGGLEABLE_COLUMNS = ['name'];
 
 function getFullName(user) {
   const lastName = get(user, ['personal', 'lastName'], '');
@@ -67,6 +85,8 @@ class UserSearch extends React.Component {
       records: PropTypes.object,
       patronGroups: PropTypes.object,
       departments: PropTypes.object,
+      owners: PropTypes.object,
+      servicePointsUsers: PropTypes.object,
       query: PropTypes.shape({
         qindex: PropTypes.string,
       }).isRequired,
@@ -79,14 +99,32 @@ class UserSearch extends React.Component {
       query: PropTypes.shape({
         update: PropTypes.func.isRequired,
       }).isRequired,
+      refundsReport: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }).isRequired,
+      cashDrawerReport: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }).isRequired,
+      cashDrawerReportSources: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }).isRequired,
+      financialTransactionsReport: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }).isRequired,
     }).isRequired,
+    okapi: PropTypes.shape({
+      currentUser: PropTypes.shape({
+        servicePoints: PropTypes.arrayOf(PropTypes.object),
+      }),
+    }),
     source: PropTypes.object,
-    visibleColumns: PropTypes.arrayOf(PropTypes.string),
+    stripes: PropTypes.shape({
+      timezone: PropTypes.string.isRequired,
+    }),
   }
 
   static defaultProps = {
     idPrefix: 'users-',
-    visibleColumns: ['active', 'name', 'barcode', 'patronGroup', 'username', 'email'],
   };
 
   static contextType = CalloutContext;
@@ -98,15 +136,19 @@ class UserSearch extends React.Component {
       selectedId: null,
       exportInProgress: false,
       searchPending: false,
+      showRefundsReportModal: false,
+      refundExportInProgress: false,
+      showCashDrawerReportModal: false,
+      cashDrawerReportInProgress: false,
+      showFinancialTransactionsReportModal: false,
+      financialTransactionsReportInProgress: false,
     };
 
     this.resultsPaneTitleRef = createRef();
     this.SRStatusRef = createRef();
 
-    const { formatMessage } = props.intl;
-    this.CsvReport = new CsvReport({
-      formatMessage
-    });
+    const { intl } = props;
+    this.CsvReport = new CsvReport({ intl });
   }
 
   static getDerivedStateFromProps(props) {
@@ -132,6 +174,23 @@ class UserSearch extends React.Component {
 
   componentWillUnmount() {
     this._mounted = false;
+  }
+
+  changeModalState = (modal, modalState) => {
+    this.setState({ [modal]: modalState });
+  }
+
+  getColumnMapping = () => {
+    const { intl } = this.props;
+
+    return {
+      active: intl.formatMessage({ id: 'ui-users.active' }),
+      name: intl.formatMessage({ id: 'ui-users.information.name' }),
+      barcode: intl.formatMessage({ id: 'ui-users.information.barcode' }),
+      patronGroup: intl.formatMessage({ id: 'ui-users.information.patronGroup' }),
+      username: intl.formatMessage({ id: 'ui-users.information.username' }),
+      email: intl.formatMessage({ id: 'ui-users.contact.email' }),
+    };
   }
 
   onSearchComplete = records => {
@@ -186,53 +245,108 @@ class UserSearch extends React.Component {
     });
   }
 
-  getActionMenu = ({ onToggle }) => (
-    <>
-      <IfPermission perm="users.item.post,login.item.post,perms.users.item.post">
-        <PaneMenu>
-          <FormattedMessage id="stripes-smart-components.addNew">
-            {ariaLabel => (
+  getActionMenu = renderColumnsMenu => ({ onToggle }) => {
+    const { intl } = this.props;
+
+    return (
+      <>
+        <MenuSection label={intl.formatMessage({ id: 'ui-users.actions' })} id="actions-menu-section">
+          <IfPermission perm="users.item.post,login.item.post,perms.users.item.post">
+            <PaneMenu>
+              <FormattedMessage id="stripes-smart-components.addNew">
+                {ariaLabel => (
+                  <Button
+                    id="clickable-newuser"
+                    aria-label={ariaLabel}
+                    to={`/users/create${this.props.location.search}`}
+                    buttonStyle="dropdownItem"
+                    marginBottom0
+                  >
+                    <Icon icon="plus-sign">
+                      <FormattedMessage id="stripes-smart-components.new" />
+                    </Icon>
+                  </Button>
+                )}
+              </FormattedMessage>
+            </PaneMenu>
+          </IfPermission>
+          <IfInterface name="circulation">
+            <IfPermission perm="ui-users.loans.view">
               <Button
-                id="clickable-newuser"
-                aria-label={ariaLabel}
-                to={`/users/create${this.props.location.search}`}
                 buttonStyle="dropdownItem"
-                marginBottom0
+                id="export-overdue-loan-report"
+                onClick={() => {
+                  onToggle();
+                  this.generateReport(this.props, 'overdue');
+                }}
               >
-                <FormattedMessage id="stripes-smart-components.new" />
+                <Icon icon="download">
+                  <FormattedMessage id="ui-users.reports.overdue.label" />
+                </Icon>
               </Button>
-            )}
-          </FormattedMessage>
-        </PaneMenu>
-      </IfPermission>
-      <IfPermission perm="ui-users.loans.view">
-        <Button
-          buttonStyle="dropdownItem"
-          id="export-overdue-loan-report"
-          onClick={() => {
-            onToggle();
-            this.generateReport(this.props, 'overdue');
-          }}
-        >
-          <Icon icon="report">
-            <FormattedMessage id="ui-users.reports.overdue.label" />
-          </Icon>
-        </Button>
-      </IfPermission>
-      <Button
-        buttonStyle="dropdownItem"
-        id="export-claimed-returned-loan-report"
-        onClick={() => {
-          onToggle();
-          this.generateReport(this.props, 'claimedReturned');
-        }}
-      >
-        <Icon icon="report">
-          <FormattedMessage id="ui-users.reports.claimReturned.label" />
-        </Icon>
-      </Button>
-    </>
-  );
+              <Button
+                buttonStyle="dropdownItem"
+                id="export-claimed-returned-loan-report"
+                onClick={() => {
+                  onToggle();
+                  this.generateReport(this.props, 'claimedReturned');
+                }}
+              >
+                <Icon icon="download">
+                  <FormattedMessage id="ui-users.reports.claimReturned.label" />
+                </Icon>
+              </Button>
+            </IfPermission>
+          </IfInterface>
+          <IfInterface name="feesfines">
+            <IfPermission perm="ui-users.cashDrawerReport">
+              <Button
+                buttonStyle="dropdownItem"
+                id="cash-drawer-report"
+                onClick={() => {
+                  onToggle();
+                  this.changeModalState('showCashDrawerReportModal', true);
+                }}
+              >
+                <Icon icon="download">
+                  <FormattedMessage id="ui-users.reports.cashDrawer.label" />
+                </Icon>
+              </Button>
+            </IfPermission>
+            <IfPermission perm="ui-users.financialTransactionReport">
+              <Button
+                buttonStyle="dropdownItem"
+                id="financial-transaction-report"
+                onClick={() => {
+                  onToggle();
+                  this.changeModalState('showFinancialTransactionsReportModal', true);
+                }}
+              >
+                <Icon icon="download">
+                  <FormattedMessage id="ui-users.reports.financialTransaction.label" />
+                </Icon>
+              </Button>
+            </IfPermission>
+            <IfPermission perm="ui-users.manualProcessRefundsReport">
+              <Button
+                buttonStyle="dropdownItem"
+                id="export-refunds-report"
+                onClick={() => {
+                  onToggle();
+                  this.changeModalState('showRefundsReportModal', true);
+                }}
+              >
+                <Icon icon="download">
+                  <FormattedMessage id="ui-users.reports.refunds.label" />
+                </Icon>
+              </Button>
+            </IfPermission>
+          </IfInterface>
+        </MenuSection>
+        {renderColumnsMenu}
+      </>
+    );
+  }
 
   renderResultsFirstMenu(filters) {
     const { filterPaneIsVisible } = this.state;
@@ -321,11 +435,219 @@ class UserSearch extends React.Component {
     onSubmit(e);
   }
 
+  handleRefundsReportFormSubmit = async ({ startDate, endDate, owners = [] }) => {
+    if (this.state.refundExportInProgress) {
+      return;
+    }
+
+    this.setState({
+      refundExportInProgress: true,
+      showRefundsReportModal: false,
+    });
+
+    const {
+      mutator: {
+        refundsReport,
+      },
+      intl: { formatMessage }
+    } = this.props;
+
+    const feeFineOwners = owners.reduce((ids, owner) => {
+      ids.push(owner.value);
+      return ids;
+    }, []);
+
+    const getRequestData = (refundsReportRequestData) => {
+      const refundsReportRequestParameter = {};
+
+      each(refundsReportRequestData, (val, key) => {
+        if (val) {
+          assign(refundsReportRequestParameter, { [key]: val });
+        }
+      });
+
+      return refundsReportRequestParameter;
+    };
+
+    try {
+      this.context.sendCallout({ message: <FormattedMessage id="ui-users.reports.inProgress" /> });
+
+      const requestData = getRequestData({ startDate, endDate, feeFineOwners });
+      const { reportData } = await refundsReport.POST(requestData);
+
+      if (isEmpty(reportData)) {
+        this.context.sendCallout({
+          type: 'error',
+          message: <FormattedMessage id="ui-users.reports.noItemsFound" />,
+        });
+      } else {
+        const report = new RefundsReport({ data: reportData, formatMessage });
+
+        report.toCSV();
+      }
+    } catch (error) {
+      if (error) {
+        this.context.sendCallout({
+          type: 'error',
+          message: <FormattedMessage id="ui-users.reports.callout.error" />,
+        });
+      }
+    } finally {
+      this.setState({ refundExportInProgress: false });
+    }
+  }
+
+  handleCashDrawerReportFormSubmit = async (data) => {
+    const {
+      startDate,
+      endDate,
+      servicePoint,
+      sources = [],
+      format,
+    } = data;
+
+    if (this.state.cashDrawerReportInProgress) {
+      return;
+    }
+
+    this.setState({
+      cashDrawerReportInProgress: true,
+      showCashDrawerReportModal: false,
+    });
+
+    const {
+      mutator: { cashDrawerReport },
+      okapi: { currentUser },
+      intl,
+    } = this.props;
+    const reportParameters = {
+      createdAt: servicePoint,
+      sources: sources.map(s => s.label),
+      startDate,
+      endDate,
+    };
+
+    try {
+      this.context.sendCallout({ message: <FormattedMessage id="ui-users.reports.inProgress" /> });
+      const reportData = await cashDrawerReport.POST(reportParameters);
+
+      if (isEmpty(reportData?.reportData)) {
+        this.context.sendCallout({
+          type: 'error',
+          message: <FormattedMessage id="ui-users.reports.noItemsFound" />,
+        });
+      } else {
+        const servicePoints = currentUser.servicePoints;
+        const chosenServicePoint = servicePoints.find(sp => sp.id === servicePoint);
+        const headerData = {
+          ...reportParameters,
+          createdAt: chosenServicePoint?.name ?? '',
+          sources: reportParameters.sources.join(', '),
+        };
+        const reportParams = {
+          data: reportData,
+          intl,
+          headerData,
+        };
+        const reportPDF = new CashDrawerReconciliationReportPDF(reportParams);
+        const reportCSV = new CashDrawerReconciliationReportCSV(reportParams);
+
+        switch (format) {
+          case 'pdf':
+            reportPDF.toPDF();
+            break;
+          case 'csv':
+            reportCSV.toCSV();
+            break;
+          case 'both':
+            reportPDF.toPDF();
+            reportCSV.toCSV();
+            break;
+          default:
+            reportPDF.toPDF();
+        }
+      }
+    } catch (error) {
+      if (error) {
+        this.context.sendCallout({
+          type: 'error',
+          message: <FormattedMessage id="ui-users.reports.callout.error" />,
+        });
+      }
+    } finally {
+      this.setState({ cashDrawerReportInProgress: false });
+    }
+  }
+
+  handleFinancialTransactionsReportFormSubmit = async (data) => {
+    if (this.state.financialTransactionsReportInProgress) {
+      return;
+    }
+
+    this.setState({
+      financialTransactionsReportInProgress: true,
+      showFinancialTransactionsReportModal: false,
+    });
+
+    const {
+      startDate,
+      endDate,
+      servicePoint,
+      feeFineOwner,
+    } = data;
+    const {
+      resources,
+      mutator: { financialTransactionsReport },
+      intl,
+    } = this.props;
+    const reportParameters = {
+      createdAt: servicePoint.map(s => s.value),
+      feeFineOwner,
+      startDate,
+      endDate,
+    };
+
+    try {
+      this.context.sendCallout({ message: <FormattedMessage id="ui-users.reports.inProgress" /> });
+      const reportData = await financialTransactionsReport.POST(reportParameters);
+
+      if (isEmpty(reportData?.reportData)) {
+        this.context.sendCallout({
+          type: 'error',
+          message: <FormattedMessage id="ui-users.reports.noItemsFound" />,
+        });
+      } else {
+        const selectedOwner = resources.owners.records.find(({ id }) => id === feeFineOwner);
+        const headerData = {
+          ...reportParameters,
+          createdAt: reportParameters.createdAt.join(', '),
+          feeFineOwner: selectedOwner.owner,
+        };
+        const reportParams = {
+          data: reportData,
+          intl,
+          headerData,
+        };
+        const report = new FinancialTransactionsReport(reportParams);
+
+        report.toCSV();
+      }
+    } catch (error) {
+      if (error) {
+        this.context.sendCallout({
+          type: 'error',
+          message: <FormattedMessage id="ui-users.reports.callout.error" />,
+        });
+      }
+    } finally {
+      this.setState({ financialTransactionsReportInProgress: false });
+    }
+  }
+
   render() {
     const {
       onComponentWillUnmount,
       idPrefix,
-      visibleColumns,
       queryGetter,
       querySetter,
       initialSearch,
@@ -333,9 +655,17 @@ class UserSearch extends React.Component {
       onNeedMoreData,
       resources,
       contentRef,
-      mutator: { resultOffset },
+      mutator: { resultOffset, cashDrawerReportSources },
+      stripes: { timezone },
+      okapi: { currentUser },
+      intl: { formatMessage },
     } = this.props;
-
+    const {
+      filterPaneIsVisible,
+      showRefundsReportModal,
+      showCashDrawerReportModal,
+      showFinancialTransactionsReportModal,
+    } = this.state;
     if (!searchableIndexes) {
       searchableIndexes = rawSearchableIndexes.map(x => (
         { value: x.value, label: this.props.intl.formatMessage({ id: x.label }) }
@@ -347,11 +677,17 @@ class UserSearch extends React.Component {
       ];
     }
 
+    const columnMapping = this.getColumnMapping();
     const users = get(resources, 'records.records', []);
+    const owners = resources.owners.records;
+    const servicePoints = currentUser.servicePoints;
     const patronGroups = (resources.patronGroups || {}).records || [];
     const query = queryGetter ? queryGetter() || {} : {};
     const count = source ? source.totalCount() : 0;
     const sortOrder = query.sort || '';
+    const initialCashDrawerReportValues = {
+      format: 'both'
+    };
     const resultsStatusMessage = source ? (
       <div data-test-user-search-no-results-message>
         <NoResultsMessage
@@ -406,81 +742,85 @@ class UserSearch extends React.Component {
                 resetAll,
               }) => {
                 return (
-                  <IntlConsumer>
-                    {intl => (
-                      <Paneset id={`${idPrefix}-paneset`}>
-                        {this.state.filterPaneIsVisible &&
-                          <Pane
-                            defaultWidth="22%"
-                            paneTitle={<FormattedMessage id="ui-users.userSearch" />}
-                            lastMenu={
-                              <PaneMenu>
-                                <CollapseFilterPaneButton onClick={this.toggleFilterPane} />
-                              </PaneMenu>
-                            }
-                          >
-                            <form onSubmit={e => this.handleSubmit(e, onSubmitSearch)}>
-                              <SRStatus ref={this.SRStatusRef} />
-                              <div className={css.searchGroupWrap}>
-                                <FormattedMessage id="ui-users.userSearch">
-                                  {label => (
-                                    <SearchField
-                                      aria-label={label}
-                                      autoFocus
-                                      autoComplete="off"
-                                      name="query"
-                                      id="input-user-search"
-                                      className={css.searchField}
-                                      onChange={(e) => {
-                                        if (e.target.value) {
-                                          getSearchHandlers().query(e);
-                                        } else {
-                                          getSearchHandlers().reset();
-                                        }
-                                      }}
-                                      value={searchValue.query}
-                                      searchableIndexes={searchableIndexes}
-                                      selectedIndex={get(resources.query, 'qindex')}
-                                      onChangeIndex={this.onChangeIndex}
-                                      marginBottom0
-                                      data-test-user-search-input
-                                    />
-                                  )}
-                                </FormattedMessage>
-                                <Button
-                                  id="submit-user-search"
-                                  type="submit"
-                                  buttonStyle="primary"
-                                  fullWidth
-                                  marginBottom0
-                                  disabled={(!searchValue.query || searchValue.query === '')}
-                                  data-test-user-search-submit
-                                >
-                                  Search
-                                </Button>
-                              </div>
-                              <div className={css.resetButtonWrap}>
-                                <Button
-                                  buttonStyle="none"
-                                  id="clickable-reset-all"
-                                  disabled={!(filterChanged || searchChanged)}
-                                  fullWidth
-                                  onClick={resetAll}
-                                >
-                                  <Icon icon="times-circle-solid">
-                                    <FormattedMessage id="stripes-smart-components.resetAll" />
-                                  </Icon>
-                                </Button>
-                              </div>
-                              <Filters
-                                activeFilters={activeFilters.state}
-                                resources={resources}
-                                onChangeHandlers={getFilterHandlers()}
-                                resultOffset={resultOffset}
-                              />
-                            </form>
-                          </Pane>
+                  <Paneset id={`${idPrefix}-paneset`}>
+                    {filterPaneIsVisible &&
+                      <Pane
+                        defaultWidth="22%"
+                        paneTitle={<FormattedMessage id="ui-users.userSearch" />}
+                        lastMenu={
+                          <PaneMenu>
+                            <CollapseFilterPaneButton onClick={this.toggleFilterPane} />
+                          </PaneMenu>
                         }
+                      >
+                        <form onSubmit={e => this.handleSubmit(e, onSubmitSearch)}>
+                          <SRStatus ref={this.SRStatusRef} />
+                          <div className={css.searchGroupWrap}>
+                            <FormattedMessage id="ui-users.userSearch">
+                              {label => (
+                                <SearchField
+                                  aria-label={label}
+                                  autoFocus
+                                  autoComplete="off"
+                                  name="query"
+                                  id="input-user-search"
+                                  className={css.searchField}
+                                  onChange={(e) => {
+                                    if (e.target.value) {
+                                      getSearchHandlers().query(e);
+                                    } else {
+                                      getSearchHandlers().reset();
+                                    }
+                                  }}
+                                  value={searchValue.query}
+                                  searchableIndexes={searchableIndexes}
+                                  selectedIndex={get(resources.query, 'qindex')}
+                                  onChangeIndex={this.onChangeIndex}
+                                  marginBottom0
+                                  data-test-user-search-input
+                                />
+                              )}
+                            </FormattedMessage>
+                            <Button
+                              id="submit-user-search"
+                              type="submit"
+                              buttonStyle="primary"
+                              fullWidth
+                              marginBottom0
+                              disabled={(!searchValue.query || searchValue.query === '')}
+                              data-test-user-search-submit
+                            >
+                              Search
+                            </Button>
+                          </div>
+                          <div className={css.resetButtonWrap}>
+                            <Button
+                              buttonStyle="none"
+                              id="clickable-reset-all"
+                              disabled={!(filterChanged || searchChanged)}
+                              fullWidth
+                              onClick={resetAll}
+                            >
+                              <Icon icon="times-circle-solid">
+                                <FormattedMessage id="stripes-smart-components.resetAll" />
+                              </Icon>
+                            </Button>
+                          </div>
+                          <Filters
+                            activeFilters={activeFilters.state}
+                            resources={resources}
+                            onChangeHandlers={getFilterHandlers()}
+                            resultOffset={resultOffset}
+                          />
+                        </form>
+                      </Pane>
+                    }
+                    <ColumnManager
+                      id={VISIBLE_COLUMNS_STORAGE_KEY}
+                      columnMapping={columnMapping}
+                      excludeKeys={NON_TOGGLEABLE_COLUMNS}
+                    >
+                      {({ renderColumnsMenu, visibleColumns }) => (
                         <Pane
                           id="users-search-results-pane"
                           firstMenu={this.renderResultsFirstMenu(activeFilters)}
@@ -488,7 +828,7 @@ class UserSearch extends React.Component {
                           paneTitle={<FormattedMessage id="ui-users.userSearchResults" />}
                           paneSub={resultPaneSub}
                           defaultWidth="fill"
-                          actionMenu={this.getActionMenu}
+                          actionMenu={this.getActionMenu(renderColumnsMenu)}
                           padContent={false}
                           noOverflow
                         >
@@ -498,14 +838,7 @@ class UserSearch extends React.Component {
                             rowUpdater={this.rowUpdater}
                             contentData={users}
                             totalCount={count}
-                            columnMapping={{
-                              active: intl.formatMessage({ id: 'ui-users.active' }),
-                              name: intl.formatMessage({ id: 'ui-users.information.name' }),
-                              barcode: intl.formatMessage({ id: 'ui-users.information.barcode' }),
-                              patronGroup: intl.formatMessage({ id: 'ui-users.information.patronGroup' }),
-                              username: intl.formatMessage({ id: 'ui-users.information.username' }),
-                              email: intl.formatMessage({ id: 'ui-users.contact.email' }),
-                            }}
+                            columnMapping={columnMapping}
                             formatter={resultsFormatter}
                             rowFormatter={this.anchoredRowFormatter}
                             onNeedMoreData={onNeedMoreData}
@@ -520,15 +853,46 @@ class UserSearch extends React.Component {
                             pageAmount={100}
                             pagingType="click"
                           />
-
                         </Pane>
-                        { this.props.children }
-                      </Paneset>
-                    )}
-                  </IntlConsumer>
+                      )}
+                    </ColumnManager>
+                    { this.props.children }
+                  </Paneset>
                 );
               }}
           </SearchAndSortQuery>
+          {showRefundsReportModal && (
+            <RefundsReportModal
+              open
+              label={formatMessage({ id:'ui-users.reports.refunds.modal.label' })}
+              owners={owners}
+              onClose={() => { this.changeModalState('showRefundsReportModal', false); }}
+              onSubmit={this.handleRefundsReportFormSubmit}
+              timezone={timezone}
+            />
+          )}
+          {showCashDrawerReportModal && (
+            <CashDrawerReportModal
+              open
+              label={formatMessage({ id:'ui-users.reports.cash.drawer.modal.label' })}
+              servicePoints={servicePoints}
+              onClose={() => { this.changeModalState('showCashDrawerReportModal', false); }}
+              onSubmit={this.handleCashDrawerReportFormSubmit}
+              timezone={timezone}
+              initialValues={initialCashDrawerReportValues}
+              cashDrawerReportSources={cashDrawerReportSources}
+            />
+          )}
+          {showFinancialTransactionsReportModal && (
+            <FinancialTransactionsReportModal
+              open
+              label={formatMessage({ id:'ui-users.reports.financial.trans.modal.label' })}
+              onClose={() => { this.changeModalState('showFinancialTransactionsReportModal', false); }}
+              onSubmit={this.handleFinancialTransactionsReportFormSubmit}
+              timezone={timezone}
+              owners={owners}
+            />
+          )}
         </div>
       </HasCommand>);
   }

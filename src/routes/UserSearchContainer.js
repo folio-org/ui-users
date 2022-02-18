@@ -10,18 +10,76 @@ import {
   makeQueryFunction,
   StripesConnectedSource,
   buildUrl,
+  parseFilters,
 } from '@folio/stripes/smart-components';
 
 import filterConfig from './filterConfig';
 import { UserSearch } from '../views';
+import { MAX_RECORDS } from '../constants';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
 
-const compileQuery = template(
-  '(username="%{query}*" or personal.firstName="%{query}*" or personal.preferredFirstName="%{query}*" or personal.lastName="%{query}*" or personal.email="%{query}*" or barcode="%{query}*" or id="%{query}*" or externalSystemId="%{query}*")',
-  { interpolate: /%{([\s\S]+?)}/g }
-);
+const searchFields = [
+  'username="%{query}*"',
+  'personal.firstName="%{query}*"',
+  'personal.preferredFirstName="%{query}*"',
+  'personal.lastName="%{query}*"',
+  'personal.email="%{query}*"',
+  'barcode="%{query}*"',
+  'id="%{query}*"',
+  'externalSystemId="%{query}*"',
+  'customFields="%{query}*"'
+];
+const compileQuery = template(`(${searchFields.join(' or ')})`, { interpolate: /%{([\s\S]+?)}/g });
+
+// Generates a filter config in a dynamic fashion for currently
+// registerd custom fields.
+// This function loops through all currently applied filters
+// and it looks for filters which contain 'customFields` name.
+// It then generates a custom config for each of them
+// replacing the name "customFields-fieldName"
+// with "customFields.fieldName" for CQL representation.
+function buildFilterConfig(filters) {
+  const customFilterConfig = [];
+  const parsedFilters = parseFilters(filters);
+
+  Object.keys(parsedFilters).forEach(name => {
+    if (name.match('customFields')) {
+      customFilterConfig.push(
+        {
+          name,
+          cql: name.split('-').join('.'),
+          values: [],
+          operator: '=',
+        },
+      );
+    }
+  });
+  return customFilterConfig;
+}
+
+function buildQuery(queryParams, pathComponents, resourceData, logger, props) {
+  const customFilterConfig = buildFilterConfig(queryParams.filters);
+
+  return makeQueryFunction(
+    'cql.allRecords=1',
+    // TODO: Refactor/remove this after work on FOLIO-2066 and RMB-385 is done
+    (parsedQuery, _, localProps) => localProps.query.query.trim().replace('*', '').split(/\s+/)
+      .map(query => compileQuery({ query }))
+      .join(' and '),
+    {
+      'active': 'active',
+      'name': 'personal.lastName personal.firstName',
+      'patronGroup': 'patronGroup.group',
+      'username': 'username',
+      'barcode': 'barcode',
+      'email': 'personal.email',
+    },
+    [...filterConfig, ...customFilterConfig],
+    2,
+  )(queryParams, pathComponents, resourceData, logger, props);
+}
 
 class UserSearchContainer extends React.Component {
   static manifest = Object.freeze({
@@ -36,26 +94,12 @@ class UserSearchContainer extends React.Component {
       perRequest: 100,
       path: 'users',
       GET: {
-        params: {
-          query: makeQueryFunction(
-            'cql.allRecords=1',
-            // TODO: Refactor/remove this after work on FOLIO-2066 and RMB-385 is done
-            (parsedQuery, props, localProps) => localProps.query.query.trim().replace('*', '').split(/\s+/)
-              .map(query => compileQuery({ query }))
-              .join(' and '),
-            {
-              'active': 'active',
-              'name': 'personal.lastName personal.firstName',
-              'patronGroup': 'patronGroup.group',
-              'username': 'username',
-              'barcode': 'barcode',
-              'email': 'personal.email',
-            },
-            filterConfig,
-            2,
-          ),
-        },
+        params: { query: buildQuery },
         staticFallback: { params: {} },
+      },
+      shouldRefresh: (resource, action, refresh) => {
+        const { path } = action.meta;
+        return refresh || (path && path.match(/users/));
       },
     },
     patronGroups: {
@@ -73,17 +117,57 @@ class UserSearchContainer extends React.Component {
       accumulate: true,
       path: () => 'circulation/loans',
       permissionsRequired: 'circulation.loans.collection.get,accounts.collection.get',
+      fetch: props => (!!props.stripes.hasInterface('circulation')),
     },
     tags: {
       throwErrors: false,
       type: 'okapi',
       path: 'tags',
+      params: {
+        query: 'cql.allRecords=1 sortby label',
+        limit: '10000',
+      },
       records: 'tags',
     },
     departments: {
       type: 'okapi',
-      path: 'departments',
+      path: `departments?query=cql.allRecords=1 sortby name&limit=${MAX_RECORDS}`,
       records: 'departments',
+    },
+    owners: {
+      type: 'okapi',
+      records: 'owners',
+      path: `owners?query=cql.allRecords=1&limit=${MAX_RECORDS}`,
+      fetch: props => (!!props.stripes.hasInterface('feesfines')),
+      permissionsRequired: 'owners.collection.get',
+    },
+    refundsReport: {
+      type: 'okapi',
+      records: 'reportData',
+      path: 'feefine-reports/refund',
+      clientGeneratePk: false,
+      fetch: false,
+    },
+    cashDrawerReport: {
+      type: 'okapi',
+      records: 'cashDrawerReport',
+      path: 'feefine-reports/cash-drawer-reconciliation',
+      clientGeneratePk: false,
+      fetch: false,
+    },
+    cashDrawerReportSources: {
+      type: 'okapi',
+      records: 'cashDrawerReportSources',
+      path: 'feefine-reports/cash-drawer-reconciliation/sources',
+      clientGeneratePk: false,
+      fetch: false,
+    },
+    financialTransactionsReport: {
+      type: 'okapi',
+      records: 'financialTransactionsReport',
+      path: 'feefine-reports/financial-transactions-detail',
+      clientGeneratePk: false,
+      fetch: false,
     },
   });
 
@@ -114,6 +198,18 @@ class UserSearchContainer extends React.Component {
       }),
       resultOffset: PropTypes.shape({
         replace: PropTypes.func.isRequired,
+      }),
+      refundsReport: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      cashDrawerReport: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      cashDrawerReportSources: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      financialTransactionsReport: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
       }),
     }).isRequired,
     stripes: PropTypes.shape({
@@ -162,19 +258,38 @@ class UserSearchContainer extends React.Component {
   };
 
   querySetter = ({ nsValues, state }) => {
-    const { location : locationProp, history } = this.props;
+    const {
+      location: locationProp,
+      history,
+      mutator: { resultOffset },
+    } = this.props;
+
     if (nsValues.query) {
       nsValues.query = nsValues.query.replace('*', '');
     }
+
     let location = locationProp;
+
     // modifying the location hides the user detail view if a search/filter is triggered.
     if (state.changeType !== 'init.reset' && !location.pathname.endsWith('users')) {
       const pathname = '/users';
       location = { ...locationProp, pathname };
     }
 
+    // reset offset when sort values change
+    // https://issues.folio.org/browse/UIU-2466
+    if (state.sortChanged) {
+      resultOffset.replace(0);
+    }
+
     const url = buildUrl(location, nsValues);
-    history.push(url);
+    const { pathname, search } = locationProp;
+
+    // Do not push to history if the url didn't change
+    // https://issues.folio.org/browse/UIU-2490
+    if (`${pathname}${search}` !== url) {
+      history.push(url);
+    }
   }
 
   queryGetter = () => {

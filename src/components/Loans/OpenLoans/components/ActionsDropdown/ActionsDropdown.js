@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router-dom';
 
 import {
@@ -17,6 +17,7 @@ import {
 import {
   getChargeFineToLoanPath,
   getOpenRequestsPath,
+  checkUserActive,
 } from '../../../../util';
 
 import { itemStatuses } from '../../../../../constants';
@@ -32,6 +33,8 @@ class ActionsDropdown extends React.Component {
     match: PropTypes.shape({
       params: PropTypes.object
     }),
+    intl: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired,
   };
 
   renderMenu = ({ onToggle }) => {
@@ -43,12 +46,14 @@ class ActionsDropdown extends React.Component {
       stripes,
       disableFeeFineDetails,
       match: { params },
+      user,
     } = this.props;
 
     const itemStatusName = loan?.item?.status?.name;
     const itemDetailsLink = `/inventory/view/${loan.item.instanceId}/${loan.item.holdingsRecordId}/${loan.itemId}`;
     const loanPolicyLink = `/settings/circulation/loan-policies/${loan.loanPolicyId}`;
     const buttonDisabled = !stripes.hasPerm('ui-users.feesfines.actions.all');
+    const isUserActive = checkUserActive(user);
 
     return (
       <DropdownMenu data-role="menu">
@@ -61,7 +66,7 @@ class ActionsDropdown extends React.Component {
           </Button>
         </IfPermission>
         <IfPermission perm="ui-users.loans.renew">
-          { itemStatusName !== itemStatuses.CLAIMED_RETURNED &&
+          { isUserActive && itemStatusName !== itemStatuses.CLAIMED_RETURNED &&
           <Button
             buttonStyle="dropdownItem"
             data-test-dropdown-content-renew-button
@@ -88,7 +93,7 @@ class ActionsDropdown extends React.Component {
             </Button>
           }
         </IfPermission>
-        <IfPermission perm="ui-users.loans.edit">
+        <IfPermission perm="ui-users.loans.change-due-date">
           { itemStatusName !== itemStatuses.DECLARED_LOST &&
             itemStatusName !== itemStatuses.CLAIMED_RETURNED &&
             itemStatusName !== itemStatuses.AGED_TO_LOST &&
@@ -170,12 +175,14 @@ class ActionsDropdown extends React.Component {
   };
 
   render() {
+    const { intl: { formatMessage } } = this.props;
     return (
       <Dropdown
         renderTrigger={({ getTriggerProps }) => (
           <IconButton
             {...getTriggerProps()}
             icon="ellipsis"
+            aria-label={formatMessage({ id: 'ui-users.action' })}
           />
         )}
         renderMenu={this.renderMenu}
@@ -184,4 +191,4 @@ class ActionsDropdown extends React.Component {
   }
 }
 
-export default withRouter(ActionsDropdown);
+export default withRouter(injectIntl(ActionsDropdown));

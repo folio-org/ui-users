@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
@@ -11,11 +12,10 @@ import {
   Col,
 } from '@folio/stripes/components';
 import { stripesConnect } from '@folio/stripes/core';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 import { getOpenRequestsPath } from '../util';
 
-import { loanActionMutators } from '../../constants';
+import { loanActionMutators, refundClaimReturned, loanActions } from '../../constants';
 
 import css from './ModalContent.css';
 
@@ -31,6 +31,7 @@ class ModalContent extends React.Component {
     declareLost: {
       type: 'okapi',
       fetch: false,
+      throwErrors: false,
       POST: {
         path: 'circulation/loans/!{loan.id}/declare-item-lost',
       },
@@ -42,6 +43,20 @@ class ModalContent extends React.Component {
         path: 'circulation/loans/!{loan.id}/declare-claimed-returned-item-as-missing',
       },
     },
+    cancel: {
+      type: 'okapi',
+      path: 'accounts/%{activeRecord.id}/cancel',
+      fetch: false,
+      clientGeneratePk: false,
+    },
+    feefineshistory: {
+      type: 'okapi',
+      records: 'accounts',
+      GET: {
+        path: 'accounts?query=(userId==:{id})&limit=10000',
+      },
+    },
+    activeRecord: {},
   });
 
   static propTypes = {
@@ -55,6 +70,13 @@ class ModalContent extends React.Component {
       markAsMissing: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }).isRequired,
+      cancel: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      feefineshistory: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      activeRecord: PropTypes.object,
     }).isRequired,
     stripes: PropTypes.shape({
       user: PropTypes.shape({
@@ -65,8 +87,14 @@ class ModalContent extends React.Component {
     loanAction: PropTypes.string.isRequired,
     loan: PropTypes.object.isRequired,
     onClose: PropTypes.func.isRequired,
+    handleError: PropTypes.func.isRequired,
     disableButton: PropTypes.func,
+    validateAction: PropTypes.func,
     itemRequestCount: PropTypes.number.isRequired,
+    activeRecord: PropTypes.object,
+    user: PropTypes.object,
+    resources: PropTypes.object,
+    okapi: PropTypes.object
   };
 
   static defaultProps = {
@@ -75,14 +103,14 @@ class ModalContent extends React.Component {
 
   constructor(props) {
     super(props);
-
+    this.validateAction = this.props.validateAction;
     this.state = {
       additionalInfo: '',
     };
   }
 
   handleAdditionalInfoChange = event => {
-    this.setState({ additionalInfo: event.target.value });
+    this.setState({ additionalInfo: event.target.value.trim() });
   };
 
   submit = async () => {
@@ -113,6 +141,7 @@ class ModalContent extends React.Component {
 
     if (loanAction === loanActionMutators.CLAIMED_RETURNED) {
       requestData.itemClaimedReturnedDateTime = new Date().toISOString();
+      this.validateAction();
     }
 
     if (loanAction === loanActionMutators.DECLARE_LOST) {
@@ -120,12 +149,82 @@ class ModalContent extends React.Component {
       requestData.declaredLostDateTime = new Date().toISOString();
     }
 
-    disableButton();
+    if (this.props.loan.action === loanActions.CLAIMED_RETURNED && (loanAction === loanActionMutators.MARK_AS_MISSING || loanAction === loanActionMutators.DECLARE_LOST)) {
+      const feeFines = this.getFeeFines(this.props.loan.id);
+      feeFines.forEach((feeFine) => {
+        this.cancelFeeFine(feeFine.id, additionalInfo);
+      });
+    }
 
-    await POST(requestData);
+    disableButton();
+    try {
+      await POST(requestData);
+    } catch (error) {
+      this.processError(error);
+    }
 
     onClose();
   };
+
+  getFeeFines(loanId) {
+    const {
+      mutator,
+      user,
+      resources
+    } = this.props;
+
+    if (user) {
+      mutator.activeRecord.update({ userId: user.id });
+    }
+
+    const feeFines = [];
+    _.get(resources, ['feefineshistory', 'records'], []).forEach((currentFeeFine) => {
+      if (currentFeeFine.loanId === loanId && currentFeeFine.status.name === 'Open' &&
+        (currentFeeFine.feeFineType === refundClaimReturned.LOST_ITEM_FEE || currentFeeFine.feeFineType === refundClaimReturned.LOST_ITEM_PROCESSING_FEE)) {
+        feeFines.push(currentFeeFine);
+      }
+    });
+    return feeFines;
+  }
+
+  cancelFeeFine = async (accountId, additionalInfo) => {
+    const {
+      mutator
+    } = this.props;
+
+    mutator.activeRecord.update({ id: accountId });
+
+    const {
+      okapi: {
+        currentUser: {
+          firstName = '',
+          lastName = '',
+          curServicePoint: { id: servicePointId }
+        },
+      }
+    } = this.props;
+
+    const body = {};
+
+    body.notifyPatron = false;
+    body.comments = additionalInfo;
+    body.servicePointId = servicePointId;
+    body.userName = `${lastName}, ${firstName}`;
+
+    await mutator.cancel.POST(body);
+  }
+
+  processError(resp) {
+    const { handleError } = this.props;
+
+    const contentType = resp.headers.get('Content-Type') || '';
+
+    if (contentType.startsWith('application/json')) {
+      resp.json().then(error => handleError(error.errors[0].message));
+    } else {
+      resp.text().then(handleError);
+    }
+  }
 
   render() {
     const {
@@ -147,7 +246,7 @@ class ModalContent extends React.Component {
 
     return (
       <div>
-        <SafeHTMLMessage
+        <FormattedMessage
           id={`ui-users.loans.${loanAction}DialogBody`}
           values={{
             title: loan?.item?.title,

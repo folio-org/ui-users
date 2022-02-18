@@ -6,7 +6,6 @@ import {
   FormattedMessage,
   injectIntl,
 } from 'react-intl';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import { stripesConnect } from '@folio/stripes/core';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import moment from 'moment';
@@ -17,10 +16,12 @@ import CommentModal from './CommentModal';
 import WarningModal from './WarningModal';
 import ActionModal from './ActionModal';
 import { MAX_RECORDS } from '../../../constants';
-import { getFullName } from '../../util';
+import {
+  getFullName,
+  isRefundAllowed,
+} from '../../util';
 import {
   calculateSelectedAmount,
-  isRefundAllowed,
   loadServicePoints,
 } from '../accountFunctions';
 
@@ -44,7 +45,9 @@ class Actions extends React.Component {
       records: 'feefineactions',
       path: `feefineactions?query=(userId==%{user.id})&limit=${MAX_RECORDS}`,
       shouldRefresh: (resource, action, refresh) => {
-        return refresh || action.meta.path === 'accounts';
+        const { path } = action.meta;
+
+        return refresh || path === 'accounts' || path === 'accounts-bulk';
       },
     },
     payments: {
@@ -55,12 +58,12 @@ class Actions extends React.Component {
     waives: {
       type: 'okapi',
       records: 'waivers',
-      path: 'waives',
+      path: `waives?limit=${MAX_RECORDS}`,
     },
     refunds: {
       type: 'okapi',
       records: 'refunds',
-      path: 'refunds',
+      path: `refunds?limit=${MAX_RECORDS}`,
     },
     owners: {
       type: 'okapi',
@@ -75,7 +78,7 @@ class Actions extends React.Component {
     transfers: {
       type: 'okapi',
       records: 'transfers',
-      path: 'transfers?limit=100',
+      path: `transfers?limit=${MAX_RECORDS}`,
     },
     curUserServicePoint: {
       type: 'okapi',
@@ -241,7 +244,7 @@ class Actions extends React.Component {
     const fullName = getFullName(user);
 
     const message = (
-      <SafeHTMLMessage
+      <FormattedMessage
         id="ui-users.accounts.actions.cancellation.success"
         values={{
           count: 1,
@@ -296,10 +299,11 @@ class Actions extends React.Component {
       userId: this.props.user.id,
       amountAction: parseFloat(amount || 0).toFixed(2),
       balance: parseFloat(balance || 0).toFixed(2),
-      transactionInformation: transaction || '-',
+      transactionInformation: transaction || '',
       comments: comment,
       notify,
     };
+
     return this.props.mutator.feefineactions.POST(Object.assign(action, newAction));
   }
 
@@ -352,8 +356,8 @@ class Actions extends React.Component {
     const info = formatMessage({ id: 'ui-users.accounts.comment.staffInfo' });
     const account = this.props.accounts[0] || '';
     const id = this.props.accounts[0].id || '';
-    const createAt = this.props.accounts[0].feeFineOwner || '';
-    const balance = this.props.balance || 0;
+    const createAt = this.props.okapi.currentUser.curServicePoint.id;
+    const balance = account.remaining;
     const tagStaff = formatMessage({ id: 'ui-users.accounts.actions.tag.staff' });
     const comment = `${tagStaff} : ${values.comment}`;
     this.props.mutator.activeRecord.update({ id });
@@ -397,7 +401,7 @@ class Actions extends React.Component {
     const payload = this.buildActionBody(values);
 
     if (action === 'pay') {
-      payload.transactionInfo = values.transaction || '-';
+      payload.transactionInfo = values?.transaction ?? '';
     }
 
     mutator[action].POST(payload, ['id'])
@@ -420,7 +424,7 @@ class Actions extends React.Component {
     };
 
     if (action === 'bulkPay') {
-      payload.transactionInfo = values.transaction || '-';
+      payload.transactionInfo = values?.transaction ?? '';
     }
 
     mutator[action].POST(payload, ['id'])
@@ -571,7 +575,7 @@ class Actions extends React.Component {
       this.paymentStatus = paymentStatus;
 
       return (
-        <SafeHTMLMessage
+        <FormattedMessage
           id="ui-users.accounts.confirmation.message"
           values={{ count: 1, amount, action: paymentStatus }}
         />
@@ -588,7 +592,7 @@ class Actions extends React.Component {
       this.paymentStatus = paymentStatus;
 
       return (
-        <SafeHTMLMessage
+        <FormattedMessage
           id="ui-users.accounts.confirmation.message"
           values={{ count: accounts.length, amount, action: paymentStatus }}
         />
@@ -612,9 +616,17 @@ class Actions extends React.Component {
       submitting
     } = this.state;
 
+    const {
+      okapi: {
+        currentUser: {
+          curServicePoint,
+        }
+      },
+    } = this.props;
+
     const account = this.props.accounts[0] || {};
     const feeFineActions = _.get(resources, ['feefineactions', 'records'], []);
-    const defaultServicePointId = _.get(resources, ['curUserServicePoint', 'records', 0, 'defaultServicePointId'], '-');
+    const defaultServicePointId = curServicePoint.id;
     const servicePointsIds = _.get(resources, ['curUserServicePoint', 'records', 0, 'servicePointsIds'], []);
     const payments = _.get(resources, ['payments', 'records'], []);
     const refunds = _.get(resources, ['refunds', 'records'], []);
@@ -638,8 +650,8 @@ class Actions extends React.Component {
           : 'ui-users.accounts.actions.refundFeeFine';
 
     const servicePointOwnerId = loadServicePoints({ owners, defaultServicePointId, servicePointsIds });
-    const currentFeeFineType = feefines.find(({ feeFineType }) => feeFineType === account?.feeFineType);
-    const currentOwnerId = servicePointOwnerId || currentFeeFineType?.ownerId || account?.ownerId;
+    const currentFeeFineType = feefines.find(({ id }) => id === account?.feeFineId);
+    const currentOwnerId = servicePointOwnerId;
     const currentOwner = owners.find(o => o.id === currentOwnerId) || {};
     const initialValues = {
       ownerId: currentOwnerId,

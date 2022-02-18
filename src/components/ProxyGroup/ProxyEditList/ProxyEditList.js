@@ -1,14 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  FieldArray,
-  getFormValues,
-} from 'redux-form';
+import { FieldArray } from 'react-final-form-arrays';
 import {
   FormattedMessage,
   injectIntl,
 } from 'react-intl';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import {
   Row,
   Col,
@@ -18,19 +14,19 @@ import {
 import { Pluggable } from '@folio/stripes/core';
 
 import ErrorModal from '../../ErrorModal';
+import { withFormValues } from '../../Wrappers';
 import { getFullName } from '../../util';
 import css from './ProxyEditList.css';
 
 class ProxyEditList extends React.Component {
   static propTypes = {
-    stripes: PropTypes.object.isRequired,
     name: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
     itemComponent: PropTypes.func.isRequired,
     initialValues: PropTypes.object,
     change: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired,
-    getWarning: PropTypes.func.isRequired,
+    values: PropTypes.object,
   };
 
   constructor(props) {
@@ -43,10 +39,9 @@ class ProxyEditList extends React.Component {
   validate(user) {
     const {
       initialValues: { id },
-      stripes: { store },
+      values,
       name,
     } = this.props;
-    const currentValues = getFormValues('userForm')(store.getState());
     let error;
 
     if (id === user.id) {
@@ -56,7 +51,7 @@ class ProxyEditList extends React.Component {
       };
     }
 
-    currentValues[name].forEach(({ user: { id: userId } }) => {
+    values[name].forEach(({ user: { id: userId } }) => {
       if (userId === user.id) {
         error = {
           label: <FormattedMessage id={`ui-users.errors.${name}.invalidUserLabel`} />,
@@ -114,11 +109,11 @@ class ProxyEditList extends React.Component {
     const heading = (name === 'sponsors') ?
       <FormattedMessage id="ui-users.deleteSponsorPrompt" /> :
       <FormattedMessage id="ui-users.deleteProxyPrompt" />;
-    const sponsorsMsg = <SafeHTMLMessage
+    const sponsorsMsg = <FormattedMessage
       id="ui-users.proxyWillBeDeleted"
       values={{ name1: getFullName(initialValues), name2: getFullName(curRecord.user) }}
     />;
-    const proxyMsg = <SafeHTMLMessage
+    const proxyMsg = <FormattedMessage
       id="ui-users.proxyWillBeDeleted"
       values={{ name1: getFullName(curRecord.user), name2: getFullName(initialValues) }}
     />;
@@ -163,24 +158,22 @@ class ProxyEditList extends React.Component {
       itemComponent,
       label,
       name,
-      stripes,
       change,
       intl,
-      getWarning,
+      values,
     } = this.props;
     const ComponentToRender = itemComponent;
 
     const items = fields.map((fieldName, index) => (
       <ComponentToRender
-        record={fields.get(index)}
+        record={fields.value[index]}
         index={index}
         key={`item-${index}`}
         namespace={name}
         name={fieldName}
         onDelete={record => this.beginDelete(index, record)}
-        stripes={stripes}
         change={change}
-        getWarning={getWarning}
+        formValues={values}
       />
     ));
 
@@ -252,4 +245,4 @@ class ProxyEditList extends React.Component {
   }
 }
 
-export default injectIntl(ProxyEditList);
+export default withFormValues(injectIntl(ProxyEditList));

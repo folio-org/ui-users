@@ -1,11 +1,9 @@
-import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
   FormattedMessage,
   injectIntl,
 } from 'react-intl';
-import moment from 'moment';
 
 import {
   Row,
@@ -20,21 +18,15 @@ import { stripesConnect } from '@folio/stripes/core';
 
 import { calculateSortParams } from '../../util';
 
-class PatronBlock extends React.Component {
-  static manifest = Object.freeze({
-    manualPatronBlocks: {
-      type: 'okapi',
-      records: 'manualblocks',
-      path: 'manualblocks',
-      accumulate: 'true',
-      fetch: false,
-      DELETE: {
-        path: 'manualblocks/%{activeRecord.blockId}',
-      },
-    },
-    activeRecord: {},
-  });
+import css from './PatronBlock.css';
 
+const PATRON_BLOCKS_COLUMNS = {
+  type: 'type',
+  displayDescription: 'displayDescription',
+  blockedActions: 'blockedActions',
+};
+
+class PatronBlock extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func,
@@ -46,25 +38,15 @@ class PatronBlock extends React.Component {
     expanded: PropTypes.bool,
     accordionId: PropTypes.string,
     patronBlocks: PropTypes.arrayOf(PropTypes.object),
-    automatedPatronBlocks: PropTypes.arrayOf(PropTypes.object),
-    manualPatronBlocks: PropTypes.arrayOf(PropTypes.object),
-    hasPatronBlocks: PropTypes.bool,
     mutator: PropTypes.shape({
       activeRecord: PropTypes.shape({
         update: PropTypes.func,
       }),
-      manualPatronBlocks: PropTypes.shape({
-        DELETE: PropTypes.func,
-        GET: PropTypes.func,
-        reset: PropTypes.func,
-      }),
     }),
-    user: PropTypes.object,
   };
 
   static defaultProps = {
     patronBlocks: [],
-    automatedPatronBlocks: [],
   };
 
   constructor(props) {
@@ -88,33 +70,6 @@ class PatronBlock extends React.Component {
       ],
       sortDirection: ['desc', 'asc'],
     };
-  }
-
-  componentDidMount() {
-    const {
-      mutator: {
-        manualPatronBlocks,
-      },
-      user,
-      onToggle,
-      expanded,
-      accordionId,
-      automatedPatronBlocks,
-    } = this.props;
-    const query = `userId==${user.id}`;
-
-    manualPatronBlocks.reset();
-    manualPatronBlocks.GET({ params: { query } })
-      .then(records => {
-        const blocks = records.filter(p => moment(moment(p.expirationDate).endOf('day')).isSameOrAfter(moment().endOf('day')));
-        if ((blocks.length > 0 && !expanded) || (!blocks.length && expanded)) {
-          onToggle({ id: accordionId });
-        }
-      });
-
-    if ((automatedPatronBlocks.length && !expanded) || (!automatedPatronBlocks.length && expanded)) {
-      onToggle({ id: accordionId });
-    }
   }
 
   onSort(e, meta) {
@@ -158,10 +113,24 @@ class PatronBlock extends React.Component {
       },
     } = this.props;
 
+    const pointerWrapper = (content, isManual) => (
+      isManual
+        ? <div className={css.pointerWrapper}>{content}</div>
+        : content
+    );
+
     return {
-      'Type': f => f?.type ?? <FormattedMessage id="ui-users.blocks.columns.automated.type" />,
-      'Display description': f => f.desc || f.message,
-      'Blocked actions': f => {
+      [PATRON_BLOCKS_COLUMNS.type]: f => {
+        const type = f?.type ?? <FormattedMessage id="ui-users.blocks.columns.automated.type" />;
+
+        return pointerWrapper(type, f?.type);
+      },
+      [PATRON_BLOCKS_COLUMNS.displayDescription]: f => {
+        const description = f.desc || f.message;
+
+        return pointerWrapper(description, f?.type);
+      },
+      [PATRON_BLOCKS_COLUMNS.blockedActions]: f => {
         const blockedActions = [];
 
         if (f.borrowing || f.blockBorrowing) {
@@ -176,10 +145,28 @@ class PatronBlock extends React.Component {
           blockedActions.push([formatMessage({ id: 'ui-users.blocks.columns.requests' })]);
         }
 
-        return blockedActions.join(', ');
+        return pointerWrapper(blockedActions.join(', '), f?.type);
       }
     };
   }
+
+  columnMapping = {
+    [PATRON_BLOCKS_COLUMNS.type]: <FormattedMessage id="ui-users.blocks.columns.type" />,
+    [PATRON_BLOCKS_COLUMNS.displayDescription]: <FormattedMessage id="ui-users.blocks.columns.desc" />,
+    [PATRON_BLOCKS_COLUMNS.blockedActions]: <FormattedMessage id="ui-users.blocks.columns.blocked" />,
+  };
+
+  columnWidths = {
+    [PATRON_BLOCKS_COLUMNS.type]: '100px',
+    [PATRON_BLOCKS_COLUMNS.displayDescription]: '350px',
+    [PATRON_BLOCKS_COLUMNS.blockedActions]: '250px',
+  };
+
+  visibleColumns = [
+    PATRON_BLOCKS_COLUMNS.type,
+    PATRON_BLOCKS_COLUMNS.displayDescription,
+    PATRON_BLOCKS_COLUMNS.blockedActions,
+  ];
 
   render() {
     const {
@@ -187,20 +174,12 @@ class PatronBlock extends React.Component {
       onToggle,
       accordionId,
       patronBlocks,
-      hasPatronBlocks,
       match: { params },
     } = this.props;
     const {
       sortOrder,
-      sortDirection
+      sortDirection,
     } = this.state;
-    let contentData = patronBlocks.filter(p => moment(moment(p.expirationDate).endOf('day')).isSameOrAfter(moment().endOf('day')));
-    contentData = _.orderBy(contentData, ['metadata.createdDate'], ['desc']);
-    const visibleColumns = [
-      'Type',
-      'Display description',
-      'Blocked actions',
-    ];
 
     const buttonDisabled = this.props.stripes.hasPerm('ui-users.patron_blocks');
     const displayWhenOpen =
@@ -211,23 +190,20 @@ class PatronBlock extends React.Component {
       <MultiColumnList
         id="patron-block-mcl"
         interactive={false}
-        contentData={contentData}
+        contentData={patronBlocks}
         formatter={this.getPatronFormatter()}
-        visibleColumns={visibleColumns}
+        visibleColumns={this.visibleColumns}
         onHeaderClick={this.onSort}
         sortOrder={sortOrder[0]}
         sortDirection={`${sortDirection[0]}ending`}
         onRowClick={this.onRowClick}
-        columnWidths={{
-          'Type': '100px',
-          'Display description': '350px',
-          'Blocked actions': '250px'
-        }}
+        columnMapping={this.columnMapping}
+        columnWidths={this.columnWidths}
       />;
     const title =
       <Headline size="large" tag="h3">
         <FormattedMessage id="ui-users.settings.patronBlocks" />
-        {(hasPatronBlocks) ? <Icon size="medium" icon="exclamation-circle" status="error" /> : ''}
+        {(patronBlocks.length) ? <Icon size="medium" icon="exclamation-circle" status="error" /> : ''}
       </Headline>;
 
     return (

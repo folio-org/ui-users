@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import uuid from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import { FormattedMessage } from 'react-intl';
 
 import {
@@ -82,6 +82,7 @@ class UserEdit extends React.Component {
       active: true,
       personal: {
         addresses: [],
+        firstName: '',
         preferredContactTypeId: (find(contactTypes, { 'name': 'email' }) || {}).id,
       },
       requestPreferences: {
@@ -89,7 +90,8 @@ class UserEdit extends React.Component {
         delivery: false,
         defaultServicePointId: null,
         defaultDeliveryAddressTypeId: null,
-      }
+      },
+      username: '',
     };
 
     if (!match.params.id) return initialFormValues;
@@ -166,10 +168,14 @@ class UserEdit extends React.Component {
   create = ({ requestPreferences, ...userFormData }) => {
     const { mutator, history, location: { search } } = this.props;
     const userData = cloneDeep(userFormData);
-    const user = { ...userData, id: uuid() };
+    const user = { ...userData, id: uuidv4() };
     user.personal.addresses = toUserAddresses(user.personal.addresses);
     user.personal.email = user.personal.email.trim();
     user.departments = compact(user.departments);
+
+    if (!user.username) {
+      delete user.username;
+    }
 
     mutator.records.POST(user)
       .then(() => {

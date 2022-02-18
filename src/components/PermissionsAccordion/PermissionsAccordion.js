@@ -1,190 +1,164 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import {
-  arrayRemove, change,
-  FieldArray,
-} from 'redux-form';
-import { connect as reduxConnect } from 'react-redux';
+import { FieldArray } from 'react-final-form-arrays';
+
 import {
   FormattedMessage,
   injectIntl,
 } from 'react-intl';
 import {
-  Icon,
-  Button,
   Accordion,
   Badge,
-  List,
-  Headline
+  ConfirmationModal,
+  Callout,
+  Button,
+  Headline,
 } from '@folio/stripes/components';
 import {
   IfPermission,
   stripesConnect,
-  stripesShape,
-} from '@folio/stripes-core';
+} from '@folio/stripes/core';
 
-import { getPermissionLabelString } from '../data/converters/permission';
 import PermissionModal from './components/PermissionsModal';
-import PermissionLabel from '../PermissionLabel';
-import css from './PermissionsAccordion.css';
+import PermissionsAccordionList from './PermissionsAccordionList';
+import EnableUnassignAll from './EnableUnassignAll';
 
-class PermissionsAccordion extends React.Component {
-  static propTypes = {
-    expanded: PropTypes.bool.isRequired,
-    initialValues: PropTypes.object,
-    intl: PropTypes.shape({
-      formatMessage: PropTypes.func.isRequired,
-    }),
-    onToggle: PropTypes.func.isRequired,
-    accordionId: PropTypes.string.isRequired,
-    permToDelete: PropTypes.string.isRequired,
-    permToModify: PropTypes.string.isRequired,
-    permToRead: PropTypes.string.isRequired,
-    stripes: stripesShape.isRequired,
-    // eslint-disable-next-line react/no-unused-prop-types
-    formName: PropTypes.string.isRequired,
-    permissionsField: PropTypes.string.isRequired,
-    assignedPermissions: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        displayName: PropTypes.string.isRequired,
-        permissionName: PropTypes.string.isRequired,
-        subPermissions: PropTypes.arrayOf(PropTypes.string).isRequired,
-        dummy: PropTypes.bool.isRequired,
-        mutable: PropTypes.bool.isRequired,
-        visible: PropTypes.bool.isRequired,
-      })
-    ).isRequired,
-    filtersConfig: PropTypes.arrayOf(
-      PropTypes.shape({
-        label: PropTypes.node.isRequired,
-        name: PropTypes.string.isRequired,
-        cql: PropTypes.string.isRequired,
-        filter: PropTypes.func.isRequired,
-        values: PropTypes.arrayOf(
-          PropTypes.shape({
-            name: PropTypes.string.isRequired,
-            displayName: PropTypes.element.isRequired,
-            value: PropTypes.bool.isRequired,
-          }),
-        ).isRequired,
-      })
-    ).isRequired,
-    visibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
-    headlineContent: PropTypes.element.isRequired,
-    unassignPermission: PropTypes.func.isRequired,
-    addPermissions: PropTypes.func.isRequired,
-    excludePermissionSets: PropTypes.bool,
+const PermissionsAccordion = (props) => {
+  const {
+    accordionId,
+    expanded,
+    onToggle,
+    permToModify,
+    permToDelete,
+    permissionsField,
+    filtersConfig,
+    visibleColumns,
+    headlineContent,
+    excludePermissionSets,
+    initialValues: { personal },
+    form: { change },
+  } = props;
+
+  const getAssignedPermissions = () => {
+    const { form: { getFieldState } } = props;
+
+    return getFieldState(permissionsField)?.value ?? [];
   };
 
-  static defaultProps = {
-    initialValues: {},
-    excludePermissionSets: false,
+  const isAllowedPermissions = !!getAssignedPermissions().length;
+
+  const [permissionModalOpen, setPermissionModalOpen] = useState(false);
+  const [unassignModalOpen, setUnassignModalOpen] = useState(false);
+  const [isUnassignButtonEnable, setIsUnassignButtonEnable] = useState(false);
+  const [confirmEditModalOpen, setConfirmEditModalOpen] = useState(false);
+
+  const calloutRef = useRef();
+
+  useEffect(() => {
+    setIsUnassignButtonEnable(isAllowedPermissions);
+  }, [isAllowedPermissions]);
+
+  const addPermissions = (permissions) => {
+    change(permissionsField, permissions);
   };
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      permissionModalOpen: false,
-    };
-  }
-
-  renderItem(item, index, showPerms) {
-    return (
-      <li
-        key={item.id}
-        data-permission-name={`${item.permissionName}`}
-      >
-        <PermissionLabel permission={item} showRaw={showPerms} />
-        <IfPermission perm={this.props.permToDelete}>
-          <FormattedMessage id="ui-users.permissions.removePermission">
-            {aria => (
-              <Button
-                buttonStyle="fieldControl"
-                align="end"
-                type="button"
-                id={`clickable-remove-permission-${item.permissionName}`}
-                onClick={() => this.removePermission(index)}
-                aria-label={`${aria}: ${item.permissionName}`}
-              >
-                <Icon
-                  icon="times-circle"
-                  iconClassName={css.removePermissionIcon}
-                  iconRootClass={css.removePermissionButton}
-                />
-              </Button>
-            )}
-          </FormattedMessage>
-        </IfPermission>
-      </li>
-    );
-  }
-
-  renderList = ({ fields }) => {
-    const {
-      assignedPermissions,
-      intl: { formatMessage },
-    } = this.props;
-    const showPerms = this.props.stripes?.config?.showPerms;
-
-    const listFormatter = (_fieldName, index) => (
-      this.renderItem(fields.get(index), index, this.props.stripes?.config?.showPerms)
-    );
-    const sortedItems = (assignedPermissions || []).sort((a, b) => {
-      const permA = getPermissionLabelString(a, formatMessage, showPerms);
-      const permB = getPermissionLabelString(b, formatMessage, showPerms);
-
-      return permA.localeCompare(permB);
-    });
-
-    return (
-      <List
-        items={sortedItems}
-        itemFormatter={listFormatter}
-        isEmptyMessage={<FormattedMessage id="ui-users.permissions.empty" />}
-      />
-    );
+  /**
+   * confirmEdit
+   * Close the ConfirmationModal, and open the PermissionsModal. This is a
+   * callback from the ConfirmationModal to continue with editing permissions
+   * even though this means permissions with `visible: false` settings will
+   * be removed.
+   *
+   *
+   * See openPermissionsModal for a detailed explanation.
+   */
+  const confirmEdit = () => {
+    setConfirmEditModalOpen(false);
+    setPermissionModalOpen(true);
   };
 
-  removePermission(index) {
-    this.props.unassignPermission(index);
-  }
+  /**
+   * cancelEdit
+   * Close the ConfirmationModal. This is a callback from the ConfirmationModal
+   * to cancel editing of permissions since it would result in the removal of
+   * permissions with `visible: false`.
+   *
+   * See openPermissionsModal for a detailed explanation.
+   */
+  const cancelEdit = () => {
+    setConfirmEditModalOpen(false);
+  };
 
-  openPermissionModal = (e) => {
+  /**
+   * openPermissionModal
+   * Check whether any currently-assigned permissions contain `visible: false`.
+   * If there are any, confirm whether to continue since only `visible: true`
+   * permissions will be retained after editing (confirmation is handled by
+   * confirmEdit and cancelEdit). If there are not any, i.e. all currently-assigned
+   * permissions are `visible: true`, open PermissionModal.
+   *
+   * UPDATE: With the work done for UIU-2075, invisible permissions are no
+   * longer removed, so showing the ConfirmationModal isn't necessary. Since we might
+   * have need of a confirmation step in the future, leave the code in place for now;
+   * but the `visible: true` check below has been disabled.
+   *
+   * @param {event} e click event
+   */
+  const openPermissionModal = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    this.setState({ permissionModalOpen: true });
+
+    setPermissionModalOpen(true);
+
+    // const isHiddenAssigned = !!getAssignedPermissions().find((p) => p.visible === false);
+    // if (isHiddenAssigned) {
+    //   setConfirmEditModalOpen(true);
+    // } else {
+    //   setPermissionModalOpen(true);
+    // }
   };
 
-  closePermissionModal = () => {
-    this.setState({ permissionModalOpen: false });
+  const closePermissionModal = () => {
+    setPermissionModalOpen(false);
   };
 
-  render() {
-    const {
-      accordionId,
-      expanded,
-      onToggle,
-      initialValues,
-      permToModify,
-      permissionsField,
-      filtersConfig,
-      visibleColumns,
-      headlineContent,
-      assignedPermissions,
-      addPermissions,
-      excludePermissionSets,
-    } = this.props;
+  const openUnassignModal = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setUnassignModalOpen(true);
+  };
 
-    const { permissionModalOpen } = this.state;
-    const permissions = (initialValues || {}).subPermissions || [];
+  const closeUnassignModal = () => {
+    setUnassignModalOpen(false);
+  };
 
-    if (!this.props.stripes.hasPerm(this.props.permToRead)) return null;
+  const unassignAllPermissions = () => {
+    change(permissionsField, []);
+    setUnassignModalOpen(false);
+    calloutRef.current.sendCallout({
+      type: 'success',
+      message: <FormattedMessage id="ui-users.permissions.calloutMessage" />,
+    });
+  };
 
-    const size = assignedPermissions ? assignedPermissions.length : permissions.length;
+  const assignedPermissions = getAssignedPermissions();
 
-    return (
+  if (!props.stripes.hasPerm(props.permToRead)) return null;
+
+  const permissionsAmount = assignedPermissions.length;
+
+  const message = (
+    <FormattedMessage
+      id="ui-users.permissions.modal.unassignAll.label"
+      values={{
+        firstName: personal?.firstName,
+        lastName: personal?.lastName,
+      }}
+    />
+  );
+
+  return (
+    <div data-testid={accordionId}>
       <Accordion
         open={expanded}
         id={accordionId}
@@ -197,44 +171,112 @@ class PermissionsAccordion extends React.Component {
             {headlineContent}
           </Headline>
         }
-        displayWhenClosed={<Badge>{size}</Badge>}
+        displayWhenClosed={<Badge>{permissionsAmount}</Badge>}
       >
-        <FieldArray name={permissionsField} component={this.renderList} />
+        <FieldArray
+          name={permissionsField}
+          component={PermissionsAccordionList}
+          getAssignedPermissions={getAssignedPermissions}
+          showPerms={!!props.stripes?.config?.showPerms}
+          permToDelete={permToDelete}
+        />
         <IfPermission perm={permToModify}>
           <Button
             type="button"
             align="end"
             bottomMargin0
             id="clickable-add-permission"
-            onClick={this.openPermissionModal}
+            onClick={openPermissionModal}
           >
             <FormattedMessage id="ui-users.permissions.addPermission" />
           </Button>
-          {
-            permissionModalOpen &&
-            <PermissionModal
-              assignedPermissions={assignedPermissions}
-              addPermissions={addPermissions}
-              open={permissionModalOpen}
-              excludePermissionSets={excludePermissionSets}
-              visibleColumns={visibleColumns}
-              filtersConfig={filtersConfig}
-              onClose={this.closePermissionModal}
-            />
-          }
+          <Button
+            type="button"
+            align="end"
+            bottomMargin0
+            disabled={!isUnassignButtonEnable}
+            id="clickable-remove-all-permissions"
+            onClick={openUnassignModal}
+          >
+            <FormattedMessage id="ui-users.permissions.unassignAllPermissions" />
+          </Button>
+          <PermissionModal
+            assignedPermissions={assignedPermissions}
+            addPermissions={addPermissions}
+            open={permissionModalOpen}
+            excludePermissionSets={excludePermissionSets}
+            visibleColumns={visibleColumns}
+            filtersConfig={filtersConfig}
+            onClose={closePermissionModal}
+          />
+          <ConfirmationModal
+            open={confirmEditModalOpen}
+            heading="ui-users.permissions-accordion.confirm-heading"
+            message="ui-users.permissions-accordion.confirm-message"
+            onConfirm={confirmEdit}
+            confirmLabel="ui-users.permissions-accordion.confirm-continue"
+            onCancel={cancelEdit}
+          />
+          <ConfirmationModal
+            open={unassignModalOpen}
+            heading={<FormattedMessage id="ui-users.permissions.modal.unassignAll.header" />}
+            message={message}
+            onConfirm={unassignAllPermissions}
+            onCancel={closeUnassignModal}
+            cancelLabel={<FormattedMessage id="ui-users.no" />}
+            confirmLabel={<FormattedMessage id="ui-users.yes" />}
+          />
+          <EnableUnassignAll
+            permissionsField={permissionsField}
+            callback={setIsUnassignButtonEnable}
+            isEnabled={!!getAssignedPermissions().length}
+          />
         </IfPermission>
+        <Callout ref={calloutRef} />
       </Accordion>
-    );
-  }
-}
+    </div>
+  );
+};
 
-const mapStateToProps = (state, { formName, permissionsField }) => ({
-  assignedPermissions: state.form[formName].values[permissionsField] || [],
-});
+PermissionsAccordion.propTypes = {
+  expanded: PropTypes.bool,
+  intl: PropTypes.shape({
+    formatMessage: PropTypes.func.isRequired,
+  }),
+  initialValues: PropTypes.object,
+  onToggle: PropTypes.func,
+  accordionId: PropTypes.string.isRequired,
+  permToDelete: PropTypes.string.isRequired,
+  permToModify: PropTypes.string.isRequired,
+  permToRead: PropTypes.string.isRequired,
+  stripes: PropTypes.object.isRequired,
+  // eslint-disable-next-line react/no-unused-prop-types
+  formName: PropTypes.string.isRequired,
+  permissionsField: PropTypes.string.isRequired,
+  filtersConfig: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.node.isRequired,
+      name: PropTypes.string.isRequired,
+      cql: PropTypes.string.isRequired,
+      filter: PropTypes.func.isRequired,
+      values: PropTypes.arrayOf(
+        PropTypes.shape({
+          name: PropTypes.string.isRequired,
+          displayName: PropTypes.element.isRequired,
+          value: PropTypes.bool.isRequired,
+        }),
+      ).isRequired,
+    })
+  ).isRequired,
+  visibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
+  headlineContent: PropTypes.element.isRequired,
+  excludePermissionSets: PropTypes.bool,
+  form: PropTypes.object,
+};
 
-const mapDispatchToProps = (dispatch, { formName, permissionsField }) => ({
-  unassignPermission: (index) => dispatch(arrayRemove(formName, permissionsField, index)),
-  addPermissions: (permissions) => dispatch(change(formName, permissionsField, permissions)),
-});
+PermissionsAccordion.defaultProps = {
+  excludePermissionSets: false,
+  initialValues: {},
+};
 
-export default stripesConnect(reduxConnect(mapStateToProps, mapDispatchToProps)(injectIntl(PermissionsAccordion)));
+export default stripesConnect(injectIntl(PermissionsAccordion));

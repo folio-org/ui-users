@@ -12,7 +12,7 @@ describe('Test Fee/Fine History', () => {
   setupApplication({
     scenarios: ['view-fees-fines'],
     currentUser: {
-      curServicePoint: { id: 1 },
+      curServicePoint: { id: 1, value: 'Test Point' },
     },
   });
   describe('visit user details', () => {
@@ -25,6 +25,10 @@ describe('Test Fee/Fine History', () => {
       expect(FeeFineHistoryInteractor.section).to.equal('Fees/fines');
     });
 
+    it('displays active Export button', () => {
+      expect(FeeFineHistoryInteractor.exportButtonIsDisabled).to.be.false;
+    });
+
     describe('displays section Fees/Fines', () => {
       beforeEach(async () => {
         await FeeFineHistoryInteractor.sectionFeesFinesSection.click();
@@ -32,8 +36,10 @@ describe('Test Fee/Fine History', () => {
 
       it('It should render with the labels', () => {
         expect(FeeFineHistoryInteractor.openFeesFines).to.string('open fees/fines');
-        expect(FeeFineHistoryInteractor.closedFeesFines).to.string('closed fees/fines');
+        expect(FeeFineHistoryInteractor.closedFeesFines).to.string('0 closed fees/fines');
         expect(FeeFineHistoryInteractor.allFeesFines).to.string('View all fees/fines');
+        expect(FeeFineHistoryInteractor.refundedFeesFines).to.string('0 refunded fees/fines (Total: 0.00)');
+        expect(FeeFineHistoryInteractor.claimFeesFines).to.string('0 suspended claim returned fees/fines (Total: 0.00)');
       });
 
       describe('select open fees/fines', () => {
@@ -43,9 +49,10 @@ describe('Test Fee/Fine History', () => {
 
         it('displays the pane title menu', () => {
           expect(FeeFineHistoryInteractor.paneTitle).to.string('Fees/fines -');
-          expect(FeeFineHistoryInteractor.paneSub).to.string('Outstanding Balance');
+          expect(FeeFineHistoryInteractor.paneSub).to.string('Outstanding balance for page');
+          expect(FeeFineHistoryInteractor.paneSub).to.string('Suspended balance for page');
           expect(FeeFineHistoryInteractor.labelMenu).to.string('Open fees/fines for');
-          expect(FeeFineHistoryInteractor.outstandingMenu).to.string('Outstanding Balance');
+          expect(FeeFineHistoryInteractor.outstandingMenu).to.string('Total outstanding balance: 660.00 | Total suspended balance: 0.00');
         });
 
         describe('displays open fees/fines rows', () => {
@@ -55,7 +62,7 @@ describe('Test Fee/Fine History', () => {
           });
 
           it('renders proper amount of rows', () => {
-            expect(FeeFineHistoryInteractor.mclViewFeesFines.rowCount).to.equal(5);
+            expect(FeeFineHistoryInteractor.mclViewFeesFines.rowCount).to.equal(6);
           });
 
           describe('activate the Search & filter', () => {
@@ -249,6 +256,16 @@ describe('Test Fee/Fine History', () => {
               });
             });
           });
+
+          describe('Export Fees/Fines report', () => {
+            beforeEach(async () => {
+              await FeeFineHistoryInteractor.exportButton.click();
+            });
+
+            it('show successfull callout', () => {
+              expect(FeeFineHistoryInteractor.callout.successCalloutIsPresent).to.be.true;
+            });
+          });
         });
 
         describe('selects all accounts', () => {
@@ -367,7 +384,17 @@ describe('Test Fee/Fine History', () => {
             });
           });
         });
+
+        describe('est the ellipsis menu (anonymized)', () => {
+          beforeEach(async () => {
+            await FeeFineHistoryInteractor.rows(5).cells(13).selectEllipsis();
+          });
+          it('Check text on loan details option', () => {
+            expect(FeeFineHistoryInteractor.dropDownEllipsisOptions(5).text).to.string('Loan details (anonymized)');
+          });
+        });
       });
     });
   });
 });
+

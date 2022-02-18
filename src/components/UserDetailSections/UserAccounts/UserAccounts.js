@@ -1,9 +1,11 @@
-import _ from 'lodash';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
+
 import {
+  Row,
+  Col,
   Badge,
   Button,
   Accordion,
@@ -11,9 +13,15 @@ import {
   List,
   Headline
 } from '@folio/stripes/components';
+import { useStripes } from '@folio/stripes/core';
+
 import {
-  stripesConnect
-} from '@folio/stripes/core';
+  accountStatuses,
+  refundStatuses,
+  refundClaimReturned,
+  loanActions,
+} from '../../../constants';
+
 
 /**
  * User-details "Accounts" accordian pane.
@@ -21,179 +29,179 @@ import {
  * Show links to the open- and closed-accounts in the body; include the
  * number of open-accounts in the preview.
  */
-class UserAccounts extends React.Component {
-  static manifest = Object.freeze({
-    accountsHistory: {
-      type: 'okapi',
-      records: 'accounts',
-      GET: {
-        path: 'accounts?query=(userId==:{id})&limit=10000',
-      },
-    },
-    openAccountsCount: {
-      type: 'okapi',
-      accumulate: 'true',
-      GET: {
-        path: 'accounts?query=(userId==:{id} and status.name<>Closed)&limit=10000',
-      },
-    },
-    closedAccountsCount: {
-      type: 'okapi',
-      accumulate: 'true',
-      GET: {
-        path: 'accounts?query=(userId==:{id} and status.name=Closed)&limit=1',
-      },
-    },
-    activeRecord: {},
-    userid: {},
+const UserAccounts = ({
+  expanded,
+  onToggle,
+  accordionId,
+  match: { params },
+  accounts: {
+    records,
+    isPending,
+  },
+  resources,
+}) => {
+  const [totals, setTotals] = useState({
+    openAccountsCount: 0,
+    closedAccountsCount: 0,
+    claimAccountsCount: 0,
+    refundedAccountsCount: 0,
+    total: 0.00,
+    totalClaim: 0.00,
+    totalRefunded: 0.00,
   });
+  const stripes = useStripes();
+  const accountsLoaded = !isPending;
+  const {
+    openAccountsCount,
+    closedAccountsCount,
+    claimAccountsCount,
+    refundedAccountsCount,
+    total,
+    totalClaim,
+    totalRefunded,
+  } = totals;
+  const displayWhenClosed = accountsLoaded ? (<Badge>{openAccountsCount}</Badge>) : (<Icon icon="spinner-ellipsis" width="10px" />);
+  const buttonDisabled = !stripes?.hasPerm('ui-users.feesfines.actions.all');
+  const displayWhenOpen = (<Button disabled={buttonDisabled} to={{ pathname: `/users/${params.id}/charge` }}><FormattedMessage id="ui-users.accounts.chargeManual" /></Button>);
 
-  static propTypes = {
-    resources: PropTypes.shape({
-      accountsHistory: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
-      }),
-      closedAccountsCount: PropTypes.number,
-      openAccountsCount: PropTypes.number,
-    }),
-    mutator: PropTypes.shape({
-      openAccountsCount: PropTypes.object,
-      closedAccountsCount: PropTypes.object,
-    }),
-    stripes: PropTypes.shape({
-      hasPerm: PropTypes.func,
-    }),
-    accordionId: PropTypes.string,
-    addRecord: PropTypes.bool,
-    expanded: PropTypes.bool,
-    onToggle: PropTypes.func,
-    location: PropTypes.shape({
-      search: PropTypes.string,
-      pathname: PropTypes.string,
-    }),
-    match: PropTypes.shape({
-      params: PropTypes.object,
-    }).isRequired
-  };
+  useEffect(() => {
+    const open = records.filter(account => account?.status?.name !== accountStatuses.CLOSED);
+    const closed = records.filter(account => account?.status?.name === accountStatuses.CLOSED);
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      openAccounts: 0,
-      closedAccounts: 0,
-    };
+    // get refunded actions and refunds total amount
+    const refundStatusesValues = [
+      ...Object.values(refundStatuses),
+      refundClaimReturned.REFUNDED_ACTION,
+    ];
+    const feeFineActions = resources.feefineactions.records ?? [];
+    const refunded = feeFineActions.filter((feeFineAction) => refundStatusesValues.includes(feeFineAction.typeAction));
+    const refundedTotal = refunded.reduce((acc, { amountAction }) => (acc + amountAction), 0);
 
-    this._isMounted = false;
-  }
-
-  componentDidMount() {
-    this._isMounted = true;
-
-    this.props.mutator.openAccountsCount.GET().then(records => {
-      this.setState({
-        total: this.getTotalOpenAccounts(records.accounts),
-        openAccounts: records.totalRecords,
-      });
+    const loansClaim = resources.loansHistory.records?.filter(loan => loan?.action === loanActions.CLAIMED_RETURNED);
+    let claim = [];
+    loansClaim.forEach((loan) => {
+      claim = claim.concat(open.filter(account => account?.loanId === loan.id));
     });
-    this.props.mutator.closedAccountsCount.GET().then(records => {
-      this.setState({
-        closedAccounts: records.totalRecords,
-      });
+
+    const claimTotal = claim.reduce((acc, { remaining }) => (acc + parseFloat(remaining)), 0);
+    const openTotal = open.reduce((acc, { remaining }) => (acc + parseFloat(remaining)), 0) - claimTotal;
+
+    setTotals({
+      openAccountsCount: open.length - claim.length,
+      closedAccountsCount: closed.length,
+      claimAccountsCount: claim.length,
+      refundedAccountsCount: refunded.length,
+      total: parseFloat(openTotal).toFixed(2),
+      totalClaim: parseFloat(claimTotal).toFixed(2),
+      totalRefunded: parseFloat(refundedTotal).toFixed(2),
     });
-  }
+  }, [records, resources]);
 
-  componentDidUpdate(prevProps) {
-    if (this.props.addRecord !== prevProps.addRecord) {
-      this.props.mutator.openAccountsCount.GET().then(records => {
-        if (this._isMounted) {
-          this.setState({
-            total: this.getTotalOpenAccounts(records.accounts),
-            openAccounts: records.totalRecords,
-          });
-        }
-      });
-      this.props.mutator.closedAccountsCount.GET().then(records => {
-        if (this._isMounted) {
-          this.setState({
-            closedAccounts: records.totalRecords,
-          });
-        }
-      });
-    }
-  }
+  return (
+    <Accordion
+      open={expanded}
+      id={accordionId}
+      onToggle={onToggle}
+      label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.accounts.title.feeFine" /></Headline>}
+      displayWhenClosed={displayWhenClosed}
+      displayWhenOpen={displayWhenOpen}
+    >
+      {accountsLoaded ?
+        <Row>
+          <Col xs={5}>
+            <List
+              listStyle="bullets"
+              itemFormatter={(item, index) => (
+                <li key={index}>
+                  <Link
+                    id={item.id}
+                    to={`/users/${params.id}/accounts/${item.status}`}
+                  >
+                    <FormattedMessage id={item.formattedMessageId} values={{ count: item.count }} />
+                    {' '}
+                    {' '}
+                  </Link>
+                  {item.id === 'clickable-viewcurrentaccounts' && <FormattedMessage id="ui-users.accounts.totalOpenAccounts" values={{ amount: total }} />}
+                </li>)}
+              items={[
+                {
+                  id: 'clickable-viewcurrentaccounts',
+                  count: openAccountsCount,
+                  formattedMessageId: 'ui-users.accounts.numOpenAccounts',
+                  status: 'open',
+                },
+                {
+                  id: 'clickable-viewclosedaccounts',
+                  count: closedAccountsCount,
+                  formattedMessageId: 'ui-users.accounts.numClosedAccounts',
+                  status: 'closed',
+                },
+                {
+                  id: 'clickable-viewallaccounts',
+                  count: 0,
+                  formattedMessageId: 'ui-users.accounts.viewAllFeesFines',
+                  status: 'all',
+                },
+              ]}
+            />
+          </Col>
+          <Col xs={6}>
+            <List
+              listStyle="bullets"
+              itemFormatter={(item, index) => (
+                <li key={index}>
+                  <div id={item.id}>
+                    <FormattedMessage id={item.formattedMessageId} values={{ count: item.count }} />
+                    {' '}
+                    <FormattedMessage id="ui-users.accounts.totalOpenAccounts" values={{ amount: item.total }} />
+                  </div>
+                </li>)}
+              items={[
+                {
+                  id: 'no-clickable-claim',
+                  count: claimAccountsCount,
+                  formattedMessageId: 'ui-users.accounts.numClaimAccounts',
+                  total: totalClaim
+                },
+                {
+                  id: 'no-clickable-refunded',
+                  count: refundedAccountsCount,
+                  formattedMessageId: 'ui-users.accounts.numRefundedAccounts',
+                  total: totalRefunded
+                },
+              ]}
+            />
+          </Col>
+        </Row> : <Icon icon="spinner-ellipsis" width="10px" />
+      }
+    </Accordion>
+  );
+};
 
-  componentWillUnmount() {
-    this._isMounted = false;
-  }
+UserAccounts.propTypes = {
+  accounts: PropTypes.object,
+  accordionId: PropTypes.string,
+  expanded: PropTypes.bool,
+  onToggle: PropTypes.func,
+  location: PropTypes.shape({
+    search: PropTypes.string,
+    pathname: PropTypes.string,
+  }),
+  match: PropTypes.shape({
+    params: PropTypes.object,
+  }).isRequired,
+  resources: PropTypes.shape({
+    loansHistory: PropTypes.shape({
+      records: PropTypes.arrayOf(PropTypes.object),
+    }),
+    feefineactions: PropTypes.shape({
+      records: PropTypes.arrayOf(
+        PropTypes.shape({
+          typeAction: PropTypes.string.isRequired,
+        })
+      ),
+    }).isRequired,
+  }).isRequired,
+};
 
-  getTotalOpenAccounts = (accounts) => {
-    const total = accounts.reduce((t, { remaining }) => (t + parseFloat(remaining)), 0);
-    return parseFloat(total).toFixed(2);
-  }
-
-  render() {
-    const resources = this.props.resources;
-    const openAccountsTotal = this.state.openAccounts || 0;
-    const closedAccountsTotal = this.state.closedAccounts || 0;
-    const total = this.state.total || '0.00';
-    const { expanded, onToggle, accordionId, match: { params } } = this.props;
-
-    const openAccountsCount = (_.get(resources.openAccountsCount, ['isPending'], true)) ? -1 : openAccountsTotal;
-    const closedAccountsCount = (_.get(resources.closedAccountsCount, ['isPending'], true)) ? -1 : closedAccountsTotal;
-
-    const accountsLoaded = openAccountsCount >= 0 && closedAccountsCount >= 0;
-    const displayWhenClosed = accountsLoaded ? (<Badge>{openAccountsCount}</Badge>) : (<Icon icon="spinner-ellipsis" width="10px" />);
-    const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
-    const displayWhenOpen = (<Button disabled={buttonDisabled} to={{ pathname: `/users/${params.id}/charge` }}><FormattedMessage id="ui-users.accounts.chargeManual" /></Button>);
-    return (
-      <Accordion
-        open={expanded}
-        id={accordionId}
-        onToggle={onToggle}
-        label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.accounts.title.feeFine" /></Headline>}
-        displayWhenClosed={displayWhenClosed}
-        displayWhenOpen={displayWhenOpen}
-      >
-        {accountsLoaded ?
-          <List
-            listStyle="bullets"
-            itemFormatter={(item, index) => (
-              <li key={index}>
-                <Link
-                  id={item.id}
-                  to={`/users/${params.id}/accounts/${item.status}`}
-                >
-                  <FormattedMessage id={item.formattedMessageId} values={{ count: item.count }} />
-                  {' '}
-                  {' '}
-                </Link>
-                {item.id === 'clickable-viewcurrentaccounts' && <FormattedMessage id="ui-users.accounts.totalOpenAccounts" values={{ amount: total }} />}
-              </li>)}
-            items={[
-              {
-                id: 'clickable-viewcurrentaccounts',
-                count: openAccountsCount,
-                formattedMessageId: 'ui-users.accounts.numOpenAccounts',
-                status: 'open',
-              },
-              {
-                id: 'clickable-viewclosedaccounts',
-                count: closedAccountsCount,
-                formattedMessageId: 'ui-users.accounts.numClosedAccounts',
-                status: 'closed',
-              },
-              {
-                id: 'clickable-viewallaccounts',
-                count: 0,
-                formattedMessageId: 'ui-users.accounts.viewAllFeesFines',
-                status: 'all',
-              },
-            ]}
-          /> : <Icon icon="spinner-ellipsis" width="10px" />
-        }
-      </Accordion>
-    );
-  }
-}
-
-export default stripesConnect(UserAccounts);
+export default UserAccounts;

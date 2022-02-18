@@ -21,6 +21,8 @@ import {
 
 import { statusFilter } from '../../constants';
 
+import CustomFieldsFilters from '../../components/CustomFieldsFilters';
+
 class Filters extends React.Component {
   static propTypes = {
     activeFilters: PropTypes.object,
@@ -79,16 +81,17 @@ class Filters extends React.Component {
 
   render() {
     const {
-      activeFilters: {
-        active = [],
-        pg = [],
-        tags = [],
-        departments = [],
-      },
+      activeFilters,
       onChangeHandlers: { clearGroup },
       intl: { formatMessage },
       resources,
     } = this.props;
+    const {
+      active = [],
+      pg = [],
+      tags = [],
+      departments = [],
+    } = activeFilters;
 
     const departmentsAreNotEmpty = !!resources.departments?.records?.length;
 
@@ -155,8 +158,15 @@ class Filters extends React.Component {
             name="tags"
             selectedValues={tags}
             onChange={this.handleFilterChange}
+            aria-labelledby="users-filter-accordion-tags"
           />
         </Accordion>
+
+        <CustomFieldsFilters
+          activeFilters={activeFilters}
+          clearGroup={clearGroup}
+          onChange={this.handleFilterChange}
+        />
       </AccordionSet>
     );
   }

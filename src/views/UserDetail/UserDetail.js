@@ -5,16 +5,18 @@ import {
   keyBy,
   cloneDeep,
   concat,
+  orderBy,
 } from 'lodash';
 import moment from 'moment';
-import { FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
+
 import {
   AppIcon,
+  CalloutContext,
   IfPermission,
   IfInterface,
   TitleManager,
 } from '@folio/stripes/core';
-
 import {
   Pane,
   PaneMenu,
@@ -23,6 +25,7 @@ import {
   expandAllFunction,
   ExpandAllButton,
   Button,
+  Callout,
   Row,
   Col,
   Headline,
@@ -30,10 +33,10 @@ import {
   LoadingPane,
   HasCommand,
 } from '@folio/stripes/components';
-
 import {
   NotesSmartAccordion,
   ViewCustomFieldsRecord,
+  NotePopupModal,
 } from '@folio/stripes/smart-components';
 
 import {
@@ -50,24 +53,28 @@ import {
 } from '../../components/UserDetailSections';
 
 import HelperApp from '../../components/HelperApp';
-
 import {
   PatronBlockMessage
 } from '../../components/PatronBlock';
 import {
   getFormAddressList,
-  // toUserAddresses
 } from '../../components/data/converters/address';
 import {
   getFullName,
-  // eachPromise
 } from '../../components/util';
 import RequestFeeFineBlockButtons from '../../components/RequestFeeFineBlockButtons';
 import { departmentsShape } from '../../shapes';
 
+import OpenTransactionModal from './components/OpenTransactionModal';
+import DeleteUserModal from './components/DeleteUserModal';
+import ExportFeesFinesReportButton from './components';
+import ErrorPane from '../../components/ErrorPane';
+import ActionMenuEditOption from './components/ActionMenuEditOption';
+
 class UserDetail extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
+      hasInterface: PropTypes.func.isRequired,
       hasPerm: PropTypes.func.isRequired,
       connect: PropTypes.func.isRequired,
       locale: PropTypes.string.isRequired,
@@ -75,9 +82,28 @@ class UserDetail extends React.Component {
         log: PropTypes.func.isRequired,
       }).isRequired,
     }).isRequired,
+    mutator: PropTypes.shape({
+      hasManualPatronBlocks: PropTypes.shape({
+        GET: PropTypes.func,
+      }),
+      hasAutomatedPatronBlocks: PropTypes.shape({
+        GET: PropTypes.func,
+      }),
+      delUser: PropTypes.shape({
+        DELETE: PropTypes.func,
+      }),
+      openTransactions: PropTypes.shape({
+        GET: PropTypes.func,
+      }),
+    }),
     resources: PropTypes.shape({
       selUser: PropTypes.object,
+      delUser: PropTypes.object,
+      openTransactions: PropTypes.object,
       user: PropTypes.arrayOf(PropTypes.object),
+      accounts: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
       addressTypes: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
@@ -97,12 +123,20 @@ class UserDetail extends React.Component {
       loansHistory: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
+      suppressEdit: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
     }),
     match: PropTypes.shape({
       path: PropTypes.string.isRequired,
       params: PropTypes.shape({
         id: PropTypes.string,
       }),
+    }).isRequired,
+    okapi: PropTypes.shape({
+      currentUser: PropTypes.shape({
+        servicePoints: PropTypes.arrayOf(PropTypes.object).isRequired,
+      }).isRequired,
     }).isRequired,
     onClose: PropTypes.func,
     tagsToggle: PropTypes.func,
@@ -114,11 +148,14 @@ class UserDetail extends React.Component {
     getPreferredServicePoint: PropTypes.func,
     tagsEnabled: PropTypes.bool,
     paneWidth: PropTypes.string,
+    intl: PropTypes.object.isRequired,
   };
 
   static defaultProps = {
     paneWidth: '44%'
   };
+
+  static contextType = CalloutContext;
 
   constructor(props) {
     super(props);
@@ -141,7 +178,10 @@ class UserDetail extends React.Component {
     ];
 
     this.state = {
+      patronBlocks: [],
       lastUpdate: null,
+      showOpenTransactionModal: false,
+      showDeleteUserModal: false,
       sections: {
         userInformationSection: true,
         extendedInfoSection: false,
@@ -157,6 +197,12 @@ class UserDetail extends React.Component {
         customFields: false,
       },
     };
+
+    this.callout = null;
+  }
+
+  componentDidMount() {
+    this.loadPatronBlocks();
   }
 
   getUser = () => {
@@ -167,6 +213,34 @@ class UserDetail extends React.Component {
     // Logging below shows this DOES sometimes find the wrong record. But why?
     // console.log(`getUser: found ${selUser.length} users, id '${selUser[0].id}' ${selUser[0].id === id ? '==' : '!='} '${id}'`);
     return selUser.find(u => u.id === id);
+  }
+
+  handleDeleteUser = (id) => {
+    const { history, location, mutator, intl } = this.props;
+    const user = this.getUser();
+    const fullNameOfUser = getFullName(user);
+
+    try {
+      mutator.delUser.DELETE({ id })
+        .then(() => history.replace(
+          {
+            pathname: '/users',
+            search: `${location.search}`,
+            state: { deletedUserId: id }
+          }
+        ))
+        .then(() => {
+          this.context.sendCallout({
+            type: 'success',
+            message: intl.formatMessage({ id: 'ui-users.details.deleteUser.success' }, { name: fullNameOfUser }),
+          });
+        });
+    } catch (error) {
+      this.context.sendCallout({
+        type: 'error',
+        message: intl.formatMessage({ id: 'ui-users.details.deleteUser.failed' }, { name: fullNameOfUser }),
+      });
+    }
   }
 
   checkScope = () => {
@@ -276,6 +350,7 @@ class UserDetail extends React.Component {
   renderDetailsLastMenu(user) {
     const {
       tagsEnabled,
+      intl,
     } = this.props;
 
     const tags = ((user && user.tags) || {}).tagList || [];
@@ -284,49 +359,123 @@ class UserDetail extends React.Component {
       <PaneMenu>
         {
           tagsEnabled &&
-          <FormattedMessage id="ui-users.showTags">
-            {ariaLabel => (
-              <IconButton
-                icon="tag"
-                id="clickable-show-tags"
-                onClick={() => { this.showHelperApp('tags'); }}
-                badgeCount={tags.length}
-                aria-label={ariaLabel}
-              />
-            )}
-          </FormattedMessage>
+            <IconButton
+              icon="tag"
+              id="clickable-show-tags"
+              onClick={() => { this.showHelperApp('tags'); }}
+              badgeCount={tags.length}
+              aria-label={intl.formatMessage({ id: 'ui-users.showTags' })}
+            />
         }
       </PaneMenu>
     );
   }
 
+  showOpenTransactionsModal(json) {
+    this.setState({
+      showOpenTransactionModal: true,
+      openTransactions: json,
+    });
+  }
+
+  showDeleteUserModal(json) {
+    this.setState({
+      showDeleteUserModal: true,
+      openTransactions: json,
+    });
+  }
+
+  doCloseTransactionDeleteModal = () => {
+    this.setState({
+      showDeleteUserModal: false,
+      showOpenTransactionModal: false,
+    });
+  }
+
+  selectModal(transactions) {
+    if (!transactions?.hasOpenTransactions) {
+      this.showDeleteUserModal();
+    } else {
+      this.showOpenTransactionsModal(transactions);
+    }
+  }
+
+  handleDeleteClick() {
+    const { mutator } = this.props;
+    const userId = this.props.match.params.id;
+
+    mutator.openTransactions.GET({ userId })
+      .then((response) => {
+        this.selectModal(response);
+      });
+  }
+
   getActionMenu = barcode => ({ onToggle }) => {
+    const {
+      okapi: {
+        currentUser: {
+          servicePoints,
+        },
+      },
+      resources,
+    } = this.props;
+    const user = this.getUser();
+    const patronGroup = this.getPatronGroup(user);
+    const feeFineActions = get(resources, ['feefineactions', 'records'], []);
+    const accounts = get(resources, ['accounts', 'records'], []);
+    const loans = get(resources, ['loanRecords', 'records'], []);
+
+    const feesFinesReportData = {
+      user,
+      patronGroup: patronGroup.group,
+      servicePoints,
+      feeFineActions,
+      accounts,
+      loans,
+    };
+
     const showActionMenu = this.props.stripes.hasPerm('ui-users.edit')
       || this.props.stripes.hasPerm('ui-users.patron_blocks')
       || this.props.stripes.hasPerm('ui-users.feesfines.actions.all')
-      || this.props.stripes.hasPerm('ui-requests.all');
+      || this.props.stripes.hasPerm('ui-requests.all')
+      || this.props.stripes.hasPerm('ui-users.delete,ui-users.opentransactions');
 
     if (showActionMenu) {
       return (
         <>
-          <RequestFeeFineBlockButtons
-            barcode={barcode}
+          <IfInterface name="feesfines">
+            <RequestFeeFineBlockButtons
+              barcode={barcode}
+              onToggle={onToggle}
+              userId={this.props.match.params.id}
+            />
+          </IfInterface>
+          <ActionMenuEditOption
+            id={this.props.match.params.id}
+            suppressEdit={this.props.resources.suppressEdit}
             onToggle={onToggle}
-            userId={this.props.match.params.id}
+            goToEdit={this.goToEdit}
+            editButton={this.editButton}
           />
-          <IfPermission perm="ui-users.edit">
+          <IfInterface name="feesfines">
+            <ExportFeesFinesReportButton
+              feesFinesReportData={feesFinesReportData}
+              onToggle={onToggle}
+              callout={this.callout}
+            />
+          </IfInterface>
+          <IfPermission perm="ui-users.delete,ui-users.opentransactions">
             <Button
               buttonStyle="dropdownItem"
-              data-test-actions-menu-edit
-              id="clickable-edituser"
+              data-test-actions-menu-check-delete
+              id="clickable-checkdeleteuser"
               onClick={() => {
+                this.handleDeleteClick();
                 onToggle();
-                this.goToEdit();
               }}
-              buttonRef={this.editButton}
             >
-              <Icon icon="edit">
-                <FormattedMessage id="ui-users.edit" />
+              <Icon icon="trash">
+                <FormattedMessage id="ui-users.details.checkDelete" />
               </Icon>
             </Button>
           </IfPermission>
@@ -340,8 +489,8 @@ class UserDetail extends React.Component {
   checkScope = () => true;
 
   goToEdit = () => {
-    const { history, match: { params } } = this.props;
-    history.push(`/users/${params.id}/edit`);
+    const { history, location: { search }, match: { params } } = this.props;
+    history.push(`/users/${params.id}/edit${search}`);
   }
 
   shortcuts = [
@@ -370,6 +519,56 @@ class UserDetail extends React.Component {
     });
   }
 
+  userNotFound = () => {
+    return this.props.resources?.selUser?.failed?.httpStatus === 404;
+  }
+
+  loadPatronBlocks() {
+    const {
+      mutator: {
+        hasManualPatronBlocks,
+        hasAutomatedPatronBlocks,
+      },
+      stripes,
+    } = this.props;
+
+    const manualPatronBlocksResolver = stripes.hasInterface('feesfines')
+      && stripes.hasPerm('manualblocks.collection.get')
+      ? hasManualPatronBlocks
+        .GET().catch(() => [])
+      : Promise.resolve([]);
+    const automatedPatronBlocksResolver = stripes.hasInterface('automated-patron-blocks')
+      && stripes.hasPerm('automated-patron-blocks.collection.get')
+      ? hasAutomatedPatronBlocks
+        .GET().catch(() => [])
+      : Promise.resolve([]);
+
+    Promise.all([
+      manualPatronBlocksResolver,
+      automatedPatronBlocksResolver,
+    ]).then(([
+      manualPatronBlocks,
+      automatedPatronBlocks,
+    ]) => {
+      const { sections } = this.state;
+
+      let patronBlocks = concat(manualPatronBlocks, automatedPatronBlocks)
+        .filter((patronBlock) => {
+          return moment(patronBlock.expirationDate).endOf('day').isSameOrAfter(moment().endOf('day'));
+        });
+
+      patronBlocks = orderBy(patronBlocks, ['metadata.createdDate'], ['desc']);
+
+      this.setState({
+        patronBlocks,
+      });
+
+      if (!sections.patronBlocksSection && patronBlocks.length) {
+        this.handleSectionToggle({ id: 'patronBlocksSection' });
+      }
+    });
+  }
+
   render() {
     const {
       resources,
@@ -383,10 +582,12 @@ class UserDetail extends React.Component {
     const {
       sections,
       helperApp,
-      addRecord
+      patronBlocks,
     } = this.state;
 
     const user = this.getUser();
+    const fullNameOfUser = getFullName(user);
+    const userId = match.params.id;
 
     const addressTypes = (resources.addressTypes || {}).records || [];
     const addresses = getFormAddressList(get(user, 'personal.addresses', []));
@@ -397,12 +598,7 @@ class UserDetail extends React.Component {
     const proxies = this.props.getProxies();
     const servicePoints = this.props.getUserServicePoints();
     const preferredServicePoint = this.props.getPreferredServicePoint();
-    const manualPatronBlocks = get(resources, ['hasManualPatronBlocks', 'records'], [])
-      .filter(p => moment(moment(p.expirationDate).format()).isSameOrAfter(moment().format()));
-    const automatedPatronBlocks = get(resources, ['hasAutomatedPatronBlocks', 'records'], []);
-    const totalPatronBlocks = manualPatronBlocks.length + automatedPatronBlocks.length;
-    const patronBlocks = concat(automatedPatronBlocks, manualPatronBlocks);
-    const hasPatronBlocks = totalPatronBlocks > 0;
+    const hasPatronBlocks = !!patronBlocks.length;
     const hasPatronBlocksPermissions = stripes.hasPerm('automated-patron-blocks.collection.get') || stripes.hasPerm('manualblocks.collection.get');
     const patronGroup = this.getPatronGroup(user);
     const requestPreferences = get(resources, 'requestPreferences.records.[0].requestPreferences[0]', {});
@@ -417,10 +613,25 @@ class UserDetail extends React.Component {
       'addressType',
       '',
     );
-    const customFields = user?.customFields || [];
+    const customFields = user?.customFields || {};
     const departments = resources?.departments?.records || [];
     const userDepartments = (user?.departments || [])
       .map(departmentId => departments.find(({ id }) => id === departmentId)?.name);
+    const accounts = resources?.accounts;
+
+    if (this.userNotFound()) {
+      return (
+        <ErrorPane
+          id="pane-user-not-found"
+          defaultWidth={paneWidth}
+          paneTitle={<FormattedMessage id="ui-users.information.userDetails" />}
+          dismissible
+          onClose={this.onClose}
+        >
+          <FormattedMessage id="ui-users.errors.userNotFound" />
+        </ErrorPane>
+      );
+    }
 
     if (!user) {
       return (
@@ -487,18 +698,14 @@ class UserDetail extends React.Component {
                 />
                 <IfInterface name="feesfines">
                   {hasPatronBlocksPermissions &&
-                  <PatronBlock
-                    accordionId="patronBlocksSection"
-                    user={user}
-                    hasPatronBlocks={hasPatronBlocks}
-                    patronBlocks={patronBlocks}
-                    automatedPatronBlocks={automatedPatronBlocks}
-                    expanded={sections.patronBlocksSection}
-                    onToggle={this.handleSectionToggle}
-                    onClickViewPatronBlock={this.onClickViewPatronBlock}
-                    addRecord={this.state.addRecord}
-                    {...this.props}
-                  />
+                    <PatronBlock
+                      accordionId="patronBlocksSection"
+                      patronBlocks={patronBlocks}
+                      expanded={sections.patronBlocksSection}
+                      onToggle={this.handleSectionToggle}
+                      onClickViewPatronBlock={this.onClickViewPatronBlock}
+                      {...this.props}
+                    />
                   }
                 </IfInterface>
                 <ExtendedInfo
@@ -527,6 +734,8 @@ class UserDetail extends React.Component {
                   backendModuleName="users"
                   entityType="user"
                   customFieldsValues={customFields}
+                  customFieldsLabel={<FormattedMessage id="ui-users.custom.customFields" />}
+                  noCustomFieldsFoundLabel={<FormattedMessage id="ui-users.custom.noCustomFieldsFound" />}
                 />
                 <IfPermission perm="proxiesfor.collection.get">
                   <ProxyPermissions
@@ -540,14 +749,15 @@ class UserDetail extends React.Component {
                   />
                 </IfPermission>
                 <IfInterface name="feesfines">
-                  <IfPermission perm="ui-users.feesfines.actions.all">
+                  <IfPermission perm="ui-users.feesfines.view">
                     <UserAccounts
                       expanded={sections.accountsSection}
                       onToggle={this.handleSectionToggle}
                       accordionId="accountsSection"
-                      addRecord={addRecord}
                       location={location}
+                      accounts={accounts}
                       match={match}
+                      {...this.props}
                     />
                   </IfPermission>
                 </IfInterface>
@@ -572,7 +782,7 @@ class UserDetail extends React.Component {
                 </IfPermission>
 
                 <IfPermission perm="ui-users.requests.all">
-                  <IfInterface name="request-storage" version="2.5 3.0">
+                  <IfInterface name="request-storage" version="2.5 3.0 4.0">
                     <IfInterface name="circulation">
                       <UserRequests
                         expanded={sections.requestsSection}
@@ -628,6 +838,33 @@ class UserDetail extends React.Component {
               </AccordionSet>
             </Pane>
             { helperApp && <HelperApp appName={helperApp} onClose={this.closeHelperApp} /> }
+            <Callout ref={(ref) => { this.callout = ref; }} />
+            <IfInterface name="notes">
+              <IfPermission perm="ui-notes.item.view">
+                <NotePopupModal
+                  id="user-popup-note-modal"
+                  domainName="users"
+                  entityType="user"
+                  popUpPropertyName="popUpOnUser"
+                  entityId={user?.id}
+                />
+              </IfPermission>
+            </IfInterface>
+            {this.state.showDeleteUserModal &&
+            <DeleteUserModal
+              onCloseModal={this.doCloseTransactionDeleteModal}
+              username={fullNameOfUser}
+              userId={userId}
+              deleteUser={this.handleDeleteUser}
+            />
+            }
+            {this.state.showOpenTransactionModal &&
+            <OpenTransactionModal
+              onCloseModal={this.doCloseTransactionDeleteModal}
+              openTransactions={this.state.openTransactions}
+              username={fullNameOfUser}
+            />
+            }
           </>
         </HasCommand>
       );
@@ -635,4 +872,4 @@ class UserDetail extends React.Component {
   }
 }
 
-export default UserDetail;
+export default injectIntl(UserDetail);

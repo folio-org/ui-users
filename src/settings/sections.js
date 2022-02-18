@@ -5,7 +5,6 @@ import { sortBy } from 'lodash';
 import PermissionSets from './permissions/PermissionSets';
 import PatronGroupsSettings from './PatronGroupsSettings';
 import AddressTypesSettings from './AddressTypesSettings';
-import ProfilePictureSettings from './ProfilePictureSettings';
 import OwnerSettings from './OwnerSettings';
 import FeeFineSettings from './FeeFineSettings';
 import WaiveSettings from './WaiveSettings';
@@ -17,6 +16,8 @@ import CustomFieldsSettingsPane from './CustomFieldsSettings';
 import ConditionsSettings from './ConditionsSettings';
 import LimitsSettings from './LimitsSettings';
 import DepartmentsSettings from './DepartmentsSettings';
+import BlockTemplates from './patronBlocks/BlockTemplates';
+import TransferCriteriaSettings from './TransferCriteriaSettings';
 
 const settingsGeneral = [
   {
@@ -43,12 +44,15 @@ const settingsGeneral = [
     component: DepartmentsSettings,
     perm: 'ui-users.settings.departments.view'
   },
-  {
-    route: 'profilepictures',
-    label: <FormattedMessage id="ui-users.settings.profilePictures" />,
-    component: ProfilePictureSettings,
-    perm: 'ui-users.settings.profilePictures'
-  },
+  //   Profile pictures are currently unsupported in Folio and the existence of this setting has
+  //   confused implementers. Commenting out for now as opposed to deleting it so the existing
+  //   files and components aren't orphaned.
+  //   {
+  //     route: 'profilepictures',
+  //     label: <FormattedMessage id="ui-users.settings.profilePictures" />,
+  //     component: ProfilePictureSettings,
+  //     perm: 'ui-users.settings.profilePictures'
+  //   },
   {
     route: 'custom-fields',
     label: <FormattedMessage id="ui-users.settings.customFields" />,
@@ -100,6 +104,12 @@ const settingsFeefines = [
     component: TransferAccountsSettings,
     perm: 'ui-users.settings.transfers',
   },
+  {
+    route: 'transfer-criteria',
+    label: <FormattedMessage id="ui-users.settings.transferCriteria" />,
+    component: TransferCriteriaSettings,
+    perm: 'ui-plugin-bursar-export.bursar-exports.all',
+  },
 ];
 
 const settingsPatronBlocks = [
@@ -110,11 +120,18 @@ const settingsPatronBlocks = [
     perm: 'ui-users.settings.conditions',
   },
   {
+    route: 'manual-block-templates',
+    label: <FormattedMessage id="ui-users.settings.manualBlockTemplates" />,
+    component: BlockTemplates,
+    perm: 'ui-users.settings.patron-block-templates',
+    interface: 'feesfines',
+  },
+  {
     route: 'limits',
     label: <FormattedMessage id="ui-users.settings.limits" />,
     component: LimitsSettings,
     perm: 'ui-users.settings.limits',
-  }
+  },
 ];
 
 export default [
@@ -125,9 +142,11 @@ export default [
   {
     label: <FormattedMessage id="ui-users.settings.feefine" />,
     pages: sortBy(settingsFeefines, ['label']),
+    interface: 'feesfines',
   },
   {
     label: <FormattedMessage id="ui-users.settings.patronBlocks" />,
     pages: sortBy(settingsPatronBlocks, ['label']),
+    interface: 'circulation',
   },
 ];

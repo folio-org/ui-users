@@ -6,7 +6,6 @@ import { Field } from 'react-final-form';
 import setFieldData from 'final-form-set-field-data';
 
 import stripesFinalForm from '@folio/stripes/final-form';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import {
   Row,
   Col,
@@ -20,6 +19,7 @@ import {
 } from '@folio/stripes/components';
 
 import { calculateSelectedAmount } from '../accountFunctions';
+import { FEE_FINE_ACTIONS } from '../../../constants';
 
 import css from './PayWaive.css';
 
@@ -98,7 +98,7 @@ class ActionModal extends React.Component {
       : formatMessage({ id: `ui-users.accounts.${action}.summary.fully` });
 
     return (
-      <SafeHTMLMessage
+      <FormattedMessage
         id="ui-users.accounts.summary"
         values={{
           count: accounts.length,
@@ -140,10 +140,11 @@ class ActionModal extends React.Component {
   renderMethod = (options) => {
     const {
       action,
-      intl: { formatMessage }
+      intl: { formatMessage },
     } = this.props;
+
     return (
-      <Col xs={this.isPaymentAction(action) ? 3 : 7}>
+      <Col xs={(this.isPaymentAction(action) || this.isTransferAction(action)) ? 3 : 7}>
         <Row>
           <Col xs>
             <FormattedMessage id={`ui-users.accounts.${action}.method`} />
@@ -152,13 +153,22 @@ class ActionModal extends React.Component {
         </Row>
         <Row>
           <Col xs id="action-selection">
-            <Field
-              name="method"
-              component={Select}
-              dataOptions={options}
-              placeholder={formatMessage({ id: `ui-users.accounts.${action}.method.placeholder` })}
-              validate={this.validateMethod}
-            />
+            {_.isEmpty(options)
+              ? <Field
+                  name="method"
+                  component={Select}
+                  dataOptions={options}
+                  placeholder={formatMessage({ id: `ui-users.accounts.${action}.method.placeholder` })}
+                  error={formatMessage({ id: `ui-users.accounts.${action}.error.select` })}
+              />
+              : <Field
+                  name="method"
+                  component={Select}
+                  dataOptions={options}
+                  placeholder={formatMessage({ id: `ui-users.accounts.${action}.method.placeholder` })}
+                  validate={this.validateMethod}
+              />
+            }
           </Col>
         </Row>
       </Col>
@@ -166,11 +176,15 @@ class ActionModal extends React.Component {
   }
 
   isPaymentAction = (action) => {
-    return action === 'payment';
+    return action === FEE_FINE_ACTIONS.PAYMENT;
   }
 
   isRefundAction = (action) => {
-    return action === 'refund';
+    return action === FEE_FINE_ACTIONS.REFUND;
+  }
+
+  isTransferAction = (action) => {
+    return action === FEE_FINE_ACTIONS.TRANSFER;
   }
 
   onChangeOwner = ({ target: { value } }) => {
@@ -275,10 +289,9 @@ class ActionModal extends React.Component {
 
   validateMethod = (value) => {
     let error;
-    const { action } = this.props;
 
     if (!value) {
-      error = <FormattedMessage id={`ui-users.accounts.${action}.error.select`} />;
+      error = <FormattedMessage id="ui-users.feefines.modal.error" />;
     }
 
     return error;
@@ -329,6 +342,9 @@ class ActionModal extends React.Component {
     const ownerOptions = owners.filter(o => o.owner !== 'Shared').map(o => ({ value: o.id, label: o.owner }));
 
     let options = (this.isPaymentAction(action)) ? data.filter(d => (d.ownerId === (accounts.length > 1 ? ownerId : (accounts[0] || {}).ownerId))) : data;
+    options = (this.isTransferAction(action))
+      ? data.filter(d => (d.ownerId === ownerId))
+      : options;
     options = _.uniqBy(options.map(o => ({ id: o.id, label: o[label] })), 'label');
 
     const showNotify = initialValues.notify;
@@ -424,7 +440,7 @@ class ActionModal extends React.Component {
                 </Row>
               )}
             </Col>
-            {(this.isPaymentAction(action) && accounts.length > 1) &&
+            {((this.isPaymentAction(action) && accounts.length > 1) || this.isTransferAction(action)) &&
               <Col xs={4}>
                 <Row>
                   <Col xs>
@@ -444,7 +460,7 @@ class ActionModal extends React.Component {
                       dataOptions={ownerOptions}
                       placeholder={formatMessage({ id: 'ui-users.accounts.payment.owner.placeholder' })}
                       onChange={this.onChangeOwner}
-                      value={ownerId}
+                      defaultValue={ownerId}
                     />
                   </Col>
                 </Row>

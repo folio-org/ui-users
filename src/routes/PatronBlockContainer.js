@@ -18,12 +18,19 @@ class PatronBlockContainer extends React.Component {
       type: 'okapi',
       records: 'manualblocks',
       path:'manualblocks',
-      fetch: false,
       PUT: {
         path: 'manualblocks/%{activeRecord.blockid}',
       },
       DELETE: {
         path: 'manualblocks/%{activeRecord.blockid}',
+      }
+    },
+    blockTemplates: {
+      type: 'okapi',
+      records: 'manualBlockTemplates',
+      path:'manual-block-templates',
+      params: {
+        limit: '100'
       }
     },
     activeRecord: {},

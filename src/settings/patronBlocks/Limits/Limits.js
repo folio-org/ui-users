@@ -12,9 +12,9 @@ import {
 
 import { stripesConnect } from '@folio/stripes/core';
 import { Callout } from '@folio/stripes/components';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 import LimitsForm from './LimitsForm';
+
 import css from '../patronBlocks.css';
 
 class Limits extends Component {
@@ -102,7 +102,7 @@ class Limits extends Component {
   }
 
   normializeValue = (value) => {
-    if (!isNumber(value) || value === 0) {
+    if (!isNumber(value)) {
       return null;
     }
 
@@ -205,7 +205,7 @@ class Limits extends Component {
     const { patronGroup } = this.props;
     const limits = this.saveLimits(value);
     const showSuccessMessage = (
-      <SafeHTMLMessage
+      <FormattedMessage
         id="ui-users.settings.limits.callout.message"
         values={{ patronGroup }}
       />

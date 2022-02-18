@@ -8,30 +8,33 @@ import { NoValue } from '@folio/stripes/components';
 import { ControlledVocab } from '@folio/stripes/smart-components';
 import { useStripes } from '@folio/stripes/core';
 
+
+const validate = (item, index, items) => {
+  const filteredDepartments = items.filter((department, i) => i !== index);
+  const errors = {};
+
+  // existing departent matches name
+  if (filteredDepartments.find(department => department.name === item.name)) {
+    errors.name = <FormattedMessage id="ui-users.settings.departments.name.error" />;
+  }
+
+  // existing departent matches name
+  if (filteredDepartments.find(department => department.code === item.code)) {
+    errors.code = <FormattedMessage id="ui-users.settings.departments.code.error" />;
+  }
+
+  // code is missing
+  if (!item.code) {
+    errors.code = <FormattedMessage id="ui-users.settings.departments.code.required" />;
+  }
+
+  return errors;
+};
+
 const DepartmentsSettings = () => {
   const { formatMessage } = useIntl();
   const stripes = useStripes();
   const ConnectedControlledVocab = useMemo(() => stripes.connect(ControlledVocab), [stripes]);
-
-  const validate = (item, index, items) => {
-    const filteredDepartments = items.filter((department, i) => i !== index);
-    const errors = {};
-
-    if (filteredDepartments.find(department => department.name === item.name)) {
-      errors.name = <FormattedMessage id="ui-users.settings.departments.name.error" />;
-    }
-
-    if (filteredDepartments.find(department => department.code === item.code)) {
-      errors.code = <FormattedMessage id="ui-users.settings.departments.code.error" />;
-    }
-
-    if (!item.code) {
-      errors.code = <FormattedMessage id="ui-users.settings.departments.code.required" />;
-    }
-
-    return errors;
-  };
-
   const hasEditPerm = stripes.hasPerm('ui-users.settings.departments.edit');
   const hasDeletePerm = stripes.hasPerm('ui-users.settings.departments.delete');
   const hasCreatePerm = stripes.hasPerm('ui-users.settings.departments.create');
@@ -64,5 +67,7 @@ const DepartmentsSettings = () => {
     />
   );
 };
+
+export { validate };
 
 export default DepartmentsSettings;

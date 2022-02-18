@@ -1,0 +1,5 @@
+[
+  {
+    "username":"user96","id":"72161ac0-97ff-44de-814f-500b01f203db","barcode":"12345","active":true,"patronGroup":"503a81cd-6c26-400f-b620-14c08943697c","departments":[],"proxyFor":[],"personal":{"lastName":"Alina","firstName":"","email":"drshalina20@gmail.com","addresses":[{"countryId":"AL","addressLine1":"xdmhsjdhbsjhd","addressLine2":"asdsd","city":"zd","region":"asd","postalCode":"asd","addressTypeId":"b6f4d1c6-0dfa-463c-9534-f49c4f0ae090"}],"preferredContactTypeId":"002"},"expirationDate":"2022-10-11T23:59:59.000+00:00","createdDate":"2021-10-11T14:44:10.129+00:00","updatedDate":"2021-10-11T14:44:10.129+00:00","metadata":{"createdDate":"2021-10-11T04:32:50.911+00:00","createdByUserId":"dae881f7-9432-5723-ba4e-7fab613efe77","updatedDate":"2021-10-11T14:44:10.125+00:00","updatedByUserId":"dae881f7-9432-5723-ba4e-7fab613efe77"},"customFields":{}
+  }
+]

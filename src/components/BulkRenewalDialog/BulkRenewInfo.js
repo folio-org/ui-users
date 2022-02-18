@@ -8,7 +8,6 @@ import {
   Button,
   Layout,
 } from '@folio/stripes/components';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import {
   stripesShape,
   IfPermission,
@@ -19,6 +18,7 @@ import BulkRenewedLoansList from './BulkRenewedLoansList';
 
 class BulkRenewInfo extends React.Component {
   static propTypes = {
+    additionalInfo: PropTypes.string.isRequired,
     stripes: stripesShape.isRequired,
     successRenewals: PropTypes.arrayOf(PropTypes.object).isRequired,
     failedRenewals: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -78,6 +78,7 @@ class BulkRenewInfo extends React.Component {
 
   render() {
     const {
+      additionalInfo,
       stripes,
       successRenewals,
       failedRenewals,
@@ -106,7 +107,7 @@ class BulkRenewInfo extends React.Component {
                   icon="exclamation-circle"
                   status="warn"
                 />
-                <SafeHTMLMessage
+                <FormattedMessage
                   id="ui-users.brd.itemNotRenewed"
                   tagName="span"
                   values={{
@@ -123,7 +124,7 @@ class BulkRenewInfo extends React.Component {
                   icon="check-circle"
                   status="success"
                 />
-                <SafeHTMLMessage
+                <FormattedMessage
                   id="ui-users.brd.itemSuccessfullyRenewed"
                   tagName="span"
                   values={{
@@ -164,6 +165,7 @@ class BulkRenewInfo extends React.Component {
         {
           !isEmpty(overridableLoans) &&
           <BulkOverrideDialog
+            additionalInfo={additionalInfo}
             user={user}
             stripes={stripes}
             showDueDatePicker={showDueDatePicker}

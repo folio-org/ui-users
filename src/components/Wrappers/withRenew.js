@@ -3,15 +3,16 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import {
   isEmpty,
-  get,
 } from 'lodash';
 
 import { Callout } from '@folio/stripes/components';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 import BulkRenewalDialog from '../BulkRenewalDialog';
 import isOverridePossible from '../Loans/OpenLoans/helpers/isOverridePossible';
-import { requestStatuses } from '../../constants';
+import {
+  requestStatuses,
+  OVERRIDE_BLOCKS_FIELDS,
+} from '../../constants';
 
 // HOC used to manage renew
 const withRenew = WrappedComponent => class WithRenewComponent extends React.Component {
@@ -46,6 +47,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
 
     this.connectedBulkRenewalDialog = props.stripes.connect(BulkRenewalDialog);
     this.state = {
+      additionalInfo: '',
       loans: [],
       // eslint-disable-next-line react/no-unused-state
       errors: [],
@@ -100,13 +102,20 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
   // condition in those methods to determine whether it is safe to update state.
   _isMounted = false;
 
-  renewItem = (loan, patron, bulkRenewal, silent) => {
+  renewItem = (loan, patron, bulkRenewal, silent, additionalInfo) => {
     // eslint-disable-next-line react/no-unused-state
     this.setState({ bulkRenewal });
     const params = {
       itemBarcode: loan.item.barcode,
       userBarcode: patron.barcode,
     };
+
+    if (additionalInfo) {
+      params[OVERRIDE_BLOCKS_FIELDS.OVERRIDE_BLOCKS] = {
+        [OVERRIDE_BLOCKS_FIELDS.PATRON_BLOCK]: {},
+        [OVERRIDE_BLOCKS_FIELDS.COMMENT]: additionalInfo,
+      };
+    }
 
     return new Promise((resolve, reject) => {
       this.props.mutator.renew.POST(params, { silent })
@@ -128,33 +137,26 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
     });
   };
 
-  renew = async (loans, patron) => {
-    const { patronBlocks } = this.props;
+  renew = async (loans, patron, additionalInfo = '') => {
     const renewSuccess = [];
     const renewFailure = [];
     const errorMsg = {};
-    const countRenew = patronBlocks.filter(p => p.renewals);
     const loansSize = loans.length;
     const bulkRenewal = (loansSize > 1);
-
-    if (!isEmpty(countRenew)) {
-      // eslint-disable-next-line react/no-unused-state
-      return this.setState({ patronBlockedModal: true });
-    }
 
     for (const [index, loan] of loans.entries()) {
       try {
         // We actually want to execute it in a sequence so turning off eslint warning
         // https://issues.folio.org/browse/UIU-1299
         // eslint-disable-next-line no-await-in-loop
-        renewSuccess.push(await this.renewItem(loan, patron, bulkRenewal, index !== loansSize - 1));
+        renewSuccess.push(
+          await this.renewItem(loan, patron, bulkRenewal, index !== loansSize - 1, additionalInfo)
+        );
       } catch (error) {
-        const stringErrorMessage = get(error, 'props.values.message', '');
-
         renewFailure.push(loan);
         errorMsg[loan.id] = {
           ...error,
-          ...isOverridePossible(stringErrorMessage),
+          ...isOverridePossible(this.state.errors),
         };
       }
     }
@@ -169,7 +171,8 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
       errorMsg,
       renewSuccess,
       renewFailure,
-      bulkRenewalDialogOpen: true
+      bulkRenewalDialogOpen: true,
+      additionalInfo,
     });
 
     return renewSuccess;
@@ -178,7 +181,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
   showSingleRenewCallout = (loan) => {
     const message = (
       <span>
-        <SafeHTMLMessage
+        <FormattedMessage
           id="ui-users.loans.item.renewed.callout"
           values={{ title: loan.item.title }}
         />
@@ -261,13 +264,12 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
 
     for (let i = 0; i < loans.length; i += step) {
       const loansSlice = loans.slice(i, i + step);
-      const q = loansSlice
+      const itemIdList = loansSlice
         .filter(loan => loan.itemId)
-        .map(loan => loan.itemId)
-        .join(' or ');
-      const query = `(itemId==(${q})) and status==(${statusList}) sortby requestDate desc`;
+        .map(loan => loan.itemId);
+      const query = `(itemId==(${itemIdList.join(' or ')})) and status==(${statusList}) sortby requestDate desc`;
       reset();
-      GET({ params: { query } })
+      GET({ params: { query, limit: itemIdList.length } })
         .then((requestRecords) => {
           const requestCountObject = requestRecords.reduce((map, record) => {
             map[record.itemId] = map[record.itemId]
@@ -291,13 +293,6 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
    * loan-policy.id => loan-policy.name in state.
    */
   fetchLoanPolicyNames = () => {
-    // get a list of unique policy IDs to retrieve. multiple loans may share
-    // the same policy; we only need to retrieve that policy once.
-    const ids = [...new Set(this.state.loans
-      .filter(loan => loan.loanPolicyId)
-      .map(loan => loan.loanPolicyId))]
-      .join(' or ');
-    const query = `id==(${ids})`;
     const {
       mutator: {
         loanPolicies: {
@@ -307,24 +302,34 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
       },
     } = this.props;
 
-    reset();
-    GET({ params: { query } })
-      .then((loanPolicies) => {
-        const loanPolicyObject = loanPolicies.reduce((map, loanPolicy) => {
-          map[loanPolicy.id] = loanPolicy.name;
+    // get a list of unique policy IDs to retrieve. multiple loans may share
+    // the same policy; we only need to retrieve that policy once.
+    const ids = [...new Set(this.state.loans
+      .filter(loan => loan.loanPolicyId)
+      .map(loan => loan.loanPolicyId))];
+    const query = `id==(${ids.join(' or ')})`;
 
-          return map;
-        }, {});
+    if (ids.length) {
+      reset();
+      GET({ params: { query, limit: `${ids.length}` } })
+        .then((loanPolicies) => {
+          const loanPolicyObject = loanPolicies.reduce((map, loanPolicy) => {
+            map[loanPolicy.id] = loanPolicy.name;
 
-        if (this._isMounted) {
-          this.setState({ loanPolicies: loanPolicyObject });
-        }
-      });
+            return map;
+          }, {});
+
+          if (this._isMounted) {
+            this.setState({ loanPolicies: loanPolicyObject });
+          }
+        });
+    }
   };
 
   render() {
     const {
       bulkRenewalDialogOpen,
+      additionalInfo,
       renewSuccess,
       renewFailure,
       errorMsg,
@@ -346,6 +351,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
           {...this.props}
         />
         <this.connectedBulkRenewalDialog
+          additionalInfo={additionalInfo}
           user={user}
           stripes={stripes}
           errorMessages={errorMsg}

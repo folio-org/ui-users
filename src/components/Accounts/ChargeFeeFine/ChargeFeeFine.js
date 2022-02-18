@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import uuid from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import _ from 'lodash';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import moment from 'moment';
@@ -12,7 +12,6 @@ import {
   FormattedMessage,
   injectIntl,
 } from 'react-intl';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import ChargeForm from './ChargeForm';
 import ItemLookup from './ItemLookup';
 import ActionModal from '../Actions/ActionModal';
@@ -112,7 +111,7 @@ class ChargeFeeFine extends React.Component {
 
   onFormAccountData(type) {
     const owners = _.get(this.props.resources, ['owners', 'records'], []);
-    const feefines = _.get(this.props.resources, ['feefines', 'records'], []);
+    const feefines = _.get(this.props.resources, ['allfeefines', 'records'], []);
     const selectedLoan = this.props.selectedLoan || {};
     const { intl: { formatMessage } } = this.props;
     const item = (selectedLoan.id) ? selectedLoan.item : this.item;
@@ -133,9 +132,10 @@ class ChargeFeeFine extends React.Component {
     type.materialType = (item.materialType || {}).name;
     type.materialTypeId = (selectedLoan.id) ? undefined : (item.materialType || {}).id || undefined;
 
+    if (item.contributorNames) { type.contributors = item.contributorNames; }
     if (selectedLoan.dueDate) type.dueDate = selectedLoan.dueDate;
     if (selectedLoan.returnDate) type.returnedDate = selectedLoan.returnDate;
-    type.id = uuid();
+    type.id = uuidv4();
     type.loanId = selectedLoan.id;
     type.userId = this.props.user.id;
     type.itemId = this.item.id;
@@ -196,10 +196,11 @@ class ChargeFeeFine extends React.Component {
         userId: user.id,
         amountAction: parseFloat(amount || 0).toFixed(2),
         balance: parseFloat(balance || 0).toFixed(2),
-        transactionInformation: transaction || '-',
+        transactionInformation: transaction || '',
         comments: comment,
         notify,
       };
+
       mutator.feefineactions.POST(Object.assign(action, newAction));
     });
   }
@@ -215,6 +216,12 @@ class ChargeFeeFine extends React.Component {
       this.payResolve = resolve;
       this.payReject = reject;
     });
+  }
+
+  goBack = () => {
+    const { history } = this.props;
+
+    history.goBack();
   }
 
   onClosePayModal() {
@@ -234,8 +241,7 @@ class ChargeFeeFine extends React.Component {
     }
   }
 
-  onChangeOwner(e) {
-    const ownerId = e.target.value;
+  onChangeOwner(ownerId) {
     const {
       resources,
       mutator,
@@ -317,11 +323,11 @@ class ChargeFeeFine extends React.Component {
     const {
       intl: { formatMessage },
       okapi: {
+        currentUser,
         currentUser: {
           curServicePoint: { id: servicePointId }
         },
       },
-      user,
       mutator,
     } = this.props;
     const tagStaff = formatMessage({ id: 'ui-users.accounts.actions.tag.staff' });
@@ -353,10 +359,10 @@ class ChargeFeeFine extends React.Component {
         amount: values.amount,
         notifyPatron: values.notify,
         servicePointId,
-        userName: getFullName(user),
+        userName: `${currentUser.lastName}, ${currentUser.firstName}`,
         paymentMethod: values.method,
         comments: comment,
-        transactionInfo: values.transaction
+        transactionInfo: values?.transaction ?? '',
       };
 
       return mutator.pay.POST(payBody)
@@ -386,7 +392,7 @@ class ChargeFeeFine extends React.Component {
       ? formatMessage({ id: 'ui-users.accounts.status.partially' })
       : formatMessage({ id: 'ui-users.accounts.status.fully' }))} ${paymentStatus}`;
     return (
-      <SafeHTMLMessage
+      <FormattedMessage
         id="ui-users.accounts.confirmation.message"
         values={{ count: 1, amount, action: paymentStatus }}
       />
@@ -394,18 +400,19 @@ class ChargeFeeFine extends React.Component {
   }
 
   onSubmitCharge = (data) => {
-    const { history } = this.props;
-
     if (data.pay) {
       delete data.pay;
       this.type.remaining = data.amount;
-      this.chargeAction(data)
+
+      return this.chargeAction(data)
         .then(() => this.payAction(data))
-        .then(() => history.goBack());
+        .then(() => this.goBack());
     } else {
       delete data.pay;
-      this.chargeAction(data)
-        .then(() => history.goBack());
+
+      return this.chargeAction(data)
+        .then(() => this.showCalloutMessage(data))
+        .then(() => this.goBack());
     }
   }
 
@@ -420,6 +427,11 @@ class ChargeFeeFine extends React.Component {
       match: {
         params: { loanid },
       },
+      okapi: {
+        currentUser: {
+          curServicePoint,
+        }
+      },
     } = this.props;
     const {
       ownerId,
@@ -427,22 +439,24 @@ class ChargeFeeFine extends React.Component {
       pay,
     } = this.state;
     this.item = _.get(resources, ['items', 'records', [0]], {});
-    const allfeefines = _.get(resources, ['allfeefines', 'records'], []);
+    const feefines = _.get(resources, ['allfeefines', 'records'], []);
     const owners = _.get(resources, ['owners', 'records'], []);
     const list = [];
     const shared = owners.find(o => o.owner === 'Shared');
-    allfeefines.forEach(f => {
+    feefines.forEach(f => {
       if (!list.find(o => (o || {}).id === f.ownerId)) {
         const owner = owners.find(o => (o || {}).id === f.ownerId);
-        if (owner !== undefined) { list.push(owner); }
+
+        if (owner) {
+          list.push(owner);
+        }
       }
     });
-    const feefines = _.get(resources, ['allfeefines', 'records'], []);
-    const payments = _.get(resources, ['payments', 'records'], []).filter(p => p.ownerId === this.state.ownerId);
+    const payments = _.get(resources, ['payments', 'records'], []);
     const accounts = _.get(resources, ['accounts', 'records'], []);
     const settings = _.get(resources, ['commentRequired', 'records', 0], {});
     const barcode = _.get(resources, 'activeRecord.barcode');
-    const defaultServicePointId = _.get(resources, ['curUserServicePoint', 'records', 0, 'defaultServicePointId'], '-');
+    const defaultServicePointId = curServicePoint.id;
     const servicePointsIds = _.get(resources, ['curUserServicePoint', 'records', 0, 'servicePointsIds'], []);
     let selected = parseFloat(0);
     accounts.forEach(a => {
@@ -465,7 +479,7 @@ class ChargeFeeFine extends React.Component {
 
     const isPending = {
       owners: _.get(resources, ['owners', 'isPending'], false),
-      feefines: _.get(resources, ['feefines', 'isPending'], false),
+      feefines: _.get(resources, ['allfeefines', 'isPending'], false),
       servicePoints: _.get(resources, ['curUserServicePoint', 'isPending'], true)
     };
 
@@ -473,10 +487,11 @@ class ChargeFeeFine extends React.Component {
     const servicePointOwnerId = loadServicePoints({ owners: (shared ? owners : list), defaultServicePointId, servicePointsIds });
     const initialOwnerId = ownerId !== '0' ? ownerId : servicePointOwnerId;
     const selectedFeeFine = feefines.find(f => f.id === feeFineTypeId);
-    const currentOwnerFeeFineTypes = feefines.filter(f => f.ownerId === resources.activeRecord.ownerId);
+    const currentOwnerFeeFineTypes = feefines.filter(f => f.ownerId === initialOwnerId || f.ownerId === resources.activeRecord.shared);
     const selectedOwner = owners.find(o => o.id === initialOwnerId);
+
     const initialChargeValues = {
-      ownerId: resources.activeRecord.ownerId || '',
+      ownerId: initialOwnerId,
       notify: !!(selectedFeeFine?.chargeNoticeId || selectedOwner?.defaultChargeNoticeId),
       feeFineId: '',
       amount: ''
@@ -529,7 +544,7 @@ class ChargeFeeFine extends React.Component {
             initialValues={initialActionValues}
             open
             commentRequired={settings.paid}
-            onClose={this.onClosePayModal}
+            onClose={this.goBack}
             accounts={[this.type]}
             balance={this.type.amount}
             data={payments}

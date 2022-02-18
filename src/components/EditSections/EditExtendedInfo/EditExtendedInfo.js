@@ -1,8 +1,8 @@
+import { isEmpty } from 'lodash';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Field } from 'redux-form';
-
+import { Field } from 'react-final-form';
 import {
   TextField,
   Row,
@@ -13,6 +13,8 @@ import {
   Headline,
 } from '@folio/stripes/components';
 import { IfPermission } from '@folio/stripes/core';
+import { withFormValues } from '../../Wrappers';
+import asyncValidateField from '../../validators/asyncValidateField';
 
 import {
   addressTypesShape,
@@ -28,12 +30,15 @@ class EditExtendedInfo extends Component {
     addressTypes: addressTypesShape,
     expanded: PropTypes.bool.isRequired,
     departments: departmentsShape,
-    userId: PropTypes.string.isRequired,
-    userEmail: PropTypes.string.isRequired,
+    userId: PropTypes.string,
+    userEmail: PropTypes.string,
     accordionId: PropTypes.string.isRequired,
     userFirstName: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,
-    onToggle: PropTypes.func.isRequired,
+    onToggle: PropTypes.func,
+    change: PropTypes.func.isRequired,
+    values: PropTypes.object,
+    uniquenessValidator: PropTypes.object,
   };
 
   buildAccordionHeader = () => {
@@ -47,6 +52,23 @@ class EditExtendedInfo extends Component {
     );
   };
 
+  getAddresses = () => {
+    const { values } = this.props;
+    const addresses = values?.personal?.addresses ?? [];
+
+    return addresses.filter(address => !isEmpty(address)) ?? [];
+  }
+
+  getDefaultDeliveryAddressTypeId = () => {
+    const { values } = this.props;
+    return values?.requestPreferences?.defaultDeliveryAddressTypeId;
+  }
+
+  isDeliveryAvailable = () => {
+    const { values } = this.props;
+    return values?.requestPreferences?.delivery;
+  }
+
   render() {
     const {
       expanded,
@@ -58,10 +80,15 @@ class EditExtendedInfo extends Component {
       username,
       addressTypes,
       departments,
+      change,
+      uniquenessValidator,
     } = this.props;
 
     const accordionHeader = this.buildAccordionHeader();
     const isEditForm = !!userId;
+    const addresses = this.getAddresses();
+    const defaultDeliveryAddressTypeId = this.getDefaultDeliveryAddressTypeId();
+    const deliveryAvailable = this.isDeliveryAvailable();
 
     return (
       <Accordion
@@ -125,15 +152,26 @@ class EditExtendedInfo extends Component {
             md={6}
           >
             <Row>
-              <RequestPreferencesEdit addressTypes={addressTypes} />
+              <RequestPreferencesEdit
+                addressTypes={addressTypes}
+                addresses={addresses}
+                defaultDeliveryAddressTypeId={defaultDeliveryAddressTypeId}
+                deliveryAvailable={deliveryAvailable}
+                setFieldValue={change}
+              />
             </Row>
           </Col>
-          <Col
-            xs={12}
-            md={3}
-          >
-            <DepartmentsNameEdit departments={departments} />
-          </Col>
+          {departments.length
+            ? (
+              <Col
+                xs={12}
+                md={3}
+              >
+                <DepartmentsNameEdit departments={departments} />
+              </Col>
+            )
+            : null
+          }
         </Row>
         <Row>
           <Col
@@ -147,6 +185,7 @@ class EditExtendedInfo extends Component {
               component={TextField}
               fullWidth
               validStylesEnabled
+              validate={asyncValidateField('username', username, uniquenessValidator)}
             />
           </Col>
           <IfPermission perm="ui-users.reset.password">
@@ -168,4 +207,4 @@ class EditExtendedInfo extends Component {
   }
 }
 
-export default EditExtendedInfo;
+export default withFormValues(EditExtendedInfo);

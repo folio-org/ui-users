@@ -45,7 +45,7 @@ class OpenLoans extends React.Component {
       'dueDate': { max: 140 },
       'requests': { max: 90 },
       'barcode': { max: 135 },
-      'Fee/Fine': { max: 100 },
+      'feefineIncurred': { max: 100 },
       'callNumber': { max: 120 },
       'Contributors': { max: 160 },
       'renewals': { max: 70 },

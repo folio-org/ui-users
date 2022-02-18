@@ -2,16 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   first,
-  isEmpty,
 } from 'lodash';
 import { FormattedMessage } from 'react-intl';
 
 import { stripesConnect } from '@folio/stripes/core';
 import { LoadingView } from '@folio/stripes/components';
 
+import { MAX_RECORDS } from '../constants';
 import { calculateOwedFeeFines } from '../components/Accounts/accountFunctions';
-
 import { AccountDetails } from '../views';
+import {
+  filterConfig,
+  queryFunction,
+  args,
+} from './feeFineConfig';
+import { getContributors } from '../components/util';
 
 class AccountDetailsContainer extends React.Component {
   static manifest = Object.freeze({
@@ -39,28 +44,75 @@ class AccountDetailsContainer extends React.Component {
       path: 'accounts',
       params: {
         query: 'userId==:{id}',
-        limit: '1000',
+        limit: MAX_RECORDS,
       },
     },
     accountActions: {
       type: 'okapi',
       records: 'feefineactions',
       accumulate: 'true',
-      path: 'feefineactions?query=(accountId==:{accountid})&limit=10000',
+      path: `feefineactions?query=(accountId==:{accountid})&limit=${MAX_RECORDS}`,
+    },
+    feefineactions: {
+      type: 'okapi',
+      records: 'feefineactions',
+      path: `feefineactions?query=(userId==:{id})&limit=${MAX_RECORDS}`,
     },
     activeRecord: {
       accountId: '0',
       instanceId: '',
+      records: MAX_RECORDS,
     },
+    // Many fees and fines are associated with loans, so the loans are
+    // retrieved in order to show the corresponding policies (overdue
+    // fine policy, lost item policy) and the item's current status.
+    // But! Not _all_ fees and fines are associated with loans, and not
+    // all users may have permission to view loans. For that situation,
+    // using permissionRequired allows the AccountDetails page to function
+    // as-is; it simply doesn't receive any loan information.
     loans: {
       type: 'okapi',
       records: 'loans',
       path: 'circulation/loans?query=(userId==:{id})&limit=1000',
+      permissionsRequired: 'circulation.loans.collection.get',
     },
     instance: {
       type: 'okapi',
       path: 'instance-storage/instances/%{activeRecord.instanceId}',
-    }
+    },
+    query: { initialValue: {} },
+    feefineshistory: {
+      type: 'okapi',
+      records: 'accounts',
+      path: 'accounts',
+      recordsRequired: '%{activeRecord.records}',
+      perRequest: MAX_RECORDS,
+      GET: {
+        params: {
+          query: queryFunction(
+            'feeFineType=*',
+            'feeFineType="%{query.query}*" or barcode="%{query.query}*" or materialType="%{query.query}" or title="%{query.query}*    " or feeFineOwner="%{query.query}*" or paymentStatus.name="%{query.query}"',
+            { userId: 'userId' },
+            filterConfig,
+            0,
+            { query: 'q', filters: 'f' },
+            args,
+          ),
+        },
+        staticFallback: { params: {} },
+      },
+      shouldRefresh: (resource, action, refresh) => {
+        return refresh || action.meta.path === 'accounts-bulk';
+      },
+    },
+    // Service points are needed here to properly display SP name in <AccountDetails>
+    // for fees/fines assigned to an item during checkout.
+    servicePoints: {
+      type: 'okapi',
+      records: 'servicepoints',
+      path: 'service-points',
+      limit: 10000,
+    },
   });
 
   static propTypes = {
@@ -81,6 +133,9 @@ class AccountDetailsContainer extends React.Component {
       instance: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
+      feefineshistory: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
     }),
     match: PropTypes.shape({
       params: PropTypes.shape({
@@ -93,6 +148,18 @@ class AccountDetailsContainer extends React.Component {
         update: PropTypes.func.isRequired
       }).isRequired
     }),
+  }
+
+  componentDidMount() {
+    const {
+      match: {
+        params,
+      },
+    } = this.props;
+
+    this.props.mutator.activeRecord.update({ records: 50, userId: params.id });
+
+    args[0].value = params.id;
   }
 
   getUser = () => {
@@ -158,9 +225,7 @@ class AccountDetailsContainer extends React.Component {
       ? first(resources?.instance?.records)
       : [];
     const loanRecords = resources?.loans?.records ?? [];
-    const contributors = !isEmpty(instance)
-      ? instance.contributors.map(({ name }) => name.split(',').reverse().join(', '))
-      : [];
+    const contributors = getContributors(account, instance);
     const loanId = account?.loanId;
 
     if (loanId === '0') return { contributors };
@@ -170,6 +235,7 @@ class AccountDetailsContainer extends React.Component {
     const overdueFinePolicyId = currentRecord[0]?.overdueFinePolicyId;
     const lostItemPolicyName = currentRecord[0]?.lostItemPolicy?.name;
     const lostItemPolicyId = currentRecord[0]?.lostItemPolicyId;
+    const statusItemName = currentRecord[0]?.item.status?.name;
 
     return {
       overdueFinePolicyId,
@@ -177,6 +243,7 @@ class AccountDetailsContainer extends React.Component {
       contributors,
       overdueFinePolicyName,
       lostItemPolicyName,
+      statusItemName,
     };
   }
 

@@ -7,7 +7,10 @@ export default (server) => {
       'parameters' : [{
         'key' : 'request id',
         'value' : 'b67e73a8-b6b7-46fd-a918-77ce907dd3aa'
-      }]
+      }],
+      'overridableBlock' : {
+        'name' : 'renewalBlock'
+      }
     }]
   }, 422);
 };

@@ -3,34 +3,39 @@ import { FormattedMessage } from 'react-intl';
 
 const commands = [
   {
-    name: 'save',
-    label: (<FormattedMessage id="ui-users.saveAndClose" />),
-    shortcut: 'mod+s',
-  },
-  {
     name: 'new',
-    label: (<FormattedMessage id="ui-users.new" />),
+    label: (<FormattedMessage id="ui-users.shortcut.createRecord" />),
     shortcut: 'alt+n',
   },
   {
-    name: 'search',
-    label: (<FormattedMessage id="ui-users.search" />),
-    shortcut: 'mod+alt+h',
-  },
-  {
     name: 'edit',
-    label: (<FormattedMessage id="ui-users.edit" />),
+    label: (<FormattedMessage id="ui-users.shortcut.editRecord" />),
     shortcut: 'mod+alt+e',
   },
   {
+    name: 'save',
+    label: (<FormattedMessage id="ui-users.shortcut.saveRecord" />),
+    shortcut: 'mod+s',
+  },
+  {
     name: 'expandAllSections',
-    label: (<FormattedMessage id="ui-users.expandAll" />),
+    label: (<FormattedMessage id="ui-users.shortcut.expandAll" />),
     shortcut: 'mod+alt+b'
   },
   {
     name: 'collapseAllSections',
-    label: (<FormattedMessage id="ui-users.collapseAll" />),
+    label: (<FormattedMessage id="ui-users.shortcut.collapseAll" />),
     shortcut: 'mod+alt+g'
+  },
+  {
+    name: 'search',
+    label: (<FormattedMessage id="ui-users.shortcut.goToSearchFilter" />),
+    shortcut: 'mod+alt+h',
+  },
+  {
+    name: 'openShortcutModal',
+    label: (<FormattedMessage id="ui-users.shortcut.openShortcutModal" />),
+    shortcut: 'mod+alt+k',
   }
 ];
 

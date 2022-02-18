@@ -91,6 +91,8 @@ import CalloutInteractor from '@folio/stripes-components/lib/Callout/tests/inter
   openFeesFines = text('#clickable-viewcurrentaccounts');
   closedFeesFines = text('#clickable-viewclosedaccounts');
   allFeesFines = text('#clickable-viewallaccounts');
+  claimFeesFines = text('#no-clickable-claim');
+  refundedFeesFines = text('#no-clickable-refunded');
 
   accountActionIsPresent = isPresent('#paneHeaderpane-account-action-history-pane-title');
   ellipsisMenuIsPresent = isPresent('#OverlayContainer #ellipsis-drop-down');
@@ -129,6 +131,8 @@ import CalloutInteractor from '@folio/stripes-components/lib/Callout/tests/inter
   waiveButton = new ButtonInteractor('#open-closed-all-wave-button');
   transferButton = new ButtonInteractor('#open-closed-all-transfer-button');
   refundButton = new ButtonInteractor('#open-closed-all-refund-button');
+  exportButton = new ButtonInteractor('#fee-fine-report-export-button');
+  exportButtonIsDisabled = is('#fee-fine-report-export-button[disabled]');
   searchField = new SearchFieldInteractor('[class*=searchFieldWrap---]');
   checkList = collection('[class*=filterList---] [class*=listItem---]', CheckboxInteractor);
   col = new CheckboxInteractor('#column-item-0');

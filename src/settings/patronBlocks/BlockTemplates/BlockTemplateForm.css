@@ -1,0 +1,8 @@
+.BlockTemplateFormRoot {
+  height: 100%;
+}
+
+.BlockTemplateFormContent {
+  margin: 0 auto;
+  max-width: 50em;
+}

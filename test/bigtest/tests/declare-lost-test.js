@@ -11,6 +11,8 @@ import DummyComponent from '../helpers/DummyComponent';
 import OpenLoansInteractor from '../interactors/open-loans';
 import LoanActionsHistory from '../interactors/loan-actions-history';
 
+import translations from '../../../translations/ui-users/en';
+
 describe('Declare Lost', () => {
   const requestsPath = '/requests';
   const requestsAmount = 5;
@@ -144,6 +146,44 @@ describe('Declare Lost', () => {
               expect(OpenLoansInteractor.declareLostDialog.isPresent).to.be.false;
             });
           });
+
+          describe('when no fee/fine owner found', () => {
+            const errorMessage = 'No fee/fine owner found for item\'s permanent location';
+
+            beforeEach(async function () {
+              this.server.post(`/circulation/loans/${loan.id}/declare-item-lost`, () => {
+                return new Response(422, { 'Content-Type': 'application/json' }, {
+                  errors: [{
+                    message: errorMessage,
+                  }]
+                });
+              });
+
+              await OpenLoansInteractor.declareLostDialog.confirmButton.click();
+            });
+
+            it('should display error modal', () => {
+              expect(OpenLoansInteractor.errorModal.isPresent).to.be.true;
+            });
+
+            it('error modal should have title', () => {
+              expect(OpenLoansInteractor.errorModal.headline).to.equal(translations['feefines.errors.notBilledTitle']);
+            });
+
+            it('error modal should have content', () => {
+              expect(OpenLoansInteractor.errorModal.content).to.include(translations['feefines.errors.updateOwnerMessage']);
+            });
+
+            describe('clicking close button', () => {
+              beforeEach(async () => {
+                await OpenLoansInteractor.errorModal.closeButton.click();
+              });
+
+              it('should not display error modal', () => {
+                expect(OpenLoansInteractor.errorModal.isPresent).to.be.false;
+              });
+            });
+          });
         });
       });
     });
@@ -261,9 +301,10 @@ describe('Declare Lost', () => {
         await OpenLoansInteractor.declareLostDialog.additionalInfoTextArea.fill('item lost');
         await OpenLoansInteractor.declareLostDialog.confirmButton.click();
       });
-      it('should update fine incurred amount', () => {
-        expect(LoanActionsHistory.feeFines.text).to.equal('250.00');
-      });
+    });
+
+    it('should update fine incurred amount', () => {
+      expect(LoanActionsHistory.feeFines.text).to.equal('-');
     });
   });
 

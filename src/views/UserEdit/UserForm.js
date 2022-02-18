@@ -1,10 +1,9 @@
-import cloneDeep from 'lodash/cloneDeep';
+import isEqual from 'lodash/isEqual';
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
-import { FormattedMessage } from 'react-intl';
-import { get } from 'lodash';
-import { Field } from 'redux-form';
+import { injectIntl, FormattedMessage } from 'react-intl';
+import { Field, FormSpy } from 'react-final-form';
+import setFieldData from 'final-form-set-field-data';
 
 import { AppIcon } from '@folio/stripes/core';
 import {
@@ -15,15 +14,15 @@ import {
   PaneFooter,
   Button,
   ExpandAllButton,
-  expandAllFunction,
   Row,
   Col,
   Headline,
   AccordionSet,
+  AccordionStatus,
   HasCommand,
 } from '@folio/stripes/components';
 import { EditCustomFieldsRecord } from '@folio/stripes/smart-components';
-import stripesForm from '@folio/stripes/form';
+import stripesFinalForm from '@folio/stripes/final-form';
 
 import {
   EditUserInfo,
@@ -40,12 +39,17 @@ import {
   permissionTypeFilterConfig,
 } from '../../components/PermissionsAccordion/helpers/filtersConfig';
 import { addressTypesShape } from '../../shapes';
+import getProxySponsorWarning from '../../components/util/getProxySponsorWarning';
 
 import css from './UserForm.css';
 
 function validate(values, props) {
   const errors = {};
   errors.personal = {};
+
+  if (!props) {
+    return errors;
+  }
 
   if (!values.personal || !values.personal.lastName) {
     errors.personal.lastName = <FormattedMessage id="ui-users.errors.missingRequiredField" />;
@@ -83,123 +87,6 @@ function validate(values, props) {
   return errors;
 }
 
-/**
- * getProxySponsorWarning
- * Return a warning for the given namespace-index pair if any one of these
- * conditions is true:
- *
- * 1. the current user is expired
- * 2. the proxy or sponsor is expired
- * 3. the proxy relationship itself is expired
- *
- * Return an empty string otherwise.
- *
- * Sometimes, a date is just a date and you don't care about the time. If
- * Harry Potter were born at 12:30 a.m. on July 31 in London, there wouldn't
- * be anybody in Boston claiming his birthday was July 30 because it's only
- * 8:30 p.m. in Boston. July 31 is July 31, end of story. Thus, the `day`
- * modifier to all the date comparisons here; we DO NOT CARE about the time.
- *
- * @param object values all form values
- * @param enum namespace one of `proxies` or `sponsors`
- * @param int index index into the array
- *
- * @return empty string indicates no warnings; a string contains a warning message.
- */
-function getProxySponsorWarning(values, namespace, index) {
-  const proxyRel = values[namespace][index] || {};
-  const today = moment().endOf('day');
-  let warning = '';
-
-  // proxy/sponsor user expired
-  if (get(proxyRel, 'user.expirationDate') && moment(proxyRel.user.expirationDate).isSameOrBefore(today, 'day')) {
-    warning = <FormattedMessage id={`ui-users.errors.${namespace}.expired`} />;
-  }
-
-  // current user expired
-  if (values.expirationDate && moment(values.expirationDate).isSameOrBefore(today, 'day')) {
-    warning = <FormattedMessage id="ui-users.errors.currentUser.expired" />;
-  }
-
-  // proxy relationship expired
-  if (get(proxyRel, 'proxy.expirationDate') &&
-    moment(proxyRel.proxy.expirationDate).isSameOrBefore(today, 'day')) {
-    warning = <FormattedMessage id="ui-users.errors.proxyrelationship.expired" />;
-  }
-
-  return warning;
-}
-
-function warn(values, props) {
-  const warnings = {};
-
-  // note: warnings derived from any field in a proxy-sponsor relationship
-  // are always displayed on the `status` field. `props.touch` is necessary
-  // in order to trigger validation of the status field and thus show the
-  // new warning that has been attached to it.
-  ['sponsors', 'proxies'].forEach(namespace => {
-    if (values[namespace]) {
-      values[namespace].forEach((item, index) => {
-        const warning = getProxySponsorWarning(values, namespace, index);
-        if (warning) {
-          if (!warnings[namespace]) {
-            warnings[namespace] = [];
-          }
-          warnings[namespace][index] = { proxy: { status: warning } };
-          props.touch(`${namespace}[${index}].proxy.status`);
-        }
-      });
-    }
-  });
-
-  return warnings;
-}
-
-function asyncValidateField(field, value, validator) {
-  return new Promise((resolve, reject) => {
-    const query = `(${field}=="${value}")`;
-    validator.reset();
-
-    return validator.GET({ params: { query } }).then((users) => {
-      if (users.length > 0) {
-        const error = { [field]: <FormattedMessage id={`ui-users.errors.${field}Unavailable`} /> };
-        return reject(error);
-      } else {
-        return resolve();
-      }
-    });
-  });
-}
-
-function asyncValidate(values, dispatch, props, blurredField) {
-  const { uniquenessValidator, initialValues } = props;
-  const { username, barcode } = values;
-  if (username) {
-    values.username = username.trim();
-  }
-  const curValue = values[blurredField];
-  const prevValue = initialValues[blurredField];
-
-  // validate on blur
-  if (blurredField && curValue && curValue !== prevValue) {
-    return asyncValidateField(blurredField, curValue, uniquenessValidator);
-  }
-
-  const promises = [];
-
-  // validate on submit
-
-  if (username !== initialValues.username) {
-    promises.push(asyncValidateField('username', username, uniquenessValidator));
-  }
-
-  if (barcode && barcode !== initialValues.barcode) {
-    promises.push(asyncValidateField('barcode', barcode, uniquenessValidator));
-  }
-
-  return Promise.all(promises);
-}
-
 class UserForm extends React.Component {
   static propTypes = {
     change: PropTypes.func,
@@ -219,8 +106,10 @@ class UserForm extends React.Component {
     onCancel: PropTypes.func.isRequired,
     onSubmit: PropTypes.func.isRequired,
     initialValues: PropTypes.object.isRequired,
-    servicePoints: PropTypes.object.isRequired,
+    servicePoints: PropTypes.object,
     stripes: PropTypes.object,
+    form: PropTypes.object, // provided by final-form
+    intl: PropTypes.object,
   };
 
   static defaultProps = {
@@ -231,17 +120,8 @@ class UserForm extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      sections: {
-        editUserInfo: true,
-        extendedInfo: true,
-        contactInfo: true,
-        proxyAccordion: false,
-        permissions: false,
-        servicePoints: false,
-        customFields: true,
-      },
-    };
+
+    this.accordionStatusRef = React.createRef();
 
     this.closeButton = React.createRef();
     this.saveButton = React.createRef();
@@ -295,25 +175,19 @@ class UserForm extends React.Component {
   }
 
   getAddFirstMenu() {
+    const { intl } = this.props;
+
     return (
       <PaneMenu>
-        <FormattedMessage id="ui-users.crud.closeNewUserDialog">
-          {ariaLabel => (
-            <PaneHeaderIconButton
-              id="clickable-closenewuserdialog"
-              onClick={this.handleCancel}
-              ref={this.closeButton}
-              aria-label={ariaLabel}
-              icon="times"
-            />
-          )}
-        </FormattedMessage>
+        <PaneHeaderIconButton
+          id="clickable-closenewuserdialog"
+          onClick={this.handleCancel}
+          ref={this.closeButton}
+          aria-label={intl.formatMessage({ id: 'ui-users.crud.closeNewUserDialog' })}
+          icon="times"
+        />
       </PaneMenu>
     );
-  }
-
-  handleExpandAll = (sections) => {
-    this.setState({ sections });
   }
 
   ignoreEnterKey = (e) => {
@@ -327,35 +201,6 @@ class UserForm extends React.Component {
       e.preventDefault();
     }
   };
-
-  handleSectionToggle = ({ id }) => {
-    this.setState((curState) => {
-      const newState = cloneDeep(curState);
-      newState.sections[id] = !newState.sections[id];
-
-      return newState;
-    });
-  }
-
-  toggleAllSections = (expand) => {
-    this.setState((curState) => {
-      const newSections = expandAllFunction(curState.sections, expand);
-
-      return {
-        sections: newSections
-      };
-    });
-  }
-
-  expandAllSections = (e) => {
-    e.preventDefault();
-    this.toggleAllSections(true);
-  }
-
-  collapseAllSections = (e) => {
-    e.preventDefault();
-    this.toggleAllSections(false);
-  }
 
   handleSaveKeyCommand = (e) => {
     e.preventDefault();
@@ -446,12 +291,14 @@ class UserForm extends React.Component {
       initialValues,
       handleSubmit,
       formData,
-      change, // from redux-form...
       servicePoints,
       onCancel,
+      stripes,
+      form,
+      uniquenessValidator,
     } = this.props;
 
-    const { sections } = this.state;
+    const selectedPatronGroup = form.getFieldState('patronGroup')?.value;
     const firstMenu = this.getAddFirstMenu();
     const footer = this.getPaneFooter();
     const fullName = getFullName(initialValues);
@@ -480,116 +327,139 @@ class UserForm extends React.Component {
                 </span>
               }
               onClose={onCancel}
+              defaultWidth="fill"
             >
-              <Headline
-                size="xx-large"
-                tag="h2"
-                data-test-header-title
-              >
-                {fullName}
-              </Headline>
-              <Row end="xs">
-                <Col xs>
-                  <ExpandAllButton
-                    accordionStatus={sections}
-                    onToggle={this.handleExpandAll}
+              {fullName && (
+                <Headline
+                  size="xx-large"
+                  tag="h2"
+                  data-test-header-title
+                >
+                  {fullName}
+                </Headline>
+              )}
+              <AccordionStatus ref={this.accordionStatusRef}>
+                <Row end="xs">
+                  <Col xs>
+                    <ExpandAllButton />
+                  </Col>
+                </Row>
+                <AccordionSet
+                  initialStatus={{
+                    editUserInfo: true,
+                    extendedInfo: true,
+                    contactInfo: true,
+                    proxy: false,
+                    permissions: false,
+                    servicePoints: false,
+                    customFields: true,
+                  }}
+                >
+                  <EditUserInfo
+                    accordionId="editUserInfo"
+                    initialValues={initialValues}
+                    patronGroups={formData.patronGroups}
+                    stripes={stripes}
+                    form={form}
+                    selectedPatronGroup={selectedPatronGroup}
+                    uniquenessValidator={uniquenessValidator}
                   />
-                </Col>
-              </Row>
-              <AccordionSet>
-                <EditUserInfo
-                  accordionId="editUserInfo"
-                  expanded={sections.editUserInfo}
-                  onToggle={this.handleSectionToggle}
-                  initialValues={initialValues}
-                  patronGroups={formData.patronGroups}
-                />
-                <EditExtendedInfo
-                  accordionId="extendedInfo"
-                  expanded={sections.extendedInfo}
-                  onToggle={this.handleSectionToggle}
-                  userId={initialValues.id}
-                  userFirstName={initialValues.personal.firstName}
-                  userEmail={initialValues.personal.email}
-                  username={initialValues.username}
-                  servicePoints={servicePoints}
-                  addressTypes={formData.addressTypes}
-                  departments={formData.departments}
-                />
-                <EditContactInfo
-                  accordionId="contactInfo"
-                  expanded={sections.contactInfo}
-                  onToggle={this.handleSectionToggle}
-                  addressTypes={formData.addressTypes}
-                  preferredContactTypeId={initialValues.preferredContactTypeId}
-                />
-                <EditCustomFieldsRecord
-                  formName="userForm"
-                  isReduxForm
-                  accordionId="customFields"
-                  onToggle={this.handleSectionToggle}
-                  expanded={sections.customFields}
-                  backendModuleName="users"
-                  entityType="user"
-                  fieldComponent={Field}
-                />
-                {initialValues.id &&
-                  <div>
-                    <EditProxy
-                      accordionId="proxyAccordion"
-                      expanded={sections.proxy}
-                      onToggle={this.handleSectionToggle}
-                      sponsors={initialValues.sponsors}
-                      proxies={initialValues.proxies}
-                      fullName={fullName}
-                      change={change}
-                      initialValues={initialValues}
-                      getWarning={getProxySponsorWarning}
-                    />
-                    <PermissionsAccordion
-                      filtersConfig={[
-                        permissionTypeFilterConfig,
-                        statusFilterConfig,
-                      ]}
-                      visibleColumns={[
-                        'selected',
-                        'permissionName',
-                        'type',
-                        'status',
-                      ]}
-                      accordionId="permissions"
-                      expanded={sections.permissions}
-                      onToggle={this.handleSectionToggle}
-                      headlineContent={<FormattedMessage id="ui-users.permissions.userPermissions" />}
-                      permToRead="perms.users.get"
-                      permToDelete="perms.users.item.delete"
-                      permToModify="perms.users.item.put"
-                      formName="userForm"
-                      permissionsField="permissions"
-                    />
-                    <EditServicePoints
-                      accordionId="servicePoints"
-                      expanded={sections.servicePoints}
-                      onToggle={this.handleSectionToggle}
-                      {...this.props}
-                    />
-                  </div>
-                }
-              </AccordionSet>
+                  <EditExtendedInfo
+                    accordionId="extendedInfo"
+                    expanded
+                    userId={initialValues.id}
+                    userFirstName={initialValues.personal.firstName}
+                    userEmail={initialValues.personal.email}
+                    username={initialValues.username}
+                    servicePoints={servicePoints}
+                    addressTypes={formData.addressTypes}
+                    departments={formData.departments}
+                    uniquenessValidator={uniquenessValidator}
+                  />
+                  <EditContactInfo
+                    accordionId="contactInfo"
+                    addressTypes={formData.addressTypes}
+                    preferredContactTypeId={initialValues.preferredContactTypeId}
+                  />
+                  <EditCustomFieldsRecord
+                    expanded
+                    formName="userForm"
+                    accordionId="customFields"
+                    backendModuleName="users"
+                    entityType="user"
+                    finalFormCustomFieldsValues={form.getState().values.customFields}
+                    fieldComponent={Field}
+                    changeFinalFormField={form.change}
+                  />
+                  {initialValues.id &&
+                    <div>
+                      <EditProxy
+                        accordionId="proxy"
+                        sponsors={initialValues.sponsors}
+                        proxies={initialValues.proxies}
+                        fullName={fullName}
+                      />
+                      <PermissionsAccordion
+                        initialValues={initialValues}
+                        filtersConfig={[
+                          permissionTypeFilterConfig,
+                          statusFilterConfig,
+                        ]}
+                        visibleColumns={[
+                          'selected',
+                          'permissionName',
+                          'type',
+                          'status',
+                        ]}
+                        accordionId="permissions"
+                        headlineContent={<FormattedMessage id="ui-users.permissions.userPermissions" />}
+                        permToRead="perms.users.get"
+                        permToDelete="perms.users.item.delete"
+                        permToModify="perms.users.item.put"
+                        formName="userForm"
+                        permissionsField="permissions"
+                        form={form}
+                      />
+                      <EditServicePoints
+                        accordionId="servicePoints"
+                        {...this.props}
+                      />
+                    </div>
+                  }
+                </AccordionSet>
+              </AccordionStatus>
             </Pane>
           </Paneset>
+          <FormSpy
+            subscription={{ values: true }}
+            onChange={({ values }) => {
+              const { mutators } = form;
+
+              ['sponsors', 'proxies'].forEach(namespace => {
+                if (values[namespace]) {
+                  values[namespace].forEach((_, index) => {
+                    const warning = getProxySponsorWarning(values, namespace, index);
+
+                    if (warning) {
+                      mutators.setFieldData(`${namespace}[${index}].proxy.status`, { warning });
+                    }
+                  });
+                }
+              });
+            }}
+          />
         </form>
       </HasCommand>
     );
   }
 }
 
-export default stripesForm({
-  form: 'userForm',
+export default stripesFinalForm({
   validate,
-  warn,
-  asyncValidate,
-  asyncBlurFields: ['username', 'barcode'],
+  mutators: {
+    setFieldData,
+  },
+  initialValuesEqual: (a, b) => isEqual(a, b),
   navigationCheck: true,
   enableReinitialize: true,
-})(UserForm);
+})(injectIntl(UserForm));

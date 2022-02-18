@@ -8,8 +8,11 @@ import {
 } from '@bigtest/react';
 import { expect } from 'chai';
 
+import translations from '../../../translations/ui-users/en';
 import setupApplication from '../helpers/setup-application';
 import ChargeFeeFineInteractor from '../interactors/charge-fee-fine';
+import FeeFineHistoryInteractor from '../interactors/fee-fine-history';
+import FeeFineDetails from '../interactors/fee-fine-details';
 
 describe('Charge and pay fee/fine', () => {
   const chargeFeeFine = new ChargeFeeFineInteractor();
@@ -21,6 +24,7 @@ describe('Charge and pay fee/fine', () => {
 
   describe('from the user detail view', () => {
     let user;
+    let account;
     beforeEach(async function () {
       const owner = this.server.create('owner', {
         owner: 'testOwner',
@@ -37,7 +41,7 @@ describe('Charge and pay fee/fine', () => {
         defaultAmount: 500
       });
       user = this.server.create('user');
-      const account = this.server.create('account', { userId: user.id });
+      account = this.server.create('account', { userId: user.id, loanId: '' });
       this.server.create('feefineaction', {
         accountId: account.id,
         amountAction: 500,
@@ -127,13 +131,29 @@ describe('Charge and pay fee/fine', () => {
                 expect(chargeFeeFine.confirmationModal.body.isPresent).to.be.true;
               });
 
-              describe('confirm fine payment', () => {
+              describe.skip('confirm fine payment', () => {
                 beforeEach(async () => {
                   await chargeFeeFine.confirmationModal.confirmButton.click();
                 });
 
                 it('show successfull callout', () => {
                   expect(chargeFeeFine.callout.successCalloutIsPresent).to.be.true;
+                });
+
+                describe('visit created Fee/Fine details page', () => {
+                  beforeEach(function () {
+                    visit(`/users/${user.id}/accounts/view/${account.id}`);
+                  });
+
+                  it('displays source of fee/fine', () => {
+                    expect(FeeFineHistoryInteractor.mclAccountActions.rows(0).cells(6).content).to.equal('User, Test');
+                    expect(FeeFineHistoryInteractor.mclAccountActions.rows(1).cells(6).content).to.equal('User, Test');
+                  });
+
+                  it('displays loan details', () => {
+                    expect(FeeFineDetails.loanDetails.label.text).to.equal(translations['details.label.loanDetails']);
+                    expect(FeeFineDetails.loanDetails.value.text).to.equal('-');
+                  });
                 });
               });
             });

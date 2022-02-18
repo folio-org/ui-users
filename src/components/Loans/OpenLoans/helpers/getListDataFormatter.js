@@ -23,6 +23,7 @@ export default function getListDataFormatter(
   getFeeFine,
   getContributorslist,
   feeFineCount,
+  user,
 ) {
   return {
     '  ' : {
@@ -33,6 +34,7 @@ export default function getListDataFormatter(
           onClick={e => toggleItem(e, loan)}
           onChange={e => toggleItem(e, loan)}
           type="checkbox"
+          aria-label={formatMessage({ id: 'ui-users.loans.rows.select' })}
         />
       ),
     },
@@ -61,10 +63,10 @@ export default function getListDataFormatter(
       formatter: loan => get(loan, ['item', 'barcode'], ''),
       sorter: loan => get(loan, ['item', 'barcode']),
     },
-    'feefine': {
-      key:'Fee/Fine',
-      view: formatMessage({ id: 'ui-users.loans.columns.feefine' }),
-      formatter: loan => getFeeFine(loan, resources),
+    'feefineIncurred': {
+      key:'feefineIncurred',
+      view: formatMessage({ id: 'ui-users.loans.columns.feefineIncurred' }),
+      formatter:  loan => (<div data-test-feefine-incurred>{getFeeFine(loan, resources)}</div>),
       sorter: loan => getFeeFine(loan, resources),
     },
     'loanDate': {
@@ -150,6 +152,7 @@ export default function getListDataFormatter(
               itemRequestCount={itemRequestCount}
               disableFeeFineDetails={disableFeeFineDetails}
               handleOptionsChange={handleOptionsChange}
+              user={user}
             />
           </div>
         );

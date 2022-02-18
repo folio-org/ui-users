@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  get,
   mapKeys,
   pickBy,
   remove,
@@ -111,11 +110,20 @@ class PermissionsModal extends React.Component {
   constructor(props) {
     super(props);
 
+    this._isMounted = false;
+
     this.state = {
-      filterPaneIsVisible: true,
+      // There are two 'permissions' vars in play here:
+      // `allPermissions` is intended to be a fixed copy of the records from the
+      // availablePermissions resource. Using this as a source of truth prevents
+      // the permissions duplication problem specified in UIU-2496.
+      // `permissions` begins as a second copy of the resource records, but it can
+      // change in response to a search query.
+      allPermissions: [],
       permissions: [],
-      filters: getInitialFiltersState(props.filtersConfig),
-      assignedPermissionIds: props.assignedPermissions.map(({ id }) => id)
+      assignedPermissionIds: [],
+      filterPaneIsVisible: true,
+      filters: getInitialFiltersState(props.filtersConfig)
     };
   }
 
@@ -129,15 +137,29 @@ class PermissionsModal extends React.Component {
       }
     } = this.props;
 
+    this._isMounted = true;
+
     await reset();
     const permissions = await GET();
 
-    this.setState({ permissions });
+    // don't set state if the component has unmounted,
+    // which it may have since this function is async
+    if (this._isMounted) {
+      this.setState({
+        allPermissions: permissions,
+        permissions,
+        assignedPermissionIds: this.props.assignedPermissions.map(({ id }) => id)
+      });
+    }
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   // Search for permissions
   onSubmitSearch = (searchText) => {
-    const permissions = this.props.resources?.availablePermissions?.records || [];
+    const permissions = this.state.allPermissions || [];
     // Need a bit of extra work to search for terms that might appear only in a translated label
     const translationResults = this.getMatchedTranslations(searchText, permissions);
 
@@ -165,7 +187,18 @@ class PermissionsModal extends React.Component {
     // in the translation key, e.g. ui-users.permission.loans.all, before looking for the
     // search query.
     const matchedPermTranslations = pickBy(translations, (label, key) => {
-      return /\.permission\./.test(key) && label.toLowerCase().match(query.toLowerCase());
+      // non-AST translations are key-value pairs and the value is a string.
+      // AST-ified translations are key-value pairs and the value is an array.
+      // when that array has only a single element, it contains an object with
+      // the property "value" that contains the translation value.
+      // multi-value arrays correspond to translations with substitutions, html, etc.,
+      // but those are not relevent here.
+      if (typeof label === 'string') {
+        return /\.permission\./.test(key) && label.toLowerCase().match(query.toLowerCase());
+      } else if (Array.isArray(label) && label.length === 1) {
+        return /\.permission\./.test(key) && label[0].value.toLowerCase().match(query.toLowerCase());
+      }
+      return false;
     });
 
     // Matched permissions may not have a displayName value. We have to compare a permission's
@@ -214,15 +247,24 @@ class PermissionsModal extends React.Component {
   };
 
   onSave = () => {
-    const { assignedPermissionIds } = this.state;
+    const {
+      allPermissions,
+      assignedPermissionIds,
+    } = this.state;
     const {
       addPermissions,
+      assignedPermissions,
       onClose,
     } = this.props;
-    const permissions = get(this.props, 'resources.availablePermissions.records', []);
-    const filteredPermissions = permissions.filter(({ id }) => assignedPermissionIds.includes(id));
+    const filteredPermissions = allPermissions.filter(({ id }) => assignedPermissionIds.includes(id));
 
-    addPermissions(filteredPermissions);
+    // Invisible permissions assigned to a user are lost in the permissions selection process,
+    // so we want to make sure that they get saved along with any visible selections. This renders
+    // it impossible to *remove* invisible permissions in the UI, but that's probably better
+    // than making it impossible to *keep* invisible permissions in the UI.
+    const invisiblePermissions = assignedPermissions.filter(p => !p.visible);
+
+    addPermissions([...filteredPermissions, ...invisiblePermissions]);
     onClose();
   };
 
@@ -243,12 +285,14 @@ class PermissionsModal extends React.Component {
   };
 
   resetSearchForm = () => {
-    const permissions = get(this.props, 'resources.availablePermissions.records', []);
+    this.setState(prevState => {
+      const permissions = prevState.allPermissions || [];
 
-    this.setState({
-      filters: {},
-      permissions,
-      assignedPermissionIds: this.props.assignedPermissions.map(({ id }) => id),
+      return ({
+        filters: {},
+        permissions,
+        assignedPermissionIds: this.props.assignedPermissions.map(({ id }) => id)
+      });
     });
   };
 

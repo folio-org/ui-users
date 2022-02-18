@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _, { get, isEmpty, isNil } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -14,7 +14,8 @@ import {
   PaneHeaderIconButton,
   TextArea,
   Checkbox,
-  Datepicker
+  Datepicker,
+  Selection
 } from '@folio/stripes/components';
 import {
   AppIcon,
@@ -32,6 +33,8 @@ import {
 import { getFullName } from '../util';
 import UserInfo from '../Accounts/ChargeFeeFine/UserInfo';
 
+import css from './PatronBlockForm.css';
+
 const showValidationErrors = ({
   desc,
   borrowing,
@@ -40,21 +43,28 @@ const showValidationErrors = ({
   expirationDate,
 }) => {
   const errors = {};
-  const patronBlockError = <FormattedMessage id="ui-users.blocks.form.validate.any" />;
 
   if (!desc) {
     errors.desc = <FormattedMessage id="ui-users.blocks.form.validate.desc" />;
   }
   if (!borrowing && !renewals && !requests) {
-    errors.borrowing = patronBlockError;
-    errors.renewals = patronBlockError;
-    errors.requests = patronBlockError;
+    errors.borrowing = ' ';
+    errors.renewals = ' ';
+    errors.requests = ' ';
   }
-  if (moment(moment(expirationDate).endOf('day')).isBefore(moment().endOf('day'))) {
+  if (expirationDate && moment(moment(expirationDate).endOf('day')).isBefore(moment().endOf('day').add(1, 'days'))) {
     errors.expirationDate = <FormattedMessage id="ui-users.blocks.form.validate.future" />;
   }
 
   return errors;
+};
+
+const BLOCK_TEMPLATE_FIELDS_MAP = {
+  'desc': 'blockTemplate.desc',
+  'patronMessage': 'blockTemplate.patronMessage',
+  'borrowing': 'blockTemplate.borrowing',
+  'renewals': 'blockTemplate.renewals',
+  'requests': 'blockTemplate.requests',
 };
 
 class PatronBlockForm extends React.Component {
@@ -71,6 +81,12 @@ class PatronBlockForm extends React.Component {
     intl: PropTypes.object.isRequired,
     stripes: PropTypes.object,
     initialValues: PropTypes.object,
+    blockTemplates: PropTypes.arrayOf(PropTypes.shape()),
+    form: PropTypes.shape({
+      batch: PropTypes.func.isRequired,
+      change: PropTypes.func.isRequired,
+      getRegisteredFields: PropTypes.func.isRequired,
+    }).isRequired,
   };
 
   constructor(props) {
@@ -142,6 +158,47 @@ class PatronBlockForm extends React.Component {
     );
   }
 
+  getBlockTemplatesForSelect = (blockTemplates) => {
+    const empty = { label: '', value: null };
+
+    const options = blockTemplates.map(b => (
+      {
+        value: b.id,
+        label: b.code ? `${b.name} (${b.code})` : b.name
+      }
+    )).sort((a, b) => a.label.localeCompare(b.label));
+    return [empty, ...options];
+  }
+
+  onChangeTemplate = (id) => {
+    const { form: { batch, change, getRegisteredFields }, blockTemplates } = this.props;
+    const template = blockTemplates.find(t => t.id === id) || {};
+    const code = get(template, 'code', null);
+
+    // if no template is selected, all blockActions are set to true (default behavior when creating a block)
+    const blockActions = isEmpty(template);
+    batch(() => {
+      change('type', 'Manual');
+      change('desc', null);
+      change('code', code);
+      change('staffInformation', null);
+      change('patronMessage', null);
+      change('expirationDate', null);
+      change('borrowing', blockActions);
+      change('renewals', blockActions);
+      change('requests', blockActions);
+    });
+
+    getRegisteredFields()
+      .forEach(field => {
+        const templateField = BLOCK_TEMPLATE_FIELDS_MAP[field] || field;
+        const templateFieldValue = get(template, templateField);
+        if (!isNil(templateFieldValue)) {
+          change(field, templateFieldValue);
+        }
+      });
+  }
+
   render() {
     const {
       intl,
@@ -149,9 +206,11 @@ class PatronBlockForm extends React.Component {
       initialValues,
       handleSubmit,
       user = {},
+      blockTemplates = [],
     } = this.props;
     const title = params.patronblockid ? getFullName(user) : intl.formatMessage({ id: 'ui-users.blocks.layer.newBlockTitle' });
     const userD = !params.patronblockid ? <UserInfo user={user} /> : '';
+
 
     return (
       <form
@@ -172,6 +231,17 @@ class PatronBlockForm extends React.Component {
             <Row end="xs">
               <Col xs id="collapse-patron-block">
                 <ExpandAllButton accordionStatus={this.state.sections} onToggle={this.handleExpandAll} />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={6} md={6} lg={3}>
+                <div id="patronBlockForm-templateSelection">
+                  <Selection
+                    dataOptions={this.getBlockTemplatesForSelect(blockTemplates)}
+                    label={<FormattedMessage id="ui-users.blocks.form.label.template" />}
+                    onChange={this.onChangeTemplate}
+                  />
+                </div>
               </Col>
             </Row>
             <Row>
@@ -196,6 +266,8 @@ class PatronBlockForm extends React.Component {
                         name="desc"
                         label={<FormattedMessage id="ui-users.blocks.form.label.display" />}
                         component={TextArea}
+                        required
+                        aria-required="true"
                         placeholder={intl.formatMessage({ id: 'ui-users.blocks.form.placeholder.desc' })}
                         fullWidth
                       />
@@ -236,7 +308,9 @@ class PatronBlockForm extends React.Component {
                     </Col>
                   </Row>
                   <Row>
-                    <Col><FormattedMessage id="ui-users.blocks.form.label.block" /></Col>
+                    <Col>
+                      <div className={css.labelWrapper}><FormattedMessage id="ui-users.blocks.form.label.block" /></div>
+                    </Col>
                   </Row>
                   <Row>
                     <Col id="patronBlockForm-borrowing" xs={12} sm={10} md={7} lg={5}>
@@ -281,7 +355,10 @@ class PatronBlockForm extends React.Component {
 export default stripesFinalForm({
   initialValuesEqual: (a, b) => _.isEqual(a, b),
   navigationCheck: true,
-  subscription: { values: true },
+  subscription: {
+    invalid: true,
+    values: true,
+  },
   mutators: { setFieldData },
   validate: showValidationErrors,
 })(PatronBlockForm);

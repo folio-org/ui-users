@@ -9,6 +9,8 @@ import {
   ButtonInteractor,
 } from '@bigtest/interactor';
 
+import CalloutInteractor from '@folio/stripes-components/lib/Callout/tests/interactor'; // eslint-disable-line
+
 import proxyItemCSS from '../../../src/components/ProxyGroup/ProxyItem/ProxyItem.css';
 
 @interactor class AccordionSection {
@@ -54,14 +56,25 @@ import proxyItemCSS from '../../../src/components/ProxyGroup/ProxyItem/ProxyItem
   userInfo = new AccordionSection('#userInformationSection');
   contactInfo = new AccordionSection('#contactInfoSection');
   departmentName = text('[data-test-department-name]');
+  departmentNameIsPresent = isPresent('[data-test-department-name]');
   actionMenuButton = scoped('[data-test-actions-menu]', ButtonInteractor);
   actionMenuCreateRequestButton = scoped('[data-test-actions-menu-create-request]');
   actionMenuCreateFeeFinesButton = scoped('[data-test-actions-menu-create-feesfines]');
   actionMenuCreatePatronBlocksButton = scoped('[data-test-actions-menu-create-patronblocks]');
   actionMenuEditUserButton = scoped('[data-test-actions-menu-edit]');
+  actionMenuExportFeeFineReport = scoped('[data-test-export-fee-fine-report]');
+  actionMenuExportFeeFineReportButton = scoped('[data-test-export-fee-fine-report]', ButtonInteractor);
+  actionMenuCheckDelete = scoped('[data-test-actions-menu-check-delete]');
+  userNotFoundPanePresent = isPresent('#pane-user-not-found-content');
+
+  callout = new CalloutInteractor();
 
   whenLoaded() {
     return this.when(() => this.isPresent).timeout(5000);
+  }
+
+  whenNotFoundPaneLoaded() {
+    return this.when(() => this.userNotFoundPanePresent);
   }
 }
 

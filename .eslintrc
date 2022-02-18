@@ -1,4 +1,23 @@
 {
-  "parser": "babel-eslint",
-  "extends": "@folio/eslint-config-stripes"
+  "extends": "@folio/eslint-config-stripes",
+  "parser": "@babel/eslint-parser",
+  "overrides": [
+    {
+      "files": [ "src/**/tests/*", "test/**/*" ]
+    }
+  ],
+  "env": {
+    "jest": true
+  },
+  "settings": {
+    "import/resolver": {
+      "alias": {
+        "map": [
+          ["__mock__", "./test/jest/__mock__"],
+          ["fixtures", "./test/jest/fixtures"],
+          ["helpers", "./test/jest/helpers"]
+        ]
+      }
+    }
+  }
 }

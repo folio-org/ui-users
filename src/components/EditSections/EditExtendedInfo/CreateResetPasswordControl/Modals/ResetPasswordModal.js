@@ -28,7 +28,7 @@ const ResetPasswordModalBody = ({
 
 ResetPasswordModalBody.propTypes = {
   name: PropTypes.string.isRequired,
-  email: PropTypes.string.isRequired,
+  email: PropTypes.string,
 };
 
 export default withCopyModal(ResetPasswordModalBody);

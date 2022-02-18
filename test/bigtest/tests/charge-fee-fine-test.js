@@ -18,7 +18,11 @@ import ChargeFeeFineInteractor from '../interactors/charge-fee-fine';
 
 describe('Charge fee/fine', () => {
   const chargeForm = new ChargeFeeFineInteractor();
-  setupApplication();
+  setupApplication({
+    currentUser: {
+      curServicePoint: { id: 1 },
+    },
+  });
 
   describe('from the user detail view', () => {
     const userDetail = InstanceViewPage;
@@ -26,11 +30,17 @@ describe('Charge fee/fine', () => {
     const actionButton = new Interactor('a[href*=charge]');
     let loan;
     beforeEach(async function () {
-      const owner = this.server.create('owner', { owner: 'testOwner' });
+      const owner = this.server.create('owner', { owner: 'testOwner', id: '1', servicePointOwner: [{ value: 1, label: 'Test Point' }] });
       this.server.create('feefine',
         { feeFineType: 'testFineType',
           ownerId: owner.id,
           defaultAmount: 500.00 });
+      this.server.create('feefine', {
+        feeFineType: 'automaticFineType',
+        automatic: true,
+        ownerId: owner.id,
+        defaultAmount: 10.00
+      });
       loan = this.server.create('loan', { status: { name: 'Open' } });
       visit(`/users/preview/${loan.userId}`);
       await userDetail.whenLoaded();
@@ -50,6 +60,10 @@ describe('Charge fee/fine', () => {
         expect(chargeForm.form.isPresent).to.be.true;
       });
 
+      it('should show only manual fee.fine types', () => {
+        expect(chargeForm.typeSelect.optionCount).to.equal(1);
+      });
+
       describe('cancel the charge', () => {
         beforeEach(async () => {
           await chargeForm.clickCancel();
@@ -57,6 +71,12 @@ describe('Charge fee/fine', () => {
 
         it('navigate to previous page', function () {
           expect(this.location.pathname).to.equal(`/users/${loan.userId}/accounts/open`);
+        });
+      });
+
+      describe('initial owner desk', () => {
+        it('should show owner desk', () => {
+          expect(chargeForm.ownerSelect.value).to.equal('1');
         });
       });
 

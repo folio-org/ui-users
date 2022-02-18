@@ -15,9 +15,9 @@ import {
   Spinner,
   TextArea,
 } from '@folio/stripes-components';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 import { getOpenRequestsPath } from '../../../../util';
+import refundTransferClaimReturned from '../../../../util/refundTransferClaimReturned';
 
 import css from '../../../../ModalContent';
 
@@ -31,11 +31,27 @@ class BulkClaimReturnedModal extends React.Component {
         path: 'circulation/loans/%{loanId}/claim-item-returned',
       },
     },
+    feefineactions: {
+      type: 'okapi',
+      records: 'feefineactions',
+      path: 'feefineactions',
+      fetch: false,
+      accumulate: true,
+    },
+    accounts: {
+      type: 'okapi',
+      records: 'accounts',
+      PUT: {
+        path: 'accounts/%{activeAccount.id}',
+      },
+      fetch: false,
+      accumulate: true,
+    },
+    activeAccount: {},
     loanId: {},
   });
 
   static propTypes = {
-    stripes: PropTypes.object.isRequired,
     checkedLoansIndex: PropTypes.object.isRequired,
     intl: PropTypes.object.isRequired,
     mutator: PropTypes.shape({
@@ -45,6 +61,24 @@ class BulkClaimReturnedModal extends React.Component {
       loanId: PropTypes.shape({
         replace: PropTypes.func.isRequired,
       }).isRequired,
+      accounts: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+        PUT: PropTypes.func.isRequired,
+      }),
+      feefineactions: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+        POST: PropTypes.func.isRequired,
+      }),
+      activeAccount: PropTypes.shape({
+        update: PropTypes.func,
+      }).isRequired,
+    }).isRequired,
+    okapi: PropTypes.shape({
+      currentUser: PropTypes.object.isRequired,
+    }).isRequired,
+    stripes: PropTypes.shape({
+      connect: PropTypes.func.isRequired,
+      hasPerm: PropTypes.func,
     }),
     onCancel: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
@@ -87,7 +121,7 @@ class BulkClaimReturnedModal extends React.Component {
   }
 
   handleAdditionalInfoChange = e => {
-    this.setState({ additionalInfo: e.target.value });
+    this.setState({ additionalInfo: e.target.value.trim() });
   };
 
   claimItemReturned = (loan) => {
@@ -105,7 +139,9 @@ class BulkClaimReturnedModal extends React.Component {
   claimAllReturned = () => {
     const promises = Object
       .values(this.props.checkedLoansIndex)
-      .map(loan => this.claimItemReturned(loan).catch(e => e));
+      .map(loan => this.claimItemReturned(loan)
+        .then(refundTransferClaimReturned.refundTransfers(loan, this.props))
+        .catch(e => e));
     Promise.all(promises)
       .then(results => this.finishClaims(results));
   }
@@ -168,6 +204,7 @@ class BulkClaimReturnedModal extends React.Component {
       <ModalFooter>
         <Layout className="textRight">
           <Button
+            data-test-bulk-cr-close-button
             buttonStyle="primary"
             onClick={this.onCancel}
           >
@@ -177,8 +214,15 @@ class BulkClaimReturnedModal extends React.Component {
       </ModalFooter>
     );
 
-    const columns = ['title', 'dueDate', 'requests', 'barcode', 'callNumber', 'loanPolicy'];
-    if (operationState === 'post') { columns.unshift('status'); }
+    const columns = [
+      'bulkClaimReturnedTitle',
+      'bulkClaimReturnedDueDate',
+      'bulkClaimReturnedRequests',
+      'bulkClaimReturnedBarcode',
+      'bulkClaimReturnedCallNumber',
+      'bulkClaimReturnedLoanPolicy',
+    ];
+    if (operationState === 'post') { columns.unshift('bulkClaimReturnedStatus'); }
 
     const statuses = {
       OK: <FormattedMessage id="ui-users.bulkClaimReturned.status.ok" />,
@@ -191,22 +235,22 @@ class BulkClaimReturnedModal extends React.Component {
         contentData={loans}
         visibleColumns={columns}
         columnMapping={{
-          status: <FormattedMessage id="ui-users.bulkClaimReturned.status" />,
-          title: <FormattedMessage id="ui-users.bulkClaimReturned.item.title" />,
-          dueDate: <FormattedMessage id="ui-users.dueDate" />,
-          requests: <FormattedMessage id="ui-users.loans.details.requests" />,
-          barcode: <FormattedMessage id="ui-users.item.barcode" />,
-          callNumber: <FormattedMessage id="ui-users.item.callNumberComponents.callNumber" />,
-          loanPolicy: <FormattedMessage id="ui-users.loans.details.loanPolicy" />,
+          bulkClaimReturnedStatus: <FormattedMessage id="ui-users.bulkClaimReturned.status" />,
+          bulkClaimReturnedTitle: <FormattedMessage id="ui-users.bulkClaimReturned.item.title" />,
+          bulkClaimReturnedDueDate: <FormattedMessage id="ui-users.dueDate" />,
+          bulkClaimReturnedRequests: <FormattedMessage id="ui-users.loans.details.requests" />,
+          bulkClaimReturnedBarcode: <FormattedMessage id="ui-users.item.barcode" />,
+          bulkClaimReturnedCallNumber: <FormattedMessage id="ui-users.item.callNumberComponents.callNumber" />,
+          bulkClaimReturnedLoanPolicy: <FormattedMessage id="ui-users.loans.details.loanPolicy" />,
         }}
         formatter={{
-          status: loan => (unchangedLoans.includes(loan.id) ? statuses.NOT_OK : statuses.OK),
-          title: loan => loan?.item?.title,
-          dueDate: loan => <FormattedDate value={loan?.dueDate} />,
-          requests: loan => this.getRequestCountForItem(loan?.item?.id),
-          barcode: loan => loan?.item?.barcode,
-          callNumber: loan => loan?.item?.callNumber,
-          loanPolicy: loan => loan?.loanPolicy?.name,
+          bulkClaimReturnedStatus: loan => (unchangedLoans.includes(loan.id) ? statuses.NOT_OK : statuses.OK),
+          bulkClaimReturnedTitle: loan => loan?.item?.title,
+          bulkClaimReturnedDueDate: loan => <FormattedDate value={loan?.dueDate} />,
+          bulkClaimReturnedRequests: loan => this.getRequestCountForItem(loan?.item?.id),
+          bulkClaimReturnedBarcode: loan => loan?.item?.barcode,
+          bulkClaimReturnedCallNumber: loan => loan?.item?.callNumber,
+          bulkClaimReturnedLoanPolicy: loan => loan?.loanPolicy?.name,
         }}
       />;
 
@@ -215,7 +259,7 @@ class BulkClaimReturnedModal extends React.Component {
     if (operationState === 'pre') {
       modalHeader = <FormattedMessage id="ui-users.bulkClaimReturned.preConfirm" />;
       statusMessage =
-        <SafeHTMLMessage
+        <FormattedMessage
           id="ui-users.bulkClaimReturned.summary"
           values={{ numLoans: loans.length }}
         />;
@@ -224,17 +268,17 @@ class BulkClaimReturnedModal extends React.Component {
       modalHeader = <FormattedMessage id="ui-users.bulkClaimReturned.postConfirm" />;
       statusMessage = unchangedLoans.length > 0 ?
         <>
-          <SafeHTMLMessage
+          <FormattedMessage
             id="ui-users.bulkClaimReturned.items.notOk"
             values={{ numItems: unchangedLoans.length }}
           />
           {' '}
-          <SafeHTMLMessage
+          <FormattedMessage
             id="ui-users.bulkClaimReturned.items.ok"
             values={{ numItems: numSuccessfulOperations }}
           />
         </> :
-        <SafeHTMLMessage
+        <FormattedMessage
           id="ui-users.bulkClaimReturned.items.ok"
           values={{ numItems: numSuccessfulOperations }}
         />;
@@ -247,6 +291,7 @@ class BulkClaimReturnedModal extends React.Component {
         {operationState === 'pre' &&
           <Col sm={12} className={css.additionalInformation}>
             <TextArea
+              data-test-bulk-claim-returned-additional-info
               label={<FormattedMessage id="ui-users.additionalInfo.label" />}
               placeholder={intl.formatMessage({ id: 'ui-users.bulkClaimReturned.moreInfoPlaceholder' })}
               required

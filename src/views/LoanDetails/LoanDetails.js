@@ -29,16 +29,19 @@ import {
   Dropdown,
   DropdownMenu,
 } from '@folio/stripes/components';
-import { IfPermission } from '@folio/stripes/core';
+import { IfPermission, stripesConnect } from '@folio/stripes/core';
 import { effectiveCallNumber } from '@folio/stripes/util';
 
-import PatronBlockModal from '../../components/PatronBlock/PatronBlockModal';
+import PatronBlockModalWithOverrideModal from '../../components/PatronBlock/PatronBlockModalWithOverrideModal';
 import {
   getFullName,
   nav,
   getOpenRequestsPath,
+  getRenewalPatronBlocksFromPatronBlocks,
+  accountsMatchStatus,
+  checkUserActive,
 } from '../../components/util';
-import { itemStatuses, loanActions } from '../../constants';
+import { itemStatuses, loanActions, refundClaimReturned } from '../../constants';
 import {
   withRenew,
   withDeclareLost,
@@ -52,9 +55,9 @@ import css from './LoanDetails.css';
 
 class LoanDetails extends React.Component {
   static propTypes = {
+    isLoading: PropTypes.bool,
     stripes: PropTypes.object.isRequired,
     resources: PropTypes.shape({
-      loanAccountsActions: PropTypes.object,
       loanActions: PropTypes.object,
       loanActionsWithUser: PropTypes.object,
     }).isRequired,
@@ -73,9 +76,11 @@ class LoanDetails extends React.Component {
       }),
     }).isRequired,
     loan: PropTypes.object,
+    loanIsMissing: PropTypes.bool,
     patronGroup: PropTypes.object,
     user: PropTypes.object,
     loanActionsWithUser: PropTypes.arrayOf(PropTypes.object),
+    loanAccountActions: PropTypes.arrayOf(PropTypes.object),
     loanPolicies: PropTypes.object,
     requestCounts: PropTypes.object,
     renew: PropTypes.func,
@@ -93,6 +98,7 @@ class LoanDetails extends React.Component {
 
   static defaultProps = {
     enableButton: () => {},
+    loanAccountActions: [],
   };
 
   constructor(props) {
@@ -143,61 +149,88 @@ class LoanDetails extends React.Component {
     this.setState({ nonRenewedLoansModalOpen: false });
   }
 
-  renew = async () => {
+  onRenew = async (additionalInfo = '') => {
     const {
       loan,
       user,
-      patronBlocks,
       renew,
-      mutator: { renewals },
+      mutator: {
+        renewals,
+      },
     } = this.props;
-    const countRenew = patronBlocks.filter(p => p.renewals || p.blockRenewals);
 
-    if (!isEmpty(countRenew)) return this.setState({ patronBlockedModal: true });
+    await renew([loan], user, additionalInfo);
 
-    await renew([loan], user);
     return renewals.replace({ ts: new Date().getTime() });
   }
 
+  renew = async () => {
+    const {
+      patronBlocks,
+    } = this.props;
+    const countRenew = getRenewalPatronBlocksFromPatronBlocks(patronBlocks);
+
+    if (!isEmpty(countRenew)) {
+      return this.setState({
+        patronBlockedModal: true,
+      });
+    }
+
+    return this.onRenew();
+  }
+
   viewFeeFine() {
-    const { stripes, resources } = this.props;
-    const records = resources?.loanAccountsActions?.records ?? [];
-    const total = records.reduce((acc, { amount }) => (acc + parseFloat(amount)), 0);
+    const { stripes, loanAccountActions } = this.props;
+    const total = loanAccountActions.reduce((acc, { amount }) => (acc + parseFloat(amount)), 0);
+    const suspendedAction = loanAccountActions.filter(a => a?.paymentStatus?.name === refundClaimReturned.PAYMENT_STATUS) || [];
+    const suspendedMessage = (suspendedAction.length > 0) ? <FormattedMessage id="ui-users.accounts.suspended" /> : '';
 
     if (total === 0) return '-';
 
     const value = parseFloat(total).toFixed(2);
-
-    return stripes.hasPerm('ui-users.accounts')
-      ? (
+    const valueDisplay = stripes.hasPerm('ui-users.accounts')
+      ?
         <button
+          data-test-fee-fine-details-link
           className={css.feefineButton}
           onClick={(e) => this.feefinedetails(e)}
           type="button"
         >
-          {value}
+          { value }
         </button>
-      )
-      : value;
+      :
+      value;
+
+    return <>{ valueDisplay }<br />{ suspendedMessage }</>;
   }
 
   feefinedetails = (e) => {
-    const { history, match: { params }, resources } = this.props;
-    const accounts = resources?.loanAccountsActions?.records ?? [];
+    const {
+      history,
+      match: { params },
+      loanAccountActions,
+    } = this.props;
+
+    if (loanAccountActions.length === 1) {
+      nav.onClickViewAccountActionsHistory(e, { id: loanAccountActions[0].id }, history, params);
+      return undefined;
+    }
+
     const loan = this.loan || {};
 
-    if (accounts.length === 1) {
-      nav.onClickViewAccountActionsHistory(e, { id: accounts[0].id }, history, params);
-    } else if (accounts.length > 1) {
-      const open = accounts.filter(a => a?.status?.name === 'Open') || [];
-      if (open.length === accounts.length) {
-        nav.onClickViewOpenAccounts(e, loan, history, params);
-      } else if (open.length === 0) {
-        nav.onClickViewClosedAccounts(e, loan, history, params);
-      } else {
-        nav.onClickViewAllAccounts(e, loan, history, params);
-      }
+    if (accountsMatchStatus(loanAccountActions, 'closed')) {
+      nav.onClickViewClosedAccounts(e, loan, history, params);
+    } else if (accountsMatchStatus(loanAccountActions, 'open')) {
+      nav.onClickViewOpenAccounts(e, loan, history, params);
+    } else {
+      nav.onClickViewAllAccounts(e, loan, history, params);
     }
+
+    return undefined;
+  };
+
+  onOpenPatronBlockedModal = () => {
+    this.setState({ patronBlockedModal: true });
   };
 
   onClosePatronBlockedModal = () => {
@@ -301,19 +334,41 @@ class LoanDetails extends React.Component {
       markAsMissing,
       claimReturned,
       declarationInProgress,
+      loanIsMissing,
+      isLoading,
     } = this.props;
 
     const {
       patronBlockedModal,
     } = this.state;
 
-    if (!loan || !user || (loan.userId !== user.id)) {
+    if (isLoading) {
       return (
         <LoadingView
           id="pane-loandetails"
           defaultWidth="100%"
           paneTitle={<FormattedMessage id="ui-users.loans.history" />}
         />
+      );
+    }
+
+    if (loanIsMissing) {
+      return (
+        <Paneset isRoot>
+          <Pane
+            id="pane-loandetails-404"
+            defaultWidth="100%"
+            dismissible
+            onClose={this.handleClose}
+            paneTitle={(
+              <FormattedMessage id="ui-users.loans.loanDetails">
+                {(loanDetails) => `${loanDetails} - ${getFullName(user)} (${upperFirst(patronGroup.group)})`}
+              </FormattedMessage>
+            )}
+          >
+            <FormattedMessage id="ui-users.loan404" />
+          </Pane>
+        </Paneset>
       );
     }
 
@@ -383,6 +438,8 @@ class LoanDetails extends React.Component {
         />
       </p>
     );
+    const patronBlocksForModal = getRenewalPatronBlocksFromPatronBlocks(patronBlocks);
+    const isUserActive = checkUserActive(user);
 
     return (
       <div data-test-loan-actions-history>
@@ -403,7 +460,7 @@ class LoanDetails extends React.Component {
                 <IfPermission perm="ui-users.loans.renew">
                   <Button
                     data-test-renew-button
-                    disabled={buttonDisabled || isClaimedReturnedItem}
+                    disabled={buttonDisabled || isClaimedReturnedItem || !isUserActive}
                     buttonStyle="primary"
                     onClick={this.renew}
                   >
@@ -451,7 +508,7 @@ class LoanDetails extends React.Component {
                     </Button>
                   </IfPermission>
                 }
-                <IfPermission perm="ui-users.loans.edit">
+                <IfPermission perm="ui-users.loans.change-due-date">
                   <Button
                     data-test-change-due-date-button
                     disabled={
@@ -588,7 +645,7 @@ class LoanDetails extends React.Component {
               <Col xs={2}>
                 <KeyValue
                   data-test-loan-fees-fines
-                  label={<FormattedMessage id="ui-users.loans.details.fine" />}
+                  label={<FormattedMessage id="ui-users.loans.details.fineIncurred" />}
                   value={this.viewFeeFine()}
                 />
               </Col>
@@ -644,10 +701,12 @@ class LoanDetails extends React.Component {
                   </li>))
             }
             </Modal>
-            <PatronBlockModal
-              open={patronBlockedModal}
-              onClose={this.onClosePatronBlockedModal}
-              patronBlocks={patronBlocks}
+            <PatronBlockModalWithOverrideModal
+              patronBlockedModalOpen={patronBlockedModal}
+              onClosePatronBlockedModal={this.onClosePatronBlockedModal}
+              onOpenPatronBlockedModal={this.onOpenPatronBlockedModal}
+              onRenew={this.onRenew}
+              patronBlocks={patronBlocksForModal}
               viewUserPath={`/users/view/${(user || {}).id}?filters=pg.${patronGroup.group}&sort=name`}
             />
             { this.props.user && this.renderChangeDueDateDialog() }
@@ -662,6 +721,7 @@ export default compose(
   injectIntl,
   withRenew,
   withDeclareLost,
+  stripesConnect,
   withClaimReturned,
   withMarkAsMissing,
 )(LoanDetails);

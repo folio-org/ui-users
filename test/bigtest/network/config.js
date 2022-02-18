@@ -103,6 +103,7 @@ export default function config() {
       'group': 'staff',
       'desc': 'Staff Member',
       'id': 'group6',
+      'expirationOffsetInDays': 730,
     }, {
       'group': 'undergrad',
       'desc': 'Undergraduate Student',
@@ -270,9 +271,8 @@ export default function config() {
     return this.serializerOrRegistry.serialize(loans.all());
   });
 
-  this.get('loan-storage/loans/:loanid', {
-    loans: [],
-    totalRecords: 0
+  this.get('/loan-storage/loans/:id', ({ loans }, request) => {
+    return loans.find(request.params.id).attrs;
   });
 
   this.get('loan-storage/loan-history', ({ loanactions }, request) => {
@@ -300,6 +300,10 @@ export default function config() {
       loansHistory: [],
       totalRecords: 0,
     };
+  });
+
+  this.put('/loan-storage/loans/:id', (_, request) => {
+    return JSON.parse(request.requestBody);
   });
 
   this.get('/circulation/requests', function ({ requests }) {
@@ -445,6 +449,7 @@ export default function config() {
   this.post('/perms/users/:id/permissions?indexField=userId');
 
   this.post('/circulation/loans/:loanId/declare-item-lost', []);
+  this.post('/circulation/loans/:loanId/claim-item-returned', []);
 
   this.get('/feefineactions', ({ feefineactions }) => {
     return this.serializerOrRegistry.serialize(feefineactions.all());

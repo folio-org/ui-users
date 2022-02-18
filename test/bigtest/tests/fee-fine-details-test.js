@@ -14,7 +14,7 @@ describe('Test Fee/Fine details', () => {
   setupApplication({
     scenarios: ['fee-fine-details'],
     currentUser: {
-      curServicePoint: { id: 1 },
+      curServicePoint: { id: 1, value: 'Test Point' },
     },
   });
   describe('visit Fee/fine details', () => {
@@ -49,6 +49,23 @@ describe('Test Fee/Fine details', () => {
       expect(FeeFineDetails.contributors.label.text).to.equal(translations['reports.overdue.item.contributors']);
       expect(FeeFineDetails.contributors.value.text).to.equal('-');
     });
+
+    it('displays loan details', () => {
+      expect(FeeFineDetails.loanDetails.label.text).to.equal(translations['details.label.loanDetails']);
+      expect(FeeFineDetails.loanDetails.value.text).to.equal(translations['details.field.loan']);
+    });
+
+    describe('Loan details link', () => {
+      beforeEach(async function () {
+        await FeeFineDetails.loanDetailsClick();
+      });
+
+      it('should navigate to', function () {
+        const path = '/users/ce0e0d5b-b5f3-4ad5-bccb-49c0784298fd/loans/view/8e9f211b-6024-4828-8c14-ace39c6c2863';
+        expect(this.location.pathname.endsWith(path)).to.be.true;
+      });
+    });
+
     describe('Overdue policy link', () => {
       beforeEach(async function () {
         await FeeFineDetails.overduePolicyClick();
