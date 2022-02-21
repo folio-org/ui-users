@@ -194,7 +194,7 @@ class ViewFeesFines extends React.Component {
                     size="small"
                   />
                 </div>
-                <p data-role="popover">
+                <div data-role="popover">
                   <b>
                     <FormattedMessage
                       id="ui-users.accounts.history.staff.info"
@@ -205,7 +205,7 @@ class ViewFeesFines extends React.Component {
                   <Link to={`/users/${feeFine.userId}/accounts/view/${feeFine.id}`}>
                     <FormattedMessage id="ui-users.accounts.history.link.details" />
                   </Link>
-                </p>
+                </div>
               </Popover>
             </Col>
             : null}
@@ -220,7 +220,7 @@ class ViewFeesFines extends React.Component {
       '  ': f => (
         <input
           checked={(accounts.findIndex(a => a.id === f.id) !== -1)}
-          onClick={e => this.toggleItem(e, f)}
+          onChange={e => this.toggleItem(e, f)}
           type="checkbox"
         />
       ),
