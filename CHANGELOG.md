@@ -43,6 +43,7 @@
 * Prevent duplication of permissions in `<PermissionsModal>` and related logic. Fixes UIU-2486, UIU-2496.
 * Add Service Point modal: Ensure every form element has label. Refs UIU-1699.
 * Create/Edit Patron Blocks: Required fields are not using the right prop and cannot be read by screenreader. Refs UIU-1688.
+* Display preferred name in the search result. Refs UIU-2500.
 
 ## [7.0.1](https://github.com/folio-org/ui-users/tree/v7.0.1) (2021-10-07)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.1.0...v7.0.1)
