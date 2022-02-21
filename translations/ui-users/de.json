@@ -984,5 +984,8 @@
     "permissions.unassignAllPermissions": "Alle Berechtigungen aufheben",
     "permissions.calloutMessage": "Alle Berechtigungen sind aufgehoben.",
     "permissions.modal.unassignAll.header": "Alle Berechtigungen aufheben",
-    "permissions.modal.unassignAll.label": "You are unassigning all permissions from the user <strong>{lastName}, {firstName}</strong> <p><strong>Are you sure?</strong></p>"
+    "permissions.modal.unassignAll.label": "You are unassigning all permissions from the user <strong>{lastName}, {firstName}</strong> <p><strong>Are you sure?</strong></p>",
+    "loans.rows.select": "Select loan",
+    "loans.selectAllLoans": "Select all loans",
+    "sp.selectAllServicePoints": "Select all service points"
 }
