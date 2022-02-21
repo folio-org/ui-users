@@ -984,5 +984,8 @@
     "permissions.unassignAllPermissions": "Unassign all permissions",
     "permissions.calloutMessage": "User's permissions are all unassigned.",
     "permissions.modal.unassignAll.header": "Unassign all permissions",
-    "permissions.modal.unassignAll.label": "You are unassigning all permissions from the user <strong>{lastName}, {firstName}</strong> <p><strong>Are you sure?</strong></p>"
+    "permissions.modal.unassignAll.label": "You are unassigning all permissions from the user <strong>{lastName}, {firstName}</strong> <p><strong>Are you sure?</strong></p>",
+    "loans.rows.select": "Select loan",
+    "loans.selectAllLoans": "Select all loans",
+    "sp.selectAllServicePoints": "Select all service points"
 }

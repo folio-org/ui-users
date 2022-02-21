@@ -984,5 +984,8 @@
     "permissions.unassignAllPermissions": "取消分配所有权限",
     "permissions.calloutMessage": "用户权限全部未分配。",
     "permissions.modal.unassignAll.header": "取消分配所有权限",
-    "permissions.modal.unassignAll.label": "正在取消分配给用户<strong> {lastName} , {firstName} </strong> <p> <strong>所有权限，确定吗？ </strong> </p>"
+    "permissions.modal.unassignAll.label": "正在取消分配给用户<strong> {lastName} , {firstName} </strong> <p> <strong>所有权限，确定吗？ </strong> </p>",
+    "loans.rows.select": "Select loan",
+    "loans.selectAllLoans": "Select all loans",
+    "sp.selectAllServicePoints": "Select all service points"
 }
