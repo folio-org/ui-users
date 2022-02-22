@@ -40,6 +40,7 @@
 * Retrieve up to 50 proxies/sponsors. Refs UIU-2510.
 * Open Loans List: Form does not include label. Refs UIU-1638.
 * Accessibility: Headings must not be empty. Refs UIU-1695.
+* Accessibility: Form elements must have labels. Refs UIU-1686.
 
 ## [7.0.1](https://github.com/folio-org/ui-users/tree/v7.0.1) (2021-10-07)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.1.0...v7.0.1)
