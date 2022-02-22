@@ -10,8 +10,8 @@ import {
 
 /**
  * getFullName
- * return "last, first middle", derived from user.personal.
- * preferred first name should be shown instead first name if present
+ * return "last, first middle", derived from user.personal
+ * preferred first name should be shown instead first name if present.
  *
  * @param {object} user
  * @returns string
