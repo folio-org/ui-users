@@ -126,7 +126,7 @@ class FeeFineInfo extends React.Component {
                   <Col xs={12}>
                     <Field
                       name="amount"
-                      aria-label="amount"
+                      aria-label="Amount"
                       id="amount"
                       type="number"
                       component={TextField}
