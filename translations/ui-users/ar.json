@@ -352,11 +352,11 @@
     "blocks.columns.renewals": "التجديدات",
     "blocks.buttons.add": "إنشاء حظر",
     "blocks.form.label.information": "بيانات الحظر",
-    "blocks.form.label.display": "عرض الوصف*",
+    "blocks.form.label.display": "عرض الوصف",
     "blocks.form.label.staff": "بيانات للموظفين فقط",
     "blocks.form.label.message": "رسالة إلى المستفيد",
     "blocks.form.label.date": "تاريخ الانتهاء",
-    "blocks.form.label.block": "إجراءات الحظر*",
+    "blocks.form.label.block": "<strong>إجراءات الحظر<span>*</span></strong> (حدد كل ما ينطبق)",
     "blocks.form.label.borrowing": "الاستعارة",
     "blocks.form.label.renewals": "التجديدات",
     "blocks.form.placeholder.desc": "قم بإدخال وصف قصير (مطلوب)",
@@ -984,5 +984,8 @@
     "permissions.unassignAllPermissions": "إلغاء تعيين كل الصلاحيات",
     "permissions.calloutMessage": "تم إلغاء تعيين كل صلاحيات المستخدم",
     "permissions.modal.unassignAll.header": "إلغاء تعيين كل الصلاحيات",
-    "permissions.modal.unassignAll.label": "أنت تقوم بإلغاء تعيين كل الصلاحيات من المستخدم <strong>{lastName}, {firstName}</strong><p><strong>هل أنت متأكد؟</strong></p>"
+    "permissions.modal.unassignAll.label": "أنت تقوم بإلغاء تعيين كل الصلاحيات من المستخدم <strong>{lastName}, {firstName}</strong><p><strong>هل أنت متأكد؟</strong></p>",
+    "loans.rows.select": "تحديد إعارة",
+    "loans.selectAllLoans": "تحديد كل الإعارات",
+    "sp.selectAllServicePoints": "حدد كل نقاط الخدمة"
 }
