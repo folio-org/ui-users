@@ -74,6 +74,7 @@ class ChargeForm extends React.Component {
     initialValues: PropTypes.object,
     match: PropTypes.object,
     feeFineTypeOptions: PropTypes.arrayOf(PropTypes.object).isRequired,
+    intl: PropTypes.object,
   }
 
   constructor(props) {
@@ -142,6 +143,7 @@ class ChargeForm extends React.Component {
       onSubmit,
       handleSubmit,
       initialValues,
+      intl: { formatMessage },
       feeFineTypeOptions,
       form,
       form : {
@@ -266,7 +268,7 @@ class ChargeForm extends React.Component {
                 <Field
                   id="comments"
                   name="comments"
-                  aria-label="Comments"
+                  aria-label={formatMessage({ id: 'ui-users.charge.comment.label' })}
                   component={TextArea}
                   fullWidth
                 />

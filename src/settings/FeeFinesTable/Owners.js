@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import {
   Row,
@@ -10,6 +10,7 @@ import {
 } from '@folio/stripes/components';
 
 const Owners = ({ dataOptions, onChange, filterShared }) => {
+  const { formatMessage } = useIntl();
   const options = [];
   const shared = dataOptions.find(d => d.owner === 'Shared') || {};
 
@@ -52,7 +53,7 @@ const Owners = ({ dataOptions, onChange, filterShared }) => {
           <Select
             id="select-owner"
             onChange={onChange}
-            aria-label="Select owner"
+            aria-label={formatMessage({ id: 'ui-users.owners.select' })}
           >
             {options}
           </Select>

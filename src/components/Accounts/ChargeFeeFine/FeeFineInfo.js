@@ -55,7 +55,7 @@ class FeeFineInfo extends React.Component {
 
   render() {
     const {
-      intl,
+      intl: { formatMessage },
       isPending,
       ownerOptions,
       feefineList,
@@ -78,7 +78,7 @@ class FeeFineInfo extends React.Component {
                   <Col xs={12}>
                     <Field
                       name="ownerId"
-                      aria-label="Owner id"
+                      aria-label={formatMessage({ id: 'ui-users.charge.owner.id' })}
                       id="ownerId"
                       type="select"
                       component={Select}
@@ -86,7 +86,7 @@ class FeeFineInfo extends React.Component {
                       disabled={isPending.owners}
                       dataOptions={ownerOptions}
                       onChange={(e) => onChangeOwner(e.target.value)}
-                      placeholder={intl.formatMessage({ id: 'ui-users.feefines.modal.placeholder' })}
+                      placeholder={formatMessage({ id: 'ui-users.feefines.modal.placeholder' })}
                     />
                     {isPending.owners && <FormattedMessage id="ui-users.loading" />}
                   </Col>
@@ -102,14 +102,14 @@ class FeeFineInfo extends React.Component {
                   <Col xs={12}>
                     <Field
                       name="feeFineId"
-                      aria-label="Fee/fine id"
+                      aria-label={formatMessage({ id: 'ui-users.charge.feefine.id' })}
                       id="feeFineType"
                       type="select"
                       component={Select}
                       fullWidth
                       disabled={isPending.feefines}
                       dataOptions={feefineList}
-                      placeholder={intl.formatMessage({ id: 'ui-users.feefines.modal.placeholder' })}
+                      placeholder={formatMessage({ id: 'ui-users.feefines.modal.placeholder' })}
                       onChange={onChangeFeeFine}
                     />
                     {isPending.feefines && <FormattedMessage id="ui-users.loading" />}
@@ -126,7 +126,7 @@ class FeeFineInfo extends React.Component {
                   <Col xs={12}>
                     <Field
                       name="amount"
-                      aria-label="Amount"
+                      aria-label={formatMessage({ id: 'ui-users.charge.amount' })}
                       id="amount"
                       type="number"
                       component={TextField}
