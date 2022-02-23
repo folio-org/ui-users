@@ -46,6 +46,7 @@
 * Display preferred name in the search result. Refs UIU-2500.
 * Display preferred name in the header and body of the user record. Refs UIU-2501.
 * Display preferred name in the top of the edit view of the user record. Refs UIU-2502.
+* Newly Created Address Record Should be In Focus. Refs UIU-1161.
 
 ## [7.0.1](https://github.com/folio-org/ui-users/tree/v7.0.1) (2021-10-07)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.1.0...v7.0.1)
