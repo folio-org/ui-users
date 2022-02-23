@@ -42,6 +42,7 @@ const EditContactInfo = ({
       props: {
         dataOptions: toAddressTypeOptions(addressTypes),
         fullWidth: true,
+        autoFocus: true,
         placeholder: intl.formatMessage({ id: 'ui-users.contact.selectAddressType' }),
       },
     },
