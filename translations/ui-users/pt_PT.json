@@ -352,11 +352,11 @@
     "blocks.columns.renewals": "Renewals",
     "blocks.buttons.add": "Create block",
     "blocks.form.label.information": "Block information",
-    "blocks.form.label.display": "Display Description*",
+    "blocks.form.label.display": "Display description",
     "blocks.form.label.staff": "Staff only information",
     "blocks.form.label.message": "Mensagem para o utilizador",
     "blocks.form.label.date": "Expiration date",
-    "blocks.form.label.block": "Block actions*",
+    "blocks.form.label.block": "<strong>Block actions<span>*</span></strong> (select all that apply)",
     "blocks.form.label.borrowing": "Empréstimo",
     "blocks.form.label.renewals": "Renewals",
     "blocks.form.placeholder.desc": "Enter a short description (required)",
@@ -984,5 +984,8 @@
     "permissions.unassignAllPermissions": "Unassign all permissions",
     "permissions.calloutMessage": "User's permissions are all unassigned.",
     "permissions.modal.unassignAll.header": "Unassign all permissions",
-    "permissions.modal.unassignAll.label": "You are unassigning all permissions from the user <strong>{lastName}, {firstName}</strong> <p><strong>Are you sure?</strong></p>"
+    "permissions.modal.unassignAll.label": "You are unassigning all permissions from the user <strong>{lastName}, {firstName}</strong> <p><strong>Are you sure?</strong></p>",
+    "loans.rows.select": "Select loan",
+    "loans.selectAllLoans": "Select all loans",
+    "sp.selectAllServicePoints": "Select all service points"
 }

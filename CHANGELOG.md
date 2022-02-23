@@ -43,6 +43,10 @@
 * Prevent duplication of permissions in `<PermissionsModal>` and related logic. Fixes UIU-2486, UIU-2496.
 * Add Service Point modal: Ensure every form element has label. Refs UIU-1699.
 * Create/Edit Patron Blocks: Required fields are not using the right prop and cannot be read by screenreader. Refs UIU-1688.
+* Display preferred name in the search result. Refs UIU-2500.
+* Display preferred name in the header and body of the user record. Refs UIU-2501.
+* Display preferred name in the top of the edit view of the user record. Refs UIU-2502.
+* Newly Created Address Record Should be In Focus. Refs UIU-1161.
 * Move `moment` to peerDependencies. Refs UIU-1900.
 
 ## [7.0.1](https://github.com/folio-org/ui-users/tree/v7.0.1) (2021-10-07)
@@ -125,6 +129,10 @@
 * Create Jest/RTL test for `CommentModal`. Refs UIU-2280.
 * Create Jest/RTL test for `ResetPasswordModal`. Refs UIU-2359.
 * Create Jest/RTL test for `CreatePasswordModal`. Refs UIU-2355.
+* Create Jest/RTL test for `CheckboxColumn`. Refs UIU-2261.
+* Create Jest/RTL test for `RefundsReportModal`. Refs UIU-2308.
+* Create Jest/RTL test for `WarningModal`. Refs UIU-2336.
+* Create Jest/RTL test for `CopyModal`. Refs UIU-2385.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
