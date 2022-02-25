@@ -29,16 +29,19 @@ class LoansListing extends React.Component {
     match: PropTypes.object,
   };
 
-    // eslint-disable-next-line react/sort-comp
-    paneTitleRef = createRef();
+  constructor(props) {
+    super(props);
 
-    componentDidMount() {
-      if (this.paneTitleRef.current) {
-        this.paneTitleRef.current.focus();
-      }
+    this.paneTitleRef = createRef();
+  }
+
+  componentDidMount() {
+    if (this.paneTitleRef.current) {
+      this.paneTitleRef.current.focus();
     }
+  }
 
-    /**
+  /**
    * Segmented Control to swtich between open and closed loans
    */
   getSegmentedControls = () => {
