@@ -71,18 +71,15 @@ class FeeFineInfo extends React.Component {
               <Col xs={4}>
                 <Row>
                   <Col xs={12}>
-                    <b><FormattedMessage id="ui-users.charge.owner.label" /></b>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col xs={12}>
                     <Field
                       name="ownerId"
-                      aria-label={formatMessage({ id: 'ui-users.charge.owner.id' })}
+                      label={<FormattedMessage id="ui-users.charge.owner.label" />}
                       id="ownerId"
                       type="select"
                       component={Select}
                       fullWidth
+                      required
+                      aria-required="true"
                       disabled={isPending.owners}
                       dataOptions={ownerOptions}
                       onChange={(e) => onChangeOwner(e.target.value)}
@@ -95,18 +92,15 @@ class FeeFineInfo extends React.Component {
               <Col xs={4}>
                 <Row>
                   <Col xs={12}>
-                    <b><FormattedMessage id="ui-users.charge.feefine.label" /></b>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col xs={12}>
                     <Field
                       name="feeFineId"
-                      aria-label={formatMessage({ id: 'ui-users.charge.feefine.id' })}
+                      label={<FormattedMessage id="ui-users.charge.feefine.label" />}
                       id="feeFineType"
                       type="select"
                       component={Select}
                       fullWidth
+                      required
+                      aria-required="true"
                       disabled={isPending.feefines}
                       dataOptions={feefineList}
                       placeholder={formatMessage({ id: 'ui-users.feefines.modal.placeholder' })}
@@ -119,19 +113,15 @@ class FeeFineInfo extends React.Component {
               <Col xs={4}>
                 <Row>
                   <Col xs={12}>
-                    <b><FormattedMessage id="ui-users.charge.amount.label" /></b>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col xs={12}>
                     <Field
                       name="amount"
-                      aria-label={formatMessage({ id: 'ui-users.charge.amount' })}
+                      label={<FormattedMessage id="ui-users.charge.amount.label" />}
                       id="amount"
                       type="number"
                       component={TextField}
                       fullWidth
                       required
+                      aria-required="true"
                       onChange={this.onChangeAmount}
                       onBlur={this.onBlurAmount}
                     />
