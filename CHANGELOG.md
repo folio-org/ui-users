@@ -47,6 +47,7 @@
 * Display preferred name in the header and body of the user record. Refs UIU-2501.
 * Display preferred name in the top of the edit view of the user record. Refs UIU-2502.
 * Newly Created Address Record Should be In Focus. Refs UIU-1161.
+* Keyboard Navigation: Accessing open loans/closed loans list : Initial focus should be on an element on the page. Refs UIU-1257.
 * Accessibility: Form elements must have labels. Refs UIU-1686.
 
 ## [7.0.1](https://github.com/folio-org/ui-users/tree/v7.0.1) (2021-10-07)
@@ -133,6 +134,7 @@
 * Create Jest/RTL test for `RefundsReportModal`. Refs UIU-2308.
 * Create Jest/RTL test for `WarningModal`. Refs UIU-2336.
 * Create Jest/RTL test for `CopyModal`. Refs UIU-2385.
+* Create Jest/RTL test for `patronBlocks`. Refs UIU-2290.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
