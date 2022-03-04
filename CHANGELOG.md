@@ -1,5 +1,7 @@
 # Change history for ui-users
 
+## [7.2.0] IN PROGRESS
+
 ## [7.1.0](https://github.com/folio-org/ui-users/tree/v7.1.0) (2022-03-03)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v7.0.1...v7.1.0)
 
