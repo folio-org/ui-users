@@ -120,7 +120,6 @@ class UserForm extends React.Component {
   constructor(props) {
     super(props);
 
-
     this.accordionStatusRef = React.createRef();
 
     this.closeButton = React.createRef();
@@ -191,10 +190,13 @@ class UserForm extends React.Component {
   }
 
   ignoreEnterKey = (e) => {
+    const addServicePointsButton = document.querySelector('#add-service-point-btn');
+
     const allowedControls = [
       this.closeButton.current,
       this.saveButton.current,
       this.cancelButton.current,
+      addServicePointsButton,
     ];
 
     if (!allowedControls.includes(e.target)) {
