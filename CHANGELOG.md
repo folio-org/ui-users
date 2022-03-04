@@ -1,6 +1,9 @@
 # Change history for ui-users
 
-## 7.something (IN PROGRESS)
+## [7.2.0] IN PROGRESS
+
+## [7.1.0](https://github.com/folio-org/ui-users/tree/v7.1.0) (2022-03-03)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v7.0.1...v7.1.0)
 
 * Correctly show fee/fine for users without `ui-users.accounts` permission. Refs UIU-2446.
 * Create Jest/RTL test for `RequestFeeFineBlockButtons`. Refs UIU-2287.
