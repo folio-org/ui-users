@@ -150,6 +150,9 @@ class UserForm extends React.Component {
         handler: this.collapseAllSections,
       }
     ];
+
+    this.buttonRefs = [];
+    this.setButtonRef = el => this.buttonRefs.push(el);
   }
 
   handleCancel = () => {
@@ -190,13 +193,11 @@ class UserForm extends React.Component {
   }
 
   ignoreEnterKey = (e) => {
-    const addServicePointsButton = document.querySelector('#add-service-point-btn');
-
     const allowedControls = [
       this.closeButton.current,
       this.saveButton.current,
       this.cancelButton.current,
-      addServicePointsButton,
+      ...this.buttonRefs,
     ];
 
     if (!allowedControls.includes(e.target)) {
@@ -421,9 +422,11 @@ class UserForm extends React.Component {
                         formName="userForm"
                         permissionsField="permissions"
                         form={form}
+                        setButtonRef={this.setButtonRef}
                       />
                       <EditServicePoints
                         accordionId="servicePoints"
+                        setButtonRef={this.setButtonRef}
                         {...this.props}
                       />
                     </div>
