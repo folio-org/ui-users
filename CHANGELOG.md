@@ -138,6 +138,8 @@
 * Create Jest/RTL test for `RefundsReportModal`. Refs UIU-2308.
 * Create Jest/RTL test for `WarningModal`. Refs UIU-2336.
 * Create Jest/RTL test for `CopyModal`. Refs UIU-2385.
+* Create Jest/RTL test for `PatronBlock`. Refs UIU-2337.
+* Create Jest/RTL test for `ContributorsView`. Refs UIU-2367.
 * Create Jest/RTL test for `patronBlocks`. Refs UIU-2290.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
