@@ -116,8 +116,22 @@ describe('getChargeFineToLoanPath', () => {
 describe('getFullName', () => {
   const firstName = 'John';
   const middleName = 'Jacob';
+  const preferredFirstName = 'Johnnie';
   const lastName = 'Jingle-Heimer-Schmidt';
   it('handles all names', () => {
+    const user = {
+      personal: {
+        firstName,
+        preferredFirstName,
+        middleName,
+        lastName,
+      },
+    };
+
+    expect(getFullName(user)).toBe(`${lastName}, ${preferredFirstName} ${middleName}`);
+  });
+
+  it('handles missing preferred first name', () => {
     const user = {
       personal: {
         firstName,

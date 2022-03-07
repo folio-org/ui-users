@@ -32,6 +32,7 @@ const Setting = ({
       <Col sm={1}>
         <Field
           name={name}
+          aria-label={label}
           component={Select}
           dataOptions={[
             { value: true, label: intl.formatMessage({ id: 'ui-users.yes' }) },

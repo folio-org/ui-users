@@ -352,11 +352,11 @@
     "blocks.columns.renewals": "续借",
     "blocks.buttons.add": "创建冻结",
     "blocks.form.label.information": "冻结信息",
-    "blocks.form.label.display": "显示描述*",
+    "blocks.form.label.display": "显示描述",
     "blocks.form.label.staff": "仅限员工信息",
     "blocks.form.label.message": "给读者的消息",
     "blocks.form.label.date": "失效日期",
-    "blocks.form.label.block": "冻结操作*",
+    "blocks.form.label.block": "<strong>冻结操作<span> * </span> </strong> （选择所有适用项）",
     "blocks.form.label.borrowing": "外借中",
     "blocks.form.label.renewals": "续借",
     "blocks.form.placeholder.desc": "输入简短描述（必备）",
@@ -984,5 +984,8 @@
     "permissions.unassignAllPermissions": "取消分配所有权限",
     "permissions.calloutMessage": "用户权限全部未分配。",
     "permissions.modal.unassignAll.header": "取消分配所有权限",
-    "permissions.modal.unassignAll.label": "正在取消分配给用户<strong> {lastName} , {firstName} </strong> <p> <strong>所有权限，确定吗？ </strong> </p>"
+    "permissions.modal.unassignAll.label": "正在取消分配给用户<strong> {lastName} , {firstName} </strong> <p> <strong>所有权限，确定吗？ </strong> </p>",
+    "loans.rows.select": "选择借阅",
+    "loans.selectAllLoans": "选择所有借阅",
+    "sp.selectAllServicePoints": "选择所有服务点"
 }

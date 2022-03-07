@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React from 'react';
+import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import {
@@ -28,6 +28,18 @@ class LoansListing extends React.Component {
     history: PropTypes.object,
     match: PropTypes.object,
   };
+
+  constructor(props) {
+    super(props);
+
+    this.paneTitleRef = createRef();
+  }
+
+  componentDidMount() {
+    if (this.paneTitleRef.current) {
+      this.paneTitleRef.current.focus();
+    }
+  }
 
   /**
    * Segmented Control to swtich between open and closed loans
@@ -99,6 +111,7 @@ class LoansListing extends React.Component {
           defaultWidth="100%"
           dismissible
           onClose={this.handleClose}
+          paneTitleRef={this.paneTitleRef}
           paneTitle={(
             <FormattedMessage id="ui-users.loans.title">
               {(title) => `${title} - ${getFullName(user)} (${_.upperFirst(patronGroup.group)})`}
