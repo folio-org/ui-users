@@ -133,6 +133,7 @@
 * Create Jest/RTL test for `CommentModal`. Refs UIU-2280.
 * Create Jest/RTL test for `ResetPasswordModal`. Refs UIU-2359.
 * Create Jest/RTL test for `CreatePasswordModal`. Refs UIU-2355.
+* Create Jest/RTL test for `CreateResetPasswordControl`. Refs UIU-2262.
 * Create Jest/RTL test for `CheckboxColumn`. Refs UIU-2261.
 * Create Jest/RTL test for `RefundsReportModal`. Refs UIU-2308.
 * Create Jest/RTL test for `WarningModal`. Refs UIU-2336.
