@@ -134,10 +134,13 @@
 * Create Jest/RTL test for `CommentModal`. Refs UIU-2280.
 * Create Jest/RTL test for `ResetPasswordModal`. Refs UIU-2359.
 * Create Jest/RTL test for `CreatePasswordModal`. Refs UIU-2355.
+* Create Jest/RTL test for `CreateResetPasswordControl`. Refs UIU-2262.
 * Create Jest/RTL test for `CheckboxColumn`. Refs UIU-2261.
 * Create Jest/RTL test for `RefundsReportModal`. Refs UIU-2308.
 * Create Jest/RTL test for `WarningModal`. Refs UIU-2336.
 * Create Jest/RTL test for `CopyModal`. Refs UIU-2385.
+* Create Jest/RTL test for `PatronBlock`. Refs UIU-2337.
+* Create Jest/RTL test for `ContributorsView`. Refs UIU-2367.
 * Create Jest/RTL test for `patronBlocks`. Refs UIU-2290.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
