@@ -6,6 +6,8 @@
 * *BREAKING* Require okapi interface `permissions` `5.5` for permission-assignment permissions. Refs UIU-2549.
 * Happy St. Patrick's Day
 
+* Show an error toast when saving user-changes fails for any reason. Refs UIU-2541.
+
 ## [7.1.0](https://github.com/folio-org/ui-users/tree/v7.1.0) (2022-03-03)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v7.0.1...v7.1.0)
 
