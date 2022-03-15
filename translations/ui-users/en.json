@@ -339,6 +339,7 @@
   "errors.reviewBeforeRenewal": "{message} Please review {policyName} before retrying renewal.",
   "errors.loanNotRenewedReason": "Loan cannot be renewed because: {message}.",
   "errors.userNotFound": "User not found",
+  "errors.permissionChangeFailed": "Permissions were not changed",
   "hide": "Hide",
   "show": "Show",
   "active": "Active",
