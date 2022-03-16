@@ -34,7 +34,7 @@
     "okapiInterfaces": {
       "users": "15.0",
       "configuration": "2.0",
-      "permissions": "5.0",
+      "permissions": "7.0",
       "login": "6.0 7.0",
       "users-bl": "5.0 6.0"
     },
