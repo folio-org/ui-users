@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## [8.0.0] IN PROGRESS
+
+* *BREAKING* Require okapi interface `permissions` `5.5` for permission-assignment permissions. Refs UIU-2549.
+
 ## [7.1.0](https://github.com/folio-org/ui-users/tree/v7.1.0) (2022-03-03)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v7.0.1...v7.1.0)
 
