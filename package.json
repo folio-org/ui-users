@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "7.2.0",
+  "version": "8.0.0",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -34,7 +34,7 @@
     "okapiInterfaces": {
       "users": "15.0",
       "configuration": "2.0",
-      "permissions": "5.0",
+      "permissions": "5.5",
       "login": "6.0 7.0",
       "users-bl": "5.0 6.0"
     },
@@ -148,7 +148,9 @@
           "ui-users.viewperms",
           "perms.users.item.put",
           "perms.users.item.post",
-          "perms.users.item.delete"
+          "perms.users.item.delete",
+          "perms.users.assign.immutable",
+          "perms.users.assign.mutable"
         ],
         "visible": true
       },
