@@ -987,5 +987,10 @@
     "permissions.modal.unassignAll.label": "You are unassigning from the user <strong>{lastName}, {firstName}</strong> <p><strong>Are you sure?</strong></p>",
     "loans.rows.select": "Select loan",
     "loans.selectAllLoans": "Select all loans",
-    "sp.selectAllServicePoints": "Select all service points"
+    "sp.selectAllServicePoints": "Select all service points",
+    "owners.select": "Select owner",
+    "charge.feefine.id": "Fee/fine id",
+    "charge.amount": "Amount",
+    "charge.comment.label": "Comments",
+    "errors.permissionChangeFailed": "Permissions were not changed"
 }
