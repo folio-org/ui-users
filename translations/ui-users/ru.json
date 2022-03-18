@@ -209,9 +209,9 @@
     "comment.waived": "Require comment when fee/fine fully/partially waived",
     "comment.transferred": "Require comment when fee/fine fully/partially transferred",
     "comment.refunded": "Require comment when fee/fine fully/partially refunded",
-    "charge.owner.label": "Fee/fine owner*",
+    "charge.owner.label": "Fee/fine owner",
     "charge.feefine.label": "Тип оплаты*",
-    "charge.amount.label": "Fee/fine amount*",
+    "charge.amount.label": "Fee/fine amount",
     "charge.patron": "Читатель",
     "charge.barcode": "Штрихкод: ",
     "charge.title": " Новая оплата",
@@ -987,5 +987,10 @@
     "permissions.modal.unassignAll.label": "You are unassigning all permissions from the user <strong>{lastName}, {firstName}</strong> <p><strong>Are you sure?</strong></p>",
     "loans.rows.select": "Select loan",
     "loans.selectAllLoans": "Select all loans",
-    "sp.selectAllServicePoints": "Select all service points"
+    "sp.selectAllServicePoints": "Select all service points",
+    "owners.select": "Select owner",
+    "charge.feefine.id": "Fee/fine id",
+    "charge.amount": "Amount",
+    "charge.comment.label": "Comments",
+    "errors.permissionChangeFailed": "Permissions were not changed"
 }

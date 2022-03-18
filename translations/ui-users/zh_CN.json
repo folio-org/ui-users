@@ -987,5 +987,10 @@
     "permissions.modal.unassignAll.label": "正在取消分配给用户<strong> {lastName} , {firstName} </strong> <p> <strong>所有权限，确定吗？ </strong> </p>",
     "loans.rows.select": "选择借阅",
     "loans.selectAllLoans": "选择所有借阅",
-    "sp.selectAllServicePoints": "选择所有服务点"
+    "sp.selectAllServicePoints": "选择所有服务点",
+    "owners.select": "Select owner",
+    "charge.feefine.id": "Fee/fine id",
+    "charge.amount": "Amount",
+    "charge.comment.label": "Comments",
+    "errors.permissionChangeFailed": "Permissions were not changed"
 }
