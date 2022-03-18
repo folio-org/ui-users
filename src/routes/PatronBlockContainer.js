@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { stripesConnect } from '@folio/stripes/core';
 import { PatronBlockLayer } from '../components/PatronBlock';
+import { MAX_RECORDS } from '../constants';
 
 class PatronBlockContainer extends React.Component {
   static manifest = Object.freeze({
@@ -18,20 +19,24 @@ class PatronBlockContainer extends React.Component {
       type: 'okapi',
       records: 'manualblocks',
       path:'manualblocks',
+      params: {
+        limit: MAX_RECORDS,
+        query: 'userId==:{id}',
+      },
       PUT: {
         path: 'manualblocks/%{activeRecord.blockid}',
       },
       DELETE: {
         path: 'manualblocks/%{activeRecord.blockid}',
-      }
+      },
     },
     blockTemplates: {
       type: 'okapi',
       records: 'manualBlockTemplates',
       path:'manual-block-templates',
       params: {
-        limit: '100'
-      }
+        limit: '100',
+      },
     },
     activeRecord: {},
   });
@@ -41,7 +46,7 @@ class PatronBlockContainer extends React.Component {
       manualPatronBlocks: PropTypes.shape({
         POST: PropTypes.func.isRequired,
         PUT: PropTypes.func.isRequired,
-        DELETE: PropTypes.func.isRequired
+        DELETE: PropTypes.func.isRequired,
       }),
       activeRecord: PropTypes.object,
     }).isRequired,

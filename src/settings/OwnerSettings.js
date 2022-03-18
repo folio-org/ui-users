@@ -25,7 +25,11 @@ const columnMapping = {
     </Label>
   ),
   desc: <FormattedMessage id="ui-users.owners.columns.desc" />,
-  servicePointOwner: <FormattedMessage id="ui-users.owners.columns.asp" />,
+  servicePointOwner: (
+    <Label id="associated-service-point-label">
+      <FormattedMessage id="ui-users.owners.columns.asp" />
+    </Label>
+  ),
 };
 
 class OwnerSettings extends React.Component {
@@ -126,6 +130,7 @@ class OwnerSettings extends React.Component {
           {...fieldProps}
           id="owner-service-point"
           component={MultiSelection}
+          aria-labelledby="associated-service-point-label"
           dataOptions={options}
           renderToOverlay
           marginBottom0
