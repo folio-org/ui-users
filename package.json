@@ -413,11 +413,11 @@
         "permissionName": "ui-users.settings.transfertypes",
         "displayName": "Settings (Users): Can create, edit and remove transfer criteria",
         "subPermissions": [
-          "transfertypes.collection.get",
-          "transfertypes.item.delete",
-          "transfertypes.item.get",
-          "transfertypes.item.post",
-          "transfertypes.item.put",
+          "transfer-criterias.collection.get",
+          "transfer-criterias.item.delete",
+          "transfer-criterias.item.get",
+          "transfer-criterias.item.post",
+          "transfer-criterias.item.put",
           "settings.users.enabled"
         ],
         "visible": true
