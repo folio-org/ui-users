@@ -480,9 +480,7 @@
         "subPermissions": [
           "patron-block-conditions.collection.get",
           "patron-block-conditions.item.get",
-          "patron-block-conditions.item.post",
-          "patron-block-conditions.item.put",
-          "patron-block-conditions.item.delete"
+          "patron-block-conditions.item.put"
         ],
         "visible": true
       },
