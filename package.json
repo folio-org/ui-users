@@ -474,7 +474,7 @@
       },
       {
         "permissionName": "ui-users.settings.conditions",
-        "displayName": "Settings (Users): Can create, edit and remove patron blocks conditions",
+        "displayName": "Settings (Users): Can view and edit patron blocks conditions",
         "subPermissions": [
           "patron-block-conditions.collection.get",
           "patron-block-conditions.item.get",
