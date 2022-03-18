@@ -720,7 +720,6 @@
         "displayName": "Users: Create/reset password",
         "subPermissions": [
           "login.credentials-existence.get",
-          "login.collection.get",
           "ui-users.view",
           "ui-users.edit",
           "users-bl.password-reset-link.generate"
