@@ -35,7 +35,7 @@
       "users": "15.0",
       "configuration": "2.0",
       "permissions": "5.5",
-      "login": "6.0 7.0",
+      "login": "7.0",
       "users-bl": "5.0 6.0"
     },
     "optionalOkapiInterfaces": {
@@ -71,7 +71,6 @@
           "users.collection.get",
           "users.item.get",
           "usergroups.collection.get",
-          "login.item.get",
           "configuration.entries.collection.get",
           "user-settings.custom-fields.collection.get",
           "user-settings.custom-fields.item.get",
@@ -89,7 +88,6 @@
           "ui-users.view",
           "users-bl.item.put",
           "users.item.put",
-          "login.item.put",
           "tags.collection.get",
           "tags.item.post",
           "circulation-storage.request-preferences.item.post",
