@@ -148,6 +148,7 @@
 * Create Jest/RTL test for `PatronBlock`. Refs UIU-2337.
 * Create Jest/RTL test for `ContributorsView`. Refs UIU-2367.
 * Create Jest/RTL test for `patronBlocks`. Refs UIU-2290.
+* Create Jest/RTL test for `CsvReport`. Refs UIU-2291.
 * Create Jest/RTL test for `asyncValidateField`. Refs UIU-2271.
 * Create Jest/RTL test for `PatronGroupNumberOfUsers`. Refs UIU-2272.
 * Create Jest/RTL test for `EditProxy`. Refs UIU-2285.
