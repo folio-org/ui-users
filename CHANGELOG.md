@@ -2,6 +2,7 @@
 
 ## [8.1.0] IN PROGRESS
 
+* Increase limit for servicePoints query in `<AccountDetailsContainer>`. Fixes UIU-2544.
 
 ## [8.0.0](https://github.com/folio-org/ui-users/tree/v8.0.0) (2022-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v7.1.0...v8.0.0)
