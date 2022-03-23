@@ -71,7 +71,6 @@
           "users.collection.get",
           "users.item.get",
           "usergroups.collection.get",
-          "login.item.get",
           "configuration.entries.collection.get",
           "user-settings.custom-fields.collection.get",
           "user-settings.custom-fields.item.get",
@@ -89,7 +88,6 @@
           "ui-users.view",
           "users-bl.item.put",
           "users.item.put",
-          "login.item.put",
           "tags.collection.get",
           "tags.item.post",
           "circulation-storage.request-preferences.item.post",
@@ -415,11 +413,11 @@
         "permissionName": "ui-users.settings.transfertypes",
         "displayName": "Settings (Users): Can create, edit and remove transfer criteria",
         "subPermissions": [
-          "transfertypes.collection.get",
-          "transfertypes.item.delete",
-          "transfertypes.item.get",
-          "transfertypes.item.post",
-          "transfertypes.item.put",
+          "transfer-criterias.collection.get",
+          "transfer-criterias.item.delete",
+          "transfer-criterias.item.get",
+          "transfer-criterias.item.post",
+          "transfer-criterias.item.put",
           "settings.users.enabled"
         ],
         "visible": true
@@ -476,13 +474,11 @@
       },
       {
         "permissionName": "ui-users.settings.conditions",
-        "displayName": "Settings (Users): Can create, edit and remove patron blocks conditions",
+        "displayName": "Settings (Users): Can view and edit patron blocks conditions",
         "subPermissions": [
           "patron-block-conditions.collection.get",
           "patron-block-conditions.item.get",
-          "patron-block-conditions.item.post",
-          "patron-block-conditions.item.put",
-          "patron-block-conditions.item.delete"
+          "patron-block-conditions.item.put"
         ],
         "visible": true
       },
@@ -724,7 +720,6 @@
         "displayName": "Users: Create/reset password",
         "subPermissions": [
           "login.credentials-existence.get",
-          "login.collection.get",
           "ui-users.view",
           "ui-users.edit",
           "users-bl.password-reset-link.generate"
