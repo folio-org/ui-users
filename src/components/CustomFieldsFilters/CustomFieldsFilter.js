@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {
   Accordion,
   FilterAccordionHeader,
-} from '@folio/stripes-components';
+} from '@folio/stripes/components';
 import {
   MultiSelectionFilter,
   CheckboxFilter,
