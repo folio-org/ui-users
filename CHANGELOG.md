@@ -1,13 +1,18 @@
 # Change history for ui-users
 
+## [8.0.1](https://github.com/folio-org/ui-users/tree/v8.0.1) (2022-03-25)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v8.0.0...v8.0.1)
+
+* Increase limit for servicePoints query in <AccountDetailsContainer>. Fixes UIU-2544.
+* Replace onChange with onClick when checkbox is clicked on MCL row. Fixes UIU-2543.
+* Unable to edit Manual Patron Blocks. Refs UIU-2548.
+* Show an error toast when saving user-changes fails for any reason. Refs UIU-2541.
+
 ## [8.0.0](https://github.com/folio-org/ui-users/tree/v8.0.0) (2022-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v7.1.0...v8.0.0)
 
 * *BREAKING* Require okapi interface `permissions` `5.5` for permission-assignment permissions. Refs UIU-2549.
 * Happy St. Patrick's Day
-
-* Show an error toast when saving user-changes fails for any reason. Refs UIU-2541.
-* Unable to edit Manual Patron Blocks. Refs UIU-2548.
 
 ## [7.1.0](https://github.com/folio-org/ui-users/tree/v7.1.0) (2022-03-03)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v7.0.1...v7.1.0)
