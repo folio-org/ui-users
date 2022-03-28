@@ -2,6 +2,8 @@
 
 ## [8.1.0] IN PROGRESS
 
+* Increase limit for servicePoints query in `<AccountDetailsContainer>`. Fixes UIU-2544.
+* Replace `onChange` with `onClick` when checkbox is clicked on MCL row. Fixes UIU-2543.
 * Correctly import from `stripes-components` via `@folio/stripes`. Refs UIU-2173.
 
 ## [8.0.0](https://github.com/folio-org/ui-users/tree/v8.0.0) (2022-03-17)
@@ -149,6 +151,7 @@
 * Create Jest/RTL test for `PatronBlock`. Refs UIU-2337.
 * Create Jest/RTL test for `ContributorsView`. Refs UIU-2367.
 * Create Jest/RTL test for `patronBlocks`. Refs UIU-2290.
+* Create Jest/RTL test for `isOverridePossible`. Refs UIU-2293.
 * Create Jest/RTL test for `CsvReport`. Refs UIU-2291.
 * Create Jest/RTL test for `asyncValidateField`. Refs UIU-2271.
 * Create Jest/RTL test for `PatronGroupNumberOfUsers`. Refs UIU-2272.

@@ -111,7 +111,10 @@ class AccountDetailsContainer extends React.Component {
       type: 'okapi',
       records: 'servicepoints',
       path: 'service-points',
-      limit: 10000,
+      params: {
+        query: 'cql.allRecords=1',
+        limit: MAX_RECORDS,
+      },
     },
   });
 
