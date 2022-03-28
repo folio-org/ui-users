@@ -36,7 +36,8 @@
       "configuration": "2.0",
       "permissions": "5.5",
       "login": "6.0 7.0",
-      "users-bl": "5.0 6.0"
+      "users-bl": "5.0 6.0",
+      "tags": "1.0"
     },
     "optionalOkapiInterfaces": {
       "automated-patron-blocks": "0.1",
