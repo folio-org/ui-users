@@ -209,9 +209,9 @@
     "comment.waived": "يتطلب التعليق عند إعفاء الغرامة/الرسم بشكل جزئي/كامل",
     "comment.transferred": "يتطلب التعليق عند تحويل الغرامة/الرسم بشكل جزئي/كامل",
     "comment.refunded": "يتطلب التعليق عند رد الرسوم/الغرامات بشكل جزئي/كامل",
-    "charge.owner.label": "جهة تحصيل الغرامة/الرسم*",
-    "charge.feefine.label": "نوع الغرامة/الرسم*",
-    "charge.amount.label": "مبلغ الرسم/الغرامة*",
+    "charge.owner.label": "جهة تحصيل الغرامة/الرسم",
+    "charge.feefine.label": "نوع الغرامة/الرسم",
+    "charge.amount.label": "مبلغ الرسم/الغرامة",
     "charge.patron": "المستفيد",
     "charge.barcode": "الباركود",
     "charge.title": "غرامة/رسم جديد",
@@ -987,5 +987,10 @@
     "permissions.modal.unassignAll.label": "أنت تقوم بإلغاء تعيين كل الصلاحيات من المستخدم <strong>{lastName}, {firstName}</strong><p><strong>هل أنت متأكد؟</strong></p>",
     "loans.rows.select": "تحديد إعارة",
     "loans.selectAllLoans": "تحديد كل الإعارات",
-    "sp.selectAllServicePoints": "حدد كل نقاط الخدمة"
+    "sp.selectAllServicePoints": "حدد كل نقاط الخدمة",
+    "owners.select": "حدد جهة التحصيل",
+    "charge.feefine.id": "معرّف الرسم/الغرامة",
+    "charge.amount": "المبلغ",
+    "charge.comment.label": "تعليقات",
+    "errors.permissionChangeFailed": "لم يتم تغيير الصلاحيات"
 }
