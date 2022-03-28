@@ -4,6 +4,7 @@
 
 * Increase limit for servicePoints query in `<AccountDetailsContainer>`. Fixes UIU-2544.
 * Replace `onChange` with `onClick` when checkbox is clicked on MCL row. Fixes UIU-2543.
+* Correctly import from `stripes-components` via `@folio/stripes`. Refs UIU-2173.
 
 ## [8.0.0](https://github.com/folio-org/ui-users/tree/v8.0.0) (2022-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v7.1.0...v8.0.0)
