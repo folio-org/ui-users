@@ -51,9 +51,14 @@ const VISIBLE_COLUMNS_STORAGE_KEY = 'users-visible-columns';
 const NON_TOGGLEABLE_COLUMNS = ['name'];
 
 function getFullName(user) {
-  const lastName = get(user, ['personal', 'lastName'], '');
-  const firstName = get(user, ['personal', 'firstName'], '');
-  const middleName = get(user, ['personal', 'middleName'], '');
+  let firstName = user?.personal?.firstName ?? '';
+  const lastName = user?.personal?.lastName ?? '';
+  const middleName = user?.personal?.middleName ?? '';
+  const preferredFirstName = user?.personal?.preferredFirstName ?? '';
+
+  if (preferredFirstName && firstName) {
+    firstName = `${preferredFirstName} (${firstName})`;
+  }
 
   return `${lastName}${firstName ? ', ' : ' '}${firstName} ${middleName}`;
 }

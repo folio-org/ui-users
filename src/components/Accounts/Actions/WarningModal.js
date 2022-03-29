@@ -42,13 +42,13 @@ class WarningModal extends React.Component {
     this.state = {
       checkedAccounts: {},
       allChecked: true,
-      sortOrder: ['Alert details', 'Fee/Fine type', 'Remainig', 'Payment Status', 'Item'],
+      sortOrder: ['Alert details', 'Fee/Fine type', 'Remaining', 'Payment Status', 'Item'],
       sortDirection: ['desc', 'asc']
     };
     this.sortMap = {
       'Alert details': this.getAlertDetailsFormatter,
       'Fee/Fine type': a => a.feeFineType,
-      'Remainig': a => a.remaining,
+      'Remaining': a => a.remaining,
       'Payment Status': a => (a.paymentStatus || {}).name,
       'Item': a => a.title,
     };

@@ -14,7 +14,7 @@ import {
   MultiColumnList,
   Spinner,
   TextArea,
-} from '@folio/stripes-components';
+} from '@folio/stripes/components';
 
 import { getOpenRequestsPath } from '../../../../util';
 import refundTransferClaimReturned from '../../../../util/refundTransferClaimReturned';
@@ -214,8 +214,15 @@ class BulkClaimReturnedModal extends React.Component {
       </ModalFooter>
     );
 
-    const columns = ['title', 'dueDate', 'requests', 'barcode', 'callNumber', 'loanPolicy'];
-    if (operationState === 'post') { columns.unshift('status'); }
+    const columns = [
+      'bulkClaimReturnedTitle',
+      'bulkClaimReturnedDueDate',
+      'bulkClaimReturnedRequests',
+      'bulkClaimReturnedBarcode',
+      'bulkClaimReturnedCallNumber',
+      'bulkClaimReturnedLoanPolicy',
+    ];
+    if (operationState === 'post') { columns.unshift('bulkClaimReturnedStatus'); }
 
     const statuses = {
       OK: <FormattedMessage id="ui-users.bulkClaimReturned.status.ok" />,
@@ -228,22 +235,22 @@ class BulkClaimReturnedModal extends React.Component {
         contentData={loans}
         visibleColumns={columns}
         columnMapping={{
-          status: <FormattedMessage id="ui-users.bulkClaimReturned.status" />,
-          title: <FormattedMessage id="ui-users.bulkClaimReturned.item.title" />,
-          dueDate: <FormattedMessage id="ui-users.dueDate" />,
-          requests: <FormattedMessage id="ui-users.loans.details.requests" />,
-          barcode: <FormattedMessage id="ui-users.item.barcode" />,
-          callNumber: <FormattedMessage id="ui-users.item.callNumberComponents.callNumber" />,
-          loanPolicy: <FormattedMessage id="ui-users.loans.details.loanPolicy" />,
+          bulkClaimReturnedStatus: <FormattedMessage id="ui-users.bulkClaimReturned.status" />,
+          bulkClaimReturnedTitle: <FormattedMessage id="ui-users.bulkClaimReturned.item.title" />,
+          bulkClaimReturnedDueDate: <FormattedMessage id="ui-users.dueDate" />,
+          bulkClaimReturnedRequests: <FormattedMessage id="ui-users.loans.details.requests" />,
+          bulkClaimReturnedBarcode: <FormattedMessage id="ui-users.item.barcode" />,
+          bulkClaimReturnedCallNumber: <FormattedMessage id="ui-users.item.callNumberComponents.callNumber" />,
+          bulkClaimReturnedLoanPolicy: <FormattedMessage id="ui-users.loans.details.loanPolicy" />,
         }}
         formatter={{
-          status: loan => (unchangedLoans.includes(loan.id) ? statuses.NOT_OK : statuses.OK),
-          title: loan => loan?.item?.title,
-          dueDate: loan => <FormattedDate value={loan?.dueDate} />,
-          requests: loan => this.getRequestCountForItem(loan?.item?.id),
-          barcode: loan => loan?.item?.barcode,
-          callNumber: loan => loan?.item?.callNumber,
-          loanPolicy: loan => loan?.loanPolicy?.name,
+          bulkClaimReturnedStatus: loan => (unchangedLoans.includes(loan.id) ? statuses.NOT_OK : statuses.OK),
+          bulkClaimReturnedTitle: loan => loan?.item?.title,
+          bulkClaimReturnedDueDate: loan => <FormattedDate value={loan?.dueDate} />,
+          bulkClaimReturnedRequests: loan => this.getRequestCountForItem(loan?.item?.id),
+          bulkClaimReturnedBarcode: loan => loan?.item?.barcode,
+          bulkClaimReturnedCallNumber: loan => loan?.item?.callNumber,
+          bulkClaimReturnedLoanPolicy: loan => loan?.loanPolicy?.name,
         }}
       />;
 

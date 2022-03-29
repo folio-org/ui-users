@@ -13,6 +13,7 @@ import {
 } from 'lodash';
 
 import { LoadingView } from '@folio/stripes/components';
+import { CalloutContext } from '@folio/stripes/core';
 
 import { getRecordObject } from '../../components/util';
 
@@ -20,26 +21,7 @@ import UserForm from './UserForm';
 import { toUserAddresses, getFormAddressList } from '../../components/data/converters/address';
 import contactTypes from '../../components/data/static/contactTypes';
 import { deliveryFulfillmentValues } from '../../constants';
-
-function resourcesLoaded(obj, exceptions = []) {
-  for (const resource in obj) {
-    if (!exceptions.includes(resource)) {
-      if (Object.prototype.hasOwnProperty.call(obj, resource)) {
-        if (obj[resource] === null) {
-          return false;
-        }
-        if (typeof obj[resource] === 'object') {
-          if (Object.prototype.hasOwnProperty.call(obj[resource], 'isPending')) {
-            if (obj[resource].isPending) {
-              return false;
-            }
-          }
-        }
-      }
-    }
-  }
-  return true;
-}
+import { resourcesLoaded, showErrorCallout } from './UserEditHelpers';
 
 class UserEdit extends React.Component {
   static propTypes = {
@@ -57,6 +39,8 @@ class UserEdit extends React.Component {
     getProxies: PropTypes.func,
     getSponsors: PropTypes.func,
   }
+
+  static contextType = CalloutContext;
 
   getUser() {
     const { resources, match: { params: { id } } } = this.props;
@@ -162,7 +146,9 @@ class UserEdit extends React.Component {
       ...requestPreferences,
     };
 
-    mutator.requestPreferences.PUT(payload);
+    mutator.requestPreferences
+      .PUT(payload)
+      .catch((e) => showErrorCallout(e, this.context.sendCallout));
   }
 
   create = ({ requestPreferences, ...userFormData }) => {
@@ -260,13 +246,15 @@ class UserEdit extends React.Component {
       data.active = (moment(user.expirationDate).endOf('day').isSameOrAfter(today));
     }
 
-    mutator.selUser.PUT(data).then(() => {
-      history.push({
-        pathname: params.id ? `/users/preview/${params.id}` : '/users',
-        search,
-        state,
-      });
-    });
+    mutator.selUser
+      .PUT(data).then(() => {
+        history.push({
+          pathname: params.id ? `/users/preview/${params.id}` : '/users',
+          search,
+          state,
+        });
+      })
+      .catch((e) => showErrorCallout(e, this.context.sendCallout));
   }
 
   async updatePermissions(userId, perms) {
@@ -297,12 +285,16 @@ class UserEdit extends React.Component {
       // requires us to remove the metadata object before sending the request.
       delete record.metadata;
 
-      permissionsMutator.PUT(record);
+      permissionsMutator
+        .PUT(record)
+        .catch((e) => showErrorCallout(e, this.context.sendCallout));
     } else {
       // Create a new permissions user record first
       await permUserMutator.POST({ userId }).then(record => {
         record.permissions = permissionNames;
-        permissionsMutator.PUT(record);
+        permissionsMutator
+          .PUT(record)
+          .catch((e) => showErrorCallout(e, this.context.sendCallout));
       });
     }
   }

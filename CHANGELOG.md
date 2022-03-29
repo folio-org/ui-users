@@ -1,6 +1,20 @@
 # Change history for ui-users
 
-## 7.something (IN PROGRESS)
+## [8.1.0] IN PROGRESS
+
+* Increase limit for servicePoints query in `<AccountDetailsContainer>`. Fixes UIU-2544.
+* Replace `onChange` with `onClick` when checkbox is clicked on MCL row. Fixes UIU-2543.
+* Correctly import from `stripes-components` via `@folio/stripes`. Refs UIU-2173.
+* Missing interface dependency: tags. Fixes UIU-2557.
+
+## [8.0.0](https://github.com/folio-org/ui-users/tree/v8.0.0) (2022-03-17)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v7.1.0...v8.0.0)
+
+* *BREAKING* Require okapi interface `permissions` `5.5` for permission-assignment permissions. Refs UIU-2549.
+* Happy St. Patrick's Day
+
+## [7.1.0](https://github.com/folio-org/ui-users/tree/v7.1.0) (2022-03-03)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v7.0.1...v7.1.0)
 
 * Correctly show fee/fine for users without `ui-users.accounts` permission. Refs UIU-2446.
 * Create Jest/RTL test for `RequestFeeFineBlockButtons`. Refs UIU-2287.
@@ -23,6 +37,32 @@
 * Also support `circulation` `12.0`. Refs UIU-2480.
 * Also support `request-storage` `4.0` (TLR). Refs UIU-2495, UIU-2480.
 * Fix problems with permissions for claim returned, renewals. Refs UIU-2256.
+* Settings > Users > change focus. Refs UIU-2036.
+* Add custom fields filters. Refs UIU-2170.
+* Properly show service point name in fee/fine details. Fixes UIU-2473.
+* Suppress edit of users stored in a configuration entry. Refs UIU-2499.
+* Also support `circulation` `13.0`. Refs UIU-2483.
+* Fix unexpected increase of fee/fine remaining balance. Refs UIU-2506.
+* Correct calculation for expiration date. Refs UIU-2498.
+* Preserve invisible permissions during edit. Fixes UIU-2075.
+* Column selector dropdown does not match column headings. Refs UIU-2504.
+* Fee/Fine Type not showing/saving for first manual fee/fine created. Refs UIU-2508.
+* Add Jest/RTL tests for `CommentModal` business logic in `FeeFineActions` component. Refs UIU-2515.
+* Add `limit` clauses to `withRenew` queries to enable retrieval of more than 10 records. Refs UIU-2520.
+* Accessibility: Document has multiple static elements with the same ID attribute. Refs UIU-1688.
+* Preserve search filters during user edit. Fixes UIU-2484.
+* Retrieve up to 50 proxies/sponsors. Refs UIU-2510.
+* Open Loans List: Form does not include label. Refs UIU-1638.
+* Accessibility: Headings must not be empty. Refs UIU-1695.
+* Prevent duplication of permissions in `<PermissionsModal>` and related logic. Fixes UIU-2486, UIU-2496.
+* Add Service Point modal: Ensure every form element has label. Refs UIU-1699.
+* Create/Edit Patron Blocks: Required fields are not using the right prop and cannot be read by screenreader. Refs UIU-1688.
+* Display preferred name in the search result. Refs UIU-2500.
+* Display preferred name in the header and body of the user record. Refs UIU-2501.
+* Display preferred name in the top of the edit view of the user record. Refs UIU-2502.
+* Newly Created Address Record Should be In Focus. Refs UIU-1161.
+* Keyboard Navigation: Accessing open loans/closed loans list : Initial focus should be on an element on the page. Refs UIU-1257.
+* Accessibility: Form elements must have labels. Refs UIU-1686.
 
 ## [7.0.1](https://github.com/folio-org/ui-users/tree/v7.0.1) (2021-10-07)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.1.0...v7.0.1)
@@ -92,6 +132,33 @@
 * Create Jest/RTL test for `Modals`. Refs UIU-2323.
 * Create Jest/RTL test for `BulkClaimReturnedModal`. Refs UIU-2317.
 * Create Jest/RTL test for `PatronBlockModalWithOverrideModal`. Refs UIU-2370.
+* Create Jest/RTL test for `PatronBlockModal`. Refs UIU-2278.
+* Create Jest/RTL test for `OverrideModal`. Refs UIU-2358.
+* Create Jest/RTL test for `OwnerSettings`. Refs UIU-2406.
+* Create Jest/RTL test for `PaymentSettings`. Refs UIU-2389.
+* Create Jest/RTL test for `FeeFineSettings`. Refs UIU-2378.
+* Create Jest/RTL test for `ActionModal`. Refs UIU-2286.
+* Create Jest/RTL test for `ErrorModal`. Refs UIU-2318.
+* Create Jest/RTL test for `WithCopyModal`. Refs UIU-2268.
+* Create Jest/RTL test for `CancellationModal`. Refs UIU-2342.
+* Create Jest/RTL test for `CommentModal`. Refs UIU-2280.
+* Create Jest/RTL test for `ResetPasswordModal`. Refs UIU-2359.
+* Create Jest/RTL test for `CreatePasswordModal`. Refs UIU-2355.
+* Create Jest/RTL test for `CreateResetPasswordControl`. Refs UIU-2262.
+* Create Jest/RTL test for `CheckboxColumn`. Refs UIU-2261.
+* Create Jest/RTL test for `RefundsReportModal`. Refs UIU-2308.
+* Create Jest/RTL test for `WarningModal`. Refs UIU-2336.
+* Create Jest/RTL test for `CopyModal`. Refs UIU-2385.
+* Create Jest/RTL test for `PatronBlock`. Refs UIU-2337.
+* Create Jest/RTL test for `ContributorsView`. Refs UIU-2367.
+* Create Jest/RTL test for `patronBlocks`. Refs UIU-2290.
+* Create Jest/RTL test for `isOverridePossible`. Refs UIU-2293.
+* Create Jest/RTL test for `CsvReport`. Refs UIU-2291.
+* Create Jest/RTL test for `asyncValidateField`. Refs UIU-2271.
+* Create Jest/RTL test for `PatronGroupNumberOfUsers`. Refs UIU-2272.
+* Create Jest/RTL test for `EditProxy`. Refs UIU-2285.
+* Create Jest/RTL test for `AddServicePointModal`. Refs UIU-2266.
+* Create Jest/RTL test for `OpenLoansWithStaticData`. Refs UIU-2263.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)

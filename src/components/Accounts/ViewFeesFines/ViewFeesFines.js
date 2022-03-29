@@ -126,7 +126,8 @@ class ViewFeesFines extends React.Component {
 
   onRowClick(e, row) {
     const { history, match: { params } } = this.props;
-    if ((e.target.type !== 'button') && (e.target.tagName !== 'IMG')) {
+
+    if (row?.id && !e?.target?.type?.match(/checkbox|button/i) && e.target.tagName !== 'IMG') {
       nav.onClickViewAccountActionsHistory(e, row, history, params);
     }
   }
@@ -194,7 +195,7 @@ class ViewFeesFines extends React.Component {
                     size="small"
                   />
                 </div>
-                <p data-role="popover">
+                <div data-role="popover">
                   <b>
                     <FormattedMessage
                       id="ui-users.accounts.history.staff.info"
@@ -205,7 +206,7 @@ class ViewFeesFines extends React.Component {
                   <Link to={`/users/${feeFine.userId}/accounts/view/${feeFine.id}`}>
                     <FormattedMessage id="ui-users.accounts.history.link.details" />
                   </Link>
-                </p>
+                </div>
               </Popover>
             </Col>
             : null}
@@ -217,6 +218,12 @@ class ViewFeesFines extends React.Component {
   getAccountsFormatter() {
     const accounts = this.props.selectedAccounts;
     return {
+      // Changed onChange to onClick to make sure the click event is correctly propagated
+      // and the checkbox actually changes visually.
+      // There seems to be a bug in MCL where when the onRowClick is registered
+      // the even is being stopped from propagation:
+      // https://github.com/folio-org/stripes-components/blob/08fa633f7660869bc1a29c0f13d80deba62afc80/lib/MultiColumnList/MCLRenderer.js#L834
+      // which currently causes the checkbox to not be visually updated.
       '  ': f => (
         <input
           checked={(accounts.findIndex(a => a.id === f.id) !== -1)}
@@ -453,7 +460,7 @@ class ViewFeesFines extends React.Component {
       'remaining': intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' }),
       'paymentStatus.name': intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' }),
       'feeFineOwner': intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' }),
-      'title': intl.formatMessage({ id: 'ui-users.accounts.history.columns.instance' }),
+      'title': intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' }),
       'barcode': intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' }),
       'callNumber': intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' }),
       'dueDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),

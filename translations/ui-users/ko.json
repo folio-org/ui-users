@@ -167,7 +167,7 @@
     "feefines.errors.amountNumeric": "Default Amount must be numeric",
     "feefines.errors.amountPositive": "Default Amount must be positive",
     "feefines.errors.exist": "Fee/fine type exists",
-    "feefines.errors.existShared": "Fee/fine type exists for owner {owner}",
+    "feefines.errors.existShared": "Fee/fine type exists for other Fee/fine owner(s)",
     "feefines.modal.error": "Select one to continue",
     "feefines.modal.yes": "Yes",
     "feefines.modal.no": "No",
@@ -252,7 +252,7 @@
     "details.field.location": "Location",
     "details.field.duedate": "Due date",
     "details.field.returnedate": "Returned date",
-    "accounts.history.columns.title": "Instance (Item type)",
+    "accounts.history.columns.title": "Instance title (material type)",
     "accounts.history.columns.amount": "Billed",
     "accounts.history.columns.remaining": "Remaining",
     "accounts.history.columns.barcode": "바코드",
@@ -984,5 +984,13 @@
     "permissions.unassignAllPermissions": "Unassign all permissions",
     "permissions.calloutMessage": "User's permissions are all unassigned.",
     "permissions.modal.unassignAll.header": "Unassign all permissions",
-    "permissions.modal.unassignAll.label": "You are unassigning all permissions from the user <strong>{lastName}, {firstName}</strong> <p><strong>Are you sure?</strong></p>"
+    "permissions.modal.unassignAll.label": "You are unassigning all permissions from the user <strong>{lastName}, {firstName}</strong> <p><strong>Are you sure?</strong></p>",
+    "loans.rows.select": "Select loan",
+    "loans.selectAllLoans": "Select all loans",
+    "sp.selectAllServicePoints": "Select all service points",
+    "owners.select": "Select owner",
+    "charge.feefine.id": "Fee/fine id",
+    "charge.amount": "Amount",
+    "charge.comment.label": "Comments",
+    "errors.permissionChangeFailed": "Permissions were not changed"
 }

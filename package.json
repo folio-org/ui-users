@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "7.0.1",
+  "version": "8.1.0",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -34,13 +34,14 @@
     "okapiInterfaces": {
       "users": "15.0",
       "configuration": "2.0",
-      "permissions": "5.0",
+      "permissions": "5.5",
       "login": "6.0 7.0",
-      "users-bl": "5.0 6.0"
+      "users-bl": "5.0 6.0",
+      "tags": "1.0"
     },
     "optionalOkapiInterfaces": {
       "automated-patron-blocks": "0.1",
-      "circulation": "9.0 10.0 11.0 12.0",
+      "circulation": "9.0 10.0 11.0 12.0 13.0",
       "feesfines": "16.1 17.0",
       "loan-policy-storage": "1.0 2.0",
       "loan-storage": "4.0 5.0 6.0 7.0",
@@ -71,7 +72,6 @@
           "users.collection.get",
           "users.item.get",
           "usergroups.collection.get",
-          "login.item.get",
           "configuration.entries.collection.get",
           "user-settings.custom-fields.collection.get",
           "user-settings.custom-fields.item.get",
@@ -89,7 +89,6 @@
           "ui-users.view",
           "users-bl.item.put",
           "users.item.put",
-          "login.item.put",
           "tags.collection.get",
           "tags.item.post",
           "circulation-storage.request-preferences.item.post",
@@ -148,7 +147,9 @@
           "ui-users.viewperms",
           "perms.users.item.put",
           "perms.users.item.post",
-          "perms.users.item.delete"
+          "perms.users.item.delete",
+          "perms.users.assign.immutable",
+          "perms.users.assign.mutable"
         ],
         "visible": true
       },
@@ -413,11 +414,11 @@
         "permissionName": "ui-users.settings.transfertypes",
         "displayName": "Settings (Users): Can create, edit and remove transfer criteria",
         "subPermissions": [
-          "transfertypes.collection.get",
-          "transfertypes.item.delete",
-          "transfertypes.item.get",
-          "transfertypes.item.post",
-          "transfertypes.item.put",
+          "transfer-criterias.collection.get",
+          "transfer-criterias.item.delete",
+          "transfer-criterias.item.get",
+          "transfer-criterias.item.post",
+          "transfer-criterias.item.put",
           "settings.users.enabled"
         ],
         "visible": true
@@ -474,13 +475,11 @@
       },
       {
         "permissionName": "ui-users.settings.conditions",
-        "displayName": "Settings (Users): Can create, edit and remove patron blocks conditions",
+        "displayName": "Settings (Users): Can view and edit patron blocks conditions",
         "subPermissions": [
           "patron-block-conditions.collection.get",
           "patron-block-conditions.item.get",
-          "patron-block-conditions.item.post",
-          "patron-block-conditions.item.put",
-          "patron-block-conditions.item.delete"
+          "patron-block-conditions.item.put"
         ],
         "visible": true
       },
@@ -722,7 +721,6 @@
         "displayName": "Users: Create/reset password",
         "subPermissions": [
           "login.credentials-existence.get",
-          "login.collection.get",
           "ui-users.view",
           "ui-users.edit",
           "users-bl.password-reset-link.generate"
