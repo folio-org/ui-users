@@ -11,7 +11,6 @@ import {
   noop,
   isEmpty,
 } from 'lodash';
-import { Link } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { IfPermission, IfInterface, AppIcon, CalloutContext } from '@folio/stripes/core';
 import {
@@ -680,9 +679,11 @@ class UserSearch extends React.Component {
     const resultsFormatter = {
       active: user => { return user.active ? <FormattedMessage id="ui-users.active" /> : <FormattedMessage id="ui-users.inactive" />; },
       name: user => (
-        <AppIcon app="users" size="small" className={user.active ? undefined : css.inactiveAppIcon}>
+        <>
+          <AppIcon app="users" size="small" className={user.active ? undefined : css.inactiveAppIcon} />
+          &nbsp;
           <TextLink to={this.getRowURL(user.id)}>{getFullName(user)}</TextLink>
-        </AppIcon>
+        </>
       ),
       barcode: user => user.barcode,
       patronGroup: (user) => {
