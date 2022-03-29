@@ -126,7 +126,8 @@ class ViewFeesFines extends React.Component {
 
   onRowClick(e, row) {
     const { history, match: { params } } = this.props;
-    if ((e.target.type !== 'button') && (e.target.tagName !== 'IMG')) {
+
+    if (row?.id && !e?.target?.type?.match(/checkbox|button/i) && e.target.tagName !== 'IMG') {
       nav.onClickViewAccountActionsHistory(e, row, history, params);
     }
   }
@@ -217,10 +218,16 @@ class ViewFeesFines extends React.Component {
   getAccountsFormatter() {
     const accounts = this.props.selectedAccounts;
     return {
+      // Changed onChange to onClick to make sure the click event is correctly propagated
+      // and the checkbox actually changes visually.
+      // There seems to be a bug in MCL where when the onRowClick is registered
+      // the even is being stopped from propagation:
+      // https://github.com/folio-org/stripes-components/blob/08fa633f7660869bc1a29c0f13d80deba62afc80/lib/MultiColumnList/MCLRenderer.js#L834
+      // which currently causes the checkbox to not be visually updated.
       '  ': f => (
         <input
           checked={(accounts.findIndex(a => a.id === f.id) !== -1)}
-          onChange={e => this.toggleItem(e, f)}
+          onClick={e => this.toggleItem(e, f)}
           type="checkbox"
         />
       ),

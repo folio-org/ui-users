@@ -14,7 +14,7 @@ import {
   MultiColumnList,
   Spinner,
   TextArea,
-} from '@folio/stripes-components';
+} from '@folio/stripes/components';
 
 import { getOpenRequestsPath } from '../../../../util';
 import refundTransferClaimReturned from '../../../../util/refundTransferClaimReturned';
