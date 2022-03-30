@@ -6,6 +6,7 @@
 * Replace `onChange` with `onClick` when checkbox is clicked on MCL row. Fixes UIU-2543.
 * Correctly import from `stripes-components` via `@folio/stripes`. Refs UIU-2173.
 * Missing interface dependency: tags. Fixes UIU-2557.
+* Error message "Enter comment" appears erroneously when entering New Staff Info on Fee/Fine Details. Refs UIU-2569.
 
 ## [8.0.0](https://github.com/folio-org/ui-users/tree/v8.0.0) (2022-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v7.1.0...v8.0.0)
@@ -159,6 +160,9 @@
 * Create Jest/RTL test for `EditProxy`. Refs UIU-2285.
 * Create Jest/RTL test for `AddServicePointModal`. Refs UIU-2266.
 * Create Jest/RTL test for `OpenLoansWithStaticData`. Refs UIU-2263.
+
+
+* Create Jest/RTL test for `ChargeForm`. Refs UIU-2260.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
