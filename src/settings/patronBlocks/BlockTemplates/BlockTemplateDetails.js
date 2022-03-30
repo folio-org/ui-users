@@ -12,7 +12,7 @@ import {
   KeyValue,
   NoValue,
   Row,
-} from '@folio/stripes-components';
+} from '@folio/stripes/components';
 import { ViewMetaData } from '@folio/stripes/smart-components';
 
 function BlockTemplateDetails(props) {
