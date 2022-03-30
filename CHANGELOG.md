@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## 8.0.2 IN PROGRESS
+
+* Error message "Enter comment" appears erroneously when entering New Staff Info on Fee/Fine Details. Refs UIU-2569.
+
 ## [8.0.1](https://github.com/folio-org/ui-users/tree/v8.0.1) (2022-03-25)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.0.0...v8.0.1)
 
