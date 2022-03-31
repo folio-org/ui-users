@@ -14,14 +14,6 @@ import {
 
 import css from './modal.css';
 
-const validate = (values) => {
-  const errors = {};
-  if (!values.comment) {
-    errors.comment = <FormattedMessage id="ui-users.accounts.comment.error.enterComment" />;
-  }
-  return errors;
-};
-
 class CommentModal extends React.Component {
   static propTypes = {
     open: PropTypes.bool,
@@ -30,27 +22,22 @@ class CommentModal extends React.Component {
     invalid: PropTypes.bool,
     onClose: PropTypes.func,
     handleSubmit: PropTypes.func,
-    form: PropTypes.object.isRequired,
   };
 
   onSubmit = () => {
     const {
       handleSubmit,
-      form: { reset },
     } = this.props;
 
     handleSubmit();
-    reset();
   }
 
   handleClose = () => {
     const {
       onClose,
-      form: { reset },
     } = this.props;
 
     onClose();
-    reset();
   }
 
   render() {
@@ -59,7 +46,7 @@ class CommentModal extends React.Component {
       submitting,
       invalid,
       open,
-      onClose
+      onClose,
     } = this.props;
 
     const submitButtonDisabled = pristine || submitting || invalid;
@@ -112,7 +99,7 @@ class CommentModal extends React.Component {
 }
 
 export default stripesFinalForm({
+  destroyOnUnregister: true,
   navigationCheck: true,
   subscription: { values: true },
-  validate,
 })(CommentModal);
