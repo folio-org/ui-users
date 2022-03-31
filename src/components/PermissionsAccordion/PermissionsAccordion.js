@@ -37,6 +37,7 @@ const PermissionsAccordion = (props) => {
     excludePermissionSets,
     initialValues: { personal },
     form: { change },
+    setButtonRef
   } = props;
 
   const getAssignedPermissions = () => {
@@ -187,6 +188,7 @@ const PermissionsAccordion = (props) => {
             bottomMargin0
             id="clickable-add-permission"
             onClick={openPermissionModal}
+            buttonRef={setButtonRef}
           >
             <FormattedMessage id="ui-users.permissions.addPermission" />
           </Button>
@@ -197,6 +199,7 @@ const PermissionsAccordion = (props) => {
             disabled={!isUnassignButtonEnable}
             id="clickable-remove-all-permissions"
             onClick={openUnassignModal}
+            buttonRef={setButtonRef}
           >
             <FormattedMessage id="ui-users.permissions.unassignAllPermissions" />
           </Button>
@@ -272,6 +275,7 @@ PermissionsAccordion.propTypes = {
   headlineContent: PropTypes.element.isRequired,
   excludePermissionSets: PropTypes.bool,
   form: PropTypes.object,
+  setButtonRef: PropTypes.func
 };
 
 PermissionsAccordion.defaultProps = {
