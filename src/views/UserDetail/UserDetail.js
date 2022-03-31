@@ -202,7 +202,12 @@ class UserDetail extends React.Component {
   }
 
   componentDidMount() {
+    this._isMounted = true;
     this.loadPatronBlocks();
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   getUser = () => {
@@ -558,6 +563,8 @@ class UserDetail extends React.Component {
         });
 
       patronBlocks = orderBy(patronBlocks, ['metadata.createdDate'], ['desc']);
+
+      if (!this._isMounted) return;
 
       this.setState({
         patronBlocks,
