@@ -7,6 +7,7 @@
 * Correctly import from `stripes-components` via `@folio/stripes`. Refs UIU-2173.
 * Missing interface dependency: tags. Fixes UIU-2557.
 * Error message "Enter comment" appears erroneously when entering New Staff Info on Fee/Fine Details. Refs UIU-2569.
+* Edit User Record: Using Enter key should Open Add Service points when focus is on the Add Service points button. Refs UIU-1256.
 
 ## [8.0.0](https://github.com/folio-org/ui-users/tree/v8.0.0) (2022-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v7.1.0...v8.0.0)
