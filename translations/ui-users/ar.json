@@ -616,7 +616,7 @@
     "permission.requests.all": "المستخدمين: اعرض الطلبات",
     "permission.settings.addresstypes": "الإعدادات (المستخدمين): إمكانية إنشاء، وتحرير وإزالة أنواع العناوين",
     "permission.settings.comments": "الإعدادات (المستخدمين): إمكانية إنشاء، وتحرير، وإزالة التعليقات",
-    "permission.settings.conditions": "الإعدادات (المستخدمين): إمكانية إنشاء، وتحرير وإزالة شروط كتل المستفيد",
+    "permission.settings.conditions": "الإعدادات (المستخدمين): إمكانية عرض وتحرير شروط كتل المستفيد",
     "permission.settings.customfields.all": "الإعدادات (المستخدمين): إمكانية إنشاء، وتحرير، وعرض وحذف الحقول المخصصة",
     "permission.settings.customfields.edit": "الإعدادات (المستخدمين): إمكانية إنشاء، وتحرير، وعرض الحقول المخصصة",
     "permission.settings.customfields.view": "الإعدادات (المستخدمين): إمكانية عرض الحقول المخصصة",
