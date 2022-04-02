@@ -557,14 +557,14 @@ class UserDetail extends React.Component {
     ]) => {
       const { sections } = this.state;
 
+      if (!this._isMounted) return;
+
       let patronBlocks = concat(manualPatronBlocks, automatedPatronBlocks)
         .filter((patronBlock) => {
           return moment(patronBlock.expirationDate).endOf('day').isSameOrAfter(moment().endOf('day'));
         });
 
       patronBlocks = orderBy(patronBlocks, ['metadata.createdDate'], ['desc']);
-
-      if (!this._isMounted) return;
 
       this.setState({
         patronBlocks,
