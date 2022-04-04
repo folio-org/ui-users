@@ -51,8 +51,8 @@ class PatronBlock extends React.Component {
 
   constructor(props) {
     super(props);
-
-    this.onSort = this.onSort.bind(this);
+    /* commented for UIU-2553 to make header  non clickable */
+    // this.onSort = this.onSort.bind(this);
     this.onRowClick = this.onRowClick.bind(this);
     const { intl: { formatMessage } } = props;
 
@@ -71,23 +71,23 @@ class PatronBlock extends React.Component {
       sortDirection: ['desc', 'asc'],
     };
   }
+  /* commented for UIU-2553 to make header  non clickable */
+  // onSort(e, meta) {
+  //   if (!this.sortMap[meta.alias]) return;
 
-  onSort(e, meta) {
-    if (!this.sortMap[meta.alias]) return;
+  //   const {
+  //     sortOrder,
+  //     sortDirection,
+  //   } = this.state;
 
-    const {
-      sortOrder,
-      sortDirection,
-    } = this.state;
-
-    this.setState(calculateSortParams({
-      sortOrder,
-      sortDirection,
-      sortValue: meta.alias,
-      secondarySortOrderIndex: 1,
-      secondarySortDirectionIndex: 1,
-    }));
-  }
+  //   this.setState(calculateSortParams({
+  //     sortOrder,
+  //     sortDirection,
+  //     sortValue: meta.alias,
+  //     secondarySortOrderIndex: 1,
+  //     secondarySortDirectionIndex: 1,
+  //   }));
+  // }
 
   onRowClick(e, row) {
     const {
@@ -193,7 +193,8 @@ class PatronBlock extends React.Component {
         contentData={patronBlocks}
         formatter={this.getPatronFormatter()}
         visibleColumns={this.visibleColumns}
-        onHeaderClick={this.onSort}
+        /* commented for UIU-2553 to make header  non clickable */
+        // onHeaderClick={this.onSort}
         sortOrder={sortOrder[0]}
         sortDirection={`${sortDirection[0]}ending`}
         onRowClick={this.onRowClick}
