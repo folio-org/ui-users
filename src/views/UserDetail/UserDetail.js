@@ -202,7 +202,12 @@ class UserDetail extends React.Component {
   }
 
   componentDidMount() {
+    this._isMounted = true;
     this.loadPatronBlocks();
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   getUser = () => {
@@ -551,6 +556,8 @@ class UserDetail extends React.Component {
       automatedPatronBlocks,
     ]) => {
       const { sections } = this.state;
+
+      if (!this._isMounted) return;
 
       let patronBlocks = concat(manualPatronBlocks, automatedPatronBlocks)
         .filter((patronBlock) => {
