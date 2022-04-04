@@ -162,8 +162,7 @@
 * Create Jest/RTL test for `EditProxy`. Refs UIU-2285.
 * Create Jest/RTL test for `AddServicePointModal`. Refs UIU-2266.
 * Create Jest/RTL test for `OpenLoansWithStaticData`. Refs UIU-2263.
-
-
+* Create Jest/RTL test for `BulkRenewalDialog`. Refs UIU-2309.
 * Create Jest/RTL test for `ChargeForm`. Refs UIU-2260.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
