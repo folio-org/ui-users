@@ -727,7 +727,7 @@
     "reports.item.enumeration": "Enumeration",
     "reports.item.chronology": "Chronology",
     "reports.item.copyNumber": "Copy number",
-    "reports.item.volume": "Volume",
+    "reports.item.volume": "巻",
     "reports.item.location.name": "Location",
     "reports.item.instanceId": "インスタンスID",
     "reports.item.holdingsRecordId": "Holdings ID",
