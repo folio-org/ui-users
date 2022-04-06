@@ -186,7 +186,8 @@
           "perms.permissions.item.put",
           "perms.permissions.item.post",
           "perms.permissions.item.delete",
-          "settings.users.enabled"
+          "settings.users.enabled",
+          "perms.users.assign.mutable"
         ],
         "visible": true
       },
