@@ -39,6 +39,7 @@ class EditServicePoints extends React.Component {
     formData: PropTypes.object.isRequired,
     intl: PropTypes.object.isRequired,
     form: PropTypes.object,
+    setButtonRef: PropTypes.func,
   };
 
   constructor(props) {
@@ -102,12 +103,14 @@ class EditServicePoints extends React.Component {
     );
   }
 
-  renderAddServicePointButton() {
+  renderAddServicePointButton = () => {
+    const { setButtonRef } = this.props;
     return (
       <Row end="xs">
         <Col>
           <Button
             id="add-service-point-btn"
+            buttonRef={setButtonRef}
             onClick={() => this.setState({ addingServicePoint: true })}
           >
             <FormattedMessage id="ui-users.sp.addServicePoints">

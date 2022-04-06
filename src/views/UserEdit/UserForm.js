@@ -120,7 +120,6 @@ class UserForm extends React.Component {
   constructor(props) {
     super(props);
 
-
     this.accordionStatusRef = React.createRef();
 
     this.closeButton = React.createRef();
@@ -151,6 +150,9 @@ class UserForm extends React.Component {
         handler: this.collapseAllSections,
       }
     ];
+
+    this.buttonRefs = [];
+    this.setButtonRef = el => this.buttonRefs.push(el);
   }
 
   handleCancel = () => {
@@ -195,6 +197,7 @@ class UserForm extends React.Component {
       this.closeButton.current,
       this.saveButton.current,
       this.cancelButton.current,
+      ...this.buttonRefs,
     ];
 
     if (!allowedControls.includes(e.target)) {
@@ -419,9 +422,11 @@ class UserForm extends React.Component {
                         formName="userForm"
                         permissionsField="permissions"
                         form={form}
+                        setButtonRef={this.setButtonRef}
                       />
                       <EditServicePoints
                         accordionId="servicePoints"
+                        setButtonRef={this.setButtonRef}
                         {...this.props}
                       />
                     </div>
