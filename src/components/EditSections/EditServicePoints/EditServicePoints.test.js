@@ -91,7 +91,6 @@ describe('Edit Service Points Component', () => {
     it('Check if add  service point modal works', () => {
       userEvent.click(document.querySelector('[id=add-service-point-btn]'));
       expect(screen.getByText('ui-users.sp.addServicePoints')).toBeInTheDocument();
-      userEvent.click(screen.getByText('stripes-core.button.cancel'));
     });
     it('Add service points functionality ', () => {
       userEvent.click(document.querySelector('[id=add-service-point-btn]'));
