@@ -186,6 +186,7 @@
           "perms.permissions.item.post",
           "perms.permissions.item.delete",
           "settings.users.enabled",
+          "perms.users.assign.immutable",
           "perms.users.assign.mutable"
         ],
         "visible": true
