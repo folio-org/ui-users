@@ -279,8 +279,11 @@
           "feefines.item.get",
           "feefines.item.post",
           "feefines.item.put",
-          "settings.users.enabled",
-          "feefine-reports.refund.post"
+          "feefine-reports.refund.post",
+          "inventory-storage.service-points.collection.get",
+          "owners.collection.get",
+          "templates.collection.get",
+          "settings.users.enabled"
         ],
         "visible": true
       },
@@ -321,6 +324,7 @@
         "permissionName": "ui-users.settings.owners",
         "displayName": "Settings (Users): Can create, edit and remove owners",
         "subPermissions": [
+          "inventory-storage.service-points.collection.get",
           "owners.collection.get",
           "owners.item.delete",
           "owners.item.get",
@@ -334,6 +338,7 @@
         "permissionName": "ui-users.settings.payments",
         "displayName": "Settings (Users): Can create, edit and remove payments",
         "subPermissions": [
+          "owners.collection.get",
           "payments.collection.get",
           "payments.item.delete",
           "payments.item.get",
@@ -404,6 +409,7 @@
         "permissionName": "ui-users.settings.transfers",
         "displayName": "Settings (Users): Can create, edit and remove transfer accounts ",
         "subPermissions": [
+          "owners.collection.get",
           "transfers.collection.get",
           "transfers.item.delete",
           "transfers.item.get",
