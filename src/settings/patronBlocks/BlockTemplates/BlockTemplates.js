@@ -38,6 +38,7 @@ function BlockTemplates(props) {
       paneTitle={
         <FormattedMessage id="ui-users.settings.manualBlockTemplates.paneTitle" />
       }
+
       entryLabel={formatMessage({ id: 'ui-users.manualBlockTemplate' })}
       entryFormComponent={BlockTemplateForm}
       validate={validate}
@@ -55,7 +56,7 @@ BlockTemplates.manifest = Object.freeze({
   manualBlockTemplates: {
     type: 'okapi',
     records: 'manualBlockTemplates',
-    path: 'manual-block-templates',
+    path: 'manual-block-templates?limit=200',
   },
 });
 
