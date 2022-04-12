@@ -864,7 +864,7 @@
     "reports.cashDrawer.label": "Cash drawer reconciliation report (CSV, PDF)",
     "reports.financialTransaction.label": "Report sui dettagli delle transazioni finanziarie (CSV)",
     "shortcut.openShortcutModal": "Apri la modale delle scorciatoie da tastiera",
-    "accounts.outstanding.total": "Saldo totale in sospeso: {importo}",
+    "accounts.outstanding.total": "Saldo totale in sospeso: {amount}",
     "accounts.suspended.total": "Saldo totale sospeso: {amount}",
     "accounts.outstanding.page": "Saldo in sospeso per pagina: {amount}",
     "accounts.suspended.page": "Saldo sospeso per la pagina: {amount}",
