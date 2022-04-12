@@ -16,8 +16,6 @@ import {
 } from '@folio/stripes/components';
 import { stripesConnect } from '@folio/stripes/core';
 
-import { calculateSortParams } from '../../util';
-
 import css from './PatronBlock.css';
 
 const PATRON_BLOCKS_COLUMNS = {
@@ -51,8 +49,6 @@ class PatronBlock extends React.Component {
 
   constructor(props) {
     super(props);
-
-    this.onSort = this.onSort.bind(this);
     this.onRowClick = this.onRowClick.bind(this);
     const { intl: { formatMessage } } = props;
 
@@ -70,23 +66,6 @@ class PatronBlock extends React.Component {
       ],
       sortDirection: ['desc', 'asc'],
     };
-  }
-
-  onSort(e, meta) {
-    if (!this.sortMap[meta.alias]) return;
-
-    const {
-      sortOrder,
-      sortDirection,
-    } = this.state;
-
-    this.setState(calculateSortParams({
-      sortOrder,
-      sortDirection,
-      sortValue: meta.alias,
-      secondarySortOrderIndex: 1,
-      secondarySortDirectionIndex: 1,
-    }));
   }
 
   onRowClick(e, row) {
@@ -193,7 +172,6 @@ class PatronBlock extends React.Component {
         contentData={patronBlocks}
         formatter={this.getPatronFormatter()}
         visibleColumns={this.visibleColumns}
-        onHeaderClick={this.onSort}
         sortOrder={sortOrder[0]}
         sortDirection={`${sortDirection[0]}ending`}
         onRowClick={this.onRowClick}

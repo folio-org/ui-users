@@ -8,6 +8,10 @@
 * Missing interface dependency: tags. Fixes UIU-2557.
 * Error message "Enter comment" appears erroneously when entering New Staff Info on Fee/Fine Details. Refs UIU-2569.
 * Edit User Record: Using Enter key should Open Add Service points when focus is on the Add Service points button. Refs UIU-1256.
+* Increase record limit for manual-block-templates. Refs UIU-2577.
+* Fix inaccurate request counts in various open loan views & modals. Fixes UIU-2570, UIU-2574.
+* Users manipulating permissions sets need access to all permissions. Refs UIU-2563.
+* Provide missing Fee/fine settings permissions. Refs UIU-2572.
 
 ## [8.0.0](https://github.com/folio-org/ui-users/tree/v8.0.0) (2022-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v7.1.0...v8.0.0)
@@ -164,6 +168,11 @@
 * Create Jest/RTL test for `OpenLoansWithStaticData`. Refs UIU-2263.
 * Create Jest/RTL test for `ChargeForm`. Refs UIU-2260.
 * Create Jest/RTL test for `withDeclareLost`. Refs UIU-2277.
+* Create Jest/RTL test for `BulkRenewInfo`. Refs UIU-2262.
+* Create Jest/RTL test for `BulkRenewalDialog`. Refs UIU-2309.
+* Create Jest/RTL test for `BulkOverrideDialog`. Refs UIU-2295.
+* Create Jest/RTL test for `ChargeForm`. Refs UIU-2260.
+* Create Jest/RTL test for `BulkOverrideLoansList`. Refs UIU-2328.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
