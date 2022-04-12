@@ -166,6 +166,8 @@
 * Create Jest/RTL test for `EditProxy`. Refs UIU-2285.
 * Create Jest/RTL test for `AddServicePointModal`. Refs UIU-2266.
 * Create Jest/RTL test for `OpenLoansWithStaticData`. Refs UIU-2263.
+* Create Jest/RTL test for `ChargeForm`. Refs UIU-2260.
+* Create Jest/RTL test for `withDeclareLost`. Refs UIU-2277.
 * Create Jest/RTL test for `BulkRenewInfo`. Refs UIU-2262.
 * Create Jest/RTL test for `BulkRenewalDialog`. Refs UIU-2309.
 * Create Jest/RTL test for `BulkOverrideDialog`. Refs UIU-2295.
