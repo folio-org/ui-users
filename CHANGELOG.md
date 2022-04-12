@@ -1,5 +1,12 @@
 # Change history for ui-users
 
+## [8.0.3](https://github.com/folio-org/ui-users/tree/v8.0.3) (2022-04-12)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v8.0.2...v8.0.3)
+
+* Provide missing Fee/fine settings permissions. Refs UIU-2572.
+* Users manipulating permissions sets need access to all permissions. Refs UIU-2563.
+* Fix inaccurate request counts in various open loan views & modals. Fixes UIU-2570, UIU-2574.
+
 ## [8.0.2](https://github.com/folio-org/ui-users/tree/v8.0.2) (2022-04-04)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.0.1...v8.0.2)
 
