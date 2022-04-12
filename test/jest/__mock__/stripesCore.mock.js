@@ -121,7 +121,7 @@ jest.mock('@folio/stripes/core', () => {
       <span {...rest}>{children}</span>
     )),
     IfInterface: jest.fn(({ name, children }) => {
-      return name === 'interface' ? children : null;
+      return name === 'interface' || name === 'service-points-users' ? children : null;
     }),
     IfPermission: jest.fn(({ perm, children }) => {
       if (perm === 'permission') {
@@ -129,6 +129,8 @@ jest.mock('@folio/stripes/core', () => {
       } else if (perm.startsWith('ui-users')) {
         return children;
       } else if (perm.startsWith('perms')) {
+        return children;
+      } else if (perm.startsWith('inventory-storage')) {
         return children;
       } else {
         return null;
