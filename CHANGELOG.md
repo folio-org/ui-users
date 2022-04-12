@@ -11,6 +11,7 @@
 * Increase record limit for manual-block-templates. Refs UIU-2577.
 * Fix inaccurate request counts in various open loan views & modals. Fixes UIU-2570, UIU-2574.
 * Users manipulating permissions sets need access to all permissions. Refs UIU-2563.
+* Provide missing Fee/fine settings permissions. Refs UIU-2572.
 
 ## [8.0.0](https://github.com/folio-org/ui-users/tree/v8.0.0) (2022-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v7.1.0...v8.0.0)
