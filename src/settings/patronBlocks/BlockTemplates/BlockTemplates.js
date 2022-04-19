@@ -38,7 +38,6 @@ function BlockTemplates(props) {
       paneTitle={
         <FormattedMessage id="ui-users.settings.manualBlockTemplates.paneTitle" />
       }
-
       entryLabel={formatMessage({ id: 'ui-users.manualBlockTemplate' })}
       entryFormComponent={BlockTemplateForm}
       validate={validate}
