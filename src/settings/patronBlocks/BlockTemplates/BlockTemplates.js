@@ -56,10 +56,11 @@ BlockTemplates.manifest = Object.freeze({
     type: 'okapi',
     records: 'manualBlockTemplates',
     path: 'manual-block-templates',
-    params: {
-      query: 'cql.allRecords=1',
-      limit: '200',
-    },
+    GET: {
+      params: {
+        limit: '200',
+      },
+    }
   },
 });
 
