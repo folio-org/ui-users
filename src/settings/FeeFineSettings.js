@@ -278,7 +278,6 @@ class FeeFineSettings extends React.Component {
           marginBottom0
           component={Select}
           dataOptions={templateCharge}
-          data-testid="field-chargeNoticeId"
         />
       ),
       'actionNoticeId': ({ fieldProps }) => (
@@ -287,7 +286,6 @@ class FeeFineSettings extends React.Component {
           marginBottom0
           component={Select}
           dataOptions={templateAction}
-          data-testid="field-actionNoticeId"
         />
 
       ),
