@@ -10,8 +10,9 @@ import { Callout } from '@folio/stripes/components';
 import BulkRenewalDialog from '../BulkRenewalDialog';
 import isOverridePossible from '../Loans/OpenLoans/helpers/isOverridePossible';
 import {
-  requestStatuses,
+  MAX_RECORDS,
   OVERRIDE_BLOCKS_FIELDS,
+  requestStatuses,
 } from '../../constants';
 
 // HOC used to manage renew
@@ -269,7 +270,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
         .map(loan => loan.itemId);
       const query = `(itemId==(${itemIdList.join(' or ')})) and status==(${statusList}) sortby requestDate desc`;
       reset();
-      GET({ params: { query, limit: itemIdList.length } })
+      GET({ params: { query, limit: MAX_RECORDS } })
         .then((requestRecords) => {
           const requestCountObject = requestRecords.reduce((map, record) => {
             map[record.itemId] = map[record.itemId]
