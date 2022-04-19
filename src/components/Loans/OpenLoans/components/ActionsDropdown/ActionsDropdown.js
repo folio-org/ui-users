@@ -145,22 +145,26 @@ class ActionsDropdown extends React.Component {
             <FormattedMessage id="ui-users.loans.details.loanPolicy" />
           </Button>
         </IfPermission>
-        <Button
-          buttonStyle="dropdownItem"
-          disabled={buttonDisabled}
-          to={getChargeFineToLoanPath(params.id, loan.id)}
-        >
-          <FormattedMessage id="ui-users.loans.newFeeFine" />
-        </Button>
-        <Button
-          buttonStyle="dropdownItem"
-          disabled={disableFeeFineDetails}
-          onClick={() => {
-            handleOptionsChange({ loan, action: 'feefineDetails' });
-          }}
-        >
-          <FormattedMessage id="ui-users.loans.feeFineDetails" />
-        </Button>
+        <IfPermission perm="ui-users.feesfines.actions.all">
+          <Button
+            buttonStyle="dropdownItem"
+            disabled={buttonDisabled}
+            to={getChargeFineToLoanPath(params.id, loan.id)}
+          >
+            <FormattedMessage id="ui-users.loans.newFeeFine" />
+          </Button>
+        </IfPermission>
+        <IfPermission perm="ui-users.feesfines.view">
+          <Button
+            buttonStyle="dropdownItem"
+            disabled={disableFeeFineDetails}
+            onClick={() => {
+              handleOptionsChange({ loan, action: 'feefineDetails' });
+            }}
+          >
+            <FormattedMessage id="ui-users.loans.feeFineDetails" />
+          </Button>
+        </IfPermission>
         {requestQueue && stripes.hasPerm('ui-requests.all') &&
           <Button
             buttonStyle="dropdownItem"
