@@ -56,7 +56,15 @@ BlockTemplates.manifest = Object.freeze({
   manualBlockTemplates: {
     type: 'okapi',
     records: 'manualBlockTemplates',
-    path: 'manual-block-templates?limit=200',
+    GET: {
+      path: 'manual-block-templates?limit=200',
+    },
+    PUT: {
+      path: 'manual-block-templates',
+    },
+    DELETE: {
+      path: 'manual-block-templates',
+    },
   },
 });
 
