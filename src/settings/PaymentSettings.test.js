@@ -119,7 +119,7 @@ describe('Payment settings', () => {
   it('Create payment', async () => {
     userEvent.click(document.querySelector('[id="clickable-add-settings-payments"]'));
     userEvent.type(document.querySelector('[name="items[0].nameMethod"]'), 'tesstNew');
-    userEvent.selectOptions(document.querySelector('[id="select-17"]'), screen.getByText('ui-users.feefines.modal.no'));
+    userEvent.selectOptions(screen.getByTestId('field-allowedRefundMethod'), screen.getByText('ui-users.feefines.modal.no'));
     userEvent.click(document.querySelector('[id="clickable-save-settings-payments-0"]'));
     expect(screen.getByText('stripes-core.button.save')).toBeTruthy();
   });
