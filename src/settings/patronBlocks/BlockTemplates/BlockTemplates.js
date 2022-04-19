@@ -65,6 +65,9 @@ BlockTemplates.manifest = Object.freeze({
     DELETE: {
       path: 'manual-block-templates',
     },
+    POST: {
+      path: 'manual-block-templates',
+    },
   },
 });
 
