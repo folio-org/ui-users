@@ -11,6 +11,7 @@
 * Fix inaccurate request counts in various open loan views & modals. Fixes UIU-2570, UIU-2574.
 * Users manipulating permissions sets need access to all permissions. Refs UIU-2563.
 * Provide missing Fee/fine settings permissions. Refs UIU-2572.
+* Don't show fee/fine actions for users without permissions. Fixes UIU-2467.
 * Increase record limit for manual-block-templates and add different path for get. Refs UIU-2577.
 * Open/Closed Loans toggle: Screenreader does not read which toggle option is active. Refs UIU-1986.
 
