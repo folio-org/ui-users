@@ -216,11 +216,11 @@ describe('Payment settings', () => {
   });
   it('OnChange payment', async () => {
     userEvent.click(document.querySelector('[id="charge-notice-primary"]'));
-    userEvent.selectOptions(document.querySelector('[id="select-12"]'), screen.getByText('Charge test'));
-    userEvent.selectOptions(document.querySelector('[id="select-13"]'), screen.getByText('charge Action Test'));
+    userEvent.selectOptions(document.querySelector('[name="defaultChargeNoticeId"]'), screen.getByText('Charge test'));
+    userEvent.selectOptions(document.querySelector('[name="defaultActionNoticeId"]'), screen.getByText('charge Action Test'));
     userEvent.click(document.querySelector('[id="charge-notice-primary"]'));
     userEvent.selectOptions(document.querySelector('[id="select-owner"]'), screen.getByText('test1'));
-    userEvent.selectOptions(document.querySelector('[id="select-14"]'), screen.getAllByText('test2')[1]);
+    userEvent.selectOptions(document.querySelector('[name="ownerId"]'), screen.getAllByText('test2')[1]);
     userEvent.click(screen.getByText('ui-users.feefines.modal.submit'));
     expect(screen.getAllByText('test2')[1]).toBeTruthy();
   });
