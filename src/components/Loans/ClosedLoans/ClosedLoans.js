@@ -411,7 +411,11 @@ class ClosedLoans extends React.Component {
     };
 
     return (
-      <div data-test-closed-loans>
+      <div
+        data-test-closed-loans
+        role="tabpanel"
+        id="closed-loans-list-panel"
+      >
         <ActionsBar
           show={loans.length > 0}
           contentStart={

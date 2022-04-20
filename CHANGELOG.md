@@ -8,11 +8,12 @@
 * Missing interface dependency: tags. Fixes UIU-2557.
 * Error message "Enter comment" appears erroneously when entering New Staff Info on Fee/Fine Details. Refs UIU-2569.
 * Edit User Record: Using Enter key should Open Add Service points when focus is on the Add Service points button. Refs UIU-1256.
-* Increase record limit for manual-block-templates. Refs UIU-2577.
 * Fix inaccurate request counts in various open loan views & modals. Fixes UIU-2570, UIU-2574.
 * Users manipulating permissions sets need access to all permissions. Refs UIU-2563.
 * Provide missing Fee/fine settings permissions. Refs UIU-2572.
 * Don't show fee/fine actions for users without permissions. Fixes UIU-2467.
+* Increase record limit for manual-block-templates and add different path for get. Refs UIU-2577.
+* Open/Closed Loans toggle: Screenreader does not read which toggle option is active. Refs UIU-1986.
 
 ## [8.0.0](https://github.com/folio-org/ui-users/tree/v8.0.0) (2022-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v7.1.0...v8.0.0)
