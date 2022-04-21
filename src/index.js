@@ -2,7 +2,6 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
-import { hot } from 'react-hot-loader';
 
 import { AppContextMenu, Route, Switch, IfPermission } from '@folio/stripes/core';
 import {
@@ -239,4 +238,4 @@ class UsersRouting extends React.Component {
   }
 }
 
-export default hot(module)(UsersRouting);
+export default UsersRouting;
