@@ -14,6 +14,7 @@
 * Don't show fee/fine actions for users without permissions. Fixes UIU-2467.
 * Increase record limit for manual-block-templates and add different path for get. Refs UIU-2577.
 * Open/Closed Loans toggle: Screenreader does not read which toggle option is active. Refs UIU-1986.
+* Remove react-hot-loader. Refs UIU-2567.
 
 ## [8.0.0](https://github.com/folio-org/ui-users/tree/v8.0.0) (2022-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v7.1.0...v8.0.0)
