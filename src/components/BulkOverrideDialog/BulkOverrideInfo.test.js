@@ -94,7 +94,7 @@ describe('BulkOverrideDialog', () => {
   test('Additional info', async () => {
     renderBulkOverrideInfo({ failedRenewals: openLoans });
     userEvent.click(document.querySelector('[type="checkbox"]'));
-    userEvent.type(document.querySelector('[id="textarea-input-11"]'), 'TestData');
+    userEvent.type(document.querySelector('[id="data-test-additional-info"]'), 'TestData');
     expect(screen.getByText('testTestData')).toBeInTheDocument();
   });
   test('Override Check', async () => {
