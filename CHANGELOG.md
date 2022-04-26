@@ -177,6 +177,7 @@
 * Create Jest/RTL test for `ChargeForm`. Refs UIU-2260.
 * Create Jest/RTL test for `BulkOverrideLoansList`. Refs UIU-2328.
 * Create Jest/RTL test for `BulkOverrideInfo`. Refs UIU-2320.
+* Create Jest/RTL test for `Menu`. Refs UIU-2357.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
