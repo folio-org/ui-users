@@ -90,6 +90,7 @@ class PaymentSettings extends React.Component {
           component={Select}
           dataOptions={[{ label: formatMessage({ id: 'ui-users.feefines.modal.yes' }), value: true }, { label: formatMessage({ id: 'ui-users.feefines.modal.no' }), value: false }]}
           marginBottom0
+          data-testid="field-allowedRefundMethod"
         />
       )
     };
