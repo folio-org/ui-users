@@ -75,7 +75,7 @@ class UserSearch extends React.Component {
   static propTypes = {
     children: PropTypes.node,
     contentRef: PropTypes.object,
-    filterConfig: PropTypes.arrayOf(PropTypes.object),
+    // filterConfig: PropTypes.arrayOf(PropTypes.object),
     history: PropTypes.object.isRequired,
     idPrefix: PropTypes.string,
     initialSearch: PropTypes.string,
