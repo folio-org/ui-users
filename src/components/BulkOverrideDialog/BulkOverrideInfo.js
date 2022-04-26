@@ -250,6 +250,7 @@ class BulkOverrideInfo extends React.Component {
             <FormattedMessage id="ui-users.additionalInfo.placeholder">
               {placeholder => (
                 <TextArea
+                  id="data-test-additional-info"
                   label={<FormattedMessage id="ui-users.additionalInfo.label" />}
                   placeholder={placeholder}
                   required
