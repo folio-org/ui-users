@@ -188,7 +188,7 @@ class LoanDetails extends React.Component {
     if (total === 0) return '-';
 
     const value = parseFloat(total).toFixed(2);
-    const valueDisplay = stripes.hasPerm('ui-users.accounts')
+    const valueDisplay = stripes.hasPerm('ui-users.feesfines.view')
       ?
         <button
           data-test-fee-fine-details-link
