@@ -293,12 +293,11 @@ class OpenLoansControl extends React.Component {
   };
 
   parseContributors(record) {
-    const {
-      item,
-      item: { contributors },
-    } = record;
+    const { item } = record;
+    // There is a small chance that the item object could be missing
+    const contributors = item?.contributors;
 
-    return isArray(contributors) ?
+    return contributors && isArray(contributors) ?
       {
         ...record,
         item: {
