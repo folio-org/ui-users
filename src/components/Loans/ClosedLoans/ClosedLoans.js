@@ -447,10 +447,10 @@ class ClosedLoans extends React.Component {
                     id="anonymization-fees-fines-modal"
                     open={anonymizationErrorModalOpen}
                     label={intl.formatMessage({ id: 'ui-users.anonymization.confirmation.header' })}
-                    message={intl.formatMessage({
-                      id: 'ui-users.anonymization.confirmation.header',
-                      values: { amount: failedAnonymizationLoansCount },
-                    })}
+                    message={intl.formatMessage(
+                      { id: 'ui-users.anonymization.confirmation.message' },
+                      { amount: failedAnonymizationLoansCount }
+                    )}
                     onClose={this.closeLoansAnonymizationErrorModal}
                   />
                 </div>
