@@ -16,6 +16,7 @@
 * Open/Closed Loans toggle: Screenreader does not read which toggle option is active. Refs UIU-1986.
 * Remove react-hot-loader. Refs UIU-2567.
 * Guard against missing loan item record. FIXES UIU-2578.
+* Update permissions for linking to fine details in `<LoanDetails>`. Refs UIU-2481.
 * Add loans anonymized message with count of loans not anonymized. Refs UIU-2246.
 
 ## [8.0.0](https://github.com/folio-org/ui-users/tree/v8.0.0) (2022-03-17)
