@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import PropTypes from 'prop-types';
-import { stripesShape } from '@folio/stripes/core';
 import '__mock__/currencyData.mock';
 import okapiCurrentUser from 'fixtures/okapiCurrentUser';
 
