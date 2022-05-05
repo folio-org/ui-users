@@ -143,6 +143,8 @@ class OpenLoans extends React.Component {
     return (
       <div
         data-test-open-loans-list
+        role="tabpanel"
+        id="open-loans-list-panel"
         className={css.root}
       >
         <MultiColumnList

@@ -50,18 +50,27 @@ class LoansListing extends React.Component {
       match: { params },
     } = this.props;
 
+    const isLoanStatusOpen = params.loanstatus === 'open';
+    const isLoanStatusClosed = params.loanstatus === 'closed';
+
     return (
-      <ButtonGroup className={css.buttonGroupWrap}>
+      <ButtonGroup
+        className={css.buttonGroupWrap}
+        role="tablist"
+      >
         <Button
           marginBottom0
           fullWidth
           id="loans-show-open"
-          buttonStyle={params.loanstatus === 'open' ? 'primary' : 'default'}
+          buttonStyle={isLoanStatusOpen ? 'primary' : 'default'}
           to={{
             pathname: `/users/${params.id}/loans/open`,
             state: location.state,
           }}
           replace
+          role="tab"
+          aria-selected={isLoanStatusOpen}
+          aria-controls="open-loans-list-panel"
         >
           <FormattedMessage id="ui-users.loans.openLoans" />
         </Button>
@@ -69,12 +78,15 @@ class LoansListing extends React.Component {
           marginBottom0
           fullWidth
           id="loans-show-closed"
-          buttonStyle={params.loanstatus === 'closed' ? 'primary' : 'default'}
+          buttonStyle={isLoanStatusClosed ? 'primary' : 'default'}
           to={{
             pathname: `/users/${params.id}/loans/closed`,
             state: location.state,
           }}
           replace
+          role="tab"
+          aria-selected={isLoanStatusClosed}
+          aria-controls="closed-loans-list-panel"
         >
           <FormattedMessage id="ui-users.loans.closedLoans" />
         </Button>
