@@ -1,7 +1,7 @@
 import memoize from './memoize';
 
 describe('Memoize functional component', () => {
-  it('if it filters', async () => {
+  it('if it filters', () => {
     const fn = (args) => {
       return args;
     };
@@ -9,7 +9,7 @@ describe('Memoize functional component', () => {
     const result = data('one');
     expect(result).toBe('one');
   });
-  it('if it filters', async () => {
+  it('if it filters', () => {
     const fn = (args) => {
       return <div>{args}</div>;
     };
