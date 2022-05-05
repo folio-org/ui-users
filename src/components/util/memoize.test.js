@@ -5,7 +5,7 @@ describe('Memoize functional component', () => {
     const fn = (args) => {
       return args;
     };
-    const data = await memoize(fn);
+    const data = memoize(fn);
     const result = data('one');
     expect(result).toBe('one');
   });
@@ -13,7 +13,7 @@ describe('Memoize functional component', () => {
     const fn = (args) => {
       return <div>{args}</div>;
     };
-    const data = await memoize(fn);
+    const data = memoize(fn);
     const result = data();
     expect(result).toBeFalsy();
   });
