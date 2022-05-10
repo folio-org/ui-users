@@ -180,6 +180,7 @@
 * Create Jest/RTL test for `ChargeForm`. Refs UIU-2260.
 * Create Jest/RTL test for `BulkOverrideLoansList`. Refs UIU-2328.
 * Create Jest/RTL test for `BulkOverrideInfo`. Refs UIU-2320.
+* Create Jest/RTL test for `Menu`. Refs UIU-2357.
 * Create Jest/RTL test for `memoize`. Refs UIU-2338.
 * Create Jest/RTL test for `withServicePoints`. Refs UIU-2279.
 * Create Jest/RTL test for `ErrorPane`. Refs UIU-2339.
