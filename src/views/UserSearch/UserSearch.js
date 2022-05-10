@@ -177,11 +177,10 @@ class UserSearch extends React.Component {
     }
 
     const { resources, source, history } = this.props;
-   
     // Open the detail view when there's a single hit
-    if(resources.records.records[0] !== prevProps.resources.records.records[0]  && 
+    if (resources.records.records[0] !== prevProps.resources.records.records[0] &&
       source.totalCount() === 1) {
-      history.push(this.getRowURL(resources.records.records[0].id))
+      history.push(this.getRowURL(resources.records.records[0].id));
     }
   }
 
