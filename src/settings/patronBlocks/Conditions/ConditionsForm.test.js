@@ -21,18 +21,6 @@ const initialValues = {
   valueType: 'Integer'
 };
 
-const mockPut = jest.fn();
-
-const mutator = {
-  patronBlockCondition: {
-    DELETE: jest.fn().mockReturnValue(Promise.resolve()),
-    POST: jest.fn(),
-    PUT: mockPut,
-    cancel: jest.fn(),
-    reset: jest.fn(),
-  },
-};
-
 const handleSubmitMock = jest.fn();
 const getStateMock = jest.fn();
 
