@@ -189,6 +189,7 @@
 * Create Jest/RTL test for `Conditions`. Refs UIU-2405.
 * Create Jest/RTL test for `getListPresentation`. Refs UIU-2298.
 * Create Jest/RTL test for `getListDataFormatter`. Refs UIU-2351.
+* Create Jest/RTL test for `LimitsForm`. Refs UIU-2391.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
