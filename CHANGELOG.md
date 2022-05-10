@@ -186,6 +186,7 @@
 * Create Jest/RTL test for `withServicePoints`. Refs UIU-2279.
 * Create Jest/RTL test for `ErrorPane`. Refs UIU-2339.
 * Create Jest/RTL test for `BulkOverrideInfo`. Refs UIU-2320.
+* Create Jest/RTL test for `Conditions`. Refs UIU-2405.
 * Create Jest/RTL test for `getListPresentation`. Refs UIU-2298.
 * Create Jest/RTL test for `getListDataFormatter`. Refs UIU-2351.
 
