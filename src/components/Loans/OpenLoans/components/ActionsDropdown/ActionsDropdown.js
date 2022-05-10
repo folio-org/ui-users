@@ -50,7 +50,7 @@ class ActionsDropdown extends React.Component {
     } = this.props;
 
     const itemStatusName = loan?.item?.status?.name;
-    const itemDetailsLink = `/inventory/view/${loan.item.instanceId}/${loan.item.holdingsRecordId}/${loan.itemId}`;
+    const itemDetailsLink = `/inventory/view/${loan.item?.instanceId}/${loan.item?.holdingsRecordId}/${loan.itemId}`;
     const loanPolicyLink = `/settings/circulation/loan-policies/${loan.loanPolicyId}`;
     const buttonDisabled = !stripes.hasPerm('ui-users.feesfines.actions.all');
     const isUserActive = checkUserActive(user);
@@ -61,6 +61,7 @@ class ActionsDropdown extends React.Component {
           <Button
             buttonStyle="dropdownItem"
             to={itemDetailsLink}
+            disabled={!loan?.item}
           >
             <FormattedMessage id="ui-users.itemDetails" />
           </Button>
