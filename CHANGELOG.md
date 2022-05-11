@@ -18,6 +18,7 @@
 * Guard against missing loan item record. FIXES UIU-2578.
 * Update permissions for linking to fine details in `<LoanDetails>`. Refs UIU-2481.
 * Add loans anonymized message with count of loans not anonymized. Refs UIU-2246.
+* create Jest/RTL test for ActionsDropdown.js. Refs UIU-2331
 
 ## [8.0.0](https://github.com/folio-org/ui-users/tree/v8.0.0) (2022-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v7.1.0...v8.0.0)
