@@ -62,7 +62,7 @@ describe('PasswordControl component', () => {
       renderPasswordControl(props);
     });
     afterEach(cleanup);
-    
+
     it('Check if components Renders', () => {
       expect(screen.getByText('ui-users.show')).toBeInTheDocument();
       expect(screen.getByText('ui-users.extended.folioPassword')).toBeInTheDocument();
