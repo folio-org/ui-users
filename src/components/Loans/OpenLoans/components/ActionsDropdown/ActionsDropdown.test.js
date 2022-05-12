@@ -7,22 +7,16 @@ import { IfPermission } from '@folio/stripes/core';
 import okapiCurrentUser from 'fixtures/okapiCurrentUser';
 import okapiOpenLoan from 'fixtures/openLoan';
 
+import buildStripes from '__mock__/stripes.mock';
+
 import ActionsDropdown from './ActionsDropdown';
 
 import { itemStatuses } from '../../../../../constants';
 
-const mockHistoryPush = jest.fn();
 const mockHandleOptionsChange = jest.fn();
 
 jest.unmock('@folio/stripes/components');
 jest.unmock('@folio/stripes/smart-components');
-
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useHistory: () => ({
-    push: mockHistoryPush,
-  }),
-}));
 
 jest.mock('../../../../util', () => {
   return {
@@ -37,51 +31,8 @@ beforeEach(() => {
 
 const renderActionsDropdown = (props) => renderWithRouter(<ActionsDropdown {...props} />);
 
-const STRIPES = {
-  connect: (Component) => Component,
-  config: {},
-  currency: 'USD',
-  hasInterface: () => true,
-  hasPerm: jest.fn().mockReturnValue(true),
-  clone: jest.fn(),
-  setToken: jest.fn(),
-  setTimezone: jest.fn(),
-  setCurrency: jest.fn(),
-  setSinglePlugin: jest.fn(),
-  setBindings: jest.fn(),
-  locale: 'en-US',
-  actionNames: ['stripesHome', 'usersSortByName'],
-  setLocale: jest.fn(),
-  logger: {
-    log: jest.fn(),
-  },
-  okapi: {
-    tenant: 'diku',
-    url: 'https://folio-testing-okapi.dev.folio.org',
-  },
-  store: {
-    getState: () => ({
-      okapi: {
-        token: 'abc',
-      },
-    }),
-    dispatch: jest.fn(),
-    subscribe: jest.fn(),
-    replaceReducer: jest.fn(),
-  },
-  timezone: 'UTC',
-  user: {
-    perms: {},
-    user: {
-      id: 'b1add99d-530b-5912-94f3-4091b4d87e2c',
-      username: 'diku_admin',
-    },
-  },
-  withOkapi: true,
-};
-
 const props = {
-  stripes: STRIPES,
+  stripes: buildStripes({ hasPerm: jest.fn().mockReturnValue(true) }),
   loan: okapiOpenLoan,
   requestQueue: true,
   itemRequestCount: 0,
@@ -101,6 +52,7 @@ describe('ActoinsDropdown component', () => {
     renderActionsDropdown(props);
     expect(screen.getByTestId('actions-dropdown-test-id')).toBeInTheDocument();
   });
+
   it('renders all specified buttons', () => {
     renderActionsDropdown(props);
 
