@@ -68,16 +68,16 @@ class ActionsDropdown extends React.Component {
         </IfPermission>
         <IfPermission perm="ui-users.loans.renew">
           { isUserActive && itemStatusName !== itemStatuses.CLAIMED_RETURNED &&
-          <Button
-            buttonStyle="dropdownItem"
-            data-test-dropdown-content-renew-button
-            onClick={e => {
-              handleOptionsChange({ loan, action: 'renew' });
-              onToggle(e);
-            }}
-          >
-            <FormattedMessage id="ui-users.renew" />
-          </Button>
+            <Button
+              buttonStyle="dropdownItem"
+              data-test-dropdown-content-renew-button
+              onClick={e => {
+                handleOptionsChange({ loan, action: 'renew' });
+                onToggle(e);
+              }}
+            >
+              <FormattedMessage id="ui-users.renew" />
+            </Button>
           }
         </IfPermission>
         <IfPermission perm="ui-users.loans.claim-item-returned">
@@ -183,6 +183,7 @@ class ActionsDropdown extends React.Component {
     const { intl: { formatMessage } } = this.props;
     return (
       <Dropdown
+        data-testid="actions-dropdown-test-id"
         renderTrigger={({ getTriggerProps }) => (
           <IconButton
             {...getTriggerProps()}
