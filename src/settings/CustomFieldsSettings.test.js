@@ -2,10 +2,6 @@ import React from 'react';
 
 import { screen } from '@testing-library/react';
 
-import '__mock__/stripesCore.mock';
-import '__mock__/stripesSmartComponent.mock';
-import '__mock__/intl.mock';
-
 import renderWithRouter from 'helpers/renderWithRouter';
 import CustomFieldsSettings from './CustomFieldsSettings';
 
