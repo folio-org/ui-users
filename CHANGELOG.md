@@ -18,7 +18,8 @@
 * Guard against missing loan item record. FIXES UIU-2578.
 * Update permissions for linking to fine details in `<LoanDetails>`. Refs UIU-2481.
 * Add loans anonymized message with count of loans not anonymized. Refs UIU-2246.
-* create Jest/RTL test for ActionsDropdown.js. Refs UIU-2331
+* Remove unused `usersPerGroup` manifest from `<PatronGroupsSettings>`. Fixes UIU-2602.
+* Create Jest/RTL test for ActionsDropdown.js. Refs UIU-2331
 
 ## [8.0.0](https://github.com/folio-org/ui-users/tree/v8.0.0) (2022-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v7.1.0...v8.0.0)
@@ -186,6 +187,7 @@
 * Create Jest/RTL test for `withServicePoints`. Refs UIU-2279.
 * Create Jest/RTL test for `ErrorPane`. Refs UIU-2339.
 * Create Jest/RTL test for `BulkOverrideInfo`. Refs UIU-2320.
+* Create Jest/RTL test for `ConditionsForm`. Refs UIU-2382.
 * Create Jest/RTL test for `Conditions`. Refs UIU-2405.
 * Create Jest/RTL test for `getListPresentation`. Refs UIU-2298.
 * Create Jest/RTL test for `getListDataFormatter`. Refs UIU-2351.
