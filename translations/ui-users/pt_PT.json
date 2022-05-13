@@ -167,7 +167,7 @@
     "feefines.errors.amountNumeric": "O valor padrão deve ser numérico",
     "feefines.errors.amountPositive": "O valor padrão deve ser positivo",
     "feefines.errors.exist": "Tipo de taxa/multa existe",
-    "feefines.errors.existShared": "Tipo de taxa/multa existe para o titular {owner}",
+    "feefines.errors.existShared": "Tipo de taxa/multa existe para o titular",
     "feefines.modal.error": "Selecione um para continuar",
     "feefines.modal.yes": "Sim",
     "feefines.modal.no": "Não",
