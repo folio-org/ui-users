@@ -15,9 +15,6 @@ const historyReplaceMock = jest.fn();
 
 jest.mock('@folio/stripes/smart-components', () => ({
   ViewCustomFieldsSettings: () => <div>ViewCustomFieldsSettings</div>,
-}));
-
-jest.mock('@folio/stripes/smart-components', () => ({
   EditCustomFieldsSettings: () => <div>EditCustomFieldsSettings</div>,
 }));
 
@@ -57,17 +54,23 @@ const renderCustomFieldsSettings = ({ initialEntries }) => {
 };
 
 describe('Custom fields settings page', () => {
-  it('should be rendered', () => {
-    renderCustomFieldsSettings('/settings/users/custom-fields');
-  });
+  it('should render viewCustomFieldsSettings', async () => {
+    renderCustomFieldsSettings({
+      initialEntries: ['/settings/users/custom-fields'],
+    });
 
-  it('should redirect on viewCustomFieldsSettings route', async () => {
-    renderCustomFieldsSettings(['/settings/users/custom-fields']);
-
-    const viewCustomFieldsSettings = await screen.findByText('/settings/users/custom-fields');
     const viewCustomFieldsSettingsText = await screen.findByText(/ViewCustomFieldsSettings/);
 
-    expect(viewCustomFieldsSettings).toHaveLength(1);
     expect(viewCustomFieldsSettingsText).toBeVisible();
+  });
+
+  it('should render editCustomFieldsSettings', async () => {
+    renderCustomFieldsSettings({
+      initialEntries: ['/settings/users/custom-fields/edit'],
+    });
+
+    const editCustomFieldsSettings = await screen.findByText(/EditCustomFieldsSettings/);
+
+    expect(editCustomFieldsSettings).toBeVisible();
   });
 });
