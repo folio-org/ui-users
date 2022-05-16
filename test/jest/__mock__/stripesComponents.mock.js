@@ -67,6 +67,12 @@ jest.mock('@folio/stripes/components', () => ({
   Label: jest.fn(({ children, ...rest }) => (
     <span {...rest}>{children}</span>
   )),
+  List: jest.fn(({ children, ...rest }) => (
+    <>
+      <span>List Component</span>
+      <span {...rest}>{children}</span>
+    </>
+  )),
   Loading: () => <div>Loading</div>,
   // oy, dismissible. we need to pull it out of props so it doesn't
   // get applied to the div as an attribute, which must have a string-value,

@@ -197,6 +197,7 @@
 * Create Jest/RTL test for `UserInfo`. Refs UIU-2351.
 * Create Jest/RTL test for `LimitsForm`. Refs UIU-2391.
 * Create Jest/RTL test for `Limits`. Refs UIU-2399.
+* Create Jest/RTL test for `UserRequests`. Refs UIU-2306.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
