@@ -6,6 +6,7 @@ import userEvent from '@testing-library/user-event';
 import renderWithRouter from 'helpers/renderWithRouter';
 import ChargeForm from './ChargeForm';
 
+jest.unmock('@folio/stripes/util');
 jest.unmock('@folio/stripes/components');
 jest.unmock('@folio/stripes/smart-components');
 

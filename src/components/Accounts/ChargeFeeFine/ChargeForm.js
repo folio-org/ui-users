@@ -172,7 +172,7 @@ class ChargeForm extends React.Component {
       instance: (selectedLoan.item || {}).title,
       barcode: (selectedLoan.item || {}).barcode,
       itemStatus: ((selectedLoan.item || {}).status || {}).name,
-      callNumber: effectiveCallNumber(selectedLoan.item),
+      callNumber: effectiveCallNumber(selectedLoan.item || {}),
       location: selectedLoan?.item?.effectiveLocation?.name,
       type: ((selectedLoan.item || {}).materialType || {}).name
     };
