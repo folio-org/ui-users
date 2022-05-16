@@ -167,7 +167,7 @@
     "feefines.errors.amountNumeric": "Kwota domyślna musi być liczbą",
     "feefines.errors.amountPositive": "Kwota domyślna musi być dodatnia",
     "feefines.errors.exist": "Rodzaj opłaty/kary już istnieje",
-    "feefines.errors.existShared": "Dla właściciela {owner} istnieje już rodzaj opłaty/kary",
+    "feefines.errors.existShared": "Dla właściciela istnieje już rodzaj opłaty/kary",
     "feefines.modal.error": "Wybierz jeden, aby kontynuować",
     "feefines.modal.yes": "Tak",
     "feefines.modal.no": "Nie",

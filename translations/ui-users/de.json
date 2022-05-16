@@ -167,7 +167,7 @@
     "feefines.errors.amountNumeric": "Standardbetrag muss numerisch sein",
     "feefines.errors.amountPositive": "Betrag muss eine positive Zahl sein",
     "feefines.errors.exist": "Forderungen vorhanden",
-    "feefines.errors.existShared": "Forderungstyp existiert für Eigentümer {owner}",
+    "feefines.errors.existShared": "Forderungstyp existiert für Eigentümer",
     "feefines.modal.error": "Bitte auswählen, um fortzufahren",
     "feefines.modal.yes": "Ja",
     "feefines.modal.no": "Nein",
