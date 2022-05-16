@@ -167,7 +167,7 @@
     "feefines.errors.amountNumeric": "Le montant par défaut doit être numérique",
     "feefines.errors.amountPositive": "Le montant par défaut doit être positif",
     "feefines.errors.exist": "Le type de frais / amendes existe",
-    "feefines.errors.existShared": "Le type de frais / amendes existe pour {owner}",
+    "feefines.errors.existShared": "Le type de frais / amendes existe pour",
     "feefines.modal.error": "En sélectionner un pour continuer",
     "feefines.modal.yes": "Oui",
     "feefines.modal.no": "Non",
