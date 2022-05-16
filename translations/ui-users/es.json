@@ -167,7 +167,7 @@
     "feefines.errors.amountNumeric": "La cantidad por defecto debe ser numérica",
     "feefines.errors.amountPositive": "La cantidad por defecto debe ser positiva",
     "feefines.errors.exist": "El tipo de tarifa/multa ya existe",
-    "feefines.errors.existShared": "El tipo de tarifa/multa ya existe para el propietario {owner}",
+    "feefines.errors.existShared": "El tipo de tarifa/multa ya existe para el propietario",
     "feefines.modal.error": "Selecciona una para continuar",
     "feefines.modal.yes": "Sí",
     "feefines.modal.no": "No",

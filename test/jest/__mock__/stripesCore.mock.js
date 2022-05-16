@@ -146,5 +146,11 @@ jest.mock('@folio/stripes/core', () => {
         const fakeStripes = stripes || STRIPES;
         return <Component {...rest} stripes={fakeStripes} />;
       },
+    withRouter:
+      // eslint-disable-next-line react/prop-types
+      (Component) => ({ stripes, ...rest }) => {
+        const fakeStripes = stripes || STRIPES;
+        return <Component {...rest} stripes={fakeStripes} />;
+      },
   };
 });
