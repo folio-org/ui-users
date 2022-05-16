@@ -167,7 +167,7 @@
     "feefines.errors.amountNumeric": "L'importo predefinito deve essere numerico",
     "feefines.errors.amountPositive": "L'importo predefinito deve essere positivo",
     "feefines.errors.exist": "Tipologia tariffa/multa esistente",
-    "feefines.errors.existShared": "Tipologia tariffa/multa esistente per gestore {owner}",
+    "feefines.errors.existShared": "Tipologia tariffa/multa esistente per gestore",
     "feefines.modal.error": "Seleziona per continuare",
     "feefines.modal.yes": "Si",
     "feefines.modal.no": "No",
