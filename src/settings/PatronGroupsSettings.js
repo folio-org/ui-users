@@ -5,30 +5,14 @@ import {
   injectIntl,
 } from 'react-intl';
 import { ControlledVocab } from '@folio/stripes/smart-components';
-import { stripesConnect, withStripes } from '@folio/stripes/core';
+import { withStripes } from '@folio/stripes/core';
 
 class PatronGroupsSettings extends React.Component {
-  // adding the desired-count parameter, :50, to this query is an egregious
-  // hack that willfully and knowingly abuses facets to contort them to
-  // handle a reporting situation they were simply not designed for.
-  // this may become inefficient with a large number of users; it will
-  // certainly be non-functional with a large number (> 50) of groups.
-  // FIXME details at https://issues.folio.org/projects/MODUSERS/issues/MODUSERS-57
-  static manifest = Object.freeze({
-    usersPerGroup: {
-      type: 'okapi',
-      records: 'users',
-      path: 'users?limit=0&facets=patronGroup:50',
-    },
-  });
-
   static propTypes = {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
     }).isRequired,
-    resources: PropTypes.shape({
-      usersPerGroup: PropTypes.object,
-    }).isRequired,
+
     intl: PropTypes.object.isRequired,
   };
 
@@ -87,4 +71,4 @@ class PatronGroupsSettings extends React.Component {
   }
 }
 
-export default injectIntl(withStripes(stripesConnect(PatronGroupsSettings)));
+export default injectIntl(withStripes(PatronGroupsSettings));
