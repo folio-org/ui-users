@@ -194,6 +194,7 @@
 * Create Jest/RTL test for `Conditions`. Refs UIU-2405.
 * Create Jest/RTL test for `getListPresentation`. Refs UIU-2298.
 * Create Jest/RTL test for `getListDataFormatter`. Refs UIU-2351.
+* Create Jest/RTL test for `UserInfo`. Refs UIU-2351.
 * Create Jest/RTL test for `LimitsForm`. Refs UIU-2391.
 * Create Jest/RTL test for `Limits`. Refs UIU-2399.
 
