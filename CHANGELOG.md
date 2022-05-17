@@ -190,10 +190,15 @@
 * Create Jest/RTL test for `withServicePoints`. Refs UIU-2279.
 * Create Jest/RTL test for `ErrorPane`. Refs UIU-2339.
 * Create Jest/RTL test for `BulkOverrideInfo`. Refs UIU-2320.
+* Create Jest/RTL test for `UserAddresses`. Refs UIU-2305.
 * Create Jest/RTL test for `ConditionsForm`. Refs UIU-2382.
 * Create Jest/RTL test for `Conditions`. Refs UIU-2405.
 * Create Jest/RTL test for `getListPresentation`. Refs UIU-2298.
 * Create Jest/RTL test for `getListDataFormatter`. Refs UIU-2351.
+* Create Jest/RTL test for `UserInfo`. Refs UIU-2351.
+* Create Jest/RTL test for `LimitsForm`. Refs UIU-2391.
+* Create Jest/RTL test for `Limits`. Refs UIU-2399.
+* Create Jest/RTL test for `HelperApp`. Refs UIU-2310.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
