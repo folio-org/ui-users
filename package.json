@@ -343,7 +343,8 @@
           "payments.item.get",
           "payments.item.post",
           "payments.item.put",
-          "settings.users.enabled"
+          "settings.users.enabled",
+          "users.collection.get"
         ],
         "visible": true
       },
