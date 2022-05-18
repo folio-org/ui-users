@@ -23,6 +23,7 @@
 * Create Jest/RTL test for ActionsDropdown.js. Refs UIU-2331
 * Create Jest/RTL test for PasswordControl. Refs UIU-2300.
 * Create Jest/RTL test for CustomFieldsSettings. Refs UIU-2386.
+* Fix Patron blocks settings order. Refs UIU-2448.
 
 ## [8.0.0](https://github.com/folio-org/ui-users/tree/v8.0.0) (2022-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v7.1.0...v8.0.0)
