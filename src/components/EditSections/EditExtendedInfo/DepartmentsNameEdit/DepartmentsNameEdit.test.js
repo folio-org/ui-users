@@ -21,9 +21,7 @@ const arrayMutators = {
 
 const renderDepartmentsNameEdit = (props) => {
   const component = () => (
-    <>
-      <DepartmentsNameEdit {...props} />
-    </>
+    <DepartmentsNameEdit {...props} />
   );
   renderWithRouter(
     <Form
