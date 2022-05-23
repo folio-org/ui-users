@@ -68,7 +68,7 @@ jobs:
       - name: Setup kernel for react native, increase watchers
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
       - name: Use Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODEJS_VERSION }}
           check-latest: true
@@ -189,7 +189,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Set up NPM environment for publishing
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODEJS_VERSION }}
           check-latest: true
@@ -198,7 +198,7 @@ jobs:
       - name: Set _auth in .npmrc
         run: |
           npm config set @folio:registry $FOLIO_NPM_REGISTRY
-          npm config set _auth $NODE_AUTH_TOKEN
+          npm config set //repository.folio.org/repository/npm-folio/:_auth $NODE_AUTH_TOKEN
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
