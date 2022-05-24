@@ -40,6 +40,7 @@ describe('OverrideModal component', () => {
       }];
       expect(renderOverrideModal(props(data))).toBeTruthy();
     });
+
     it('for single patron data', () => {
       const data = [{
         patronBlockConditionId: '123',
@@ -47,12 +48,6 @@ describe('OverrideModal component', () => {
       }];
       renderOverrideModal(props(data));
       expect(screen.getByText('test')).toBeTruthy();
-    });
-    it('On changing data', () => {
-      const data = [];
-      renderOverrideModal(props(data));
-      userEvent.type(document.querySelector('[id="textarea-input-3"]'), 'testInfoModified');
-      expect(screen.getByText('TestInfot')).toBeTruthy();
     });
   });
 });
