@@ -23,6 +23,7 @@ jobs:
       PUBLISH_MOD_DESCRIPTOR: 'true'
       COMPILE_TRANSLATION_FILES: 'true'
       FOLIO_NPM_REGISTRY: 'https://repository.folio.org/repository/npm-folioci/'
+      FOLIO_NPM_REGISTRY_AUTH: '//repository.folio.org/repository/npm-folioci/'
       FOLIO_MD_REGISTRY: 'https://folio-registry.dev.folio.org'
       NODEJS_VERSION: '16'
       JEST_JUNIT_OUTPUT_DIR: 'artifacts/jest-junit'
@@ -139,7 +140,7 @@ jobs:
       - name: Set _auth in .npmrc
         run: |
           npm config set @folio:registry $FOLIO_NPM_REGISTRY
-          npm config set //repository.folio.org/repository/npm-folioci/:_auth $NODE_AUTH_TOKEN
+          npm config set $FOLIO_NPM_REGISTRY_AUTH:_auth $NODE_AUTH_TOKEN
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
