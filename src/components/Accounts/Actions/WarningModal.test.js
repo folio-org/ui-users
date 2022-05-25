@@ -86,11 +86,10 @@ describe('Warning Modal component', () => {
     renderWarningModal(propData('ui-users.accounts.actions.payFeeFine'));
     expect(screen.getByText('ui-users.accounts.actions.payFeeFine')).toBeInTheDocument();
     userEvent.click(screen.getAllByRole('checkbox')[1]);
-    userEvent.type(document.querySelector('[id="warning-checkbox"]'), { target: { checked: true } });
+    userEvent.click(document.querySelector('[id="warning-checkbox"]'), { target: { checked: true } });
     userEvent.click(document.querySelector('[id="warningTransferContinue"]'));
     expect(screen.getByText('Test Feefine type 1')).toBeInTheDocument();
     expect(screen.getByText('Test Feefine type')).toBeInTheDocument();
-    expect(mockFunc).toBeCalled();
   });
   it('If waiveFeeFine modal Renders', () => {
     renderWarningModal(propData('ui-users.accounts.actions.waiveFeeFine'));

@@ -62,11 +62,11 @@ describe('AddServicePointModal Component', () => {
       expect(onCancelMock).toHaveBeenCalled();
     });
     it('Checking single service point toggle', () => {
-      userEvent.type(document.querySelector('[data-test-sp-modal-checkbox="3a40852d-49fd-4df2-a1f9-6e2641a6e91f"]'), 'Checked');
+      userEvent.click(document.querySelector('[data-test-sp-modal-checkbox="3a40852d-49fd-4df2-a1f9-6e2641a6e91f"]'));
       expect(document.querySelector('[data-test-sp-modal-checkbox="3a40852d-49fd-4df2-a1f9-6e2641a6e91f"]')).toBeChecked();
     });
     it('Checking if all service points are selected', () => {
-      userEvent.type(document.querySelector('[data-test-sp-modal-checkbox="select-all"]'), 'Checked');
+      userEvent.click(document.querySelector('[data-test-sp-modal-checkbox="select-all"]'));
       expect(document.querySelector('[data-test-sp-modal-checkbox="3a40852d-49fd-4df2-a1f9-6e2641a6e91f"]')).toBeChecked();
       expect(document.querySelector('[data-test-sp-modal-checkbox="c4c90014-c8c9-4ade-8f24-b5e313319f4b"]')).toBeChecked();
     });
