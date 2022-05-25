@@ -35,14 +35,6 @@ const resources = (records = {}) => {
   };
 };
 
-const httpHeaders = {
-  'Content-Type': 'application/json'
-};
-
-const headers = {
-  'Content-Type': 'text'
-};
-
 const mockErrorRespose = () => new Promise((_, reject) => {
   const error = {
     json: () => Promise.resolve(),
