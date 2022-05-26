@@ -63,7 +63,7 @@ describe('Copy Modal component', () => {
   });
   it('On Submit modal', () => {
     userEvent.selectOptions(document.querySelector('[id="select-3"]'), screen.getByText('test2'));
-    userEvent.type(document.querySelector('[id="yes"]'), { target: { checked : true } });
+    userEvent.click(document.querySelector('[id="yes"]'));
     userEvent.click(screen.getByText('ui-users.feefines.modal.submit'));
     expect(mockFunc).toHaveBeenCalled();
   });
