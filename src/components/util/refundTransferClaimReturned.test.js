@@ -86,7 +86,9 @@ const props = (actions) => {
         GET: jest.fn(() => new Promise((resolve, _) => {
           resolve(actions);
         })),
-        POST: jest.fn(),
+        POST: jest.fn(() => new Promise((resolve, _) => {
+          resolve(actions);
+        })),
       },
       loanstorage: {
         GET: jest.fn(() => new Promise((resolve, _) => {
@@ -100,6 +102,9 @@ const props = (actions) => {
     },
     okapi: {
       currentUser: okapiCurrentUser,
+    },
+    user: {
+      id: okapiCurrentUser.id
     }
   };
 };
@@ -120,6 +125,7 @@ describe('refundTransferClaimReturned component', () => {
       paymentMethod: 'Card',
     },
     ];
+
     await refundTransferClaimReturned.refundTransfers(loan('Aged to lost'), props(actions));
     expect(refundTransferClaimReturned).toBeDefined();
   });
