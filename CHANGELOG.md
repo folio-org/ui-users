@@ -25,6 +25,7 @@
 * Create Jest/RTL test for CustomFieldsSettings. Refs UIU-2386.
 * Fix Patron blocks settings order. Refs UIU-2448.
 * Update NodeJS to Active LTS. Refs UIU-2607.
+* Use single formatted message for successfully callout message. Refs UIU-1657.
 
 ## [8.0.0](https://github.com/folio-org/ui-users/tree/v8.0.0) (2022-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v7.1.0...v8.0.0)
