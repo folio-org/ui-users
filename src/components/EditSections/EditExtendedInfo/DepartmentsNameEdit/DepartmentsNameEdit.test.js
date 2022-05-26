@@ -58,7 +58,7 @@ describe('Given DepartmentsNameEdit', () => {
     expect(screen.getByText('ui-users.extended.department.add')).toBeInTheDocument();
   });
 
-  it('should render select compoenent after clicking "Add Department" button', () => {
+  it('should render select component after clicking "Add Department" button', () => {
     userEvent.click(screen.getByText('ui-users.extended.department.add'));
     expect(screen.queryByPlaceholderText(/ui-users.extended.department.default/i));
   });
