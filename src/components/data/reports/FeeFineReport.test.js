@@ -58,7 +58,7 @@ describe('FeeFineReport', () => {
         try {
           fee.toCSV();
         } catch (error) {
-          expect(toCSVSpy).toThrowError("Cannot read property 'columnsMap' of undefined");
+          expect(toCSVSpy).toThrowError("Cannot read properties of undefined (reading 'columnsMap')");
         }
       });
     });

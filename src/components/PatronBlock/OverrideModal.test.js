@@ -1,5 +1,4 @@
 import { screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 
 import renderWithRouter from 'helpers/renderWithRouter';
 import OverrideModal from './OverrideModal';
@@ -40,6 +39,7 @@ describe('OverrideModal component', () => {
       }];
       expect(renderOverrideModal(props(data))).toBeTruthy();
     });
+
     it('for single patron data', () => {
       const data = [{
         patronBlockConditionId: '123',
@@ -47,12 +47,6 @@ describe('OverrideModal component', () => {
       }];
       renderOverrideModal(props(data));
       expect(screen.getByText('test')).toBeTruthy();
-    });
-    it('On changing data', () => {
-      const data = [];
-      renderOverrideModal(props(data));
-      userEvent.type(document.querySelector('[id="textarea-input-3"]'), 'testInfoModified');
-      expect(screen.getByText('TestInfot')).toBeTruthy();
     });
   });
 });
