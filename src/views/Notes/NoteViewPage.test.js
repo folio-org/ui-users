@@ -12,10 +12,10 @@ jest.mock('@folio/stripes/smart-components', () => ({
       onEdit,
     }) => (
       <>
-        <button type="button" onClick={navigateBack}>
+        <button type="button" onClick={navigateBack} data-testid="navigateBack">
           back
         </button>
-        <button type="button" onClick={onEdit}>
+        <button type="button" onClick={onEdit} data-testid="onEdit">
           edit
         </button>
       </>
@@ -49,12 +49,24 @@ describe('Note View Page', () => {
     expect(getByText('Note View Page')).toBeDefined();
   });
 
+  it('should render navigate back button', () => {
+    const { getByTestId } = renderNoteViewPage();
+
+    expect(getByTestId('navigateBack')).toBeInTheDocument();
+  });
+
   it('should redirect to users page', () => {
     const { getByRole } = renderNoteViewPage();
 
     fireEvent.click(getByRole('button', { name: 'back' }));
 
     expect(history.push).toHaveBeenCalled();
+  });
+
+  it('should render edit button', () => {
+    const { getByTestId } = renderNoteViewPage();
+
+    expect(getByTestId('onEdit')).toBeInTheDocument();
   });
 
   it('should redirect to the edit page', () => {
