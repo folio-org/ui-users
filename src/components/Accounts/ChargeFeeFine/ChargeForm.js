@@ -209,7 +209,7 @@ class ChargeForm extends React.Component {
     }
     return (
       <Modal
-        data-test-new-fee-fine-action-modal
+        data-test-charge-form
         id="new-modal"
         open
         label={<FormattedMessage id="ui-users.charge.title" />}
