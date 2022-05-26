@@ -1,5 +1,6 @@
 import React from 'react';
 import { IntlProvider } from 'react-intl';
+import { CalloutContext } from '@folio/stripes/core';
 import { Router } from 'react-router-dom';
 import { render } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -25,12 +26,14 @@ const translations = {
 const history = createMemoryHistory();
 const renderWithRouter = children => render(
   <Router history={history}>
-    <IntlProvider
-      locale="en"
-      messages={translations}
-    >
-      {children}
-    </IntlProvider>
+    <CalloutContext.Provider value={{ sendCallout: () => { } }}>
+      <IntlProvider
+        locale="en"
+        messages={translations}
+      >
+        {children}
+      </IntlProvider>
+    </CalloutContext.Provider>
   </Router>
 );
 
