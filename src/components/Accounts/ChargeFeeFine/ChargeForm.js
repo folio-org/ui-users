@@ -126,13 +126,9 @@ class ChargeForm extends React.Component {
 
   onClose = () => {
     const { onClose, form: { reset } } = this.props;
-    this._isMounted = false;
-
     onClose();
     reset();
   }
-
-
 
   goToAccounts = () => {
     const {
