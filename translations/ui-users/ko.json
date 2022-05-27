@@ -278,10 +278,6 @@
     "extended.resetPasswordModal.linkWasSent": "비밀번호 재설정 링크가 다음으로 전송되었습니다.",
     "extended.resetPasswordModal.linkInstructions": "{name} 이 FOLIO로부터 이메일을 받지 못하는 경우 다음 링크를 보낼 수 있습니다.",
     "owners.columns.asp": "관련 서비스 포인트",
-    "charge.messageThe": "The",
-    "charge.messageOf": "수수료 / 벌금",
-    "charge.messageSuccessfully": " 성공적으로 되었습니다. ",
-    "charge.messageFor": "...에 대한",
     "details.columns.transactioninfo": "거래 정보",
     "details.paneTitle.feeFineDetails": "수수료 / 벌금 상세 정보",
     "details.label.loanDetails": "대출 상세 정보",
@@ -992,5 +988,6 @@
     "charge.feefine.id": "Fee/fine id",
     "charge.amount": "Amount",
     "charge.comment.label": "Comments",
-    "errors.permissionChangeFailed": "Permissions were not changed"
+    "errors.permissionChangeFailed": "Permissions were not changed",
+    "charge.message.successfully": "The {feeFineType} fee/fine of <strong>{amount}</strong> has been successfully <strong>{paymentName}</strong> for <strong>{fullName}</strong>"
 }
