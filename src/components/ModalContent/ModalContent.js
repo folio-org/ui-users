@@ -220,7 +220,7 @@ class ModalContent extends React.Component {
     const contentType = resp.headers.get('Content-Type') || '';
 
     if (contentType.startsWith('application/json')) {
-      resp.json().then(error => handleError(error.errors[0].message));
+      resp.json().then(error => handleError(error?.errors?.[0]?.message));
     } else {
       resp.text().then(handleError);
     }

@@ -1,8 +1,7 @@
-import okapiCurrentUser from 'fixtures/okapiCurrentUser';
-
-import { act, screen, waitFor, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { act, screen, waitFor, fireEvent } from '@testing-library/react';
 
+import okapiCurrentUser from 'fixtures/okapiCurrentUser';
 import renderWithRouter from 'helpers/renderWithRouter';
 import ChargeForm from './ChargeForm';
 
@@ -94,6 +93,7 @@ const propData = {
   handleSubmit: jest.fn(),
   onClickSelectItem: jest.fn(),
   onFindShared: jest.fn(),
+  onClose: jest.fn(),
   pristine: false,
   submitting: false,
   invalid: false,
@@ -135,11 +135,13 @@ describe('ChargeForm component', () => {
     expect(screen.getByText('ui-users.charge.Pay')).toBeInTheDocument();
     expect(screen.getByText('ui-users.charge.onlyCharge')).toBeInTheDocument();
   });
+
   it('Onchange owner', async () => {
     renderChargeForm(propData);
     userEvent.selectOptions(document.querySelector('[name="ownerId"]'), screen.getByText('test'));
     expect(onChangeOwnerMock).toHaveBeenCalled();
   });
+
   it('Onchange feeFine', async () => {
     act(() => {
       renderChargeForm(propData);
@@ -149,19 +151,32 @@ describe('ChargeForm component', () => {
     });
     await waitFor(() => { expect(onChangeFeeFineMock).toHaveBeenCalled(); });
   });
+
   it('If there is a defaultChargeNoticeId', () => {
     /* The notify patron block must be enable */
     renderChargeForm(propData);
     userEvent.click(document.querySelector('[name="notify"]'));
     expect(screen.getByText('ui-users.accounts.notifyPatron')).toBeInTheDocument();
   });
-  it('Checking the flow', () => {
+
+  it('Checking the flow', async () => {
     renderChargeForm(propData);
     userEvent.selectOptions(document.querySelector('[name="ownerId"]'), screen.getByText('test'));
-    userEvent.type(document.querySelector('[id="feeFineType"]'), screen.getByText('Lost item processing fee'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Lost item processing fee')).toBeInTheDocument();
+      expect(document.querySelector('[id="feeFineType"]')).toBeInTheDocument();
+    });
+
+    userEvent.click(document.querySelector('[id="feeFineType"] option:not([disabled])'));
     fireEvent.change(document.querySelector('[id="amount"]'), { target: { value: 2 } });
     userEvent.click(document.querySelector('[name="notify"]'));
-    userEvent.type(document.querySelector('[id="comment"]'), 'Test Comment');
+
+    await waitFor(() => {
+      expect(document.querySelector('[id="comments"]')).toBeInTheDocument();
+    });
+
+    userEvent.type(document.querySelector('[id="comments"]'), 'Test Comment');
     userEvent.click(document.querySelector('[id="chargeAndPay"]'));
     userEvent.click(document.querySelector('[id="chargeOnly"]'));
     expect(onChangeOwnerMock).toHaveBeenCalled();

@@ -94,13 +94,13 @@ describe('Edit Service Points Component', () => {
     });
     it('Add service points functionality ', () => {
       userEvent.click(document.querySelector('[id=add-service-point-btn]'));
-      userEvent.type(document.querySelector('[data-test-sp-modal-checkbox="7c5abc9f-f3d7-4856-b8d7-6712462ca007"]'), 'Checked');
+      userEvent.click(document.querySelector('[data-test-sp-modal-checkbox="7c5abc9f-f3d7-4856-b8d7-6712462ca007"]'));
       userEvent.click(screen.getByText('ui-users.saveAndClose'));
       expect(onChangeMock).toHaveBeenCalled();
     });
     it('Remove service points functionality ', () => {
       userEvent.click(document.querySelector('[id=add-service-point-btn]'));
-      userEvent.type(document.querySelector('[data-test-sp-modal-checkbox="7c5abc9f-f3d7-4856-b8d7-6712462ca007"]'), 'Checked');
+      userEvent.click(document.querySelector('[data-test-sp-modal-checkbox="7c5abc9f-f3d7-4856-b8d7-6712462ca007"]'));
       userEvent.click(document.querySelector('[id="clickable-remove-service-point-7c5abc9f-f3d7-4856-b8d7-6712462ca007"]'));
       expect(onChangeMock).toHaveBeenCalled();
     });
