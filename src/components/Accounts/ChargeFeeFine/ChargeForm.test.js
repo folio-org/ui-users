@@ -55,7 +55,18 @@ const feefines = [
 
 const propData = {
   user: okapiCurrentUser,
-  item: {},
+  item: {
+    barcode: '12345',
+    callNumberComponents: {
+      prefix: 'prefix',
+      callNumber: 'callNumber',
+      suffix: 'suffix',
+    },
+    enumeration: 'enumeration',
+    chronology: 'chronology',
+    volume: 'volume',
+  },
+
   intl: {
     formatMessage: jest.fn(),
   },
