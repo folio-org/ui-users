@@ -509,6 +509,7 @@ class ChargeFeeFine extends React.Component {
       <div>
         <ChargeForm
           form="feeFineChargeForm"
+          onClose={this.goBack}
           initialValues={initialChargeValues}
           defaultServicePointId={defaultServicePointId}
           feeFineTypeOptions={currentOwnerFeeFineTypes}

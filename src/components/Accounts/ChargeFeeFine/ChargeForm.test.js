@@ -93,6 +93,7 @@ const propData = {
   handleSubmit: jest.fn(),
   onClickSelectItem: jest.fn(),
   onFindShared: jest.fn(),
+  onClose: jest.fn(),
   pristine: false,
   submitting: false,
   invalid: false,
