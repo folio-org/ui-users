@@ -278,21 +278,23 @@ class ChargeFeeFine extends React.Component {
   }
 
   showCalloutMessage(a) {
+    const {
+      intl: { formatNumber },
+    } = this.props;
     const amount = parseFloat(a.amount).toFixed(2);
     const paymentName = (a.paymentStatus.name).toLowerCase();
     const fullName = getFullName(this.props.user);
     const { feeFineType } = a;
     const message =
-      <span>
-        <FormattedMessage id="ui-users.charge.messageThe" />
-        {feeFineType}
-        <FormattedMessage id="ui-users.charge.messageOf" />
-        <strong>{amount}</strong>
-        <FormattedMessage id="ui-users.charge.messageSuccessfully" />
-        <strong>{paymentName}</strong>
-        <FormattedMessage id="ui-users.charge.messageFor" />
-        <strong>{fullName}</strong>
-      </span>;
+      <FormattedMessage
+        id="ui-users.charge.message.successfully"
+        values={{
+          feeFineType,
+          amount: formatNumber(amount, { style: 'currency' }),
+          paymentName,
+          fullName,
+        }}
+      />;
 
     if (this.callout) {
       this.callout.sendCallout({ message });
@@ -508,6 +510,7 @@ class ChargeFeeFine extends React.Component {
       <div>
         <ChargeForm
           form="feeFineChargeForm"
+          onClose={this.goBack}
           initialValues={initialChargeValues}
           defaultServicePointId={defaultServicePointId}
           feeFineTypeOptions={currentOwnerFeeFineTypes}
