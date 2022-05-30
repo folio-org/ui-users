@@ -168,5 +168,6 @@ describe('ChargeForm component', () => {
     expect(onChangeOwnerMock).toHaveBeenCalled();
     expect(screen.getByText('ui-users.charge.item.status')).toBeInTheDocument();
     expect(screen.getByText('ui-users.accounts.infoPatron')).toBeInTheDocument();
+    expect(screen.getByText('ui-users.charge.item.callNumber')).toBeInTheDocument();
   });
 });
