@@ -35,13 +35,21 @@ const resources = (records = {}) => {
   };
 };
 
-const httpHeaders = {
-  'Content-Type': 'application/json'
-};
-
-const headers = {
-  'Content-Type': 'text'
-};
+const mockErrorRespose = () => new Promise((_, reject) => {
+  const error = {
+    json: () => Promise.resolve(),
+    text: () => Promise.resolve(),
+    headers: new Headers(),
+    error: {
+      errors: [
+        {
+          message: 'error',
+        },
+      ],
+    },
+  };
+  reject(error);
+});
 
 const mutatorSuccess = {
   claimReturned: {
@@ -86,35 +94,13 @@ const mutatorSuccess = {
 
 const mutator = {
   claimReturned: {
-    // eslint-disable-next-line prefer-promise-reject-errors
-    POST: () => new Promise((_, reject) => {
-      const error = { headers: new Headers(),
-        error: {
-          errors: [
-            {
-              message: 'error',
-            },
-          ],
-        } };
-      reject(error);
-    }),
+    POST: () => mockErrorRespose(),
     PUT: jest.fn(),
     DELETE: jest.fn(),
     cancel: jest.fn(),
   },
   markAsMissing: {
-    // eslint-disable-next-line prefer-promise-reject-errors
-    POST: () => new Promise((_, reject) => {
-      const error = { headers: new Headers(headers),
-        error: {
-          errors: [
-            {
-              message: 'error',
-            },
-          ],
-        } };
-      reject(error);
-    }),
+    POST: () => mockErrorRespose(),
     PUT: jest.fn(),
     DELETE: jest.fn(),
     cancel: jest.fn(),
@@ -126,22 +112,7 @@ const mutator = {
     cancel: jest.fn(),
   },
   declareLost: {
-    // eslint-disable-next-line prefer-promise-reject-errors
-    POST: jest.fn(() => new Promise((resolve, reject) => {
-      const error = { headers: new Headers(httpHeaders),
-        error: {
-          errors: [
-            {
-              message: 'error',
-            },
-          ],
-        } };
-      const res = {
-        json: () => Promise.resolve(error),
-        headers: new Headers(httpHeaders),
-      };
-      reject(res);
-    })),
+    POST: () => mockErrorRespose(),
     PUT: jest.fn(),
     DELETE: jest.fn(),
     cancel: jest.fn(),
@@ -259,7 +230,7 @@ describe('Modal Content', () => {
     const actionName = 'recallrequested';
     const props = {
       isLoading: false,
-      resources,
+      resources: {},
       mutator,
       loan: loan(actionName),
       loanAction: 'declareLost',
@@ -292,7 +263,7 @@ describe('Modal Content', () => {
     const actionName = 'recallrequested';
     const props = {
       isLoading: false,
-      resources,
+      resources: {},
       mutator,
       loan: loan(actionName),
       loanAction: 'declareLost',
@@ -325,7 +296,7 @@ describe('Modal Content', () => {
     const actionName = 'recallrequested';
     const props = {
       isLoading: false,
-      resources,
+      resources: {},
       mutator,
       loan: loan(actionName),
       loanAction: 'claimReturned',
@@ -357,7 +328,7 @@ describe('Modal Content', () => {
     const actionName = 'claimedReturned';
     const props = {
       isLoading: false,
-      resources,
+      resources: {},
       mutator,
       loan: loan(actionName),
       loanAction: 'markAsMissing',
