@@ -167,7 +167,7 @@ describe('OpenLoansWithStatic Data component', () => {
   it('Column visibility filter check', () => {
     renderOpenLoansWithStaticData(props);
     userEvent.click(document.querySelector('[id="columnsDropdown"]'));
-    userEvent.type(document.querySelector('[id="ui-users.loans.columns.contributors"]'), { target : { checked: true } });
+    userEvent.click(document.querySelector('[id="ui-users.loans.columns.contributors"]'));
     expect(mockToggleColumn).toHaveBeenCalled();
   });
 });

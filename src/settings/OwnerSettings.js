@@ -15,7 +15,7 @@ import { stripesConnect, withStripes } from '@folio/stripes/core';
 
 import { validate } from '../components/util';
 
-const columnMapping = {
+const columnMapping = (formatMessage) => ({
   owner: (
     <Label
       tagName="span"
@@ -24,13 +24,13 @@ const columnMapping = {
       <FormattedMessage id="ui-users.owners.columns.owner" />
     </Label>
   ),
-  desc: <FormattedMessage id="ui-users.owners.columns.desc" />,
+  desc: formatMessage({ id: 'ui-users.owners.columns.desc' }),
   servicePointOwner: (
     <Label id="associated-service-point-label">
       <FormattedMessage id="ui-users.owners.columns.asp" />
     </Label>
   ),
-};
+});
 
 class OwnerSettings extends React.Component {
   static manifest = Object.freeze({
@@ -152,7 +152,7 @@ class OwnerSettings extends React.Component {
       <this.connectedControlledVocab
         {...this.props}
         baseUrl="owners"
-        columnMapping={columnMapping}
+        columnMapping={columnMapping(formatMessage)}
         fieldComponents={fieldComponents}
         formatter={formatter}
         hiddenFields={['lastUpdated', 'numberOfObjects']}
