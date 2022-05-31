@@ -55,7 +55,7 @@ class ItemInfo extends React.Component {
           <FormattedMessage id="ui-users.charge.item.title" />
         </h4>
         <Row>
-          <Col xs={6} sm={5} md={4} lg={3}>
+          <Col xs={8}>
             <FormattedMessage id="ui-users.charge.item.placeholder">
               {placeholder => (
                 <TextField
@@ -77,7 +77,7 @@ class ItemInfo extends React.Component {
           </Col>
         </Row>
         <Row>
-          <Col xs={12} sm={10} md={7} lg={5}>
+          <Col xs={8} sm={10} md={7} lg={5}>
             <Row><Col xs={12}><FormattedMessage id="ui-users.charge.item.barcode" /></Col></Row>
             <Row>
               <Col xs={12}>
@@ -92,14 +92,14 @@ class ItemInfo extends React.Component {
         </Row>
         <br />
         <Row>
-          <Col xs={12} sm={10} md={7} lg={5}>
+          <Col xs={8} sm={10} md={7} lg={5}>
             <Row><Col xs={12}><FormattedMessage id="ui-users.charge.item.instance" /></Col></Row>
             <Row><Col xs={12}><b>{instance}</b></Col></Row>
           </Col>
         </Row>
         <br />
         <Row>
-          <Col xs={12} sm={10} md={7} lg={5}>
+          <Col xs={12}>
             <Row>
               <Col xs={4}>
                 <Row><Col xs={12}><FormattedMessage id="ui-users.charge.item.status" /></Col></Row>
