@@ -278,10 +278,6 @@
     "extended.resetPasswordModal.linkWasSent": "A reset password link was sent to:",
     "extended.resetPasswordModal.linkInstructions": "Pokud {name} nedostává e-maily od FOLIA, lze odeslat následující odkaz:",
     "owners.columns.asp": "Přidružená servisní místa",
-    "charge.messageThe": "The ",
-    "charge.messageOf": " fee/fine Of ",
-    "charge.messageSuccessfully": " has been successfully ",
-    "charge.messageFor": " for ",
     "details.columns.transactioninfo": "Transaction information",
     "details.paneTitle.feeFineDetails": "Fee/fine details",
     "details.label.loanDetails": "Loan details",
@@ -992,5 +988,6 @@
     "charge.feefine.id": "ID poplatku/pokuty",
     "charge.amount": "Částka",
     "charge.comment.label": "Komentáře",
-    "errors.permissionChangeFailed": "Oprávnění nebyla změněna"
+    "errors.permissionChangeFailed": "Oprávnění nebyla změněna",
+    "charge.message.successfully": "Poplatek/pokuta {feeFineType} ve výši <strong>{amount}</strong> byl/a úspěšně <strong>{paymentName}</strong> pro <strong>{fullName}</strong>"
 }
