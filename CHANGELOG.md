@@ -26,8 +26,9 @@
 * Fix Patron blocks settings order. Refs UIU-2448.
 * Update NodeJS to Active LTS. Refs UIU-2607.
 * Use single formatted message for successfully callout message. Refs UIU-1657.
-* create Jest/RTL test for DepartmentsNameEdit.js. Refs UIU-2326
+* Create Jest/RTL test for DepartmentsNameEdit.js. Refs UIU-2326.
 * Fee/fine amount unexpectedly resets on manual charge form. Refs UIU-2600.
+* Create Jest/RTL test for OpenLoansSubHeader.js. Refs UIU-2340.
 
 ## [8.0.0](https://github.com/folio-org/ui-users/tree/v8.0.0) (2022-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v7.1.0...v8.0.0)
