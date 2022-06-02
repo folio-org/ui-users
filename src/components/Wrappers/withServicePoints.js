@@ -112,6 +112,7 @@ const withServicePoints = WrappedComponent => class WithServicePointsComponent e
     }
 
     componentDidMount() {
+      this._isMounted = true;
       this.fetchServicePointsResources();
     }
 
@@ -121,6 +122,10 @@ const withServicePoints = WrappedComponent => class WithServicePointsComponent e
       }
 
       return {};
+    }
+
+    componentWillUnmount() {
+      this._isMounted = false;
     }
 
     fetchServicePointsResources() {
@@ -175,9 +180,9 @@ const withServicePoints = WrappedComponent => class WithServicePointsComponent e
       if (defaultServicePointId) {
         const sp = servicePoints.find(r => r.id === defaultServicePointId);
         setCurServicePoint(store, sp);
-      } else {
+      } else if (this._isMounted) {
         this.setState({
-          showChangeServicePointHandler: true,
+          showChangeServicePointHandler: true
         });
       }
     }
