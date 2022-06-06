@@ -28,6 +28,8 @@
 * Use single formatted message for successfully callout message. Refs UIU-1657.
 * Create Jest/RTL test for DepartmentsNameEdit.js. Refs UIU-2326.
 * Fee/fine amount unexpectedly resets on manual charge form. Refs UIU-2600.
+* Allow fee/fine to be cancelled if remaining balance equals billed amount. Refs UIU-2609.
+* Unpin `moment` from `~2.24.0` and move it to peer. Refs UIU-1900.
 * Create Jest/RTL test for OpenLoansSubHeader.js. Refs UIU-2340.
 
 ## [8.0.0](https://github.com/folio-org/ui-users/tree/v8.0.0) (2022-03-17)

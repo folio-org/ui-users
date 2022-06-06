@@ -17,6 +17,7 @@ import {
   Col,
   Checkbox,
 } from '@folio/stripes/components';
+import { effectiveCallNumber } from '@folio/stripes/util';
 
 import UserInfo from './UserInfo';
 import FeeFineInfo from './FeeFineInfo';
@@ -176,7 +177,7 @@ class ChargeForm extends React.Component {
       instance: (selectedLoan.item || {}).title,
       barcode: (selectedLoan.item || {}).barcode,
       itemStatus: ((selectedLoan.item || {}).status || {}).name,
-      callNumber: (selectedLoan.item || {}).callNumber,
+      callNumber: effectiveCallNumber(selectedLoan.item || {}),
       location: selectedLoan?.item?.effectiveLocation?.name,
       type: ((selectedLoan.item || {}).materialType || {}).name,
     };
