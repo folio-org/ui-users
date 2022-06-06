@@ -12,6 +12,7 @@ import {
   FormattedMessage,
   injectIntl,
 } from 'react-intl';
+import { effectiveCallNumber } from '@folio/stripes/util';
 import ChargeForm from './ChargeForm';
 import ItemLookup from './ItemLookup';
 import ActionModal from '../Actions/ActionModal';
@@ -127,7 +128,7 @@ class ChargeFeeFine extends React.Component {
     type.feeFineOwner = (owners.find(o => o.id === type.ownerId) || {}).owner || '';
     type.title = item.title;
     type.barcode = item.barcode;
-    type.callNumber = item.callNumber;
+    type.callNumber = effectiveCallNumber(item);
     type.location = item?.location?.name || item?.effectiveLocation?.name;
     type.materialType = (item.materialType || {}).name;
     type.materialTypeId = (selectedLoan.id) ? undefined : (item.materialType || {}).id || undefined;
@@ -277,21 +278,23 @@ class ChargeFeeFine extends React.Component {
   }
 
   showCalloutMessage(a) {
+    const {
+      intl: { formatNumber },
+    } = this.props;
     const amount = parseFloat(a.amount).toFixed(2);
     const paymentName = (a.paymentStatus.name).toLowerCase();
     const fullName = getFullName(this.props.user);
     const { feeFineType } = a;
     const message =
-      <span>
-        <FormattedMessage id="ui-users.charge.messageThe" />
-        {feeFineType}
-        <FormattedMessage id="ui-users.charge.messageOf" />
-        <strong>{amount}</strong>
-        <FormattedMessage id="ui-users.charge.messageSuccessfully" />
-        <strong>{paymentName}</strong>
-        <FormattedMessage id="ui-users.charge.messageFor" />
-        <strong>{fullName}</strong>
-      </span>;
+      <FormattedMessage
+        id="ui-users.charge.message.successfully"
+        values={{
+          feeFineType,
+          amount: formatNumber(amount, { style: 'currency' }),
+          paymentName,
+          fullName,
+        }}
+      />;
 
     if (this.callout) {
       this.callout.sendCallout({ message });
@@ -471,7 +474,7 @@ class ChargeFeeFine extends React.Component {
         instance: this.item.title || '',
         barcode: this.item.barcode || '',
         itemStatus: (this.item.status || {}).name || '',
-        callNumber: this.item.callNumber || '',
+        callNumber: effectiveCallNumber(this.item),
         location: (this.item.effectiveLocation || {}).name || '',
         type: (this.item.materialType || {}).name || '',
       };
@@ -507,6 +510,7 @@ class ChargeFeeFine extends React.Component {
       <div>
         <ChargeForm
           form="feeFineChargeForm"
+          onClose={this.goBack}
           initialValues={initialChargeValues}
           defaultServicePointId={defaultServicePointId}
           feeFineTypeOptions={currentOwnerFeeFineTypes}

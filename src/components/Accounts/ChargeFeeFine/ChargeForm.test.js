@@ -5,6 +5,7 @@ import okapiCurrentUser from 'fixtures/okapiCurrentUser';
 import renderWithRouter from 'helpers/renderWithRouter';
 import ChargeForm from './ChargeForm';
 
+jest.unmock('@folio/stripes/util');
 jest.unmock('@folio/stripes/components');
 jest.unmock('@folio/stripes/smart-components');
 
@@ -54,7 +55,18 @@ const feefines = [
 
 const propData = {
   user: okapiCurrentUser,
-  item: {},
+  item: {
+    barcode: '12345',
+    callNumberComponents: {
+      prefix: 'prefix',
+      callNumber: 'callNumber',
+      suffix: 'suffix',
+    },
+    enumeration: 'enumeration',
+    chronology: 'chronology',
+    volume: 'volume',
+  },
+
   intl: {
     formatMessage: jest.fn(),
   },
@@ -93,6 +105,7 @@ const propData = {
   handleSubmit: jest.fn(),
   onClickSelectItem: jest.fn(),
   onFindShared: jest.fn(),
+  onClose: jest.fn(),
   pristine: false,
   submitting: false,
   invalid: false,
@@ -181,5 +194,6 @@ describe('ChargeForm component', () => {
     expect(onChangeOwnerMock).toHaveBeenCalled();
     expect(screen.getByText('ui-users.charge.item.status')).toBeInTheDocument();
     expect(screen.getByText('ui-users.accounts.infoPatron')).toBeInTheDocument();
+    expect(screen.getByText('ui-users.charge.item.callNumber')).toBeInTheDocument();
   });
 });

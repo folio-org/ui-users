@@ -10,15 +10,14 @@ import {
 
 import stripesFinalForm from '@folio/stripes/final-form';
 import {
-  Paneset,
-  Pane,
-  PaneMenu,
   TextArea,
   Button,
+  Modal,
   Row,
   Col,
   Checkbox,
 } from '@folio/stripes/components';
+import { effectiveCallNumber } from '@folio/stripes/util';
 
 import UserInfo from './UserInfo';
 import FeeFineInfo from './FeeFineInfo';
@@ -56,6 +55,7 @@ class ChargeForm extends React.Component {
     feefines: PropTypes.arrayOf(PropTypes.object),
     form: PropTypes.object.isRequired,
     onClickCancel: PropTypes.func,
+    onClose: PropTypes.func,
     onChangeOwner: PropTypes.func.isRequired,
     onChangeFeeFine: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
@@ -99,20 +99,20 @@ class ChargeForm extends React.Component {
     }
   }
 
-  async onChangeFeeFine(e) {
+  onChangeFeeFine(e) {
     const {
       feefines,
       form: { change },
     } = this.props;
 
     if (e?.target?.value) {
+      this.props.onChangeFeeFine(e);
+
       const feeFineId = e.target.value;
-      await this.props.onChangeFeeFine(e);
       const feefine = feefines.find(f => f.id === feeFineId) || {};
-      change('feeFineId', feefine.id);
-      this.amount = feefine.defaultAmount || 0;
-      this.amount = parseFloat(this.amount).toFixed(2);
       const defaultAmount = parseFloat(feefine.defaultAmount || 0).toFixed(2);
+
+      change('feeFineId', feefine.id);
       change('amount', defaultAmount);
     }
   }
@@ -123,6 +123,12 @@ class ChargeForm extends React.Component {
 
     this.props.onChangeOwner(ownerId);
     change('ownerId', ownerId);
+  }
+
+  onClose = () => {
+    const { onClose, form: { reset } } = this.props;
+    onClose();
+    reset();
   }
 
   goToAccounts = () => {
@@ -161,7 +167,7 @@ class ChargeForm extends React.Component {
         feeFineId,
         ownerId,
         notify,
-      }
+      },
     } = getState();
 
     const selectedLoan = selectedLoanProp || {};
@@ -171,9 +177,9 @@ class ChargeForm extends React.Component {
       instance: (selectedLoan.item || {}).title,
       barcode: (selectedLoan.item || {}).barcode,
       itemStatus: ((selectedLoan.item || {}).status || {}).name,
-      callNumber: (selectedLoan.item || {}).callNumber,
+      callNumber: effectiveCallNumber(selectedLoan.item || {}),
       location: selectedLoan?.item?.effectiveLocation?.name,
-      type: ((selectedLoan.item || {}).materialType || {}).name
+      type: ((selectedLoan.item || {}).materialType || {}).name,
     };
     const item = (editable) ? this.props.item : itemLoan;
     const feefineList = [];
@@ -198,118 +204,117 @@ class ChargeForm extends React.Component {
     if (feefine?.chargeNoticeId || owner?.defaultChargeNoticeId) {
       showNotify = true;
     }
-
-    const lastMenu = (
-      <PaneMenu>
-        <Button
-          id="cancelCharge"
-          onClick={this.goToAccounts}
-          marginBottom0
-        >
-          <FormattedMessage id="ui-users.feefines.modal.cancel" />
-        </Button>
-        <Button
-          id="chargeAndPay"
-          disabled={pristine || submitting || !valid}
-          onClick={() => {
-            change('pay', true);
-            handleSubmit(data => onSubmit(data));
-          }}
-          marginBottom0
-        >
-          <FormattedMessage id="ui-users.charge.Pay" />
-        </Button>
-        <Button
-          id="chargeOnly"
-          disabled={pristine || submitting || !valid}
-          onClick={() => {
-            change('pay', false);
-            handleSubmit(data => onSubmit(data));
-          }}
-          marginBottom0
-        >
-          <FormattedMessage id="ui-users.charge.onlyCharge" />
-        </Button>
-      </PaneMenu>);
-
     return (
-      <Paneset data-test-charge-form>
-        <Pane
-          defaultWidth="100%"
-          dismissible
-          onClose={this.goToAccounts}
-          paneTitle={(
-            <FormattedMessage id="ui-users.charge.title" />
-          )}
-          lastMenu={lastMenu}
+      <Modal
+        data-test-charge-form
+        id="new-modal"
+        open
+        label={<FormattedMessage id="ui-users.charge.title" />}
+        onClose={this.onClose}
+        size="medium"
+        dismissible
+      >
+        <UserInfo user={user} />
+        <br />
+        <form
+          onSubmit={handleSubmit}
+          id="feeFineChargeForm"
         >
-          <UserInfo user={user} />
+          <FeeFineInfo
+            form={form}
+            stripes={stripes}
+            initialValues={initialValues}
+            ownerOptions={ownerOptions}
+            isPending={isPending}
+            onChangeOwner={this.onChangeOwner}
+            onChangeFeeFine={this.onChangeFeeFine}
+            feefineList={feefineList}
+          />
           <br />
-          <form
-            onSubmit={handleSubmit}
-            id="feeFineChargeForm"
-          >
-            <FeeFineInfo
-              form={form}
-              stripes={stripes}
-              initialValues={initialValues}
-              ownerOptions={ownerOptions}
-              isPending={isPending}
-              onChangeOwner={this.onChangeOwner}
-              onChangeFeeFine={this.onChangeFeeFine}
-              feefineList={feefineList}
-            />
-            <br />
-            <ItemInfo {...this.props} item={item} onClickSelectItem={this.props.onClickSelectItem} editable={editable} />
-            <br />
-            <h4 className="marginTopHalf"><FormattedMessage id="ui-users.charge.comment" /></h4>
+          <ItemInfo {...this.props} item={item} onClickSelectItem={this.props.onClickSelectItem} editable={editable} />
+          <br />
+          <h4 className="marginTopHalf"><FormattedMessage id="ui-users.charge.comment" /></h4>
+          <Row>
+            <Col xs={12} sm={10} md={7} lg={5}>
+              <Field
+                id="comments"
+                name="comments"
+                aria-label={formatMessage({ id: 'ui-users.charge.comment.label' })}
+                component={TextArea}
+                fullWidth
+              />
+            </Col>
+          </Row>
+          {showNotify &&
+          <div>
             <Row>
-              <Col xs={12} sm={10} md={7} lg={5}>
+              <Col xs>
                 <Field
-                  id="comments"
-                  name="comments"
-                  aria-label={formatMessage({ id: 'ui-users.charge.comment.label' })}
-                  component={TextArea}
-                  fullWidth
+                  name="notify"
+                  component={Checkbox}
+                  type="checkbox"
+                  inline
+                  label={<FormattedMessage id="ui-users.accounts.notifyPatron" />}
                 />
               </Col>
             </Row>
-            {showNotify &&
-              <div>
-                <Row>
-                  <Col xs>
-                    <Field
-                      name="notify"
-                      component={Checkbox}
-                      type="checkbox"
-                      inline
-                      label={<FormattedMessage id="ui-users.accounts.notifyPatron" />}
-                    />
-                  </Col>
-                </Row>
-              </div>
+          </div>
             }
-            <br />
-            {notify && showNotify &&
-              <div>
-                <Row>
-                  <Col xs>
-                    <h4 className="marginTopHalf"><FormattedMessage id="ui-users.accounts.infoPatron" /></h4>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col xs={12} sm={10} md={7} lg={5}>
-                    <Field
-                      name="patronInfo"
-                      component={TextArea}
-                    />
-                  </Col>
-                </Row>
-              </div>
+          <br />
+          {notify && showNotify &&
+          <div>
+            <Row>
+              <Col xs>
+                <h4 className="marginTopHalf"><FormattedMessage id="ui-users.accounts.infoPatron" /></h4>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12} sm={10} md={7} lg={5}>
+                <Field
+                  name="patronInfo"
+                  component={TextArea}
+                />
+              </Col>
+            </Row>
+          </div>
             }
-          </form>
-        </Pane>
-      </Paneset>
+
+          <Row end="xs">
+            <Col>
+              <Button
+                id="cancelCharge"
+                onClick={this.onClose}
+                marginBottom0
+              >
+                <FormattedMessage id="ui-users.feefines.modal.cancel" />
+              </Button>
+              <Button
+                id="chargeAndPay"
+                disabled={pristine || submitting || !valid}
+                onClick={() => {
+                  change('pay', true);
+                  handleSubmit(data => onSubmit(data));
+                }}
+                marginBottom0
+              >
+                <FormattedMessage id="ui-users.charge.Pay" />
+              </Button>
+              <Button
+                id="chargeOnly"
+                disabled={pristine || submitting || !valid}
+                onClick={() => {
+                  change('pay', false);
+                  handleSubmit(data => onSubmit(data));
+                }}
+                marginBottom0
+              >
+                <FormattedMessage id="ui-users.charge.onlyCharge" />
+              </Button>
+            </Col>
+          </Row>
+        </form>
+      </Modal>
+
     );
   }
 }
