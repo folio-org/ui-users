@@ -343,7 +343,8 @@
           "payments.item.get",
           "payments.item.post",
           "payments.item.put",
-          "settings.users.enabled"
+          "settings.users.enabled",
+          "users.collection.get"
         ],
         "visible": true
       },
@@ -885,6 +886,7 @@
     "jest-junit": "^12.0.0",
     "miragejs": "^0.1.32",
     "mocha": "^5.2.0",
+    "moment": "^2.24.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-intl": "^5.8.0",
@@ -900,7 +902,6 @@
     "jspdf": "^2.3.1",
     "jspdf-autotable": "^3.5.14",
     "lodash": "^4.17.4",
-    "moment": "~2.24.0",
     "moment-timezone": "^0.5.14",
     "prop-types": "^15.5.10",
     "query-string": "^5.0.0",
@@ -912,6 +913,7 @@
   },
   "peerDependencies": {
     "@folio/stripes": "^7.0.0",
+    "moment": "^2.24.0",
     "react": "^17.0.2",
     "react-intl": "^5.8.0",
     "react-router": "^5.2.0",
@@ -919,8 +921,5 @@
   },
   "optionalDependencies": {
     "@folio/plugin-find-user": "^6.0.0"
-  },
-  "resolutions": {
-    "moment": "~2.24.0"
   }
 }
