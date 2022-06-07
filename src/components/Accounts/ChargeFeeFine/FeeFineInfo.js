@@ -24,12 +24,6 @@ class FeeFineInfo extends React.Component {
     isPending: PropTypes.object,
   };
 
-  constructor(props) {
-    super(props);
-    this.onChangeAmount = this.onChangeAmount.bind(this);
-    this.amount = 0;
-  }
-
   componentDidMount() {
     const {
       initialValues: {
@@ -43,14 +37,10 @@ class FeeFineInfo extends React.Component {
     }
   }
 
-  onChangeAmount(e) {
-    this.amount = parseFloat(e.target.value || 0).toFixed(2);
-    this.props.onChangeFeeFine(this.amount);
-  }
-
-  onBlurAmount = () => {
+  onBlurAmount = (e) => {
     const { form: { change } } = this.props;
-    change('amount', this.amount);
+
+    change('amount', parseFloat(e.target.value || 0).toFixed(2));
   }
 
   render() {
@@ -122,7 +112,6 @@ class FeeFineInfo extends React.Component {
                       fullWidth
                       required
                       aria-required="true"
-                      onChange={this.onChangeAmount}
                       onBlur={this.onBlurAmount}
                     />
                   </Col>
