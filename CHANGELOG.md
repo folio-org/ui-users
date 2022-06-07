@@ -209,6 +209,7 @@
 * Create Jest/RTL test for `UserRequests`. Refs UIU-2306.
 * Create Jest/RTL test for `HelperApp`. Refs UIU-2310.
 * Create Jest/RTL test for `constants`. Refs UIU-2316.
+* Create Jest/RTL test for `Label`. Refs UIU-2327.
 * Create Jest/RTL test for `getProxySponsorWarning`. Refs UIU-2321.
 * Create Jest/RTL test for `constants`. Refs UIU-2325.
 * Create Jest/RTL test for `EditUserInfo`. Refs UIU-2292.
