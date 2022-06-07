@@ -223,7 +223,7 @@
     "charge.item.barcode": "Barcode",
     "charge.item.instance": "Instance",
     "charge.item.status": "Item Status",
-    "charge.item.callNumber": "Call number",
+    "charge.item.callNumber": "Effective call number string",
     "charge.item.location": "Location",
     "details.columns.comments": "Additional information",
     "details.columns.date": "Action date",
@@ -248,7 +248,7 @@
     "details.field.latest": "Latest payment status",
     "details.field.type": "Item type",
     "details.field.barcode": "Barcode",
-    "details.field.callnumber": "Call number",
+    "details.field.callnumber": "Effective call number string",
     "details.field.location": "Location",
     "details.field.duedate": "Due date",
     "details.field.returnedate": "Returned date",
@@ -278,10 +278,6 @@
     "extended.resetPasswordModal.linkWasSent": "A reset password link was sent to:",
     "extended.resetPasswordModal.linkInstructions": "If {name} is not receiving emails from FOLIO, the following link can be sent:",
     "owners.columns.asp": "Associated service points",
-    "charge.messageThe": "The ",
-    "charge.messageOf": " fee/fine Of ",
-    "charge.messageSuccessfully": " has been successfully ",
-    "charge.messageFor": "کے لئے",
     "details.columns.transactioninfo": "Transaction information",
     "details.paneTitle.feeFineDetails": "Fee/fine details",
     "details.label.loanDetails": "Loan details",
@@ -992,5 +988,6 @@
     "charge.feefine.id": "Fee/fine id",
     "charge.amount": "Amount",
     "charge.comment.label": "Comments",
-    "errors.permissionChangeFailed": "Permissions were not changed"
+    "errors.permissionChangeFailed": "Permissions were not changed",
+    "charge.message.successfully": "The {feeFineType} fee/fine of <strong>{amount}</strong> has been successfully <strong>{paymentName}</strong> for <strong>{fullName}</strong>"
 }

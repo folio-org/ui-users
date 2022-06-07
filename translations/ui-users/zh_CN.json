@@ -278,10 +278,6 @@
     "extended.resetPasswordModal.linkWasSent": "重置密码链接已发送至：",
     "extended.resetPasswordModal.linkInstructions": "如果{name}未收到来自FOLIO的电子邮件，则可以发送以下链接。",
     "owners.columns.asp": "关联服务点",
-    "charge.messageThe": "该",
-    "charge.messageOf": "费用/罚款为",
-    "charge.messageSuccessfully": "已成功",
-    "charge.messageFor": "适用于:",
     "details.columns.transactioninfo": "交易信息",
     "details.paneTitle.feeFineDetails": "费用/罚款详情",
     "details.label.loanDetails": "借阅详情",
@@ -992,5 +988,6 @@
     "charge.feefine.id": "费用/罚款ID",
     "charge.amount": "金额",
     "charge.comment.label": "备注",
-    "errors.permissionChangeFailed": "权限未更改"
+    "errors.permissionChangeFailed": "权限未更改",
+    "charge.message.successfully": "<strong> {amount} </strong>的{feeFineType}费用/罚款已成功为<strong> {fullName} </strong> <strong> {paymentName}  </strong>"
 }
