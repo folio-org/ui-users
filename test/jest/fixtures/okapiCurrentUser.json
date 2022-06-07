@@ -11,10 +11,12 @@
     "metadata": { "createdDate": "2021-10-14T03:22:53.897+00:00", "updatedDate": "2021-10-14T03:22:53.897+00:00" },
     "staffSlips": []
   },
+  "active": true,
   "email": "admin@diku.example.org",
   "firstName": "DIKU",
   "id": "a51df26e-b472-5c06-8362-01025b90238b",
   "lastName": "ADMINISTRATOR",
+  "expirationDate": "2022-05-30T03:22:53.897+00:00",
   "servicePoints": [
     {
       "code": "Online",

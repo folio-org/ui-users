@@ -17,6 +17,7 @@ import {
   Col,
   Checkbox,
 } from '@folio/stripes/components';
+import { effectiveCallNumber } from '@folio/stripes/util';
 
 import UserInfo from './UserInfo';
 import FeeFineInfo from './FeeFineInfo';
@@ -98,20 +99,20 @@ class ChargeForm extends React.Component {
     }
   }
 
-  async onChangeFeeFine(e) {
+  onChangeFeeFine(e) {
     const {
       feefines,
       form: { change },
     } = this.props;
 
     if (e?.target?.value) {
+      this.props.onChangeFeeFine(e);
+
       const feeFineId = e.target.value;
-      await this.props.onChangeFeeFine(e);
       const feefine = feefines.find(f => f.id === feeFineId) || {};
-      change('feeFineId', feefine.id);
-      this.amount = feefine.defaultAmount || 0;
-      this.amount = parseFloat(this.amount).toFixed(2);
       const defaultAmount = parseFloat(feefine.defaultAmount || 0).toFixed(2);
+
+      change('feeFineId', feefine.id);
       change('amount', defaultAmount);
     }
   }
@@ -166,7 +167,7 @@ class ChargeForm extends React.Component {
         feeFineId,
         ownerId,
         notify,
-      }
+      },
     } = getState();
 
     const selectedLoan = selectedLoanProp || {};
@@ -176,9 +177,9 @@ class ChargeForm extends React.Component {
       instance: (selectedLoan.item || {}).title,
       barcode: (selectedLoan.item || {}).barcode,
       itemStatus: ((selectedLoan.item || {}).status || {}).name,
-      callNumber: (selectedLoan.item || {}).callNumber,
+      callNumber: effectiveCallNumber(selectedLoan.item || {}),
       location: selectedLoan?.item?.effectiveLocation?.name,
-      type: ((selectedLoan.item || {}).materialType || {}).name
+      type: ((selectedLoan.item || {}).materialType || {}).name,
     };
     const item = (editable) ? this.props.item : itemLoan;
     const feefineList = [];
