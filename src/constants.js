@@ -95,6 +95,8 @@ export const refundStatuses = {
   RefundedPartially: 'Refunded partially',
 };
 
+export const outstandingStatus = 'Outstanding';
+
 export const FEE_FINE_ACTIONS = {
   PAYMENT: 'payment',
   WAIVE: 'waive',
