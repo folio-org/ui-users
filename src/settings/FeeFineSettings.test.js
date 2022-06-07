@@ -206,24 +206,28 @@ describe('Payment settings', () => {
   beforeEach(async () => {
     await waitFor(() => renderFeeFineSettings(propData));
   });
+
   it('component must be rendered', async () => {
     expect(screen.getAllByText('ui-users.feefines.title')[0]).toBeTruthy();
   });
+
   it('Onchange owner', async () => {
     userEvent.selectOptions(document.querySelector('[id="select-owner"]'), screen.getByText('test2'));
     userEvent.selectOptions(document.querySelector('[id="select-owner"]'), screen.getByText('Shared'));
     expect(screen.getByText('test2')).toBeTruthy();
   });
+
   it('OnChange payment', async () => {
     userEvent.click(document.querySelector('[id="charge-notice-primary"]'));
-    userEvent.selectOptions(document.querySelector('[id="select-12"]'), screen.getByText('Charge test'));
-    userEvent.selectOptions(document.querySelector('[id="select-13"]'), screen.getByText('charge Action Test'));
+    userEvent.selectOptions(document.querySelector('[name="defaultChargeNoticeId"]'), screen.getByText('Charge test'));
+    userEvent.selectOptions(document.querySelector('[name="defaultActionNoticeId"]'), screen.getByText('charge Action Test'));
     userEvent.click(document.querySelector('[id="charge-notice-primary"]'));
     userEvent.selectOptions(document.querySelector('[id="select-owner"]'), screen.getByText('test1'));
-    userEvent.selectOptions(document.querySelector('[id="select-14"]'), screen.getAllByText('test2')[1]);
+    userEvent.selectOptions(document.querySelector('[name="ownerId"]'), screen.getAllByText('test2')[1]);
     userEvent.click(screen.getByText('ui-users.feefines.modal.submit'));
     expect(screen.getAllByText('test2')[1]).toBeTruthy();
   });
+
   it('Create payment', async () => {
     userEvent.click(document.querySelector('[id="clickable-add-settings-feefines"]'));
     userEvent.type(document.querySelector('[name="items[0].defaultAmount"]'), '1.0');
