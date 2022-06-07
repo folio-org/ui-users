@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## 8.0.4 IN PROGRESS
+
+* Include recent `zh-TW` updates. Refs UIU-2618.
+
 ## [8.0.3](https://github.com/folio-org/ui-users/tree/v8.0.3) (2022-04-12)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.0.2...v8.0.3)
 
