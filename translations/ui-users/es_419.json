@@ -278,10 +278,6 @@
     "extended.resetPasswordModal.linkWasSent": "Un enlace para resetear la contraseña fue enviado a:",
     "extended.resetPasswordModal.linkInstructions": "Si {name} no está recibiendo emails de FOLIO, se puede seguir este enlace:",
     "owners.columns.asp": "Puntos de servicio asociados",
-    "charge.messageThe": "El ",
-    "charge.messageOf": " tarifa/multa de ",
-    "charge.messageSuccessfully": " se ha realizado con éxito ",
-    "charge.messageFor": " para ",
     "details.columns.transactioninfo": "Información de la transacción",
     "details.paneTitle.feeFineDetails": "Detalles de tarifa/multa",
     "details.label.loanDetails": "Detalles del préstamo",
@@ -992,5 +988,6 @@
     "charge.feefine.id": "ID de la Tarifa/multa",
     "charge.amount": "Amount",
     "charge.comment.label": "Comments",
-    "errors.permissionChangeFailed": "Permissions were not changed"
+    "errors.permissionChangeFailed": "Permissions were not changed",
+    "charge.message.successfully": "The {feeFineType} fee/fine of <strong>{amount}</strong> has been successfully <strong>{paymentName}</strong> for <strong>{fullName}</strong>"
 }
