@@ -1,7 +1,8 @@
 import { fireEvent } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-
-import renderWithRouter from 'helpers/renderWithRouter';
+import {
+  render,
+} from '@testing-library/react';
 
 import NoteViewPage from './NoteViewPage';
 
@@ -12,10 +13,18 @@ jest.mock('@folio/stripes/smart-components', () => ({
       onEdit,
     }) => (
       <>
-        <button type="button" onClick={navigateBack} data-testid="navigateBack">
+        <button 
+          type="button"
+          onClick={navigateBack}
+          data-testid="navigateBack"
+        >
           back
         </button>
-        <button type="button" onClick={onEdit} data-testid="onEdit">
+        <button
+          type="button"
+          onClick={onEdit}
+          data-testid="onEdit"
+        >
           edit
         </button>
       </>
@@ -24,10 +33,11 @@ jest.mock('@folio/stripes/smart-components', () => ({
 
 const history = createMemoryHistory();
 history.push = jest.fn();
+history.goBack = jest.fn();
 
 const props = {
   history,
-  location : history.location,
+  location: history.location,
   match: {
     params: {
       id: 'id'
@@ -35,7 +45,7 @@ const props = {
   }
 };
 
-const renderNoteViewPage = () => renderWithRouter(
+const renderNoteViewPage = () => render(
   <div>
     <NoteViewPage {...props} />
     Note View Page
@@ -43,6 +53,10 @@ const renderNoteViewPage = () => renderWithRouter(
 );
 
 describe('Note View Page', () => {
+  beforeEach(() => {
+    history.push.mockClear();
+  });
+
   it('should render Note View Page', async () => {
     const { getByText } = renderNoteViewPage();
 
@@ -55,25 +69,19 @@ describe('Note View Page', () => {
     expect(getByTestId('navigateBack')).toBeInTheDocument();
   });
 
-  it('should redirect to users page', () => {
-    const { getByRole } = renderNoteViewPage();
-
-    fireEvent.click(getByRole('button', { name: 'back' }));
-
-    expect(history.push).toHaveBeenCalled();
-  });
-
   it('should render edit button', () => {
     const { getByTestId } = renderNoteViewPage();
 
     expect(getByTestId('onEdit')).toBeInTheDocument();
   });
 
-  it('should redirect to the edit page', () => {
-    const { getByRole } = renderNoteViewPage();
+  describe('when click on navigate back button', () => {
+    it('should redirect to users page', () => {
+      const { getByRole } = renderNoteViewPage();
 
-    fireEvent.click(getByRole('button', { name: 'edit' }));
+      fireEvent.click(getByRole('button', { name: 'back' }));
 
-    expect(history.push).toHaveBeenCalled();
+      expect(history.push).toHaveBeenCalled();
+    });
   });
 });
