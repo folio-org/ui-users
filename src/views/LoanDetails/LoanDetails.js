@@ -161,7 +161,7 @@ class LoanDetails extends React.Component {
 
     await renew([loan], user, additionalInfo);
 
-    return renewals.replace({ ts: new Date().getTime() });
+    return renewals?.replace({ ts: new Date().getTime() });
   }
 
   renew = async () => {
