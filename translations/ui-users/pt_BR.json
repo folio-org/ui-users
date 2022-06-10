@@ -278,10 +278,6 @@
     "extended.resetPasswordModal.linkWasSent": "Um link de redefinição de senha foi enviado para:",
     "extended.resetPasswordModal.linkInstructions": "Se {name} não estiver recebendo e-mails do FOLIO, o link a seguir poderá ser enviado:",
     "owners.columns.asp": "Pontos de serviço associados",
-    "charge.messageThe": "O ",
-    "charge.messageOf": " taxa/multa de ",
-    "charge.messageSuccessfully": " foi com sucesso ",
-    "charge.messageFor": " para ",
     "details.columns.transactioninfo": "Informação da transação",
     "details.paneTitle.feeFineDetails": "Detalhes da taxa/multa",
     "details.label.loanDetails": "Detalhes do empréstimo",
@@ -992,5 +988,6 @@
     "charge.feefine.id": "ID de taxa/multa",
     "charge.amount": "Quantia",
     "charge.comment.label": "Comentários",
-    "errors.permissionChangeFailed": "As permissões não foram alteradas"
+    "errors.permissionChangeFailed": "As permissões não foram alteradas",
+    "charge.message.successfully": "A taxa/multa de {feeFineType} de <strong> {amount} </strong> foi <strong> {paymentName} </strong> para <strong> {fullName} </strong>"
 }
