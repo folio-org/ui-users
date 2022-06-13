@@ -278,10 +278,6 @@
     "extended.resetPasswordModal.linkWasSent": "È stato inviato un link di reimpostazione password a:",
     "extended.resetPasswordModal.linkInstructions": "Se {name} non riceve email da FOLIO, è possibile inviare il seguente link:",
     "owners.columns.asp": "Punti di distribuzione associati",
-    "charge.messageThe": "Il ",
-    "charge.messageOf": " tariffa/multa di ",
-    "charge.messageSuccessfully": " è stato correttamente ",
-    "charge.messageFor": " per ",
     "details.columns.transactioninfo": "Informazioni transazione",
     "details.paneTitle.feeFineDetails": "Dettagli tariffa/multa",
     "details.label.loanDetails": "Dettagli prestito",
@@ -910,8 +906,8 @@
     "settings.transferCriteria.notAvailable": "No plugin available!",
     "details.label.loanAnonymized": "Anonymized",
     "accounts.history.button.loanAnonymized": "Dettagli prestito (anonimizzati)",
-    "details.checkDelete": "Check for open transactions/delete user",
-    "details.checkDelete.confirmation": "No open transactions for user <strong>{name}</strong>. <p>Are you sure you want to delete this user?</p>",
+    "details.checkDelete": "Controllare le transazioni aperte/eliminare l'utente",
+    "details.checkDelete.confirmation": "Nessuna transazione aperta per l'utente <strong>{name}</strong>. <p>Sei sicuro di voler eliminare questo utente?</p>",
     "details.openTransactions": "Open transactions",
     "details.openTransactions.info": "User <strong>{name}</strong> has the following open transactions:",
     "details.openTransactions.resolve": "Please resolve the transactions to proceed to delete the user.",
@@ -992,5 +988,6 @@
     "charge.feefine.id": "Tariffa/multa id",
     "charge.amount": "Importo",
     "charge.comment.label": "Commenti",
-    "errors.permissionChangeFailed": "Le autorizzazioni non sono state modificate"
+    "errors.permissionChangeFailed": "Le autorizzazioni non sono state modificate",
+    "charge.message.successfully": "The {feeFineType} fee/fine of <strong>{amount}</strong> has been successfully <strong>{paymentName}</strong> for <strong>{fullName}</strong>"
 }
