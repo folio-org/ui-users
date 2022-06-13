@@ -23,6 +23,7 @@
 * Create Jest/RTL test for ActionsDropdown.js. Refs UIU-2331
 * Create Jest/RTL test for PasswordControl. Refs UIU-2300.
 * Create Jest/RTL test for CustomFieldsSettings. Refs UIU-2386.
+* Create Jest/RTL test for NoteViewPage. Refs UIU-2422.
 * Fix Patron blocks settings order. Refs UIU-2448.
 * Update NodeJS to Active LTS. Refs UIU-2607.
 * Use single formatted message for successfully callout message. Refs UIU-1657.
