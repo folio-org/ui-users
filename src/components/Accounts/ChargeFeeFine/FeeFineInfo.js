@@ -66,7 +66,7 @@ class FeeFineInfo extends React.Component {
     return (
       <section>
         <Row>
-          <Col xs={12} sm={10} md={7} lg={5}>
+          <Col xs={12}>
             <Row>
               <Col xs={4}>
                 <Row>

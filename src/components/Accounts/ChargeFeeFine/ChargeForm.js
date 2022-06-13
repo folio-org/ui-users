@@ -214,7 +214,6 @@ class ChargeForm extends React.Component {
         dismissible
       >
         <UserInfo user={user} />
-        <br />
         <form
           onSubmit={handleSubmit}
           id="feeFineChargeForm"
@@ -229,12 +228,10 @@ class ChargeForm extends React.Component {
             onChangeFeeFine={this.onChangeFeeFine}
             feefineList={feefineList}
           />
-          <br />
           <ItemInfo {...this.props} item={item} onClickSelectItem={this.props.onClickSelectItem} editable={editable} />
-          <br />
           <h4 className="marginTopHalf"><FormattedMessage id="ui-users.charge.comment" /></h4>
           <Row>
-            <Col xs={12} sm={10} md={7} lg={5}>
+            <Col xs={12}>
               <Field
                 id="comments"
                 name="comments"
@@ -259,7 +256,6 @@ class ChargeForm extends React.Component {
             </Row>
           </div>
             }
-          <br />
           {notify && showNotify &&
           <div>
             <Row>
@@ -268,7 +264,7 @@ class ChargeForm extends React.Component {
               </Col>
             </Row>
             <Row>
-              <Col xs={12} sm={10} md={7} lg={5}>
+              <Col xs={12}>
                 <Field
                   name="patronInfo"
                   component={TextArea}
@@ -277,7 +273,6 @@ class ChargeForm extends React.Component {
             </Row>
           </div>
             }
-
           <Row end="xs">
             <Col>
               <Button
@@ -313,7 +308,6 @@ class ChargeForm extends React.Component {
           </Row>
         </form>
       </Modal>
-
     );
   }
 }
