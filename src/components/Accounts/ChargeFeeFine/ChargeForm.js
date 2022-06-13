@@ -257,7 +257,7 @@ class ChargeForm extends React.Component {
               </Col>
             </Row>
           </div>
-            }
+          }
           {notify && showNotify &&
           <div>
             <Row>
@@ -268,18 +268,13 @@ class ChargeForm extends React.Component {
             <Row>
               <Col xs>
                 <Field
-                  name="notify"
-                  component={Checkbox}
-                  type="checkbox"
-                  inline
-                  label={<FormattedMessage id="ui-users.accounts.notifyPatron" />}
                   name="patronInfo"
                   component={TextArea}
                 />
               </Col>
             </Row>
           </div>
-            }
+          }
 
           <Row end="xs">
             <Col>
