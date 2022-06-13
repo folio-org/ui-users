@@ -23,10 +23,17 @@
 * Create Jest/RTL test for ActionsDropdown.js. Refs UIU-2331
 * Create Jest/RTL test for PasswordControl. Refs UIU-2300.
 * Create Jest/RTL test for CustomFieldsSettings. Refs UIU-2386.
+* Create Jest/RTL test for NoteViewPage. Refs UIU-2422.
 * Fix Patron blocks settings order. Refs UIU-2448.
 * Update NodeJS to Active LTS. Refs UIU-2607.
 * Use single formatted message for successfully callout message. Refs UIU-1657.
-* create Jest/RTL test for DepartmentsNameEdit.js. Refs UIU-2326
+* Create Jest/RTL test for DepartmentsNameEdit.js. Refs UIU-2326.
+* Fee/fine amount unexpectedly resets on manual charge form. Refs UIU-2600.
+* Allow fee/fine to be cancelled if remaining balance equals billed amount. Refs UIU-2609.
+* Unpin `moment` from `~2.24.0` and move it to peer. Refs UIU-1900.
+* Create Jest/RTL test for OpenLoansSubHeader.js. Refs UIU-2340.
+* create Jest/RTL test for ClosedLoans.js. Refs UIU-2345
+* Get rid of console error if there is no `renewals`. Refs UIU-2603.
 
 ## [8.0.0](https://github.com/folio-org/ui-users/tree/v8.0.0) (2022-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v7.1.0...v8.0.0)
@@ -202,7 +209,13 @@
 * Create Jest/RTL test for `UserInfo`. Refs UIU-2351.
 * Create Jest/RTL test for `LimitsForm`. Refs UIU-2391.
 * Create Jest/RTL test for `Limits`. Refs UIU-2399.
+* Create Jest/RTL test for `UserRequests`. Refs UIU-2306.
 * Create Jest/RTL test for `HelperApp`. Refs UIU-2310.
+* Create Jest/RTL test for `constants`. Refs UIU-2316.
+* Create Jest/RTL test for `Label`. Refs UIU-2327.
+* Create Jest/RTL test for `getProxySponsorWarning`. Refs UIU-2321.
+* Create Jest/RTL test for `constants`. Refs UIU-2325.
+* Create Jest/RTL test for `EditUserInfo`. Refs UIU-2292.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)

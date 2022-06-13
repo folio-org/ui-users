@@ -1,14 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   cloneDeep,
   isEmpty,
 } from 'lodash';
-
-import {
-  FormattedMessage,
-  injectIntl,
-} from 'react-intl';
+import { useIntl } from 'react-intl';
 
 import { IfPermission } from '@folio/stripes/core';
 import {
@@ -39,70 +35,57 @@ const lostItemStatuses = [
   itemStatuses.DECLARED_LOST,
 ];
 
-class OpenLoansSubHeader extends React.Component {
-  static propTypes = {
-    intl: PropTypes.object.isRequired,
-    checkedLoans: PropTypes.object.isRequired,
-    columnMapping: PropTypes.object.isRequired,
-    loans: PropTypes.arrayOf(PropTypes.object).isRequired,
-    patronBlocks: PropTypes.arrayOf(PropTypes.object).isRequired,
-    visibleColumns: PropTypes.arrayOf(PropTypes.object).isRequired,
-    toggleColumn: PropTypes.func.isRequired,
-    buildRecords: PropTypes.func.isRequired,
-    renewSelected: PropTypes.func.isRequired,
-    openBulkClaimReturnedModal: PropTypes.func.isRequired,
-    openPatronBlockedModal: PropTypes.func.isRequired,
-    showChangeDueDateDialog: PropTypes.func.isRequired,
-    user: PropTypes.object.isRequired,
-  };
+const OpenLoansSubHeader = ({
+  buildRecords,
+  checkedLoans,
+  columnMapping,
+  loans,
+  openBulkClaimReturnedModal,
+  openPatronBlockedModal,
+  patronBlocks,
+  renewSelected,
+  showChangeDueDateDialog,
+  toggleColumn,
+  user,
+  visibleColumns,
+}) => {
+  const intl = useIntl();
 
-  constructor(props) {
-    super(props);
+  const [toggleDropdownState, setToggleDropdownState] = useState(false);
 
-    this.state = {
-      toggleDropdownState: false,
+  const headers = [
+    'action',
+    'dueDate',
+    'loanDate',
+    'item.barcode',
+    'item.callNumberComponents.prefix',
+    'item.callNumberComponents.callNumber',
+    'item.callNumberComponents.suffix',
+    'item.volume',
+    'item.enumeration',
+    'item.chronology',
+    'item.copyNumber',
+    'item.contributors',
+    'item.holdingsRecordId',
+    'item.instanceId',
+    'item.status.name',
+    'item.title',
+    'item.materialType.name',
+    'item.location.name',
+    'metaData.createdByUserId',
+    'metadata.updatedDate',
+    'metadata.updatedByUserId',
+    'loanPolicyId',
+  ];
+
+  const columnHeadersMap = headers.map(item => {
+    return {
+      label: intl.formatMessage({ id: `ui-users.${item}` }),
+      value: item
     };
+  });
 
-    this.headers = [
-      'action',
-      'dueDate',
-      'loanDate',
-      'item.barcode',
-      'item.callNumberComponents.prefix',
-      'item.callNumberComponents.callNumber',
-      'item.callNumberComponents.suffix',
-      'item.volume',
-      'item.enumeration',
-      'item.chronology',
-      'item.copyNumber',
-      'item.contributors',
-      'item.holdingsRecordId',
-      'item.instanceId',
-      'item.status.name',
-      'item.title',
-      'item.materialType.name',
-      'item.location.name',
-      'metaData.createdByUserId',
-      'metadata.updatedDate',
-      'metadata.updatedByUserId',
-      'loanPolicyId',
-    ];
-
-    // Map to pass into exportCsv
-    this.columnHeadersMap = this.headers.map(item => {
-      return {
-        label: props.intl.formatMessage({ id: `ui-users.${item}` }),
-        value: item
-      };
-    });
-  }
-
-  renderCheckboxList(columnMapping) {
-    const {
-      visibleColumns,
-      toggleColumn,
-    } = this.props;
-
+  const renderCheckboxList = () => {
     return visibleColumns.filter((columnObj) => Object.keys(columnMapping)
       .includes(columnObj.title))
       .map((e, i) => {
@@ -120,119 +103,118 @@ class OpenLoansSubHeader extends React.Component {
           </li>
         );
       });
-  }
-
-  onDropdownClick = () => {
-    this.setState(({ toggleDropdownState }) => ({
-      toggleDropdownState: !toggleDropdownState
-    }));
   };
 
-  render() {
-    const {
-      loans,
-      renewSelected,
-      showChangeDueDateDialog,
-      checkedLoans,
-      columnMapping,
-      buildRecords,
-      patronBlocks,
-      openPatronBlockedModal,
-      openBulkClaimReturnedModal,
-      user,
-    } = this.props;
+  const onDropdownClick = () => {
+    setToggleDropdownState(prevToggleDropdownState => !prevToggleDropdownState);
+  };
 
-    const {
-      toggleDropdownState,
-    } = this.state;
+  const noSelectedLoans = isEmpty(checkedLoans);
+  const resultCount = intl.formatMessage(
+    { id: 'ui-users.resultCount' },
+    { count: loans.length },
+  );
+  const claimedReturnedCount = loans.filter(l => l?.item?.status?.name === itemStatuses.CLAIMED_RETURNED).length;
+  const clonedLoans = cloneDeep(loans);
+  const recordsToCSV = buildRecords(clonedLoans);
+  const countRenews = getRenewalPatronBlocksFromPatronBlocks(patronBlocks);
+  const onlyClaimedReturnedItemsSelected = hasEveryLoanItemStatus(checkedLoans, itemStatuses.CLAIMED_RETURNED);
+  const onlyLostyItemsSelected = hasAnyLoanItemStatus(checkedLoans, lostItemStatuses);
+  const isUserActive = checkUserActive(user);
 
-    const noSelectedLoans = isEmpty(checkedLoans);
-    const resultCount = <FormattedMessage id="ui-users.resultCount" values={{ count: loans.length }} />;
-    const claimedReturnedCount = loans.filter(l => l?.item?.status?.name === itemStatuses.CLAIMED_RETURNED).length;
-    const clonedLoans = cloneDeep(loans);
-    const recordsToCSV = buildRecords(clonedLoans);
-    const countRenews = getRenewalPatronBlocksFromPatronBlocks(patronBlocks);
-    const onlyClaimedReturnedItemsSelected = hasEveryLoanItemStatus(checkedLoans, itemStatuses.CLAIMED_RETURNED);
-    const onlyLostyItemsSelected = hasAnyLoanItemStatus(checkedLoans, lostItemStatuses);
-    const isUserActive = checkUserActive(user);
-
-    return (
-      <ActionsBar
-        contentStart={
-          <span style={{ display: 'flex' }}>
-            <span id="loan-count">
-              {resultCount}
-              {' '}
-              {claimedReturnedCount > 0 &&
-              <FormattedMessage id="ui-users.loans.numClaimedReturnedLoans" values={{ count: claimedReturnedCount }} />
+  return (
+    <ActionsBar
+      contentStart={
+        <span style={{ display: 'flex' }}>
+          <span id="loan-count">
+            {resultCount}
+            {' '}
+            {claimedReturnedCount > 0 && intl.formatMessage(
+              { id: 'ui-users.loans.numClaimedReturnedLoans' },
+              { count: claimedReturnedCount },
+            )}
+          </span>
+          <Dropdown
+            id="columnsDropdown"
+            data-testid="columnsDropdown"
+            className={css.columnsDropdown}
+            group
+            pullRight
+            onToggle={onDropdownClick}
+            open={toggleDropdownState}
+            label={intl.formatMessage({ id: 'ui-users.selectColumns' })}
+            buttonProps={{
+              align: 'end',
+              bottomMargin0: true,
+              'aria-haspopup': true,
+            }}
+          >
+            <DropdownMenu aria-label="available permissions">
+              <ul>
+                {renderCheckboxList()}
+              </ul>
+            </DropdownMenu>
+          </Dropdown>
+        </span>
+      }
+      contentEnd={
+        <span>
+          <IfPermission perm="ui-users.loans.renew">
+            <Button
+              marginBottom0
+              id="renew-all"
+              disabled={noSelectedLoans || onlyClaimedReturnedItemsSelected || !isUserActive}
+              onClick={!isEmpty(countRenews)
+                ? openPatronBlockedModal
+                : () => renewSelected()
               }
-            </span>
-            <Dropdown
-              id="columnsDropdown"
-              className={css.columnsDropdown}
-              group
-              pullRight
-              onToggle={this.onDropdownClick}
-              open={toggleDropdownState}
-              label={<FormattedMessage id="ui-users.selectColumns" />}
-              buttonProps={{
-                align: 'end',
-                bottomMargin0: true,
-                'aria-haspopup': true,
-              }}
             >
-              <DropdownMenu aria-label="available permissions">
-                <ul>
-                  {this.renderCheckboxList(columnMapping)}
-                </ul>
-              </DropdownMenu>
-            </Dropdown>
-          </span>
-        }
-        contentEnd={
-          <span>
-            <IfPermission perm="ui-users.loans.renew">
-              <Button
-                marginBottom0
-                id="renew-all"
-                disabled={noSelectedLoans || onlyClaimedReturnedItemsSelected || !isUserActive}
-                onClick={!isEmpty(countRenews)
-                  ? openPatronBlockedModal
-                  : () => renewSelected()
-                }
-              >
-                <FormattedMessage id="ui-users.renew" />
-              </Button>
-            </IfPermission>
-            <IfPermission perm="ui-users.loans.claim-item-returned">
-              <Button
-                marginBottom0
-                id="bulk-claim-returned"
-                disabled={noSelectedLoans || onlyClaimedReturnedItemsSelected}
-                onClick={openBulkClaimReturnedModal}
-              >
-                <FormattedMessage id="ui-users.loans.claimReturned" />
-              </Button>
-            </IfPermission>
-            <IfPermission perm="ui-users.loans.change-due-date">
-              <Button
-                marginBottom0
-                id="change-due-date-all"
-                disabled={noSelectedLoans || onlyLostyItemsSelected}
-                onClick={showChangeDueDateDialog}
-              >
-                <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />
-              </Button>
-            </IfPermission>
-            <ExportCsv
-              data={recordsToCSV}
-              onlyFields={this.columnHeadersMap}
-            />
-          </span>
-        }
-      />
-    );
-  }
-}
+              {intl.formatMessage({ id: 'ui-users.renew' })}
+            </Button>
+          </IfPermission>
+          <IfPermission perm="ui-users.loans.claim-item-returned">
+            <Button
+              marginBottom0
+              id="bulk-claim-returned"
+              disabled={noSelectedLoans || onlyClaimedReturnedItemsSelected}
+              onClick={openBulkClaimReturnedModal}
+            >
+              {intl.formatMessage({ id: 'ui-users.loans.claimReturned' })}
+            </Button>
+          </IfPermission>
+          <IfPermission perm="ui-users.loans.change-due-date">
+            <Button
+              marginBottom0
+              id="change-due-date-all"
+              disabled={noSelectedLoans || onlyLostyItemsSelected}
+              onClick={showChangeDueDateDialog}
+            >
+              {intl.formatMessage({ id: 'stripes-smart-components.cddd.changeDueDate' })}
+            </Button>
+          </IfPermission>
+          <ExportCsv
+            data={recordsToCSV}
+            onlyFields={columnHeadersMap}
+          />
+        </span>
+      }
+    />
+  );
+};
 
-export default injectIntl(OpenLoansSubHeader);
+OpenLoansSubHeader.propTypes = {
+  buildRecords: PropTypes.func.isRequired,
+  checkedLoans: PropTypes.object.isRequired,
+  columnMapping: PropTypes.object.isRequired,
+  loans: PropTypes.arrayOf(PropTypes.object).isRequired,
+  openBulkClaimReturnedModal: PropTypes.func.isRequired,
+  openPatronBlockedModal: PropTypes.func.isRequired,
+  patronBlocks: PropTypes.arrayOf(PropTypes.object).isRequired,
+  renewSelected: PropTypes.func.isRequired,
+  showChangeDueDateDialog: PropTypes.func.isRequired,
+  toggleColumn: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+  visibleColumns: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
+
+export default OpenLoansSubHeader;
