@@ -61,7 +61,7 @@ describe('Filters component', () => {
   });
 
   describe('when showFilters prop is false', () => {
-    it('should not show Filters comopnent', () => {
+    it('should not show Filters component', () => {
       renderFilters({
         ...props,
         showFilters: false,
