@@ -34,6 +34,7 @@
 * create Jest/RTL test for ClosedLoans.js. Refs UIU-2345
 * Get rid of console error if there is no `renewals`. Refs UIU-2603.
 * create Jest/RTL test for src/components/Accounts/Filters. Refs UIU-2356.
+* Handle time zone issues in user info date displays. Fixes UIU-2623.
 
 ## [8.0.0](https://github.com/folio-org/ui-users/tree/v8.0.0) (2022-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v7.1.0...v8.0.0)
