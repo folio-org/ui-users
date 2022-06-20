@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import queryString from 'query-string';
+import { withRouter } from 'react-router-dom';
 
 import {
   Button,
@@ -14,10 +15,16 @@ class RequestFeeFineBlockButtons extends React.Component {
     barcode: PropTypes.string,
     onToggle: PropTypes.func,
     userId: PropTypes.string,
+    location: PropTypes.object,
   };
 
   render() {
-    const { barcode, onToggle, userId } = this.props;
+    const {
+      barcode,
+      onToggle,
+      userId,
+      location,
+    } = this.props;
     const linkToCreateRequest = barcode ?
       `/requests/?${queryString.stringify({ layer: 'create', userBarcode: barcode })}` :
       `/requests/?${queryString.stringify({ layer: 'create' })}`;
@@ -53,7 +60,10 @@ class RequestFeeFineBlockButtons extends React.Component {
             buttonStyle="dropdownItem"
             data-test-actions-menu-create-patronblocks
             id="create-patron-block"
-            to={{ pathname: `/users/${userId}/patronblocks/create` }}
+            to={{
+              pathname: `/users/${userId}/patronblocks/create`,
+              search: location.search,
+            }}
             onClick={onToggle}
           >
             <Icon icon="plus-sign">
@@ -66,4 +76,4 @@ class RequestFeeFineBlockButtons extends React.Component {
   }
 }
 
-export default RequestFeeFineBlockButtons;
+export default withRouter(RequestFeeFineBlockButtons);

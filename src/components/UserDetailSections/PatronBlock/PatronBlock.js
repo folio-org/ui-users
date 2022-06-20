@@ -30,6 +30,7 @@ class PatronBlock extends React.Component {
       hasPerm: PropTypes.func,
     }),
     history: PropTypes.object,
+    location: PropTypes.object,
     match: PropTypes.object,
     intl: PropTypes.object.isRequired,
     onToggle: PropTypes.func,
@@ -71,6 +72,7 @@ class PatronBlock extends React.Component {
   onRowClick(e, row) {
     const {
       history,
+      location,
       match: { params }
     } = this.props;
 
@@ -81,7 +83,10 @@ class PatronBlock extends React.Component {
     const permAbled = this.props.stripes.hasPerm('ui-users.patron_blocks');
 
     if (permAbled === true && (e.target.type !== 'button') && (e.target.tagName !== 'IMG')) {
-      history.push(`/users/${params.id}/patronblocks/edit/${row.id}`);
+      history.push({
+        pathname: `/users/${params.id}/patronblocks/edit/${row.id}`,
+        search: location.search,
+      });
     }
   }
 
@@ -154,6 +159,7 @@ class PatronBlock extends React.Component {
       accordionId,
       patronBlocks,
       match: { params },
+      location,
     } = this.props;
     const {
       sortOrder,
@@ -162,7 +168,14 @@ class PatronBlock extends React.Component {
 
     const buttonDisabled = this.props.stripes.hasPerm('ui-users.patron_blocks');
     const displayWhenOpen =
-      <Button id="create-patron-block" disabled={!buttonDisabled} to={{ pathname: `/users/${params.id}/patronblocks/create` }}>
+      <Button
+        id="create-patron-block"
+        disabled={!buttonDisabled}
+        to={{
+          pathname: `/users/${params.id}/patronblocks/create`,
+          search: location.search,
+        }}
+      >
         <FormattedMessage id="ui-users.blocks.buttons.add" />
       </Button>;
     const items =

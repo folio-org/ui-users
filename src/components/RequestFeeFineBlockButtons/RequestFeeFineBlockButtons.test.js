@@ -3,6 +3,9 @@ import {
   render,
   screen,
 } from '@testing-library/react';
+import {
+  BrowserRouter as Router,
+} from 'react-router-dom';
 
 import { IfPermission } from '@folio/stripes/core';
 
@@ -17,7 +20,9 @@ const props = {
 };
 
 const renderRequestFeeFineBlockButtons = (extraProps = {}) => render(
-  <RequestFeeFineBlockButtons {...props} {...extraProps} />
+  <Router>
+    <RequestFeeFineBlockButtons {...props} {...extraProps} />
+  </Router>
 );
 
 describe('RequestFeeFineBlockButtons', () => {

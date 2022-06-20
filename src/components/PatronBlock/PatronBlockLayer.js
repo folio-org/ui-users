@@ -24,6 +24,7 @@ class PatronBlockLayer extends React.Component {
     user: PropTypes.object,
     selectedPatronBlock: PropTypes.object,
     history: PropTypes.object,
+    location: PropTypes.object,
     match: PropTypes.object,
     intl: PropTypes.object.isRequired,
     stripes: PropTypes.object,
@@ -117,7 +118,16 @@ class PatronBlockLayer extends React.Component {
   }
 
   onCancel = () => {
-    this.props.history.goBack();
+    const {
+      history,
+      location,
+      match: { params: { id } },
+    } = this.props;
+
+    history.push({
+      pathname: `/users/preview/${id}`,
+      search: location.search,
+    });
   }
 
   render() {
