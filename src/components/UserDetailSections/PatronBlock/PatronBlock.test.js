@@ -28,6 +28,9 @@ const props = {
   history: {
     push: mockRedirect,
   },
+  location: {
+    search: '',
+  },
   intl: { formatMessage: jest.fn() },
   mutator: {
     activeRecord: {
