@@ -219,6 +219,9 @@
 * Create Jest/RTL test for `constants`. Refs UIU-2325.
 * Create Jest/RTL test for `EditUserInfo`. Refs UIU-2292.
 * Create Jest/RTL test for `EditContactInfo`. Refs UIU-2343.
+* Create Jest/RTL test for `EditExtendedInfo`. Refs UIU-2299.
+* Create Jest/RTL test for `RefundReport`. Refs UIU-2350.
+* Create Jest/RTL test for `accountFunctions`. Refs UIU-2334.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
