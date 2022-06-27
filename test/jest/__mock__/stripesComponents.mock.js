@@ -173,20 +173,28 @@ jest.mock('@folio/stripes/components', () => ({
     </fieldset>
   )),
   Row: jest.fn(({ children }) => <div className="row">{ children }</div>),
-  Select: jest.fn(({ children, dataOptions }) => (
-    <div>
-      <select>
-        {dataOptions.forEach((option, i) => (
-          <option
-            value={option.value}
-            key={option.id || `option-${i}`}
-          >
-            {option.label}
-          </option>))}
-      </select>
-      {children}
-    </div>
-  )),
+  Select: jest.fn(({ children, dataOptions }) => {
+    const dummyData = [{
+      value: 'testValue',
+      id: 'testId',
+      label: 'TestLabel'
+    }];
+    const options = dataOptions && dataOptions.length > 0 ? dataOptions : dummyData;
+    return (
+      <div>
+        <select>
+          {options.forEach((option, i) => (
+            <option
+              value={option.value}
+              key={option.id || `option-${i}`}
+            >
+              {option.label}
+            </option>))}
+        </select>
+        {children}
+      </div>
+    );
+  }),
   TextField: jest.fn((props) => {
     return (
       <div>

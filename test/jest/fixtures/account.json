@@ -3,6 +3,8 @@
   "paymentStatus": {
     "name": "funky chicken"
   },
+  "amount": "100.00",
+  "remaining": "10.00",
   "userId" : "011a6a83-e6fe-4b85-959f-ece14a4077db",
   "itemId" : "b2f142bf-ccc4-4cbf-a1ac-7d6df0d9c2da",
   "itemEffectiveLocationIdAtCheckOut" : "b9dc25a2-a7fb-48ad-8da5-8f68e35ba0af",
