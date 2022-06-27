@@ -35,6 +35,7 @@
 * Get rid of console error if there is no `renewals`. Refs UIU-2603.
 * create Jest/RTL test for src/components/Accounts/Filters. Refs UIU-2356.
 * Handle time zone issues in user info date displays. Fixes UIU-2623.
+* User should be directed to the last open page when working in more than one browser. Refs UIU-2605.
 
 ## [8.0.0](https://github.com/folio-org/ui-users/tree/v8.0.0) (2022-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v7.1.0...v8.0.0)
@@ -218,6 +219,12 @@
 * Create Jest/RTL test for `getProxySponsorWarning`. Refs UIU-2321.
 * Create Jest/RTL test for `constants`. Refs UIU-2325.
 * Create Jest/RTL test for `EditUserInfo`. Refs UIU-2292.
+* Create Jest/RTL test for `LoanActionDialog`. Refs UIU-2302.
+* Create Jest/RTL test for `withFormValues`. Refs UIU-2349.
+* Create Jest/RTL test for `EditContactInfo`. Refs UIU-2343.
+* Create Jest/RTL test for `EditExtendedInfo`. Refs UIU-2299.
+* Create Jest/RTL test for `RefundReport`. Refs UIU-2350.
+* Create Jest/RTL test for `accountFunctions`. Refs UIU-2334.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
