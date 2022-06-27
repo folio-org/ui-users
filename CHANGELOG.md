@@ -1,6 +1,7 @@
 # Change history for ui-users
 
-## [8.1.0] IN PROGRESS
+## [8.1.0](https://github.com/folio-org/ui-users/tree/v8.1.0) (2022-06-27)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v8.0.0...v8.1.0)
 
 * Increase limit for servicePoints query in `<AccountDetailsContainer>`. Fixes UIU-2544.
 * Replace `onChange` with `onClick` when checkbox is clicked on MCL row. Fixes UIU-2543.
