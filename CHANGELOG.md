@@ -218,6 +218,7 @@
 * Create Jest/RTL test for `getProxySponsorWarning`. Refs UIU-2321.
 * Create Jest/RTL test for `constants`. Refs UIU-2325.
 * Create Jest/RTL test for `EditUserInfo`. Refs UIU-2292.
+* Create Jest/RTL test for `EditContactInfo`. Refs UIU-2343.
 * Create Jest/RTL test for `EditExtendedInfo`. Refs UIU-2299.
 * Create Jest/RTL test for `RefundReport`. Refs UIU-2350.
 * Create Jest/RTL test for `accountFunctions`. Refs UIU-2334.
