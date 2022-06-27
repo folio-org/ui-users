@@ -218,6 +218,7 @@
 * Create Jest/RTL test for `getProxySponsorWarning`. Refs UIU-2321.
 * Create Jest/RTL test for `constants`. Refs UIU-2325.
 * Create Jest/RTL test for `EditUserInfo`. Refs UIU-2292.
+* Create Jest/RTL test for `RefundReport`. Refs UIU-2350.
 * Create Jest/RTL test for `accountFunctions`. Refs UIU-2334.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
