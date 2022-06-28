@@ -67,10 +67,12 @@ jest.mock('@folio/stripes/components', () => ({
   Label: jest.fn(({ children, ...rest }) => (
     <span {...rest}>{children}</span>
   )),
-  List: jest.fn(({ children, ...rest }) => (
+  List: jest.fn(({ children, items, itemFormatter, ...rest }) => (
     <>
-      <span>List Component</span>
+      <div>List Component </div>
+      <button type="button" data-testid="open-format-list" onClick={itemFormatter}>Formatter</button>
       <span {...rest}>{children}</span>
+      { items.length > 0 ? items.map((item, index) => <div key={index}>{item.formattedMessageId || item.id}</div>) : ''}
     </>
   )),
   Loading: () => <div>Loading</div>,
