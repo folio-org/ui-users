@@ -1,6 +1,9 @@
 # Change history for ui-users
 
-## [8.1.0] IN PROGRESS
+## 8.2.0 IN PROGRESS
+
+## [8.1.0](https://github.com/folio-org/ui-users/tree/v8.1.0) (2022-06-27)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v8.0.0...v8.1.0)
 
 * Increase limit for servicePoints query in `<AccountDetailsContainer>`. Fixes UIU-2544.
 * Replace `onChange` with `onClick` when checkbox is clicked on MCL row. Fixes UIU-2543.
@@ -34,6 +37,7 @@
 * create Jest/RTL test for ClosedLoans.js. Refs UIU-2345
 * Get rid of console error if there is no `renewals`. Refs UIU-2603.
 * create Jest/RTL test for src/components/Accounts/Filters. Refs UIU-2356.
+* Handle time zone issues in user info date displays. Fixes UIU-2623.
 * User should be directed to the last open page when working in more than one browser. Refs UIU-2605.
 
 ## [8.0.0](https://github.com/folio-org/ui-users/tree/v8.0.0) (2022-03-17)
