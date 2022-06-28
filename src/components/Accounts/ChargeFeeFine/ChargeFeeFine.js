@@ -77,7 +77,6 @@ class ChargeFeeFine extends React.Component {
     this.payAction = this.payAction.bind(this);
     this.onClickSelectItem = this.onClickSelectItem.bind(this);
     this.onChangeOwner = this.onChangeOwner.bind(this);
-    this.onChangeFeeFine = this.onChangeFeeFine.bind(this);
     this.onFindShared = this.onFindShared.bind(this);
     this.item = {};
     this.onCloseModal = this.onCloseModal.bind(this);
@@ -255,12 +254,6 @@ class ChargeFeeFine extends React.Component {
     }
     mutator.activeRecord.update({ ownerId });
     this.setState({ ownerId });
-  }
-
-  onChangeFeeFine(feeFineId) {
-    this.setState({
-      feeFineTypeId: feeFineId
-    });
   }
 
   onChangeItem(item) {
@@ -525,7 +518,6 @@ class ChargeFeeFine extends React.Component {
           item={item}
           onFindShared={this.onFindShared}
           onChangeOwner={this.onChangeOwner}
-          onChangeFeeFine={this.onChangeFeeFine}
           onClickSelectItem={this.onClickSelectItem}
           stripes={stripes}
           location={location}

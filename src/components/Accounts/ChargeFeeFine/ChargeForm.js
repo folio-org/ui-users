@@ -106,12 +106,14 @@ class ChargeForm extends React.Component {
     } = this.props;
 
     if (e?.target?.value) {
-      this.props.onChangeFeeFine(e);
-
       const feeFineId = e.target.value;
       const feefine = feefines.find(f => f.id === feeFineId) || {};
       const defaultAmount = parseFloat(feefine.defaultAmount || 0).toFixed(2);
-
+      let showNotify = false;
+      if (feefine?.chargeNoticeId) {
+        showNotify = true;
+      }
+      change('notify', showNotify);
       change('feeFineId', feefine.id);
       change('amount', defaultAmount);
     }
