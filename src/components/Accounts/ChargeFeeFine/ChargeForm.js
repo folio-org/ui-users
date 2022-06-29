@@ -108,9 +108,11 @@ class ChargeForm extends React.Component {
     if (e?.target?.value) {
       const feeFineId = e.target.value;
       const feefine = feefines.find(f => f.id === feeFineId) || {};
+      const owner = this.props.owners.find(o => o.id === feefine.ownerId) || {};
+
       const defaultAmount = parseFloat(feefine.defaultAmount || 0).toFixed(2);
       let showNotify = false;
-      if (feefine?.chargeNoticeId) {
+      if (feefine?.chargeNoticeId || owner?.defaultChargeNoticeId) {
         showNotify = true;
       }
       change('notify', showNotify);
@@ -122,8 +124,13 @@ class ChargeForm extends React.Component {
   onChangeOwner(ownerId) {
     const { form: { change, reset } } = this.props;
     reset();
-
     this.props.onChangeOwner(ownerId);
+    let showNotify = false;
+    const owner = this.props.owners.find(o => o.id === ownerId) || {};
+    if (owner?.defaultChargeNoticeId) {
+      showNotify = true;
+    }
+    change('notify', showNotify);
     change('ownerId', ownerId);
   }
 
