@@ -2,6 +2,8 @@
 
 ## 8.2.0 IN PROGRESS
 
+* Spread out the fields on the new Fee/Fine modal. Fixes UIU-2620.
+
 ## [8.1.0](https://github.com/folio-org/ui-users/tree/v8.1.0) (2022-06-27)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.0.0...v8.1.0)
 
