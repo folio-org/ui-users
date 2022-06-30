@@ -77,7 +77,6 @@ class ChargeFeeFine extends React.Component {
     this.payAction = this.payAction.bind(this);
     this.onClickSelectItem = this.onClickSelectItem.bind(this);
     this.onChangeOwner = this.onChangeOwner.bind(this);
-    this.onChangeFeeFine = this.onChangeFeeFine.bind(this);
     this.onFindShared = this.onFindShared.bind(this);
     this.item = {};
     this.onCloseModal = this.onCloseModal.bind(this);
@@ -255,12 +254,6 @@ class ChargeFeeFine extends React.Component {
     }
     mutator.activeRecord.update({ ownerId });
     this.setState({ ownerId });
-  }
-
-  onChangeFeeFine(e) {
-    this.setState({
-      feeFineTypeId: e.target.value
-    });
   }
 
   onChangeItem(item) {
@@ -491,7 +484,7 @@ class ChargeFeeFine extends React.Component {
     const initialOwnerId = ownerId !== '0' ? ownerId : servicePointOwnerId;
     const selectedFeeFine = feefines.find(f => f.id === feeFineTypeId);
     const currentOwnerFeeFineTypes = feefines.filter(f => f.ownerId === initialOwnerId || f.ownerId === resources.activeRecord.shared);
-    const selectedOwner = owners.find(o => o.id === initialOwnerId);
+    const selectedOwner = owners.find(o => (o.id === initialOwnerId || o.id === resources.activeRecord.shared));
 
     const initialChargeValues = {
       ownerId: initialOwnerId,
@@ -524,7 +517,6 @@ class ChargeFeeFine extends React.Component {
           item={item}
           onFindShared={this.onFindShared}
           onChangeOwner={this.onChangeOwner}
-          onChangeFeeFine={this.onChangeFeeFine}
           onClickSelectItem={this.onClickSelectItem}
           stripes={stripes}
           location={location}
