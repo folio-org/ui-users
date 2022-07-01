@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { stripesConnect } from '@folio/stripes/core';
 import {
@@ -23,10 +23,8 @@ import {
  * number of open-loans in the preview.
  */
 class UserLoans extends React.Component {
-  // "limit=1" on the openLoansCount and closedLoansCount fields is a hack
-  // to get at the "totalRecords" field without pulling down too much other
-  // data. Instead we should be able to construct a query to retrieve this
-  // metadata directly without pulling any item records.
+  // "limit=0" on the openLoansCount and closedLoansCount fields is a hack
+  // to get at the "totalRecords" field without pulling down any other data
   // see https://issues.folio.org/browse/FOLIO-773
   static manifest = Object.freeze({
     loansHistory: {
@@ -42,7 +40,7 @@ class UserLoans extends React.Component {
         path: 'circulation/loans',
         params: {
           query: `(userId==:{id} and status.name<>${loanStatuses.CLOSED})`,
-          limit: '1',
+          limit: '0',
         },
       },
     },
@@ -52,7 +50,7 @@ class UserLoans extends React.Component {
         path: 'circulation/loans',
         params: {
           query: `userId==:{id} and status.name<>${loanStatuses.CLOSED} and action==${loanActions.CLAIMED_RETURNED}`,
-          limit: '1',
+          limit: '0',
         },
       },
     },
@@ -62,7 +60,7 @@ class UserLoans extends React.Component {
         path: 'circulation/loans',
         params: {
           query: `userId==:{id} and status.name==${loanStatuses.CLOSED}`,
-          limit: '1',
+          limit: '0',
         },
       },
     },
@@ -116,7 +114,7 @@ class UserLoans extends React.Component {
     const claimedReturnedCount = resources?.claimedReturnedCount?.records?.[0]?.totalRecords ?? 0;
     const closedLoansCount = resources?.closedLoansCount?.records?.[0]?.totalRecords ?? 0;
     const loansLoaded = !this.isLoading();
-    const displayWhenClosed = loansLoaded ? (<Badge>{openLoansCount}</Badge>) : (<Icon icon="spinner-ellipsis" width="10px" />);
+    const displayWhenClosed = loansLoaded ? (<Badge><FormattedNumber value={openLoansCount} /></Badge>) : (<Icon icon="spinner-ellipsis" width="10px" />);
 
     const items = [
       {
