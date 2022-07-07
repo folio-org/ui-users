@@ -506,6 +506,7 @@
   "details.field.instance.type": "Instance (Material type)",
   "details.field.type": "Item type",
   "details.field.barcode": "Barcode",
+  "details.field.barcode.notFound": "{barcode} (not found)",
   "details.field.callnumber": "Effective call number string",
   "details.field.location": "Location",
   "details.field.duedate": "Due date",
