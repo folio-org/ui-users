@@ -1,13 +1,11 @@
 import get from 'lodash/get';
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  FormattedDate,
-  FormattedMessage,
-} from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import {
   Accordion,
   Col,
+  FormattedUTCDate,
   Headline,
   KeyValue,
   Row,
@@ -39,12 +37,12 @@ const ExtendedInfo = (props) => {
       <Row>
         <Col xs={12} md={3}>
           <KeyValue label={<FormattedMessage id="ui-users.extended.dateEnrolled" />}>
-            {user.enrollmentDate ? <FormattedDate value={user.enrollmentDate} /> : '-'}
+            {user.enrollmentDate ? <FormattedUTCDate value={user.enrollmentDate} /> : '-'}
           </KeyValue>
         </Col>
         <Col xs={12} md={3}>
           <KeyValue label={<FormattedMessage id="ui-users.extended.birthDate" />}>
-            {user.personal?.dateOfBirth ? <FormattedDate value={user.personal.dateOfBirth} timeZone="UTC" /> : '-'}
+            {user.personal?.dateOfBirth ? <FormattedUTCDate value={user.personal.dateOfBirth} timeZone="UTC" /> : '-'}
           </KeyValue>
         </Col>
       </Row>
