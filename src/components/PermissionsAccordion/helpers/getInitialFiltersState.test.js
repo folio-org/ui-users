@@ -1,6 +1,4 @@
-import { screen } from '@testing-library/react';
 import { getInitialFiltersState } from './index';
-
 
 const filters = [
   {
