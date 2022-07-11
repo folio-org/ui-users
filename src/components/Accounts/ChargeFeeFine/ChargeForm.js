@@ -17,6 +17,7 @@ import {
   Col,
   Checkbox,
 } from '@folio/stripes/components';
+import { effectiveCallNumber } from '@folio/stripes/util';
 
 import UserInfo from './UserInfo';
 import FeeFineInfo from './FeeFineInfo';
@@ -98,7 +99,7 @@ class ChargeForm extends React.Component {
     }
   }
 
-  async onChangeFeeFine(e) {
+  onChangeFeeFine(e) {
     const {
       feefines,
       form: { change },
@@ -106,12 +107,16 @@ class ChargeForm extends React.Component {
 
     if (e?.target?.value) {
       const feeFineId = e.target.value;
-      await this.props.onChangeFeeFine(e);
       const feefine = feefines.find(f => f.id === feeFineId) || {};
-      change('feeFineId', feefine.id);
-      this.amount = feefine.defaultAmount || 0;
-      this.amount = parseFloat(this.amount).toFixed(2);
+      const owner = this.props.owners.find(o => o.id === feefine.ownerId) || {};
+
       const defaultAmount = parseFloat(feefine.defaultAmount || 0).toFixed(2);
+      let showNotify = false;
+      if (feefine?.chargeNoticeId || owner?.defaultChargeNoticeId) {
+        showNotify = true;
+      }
+      change('notify', showNotify);
+      change('feeFineId', feefine.id);
       change('amount', defaultAmount);
     }
   }
@@ -119,8 +124,13 @@ class ChargeForm extends React.Component {
   onChangeOwner(ownerId) {
     const { form: { change, reset } } = this.props;
     reset();
-
     this.props.onChangeOwner(ownerId);
+    let showNotify = false;
+    const owner = this.props.owners.find(o => o.id === ownerId) || {};
+    if (owner?.defaultChargeNoticeId) {
+      showNotify = true;
+    }
+    change('notify', showNotify);
     change('ownerId', ownerId);
   }
 
@@ -166,7 +176,7 @@ class ChargeForm extends React.Component {
         feeFineId,
         ownerId,
         notify,
-      }
+      },
     } = getState();
 
     const selectedLoan = selectedLoanProp || {};
@@ -176,9 +186,9 @@ class ChargeForm extends React.Component {
       instance: (selectedLoan.item || {}).title,
       barcode: (selectedLoan.item || {}).barcode,
       itemStatus: ((selectedLoan.item || {}).status || {}).name,
-      callNumber: (selectedLoan.item || {}).callNumber,
+      callNumber: effectiveCallNumber(selectedLoan.item || {}),
       location: selectedLoan?.item?.effectiveLocation?.name,
-      type: ((selectedLoan.item || {}).materialType || {}).name
+      type: ((selectedLoan.item || {}).materialType || {}).name,
     };
     const item = (editable) ? this.props.item : itemLoan;
     const feefineList = [];
@@ -214,7 +224,6 @@ class ChargeForm extends React.Component {
         dismissible
       >
         <UserInfo user={user} />
-        <br />
         <form
           onSubmit={handleSubmit}
           id="feeFineChargeForm"
@@ -229,12 +238,11 @@ class ChargeForm extends React.Component {
             onChangeFeeFine={this.onChangeFeeFine}
             feefineList={feefineList}
           />
-          <br />
           <ItemInfo {...this.props} item={item} onClickSelectItem={this.props.onClickSelectItem} editable={editable} />
-          <br />
           <h4 className="marginTopHalf"><FormattedMessage id="ui-users.charge.comment" /></h4>
           <Row>
-            <Col xs={12} sm={10} md={7} lg={5}>
+            <Col xs={12}>
+
               <Field
                 id="comments"
                 name="comments"
@@ -258,17 +266,16 @@ class ChargeForm extends React.Component {
               </Col>
             </Row>
           </div>
-            }
-          <br />
+          }
           {notify && showNotify &&
           <div>
             <Row>
-              <Col xs>
+              <Col xs={12}>
                 <h4 className="marginTopHalf"><FormattedMessage id="ui-users.accounts.infoPatron" /></h4>
               </Col>
             </Row>
             <Row>
-              <Col xs={12} sm={10} md={7} lg={5}>
+              <Col xs>
                 <Field
                   name="patronInfo"
                   component={TextArea}
@@ -276,7 +283,7 @@ class ChargeForm extends React.Component {
               </Col>
             </Row>
           </div>
-            }
+          }
 
           <Row end="xs">
             <Col>
@@ -313,7 +320,6 @@ class ChargeForm extends React.Component {
           </Row>
         </form>
       </Modal>
-
     );
   }
 }

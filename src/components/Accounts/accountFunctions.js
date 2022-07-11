@@ -1,5 +1,7 @@
 import {
   paymentStatusesAllowedToRefund,
+  refundStatuses,
+  outstandingStatus,
   waiveStatuses,
 } from '../../constants';
 
@@ -127,7 +129,8 @@ export function calculateOwedFeeFines(accounts = []) {
 }
 
 export function isCancelAllowed(account) {
-  return account.paymentStatus.name === 'Outstanding';
+  return account.paymentStatus.name === outstandingStatus ||
+    (account.paymentStatus.name === refundStatuses.RefundedFully && account.amount === account.remaining);
 }
 
 export function deleteOptionalActionFields(actionData, ...fields) {

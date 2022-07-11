@@ -278,10 +278,6 @@
     "extended.resetPasswordModal.linkWasSent": "A reset password link was sent to:",
     "extended.resetPasswordModal.linkInstructions": "Если {name} не получает электронные письма от FOLIO, следующая ссылка может быть отправлена:",
     "owners.columns.asp": "Соответствующие пункты обслуживания ",
-    "charge.messageThe": "The ",
-    "charge.messageOf": "оплата",
-    "charge.messageSuccessfully": "успешно была",
-    "charge.messageFor": " для ",
     "details.columns.transactioninfo": "Информация о транзакции",
     "details.paneTitle.feeFineDetails": "Fee/fine details",
     "details.label.loanDetails": "Детали книговыдачи",
@@ -992,5 +988,6 @@
     "charge.feefine.id": "Fee/fine id",
     "charge.amount": "Amount",
     "charge.comment.label": "Comments",
-    "errors.permissionChangeFailed": "Permissions were not changed"
+    "errors.permissionChangeFailed": "Permissions were not changed",
+    "charge.message.successfully": "The {feeFineType} fee/fine of <strong>{amount}</strong> has been successfully <strong>{paymentName}</strong> for <strong>{fullName}</strong>"
 }

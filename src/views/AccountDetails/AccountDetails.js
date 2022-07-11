@@ -443,13 +443,22 @@ class AccountDetails extends React.Component {
     // was associated with has been anonymized, or the user in question simply
     // doesn't have permission to view inventory records.
     let itemBarcodeLink = <NoValue />;
+
     if (account.barcode && account.instanceId && account.holdingsRecordId && account.itemId) {
       itemBarcodeLink = (
         <Link
           to={`/inventory/view/${account.instanceId}/${account.holdingsRecordId}/${account.itemId}`}
         >
           {account.barcode}
-        </Link>);
+        </Link>
+      );
+    } else if (account.barcode && !itemDetails.statusItemName) {
+      itemBarcodeLink = <FormattedMessage
+        id="ui-users.details.field.barcode.notFound"
+        values={{
+          barcode: account.barcode,
+        }}
+      />;
     } else if (account.barcode) {
       itemBarcodeLink = account.barcode;
     }

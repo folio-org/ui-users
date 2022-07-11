@@ -24,9 +24,7 @@ const arrayMutators = {
 
 const renderSearchForm = (props) => {
   const component = () => (
-    <>
-      <SearchForm {...props} />
-    </>
+    <SearchForm {...props} />
   );
   renderWithRouter(
     <Form
