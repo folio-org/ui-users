@@ -222,6 +222,7 @@
 * Create Jest/RTL test for `HelperApp`. Refs UIU-2310.
 * Create Jest/RTL test for `constants`. Refs UIU-2316.
 * Create Jest/RTL test for `getInitialFiltersState`. Refs UIU-2324.
+* Create Jest/RTL test for `SearchForm`. Refs UIU-2329.
 * Create Jest/RTL test for `Label`. Refs UIU-2327.
 * Create Jest/RTL test for `getProxySponsorWarning`. Refs UIU-2321.
 * Create Jest/RTL test for `constants`. Refs UIU-2325.
@@ -237,6 +238,7 @@
 * Create Jest/RTL test for `RefundReport`. Refs UIU-2350.
 * Create Jest/RTL test for `accountFunctions`. Refs UIU-2334.
 * Create Jest/RTL test for `loanActionMap`. Refs UIU-2333.
+* Create Jest/RTL test for `OpenLoansControl`. Refs UIU-2347.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
