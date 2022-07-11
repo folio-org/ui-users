@@ -67,10 +67,12 @@ jest.mock('@folio/stripes/components', () => ({
   Label: jest.fn(({ children, ...rest }) => (
     <span {...rest}>{children}</span>
   )),
-  List: jest.fn(({ children, ...rest }) => (
+  List: jest.fn(({ children, items, itemFormatter, ...rest }) => (
     <>
-      <span>List Component</span>
+      <div>List Component </div>
+      <button type="button" data-testid="open-format-list" onClick={itemFormatter}>Formatter</button>
       <span {...rest}>{children}</span>
+      { items.length > 0 ? items.map((item, index) => <div key={index}>{item.formattedMessageId || item.id}</div>) : ''}
     </>
   )),
   Loading: () => <div>Loading</div>,
@@ -171,20 +173,28 @@ jest.mock('@folio/stripes/components', () => ({
     </fieldset>
   )),
   Row: jest.fn(({ children }) => <div className="row">{ children }</div>),
-  Select: jest.fn(({ children, dataOptions }) => (
-    <div>
-      <select>
-        {dataOptions.forEach((option, i) => (
-          <option
-            value={option.value}
-            key={option.id || `option-${i}`}
-          >
-            {option.label}
-          </option>))}
-      </select>
-      {children}
-    </div>
-  )),
+  Select: jest.fn(({ children, dataOptions }) => {
+    const dummyData = [{
+      value: 'testValue',
+      id: 'testId',
+      label: 'TestLabel'
+    }];
+    const options = dataOptions && dataOptions.length > 0 ? dataOptions : dummyData;
+    return (
+      <div>
+        <select>
+          {options.forEach((option, i) => (
+            <option
+              value={option.value}
+              key={option.id || `option-${i}`}
+            >
+              {option.label}
+            </option>))}
+        </select>
+        {children}
+      </div>
+    );
+  }),
   TextField: jest.fn((props) => {
     return (
       <div>

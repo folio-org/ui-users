@@ -11,20 +11,27 @@ const UserInfo = (props) => {
 
   return (
     <div className={css.root}>
-      <Row><FormattedMessage id="ui-users.charge.patron" /></Row>
       <Row>
-        <Col className={css.userInfoLink}>
+        <Col md={{ offset: 2 }} />
+        <Col>
+          <FormattedMessage id="ui-users.charge.patron" />
+          :
+        </Col>
+        <Col className={css.userInfoLink} auto>
           <Link to={`/users/view/${user.id}`}>
             {`${getFullName(user)}`}
           </Link>
         </Col>
-        <Col className={css.userInfoLink}>
+        <Col className={css.userInfoLink} auto>
           <FormattedMessage id="ui-users.charge.barcode" />
           :
+        </Col>
+        <Col auto>
           <Link to={`/users/view/${user.id}`}>
             {user.barcode}
           </Link>
         </Col>
+        <Col md={{ offset: 2 }} />
       </Row>
     </div>
   );
