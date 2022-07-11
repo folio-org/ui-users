@@ -42,18 +42,6 @@ const props = () => {
   };
 };
 
-const propsData = () => {
-  return {
-    onClose: jest.fn(),
-    open: true,
-    loanAction: 'claimReturned',
-    modalLabel: <div>Test Modal Label</div>,
-    validateAction: jest.fn(),
-    disableButton: jest.fn(),
-    itemRequestCount: 0,
-  };
-};
-
 describe('Render LoanActionDialog component', () => {
   it('Check if Component is rendered', () => {
     renderLoanActionDialog(props());
