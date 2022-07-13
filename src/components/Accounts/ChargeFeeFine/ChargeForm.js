@@ -55,7 +55,6 @@ class ChargeForm extends React.Component {
     feefines: PropTypes.arrayOf(PropTypes.object),
     form: PropTypes.object.isRequired,
     onClickCancel: PropTypes.func,
-    onClose: PropTypes.func,
     onChangeOwner: PropTypes.func.isRequired,
     onChangeFeeFine: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
@@ -132,12 +131,6 @@ class ChargeForm extends React.Component {
     }
     change('notify', showNotify);
     change('ownerId', ownerId);
-  }
-
-  onClose = () => {
-    const { onClose, form: { reset } } = this.props;
-    onClose();
-    reset();
   }
 
   goToAccounts = () => {
@@ -219,7 +212,7 @@ class ChargeForm extends React.Component {
         id="new-modal"
         open
         label={<FormattedMessage id="ui-users.charge.title" />}
-        onClose={this.onClose}
+        onClose={this.goToAccounts}
         size="medium"
         dismissible
       >
@@ -289,7 +282,7 @@ class ChargeForm extends React.Component {
             <Col>
               <Button
                 id="cancelCharge"
-                onClick={this.onClose}
+                onClick={this.goToAccounts}
                 marginBottom0
               >
                 <FormattedMessage id="ui-users.feefines.modal.cancel" />
