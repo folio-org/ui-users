@@ -7,6 +7,8 @@ import moment from 'moment-timezone';
 import { OnChange } from 'react-final-form-listeners';
 
 import { ViewMetaData } from '@folio/stripes/smart-components';
+import { NumberGeneratorModalButton } from '@folio/service-interaction';
+
 import {
   Button,
   Select,
@@ -32,6 +34,7 @@ class EditUserInfo extends React.Component {
     intl: PropTypes.object.isRequired,
     onToggle: PropTypes.func,
     patronGroups: PropTypes.arrayOf(PropTypes.object),
+    settings: PropTypes.arrayOf(PropTypes.object),
     stripes: PropTypes.shape({
       timezone: PropTypes.string.isRequired,
       store: PropTypes.shape({
@@ -111,7 +114,13 @@ class EditUserInfo extends React.Component {
       accordionId,
       intl,
       uniquenessValidator,
+      form: { change },
+      settings
     } = this.props;
+
+    const useGeneratorForBarcode = JSON.parse(
+      (settings.find(sett => sett.configName === 'number_generator') ?? { value: '{}' }).value
+    )?.useGeneratorForBarcode ?? true;
 
     const { barcode } = initialValues;
 
@@ -305,14 +314,27 @@ class EditUserInfo extends React.Component {
               )}
             </Col>
             <Col xs={12} md={3}>
-              <Field
-                label={<FormattedMessage id="ui-users.information.barcode" />}
-                name="barcode"
-                id="adduser_barcode"
-                component={TextField}
-                validate={asyncValidateField('barcode', barcode, uniquenessValidator)}
-                fullWidth
-              />
+              <Row>
+                <Col xs={12}>
+                  <Field
+                    disabled={useGeneratorForBarcode}
+                    label={<FormattedMessage id="ui-users.information.barcode" />}
+                    name="barcode"
+                    id="adduser_barcode"
+                    component={TextField}
+                    validate={asyncValidateField('barcode', barcode, uniquenessValidator)}
+                    fullWidth
+                  />
+                </Col>
+                {useGeneratorForBarcode &&
+                  <Col xs={12}>
+                    <NumberGeneratorModalButton
+                      callback={(generated) => change('barcode', generated)}
+                      generator="Patron"
+                    />
+                  </Col>
+                }
+              </Row>
             </Col>
           </Row>
         </Accordion>

@@ -151,6 +151,8 @@
   "settings.departments.users": "Users",
   "settings.manualBlockTemplates": "Templates",
   "settings.manualBlockTemplates.paneTitle": "Patron block templates",
+  "settings.numberGeneratorOptions": "Number generator options",
+  "settings.numberGeneratorOptions.useGeneratorForBarcode": "Use number generator for user barcode",
   "manualBlockTemplates.templateInformation": "Template information",
   "manualBlockTemplates.templateName": "Template name",
   "manualBlockTemplates.blockCode": "Block code",

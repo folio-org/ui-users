@@ -1,8 +1,8 @@
-import { fireEvent } from '@testing-library/react';
-import { createMemoryHistory } from 'history';
 import {
-  render,
+  fireEvent,
+  render
 } from '@testing-library/react';
+import { createMemoryHistory } from 'history';
 
 import NoteViewPage from './NoteViewPage';
 
@@ -13,7 +13,7 @@ jest.mock('@folio/stripes/smart-components', () => ({
       onEdit,
     }) => (
       <>
-        <button 
+        <button
           type="button"
           onClick={navigateBack}
           data-testid="navigateBack"

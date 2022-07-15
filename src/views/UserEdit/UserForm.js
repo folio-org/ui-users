@@ -362,6 +362,7 @@ class UserForm extends React.Component {
                     accordionId="editUserInfo"
                     initialValues={initialValues}
                     patronGroups={formData.patronGroups}
+                    settings={formData.settings}
                     stripes={stripes}
                     form={form}
                     selectedPatronGroup={selectedPatronGroup}

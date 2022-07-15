@@ -894,7 +894,8 @@
     "react-router-dom": "^5.2.0",
     "redux": "^4.0.0",
     "regenerator-runtime": "^0.13.9",
-    "sinon": "^7.1.1"
+    "sinon": "^7.1.1",
+    "@folio/service-interaction": "^1.0.0"
   },
   "dependencies": {
     "final-form-set-field-data": "^1.0.2",
@@ -917,7 +918,8 @@
     "react": "^17.0.2",
     "react-intl": "^5.8.0",
     "react-router": "^5.2.0",
-    "react-router-dom": "^5.2.0"
+    "react-router-dom": "^5.2.0",
+    "@folio/service-interaction": "^1.0.0"
   },
   "optionalDependencies": {
     "@folio/plugin-find-user": "^6.0.0"

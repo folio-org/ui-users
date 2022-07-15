@@ -18,6 +18,7 @@ import LimitsSettings from './LimitsSettings';
 import DepartmentsSettings from './DepartmentsSettings';
 import BlockTemplates from './patronBlocks/BlockTemplates';
 import TransferCriteriaSettings from './TransferCriteriaSettings';
+import NumberGeneratorOptions from './NumberGeneratorOptions';
 
 const settingsGeneral = [
   {
@@ -43,6 +44,11 @@ const settingsGeneral = [
     label: <FormattedMessage id="ui-users.settings.departments" />,
     component: DepartmentsSettings,
     perm: 'ui-users.settings.departments.view'
+  },
+  {
+    route: 'numbergeneratoroptions',
+    label: <FormattedMessage id="ui-users.settings.numberGeneratorOptions" />,
+    component: NumberGeneratorOptions
   },
   //   Profile pictures are currently unsupported in Folio and the existence of this setting has
   //   confused implementers. Commenting out for now as opposed to deleting it so the existing
