@@ -461,7 +461,7 @@
     "contextMenu.usageTips": "Dicas de uso",
     "owners.cannotDeleteOwner": "Este proprietário não pode ser excluído, pois tem uma ou mais taxas/multas associadas a ele",
     "charge.Pay": "Cobrar e pagar agora",
-    "data.loanActionMap.checkedOutThroughOverride": "Emprestado por meio de substituição",
+    "data.loanActionMap.checkedOutThroughOverride": "Emprestado via Sobrepor",
     "accounts.viewAllFeesFines": "Ver todas as taxas/multas",
     "save": "Salvar",
     "reports.overdue.item.contributors": "Contribuidores",
@@ -602,7 +602,7 @@
     "permission.loans.all": "Usuários: visualizar empréstimos do usuário, alterar data de vencimento, renovar",
     "permission.loans.claim-item-returned": "Usuários: Pode gerenciar reivindicação de devolvido de empréstimos",
     "permission.loans.declare-item-lost": "Usuários: Pode declarar empréstimos perdidos",
-    "permission.loans.renew-override": "Usuários: Pode renovar empréstimos por sobrescrição",
+    "permission.loans.renew-override": "Usuários: Pode renovar empréstimos via \"sobrepor\"",
     "permission.loans.renew": "Usuários: Renovação de empréstimos de usuários",
     "permission.loans.view": "Usuários: Visualização de empréstimos do usuário",
     "permission.manual_charge": "Taxas/multas: Pode cobrar",
@@ -989,5 +989,6 @@
     "charge.amount": "Quantia",
     "charge.comment.label": "Comentários",
     "errors.permissionChangeFailed": "As permissões não foram alteradas",
-    "charge.message.successfully": "A taxa/multa de {feeFineType} de <strong> {amount} </strong> foi <strong> {paymentName} </strong> para <strong> {fullName} </strong>"
+    "charge.message.successfully": "A taxa/multa de {feeFineType} de <strong> {amount} </strong> foi <strong> {paymentName} </strong> para <strong> {fullName} </strong>",
+    "details.field.barcode.notFound": "{barcode} (not found)"
 }

@@ -989,5 +989,6 @@
     "charge.amount": "金额",
     "charge.comment.label": "备注",
     "errors.permissionChangeFailed": "权限未更改",
-    "charge.message.successfully": "<strong> {amount} </strong>的{feeFineType}费用/罚款已成功为<strong> {fullName} </strong> <strong> {paymentName}  </strong>"
+    "charge.message.successfully": "<strong> {amount} </strong>的{feeFineType}费用/罚款已成功为<strong> {fullName} </strong> <strong> {paymentName}  </strong>",
+    "details.field.barcode.notFound": "{barcode} (not found)"
 }

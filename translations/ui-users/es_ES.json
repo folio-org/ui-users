@@ -989,5 +989,6 @@
     "charge.amount": "Amount",
     "charge.comment.label": "Comentarios",
     "errors.permissionChangeFailed": "Permissions were not changed",
-    "charge.message.successfully": "The {feeFineType} fee/fine of <strong>{amount}</strong> has been successfully <strong>{paymentName}</strong> for <strong>{fullName}</strong>"
+    "charge.message.successfully": "The {feeFineType} fee/fine of <strong>{amount}</strong> has been successfully <strong>{paymentName}</strong> for <strong>{fullName}</strong>",
+    "details.field.barcode.notFound": "{barcode} (not found)"
 }
