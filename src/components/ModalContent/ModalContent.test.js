@@ -226,28 +226,34 @@ const loan = (actionName) => {
 const renderModalContent = (props) => render(<ModalContent {...props} />);
 
 describe('Modal Content', () => {
+  const commonProps = {
+    isLoading: false,
+    declarationInProgress: false,
+    resources: {},
+    mutator,
+    loanAction: 'declareLost',
+    itemRequestCount: 0,
+    activeRecord: {},
+    onClose: jest.fn(),
+    handleError: jest.fn(),
+    disableButton: jest.fn(),
+    enableButton: jest.fn(),
+    validateAction: jest.fn(),
+    okapi: {
+      url: 'https://folio-testing-okapi.dev.folio.org',
+      tenant: 'diku',
+      okapiReady: true,
+      authFailure: [],
+      bindings: {},
+      currentUser
+    },
+  };
+
   it('Declare Lost Confirm Dialog box', async () => {
     const actionName = 'recallrequested';
     const props = {
-      isLoading: false,
-      resources: {},
-      mutator,
+      ...commonProps,
       loan: loan(actionName),
-      loanAction: 'declareLost',
-      itemRequestCount: 0,
-      activeRecord: {},
-      onClose: jest.fn(),
-      handleError: jest.fn(),
-      disableButton: jest.fn(),
-      validateAction: jest.fn(),
-      okapi: {
-        url: 'https://folio-testing-okapi.dev.folio.org',
-        tenant: 'diku',
-        okapiReady: true,
-        authFailure: [],
-        bindings: {},
-        currentUser
-      },
     };
     renderModalContent(props);
     expect(screen.getByText('ui-users.loans.declareLostDialogBody')).toBeDefined();
@@ -262,25 +268,8 @@ describe('Modal Content', () => {
   it('Cancel Dialog box', async () => {
     const actionName = 'recallrequested';
     const props = {
-      isLoading: false,
-      resources: {},
-      mutator,
+      ...commonProps,
       loan: loan(actionName),
-      loanAction: 'declareLost',
-      itemRequestCount: 0,
-      activeRecord: {},
-      onClose: jest.fn(),
-      handleError: jest.fn(),
-      disableButton: jest.fn(),
-      validateAction: jest.fn(),
-      okapi: {
-        url: 'https://folio-testing-okapi.dev.folio.org',
-        tenant: 'diku',
-        okapiReady: true,
-        authFailure: [],
-        bindings: {},
-        currentUser
-      },
     };
     renderModalContent(props);
     expect(screen.getByText('ui-users.loans.declareLostDialogBody')).toBeDefined();
@@ -295,25 +284,9 @@ describe('Modal Content', () => {
   it('ClaimedReturn confirm dialog box', async () => {
     const actionName = 'recallrequested';
     const props = {
-      isLoading: false,
-      resources: {},
-      mutator,
+      ...commonProps,
       loan: loan(actionName),
       loanAction: 'claimReturned',
-      itemRequestCount: 0,
-      activeRecord: {},
-      onClose: jest.fn(),
-      handleError: jest.fn(),
-      disableButton: jest.fn(),
-      validateAction: jest.fn(),
-      okapi: {
-        url: 'https://folio-testing-okapi.dev.folio.org',
-        tenant: 'diku',
-        okapiReady: true,
-        authFailure: [],
-        bindings: {},
-        currentUser
-      },
     };
     renderModalContent(props);
     expect(screen.getByText('ui-users.loans.claimReturnedDialogBody')).toBeDefined();
@@ -327,25 +300,9 @@ describe('Modal Content', () => {
   it('Claimed return for missing item check', async () => {
     const actionName = 'claimedReturned';
     const props = {
-      isLoading: false,
-      resources: {},
-      mutator,
+      ...commonProps,
       loan: loan(actionName),
       loanAction: 'markAsMissing',
-      itemRequestCount: 0,
-      activeRecord: {},
-      onClose: jest.fn(),
-      handleError: jest.fn(),
-      disableButton: jest.fn(),
-      validateAction: jest.fn(),
-      okapi: {
-        url: 'https://folio-testing-okapi.dev.folio.org',
-        tenant: 'diku',
-        okapiReady: true,
-        authFailure: [],
-        bindings: {},
-        currentUser
-      },
       user: {
         id: '47f7eaea-1a18-4058-907c-62b7d095c61b',
       },
@@ -359,6 +316,7 @@ describe('Modal Content', () => {
 
     fireEvent.click(document.querySelector('[data-test-dialog-confirm-button="true"]'));
   });
+
   it('Claimed return for Lost item check', async () => {
     const record = [
       {
@@ -370,25 +328,9 @@ describe('Modal Content', () => {
       }];
     const actionName = 'claimedReturned';
     const props = {
-      isLoading: false,
+      ...commonProps,
       resources: resources(record),
-      mutator,
       loan: loan(actionName),
-      loanAction: 'declareLost',
-      itemRequestCount: 0,
-      activeRecord: {},
-      onClose: jest.fn(),
-      handleError: jest.fn(),
-      disableButton: jest.fn(),
-      validateAction: jest.fn(),
-      okapi: {
-        url: 'https://folio-testing-okapi.dev.folio.org',
-        tenant: 'diku',
-        okapiReady: true,
-        authFailure: [],
-        bindings: {},
-        currentUser
-      },
     };
     renderModalContent(props);
     expect(screen.getByText('ui-users.loans.declareLostDialogBody')).toBeDefined();
@@ -411,24 +353,9 @@ describe('Modal Content', () => {
       }];
     const actionName = 'claimedReturned';
     const props = {
-      isLoading: false,
+      ...commonProps,
       resources: resources(record),
-      mutator,
       loan: loan(actionName),
-      loanAction: 'declareLost',
-      itemRequestCount: 0,
-      activeRecord: {},
-      onClose: jest.fn(),
-      handleError: jest.fn(),
-      validateAction: jest.fn(),
-      okapi: {
-        url: 'https://folio-testing-okapi.dev.folio.org',
-        tenant: 'diku',
-        okapiReady: true,
-        authFailure: [],
-        bindings: {},
-        currentUser
-      },
     };
     renderModalContent(props);
     expect(screen.getByText('ui-users.loans.declareLostDialogBody')).toBeDefined();
@@ -439,6 +366,7 @@ describe('Modal Content', () => {
 
     fireEvent.click(document.querySelector('[data-test-dialog-confirm-button="true"]'));
   });
+
   it('Checking if the user has closed fine', async () => {
     const record = [{
       loanId: '40f5e9d9-38ac-458e-ade7-7795bd821652',
@@ -449,24 +377,10 @@ describe('Modal Content', () => {
     }];
     const actionName = 'claimedReturned';
     const props = {
-      isLoading: false,
+      ...commonProps,
       resources: resources(record),
       mutator: mutatorSuccess,
       loan: loan(actionName),
-      loanAction: 'declareLost',
-      itemRequestCount: 0,
-      activeRecord: {},
-      onClose: jest.fn(),
-      handleError: jest.fn(),
-      validateAction: jest.fn(),
-      okapi: {
-        url: 'https://folio-testing-okapi.dev.folio.org',
-        tenant: 'diku',
-        okapiReady: true,
-        authFailure: [],
-        bindings: {},
-        currentUser
-      },
     };
     renderModalContent(props);
     expect(screen.getByText('ui-users.loans.declareLostDialogBody')).toBeDefined();
