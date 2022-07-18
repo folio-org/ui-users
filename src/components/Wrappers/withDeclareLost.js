@@ -62,8 +62,10 @@ const withDeclareLost = WrappedComponent => class WithDeclareLost extends React.
             loanAction={loanActionMutators.DECLARE_LOST}
             modalLabel={modalLabel}
             open={declareLostDialogOpen}
+            declarationInProgress={declarationInProgress}
             onClose={this.hideDeclareLostDialog}
             disableButton={this.disableButton}
+            enableButton={this.enableButton}
             {...this.props}
           />
         }

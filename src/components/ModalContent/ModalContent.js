@@ -88,6 +88,8 @@ class ModalContent extends React.Component {
     loan: PropTypes.object.isRequired,
     onClose: PropTypes.func.isRequired,
     handleError: PropTypes.func.isRequired,
+    declarationInProgress: PropTypes.bool.isRequired,
+    enableButton: PropTypes.func.isRequired,
     disableButton: PropTypes.func,
     validateAction: PropTypes.func,
     itemRequestCount: PropTypes.number.isRequired,
@@ -135,6 +137,7 @@ class ModalContent extends React.Component {
       },
       onClose,
       disableButton,
+      enableButton,
     } = this.props;
 
     const requestData = { comment: additionalInfo };
@@ -163,6 +166,7 @@ class ModalContent extends React.Component {
       this.processError(error);
     }
 
+    enableButton();
     onClose();
   };
 
@@ -233,6 +237,7 @@ class ModalContent extends React.Component {
       loanAction,
       onClose,
       itemRequestCount,
+      declarationInProgress,
     } = this.props;
 
     const { additionalInfo } = this.state;
@@ -243,6 +248,7 @@ class ModalContent extends React.Component {
     //  - either to determine the content of the message about open requests
     //  - or whether to show this message at all.
     const countIndex = stripes.hasPerm('ui-users.requests.all') ? itemRequestCount : -1;
+    const isConfirmButtonDisabled = !additionalInfo || declarationInProgress;
 
     return (
       <div>
@@ -276,7 +282,7 @@ class ModalContent extends React.Component {
           <Button
             data-test-dialog-confirm-button
             buttonStyle="primary"
-            disabled={!additionalInfo}
+            disabled={isConfirmButtonDisabled}
             onClick={this.submit}
           >
             <FormattedMessage id="ui-users.confirm" />

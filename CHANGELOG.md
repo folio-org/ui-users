@@ -6,6 +6,7 @@
 * Accurately count open-loans when there are > 1000. Refs UIU-2631.
 * Fine detail page throws an error if item is missing. Refs UIU-2505.
 * After new fee/fine charged at Check-in, unable to get to Users app. Refs UIU-2626.
+* Confirm button is not disabled after the click and each click on this button sends the request to the server. Refs UIU-2645.
 
 ## [8.1.0](https://github.com/folio-org/ui-users/tree/v8.1.0) (2022-06-27)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.0.0...v8.1.0)
