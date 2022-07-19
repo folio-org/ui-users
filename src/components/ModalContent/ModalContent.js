@@ -89,18 +89,13 @@ class ModalContent extends React.Component {
     onClose: PropTypes.func.isRequired,
     handleError: PropTypes.func.isRequired,
     declarationInProgress: PropTypes.bool.isRequired,
-    enableButton: PropTypes.func.isRequired,
-    disableButton: PropTypes.func,
+    toggleButton: PropTypes.func.isRequired,
     validateAction: PropTypes.func,
     itemRequestCount: PropTypes.number.isRequired,
     activeRecord: PropTypes.object,
     user: PropTypes.object,
     resources: PropTypes.object,
     okapi: PropTypes.object
-  };
-
-  static defaultProps = {
-    disableButton: () => {},
   };
 
   constructor(props) {
@@ -136,8 +131,7 @@ class ModalContent extends React.Component {
         },
       },
       onClose,
-      disableButton,
-      enableButton,
+      toggleButton,
     } = this.props;
 
     const requestData = { comment: additionalInfo };
@@ -159,14 +153,14 @@ class ModalContent extends React.Component {
       });
     }
 
-    disableButton();
+    toggleButton(true);
     try {
       await POST(requestData);
     } catch (error) {
       this.processError(error);
     }
 
-    enableButton();
+    toggleButton(false);
     onClose();
   };
 

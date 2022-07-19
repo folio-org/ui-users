@@ -55,6 +55,7 @@ import css from './LoanDetails.css';
 
 class LoanDetails extends React.Component {
   static propTypes = {
+    toggleButton: PropTypes.func.isRequired,
     isLoading: PropTypes.bool,
     stripes: PropTypes.object.isRequired,
     resources: PropTypes.shape({
@@ -87,7 +88,6 @@ class LoanDetails extends React.Component {
     declareLost: PropTypes.func,
     markAsMissing: PropTypes.func,
     claimReturned: PropTypes.func,
-    enableButton: PropTypes.func,
     declarationInProgress: PropTypes.bool,
     patronBlocks: PropTypes.arrayOf(PropTypes.object),
     intl: PropTypes.object.isRequired,
@@ -97,7 +97,6 @@ class LoanDetails extends React.Component {
   };
 
   static defaultProps = {
-    enableButton: () => {},
     loanAccountActions: [],
   };
 
@@ -125,7 +124,7 @@ class LoanDetails extends React.Component {
     const prevItemStatus = prevProps.loan?.item?.status?.name;
     const thistItemStatus = this.props.loan?.item?.status?.name;
     if (prevItemStatus && prevItemStatus !== thistItemStatus) {
-      this.props.enableButton();
+      this.props.toggleButton(false);
     }
   }
 
