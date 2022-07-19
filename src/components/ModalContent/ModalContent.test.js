@@ -236,8 +236,7 @@ describe('Modal Content', () => {
     activeRecord: {},
     onClose: jest.fn(),
     handleError: jest.fn(),
-    disableButton: jest.fn(),
-    enableButton: jest.fn(),
+    toggleButton: jest.fn(),
     validateAction: jest.fn(),
     okapi: {
       url: 'https://folio-testing-okapi.dev.folio.org',
