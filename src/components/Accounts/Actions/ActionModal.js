@@ -247,7 +247,11 @@ class ActionModal extends React.Component {
   validateAmount = async (value) => {
     let error;
 
-    const { accounts } = this.props;
+    const {
+      accounts,
+      feeFineActions,
+      action,
+    } = this.props;
 
     const {
       actionAllowed,
@@ -257,6 +261,11 @@ class ActionModal extends React.Component {
     } = this.state;
 
     if (_.isEmpty(value)) {
+      const selectedAmount = calculateSelectedAmount(accounts, this.isRefundAction(action), feeFineActions);
+
+      this.setState(() => ({
+        accountRemainingAmount: selectedAmount,
+      }));
       error = <FormattedMessage id="ui-users.accounts.error.field" />;
     } else if (value !== prevValidatedAmount && this._isMounted) {
       const response = await this.triggerCheckEndpoint(value, accounts);
