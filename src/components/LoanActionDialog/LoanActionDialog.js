@@ -36,7 +36,6 @@ class LoanActionDialog extends React.Component {
       loan,
       loanAction,
       modalLabel,
-      toggleButton,
       validateAction,
       itemRequestCount,
     } = this.props;
