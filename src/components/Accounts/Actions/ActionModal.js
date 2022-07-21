@@ -262,6 +262,7 @@ class ActionModal extends React.Component {
 
     if (_.isEmpty(value)) {
       const selectedAmount = calculateSelectedAmount(accounts, this.isRefundAction(action), feeFineActions);
+
       this.setState({
         accountRemainingAmount: selectedAmount,
         prevValidatedAmount: null,

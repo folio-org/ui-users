@@ -7,6 +7,7 @@
 * Fine detail page throws an error if item is missing. Refs UIU-2505.
 * After new fee/fine charged at Check-in, unable to get to Users app. Refs UIU-2626.
 * "Remaining amount" doesn't have the correct value when the field "Payment amount" is emptied. Refs UIU-2644.
+* Support `notes` interface version `3.0`. Refs UIU-2647.
 
 ## [8.1.0](https://github.com/folio-org/ui-users/tree/v8.1.0) (2022-06-27)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.0.0...v8.1.0)
