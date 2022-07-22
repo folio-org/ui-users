@@ -265,6 +265,7 @@ class ActionModal extends React.Component {
 
       this.setState({
         accountRemainingAmount: selectedAmount,
+        prevValidatedAmount: null,
       });
       error = <FormattedMessage id="ui-users.accounts.error.field" />;
     } else if (value !== prevValidatedAmount && this._isMounted) {
