@@ -88,17 +88,14 @@ class ModalContent extends React.Component {
     loan: PropTypes.object.isRequired,
     onClose: PropTypes.func.isRequired,
     handleError: PropTypes.func.isRequired,
-    disableButton: PropTypes.func,
+    declarationInProgress: PropTypes.bool.isRequired,
+    toggleButton: PropTypes.func.isRequired,
     validateAction: PropTypes.func,
     itemRequestCount: PropTypes.number.isRequired,
     activeRecord: PropTypes.object,
     user: PropTypes.object,
     resources: PropTypes.object,
     okapi: PropTypes.object
-  };
-
-  static defaultProps = {
-    disableButton: () => {},
   };
 
   constructor(props) {
@@ -134,7 +131,7 @@ class ModalContent extends React.Component {
         },
       },
       onClose,
-      disableButton,
+      toggleButton,
     } = this.props;
 
     const requestData = { comment: additionalInfo };
@@ -156,13 +153,14 @@ class ModalContent extends React.Component {
       });
     }
 
-    disableButton();
+    toggleButton(true);
     try {
       await POST(requestData);
     } catch (error) {
       this.processError(error);
     }
 
+    toggleButton(false);
     onClose();
   };
 
@@ -233,6 +231,7 @@ class ModalContent extends React.Component {
       loanAction,
       onClose,
       itemRequestCount,
+      declarationInProgress,
     } = this.props;
 
     const { additionalInfo } = this.state;
@@ -243,6 +242,7 @@ class ModalContent extends React.Component {
     //  - either to determine the content of the message about open requests
     //  - or whether to show this message at all.
     const countIndex = stripes.hasPerm('ui-users.requests.all') ? itemRequestCount : -1;
+    const isConfirmButtonDisabled = !additionalInfo || declarationInProgress;
 
     return (
       <div>
@@ -276,7 +276,7 @@ class ModalContent extends React.Component {
           <Button
             data-test-dialog-confirm-button
             buttonStyle="primary"
-            disabled={!additionalInfo}
+            disabled={isConfirmButtonDisabled}
             onClick={this.submit}
           >
             <FormattedMessage id="ui-users.confirm" />
