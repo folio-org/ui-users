@@ -55,7 +55,7 @@ import css from './LoanDetails.css';
 
 class LoanDetails extends React.Component {
   static propTypes = {
-    toggleButton: PropTypes.func.isRequired,
+    toggleButton: PropTypes.func,
     isLoading: PropTypes.bool,
     stripes: PropTypes.object.isRequired,
     resources: PropTypes.shape({
@@ -97,6 +97,7 @@ class LoanDetails extends React.Component {
   };
 
   static defaultProps = {
+    toggleButton: () => {},
     loanAccountActions: [],
   };
 

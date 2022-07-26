@@ -89,13 +89,17 @@ class ModalContent extends React.Component {
     onClose: PropTypes.func.isRequired,
     handleError: PropTypes.func.isRequired,
     declarationInProgress: PropTypes.bool.isRequired,
-    toggleButton: PropTypes.func.isRequired,
+    toggleButton: PropTypes.func,
     validateAction: PropTypes.func,
     itemRequestCount: PropTypes.number.isRequired,
     activeRecord: PropTypes.object,
     user: PropTypes.object,
     resources: PropTypes.object,
     okapi: PropTypes.object
+  };
+
+  static defaultProps = {
+    toggleButton: () => {},
   };
 
   constructor(props) {
