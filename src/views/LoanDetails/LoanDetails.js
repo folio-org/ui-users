@@ -11,6 +11,7 @@ import {
   get,
   upperFirst,
   isEmpty,
+  noop,
 } from 'lodash';
 
 import { ChangeDueDateDialog } from '@folio/stripes/smart-components';
@@ -55,7 +56,6 @@ import css from './LoanDetails.css';
 
 class LoanDetails extends React.Component {
   static propTypes = {
-    toggleButton: PropTypes.func,
     isLoading: PropTypes.bool,
     stripes: PropTypes.object.isRequired,
     resources: PropTypes.shape({
@@ -88,6 +88,7 @@ class LoanDetails extends React.Component {
     declareLost: PropTypes.func,
     markAsMissing: PropTypes.func,
     claimReturned: PropTypes.func,
+    toggleButton: PropTypes.func,
     declarationInProgress: PropTypes.bool,
     patronBlocks: PropTypes.arrayOf(PropTypes.object),
     intl: PropTypes.object.isRequired,
@@ -97,7 +98,7 @@ class LoanDetails extends React.Component {
   };
 
   static defaultProps = {
-    toggleButton: () => {},
+    toggleButton: noop,
     loanAccountActions: [],
   };
 

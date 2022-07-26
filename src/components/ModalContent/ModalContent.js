@@ -1,4 +1,7 @@
-import _ from 'lodash';
+import {
+  get,
+  noop,
+} from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
@@ -99,7 +102,7 @@ class ModalContent extends React.Component {
   };
 
   static defaultProps = {
-    toggleButton: () => {},
+    toggleButton: noop,
   };
 
   constructor(props) {
@@ -180,7 +183,7 @@ class ModalContent extends React.Component {
     }
 
     const feeFines = [];
-    _.get(resources, ['feefineshistory', 'records'], []).forEach((currentFeeFine) => {
+    get(resources, ['feefineshistory', 'records'], []).forEach((currentFeeFine) => {
       if (currentFeeFine.loanId === loanId && currentFeeFine.status.name === 'Open' &&
         (currentFeeFine.feeFineType === refundClaimReturned.LOST_ITEM_FEE || currentFeeFine.feeFineType === refundClaimReturned.LOST_ITEM_PROCESSING_FEE)) {
         feeFines.push(currentFeeFine);
