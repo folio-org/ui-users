@@ -991,5 +991,6 @@
   "index.lastName": "Last name",
   "index.username": "Username",
   "index.all": "Keyword (name, email, identifier)",
-  "loan404": "The requested loan could not be retrieved."
+  "loan404": "The requested loan could not be retrieved.",
+  "notes.popupModal.label": "User note"
 }
