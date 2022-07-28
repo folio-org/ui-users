@@ -143,6 +143,19 @@ describe('getFullName', () => {
     expect(getFullName(user)).toBe(`${lastName}, ${firstName} ${middleName}`);
   });
 
+  it('handles empty preferred first name', () => {
+    const user = {
+      personal: {
+        firstName,
+        middleName,
+        lastName,
+        preferredFirstName: '',
+      },
+    };
+
+    expect(getFullName(user)).toBe(`${lastName}, ${firstName} ${middleName}`);
+  });
+
   it('handles missing middle name', () => {
     const user = {
       personal: {
