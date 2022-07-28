@@ -1,7 +1,4 @@
-import {
-  fireEvent,
-  render
-} from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 
 import NoteViewPage from './NoteViewPage';

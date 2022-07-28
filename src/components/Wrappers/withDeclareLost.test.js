@@ -8,31 +8,31 @@ import loans from 'fixtures/openLoans';
 
 import withDeclareLost from './withDeclareLost';
 
-const LoanActionDialogMock = ({ open, onClose, disableButton }) => (
+const LoanActionDialogMock = ({ open, onClose, toggleButton }) => (
   open && (
   <>
     <button type="button" data-testid="close-dialog" onClick={() => onClose()}>close</button>
-    <button type="button" data-testid="disable-dialog" onClick={() => disableButton()}>Disable</button>
+    <button type="button" data-testid="disable-dialog" onClick={() => toggleButton(true)}>Disable</button>
   </>)
 );
 LoanActionDialogMock.propTypes = {
   onClose: PropTypes.func,
   open: PropTypes.bool,
-  disableButton: PropTypes.func
+  toggleButton: PropTypes.func
 };
 
 jest.mock('../LoanActionDialog', () => LoanActionDialogMock);
 
-const DeclareLost = ({ declareLost, declarationInProgress, enableButton }) => (
+const DeclareLost = ({ declareLost, declarationInProgress, toggleButton }) => (
   <>
-    <button type="button" data-testid="enable" onClick={() => enableButton()}>Enable</button>
+    <button type="button" data-testid="enable" onClick={() => toggleButton(false)}>Enable</button>
     { !declarationInProgress ?
       <button type="button" data-testid="declareLost" onClick={() => declareLost(loans[0], 1)}>Declaration</button> : ''}
   </>
 );
 
 DeclareLost.propTypes = {
-  enableButton: PropTypes.func,
+  toggleButton: PropTypes.func,
   declareLost: PropTypes.func,
   declarationInProgress: PropTypes.bool,
 };
