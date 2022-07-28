@@ -60,7 +60,6 @@ const ClaimReturned = ({ claimReturned }) => (
     <button type="button" data-testid="enable" onClick={claimReturned}>Enable</button>
   </>
 );
-
 jest.mock('../util/refundTransferClaimReturned', () => {
   return {
     refundTransfers: jest.fn(),
