@@ -856,8 +856,6 @@ class UserDetail extends React.Component {
                   popUpPropertyName="popUpOnUser"
                   entityId={user?.id}
                   label={intl.formatMessage({ id: 'ui-users.notes.popupModal.label' })}
-                  popUpFooterPrimaryAction="close"
-                  onEscapeKeyDown
                 />
               </IfPermission>
             </IfInterface>
