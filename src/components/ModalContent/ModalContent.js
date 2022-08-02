@@ -1,4 +1,7 @@
-import _ from 'lodash';
+import {
+  get,
+  noop,
+} from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
@@ -89,13 +92,17 @@ class ModalContent extends React.Component {
     onClose: PropTypes.func.isRequired,
     handleError: PropTypes.func.isRequired,
     declarationInProgress: PropTypes.bool.isRequired,
-    toggleButton: PropTypes.func.isRequired,
+    toggleButton: PropTypes.func,
     validateAction: PropTypes.func,
     itemRequestCount: PropTypes.number.isRequired,
     activeRecord: PropTypes.object,
     user: PropTypes.object,
     resources: PropTypes.object,
     okapi: PropTypes.object
+  };
+
+  static defaultProps = {
+    toggleButton: noop,
   };
 
   constructor(props) {
@@ -176,7 +183,7 @@ class ModalContent extends React.Component {
     }
 
     const feeFines = [];
-    _.get(resources, ['feefineshistory', 'records'], []).forEach((currentFeeFine) => {
+    get(resources, ['feefineshistory', 'records'], []).forEach((currentFeeFine) => {
       if (currentFeeFine.loanId === loanId && currentFeeFine.status.name === 'Open' &&
         (currentFeeFine.feeFineType === refundClaimReturned.LOST_ITEM_FEE || currentFeeFine.feeFineType === refundClaimReturned.LOST_ITEM_PROCESSING_FEE)) {
         feeFines.push(currentFeeFine);
