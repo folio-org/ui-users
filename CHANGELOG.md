@@ -245,6 +245,7 @@
 * Create Jest/RTL test for `accountFunctions`. Refs UIU-2334.
 * Create Jest/RTL test for `loanActionMap`. Refs UIU-2333.
 * Create Jest/RTL test for `OpenLoansControl`. Refs UIU-2347.
+* Create Jest/RTL test for `ItemInfo`. Refs UIU-2363.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)
