@@ -990,5 +990,6 @@
     "charge.comment.label": "說明",
     "errors.permissionChangeFailed": "權限未更改",
     "charge.message.successfully": "The {feeFineType} fee/fine of <strong>{amount}</strong> has been successfully <strong>{paymentName}</strong> for <strong>{fullName}</strong>",
-    "details.field.barcode.notFound": "{barcode} (not found)"
+    "details.field.barcode.notFound": "{barcode} (not found)",
+    "notes.popupModal.label": "User note"
 }
