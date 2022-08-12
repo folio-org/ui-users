@@ -15,7 +15,10 @@ import CancellationModal from './CancellationModal';
 import CommentModal from './CommentModal';
 import WarningModal from './WarningModal';
 import ActionModal from './ActionModal';
-import { MAX_RECORDS } from '../../../constants';
+import {
+  MAX_RECORDS,
+  SHARED_OWNER,
+} from '../../../constants';
 import {
   getFullName,
   isRefundAllowed,
@@ -630,7 +633,7 @@ class Actions extends React.Component {
     const servicePointsIds = _.get(resources, ['curUserServicePoint', 'records', 0, 'servicePointsIds'], []);
     const payments = _.get(resources, ['payments', 'records'], []);
     const refunds = _.get(resources, ['refunds', 'records'], []);
-    const owners = _.get(resources, ['owners', 'records'], []).filter(o => o.owner !== 'Shared');
+    const owners = _.get(resources, ['owners', 'records'], []).filter(o => o.owner !== SHARED_OWNER);
     const feefines = _.get(resources, ['feefineTypes', 'records'], []);
     const waives = _.get(resources, ['waives', 'records'], []);
     const transfers = _.get(resources, ['transfers', 'records'], []);

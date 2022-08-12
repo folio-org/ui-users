@@ -14,6 +14,7 @@ import { ControlledVocab } from '@folio/stripes/smart-components';
 import { stripesConnect, withStripes } from '@folio/stripes/core';
 
 import { validate } from '../components/util';
+import { SHARED_OWNER } from '../constants';
 
 const columnMapping = (formatMessage) => ({
   owner: (
@@ -68,7 +69,7 @@ class OwnerSettings extends React.Component {
     const label = formatMessage({ id: 'ui-users.owners.singular' });
     const itemErrors = validate(item, index, items, 'owner', label);
     const evaluateServicePoint = item.servicePointOwner ? item.servicePointOwner.length : 0;
-    if (item.owner === 'Shared' && evaluateServicePoint > 0) {
+    if (item.owner === SHARED_OWNER && evaluateServicePoint > 0) {
       itemErrors.owner = formatMessage({ id: 'ui-users.owners.noServicePoints' });
     }
     return itemErrors;
