@@ -164,7 +164,6 @@ class FeeFineSettings extends React.Component {
     const { intl: { formatMessage } } = this.props;
 
     const feefines = _.get(this.props.resources, ['feefines', 'records'], []);
-    const { owners } = this.state;
     const myFeeFines = feefines.filter(f => f.ownerId !== this.state.ownerId) || [];
     const label = formatMessage({ id: 'ui-users.feefines.singular' });
     const itemErrors = validate(item, index, items, 'feeFineType', label);
@@ -184,11 +183,7 @@ class FeeFineSettings extends React.Component {
     if (this.state.ownerId === (this.shared || {}).id) {
       const includes = this.includes(item, index, myFeeFines, 'feeFineType', 'ownerId');
       if (includes) {
-        itemErrors.feeFineType =
-          <FormattedMessage
-            id="ui-users.feefines.errors.existShared"
-            values={{ owner: (owners.find(o => o.id === includes) || {}).owner }}
-          />;
+        itemErrors.feeFineType = <FormattedMessage id="ui-users.feefines.errors.existOther" />;
       }
     } else {
       const shareds = feefines.filter(f => f.ownerId === (this.shared || {}).id) || [];
