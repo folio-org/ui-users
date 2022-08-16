@@ -1,5 +1,10 @@
 # Change history for ui-users
 
+## [8.1.2](https://github.com/folio-org/ui-users/tree/v8.1.2) (2022-08-16)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.1...v8.1.2)
+
+* When formatting names, correctly treat empty-strings as missing. Refs UIU-2610.
+
 ## [8.1.1](https://github.com/folio-org/ui-users/tree/v8.1.1) (2022-07-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v8.1.1)
 
