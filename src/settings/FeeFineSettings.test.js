@@ -6,6 +6,7 @@ import userEvent from '@testing-library/user-event';
 import renderWithRouter from 'helpers/renderWithRouter';
 import { buildResources } from 'helpers/buildResources';
 import FeeFineSettings from './FeeFineSettings';
+import { SHARED_OWNER } from '../constants';
 
 jest.unmock('@folio/stripes/components');
 jest.unmock('@folio/stripes/smart-components');
@@ -84,7 +85,7 @@ const ownerData = [
       updatedByUserId: 'e1130416-f25f-5929-8c1d-b33d3f50f414',
       updatedDate: '2021-12-27T12:09:22.973+00:00',
     },
-    owner: 'Shared',
+    owner: SHARED_OWNER,
     servicePointOwner: []
   }
 ];
@@ -211,7 +212,7 @@ describe('Payment settings', () => {
   });
   it('Onchange owner', async () => {
     userEvent.selectOptions(document.querySelector('[id="select-owner"]'), screen.getByText('test2'));
-    userEvent.selectOptions(document.querySelector('[id="select-owner"]'), screen.getByText('Shared'));
+    userEvent.selectOptions(document.querySelector('[id="select-owner"]'), screen.getByText(SHARED_OWNER));
     expect(screen.getByText('test2')).toBeTruthy();
   });
   it('OnChange payment', async () => {

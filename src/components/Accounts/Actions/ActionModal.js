@@ -19,7 +19,10 @@ import {
 } from '@folio/stripes/components';
 
 import { calculateSelectedAmount } from '../accountFunctions';
-import { FEE_FINE_ACTIONS } from '../../../constants';
+import {
+  FEE_FINE_ACTIONS,
+  SHARED_OWNER,
+} from '../../../constants';
 
 import css from './PayWaive.css';
 
@@ -339,7 +342,7 @@ class ActionModal extends React.Component {
     } = getState();
 
     const selected = calculateSelectedAmount(accounts, this.isRefundAction(action), feeFineActions);
-    const ownerOptions = owners.filter(o => o.owner !== 'Shared').map(o => ({ value: o.id, label: o.owner }));
+    const ownerOptions = owners.filter(o => o.owner !== SHARED_OWNER).map(o => ({ value: o.id, label: o.owner }));
 
     let options = (this.isPaymentAction(action)) ? data.filter(d => (d.ownerId === (accounts.length > 1 ? ownerId : (accounts[0] || {}).ownerId))) : data;
     options = (this.isTransferAction(action))

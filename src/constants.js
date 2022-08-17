@@ -301,3 +301,5 @@ export const financialTransactionsMainReportColumns = [
   'lostItemPolicy',
   'loanDetails'
 ];
+
+export const SHARED_OWNER = 'Shared';
