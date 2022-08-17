@@ -47,7 +47,12 @@ const props = {
   form: {
     change: changeMock,
     getFieldState: jest.fn(() => {
-      return { value: '2100-08-16T02:01:15.606+00:00' };
+      const dateIncrement = 1;
+      const tomorrow = new Date();
+
+      tomorrow.setDate(tomorrow.getDate() + dateIncrement);
+
+      return { value: tomorrow.toJSON() };
     })
   },
   accordionId: 'editUserInfo',
