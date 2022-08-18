@@ -991,5 +991,6 @@
     "errors.permissionChangeFailed": "لم يتم تغيير الصلاحيات",
     "charge.message.successfully": "تم بنجاح {feeFineType} رسم/غرامة <strong>{amount}</strong> <strong>{paymentName}</strong> لـ <strong>{fullName}</strong>",
     "details.field.barcode.notFound": "{barcode} (لم يتم العثور عليه)",
-    "notes.popupModal.label": "User note"
+    "notes.popupModal.label": "ملاحظة المستخدم",
+    "feefines.errors.existOther": "Fee/fine type exists for other Fee/fine owner(s)"
 }

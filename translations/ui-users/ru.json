@@ -167,7 +167,7 @@
     "feefines.errors.amountNumeric": "Сумма по умолчанию должна быть числом",
     "feefines.errors.amountPositive": "Сумма по умолчанию должна быть положительной",
     "feefines.errors.exist": "Fee/fine type exists",
-    "feefines.errors.existShared": "Fee/fine type exists for other Fee/fine owner(s)",
+    "feefines.errors.existShared": "Fee/fine type exists for Shared Fee/fine owner",
     "feefines.modal.error": "Выберите один для продолжения",
     "feefines.modal.yes": "Да",
     "feefines.modal.no": "Нет",
@@ -991,5 +991,6 @@
     "errors.permissionChangeFailed": "Permissions were not changed",
     "charge.message.successfully": "The {feeFineType} fee/fine of <strong>{amount}</strong> has been successfully <strong>{paymentName}</strong> for <strong>{fullName}</strong>",
     "details.field.barcode.notFound": "{barcode} (not found)",
-    "notes.popupModal.label": "User note"
+    "notes.popupModal.label": "User note",
+    "feefines.errors.existOther": "Fee/fine type exists for other Fee/fine owner(s)"
 }
