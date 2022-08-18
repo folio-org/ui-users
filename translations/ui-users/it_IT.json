@@ -991,5 +991,6 @@
     "errors.permissionChangeFailed": "Le autorizzazioni non sono state modificate",
     "charge.message.successfully": "The {feeFineType} fee/fine of <strong>{amount}</strong> has been successfully <strong>{paymentName}</strong> for <strong>{fullName}</strong>",
     "details.field.barcode.notFound": "{barcode} (not found)",
-    "notes.popupModal.label": "User note"
+    "notes.popupModal.label": "User note",
+    "feefines.errors.existOther": "Fee/fine type exists for other Fee/fine owner(s)"
 }

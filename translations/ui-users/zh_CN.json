@@ -991,5 +991,6 @@
     "errors.permissionChangeFailed": "权限未更改",
     "charge.message.successfully": "<strong> {amount} </strong>的{feeFineType}费用/罚款已成功为<strong> {fullName} </strong> <strong> {paymentName}  </strong>",
     "details.field.barcode.notFound": "{barcode} （未找到）",
-    "notes.popupModal.label": "User note"
+    "notes.popupModal.label": "User note",
+    "feefines.errors.existOther": "Fee/fine type exists for other Fee/fine owner(s)"
 }
