@@ -184,13 +184,13 @@ class FeeFineSettings extends React.Component {
     if (this.state.ownerId === (this.shared || {}).id) {
       const includes = this.includes(item, index, myFeeFines, 'feeFineType', 'ownerId');
       if (includes) {
-        itemErrors.feeFineType = <FormattedMessage id="ui-users.feefines.errors.existOther" />;
+        itemErrors.feeFineType = <FormattedMessage id="ui-users.feefines.errors.existForOther" />;
       }
     } else {
       const shareds = feefines.filter(f => f.ownerId === (this.shared || {}).id) || [];
       const includes = this.includes(item, index, shareds, 'feeFineType', 'ownerId');
       if (includes) {
-        itemErrors.feeFineType = <FormattedMessage id="ui-users.feefines.errors.existShared" />;
+        itemErrors.feeFineType = <FormattedMessage id="ui-users.feefines.errors.existForShared" />;
       }
     }
 
