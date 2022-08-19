@@ -19,7 +19,7 @@ import {
   Paneset,
   Row,
 } from '@folio/stripes/components';
-import { IfPermission } from '@folio/stripes-core';
+import { IfPermission } from '@folio/stripes/core';
 
 import Actions from '../../components/Accounts/Actions/FeeFineActions';
 import {
