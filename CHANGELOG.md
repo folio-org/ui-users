@@ -1,5 +1,10 @@
 # Change history for ui-users
 
+## [8.1.3](https://github.com/folio-org/ui-users/tree/v8.1.3) (2022-08-23)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.2...v8.1.3)
+
+* Modify error message when a Fee/Fine Owner enters a Fee/Fine Type that is duplicated by "Shared" Fee/Fine Owner. Refs UIU-2560.
+
 ## [8.1.2](https://github.com/folio-org/ui-users/tree/v8.1.2) (2022-08-16)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.1...v8.1.2)
 
