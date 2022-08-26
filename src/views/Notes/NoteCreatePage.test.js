@@ -1,28 +1,40 @@
-import { createMemoryHistory } from 'history';
+import { render } from '@testing-library/react';
 
-import renderWithRouter from 'helpers/renderWithRouter';
+import NoteCreateRoute from './NoteCreatePage';
 
-import NoteCreatePage from './NoteCreatePage';
+jest.mock('@folio/stripes/smart-components', () => ({
+  ...jest.requireActual('@folio/stripes/smart-components'),
+  NoteCreatePage: jest.fn(() => (<div>NoteCreatePage</div>)),
+}));
 
-const history = createMemoryHistory();
-history.goBack = jest.fn();
-
-const props = {
-  history,
-  location : history.location,
+const history = {
+  location: {
+    hash: '',
+    key: '9pb09t',
+    pathname: '/users/notes/new',
+    search: '',
+    state: {
+      entityId: '2205005b-ca51-4a04-87fd-938eefa8f6de',
+      entityName: 'rick, psych',
+      entityType: 'user',
+      referredRecordData: {}
+    }
+  }
 };
 
-const renderNoteCreatePage = () => renderWithRouter(
-  <div>
-    <NoteCreatePage {...props} />
-    Note Create Page
-  </div>
+const location = history.location;
+
+const renderNoteCreateRoute = (props = {
+  history,
+  location
+}) => render(
+  <NoteCreateRoute {...props} />
 );
 
 describe('Note Create Page', () => {
   it('should render Note Create Page', async () => {
-    const { getByText } = renderNoteCreatePage();
+    const { getByText } = renderNoteCreateRoute();
 
-    expect(getByText('Note Create Page')).toBeInTheDocument();
+    expect(getByText('NoteCreatePage')).toBeInTheDocument();
   });
 });
