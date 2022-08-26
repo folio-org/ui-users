@@ -1,5 +1,5 @@
 import userEvent from '@testing-library/user-event';
-import { act, screen, waitFor, fireEvent } from '@testing-library/react';
+import { screen, waitFor, fireEvent } from '@testing-library/react';
 
 import okapiCurrentUser from 'fixtures/okapiCurrentUser';
 import renderWithRouter from 'helpers/renderWithRouter';
@@ -42,7 +42,7 @@ const feefines = [
     'automatic' : false,
     'feeFineType' : 'TestFeeFine',
     'defaultAmount' : 1.0,
-    'ownerId' : '6b3884f3-8066-47a7-b44e-5adcd6350d61',
+    'ownerId' : '109155d9-3b60-4a3d-a6b1-066cf1b1356b',
     'metadata' : {
       'createdDate' : '2022-01-11T13:17:33.422+00:00',
       'createdByUserId' : '279cec9f-1ae5-50b2-bd65-cfd0803fc9a9',
@@ -126,7 +126,7 @@ const propData = {
   initialValues: {
     amount: '',
     feeFineId: '',
-    notify: false,
+    notify: true,
     ownerId: '109155d9-3b60-4a3d-a6b1-066cf1b1356b',
   },
   match: {
@@ -137,7 +137,7 @@ const propData = {
     feeFineType: 'Lost item processing fee',
     id: 'c7dede15-aa48-45ed-860b-f996540180e0',
     ownerId: '109155d9-3b60-4a3d-a6b1-066cf1b1356b',
-    metadata: { createdDate: '2022-03-01T03:22:48.262+00:00', updatedDate: '2022-03-01T03:22:48.262+00:00' }
+    metadata: { createdDate: '2022-03-01T03:22:48.262+00:00', updatedDate: '2022-03-01T03:22:48.262+00:00' },
   }],
 };
 
@@ -152,16 +152,6 @@ describe('ChargeForm component', () => {
     renderChargeForm(propData);
     userEvent.selectOptions(document.querySelector('[name="ownerId"]'), screen.getByText('test'));
     expect(onChangeOwnerMock).toHaveBeenCalled();
-  });
-
-  it('Onchange feeFine', async () => {
-    act(() => {
-      renderChargeForm(propData);
-    });
-    act(() => {
-      userEvent.selectOptions(document.querySelector('[id="feeFineType"]'), screen.getByText('Lost item processing fee'));
-    });
-    await waitFor(() => { expect(onChangeFeeFineMock).toHaveBeenCalled(); });
   });
 
   it('If there is a defaultChargeNoticeId', () => {
@@ -193,7 +183,7 @@ describe('ChargeForm component', () => {
     userEvent.click(document.querySelector('[id="chargeOnly"]'));
     expect(onChangeOwnerMock).toHaveBeenCalled();
     expect(screen.getByText('ui-users.charge.item.status')).toBeInTheDocument();
-    expect(screen.getByText('ui-users.accounts.infoPatron')).toBeInTheDocument();
+    expect(screen.getByText('ui-users.accounts.notifyPatron')).toBeInTheDocument();
     expect(screen.getByText('ui-users.charge.item.callNumber')).toBeInTheDocument();
   });
 });

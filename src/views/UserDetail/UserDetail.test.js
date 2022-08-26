@@ -98,6 +98,11 @@ jest.mock(
 );
 
 jest.mock(
+  '../../components/RequestFeeFineBlockButtons',
+  () => jest.fn(() => null),
+);
+
+jest.mock(
   '../../components/PatronBlock',
   () => ({
     PatronBlockMessage: jest.fn(() => null),

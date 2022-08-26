@@ -584,6 +584,7 @@ class UserDetail extends React.Component {
       match,
       onClose,
       paneWidth,
+      intl,
     } = this.props;
 
     const {
@@ -854,6 +855,7 @@ class UserDetail extends React.Component {
                   entityType="user"
                   popUpPropertyName="popUpOnUser"
                   entityId={user?.id}
+                  label={intl.formatMessage({ id: 'ui-users.notes.popupModal.label' })}
                 />
               </IfPermission>
             </IfInterface>

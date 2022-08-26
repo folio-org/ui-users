@@ -359,6 +359,7 @@ class ClosedLoans extends React.Component {
           </IfPermission>
         }
         <Button
+          data-testid="newFeeFineButton"
           disabled={buttonDisabled}
           buttonStyle="dropdownItem"
           to={getChargeFineToLoanPath(params.id, loan.id)}
@@ -366,6 +367,7 @@ class ClosedLoans extends React.Component {
           <FormattedMessage id="ui-users.loans.newFeeFine" />
         </Button>
         <Button
+          data-testid="feeFineDetailsButton"
           disabled={_.isEmpty(accountsLoan)}
           buttonStyle="dropdownItem"
           onClick={() => {

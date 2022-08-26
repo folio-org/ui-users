@@ -11,6 +11,7 @@ import {
   get,
   upperFirst,
   isEmpty,
+  noop,
 } from 'lodash';
 
 import { ChangeDueDateDialog } from '@folio/stripes/smart-components';
@@ -87,7 +88,7 @@ class LoanDetails extends React.Component {
     declareLost: PropTypes.func,
     markAsMissing: PropTypes.func,
     claimReturned: PropTypes.func,
-    enableButton: PropTypes.func,
+    toggleButton: PropTypes.func,
     declarationInProgress: PropTypes.bool,
     patronBlocks: PropTypes.arrayOf(PropTypes.object),
     intl: PropTypes.object.isRequired,
@@ -97,7 +98,7 @@ class LoanDetails extends React.Component {
   };
 
   static defaultProps = {
-    enableButton: () => {},
+    toggleButton: noop,
     loanAccountActions: [],
   };
 
@@ -125,7 +126,7 @@ class LoanDetails extends React.Component {
     const prevItemStatus = prevProps.loan?.item?.status?.name;
     const thistItemStatus = this.props.loan?.item?.status?.name;
     if (prevItemStatus && prevItemStatus !== thistItemStatus) {
-      this.props.enableButton();
+      this.props.toggleButton(false);
     }
   }
 
@@ -161,7 +162,7 @@ class LoanDetails extends React.Component {
 
     await renew([loan], user, additionalInfo);
 
-    return renewals.replace({ ts: new Date().getTime() });
+    return renewals?.replace({ ts: new Date().getTime() });
   }
 
   renew = async () => {

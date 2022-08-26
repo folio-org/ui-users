@@ -21,6 +21,7 @@ import {
   loadServicePoints,
   deleteOptionalActionFields,
 } from '../accountFunctions';
+import { SHARED_OWNER } from '../../../constants';
 
 class ChargeFeeFine extends React.Component {
   static propTypes = {
@@ -77,7 +78,6 @@ class ChargeFeeFine extends React.Component {
     this.payAction = this.payAction.bind(this);
     this.onClickSelectItem = this.onClickSelectItem.bind(this);
     this.onChangeOwner = this.onChangeOwner.bind(this);
-    this.onChangeFeeFine = this.onChangeFeeFine.bind(this);
     this.onFindShared = this.onFindShared.bind(this);
     this.item = {};
     this.onCloseModal = this.onCloseModal.bind(this);
@@ -250,17 +250,11 @@ class ChargeFeeFine extends React.Component {
 
     if (_.get(resources, ['activeRecord', 'shared']) === undefined) {
       const owners = _.get(resources, ['owners', 'records'], []);
-      const shared = (owners.find(o => o.owner === 'Shared') || {}).id || '0';
+      const shared = (owners.find(o => o.owner === SHARED_OWNER) || {}).id || '0';
       mutator.activeRecord.update({ shared });
     }
     mutator.activeRecord.update({ ownerId });
     this.setState({ ownerId });
-  }
-
-  onChangeFeeFine(e) {
-    this.setState({
-      feeFineTypeId: e.target.value
-    });
   }
 
   onChangeItem(item) {
@@ -445,7 +439,7 @@ class ChargeFeeFine extends React.Component {
     const feefines = _.get(resources, ['allfeefines', 'records'], []);
     const owners = _.get(resources, ['owners', 'records'], []);
     const list = [];
-    const shared = owners.find(o => o.owner === 'Shared');
+    const shared = owners.find(o => o.owner === SHARED_OWNER);
     feefines.forEach(f => {
       if (!list.find(o => (o || {}).id === f.ownerId)) {
         const owner = owners.find(o => (o || {}).id === f.ownerId);
@@ -491,7 +485,7 @@ class ChargeFeeFine extends React.Component {
     const initialOwnerId = ownerId !== '0' ? ownerId : servicePointOwnerId;
     const selectedFeeFine = feefines.find(f => f.id === feeFineTypeId);
     const currentOwnerFeeFineTypes = feefines.filter(f => f.ownerId === initialOwnerId || f.ownerId === resources.activeRecord.shared);
-    const selectedOwner = owners.find(o => o.id === initialOwnerId);
+    const selectedOwner = owners.find(o => (o.id === initialOwnerId || o.id === resources.activeRecord.shared));
 
     const initialChargeValues = {
       ownerId: initialOwnerId,
@@ -510,7 +504,6 @@ class ChargeFeeFine extends React.Component {
       <div>
         <ChargeForm
           form="feeFineChargeForm"
-          onClose={this.goBack}
           initialValues={initialChargeValues}
           defaultServicePointId={defaultServicePointId}
           feeFineTypeOptions={currentOwnerFeeFineTypes}
@@ -525,7 +518,6 @@ class ChargeFeeFine extends React.Component {
           item={item}
           onFindShared={this.onFindShared}
           onChangeOwner={this.onChangeOwner}
-          onChangeFeeFine={this.onChangeFeeFine}
           onClickSelectItem={this.onClickSelectItem}
           stripes={stripes}
           location={location}

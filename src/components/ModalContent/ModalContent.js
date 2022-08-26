@@ -1,4 +1,7 @@
-import _ from 'lodash';
+import {
+  get,
+  noop,
+} from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
@@ -88,7 +91,8 @@ class ModalContent extends React.Component {
     loan: PropTypes.object.isRequired,
     onClose: PropTypes.func.isRequired,
     handleError: PropTypes.func.isRequired,
-    disableButton: PropTypes.func,
+    declarationInProgress: PropTypes.bool.isRequired,
+    toggleButton: PropTypes.func,
     validateAction: PropTypes.func,
     itemRequestCount: PropTypes.number.isRequired,
     activeRecord: PropTypes.object,
@@ -98,7 +102,7 @@ class ModalContent extends React.Component {
   };
 
   static defaultProps = {
-    disableButton: () => {},
+    toggleButton: noop,
   };
 
   constructor(props) {
@@ -134,7 +138,7 @@ class ModalContent extends React.Component {
         },
       },
       onClose,
-      disableButton,
+      toggleButton,
     } = this.props;
 
     const requestData = { comment: additionalInfo };
@@ -156,13 +160,14 @@ class ModalContent extends React.Component {
       });
     }
 
-    disableButton();
+    toggleButton(true);
     try {
       await POST(requestData);
     } catch (error) {
       this.processError(error);
     }
 
+    toggleButton(false);
     onClose();
   };
 
@@ -178,7 +183,7 @@ class ModalContent extends React.Component {
     }
 
     const feeFines = [];
-    _.get(resources, ['feefineshistory', 'records'], []).forEach((currentFeeFine) => {
+    get(resources, ['feefineshistory', 'records'], []).forEach((currentFeeFine) => {
       if (currentFeeFine.loanId === loanId && currentFeeFine.status.name === 'Open' &&
         (currentFeeFine.feeFineType === refundClaimReturned.LOST_ITEM_FEE || currentFeeFine.feeFineType === refundClaimReturned.LOST_ITEM_PROCESSING_FEE)) {
         feeFines.push(currentFeeFine);
@@ -233,6 +238,7 @@ class ModalContent extends React.Component {
       loanAction,
       onClose,
       itemRequestCount,
+      declarationInProgress,
     } = this.props;
 
     const { additionalInfo } = this.state;
@@ -243,6 +249,7 @@ class ModalContent extends React.Component {
     //  - either to determine the content of the message about open requests
     //  - or whether to show this message at all.
     const countIndex = stripes.hasPerm('ui-users.requests.all') ? itemRequestCount : -1;
+    const isConfirmButtonDisabled = !additionalInfo || declarationInProgress;
 
     return (
       <div>
@@ -276,7 +283,7 @@ class ModalContent extends React.Component {
           <Button
             data-test-dialog-confirm-button
             buttonStyle="primary"
-            disabled={!additionalInfo}
+            disabled={isConfirmButtonDisabled}
             onClick={this.submit}
           >
             <FormattedMessage id="ui-users.confirm" />

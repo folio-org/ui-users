@@ -19,7 +19,10 @@ import {
 } from '@folio/stripes/components';
 
 import { calculateSelectedAmount } from '../accountFunctions';
-import { FEE_FINE_ACTIONS } from '../../../constants';
+import {
+  FEE_FINE_ACTIONS,
+  SHARED_OWNER,
+} from '../../../constants';
 
 import css from './PayWaive.css';
 
@@ -247,7 +250,11 @@ class ActionModal extends React.Component {
   validateAmount = async (value) => {
     let error;
 
-    const { accounts } = this.props;
+    const {
+      accounts,
+      feeFineActions,
+      action,
+    } = this.props;
 
     const {
       actionAllowed,
@@ -257,6 +264,12 @@ class ActionModal extends React.Component {
     } = this.state;
 
     if (_.isEmpty(value)) {
+      const selectedAmount = calculateSelectedAmount(accounts, this.isRefundAction(action), feeFineActions);
+
+      this.setState({
+        accountRemainingAmount: selectedAmount,
+        prevValidatedAmount: null,
+      });
       error = <FormattedMessage id="ui-users.accounts.error.field" />;
     } else if (value !== prevValidatedAmount && this._isMounted) {
       const response = await this.triggerCheckEndpoint(value, accounts);
@@ -339,7 +352,7 @@ class ActionModal extends React.Component {
     } = getState();
 
     const selected = calculateSelectedAmount(accounts, this.isRefundAction(action), feeFineActions);
-    const ownerOptions = owners.filter(o => o.owner !== 'Shared').map(o => ({ value: o.id, label: o.owner }));
+    const ownerOptions = owners.filter(o => o.owner !== SHARED_OWNER).map(o => ({ value: o.id, label: o.owner }));
 
     let options = (this.isPaymentAction(action)) ? data.filter(d => (d.ownerId === (accounts.length > 1 ? ownerId : (accounts[0] || {}).ownerId))) : data;
     options = (this.isTransferAction(action))

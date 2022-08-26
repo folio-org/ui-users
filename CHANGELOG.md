@@ -1,6 +1,22 @@
 # Change history for ui-users
 
-## [8.1.0] IN PROGRESS
+## 8.2.0 IN PROGRESS
+
+* Spread out the fields on the new Fee/Fine modal. Fixes UIU-2620.
+* Accurately count open-loans when there are > 1000. Refs UIU-2631.
+* Fine detail page throws an error if item is missing. Refs UIU-2505.
+* After new fee/fine charged at Check-in, unable to get to Users app. Refs UIU-2626.
+* "Remaining amount" doesn't have the correct value when the field "Payment amount" is emptied. Refs UIU-2644.
+* Support `notes` interface version `3.0`. Refs UIU-2647.
+* Confirm button is not disabled after the click and each click on this button sends the request to the server. Refs UIU-2645.
+* When formatting names, correctly treat empty-strings as missing. Refs UIU-2610.
+* Additional updates to Pop-up note Refs UIU-2653
+* Modify error message when a Fee/Fine Owner enters a Fee/Fine Type that is duplicated by "Shared" Fee/Fine Owner. Refs UIU-2560.
+* Correctly import from `stripes/core` not `stripes-core`. Refs UIU-2642.
+* Create permission for "Lost items requiring actual costs" processing page. Refs UIU-2491.
+
+## [8.1.0](https://github.com/folio-org/ui-users/tree/v8.1.0) (2022-06-27)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v8.0.0...v8.1.0)
 
 * Increase limit for servicePoints query in `<AccountDetailsContainer>`. Fixes UIU-2544.
 * Replace `onChange` with `onClick` when checkbox is clicked on MCL row. Fixes UIU-2543.
@@ -32,6 +48,11 @@
 * Allow fee/fine to be cancelled if remaining balance equals billed amount. Refs UIU-2609.
 * Unpin `moment` from `~2.24.0` and move it to peer. Refs UIU-1900.
 * Create Jest/RTL test for OpenLoansSubHeader.js. Refs UIU-2340.
+* create Jest/RTL test for ClosedLoans.js. Refs UIU-2345
+* Get rid of console error if there is no `renewals`. Refs UIU-2603.
+* create Jest/RTL test for src/components/Accounts/Filters. Refs UIU-2356.
+* Handle time zone issues in user info date displays. Fixes UIU-2623.
+* User should be directed to the last open page when working in more than one browser. Refs UIU-2605.
 * create Jest/RTL test for NoteCreatePage.js. Refs UIU-2423.
 
 ## [8.0.0](https://github.com/folio-org/ui-users/tree/v8.0.0) (2022-03-17)
@@ -211,10 +232,27 @@
 * Create Jest/RTL test for `UserRequests`. Refs UIU-2306.
 * Create Jest/RTL test for `HelperApp`. Refs UIU-2310.
 * Create Jest/RTL test for `constants`. Refs UIU-2316.
+* Create Jest/RTL test for `getInitialFiltersState`. Refs UIU-2324.
+* Create Jest/RTL test for `SearchForm`. Refs UIU-2329.
 * Create Jest/RTL test for `Label`. Refs UIU-2327.
 * Create Jest/RTL test for `getProxySponsorWarning`. Refs UIU-2321.
 * Create Jest/RTL test for `constants`. Refs UIU-2325.
 * Create Jest/RTL test for `EditUserInfo`. Refs UIU-2292.
+* Create Jest/RTL test for `settings`. Refs UIU-2344.
+* Create Jest/RTL test for `util`. Refs UIU-2304.
+* Create Jest/RTL test for `UserAccounts`. Refs UIU-2346.
+* Create Jest/RTL test for `UserServicePoints`. Refs UIU-2335.
+* Create Jest/RTL test for `LoanActionDialog`. Refs UIU-2302.
+* Create Jest/RTL test for `withFormValues`. Refs UIU-2349.
+* Create Jest/RTL test for `EditContactInfo`. Refs UIU-2343.
+* Create Jest/RTL test for `EditExtendedInfo`. Refs UIU-2299.
+* Create Jest/RTL test for `RefundReport`. Refs UIU-2350.
+* Create Jest/RTL test for `accountFunctions`. Refs UIU-2334.
+* Create Jest/RTL test for `loanActionMap`. Refs UIU-2333.
+* Create Jest/RTL test for `OpenLoansControl`. Refs UIU-2347.
+* Create Jest/RTL test for `withClaimReturned`. Refs UIU-2352.
+* Create Jest/RTL test for `navigationHandlers`. Refs UIU-2369.
+* Create Jest/RTL test for `ItemInfo`. Refs UIU-2363.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)

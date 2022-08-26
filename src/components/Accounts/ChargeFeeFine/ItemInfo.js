@@ -90,14 +90,12 @@ class ItemInfo extends React.Component {
             </Row>
           </Col>
         </Row>
-        <br />
         <Row>
           <Col xs={8} sm={10} md={7} lg={5}>
             <Row><Col xs={12}><FormattedMessage id="ui-users.charge.item.instance" /></Col></Row>
             <Row><Col xs={12}><b>{instance}</b></Col></Row>
           </Col>
         </Row>
-        <br />
         <Row>
           <Col xs={12}>
             <Row>
