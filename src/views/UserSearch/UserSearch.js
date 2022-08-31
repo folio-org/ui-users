@@ -604,6 +604,7 @@ class UserSearch extends React.Component {
       mutator: { financialTransactionsReport },
       intl,
     } = this.props;
+    console.log('SP: ', servicePoint);
     const reportParameters = {
       createdAt: servicePoint.map(s => s.value),
       feeFineOwner,
@@ -624,7 +625,7 @@ class UserSearch extends React.Component {
         const selectedOwner = resources.owners.records.find(({ id }) => id === feeFineOwner);
         const headerData = {
           ...reportParameters,
-          createdAt: reportParameters.createdAt.join(', '),
+          createdAt: servicePoint.map(s => s.label).join(', '),
           feeFineOwner: selectedOwner.owner,
         };
         const reportParams = {

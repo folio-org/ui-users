@@ -45,11 +45,12 @@ class FinancialTransactionsReport {
   }
 
   buildHeader() {
+    console.log(this.headerData);
     return this.formatMessage(
       { id: 'ui-users.reports.financial.header' },
       {
         owner: this.headerData.feeFineOwner,
-        servicePoints: this.headerData.servicePoints,
+        servicePoints: this.headerData.createdAt,
         startDate: this.formatDate(this.headerData.startDate),
         endDate: this.formatDate(this.headerData.endDate) || moment().format('YYYY/MM/DD'), // if no endDate then show date='today'
       }
