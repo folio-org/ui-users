@@ -10,13 +10,13 @@ import {
 } from 'react-intl';
 
 import { stripesShape } from '@folio/stripes/core';
+import { NoValue } from '@folio/stripes/components';
 
 import OpenLoans from '../../OpenLoans';
 import Modals from '../Modals/Modals';
 import OpenLoansSubHeader from '../OpenLoansSubHeader/OpenLoansSubHeader';
 import getListDataFormatter from '../../helpers/getListDataFormatter';
 import { refundClaimReturned } from '../../../../../constants';
-
 
 class OpenLoansWithStaticData extends React.Component {
   static propTypes = {
@@ -184,13 +184,16 @@ class OpenLoansWithStaticData extends React.Component {
     const accounts = get(resources, ['loanAccount', 'records'], []);
     const accountsLoan = accounts.filter(a => a.loanId === loan.id) || [];
     const suspendedStatus = accountsLoan.filter(a => a?.paymentStatus?.name === refundClaimReturned.PAYMENT_STATUS) || [];
+    const decimalCount = 2;
     let amount = 0;
 
     accountsLoan.forEach(a => {
       amount += parseFloat(a.amount);
     });
 
-    if (amount === 0) return '-';
+    if (amount === 0) return <NoValue />;
+
+    amount = amount.toFixed(decimalCount);
 
     return (suspendedStatus.length > 0) ?
       <FormattedMessage id="ui-users.loans.details.accounts.suspended" values={{ amount }} />
