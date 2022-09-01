@@ -417,11 +417,6 @@ class UserSearch extends React.Component {
     history.push('/users/create');
   }
 
-  onChangeIndex = (e) => {
-    const index = e.target.value;
-    this.props.mutator.query.update({ qindex: index });
-  };
-
   shortcuts = [
     {
       name: 'new',
@@ -746,6 +741,7 @@ class UserSearch extends React.Component {
                 filterChanged,
                 searchChanged,
                 resetAll,
+                onChangeSearch,
               }) => {
                 return (
                   <Paneset id={`${idPrefix}-paneset`}>
@@ -769,6 +765,7 @@ class UserSearch extends React.Component {
                                   autoFocus
                                   autoComplete="off"
                                   name="query"
+                                  indexName="qindex"
                                   id="input-user-search"
                                   className={css.searchField}
                                   onChange={(e) => {
@@ -780,8 +777,8 @@ class UserSearch extends React.Component {
                                   }}
                                   value={searchValue.query}
                                   searchableIndexes={searchableIndexes}
-                                  selectedIndex={get(resources.query, 'qindex')}
-                                  onChangeIndex={this.onChangeIndex}
+                                  selectedIndex={searchValue.qindex}
+                                  onChangeIndex={getSearchHandlers().query}
                                   marginBottom0
                                   data-test-user-search-input
                                 />
