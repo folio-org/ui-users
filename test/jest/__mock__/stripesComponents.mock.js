@@ -58,6 +58,9 @@ jest.mock('@folio/stripes/components', () => ({
       <span {...rest} />
     </button>
   )),
+  InfoPopover: jest.fn(({ children, ...rest }) => (
+    <span {...rest}>{children}</span>
+  )),
   KeyValue: jest.fn(({ label, children, value }) => (
     <>
       <span>{label}</span>
