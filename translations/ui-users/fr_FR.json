@@ -278,10 +278,6 @@
     "extended.resetPasswordModal.linkWasSent": "Un lien de réinitialisation du mot de passe a été envoyé à:",
     "extended.resetPasswordModal.linkInstructions": "Si {name} ne reçoit pas d'e-mails de la part de FOLIO, le lien suivant peut être envoyé:",
     "owners.columns.asp": "Points/lieux de service associés",
-    "charge.messageThe": "Le",
-    "charge.messageOf": "Pénalité.s / amende.s de",
-    "charge.messageSuccessfully": "A été avec succès",
-    "charge.messageFor": "Pour",
     "details.columns.transactioninfo": "Informations sur la transaction",
     "details.paneTitle.feeFineDetails": "Détails des frais / amendes",
     "details.label.loanDetails": "Détails du prêt",
@@ -992,5 +988,9 @@
     "charge.feefine.id": "Fee/fine id",
     "charge.amount": "Montant",
     "charge.comment.label": "Commentaires",
-    "errors.permissionChangeFailed": "Permissions were not changed"
+    "errors.permissionChangeFailed": "Permissions were not changed",
+    "charge.message.successfully": "The {feeFineType} fee/fine of <strong>{amount}</strong> has been successfully <strong>{paymentName}</strong> for <strong>{fullName}</strong>",
+    "details.field.barcode.notFound": "{barcode} (not found)",
+    "notes.popupModal.label": "Note utilisateur",
+    "feefines.errors.existOther": "Fee/fine type exists for other Fee/fine owner(s)"
 }

@@ -262,7 +262,10 @@ class UserSearch extends React.Component {
 
     return (
       <>
-        <MenuSection label={intl.formatMessage({ id: 'ui-users.actions' })} id="actions-menu-section">
+        <MenuSection
+          label={intl.formatMessage({ id: 'ui-users.actions' })}
+          id="actions-menu-section"
+        >
           <IfPermission perm="users.item.post,login.item.post,perms.users.item.post">
             <PaneMenu>
               <FormattedMessage id="stripes-smart-components.addNew">
@@ -282,6 +285,22 @@ class UserSearch extends React.Component {
               </FormattedMessage>
             </PaneMenu>
           </IfPermission>
+          <IfPermission perm="ui-users.lost-items.requiring-actual-cost">
+            <Button
+              id="requiring-actual-cost"
+              to="/users/lost-items"
+              buttonStyle="dropdownItem"
+            >
+              <Icon icon="edit">
+                <FormattedMessage id="ui-users.actionMenu.lostItems" />
+              </Icon>
+            </Button>
+          </IfPermission>
+        </MenuSection>
+        <MenuSection
+          label={intl.formatMessage({ id: 'ui-users.reports' })}
+          id="reports-menu-section"
+        >
           <IfInterface name="circulation">
             <IfPermission perm="ui-users.loans.view">
               <Button

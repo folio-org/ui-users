@@ -1,4 +1,5 @@
 import '__mock__';
+import okapiUser from 'fixtures/okapiCurrentUser';
 import {
   accountsMatchStatus,
   checkUserActive,
@@ -9,6 +10,14 @@ import {
   hasAnyLoanItemStatus,
   hasEveryLoanItemStatus,
   getContributors,
+  formatDateAndTime,
+  getServicePointOfCurrentAction,
+  calculateRemainingAmount,
+  validate,
+  getRecordObject,
+  retrieveNoteReferredEntityDataFromLocationState,
+  getClosedRequestStatusesFilterString,
+  getOpenRequestStatusesFilterString
 } from './util';
 
 describe('accountsMatchStatus', () => {
@@ -137,6 +146,19 @@ describe('getFullName', () => {
         firstName,
         middleName,
         lastName,
+      },
+    };
+
+    expect(getFullName(user)).toBe(`${lastName}, ${firstName} ${middleName}`);
+  });
+
+  it('handles empty preferred first name', () => {
+    const user = {
+      personal: {
+        firstName,
+        middleName,
+        lastName,
+        preferredFirstName: '',
       },
     };
 
@@ -287,5 +309,57 @@ describe('getContributors', () => {
     const expectedResult = ['Bond, James', 'Doe, John'];
 
     expect(getContributors(mockedAccount, mockedInstance)).toEqual(expectedResult);
+  });
+  it('formatDateAndTime', () => {
+    const formatterMock = jest.fn();
+    formatDateAndTime('21/02/2022', formatterMock);
+    expect(formatterMock).toHaveBeenCalled();
+  });
+  it('getServicePointOfCurrentAction', () => {
+    const action = {
+      createdAt: '7c5abc9f-f3d7-4856-b8d7-6712462ca007'
+    };
+    const data = getServicePointOfCurrentAction(action, okapiUser.servicePoints);
+    expect(data).toBe('Online');
+  });
+  it('calculateRemainingAmount', () => {
+    const data = calculateRemainingAmount('22.00');
+    expect(data).toBe(22);
+  });
+  it('validate', () => {
+    const data = validate({ value: '22.00' }, 2, [{ value: '21.00' },
+      { value: '23.00' }, { value: '24.00' }], 'value', 'test');
+    expect(data).toStrictEqual({});
+  });
+  it('getRecordObject  ', () => {
+    const resources = {
+      account: {
+        records: []
+      }
+    };
+    const data = getRecordObject(resources, ['account']);
+    expect(data).toStrictEqual({ account: [] });
+  });
+  it('retrieveNoteReferredEntityDataFromLocationState  ', () => {
+    const data = retrieveNoteReferredEntityDataFromLocationState({
+      entityId: 'testId',
+      entityName: 'testName',
+      entityType: 'testType'
+    });
+    expect(data).toStrictEqual({
+      name: 'testName',
+      type: 'testType',
+      id: 'testId',
+    });
+    const data1 = retrieveNoteReferredEntityDataFromLocationState();
+    expect(data1).toBeNull();
+  });
+  it('getClosedRequestStatusesFilterString  ', () => {
+    const data = getClosedRequestStatusesFilterString();
+    expect(data).toStrictEqual('requestStatus.Closed - Pickup expired,requestStatus.Closed - Cancelled,requestStatus.Closed - Filled,requestStatus.Closed - Unfilled');
+  });
+  it('getOpenRequestStatusesFilterString  ', () => {
+    const data = getOpenRequestStatusesFilterString();
+    expect(data).toStrictEqual('requestStatus.Open - Awaiting pickup,requestStatus.Open - Awaiting delivery,requestStatus.Open - In transit,requestStatus.Open - Not yet filled');
   });
 });

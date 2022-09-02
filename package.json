@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "8.1.0",
+  "version": "8.2.0",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -45,7 +45,7 @@
       "feesfines": "16.1 17.0",
       "loan-policy-storage": "1.0 2.0",
       "loan-storage": "4.0 5.0 6.0 7.0",
-      "notes": "2.0",
+      "notes": "2.0 3.0",
       "request-storage": "2.5 3.0 4.0"
     },
     "permissionSets": [
@@ -834,6 +834,17 @@
           "ui-users.view",
           "feefine-reports.refund.post",
           "owners.collection.get"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.lost-items.requiring-actual-cost",
+        "displayName": "Users: Can process lost items requiring actual cost",
+        "subPermissions": [
+          "ui-users.view",
+          "ui-users.loans.view",
+          "ui-users.feesfines.actions.all",
+          "ui-inventory.instance.view"
         ],
         "visible": true
       }

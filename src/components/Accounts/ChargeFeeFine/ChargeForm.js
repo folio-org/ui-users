@@ -22,6 +22,7 @@ import { effectiveCallNumber } from '@folio/stripes/util';
 import UserInfo from './UserInfo';
 import FeeFineInfo from './FeeFineInfo';
 import ItemInfo from './ItemInfo';
+import { SHARED_OWNER } from '../../../constants';
 
 function showValidationErrors({ feeFineId, ownerId, amount }) {
   const errors = {};
@@ -55,7 +56,6 @@ class ChargeForm extends React.Component {
     feefines: PropTypes.arrayOf(PropTypes.object),
     form: PropTypes.object.isRequired,
     onClickCancel: PropTypes.func,
-    onClose: PropTypes.func,
     onChangeOwner: PropTypes.func.isRequired,
     onChangeFeeFine: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
@@ -94,7 +94,7 @@ class ChargeForm extends React.Component {
     const { owners: prevOwners } = prevProps;
 
     if (prevOwners !== owners) {
-      const shared = (owners.find(o => o.owner === 'Shared') || {}).id;
+      const shared = (owners.find(o => o.owner === SHARED_OWNER) || {}).id;
       onFindShared(shared);
     }
   }
@@ -106,12 +106,16 @@ class ChargeForm extends React.Component {
     } = this.props;
 
     if (e?.target?.value) {
-      this.props.onChangeFeeFine(e);
-
       const feeFineId = e.target.value;
       const feefine = feefines.find(f => f.id === feeFineId) || {};
-      const defaultAmount = parseFloat(feefine.defaultAmount || 0).toFixed(2);
+      const owner = this.props.owners.find(o => o.id === feefine.ownerId) || {};
 
+      const defaultAmount = parseFloat(feefine.defaultAmount || 0).toFixed(2);
+      let showNotify = false;
+      if (feefine?.chargeNoticeId || owner?.defaultChargeNoticeId) {
+        showNotify = true;
+      }
+      change('notify', showNotify);
       change('feeFineId', feefine.id);
       change('amount', defaultAmount);
     }
@@ -120,15 +124,14 @@ class ChargeForm extends React.Component {
   onChangeOwner(ownerId) {
     const { form: { change, reset } } = this.props;
     reset();
-
     this.props.onChangeOwner(ownerId);
+    let showNotify = false;
+    const owner = this.props.owners.find(o => o.id === ownerId) || {};
+    if (owner?.defaultChargeNoticeId) {
+      showNotify = true;
+    }
+    change('notify', showNotify);
     change('ownerId', ownerId);
-  }
-
-  onClose = () => {
-    const { onClose, form: { reset } } = this.props;
-    onClose();
-    reset();
   }
 
   goToAccounts = () => {
@@ -186,7 +189,7 @@ class ChargeForm extends React.Component {
     const ownerOptions = [];
 
     this.props.owners.forEach((own = {}) => {
-      if (own.owner !== 'Shared') ownerOptions.push({ label: own.owner, value: own.id });
+      if (own.owner !== SHARED_OWNER) ownerOptions.push({ label: own.owner, value: own.id });
     });
 
     feeFineTypeOptions.forEach((feefineItem) => {
@@ -210,12 +213,11 @@ class ChargeForm extends React.Component {
         id="new-modal"
         open
         label={<FormattedMessage id="ui-users.charge.title" />}
-        onClose={this.onClose}
+        onClose={this.goToAccounts}
         size="medium"
         dismissible
       >
         <UserInfo user={user} />
-        <br />
         <form
           onSubmit={handleSubmit}
           id="feeFineChargeForm"
@@ -230,12 +232,11 @@ class ChargeForm extends React.Component {
             onChangeFeeFine={this.onChangeFeeFine}
             feefineList={feefineList}
           />
-          <br />
           <ItemInfo {...this.props} item={item} onClickSelectItem={this.props.onClickSelectItem} editable={editable} />
-          <br />
           <h4 className="marginTopHalf"><FormattedMessage id="ui-users.charge.comment" /></h4>
           <Row>
-            <Col xs={12} sm={10} md={7} lg={5}>
+            <Col xs={12}>
+
               <Field
                 id="comments"
                 name="comments"
@@ -259,17 +260,16 @@ class ChargeForm extends React.Component {
               </Col>
             </Row>
           </div>
-            }
-          <br />
+          }
           {notify && showNotify &&
           <div>
             <Row>
-              <Col xs>
+              <Col xs={12}>
                 <h4 className="marginTopHalf"><FormattedMessage id="ui-users.accounts.infoPatron" /></h4>
               </Col>
             </Row>
             <Row>
-              <Col xs={12} sm={10} md={7} lg={5}>
+              <Col xs>
                 <Field
                   name="patronInfo"
                   component={TextArea}
@@ -277,13 +277,13 @@ class ChargeForm extends React.Component {
               </Col>
             </Row>
           </div>
-            }
+          }
 
           <Row end="xs">
             <Col>
               <Button
                 id="cancelCharge"
-                onClick={this.onClose}
+                onClick={this.goToAccounts}
                 marginBottom0
               >
                 <FormattedMessage id="ui-users.feefines.modal.cancel" />
@@ -314,7 +314,6 @@ class ChargeForm extends React.Component {
           </Row>
         </form>
       </Modal>
-
     );
   }
 }
