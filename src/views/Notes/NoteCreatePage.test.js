@@ -1,5 +1,6 @@
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
+import { NoteCreatePage } from '@folio/stripes/smart-components';
 import NoteCreateRoute from './NoteCreatePage';
 import { retrieveNoteReferredEntityDataFromLocationState } from '../../components/util';
 
@@ -48,14 +49,13 @@ const renderNoteCreateRoute = (props) => render(
 
 describe('Note Create Route', () => {
   describe('should render Note Create Page', () => {
-    it('should hold appropriate values for referredRecordData', () => {
-      const referredRecordData = retrieveNoteReferredEntityDataFromLocationState(location.state);
-      const expectedObject = {
-        name: 'rick, psych',
-        type: 'user',
-        id: '2205005b-ca51-4a04-87fd-938eefa8f6de',
+    it('should pass wel defined referredEntityData prop to NoteCreatePage when location.state is defined', () => {
+      const props = {
+        history,
+        location
       };
-      expect(referredRecordData).toMatchObject(expectedObject);
+      renderNoteCreateRoute(props);
+      expect(NoteCreatePage.mock.calls[0][0].referredEntityData).toEqual(retrieveNoteReferredEntityDataFromLocationState(props.location.state));
     });
     it('should render Note Create Page', async () => {
       const { getByText } = renderNoteCreateRoute({
@@ -67,10 +67,6 @@ describe('Note Create Route', () => {
     });
   });
   describe('should not render Note Create Page', () => {
-    it('should hold appropriate values for referredRecordData', () => {
-      const referredRecordData = retrieveNoteReferredEntityDataFromLocationState('');
-      expect(referredRecordData).toBeNull();
-    });
     it('should render Note Create Page', async () => {
       const { getByText } = renderNoteCreateRoute({
         history: {
