@@ -32,7 +32,6 @@
 * Allow fee/fine to be cancelled if remaining balance equals billed amount. Refs UIU-2609.
 * Unpin `moment` from `~2.24.0` and move it to peer. Refs UIU-1900.
 * Create Jest/RTL test for OpenLoansSubHeader.js. Refs UIU-2340.
-* create Jest/RTL test for NoteCreatePage.js. Refs UIU-2423.
 
 ## [8.0.0](https://github.com/folio-org/ui-users/tree/v8.0.0) (2022-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v7.1.0...v8.0.0)
