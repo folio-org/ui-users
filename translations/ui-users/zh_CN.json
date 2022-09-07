@@ -167,7 +167,7 @@
     "feefines.errors.amountNumeric": "默认金额必须为数字",
     "feefines.errors.amountPositive": "默认金额必须为正数",
     "feefines.errors.exist": "费用/罚款类型存在",
-    "feefines.errors.existShared": "其他交费处存在费用/罚款类型",
+    "feefines.errors.existShared": "共享缴费处存在费用/罚款类型",
     "feefines.modal.error": "选择一个以继续",
     "feefines.modal.yes": "是",
     "feefines.modal.no": "否",
@@ -581,7 +581,7 @@
     "feefines.errors.reservedName": "费用/罚款类型已经作为自动费用/罚款存在",
     "accounts.payment.error.select": "缴费处不存在支付方法",
     "accounts.waive.error.select": "豁免理由不存在",
-    "accounts.transfer.error.select": "缴费处不存在转移帐户",
+    "accounts.transfer.error.select": "缴费处不存在转移账户",
     "settings.patronBlocks": "读者冻结",
     "settings.conditions": "条件",
     "settings.block.borrowing": "冻结借阅",
@@ -991,6 +991,10 @@
     "errors.permissionChangeFailed": "权限未更改",
     "charge.message.successfully": "<strong> {amount} </strong>的{feeFineType}费用/罚款已成功为<strong> {fullName} </strong> <strong> {paymentName}  </strong>",
     "details.field.barcode.notFound": "{barcode} （未找到）",
-    "notes.popupModal.label": "User note",
-    "feefines.errors.existOther": "Fee/fine type exists for other Fee/fine owner(s)"
+    "notes.popupModal.label": "用户附注",
+    "feefines.errors.existOther": "其他缴费处存在费用/罚款类型",
+    "reports": "报告",
+    "actionMenu.lostItems": "需要实际费用的遗失单件",
+    "lostItems.message.noAccessToActualCostPage": "用户无权访问“需要实际费用的遗失单价”处理页面",
+    "permission.lost-items.requiring-actual-cost": "用户：可以处理需要实际费用的遗失单件"
 }
