@@ -14,7 +14,7 @@
 * Modify error message when a Fee/Fine Owner enters a Fee/Fine Type that is duplicated by "Shared" Fee/Fine Owner. Refs UIU-2560.
 * Correctly import from `stripes/core` not `stripes-core`. Refs UIU-2642.
 * Create permission for "Lost items requiring actual costs" processing page. Refs UIU-2491.
-* Add selected actual service points to "Financial Transaction Detail Report" title line. Refs - UIU-2666.
+* Add selected actual service points to "Financial Transaction Detail Report" title line. Refs UIU-2666.
 
 ## [8.1.0](https://github.com/folio-org/ui-users/tree/v8.1.0) (2022-06-27)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.0.0...v8.1.0)
