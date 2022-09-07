@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import {
   injectIntl,
   FormattedMessage,
+  FormattedNumber,
 } from 'react-intl';
 
 import { stripesShape } from '@folio/stripes/core';
@@ -184,7 +185,6 @@ class OpenLoansWithStaticData extends React.Component {
     const accounts = get(resources, ['loanAccount', 'records'], []);
     const accountsLoan = accounts.filter(a => a.loanId === loan.id) || [];
     const suspendedStatus = accountsLoan.filter(a => a?.paymentStatus?.name === refundClaimReturned.PAYMENT_STATUS) || [];
-    const decimalCount = 2;
     let amount = 0;
 
     accountsLoan.forEach(a => {
@@ -193,7 +193,7 @@ class OpenLoansWithStaticData extends React.Component {
 
     if (amount === 0) return <NoValue />;
 
-    amount = amount.toFixed(decimalCount);
+    amount = <FormattedNumber value={amount} minimumFractionDigits={2} />;
 
     return (suspendedStatus.length > 0) ?
       <FormattedMessage id="ui-users.loans.details.accounts.suspended" values={{ amount }} />
