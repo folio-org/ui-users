@@ -45,7 +45,6 @@ class FinancialTransactionsReport {
   }
 
   buildHeader() {
-    console.log(this.headerData);
     return this.formatMessage(
       { id: 'ui-users.reports.financial.header' },
       {

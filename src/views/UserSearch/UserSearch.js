@@ -604,7 +604,6 @@ class UserSearch extends React.Component {
       mutator: { financialTransactionsReport },
       intl,
     } = this.props;
-    console.log('SP: ', servicePoint);
     const reportParameters = {
       createdAt: servicePoint.map(s => s.value),
       feeFineOwner,
