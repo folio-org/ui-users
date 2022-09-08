@@ -836,6 +836,17 @@
           "owners.collection.get"
         ],
         "visible": true
+      },
+      {
+        "permissionName": "ui-users.lost-items.requiring-actual-cost",
+        "displayName": "Users: Can process lost items requiring actual cost",
+        "subPermissions": [
+          "ui-users.view",
+          "ui-users.loans.view",
+          "ui-users.feesfines.actions.all",
+          "ui-inventory.instance.view"
+        ],
+        "visible": true
       }
     ]
   },
