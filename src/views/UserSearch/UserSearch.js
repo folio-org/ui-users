@@ -596,7 +596,7 @@ class UserSearch extends React.Component {
     const {
       startDate,
       endDate,
-      servicePoint,
+      servicePoint: servicePoints,
       feeFineOwner,
     } = data;
     const {
@@ -605,7 +605,7 @@ class UserSearch extends React.Component {
       intl,
     } = this.props;
     const reportParameters = {
-      createdAt: servicePoint.map(s => s.value),
+      createdAt: servicePoints.map(servicePoint => servicePoint.value),
       feeFineOwner,
       startDate,
       endDate,
@@ -624,7 +624,7 @@ class UserSearch extends React.Component {
         const selectedOwner = resources.owners.records.find(({ id }) => id === feeFineOwner);
         const headerData = {
           ...reportParameters,
-          createdAt: reportParameters.createdAt.join(', '),
+          createdAt: servicePoints.map(servicePoint => servicePoint.label).join(', '),
           feeFineOwner: selectedOwner.owner,
         };
         const reportParams = {
