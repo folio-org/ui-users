@@ -118,9 +118,9 @@ class EditUserInfo extends React.Component {
       settings
     } = this.props;
 
-    const useGeneratorForBarcode = JSON.parse(
-      (settings.find(sett => sett.configName === 'number_generator') ?? { value: '{}' }).value
-    )?.useGeneratorForBarcode ?? true;
+
+    const numberGeneratorSettings = JSON.parse((settings?.find(sett => sett.configName === 'number_generator') ?? { value: '{}' }).value);
+    const barcodeGeneratorSetting = numberGeneratorSettings?.barcodeGeneratorSetting;
 
     const { barcode } = initialValues;
 
@@ -317,7 +317,7 @@ class EditUserInfo extends React.Component {
               <Row>
                 <Col xs={12}>
                   <Field
-                    disabled={useGeneratorForBarcode}
+                    disabled={barcodeGeneratorSetting === 'useGenerator'}
                     label={<FormattedMessage id="ui-users.information.barcode" />}
                     name="barcode"
                     id="adduser_barcode"
@@ -326,7 +326,10 @@ class EditUserInfo extends React.Component {
                     fullWidth
                   />
                 </Col>
-                {useGeneratorForBarcode &&
+                {(
+                  barcodeGeneratorSetting === 'useGenerator' ||
+                  barcodeGeneratorSetting === 'useBoth'
+                ) &&
                   <Col xs={12}>
                     <NumberGeneratorModalButton
                       callback={(generated) => change('barcode', generated)}

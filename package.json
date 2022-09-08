@@ -847,6 +847,14 @@
           "ui-inventory.instance.view"
         ],
         "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.numberGenerator.manage",
+        "displayName": "Settings (Users): Manage number generator options",
+        "subPermissions": [
+          "settings.users.enabled"
+        ],
+        "visible": true
       }
     ]
   },

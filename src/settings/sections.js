@@ -48,7 +48,8 @@ const settingsGeneral = [
   {
     route: 'numbergeneratoroptions',
     label: <FormattedMessage id="ui-users.settings.numberGeneratorOptions" />,
-    component: NumberGeneratorOptions
+    component: NumberGeneratorOptions,
+    perm: 'ui-users.settings.numberGenerator.manage'
   },
   //   Profile pictures are currently unsupported in Folio and the existence of this setting has
   //   confused implementers. Commenting out for now as opposed to deleting it so the existing

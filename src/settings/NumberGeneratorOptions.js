@@ -6,7 +6,7 @@ import { Field } from 'react-final-form';
 import { stripesConnect, withStripes } from '@folio/stripes/core';
 import { ConfigManager } from '@folio/stripes/smart-components';
 
-import { Checkbox, Col, Row } from '@folio/stripes-components';
+import { Col, RadioButton, Row } from '@folio/stripes-components';
 
 class NumberGeneratorOptions extends React.Component {
   static propTypes = {
@@ -52,11 +52,28 @@ class NumberGeneratorOptions extends React.Component {
         <Row>
           <Col xs={12}>
             <Field
-              component={Checkbox}
-              type="checkbox"
-              id="useGeneratorForBarcode"
-              name="useGeneratorForBarcode"
+              component={RadioButton}
+              id="useGenerator"
+              name="barcodeGeneratorSetting"
               label={<FormattedMessage id="ui-users.settings.numberGeneratorOptions.useGeneratorForBarcode" />}
+              type="radio"
+              value="useGenerator"
+            />
+            <Field
+              component={RadioButton}
+              id="useTextField"
+              name="barcodeGeneratorSetting"
+              label={<FormattedMessage id="ui-users.settings.numberGeneratorOptions.useTextFieldForBarcode" />}
+              type="radio"
+              value="useTextField"
+            />
+            <Field
+              component={RadioButton}
+              id="useBoth"
+              name="barcodeGeneratorSetting"
+              label={<FormattedMessage id="ui-users.settings.numberGeneratorOptions.useBothForBarcode" />}
+              type="radio"
+              value="useBoth"
             />
           </Col>
         </Row>
