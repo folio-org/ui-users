@@ -7,16 +7,17 @@ import PropTypes from 'prop-types';
 import {
   injectIntl,
   FormattedMessage,
+  FormattedNumber,
 } from 'react-intl';
 
 import { stripesShape } from '@folio/stripes/core';
+import { NoValue } from '@folio/stripes/components';
 
 import OpenLoans from '../../OpenLoans';
 import Modals from '../Modals/Modals';
 import OpenLoansSubHeader from '../OpenLoansSubHeader/OpenLoansSubHeader';
 import getListDataFormatter from '../../helpers/getListDataFormatter';
 import { refundClaimReturned } from '../../../../../constants';
-
 
 class OpenLoansWithStaticData extends React.Component {
   static propTypes = {
@@ -190,7 +191,9 @@ class OpenLoansWithStaticData extends React.Component {
       amount += parseFloat(a.amount);
     });
 
-    if (amount === 0) return '-';
+    if (amount === 0) return <NoValue />;
+
+    amount = <FormattedNumber value={amount} minimumFractionDigits={2} />;
 
     return (suspendedStatus.length > 0) ?
       <FormattedMessage id="ui-users.loans.details.accounts.suspended" values={{ amount }} />
