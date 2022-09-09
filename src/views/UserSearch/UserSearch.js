@@ -741,7 +741,6 @@ class UserSearch extends React.Component {
                 filterChanged,
                 searchChanged,
                 resetAll,
-                onChangeSearch,
               }) => {
                 return (
                   <Paneset id={`${idPrefix}-paneset`}>
