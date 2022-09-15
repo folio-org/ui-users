@@ -6,7 +6,7 @@ import { Field } from 'react-final-form';
 import { stripesConnect, withStripes } from '@folio/stripes/core';
 import { ConfigManager } from '@folio/stripes/smart-components';
 
-import { Col, RadioButton, Row } from '@folio/stripes-components';
+import { Col, RadioButton, Row } from '@folio/stripes/components';
 
 class NumberGeneratorOptions extends React.Component {
   static propTypes = {
@@ -19,7 +19,7 @@ class NumberGeneratorOptions extends React.Component {
   }
 
   defaultValues = {
-    useGeneratorForBarcode: true
+    barcodeGeneratorSetting: 'useTextField'
   };
 
   beforeSave(data) {
