@@ -8,6 +8,10 @@ import '__mock__/stripesComponents.mock';
 import renderWithRouter from 'helpers/renderWithRouter';
 import EditUserInfo from './EditUserInfo';
 
+jest.mock('@folio/service-interaction', () => ({
+  NumberGeneratorModalButton: () => <div>NumberGeneratorModalButton</div>
+}));
+
 const onSubmit = jest.fn();
 
 const arrayMutators = {

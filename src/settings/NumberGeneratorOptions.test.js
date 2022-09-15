@@ -14,10 +14,9 @@ jest.unmock('@folio/stripes/components');
 const renderNumberGeneratorSettings = (props) => renderWithRouter(<NumberGeneratorOptions {...props} />);
 
 describe('Number generator settings', () => {
-  it('renders all options', () => {
+  it('renders', () => {
     renderNumberGeneratorSettings();
-    expect(screen.getByText('Use number generator for user barcode.')).toBeTruthy();
-    expect(screen.getByText('Use text field for user barcode.')).toBeTruthy();
-    expect(screen.getByText('Use number generator for user barcode but allow editing via text field.')).toBeTruthy();
+
+    expect(screen.getByTestId('config-manager')).toBeTruthy();
   });
 });
