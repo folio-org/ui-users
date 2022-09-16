@@ -36,6 +36,7 @@ class EditUserInfo extends React.Component {
     patronGroups: PropTypes.arrayOf(PropTypes.object),
     settings: PropTypes.arrayOf(PropTypes.object),
     stripes: PropTypes.shape({
+      hasInterface: PropTypes.func.isRequired,
       timezone: PropTypes.string.isRequired,
       store: PropTypes.shape({
         dispatch: PropTypes.func.isRequired,
@@ -115,12 +116,15 @@ class EditUserInfo extends React.Component {
       intl,
       uniquenessValidator,
       form: { change },
-      settings
+      settings,
+      stripes
     } = this.props;
 
-
-    const numberGeneratorSettings = JSON.parse((settings?.find(sett => sett.configName === 'number_generator') ?? { value: '{}' }).value);
-    const barcodeGeneratorSetting = numberGeneratorSettings?.barcodeGeneratorSetting;
+    let barcodeGeneratorSetting = 'useTextField';
+    if (stripes.hasInterface('servint')) {
+      const numberGeneratorSettings = JSON.parse((settings?.find(sett => sett.configName === 'number_generator') ?? { value: '{}' }).value);
+      barcodeGeneratorSetting = numberGeneratorSettings?.barcodeGeneratorSetting ?? 'useTextField';
+    }
 
     const { barcode } = initialValues;
 
