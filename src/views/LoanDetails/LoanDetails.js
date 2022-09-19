@@ -320,6 +320,14 @@ class LoanDetails extends React.Component {
     });
   }
 
+  getPageTitle = (loanDetails) => {
+    const { user, patronGroup } = this.props;
+
+    return (user ?
+      `${loanDetails} - ${getFullName(user)} (${upperFirst(patronGroup.group)})` :
+      loanDetails);
+  }
+
   render() {
     const {
       loan,
@@ -363,7 +371,7 @@ class LoanDetails extends React.Component {
             onClose={this.handleClose}
             paneTitle={(
               <FormattedMessage id="ui-users.loans.loanDetails">
-                {(loanDetails) => `${loanDetails} - ${getFullName(user)} (${upperFirst(patronGroup.group)})`}
+                {this.getPageTitle}
               </FormattedMessage>
             )}
           >
@@ -390,7 +398,9 @@ class LoanDetails extends React.Component {
       source: la => {
         return la.user ?
           <Link to={`/users/view/${la.user?.id}`}>{getFullName(la.user)}</Link> :
-          <FormattedMessage id="ui-users.loans.action.source.system" />;
+          user ?
+            <FormattedMessage id="ui-users.loans.action.source.system" /> :
+            <NoValue />;
       },
       comments: ({ actionComment }) => (actionComment || '-'),
     };
@@ -440,7 +450,7 @@ class LoanDetails extends React.Component {
       </p>
     );
     const patronBlocksForModal = getRenewalPatronBlocksFromPatronBlocks(patronBlocks);
-    const isUserActive = checkUserActive(user);
+    const isUserActive = user ? checkUserActive(user) : false;
 
     return (
       <div data-test-loan-actions-history>
@@ -452,7 +462,7 @@ class LoanDetails extends React.Component {
             onClose={this.handleClose}
             paneTitle={(
               <FormattedMessage id="ui-users.loans.loanDetails">
-                {(loanDetails) => `${loanDetails} - ${getFullName(user)} (${upperFirst(patronGroup.group)})`}
+                {this.getPageTitle}
               </FormattedMessage>
           )}
           >

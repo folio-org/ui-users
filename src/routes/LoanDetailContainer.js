@@ -4,9 +4,15 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { concat } from 'lodash';
 import { stripesConnect, withStripes } from '@folio/stripes/core';
+import { Callout } from '@folio/stripes/components';
 import { LoanDetails } from '../views';
 
 class LoanDetailContainer extends React.Component {
+  constructor(props) {
+    super(props);
+    this.calloutRef = React.createRef();
+  }
+
   static manifest = Object.freeze({
     modified: {},
     users: {
@@ -32,6 +38,9 @@ class LoanDetailContainer extends React.Component {
         const { path } = action.meta;
         return refresh || (path && path.match(/link/));
       },
+      fetch: false,
+      accumulate: 'true',
+      throwErrors: false,
     },
     patronGroups: {
       type: 'okapi',
@@ -134,6 +143,21 @@ class LoanDetailContainer extends React.Component {
         loanid: PropTypes.string,
       })
     }),
+    mutator: PropTypes.shape({
+      selUser: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+      }),
+    }).isRequired,
+  }
+
+  componentDidMount() {
+    this.props.mutator.selUser.GET()
+      .catch(() => {
+        this.calloutRef.current.sendCallout({
+          type: 'error',
+          message: 'User is not found', // temporary message
+        });
+      });
   }
 
   getLoan = () => {
@@ -196,6 +220,13 @@ class LoanDetailContainer extends React.Component {
       // this.props.mutator.loanActionsWithUser.replace({ records });
       return records;
     }
+    if ((loanActions && loanActions.records.length > 0) && (users && users.records.length === 0)) {
+      const records = loanActions.records
+        .filter(loanAction => loanAction?.loan?.action)
+        .map(loanAction => loanAction.loan);
+
+      return records;
+    }
     return [];
   }
 
@@ -210,12 +241,15 @@ class LoanDetailContainer extends React.Component {
     const loan = this.getLoan();
     const user = this.getUser();
 
+    const isUser = user === null ? false : !user;
+    const isUserId = user === null ? false : loan?.userId !== user?.id;
+
     return !loanActions.hasLoaded ||
       !loanHistory.hasLoaded ||
       !users.hasLoaded ||
       !loan ||
-      !user ||
-      loan?.userId !== user?.id;
+      isUser ||
+      isUserId;
   }
 
   render() {
@@ -234,18 +268,21 @@ class LoanDetailContainer extends React.Component {
     );
 
     return (
-      <LoanDetails
-        loans={isEmpty(loan) ? [] : [loan]}
-        loanActionsWithUser={loanActionsWithUser}
-        loan={loan}
-        loanAccountActions={this.getLoanAccountActions()}
-        loanIsMissing={isEmpty(loan) && loanHistory.hasLoaded}
-        user={this.getUser()}
-        patronGroup={this.getPatronGroup()}
-        patronBlocks={this.getPatronBlocks()}
-        isLoading={this.isLoading()}
-        {...this.props}
-      />
+      <>
+        <LoanDetails
+          loans={isEmpty(loan) ? [] : [loan]}
+          loanActionsWithUser={loanActionsWithUser}
+          loan={loan}
+          loanAccountActions={this.getLoanAccountActions()}
+          loanIsMissing={isEmpty(loan) && loanHistory.hasLoaded}
+          user={this.getUser()}
+          patronGroup={this.getPatronGroup()}
+          patronBlocks={this.getPatronBlocks()}
+          isLoading={this.isLoading()}
+          {...this.props}
+        />
+        <Callout ref={this.calloutRef} />
+      </>
     );
   }
 }
