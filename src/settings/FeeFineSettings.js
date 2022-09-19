@@ -342,6 +342,7 @@ class FeeFineSettings extends React.Component {
         validate={this.validate}
         visibleFields={['feeFineType', 'defaultAmount', 'chargeNoticeId', 'actionNoticeId']}
         formType="final-form"
+        shouldReinitialize
       />
     );
   }
