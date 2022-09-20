@@ -13,9 +13,10 @@ import {
   Headline,
 } from '@folio/stripes/components';
 import { IfPermission } from '@folio/stripes/core';
+
 import { withFormValues } from '../../Wrappers';
 import asyncValidateField from '../../validators/asyncValidateField';
-import validateBirthday from '../../validators/validateBirthday';
+import validateBirthday from '../../validators/validateBirthdate';
 import {
   addressTypesShape,
   departmentsShape,
