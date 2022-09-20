@@ -64,12 +64,12 @@ class LoanActionDialog extends React.Component {
     const errorModal =
       this.state?.errorMessage === NO_FEE_FINE_OWNER_FOUND_MESSAGE
         ? <ErrorModal
-            label={<FormattedMessage id="ui-users.feefines.errors.notBilledTitle" />}
-            open={!!this.state.errorMessage}
-            message={informativeErrorMessage}
-            dismissible={false}
-            footer={footer}
-            onClose={this.clearErrorMessage}
+          label={<FormattedMessage id="ui-users.feefines.errors.notBilledTitle" />}
+          open={!!this.state.errorMessage}
+          message={informativeErrorMessage}
+          dismissible={false}
+          footer={footer}
+          onClose={this.clearErrorMessage}
         />
         : null;
 
