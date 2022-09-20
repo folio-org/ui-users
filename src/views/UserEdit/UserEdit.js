@@ -269,15 +269,11 @@ class UserEdit extends React.Component {
     // wants an array of permission names.
     const permissionNames = Object.values(perms).map(p => p.permissionName);
 
-    // Check if permissions exist on the perms record
-    // https://issues.folio.org/browse/UIU-2672
-    const permissionsExist = permUserRecords?.records?.[0]?.permissions?.length > 0;
-
     // If the user record has never had any associated permissions, a user permissions
     // record may not exist. The PUT operation will fail if that's the case; thus,
     // if no record is found, one has to be created before we assign the permissions
     // as the last step.
-    if (permissionsExist) {
+    if (permUserRecords.records.length === 1) {
       const record = permUserRecords.records[0];
 
       // N.B. permUserId is the id of the *permissions user* record, not the regular
@@ -296,6 +292,7 @@ class UserEdit extends React.Component {
       // Create a new permissions user record first
       await permUserMutator.POST({ userId }).then(record => {
         record.permissions = permissionNames;
+        permUserId.replace(record.id);
         permissionsMutator
           .PUT(record)
           .catch((e) => showErrorCallout(e, this.context.sendCallout));
