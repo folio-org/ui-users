@@ -895,7 +895,8 @@ class UserSearch extends React.Component {
             />
           )}
         </div>
-      </HasCommand>);
+      </HasCommand>
+    );
   }
 }
 
