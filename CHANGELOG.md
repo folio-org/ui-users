@@ -18,6 +18,7 @@
 * Add selected actual service points to "Financial Transaction Detail Report" title line. Refs UIU-2666.
 * Fix issue with Qindex select automatically triggering the search on change. Refs UIU-2665.
 * create Jest/RTL test for NoteEditPage.js. Refs UIU-2424
+* Make visible loan history for deleted users. UIU-2659.
 
 ## [8.1.0](https://github.com/folio-org/ui-users/tree/v8.1.0) (2022-06-27)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.0.0...v8.1.0)

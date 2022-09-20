@@ -5,6 +5,7 @@ import { compose } from 'redux';
 import { concat } from 'lodash';
 import { stripesConnect, withStripes } from '@folio/stripes/core';
 import { Callout } from '@folio/stripes/components';
+import { FormattedMessage } from 'react-intl';
 import { LoanDetails } from '../views';
 
 class LoanDetailContainer extends React.Component {
@@ -155,7 +156,7 @@ class LoanDetailContainer extends React.Component {
       .catch(() => {
         this.calloutRef.current.sendCallout({
           type: 'error',
-          message: 'User is not found', // temporary message
+          message: <FormattedMessage id="ui-users.errors.userNotFound" />,
         });
       });
   }
