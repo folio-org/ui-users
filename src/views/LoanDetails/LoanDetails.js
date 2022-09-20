@@ -95,6 +95,7 @@ class LoanDetails extends React.Component {
     match: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
+    showErrorCallout: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -345,6 +346,7 @@ class LoanDetails extends React.Component {
       declarationInProgress,
       loanIsMissing,
       isLoading,
+      showErrorCallout,
     } = this.props;
 
     const {
@@ -558,6 +560,7 @@ class LoanDetails extends React.Component {
               <Col xs={2}>
                 <LoanProxyDetails
                   id={loan.proxyUserId}
+                  showErrorCallout={showErrorCallout}
                 />
               </Col>
             </Row>

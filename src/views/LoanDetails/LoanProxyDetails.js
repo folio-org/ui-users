@@ -11,6 +11,9 @@ class LoanProxyDetails extends React.Component {
     proxy: {
       type: 'okapi',
       path: 'users/!{id}',
+      fetch: false,
+      accumulate: 'true',
+      throwErrors: false,
     },
   });
 
@@ -21,6 +24,21 @@ class LoanProxyDetails extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }),
+    mutator: PropTypes.shape({
+      proxy: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+      }),
+    }).isRequired,
+    showErrorCallout: PropTypes.func.isRequired,
+  }
+
+  componentDidMount() {
+    if (this.props.id) {
+      this.props.mutator.proxy.GET()
+        .catch(() => {
+          this.props.showErrorCallout('ui-users.errors.proxyBorrowerNotFound');
+        });
+    }
   }
 
   getUserFullName() {
@@ -29,7 +47,7 @@ class LoanProxyDetails extends React.Component {
       return <Link to={`/users/view/${this.props.id}`}>{getFullName(proxy[0])}</Link>;
     }
 
-    return this.props.id;
+    return <FormattedMessage id="ui-users.user.unknown" />;
   }
 
   render() {

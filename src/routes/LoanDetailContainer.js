@@ -154,10 +154,7 @@ class LoanDetailContainer extends React.Component {
   componentDidMount() {
     this.props.mutator.selUser.GET()
       .catch(() => {
-        this.calloutRef.current.sendCallout({
-          type: 'error',
-          message: <FormattedMessage id="ui-users.errors.userNotFound" />,
-        });
+        this.showErrorCallout('ui-users.errors.userNotFound');
       });
   }
 
@@ -253,6 +250,13 @@ class LoanDetailContainer extends React.Component {
       isUserId;
   }
 
+  showErrorCallout = (messageId) => {
+    this.calloutRef.current.sendCallout({
+      type: 'error',
+      message: <FormattedMessage id={messageId} />,
+    });
+  }
+
   render() {
     const {
       resources: {
@@ -280,6 +284,7 @@ class LoanDetailContainer extends React.Component {
           patronGroup={this.getPatronGroup()}
           patronBlocks={this.getPatronBlocks()}
           isLoading={this.isLoading()}
+          showErrorCallout={this.showErrorCallout}
           {...this.props}
         />
         <Callout ref={this.calloutRef} />

@@ -1,7 +1,6 @@
 {
   "user": "User",
   "user.pluralized": "{count} {count, plural, one {user} other {users}}",
-  "user.unknown": "Unknown user",
   "meta.title": "Users",
   "appMenu.keyboardShortcuts": "Keyboard shortcuts",
   "shortcut.createRecord": "Create a new record",
@@ -59,6 +58,7 @@
   "data.loanActionMap.checkedInFoundByLibrary": "Checked in (found by library)",
   "data.loanActionMap.itemAgedToLost": "Aged to lost",
   "data.loanActionMap.unknownAction": "Unknown action",
+  "user.unknown": "Unknown user",
   "action": "Action",
   "actionMenu.lostItems": "Lost items requiring actual cost",
   "dueDate": "Due date",
@@ -343,6 +343,7 @@
   "errors.reviewBeforeRenewal": "{message} Please review {policyName} before retrying renewal.",
   "errors.loanNotRenewedReason": "Loan cannot be renewed because: {message}.",
   "errors.userNotFound": "User not found",
+  "errors.proxyBorrowerNotFound": "Proxy borrower not found",
   "errors.permissionChangeFailed": "Permissions were not changed",
   "hide": "Hide",
   "show": "Show",
