@@ -1,4 +1,6 @@
 import { FormattedMessage } from 'react-intl';
+import PropTypes from 'prop-types';
+
 import { IfPermission } from '@folio/stripes/core';
 import { Button, Icon } from '@folio/stripes/components';
 
@@ -57,6 +59,17 @@ const ActionMenuEditButton = ({ id, suppressEdit, onToggle, goToEdit, editButton
   }
 
   return button;
+};
+
+ActionMenuEditButton.propTypes = {
+  editButton: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.instanceOf(Element) })
+  ]),
+  id: PropTypes.string,
+  goToEdit: PropTypes.func,
+  onToggle: PropTypes.func,
+  suppressEdit: PropTypes.bool,
 };
 
 export default ActionMenuEditButton;

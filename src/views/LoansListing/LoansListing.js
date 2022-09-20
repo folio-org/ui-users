@@ -140,7 +140,8 @@ class LoansListing extends React.Component {
               (<ClosedLoans {...this.props} loans={loans} />)
           }
         </Pane>
-      </Paneset>);
+      </Paneset>
+    );
   }
 }
 

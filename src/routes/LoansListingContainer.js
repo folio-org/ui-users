@@ -143,7 +143,8 @@ class LoansListingContainer extends React.Component {
         loansHistory={loansHistory}
         patronGroup={patronGroup}
         {...this.props}
-      />);
+      />
+    );
   }
 }
 
