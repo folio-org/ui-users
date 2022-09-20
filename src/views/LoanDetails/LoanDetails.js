@@ -454,7 +454,7 @@ class LoanDetails extends React.Component {
     );
     const patronBlocksForModal = getRenewalPatronBlocksFromPatronBlocks(patronBlocks);
     const isUserActive = user ? checkUserActive(user) : false;
-    const borrower = user === null ? <FormattedMessage id="ui-users.user.unknown" /> : getFullName(user);
+    const borrower = user ? getFullName(user) : <FormattedMessage id="ui-users.user.unknown" />;
 
     return (
       <div data-test-loan-actions-history>
