@@ -1,11 +1,13 @@
 import validateMinDate from './validateMinDate';
 
+const validateBirthDate = validateMinDate('ui-users.errors.personal.dateOfBirth');
+
 describe('validateMinDate', () => {
   it('returns error for invalid date', () => {
-    expect(validateMinDate('1890-01-01')).not.toBeNull();
+    expect(validateBirthDate('1890-01-01')).not.toBeNull();
   });
 
   it('returns null for valid date', () => {
-    expect(validateMinDate('1990-01-01')).toBeNull();
+    expect(validateBirthDate('1990-01-01')).toBeNull();
   });
 });

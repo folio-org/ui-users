@@ -135,7 +135,7 @@ class EditExtendedInfo extends Component {
               id="adduser_dateofbirth"
               timeZone="UTC"
               backendDateStandard="YYYY-MM-DD"
-              validate={validateMinDate}
+              validate={validateMinDate('ui-users.errors.personal.dateOfBirth')}
             />
           </Col>
           <Col
