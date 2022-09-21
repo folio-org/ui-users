@@ -16,7 +16,7 @@ import { IfPermission } from '@folio/stripes/core';
 
 import { withFormValues } from '../../Wrappers';
 import asyncValidateField from '../../validators/asyncValidateField';
-import validateBirthday from '../../validators/validateBirthdate';
+import validateMinDate from '../../validators/validateMinDate';
 import {
   addressTypesShape,
   departmentsShape,
@@ -135,7 +135,7 @@ class EditExtendedInfo extends Component {
               id="adduser_dateofbirth"
               timeZone="UTC"
               backendDateStandard="YYYY-MM-DD"
-              validate={validateBirthday}
+              validate={validateMinDate}
             />
           </Col>
           <Col
