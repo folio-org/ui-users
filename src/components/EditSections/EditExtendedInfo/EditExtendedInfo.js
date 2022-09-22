@@ -109,6 +109,7 @@ class EditExtendedInfo extends Component {
               dateFormat="YYYY-MM-DD"
               name="enrollmentDate"
               id="adduser_enrollmentdate"
+              validate={validateMinDate('ui-users.errors.extended.dateEnrolled')}
             />
           </Col>
           <Col
