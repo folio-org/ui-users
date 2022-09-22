@@ -27,7 +27,7 @@ class LoanProxyDetails extends React.Component {
     mutator: PropTypes.shape({
       proxy: PropTypes.shape({
         GET: PropTypes.func.isRequired,
-      }),
+      }).isRequired,
     }).isRequired,
     showErrorCallout: PropTypes.func.isRequired,
   }

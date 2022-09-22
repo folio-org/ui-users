@@ -1,11 +1,18 @@
-import isEmpty from 'lodash/isEmpty';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import { concat } from 'lodash';
-import { stripesConnect, withStripes } from '@folio/stripes/core';
-import { Callout } from '@folio/stripes/components';
 import { FormattedMessage } from 'react-intl';
+import {
+  concat,
+  isEmpty,
+} from 'lodash';
+
+import {
+  stripesConnect,
+  withStripes,
+} from '@folio/stripes/core';
+import { Callout } from '@folio/stripes/components';
+
 import { LoanDetails } from '../views';
 
 class LoanDetailContainer extends React.Component {
@@ -147,7 +154,7 @@ class LoanDetailContainer extends React.Component {
     mutator: PropTypes.shape({
       selUser: PropTypes.shape({
         GET: PropTypes.func.isRequired,
-      }),
+      }).isRequired,
     }).isRequired,
   }
 

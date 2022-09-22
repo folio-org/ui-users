@@ -322,7 +322,10 @@ class LoanDetails extends React.Component {
   }
 
   getPageTitle = (loanDetails) => {
-    const { user, patronGroup } = this.props;
+    const {
+      user,
+      patronGroup,
+    } = this.props;
 
     return (user ?
       `${loanDetails} - ${getFullName(user)} (${upperFirst(patronGroup.group)})` :
