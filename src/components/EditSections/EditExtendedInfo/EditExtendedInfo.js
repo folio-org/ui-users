@@ -13,9 +13,10 @@ import {
   Headline,
 } from '@folio/stripes/components';
 import { IfPermission } from '@folio/stripes/core';
+
 import { withFormValues } from '../../Wrappers';
 import asyncValidateField from '../../validators/asyncValidateField';
-
+import validateMinDate from '../../validators/validateMinDate';
 import {
   addressTypesShape,
   departmentsShape,
@@ -108,6 +109,7 @@ class EditExtendedInfo extends Component {
               dateFormat="YYYY-MM-DD"
               name="enrollmentDate"
               id="adduser_enrollmentdate"
+              validate={validateMinDate('ui-users.errors.extended.dateEnrolled')}
             />
           </Col>
           <Col
@@ -134,6 +136,7 @@ class EditExtendedInfo extends Component {
               id="adduser_dateofbirth"
               timeZone="UTC"
               backendDateStandard="YYYY-MM-DD"
+              validate={validateMinDate('ui-users.errors.personal.dateOfBirth')}
             />
           </Col>
           <Col

@@ -21,6 +21,7 @@ import {
 } from '@folio/stripes/components';
 
 import asyncValidateField from '../../validators/asyncValidateField';
+import validateMinDate from '../../validators/validateMinDate';
 
 import css from './EditUserInfo.css';
 
@@ -294,6 +295,7 @@ class EditUserInfo extends React.Component {
                 name="expirationDate"
                 id="adduser_expirationdate"
                 parse={this.parseExpirationDate}
+                validate={validateMinDate('ui-users.errors.personal.dateOfBirth')}
               />
               {checkShowRecalculateButton() && (
                 <Button

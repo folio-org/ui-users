@@ -95,6 +95,7 @@ class LoanDetails extends React.Component {
     match: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
+    showErrorCallout: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -320,6 +321,17 @@ class LoanDetails extends React.Component {
     });
   }
 
+  getPageTitle = (loanDetails) => {
+    const {
+      user,
+      patronGroup,
+    } = this.props;
+
+    return (user ?
+      `${loanDetails} - ${getFullName(user)} (${upperFirst(patronGroup.group)})` :
+      loanDetails);
+  }
+
   render() {
     const {
       loan,
@@ -337,6 +349,7 @@ class LoanDetails extends React.Component {
       declarationInProgress,
       loanIsMissing,
       isLoading,
+      showErrorCallout,
     } = this.props;
 
     const {
@@ -363,7 +376,7 @@ class LoanDetails extends React.Component {
             onClose={this.handleClose}
             paneTitle={(
               <FormattedMessage id="ui-users.loans.loanDetails">
-                {(loanDetails) => `${loanDetails} - ${getFullName(user)} (${upperFirst(patronGroup.group)})`}
+                {this.getPageTitle}
               </FormattedMessage>
             )}
           >
@@ -382,6 +395,9 @@ class LoanDetails extends React.Component {
     }
 
     const { nonRenewedLoanItems } = this.state;
+    const noLoanActionUser = user === null ?
+      <FormattedMessage id="ui-users.user.unknown" /> :
+      <FormattedMessage id="ui-users.loans.action.source.system" />;
     const loanActionsFormatter = {
       action: la => <FormattedMessage id={loanActionMap[la.action] ?? loanActionMap.unknownAction} />,
       actionDate: la => <FormattedTime value={get(la, ['metadata', 'updatedDate'], '-')} day="numeric" month="numeric" year="numeric" />,
@@ -390,7 +406,7 @@ class LoanDetails extends React.Component {
       source: la => {
         return la.user ?
           <Link to={`/users/view/${la.user?.id}`}>{getFullName(la.user)}</Link> :
-          <FormattedMessage id="ui-users.loans.action.source.system" />;
+          noLoanActionUser;
       },
       comments: ({ actionComment }) => (actionComment || '-'),
     };
@@ -440,7 +456,8 @@ class LoanDetails extends React.Component {
       </p>
     );
     const patronBlocksForModal = getRenewalPatronBlocksFromPatronBlocks(patronBlocks);
-    const isUserActive = checkUserActive(user);
+    const isUserActive = user ? checkUserActive(user) : false;
+    const borrower = user ? getFullName(user) : <FormattedMessage id="ui-users.user.unknown" />;
 
     return (
       <div data-test-loan-actions-history>
@@ -452,7 +469,7 @@ class LoanDetails extends React.Component {
             onClose={this.handleClose}
             paneTitle={(
               <FormattedMessage id="ui-users.loans.loanDetails">
-                {(loanDetails) => `${loanDetails} - ${getFullName(user)} (${upperFirst(patronGroup.group)})`}
+                {this.getPageTitle}
               </FormattedMessage>
           )}
           >
@@ -540,12 +557,13 @@ class LoanDetails extends React.Component {
               <Col xs={2}>
                 <KeyValue
                   label={<FormattedMessage id="ui-users.loans.details.borrower" />}
-                  value={getFullName(user)}
+                  value={borrower}
                 />
               </Col>
               <Col xs={2}>
                 <LoanProxyDetails
                   id={loan.proxyUserId}
+                  showErrorCallout={showErrorCallout}
                 />
               </Col>
             </Row>
