@@ -37,6 +37,6 @@ describe('Item Lookup component', () => {
   it('OnConfirm modal check', () => {
     renderItemLookup(propData);
     userEvent.click(screen.getByText('ui-users.charge.itemLookup.confirm'));
-    expect(onConfirmMock).toHaveBeenCalled();
+    expect(onConfirmMock).not.toHaveBeenCalled();
   });
 });
