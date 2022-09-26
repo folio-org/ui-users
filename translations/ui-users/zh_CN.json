@@ -996,5 +996,10 @@
     "reports": "报告",
     "actionMenu.lostItems": "需要实际费用的遗失单件",
     "lostItems.message.noAccessToActualCostPage": "用户无权访问“需要实际费用的遗失单价”处理页面",
-    "permission.lost-items.requiring-actual-cost": "用户：可以处理需要实际费用的遗失单件"
+    "permission.lost-items.requiring-actual-cost": "用户：可以处理需要实际费用的遗失单件",
+    "errors.personal.dateOfBirth": "Please enter correct birth date",
+    "errors.extended.dateEnrolled": "Please enter correct enrolled date",
+    "errors.expirationDate": "Please enter correct expiration date",
+    "user.unknown": "Unknown user",
+    "errors.proxyBorrowerNotFound": "Proxy borrower not found"
 }
