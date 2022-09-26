@@ -20,6 +20,8 @@
 * create Jest/RTL test for NoteEditPage.js. Refs UIU-2424
 * Clear Fee/Fine Type error message after changing owner. Refs UIU-2670.
 * Update `permUserId` before updating permissions. Fixes UIU-2672.
+* Fix broken link to item in export fees fines report. Refs UIU-2540.
+* Make visible loan history for deleted users. UIU-2659.
 
 ## [8.1.0](https://github.com/folio-org/ui-users/tree/v8.1.0) (2022-06-27)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.0.0...v8.1.0)
