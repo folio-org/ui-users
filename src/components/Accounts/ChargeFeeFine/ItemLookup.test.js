@@ -6,7 +6,6 @@ import ItemLookup from './ItemLookup';
 
 import '__mock__/stripesCore.mock';
 import '__mock__/stripesSmartComponent.mock';
-import { async } from 'regenerator-runtime';
 
 jest.unmock('@folio/stripes/components');
 jest.unmock('@folio/stripes/smart-components');
@@ -22,7 +21,7 @@ const propData = {
   items:[],
   onClose: onCloseMock,
   onChangeItem: onChangeItemMock,
-  };
+};
 
 describe('Item Lookup component', () => {
   it('Check if modal Renders', () => {
