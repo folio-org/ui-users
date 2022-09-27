@@ -996,5 +996,10 @@
     "reports": "Reports",
     "actionMenu.lostItems": "Lost items requiring actual cost",
     "lostItems.message.noAccessToActualCostPage": "User does not have permission to access \"Lost items needing actual cost\" processing page",
-    "permission.lost-items.requiring-actual-cost": "Users: Can process lost items requiring actual cost"
+    "permission.lost-items.requiring-actual-cost": "Users: Can process lost items requiring actual cost",
+    "errors.personal.dateOfBirth": "Please enter correct birth date",
+    "errors.extended.dateEnrolled": "Please enter correct enrolled date",
+    "errors.expirationDate": "Please enter correct expiration date",
+    "user.unknown": "Utilisateur inconnu",
+    "errors.proxyBorrowerNotFound": "Proxy borrower not found"
 }
