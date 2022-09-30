@@ -47,14 +47,14 @@ const visibleColumns = [
   COLUMNS_NAME.ACTION,
 ];
 const columnWidths = {
-  [COLUMNS_NAME.PATRON]: { max: 150, },
-  [COLUMNS_NAME.LOSS_TYPE]: { max: 150, },
-  [COLUMNS_NAME.LOSS_DATE]: { max: 100, },
-  [COLUMNS_NAME.INSTANCE]: { max: 300, },
-  [COLUMNS_NAME.PERMANENT_ITEM_LOCATION]: { max: 150, },
-  [COLUMNS_NAME.FEE_FINE_OWNER]: { max: 150, },
-  [COLUMNS_NAME.FEE_FINE_TYPE]: { max: 150, },
-  [COLUMNS_NAME.ACTION]: { max: 50, },
+  [COLUMNS_NAME.PATRON]: { max: 150 },
+  [COLUMNS_NAME.LOSS_TYPE]: { max: 150 },
+  [COLUMNS_NAME.LOSS_DATE]: { max: 100 },
+  [COLUMNS_NAME.INSTANCE]: { max: 300 },
+  [COLUMNS_NAME.PERMANENT_ITEM_LOCATION]: { max: 150 },
+  [COLUMNS_NAME.FEE_FINE_OWNER]: { max: 150 },
+  [COLUMNS_NAME.FEE_FINE_TYPE]: { max: 150 },
+  [COLUMNS_NAME.ACTION]: { max: 50 },
 };
 const columnMapping = {
   [COLUMNS_NAME.PATRON]: <FormattedMessage id="ui-users.lostItems.list.columnName.patron" />,
@@ -103,7 +103,7 @@ export const lostItemsListFormatter = {
   [COLUMNS_NAME.PERMANENT_ITEM_LOCATION]: (actualCostRecord) => (get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.PERMANENT_ITEM_LOCATION], '')),
   [COLUMNS_NAME.FEE_FINE_OWNER]: (actualCostRecord) => (get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.FEE_FINE_OWNER], '')),
   [COLUMNS_NAME.FEE_FINE_TYPE]: (actualCostRecord) => (get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.FEE_FINE_TYPE], '')),
-  [COLUMNS_NAME.ACTION]: (actualCostRecord) => (<RenderActions actualCostRecord={ actualCostRecord } />),
+  [COLUMNS_NAME.ACTION]: (actualCostRecord) => (<RenderActions actualCostRecord={actualCostRecord} />),
 };
 export const triggerOnSort = (e, meta, onSort) => {
   if (meta.name === COLUMNS_NAME.ACTION) {
@@ -111,7 +111,7 @@ export const triggerOnSort = (e, meta, onSort) => {
   }
 
   return onSort(e, meta);
-}
+};
 
 const LostItemsList = ({
   contentData,

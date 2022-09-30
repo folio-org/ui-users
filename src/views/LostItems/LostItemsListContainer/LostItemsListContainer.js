@@ -90,16 +90,16 @@ class LostItemsListContainer extends React.Component {
       filterPaneIsVisible,
     } = this.state;
 
-    const actualCostRecords = get(resources, 'records.records', []);
+    const actualCostRecords = resources.records.records ?? [];
     const query = queryGetter ? queryGetter() || {} : {};
     const count = source ? source.totalCount() : 0;
     const sortOrder = query.sort || '';
     const emptyMessage = source
       ? <NoResultsMessage
-        source={source}
-        searchTerm={query.query || ''}
-        filterPaneIsVisible
-        toggleFilterPane={noop}
+          source={source}
+          searchTerm={query.query || ''}
+          filterPaneIsVisible
+          toggleFilterPane={noop}
       />
       : null;
     let resultPaneSub = <FormattedMessage id="stripes-smart-components.searchCriteria" />;
@@ -117,54 +117,55 @@ class LostItemsListContainer extends React.Component {
         querySetter={querySetter}
         queryGetter={queryGetter}
       >
-      {({
-        onSort,
-        getFilterHandlers,
-        activeFilters,
-      }) => {
-        return (
-          <Paneset id="lostItemsPaneSet">
-            {filterPaneIsVisible &&
+        {({
+          onSort,
+          getFilterHandlers,
+          activeFilters,
+        }) => {
+          return (
+            <Paneset id="lostItemsPaneSet">
+              {filterPaneIsVisible &&
+                <Pane
+                  id="lostItemsFiltersPane"
+                  defaultWidth="22%"
+                  paneTitle={<FormattedMessage id="ui-users.lostItems.list.filters" />}
+                  lastMenu={
+                    <PaneMenu>
+                      <CollapseFilterPaneButton onClick={this.toggleFilterPane} />
+                    </PaneMenu>
+                  }
+                >
+                  <Filters
+                    activeFilters={activeFilters.state}
+                    resources={resources}
+                    onChangeHandlers={getFilterHandlers()}
+                    resultOffset={resultOffset}
+                  />
+                </Pane>
+              }
               <Pane
-                id="lostItemsFiltersPane"
-                defaultWidth="22%"
-                paneTitle={<FormattedMessage id="ui-users.lostItems.list.filters" />}
-                lastMenu={
-                  <PaneMenu>
-                    <CollapseFilterPaneButton onClick={this.toggleFilterPane} />
-                  </PaneMenu>
-                }
+                id="lostItemsListPane"
+                paneTitle={<FormattedMessage id="ui-users.lostItems.list.searchResults" />}
+                paneSub={resultPaneSub}
+                firstMenu={this.renderResultsFirstMenu(activeFilters)}
+                defaultWidth="fill"
+                padContent={false}
+                noOverflow
               >
-                <Filters
-                  activeFilters={activeFilters.state}
-                  resources={resources}
-                  onChangeHandlers={getFilterHandlers()}
-                  resultOffset={resultOffset}
+                <LostItemsList
+                  contentData={actualCostRecords}
+                  totalCount={count}
+                  onNeedMoreData={onNeedMoreData}
+                  emptyMessage={emptyMessage}
+                  onSort={onSort}
+                  sortOrder={sortOrder}
                 />
               </Pane>
-            }
-            <Pane
-              id="lostItemsListPane"
-              paneTitle={<FormattedMessage id="ui-users.lostItems.list.searchResults" />}
-              paneSub={resultPaneSub}
-              firstMenu={this.renderResultsFirstMenu(activeFilters)}
-              defaultWidth="fill"
-              padContent={false}
-              noOverflow
-            >
-              <LostItemsList
-                contentData={actualCostRecords}
-                totalCount={count}
-                onNeedMoreData={onNeedMoreData}
-                emptyMessage={emptyMessage}
-                onSort={onSort}
-                sortOrder={sortOrder}
-              />
-            </Pane>
-          </Paneset>
-        );}}
+            </Paneset>
+          );
+        }}
       </SearchAndSortQuery>
-      );
+    );
   }
 }
 

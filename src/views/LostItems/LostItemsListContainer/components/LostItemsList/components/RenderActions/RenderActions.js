@@ -19,7 +19,7 @@ import {
   ACTUAL_COST_RECORD_FIELD_PATH,
 } from '../../../../../constants';
 
-const PatronDetailsLink = ({actualCostRecord}) => {
+const PatronDetailsLink = ({ actualCostRecord }) => {
   const userId = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.USER_ID], '');
   const isPatronDetailsLinkActive = userId;
   const patronDetailsLink = `/users/preview/${userId}`;
@@ -34,9 +34,17 @@ const PatronDetailsLink = ({actualCostRecord}) => {
       <FormattedMessage id="ui-users.lostItems.list.columnName.action.patronDetails" />
     </Button>
   );
-}
+};
 
-const LoanDetailsLink = ({actualCostRecord}) => {
+PatronDetailsLink.propTypes = {
+  actualCostRecord: PropTypes.shape({
+    user: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
+};
+
+const LoanDetailsLink = ({ actualCostRecord }) => {
   const userId = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.USER_ID], '');
   const loanId = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.LOAN_ID], '');
   const isLoanDetailsLinkActive = userId && loanId;
@@ -52,9 +60,21 @@ const LoanDetailsLink = ({actualCostRecord}) => {
       <FormattedMessage id="ui-users.lostItems.list.columnName.action.loanDetails" />
     </Button>
   );
-}
+};
 
-const ItemDetailsLink = ({actualCostRecord}) => {
+LoanDetailsLink.propTypes = {
+  actualCostRecord: PropTypes.shape({
+    user: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }).isRequired,
+    loan: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
+};
+
+
+const ItemDetailsLink = ({ actualCostRecord }) => {
   const itemId = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.ITEM_ID], '');
   const instanceId = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.INSTANCE_ID], '');
   const holdingsRecordId = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.HOLDINGS_RECORD_ID], '');
@@ -71,7 +91,19 @@ const ItemDetailsLink = ({actualCostRecord}) => {
       <FormattedMessage id="ui-users.lostItems.list.columnName.action.itemDetails" />
     </Button>
   );
-}
+};
+
+ItemDetailsLink.propTypes = {
+  actualCostRecord: PropTypes.shape({
+    item: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      holdingsRecordId: PropTypes.string.isRequired,
+    }).isRequired,
+    instance: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
+};
 
 const RenderActions = ({ actualCostRecord }) => {
   return (

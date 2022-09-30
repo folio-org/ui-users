@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { get } from 'lodash';
 
 import {
   stripesConnect,
@@ -91,6 +90,9 @@ class LostItemsContainer extends React.Component {
   static propTypes = {
     location: PropTypes.object,
     history: PropTypes.object,
+    resources: PropTypes.shape({
+      records: PropTypes.object,
+    }).isRequired,
     mutator: PropTypes.shape({
       records: PropTypes.shape({
         POST: PropTypes.func.isRequired,
@@ -104,7 +106,8 @@ class LostItemsContainer extends React.Component {
       }).isRequired,
     }).isRequired,
     stripes: PropTypes.shape({
-      logger: PropTypes.object.isRequired
+      logger: PropTypes.object.isRequired,
+      hasPerm: PropTypes.func.isRequired,
     }).isRequired,
   }
 
@@ -159,7 +162,7 @@ class LostItemsContainer extends React.Component {
   }
 
   queryGetter = () => {
-    return get(this.props.resources, 'query', {});
+    return this.props?.resources?.query ?? {};
   }
 
   render() {
@@ -167,7 +170,7 @@ class LostItemsContainer extends React.Component {
 
     if (!hasPermission) {
       return (
-         <NoPermissionMessage />
+        <NoPermissionMessage />
       );
     }
 
