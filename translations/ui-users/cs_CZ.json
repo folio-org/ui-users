@@ -996,5 +996,10 @@
     "reports": "Zprávy",
     "actionMenu.lostItems": "Ztracené jednotky vyžadující skutečné náklady",
     "lostItems.message.noAccessToActualCostPage": "Uživatel nemá oprávnění k přístupu na stránku zpracování \"Ztracené jednotky vyžadující skutečné náklady\".",
-    "permission.lost-items.requiring-actual-cost": "Uživatelé: Mohou zpracovávat ztracené jednotky vyžadující skutečné náklady"
+    "permission.lost-items.requiring-actual-cost": "Uživatelé: Mohou zpracovávat ztracené jednotky vyžadující skutečné náklady",
+    "errors.personal.dateOfBirth": "Zadejte prosím správné datum narození",
+    "errors.extended.dateEnrolled": "Zadejte prosím správné datum registrace",
+    "errors.expirationDate": "Zadejte prosím správné datum vypršení platnosti",
+    "user.unknown": "Unknown user",
+    "errors.proxyBorrowerNotFound": "Proxy borrower not found"
 }
