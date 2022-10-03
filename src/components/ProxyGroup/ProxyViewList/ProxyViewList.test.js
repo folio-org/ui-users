@@ -1,13 +1,7 @@
 import { screen } from '@testing-library/react';
-// import userEvent from '@testing-library/user-event';
-
 import renderWithRouter from 'helpers/renderWithRouter';
 import ProxyViewList from './ProxyViewList';
 
-import '__mock__/stripesCore.mock';
-import '__mock__/stripesSmartComponent.mock';
-
-jest.unmock('@folio/stripes/components');
 
 const renderProxyViewList = (props) => renderWithRouter(<ProxyViewList {...props} />);
 const STRIPES = {
@@ -45,5 +39,6 @@ describe('Checking ProxyViewList ', () => {
     const data = [{ name: 'apple' }, { name: 'banana' }];
     renderProxyViewList(props(data, ''));
     expect(screen.getByText('apple')).toBeInTheDocument();
+    expect(screen.getByText('banana')).toBeInTheDocument();
   });
 });
