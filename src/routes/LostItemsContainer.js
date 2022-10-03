@@ -91,6 +91,7 @@ class LostItemsContainer extends React.Component {
     location: PropTypes.object,
     history: PropTypes.object,
     resources: PropTypes.shape({
+      query: PropTypes.object,
       records: PropTypes.object,
     }).isRequired,
     mutator: PropTypes.shape({

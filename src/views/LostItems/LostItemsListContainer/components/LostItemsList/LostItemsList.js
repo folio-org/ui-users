@@ -5,7 +5,10 @@ import {
   FormattedTime,
   FormattedMessage,
 } from 'react-intl';
-import { get } from 'lodash';
+import {
+  get,
+  noop,
+} from 'lodash';
 
 import {
   MultiColumnList,
@@ -107,7 +110,7 @@ export const lostItemsListFormatter = {
 };
 export const triggerOnSort = (e, meta, onSort) => {
   if (meta.name === COLUMNS_NAME.ACTION) {
-    return;
+    return noop;
   }
 
   return onSort(e, meta);
