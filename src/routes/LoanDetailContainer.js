@@ -16,11 +16,6 @@ import { Callout } from '@folio/stripes/components';
 import { LoanDetails } from '../views';
 
 class LoanDetailContainer extends React.Component {
-  constructor(props) {
-    super(props);
-    this.calloutRef = React.createRef();
-  }
-
   static manifest = Object.freeze({
     modified: {},
     users: {
@@ -156,6 +151,11 @@ class LoanDetailContainer extends React.Component {
         GET: PropTypes.func.isRequired,
       }).isRequired,
     }).isRequired,
+  }
+
+  constructor(props) {
+    super(props);
+    this.calloutRef = React.createRef();
   }
 
   componentDidMount() {
