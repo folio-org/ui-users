@@ -1,5 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
+import get from 'lodash/get';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import {
@@ -7,7 +8,6 @@ import {
   FormattedTime,
   injectIntl,
 } from 'react-intl';
-
 import {
   Button,
   Callout,
@@ -18,8 +18,13 @@ import {
   Pane,
   Paneset,
   Row,
+  Icon,
 } from '@folio/stripes/components';
-import { IfPermission } from '@folio/stripes/core';
+import {
+  IfPermission,
+  IfInterface,
+  AppIcon,
+} from '@folio/stripes/core';
 
 import Actions from '../../components/Accounts/Actions/FeeFineActions';
 import {
@@ -315,6 +320,110 @@ class AccountDetails extends React.Component {
     history.push({ pathname: `/users/${params.id}/accounts/${status}` });
   };
 
+  getActionMenu = () => () => {
+    const {
+      account,
+      resources,
+      itemDetails
+    } = this.props;
+
+    const feeFineActions = get(resources, ['feefineactions', 'records'], []);
+    const isAccountsPending = _.get(resources, ['accounts', 'isPending'], true);
+    const isActionsPending = _.get(resources, ['accountActions', 'isPending'], true);
+    const allFeeFineActions = _.get(resources, ['feefineactions', 'records'], []);
+    const isClaimReturnedItem = (itemDetails?.statusItemName === itemStatuses.CLAIMED_RETURNED);
+
+    const disabled = account.remaining === 0;
+    const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
+    const refundAllowed = isRefundAllowed(account, feeFineActions);
+    const cancelAllowed = isCancelAllowed(account);
+
+    const showActionMenu = this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
+
+    if (showActionMenu) {
+      return (
+        <div data-test-actions-menu>
+          <IfInterface name="feesfines">
+            <Button
+              data-test-payAccountActionsHistory
+              id="payAccountActionsHistory"
+              buttonStyle="dropdownItem"
+              disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending || isClaimReturnedItem}
+              onClick={this.pay}
+            >
+              <Icon icon="cart">
+                <FormattedMessage id="ui-users.accounts.history.button.pay" />
+              </Icon>
+            </Button>
+          </IfInterface>
+          <IfInterface name="feesfines">
+            <Button
+              id="waiveAccountActionsHistory"
+              buttonStyle="dropdownItem"
+              disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending || isClaimReturnedItem}
+              onClick={this.waive}
+            >
+              <Icon icon="cancel">
+                <FormattedMessage id="ui-users.accounts.history.button.waive" />
+              </Icon>
+            </Button>
+          </IfInterface>
+          <IfInterface name="feesfines">
+            <Button
+              id="refundAccountActionsHistory"
+              buttonStyle="dropdownItem"
+              disabled={!refundAllowed || buttonDisabled || isActionsPending || isAccountsPending || isClaimReturnedItem}
+              onClick={this.refund}
+            >
+              <Icon icon="replace">
+                <FormattedMessage id="ui-users.accounts.history.button.refund" />
+              </Icon>
+            </Button>
+          </IfInterface>
+          <IfInterface name="feesfines">
+            <Button
+              id="transferAccountActionsHistory"
+              buttonStyle="dropdownItem"
+              disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending || isClaimReturnedItem}
+              onClick={this.transfer}
+            >
+              <Icon icon="transfer">
+                <FormattedMessage id="ui-users.accounts.history.button.transfer" />
+              </Icon>
+            </Button>
+          </IfInterface>
+          <IfInterface name="feesfines">
+            <Button
+              id="errorAccountActionsHistory"
+              buttonStyle="dropdownItem"
+              disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending || !cancelAllowed || isClaimReturnedItem}
+              onClick={this.error}
+            >
+              <Icon icon="trash">
+                <FormattedMessage id="ui-users.accounts.button.error" />
+              </Icon>
+            </Button>
+          </IfInterface>
+          <IfInterface name="feesfines">
+            <Button
+              id="exportAccountActionsHistoryReport"
+              buttonStyle="dropdownItem"
+              data-test-export-account-actions-history-report
+              disabled={_.isEmpty(allFeeFineActions)}
+              onClick={this.generateFeesFinesReport}
+            >
+              <Icon icon="download">
+                <FormattedMessage id="ui-users.export.button" />
+              </Icon>
+            </Button>
+          </IfInterface>
+        </div>
+      );
+    } else {
+      return null;
+    }
+  }
+
   render() {
     const {
       sortOrder,
@@ -390,20 +499,14 @@ class AccountDetails extends React.Component {
       comments: action => (action.comments ? (<div>{action.comments.split('\n').map(c => (<Row><Col>{c}</Col></Row>))}</div>) : ''),
     };
 
-    const isAccountsPending = _.get(resources, ['accounts', 'isPending'], true);
-    const isActionsPending = _.get(resources, ['accountActions', 'isPending'], true);
     const feeFineActions = _.get(resources, ['feefineactions', 'records'], []);
-    const allFeeFineActions = _.get(resources, ['feefineactions', 'records'], []);
     const latestPaymentStatus = account.paymentStatus.name;
-    const isClaimReturnedItem = (itemDetails?.statusItemName === itemStatuses.CLAIMED_RETURNED);
 
     const actions = this.state.data || [];
     const actionsSort = _.orderBy(actions, [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
     const amount = account.amount ? formatCurrencyAmount(account.amount) : '-';
     const loanId = account.loanId || '';
-    const disabled = account.remaining === 0;
     const isAccountId = actions[0] && actions[0].accountId === account.id;
-    const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
 
     const overdueFinePolicyId = itemDetails?.overdueFinePolicyId;
     const overdueFinePolicyName = itemDetails?.overdueFinePolicyName;
@@ -412,8 +515,6 @@ class AccountDetails extends React.Component {
     const contributors = itemDetails?.contributors?.join('; ');
 
     const totalPaidAmount = calculateTotalPaymentAmount(resources?.feefineshistory?.records, feeFineActions);
-    const refundAllowed = isRefundAllowed(account, feeFineActions);
-    const cancelAllowed = isCancelAllowed(account);
 
     // the loan-details display is special.
     // other loan-related fields use <NoValue /> when a loan has been anonymized,
@@ -471,66 +572,14 @@ class AccountDetails extends React.Component {
           defaultWidth="100%"
           dismissible
           onClose={this.handleClose}
+          appIcon={<AppIcon app="actions" appIconKey="actions" />}
           paneTitle={(
             <FormattedMessage id="ui-users.details.paneTitle.feeFineDetails">
               {(msg) => `${msg} - ${getFullName(user)} (${_.upperFirst(patron.group)}) `}
             </FormattedMessage>
           )}
+          actionMenu={this.getActionMenu()}
         >
-          <Row>
-            <Col xs={12}>
-              <Button
-                id="payAccountActionsHistory"
-                disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending || isClaimReturnedItem}
-                buttonStyle="primary"
-                onClick={this.pay}
-              >
-                <FormattedMessage id="ui-users.accounts.history.button.pay" />
-              </Button>
-              <Button
-                id="waiveAccountActionsHistory"
-                disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending || isClaimReturnedItem}
-                buttonStyle="primary"
-                onClick={this.waive}
-              >
-                <FormattedMessage id="ui-users.accounts.history.button.waive" />
-              </Button>
-              <Button
-                id="refundAccountActionsHistory"
-                disabled={!refundAllowed || buttonDisabled || isActionsPending || isAccountsPending || isClaimReturnedItem}
-                buttonStyle="primary"
-                onClick={this.refund}
-              >
-                <FormattedMessage id="ui-users.accounts.history.button.refund" />
-              </Button>
-              <Button
-                id="transferAccountActionsHistory"
-                disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending || isClaimReturnedItem}
-                buttonStyle="primary"
-                onClick={this.transfer}
-              >
-                <FormattedMessage id="ui-users.accounts.history.button.transfer" />
-              </Button>
-              <Button
-                id="errorAccountActionsHistory"
-                disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending || !cancelAllowed || isClaimReturnedItem}
-                buttonStyle="primary"
-                onClick={this.error}
-              >
-                <FormattedMessage id="ui-users.accounts.button.error" />
-              </Button>
-              <Button
-                id="exportAccountActionsHistoryReport"
-                data-test-export-account-actions-history-report
-                buttonStyle="primary"
-                disabled={_.isEmpty(allFeeFineActions)}
-                onClick={this.generateFeesFinesReport}
-              >
-                <FormattedMessage id="ui-users.export.button" />
-              </Button>
-            </Col>
-          </Row>
-
           <Row>
             <Col xs={1.5}>
               <KeyValue
