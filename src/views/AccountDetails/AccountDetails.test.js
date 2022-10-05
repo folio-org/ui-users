@@ -20,7 +20,6 @@ const props = {
   history,
   location: history.location,
   match: { params: { } },
-
   isLoading: false,
 
   resources: {
@@ -32,6 +31,7 @@ const props = {
     user: {
       update: jest.fn(),
     },
+    servicePoints: {},
   },
   mutator: {
     activeRecord: {
@@ -45,14 +45,14 @@ const props = {
     },
     user: {
       update: jest.fn(),
-    }
+    },
   },
   num: 42,
   user: { id: '123' },
   patronGroup: { group: 'Shiny happy people' },
   itemDetails: {},
   stripes: {
-    hasPerm: () => true,
+    hasPerm: jest.fn().mockReturnValue(true),
   },
   account,
   owedAmount: 45.67,
@@ -84,11 +84,9 @@ const loanResources = {
   }
 };
 
-
 const renderAccountDetails = (extraProps = {}) => renderWithRouter(
-  <AccountDetails {...props} {...extraProps} />
+  <AccountDetails {...props} {...extraProps}/>
 );
-
 
 afterEach(() => jest.clearAllMocks());
 
@@ -108,3 +106,24 @@ describe('Account Details', () => {
     expect(screen.getByTestId('loan-details')).toHaveTextContent(/ui-users.details.label.loanAnonymized$/);
   });
 });
+
+describe('Checking Action Menu', () => {
+  test('AccountDetail pane should be present', async () => {
+    renderAccountDetails({ account });
+    expect(document.querySelector('#pane-account-action-history')).toBeInTheDocument();
+  });
+
+  test('Pay button should be present', () => {
+//    renderAccountDetails({ account });
+  //  expect(screen.getByRole('button', { name: 'ui-users.accounts.history.button.pay })).toBeVisible();
+    renderAccountDetails({ account });
+    expect(screen.findAllByText('button', { id: 'ui-users.accounts.history.button.pay' })).toBeInTheDocument();
+    //expect(screen.getByTestId('data-test-payAccountActionsHistory')[0]).toBeEnabled();
+  });
+
+  test('Export button should be present', () => {
+    renderAccountDetails({ account });
+    expect(screen.queryByText('ui-users.export.button')).toBeInTheDocument();
+  });
+});
+
