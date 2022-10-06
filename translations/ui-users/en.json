@@ -1002,5 +1002,21 @@
   "index.username": "Username",
   "index.all": "Keyword (name, email, identifier)",
   "loan404": "The requested loan could not be retrieved.",
-  "notes.popupModal.label": "User note"
+  "notes.popupModal.label": "User note",
+  "lostItems.list.columnName.patron": "Patron",
+  "lostItems.list.columnName.lossType": "Loss type",
+  "lostItems.list.columnName.dateOfLoss": "Date of loss",
+  "lostItems.list.columnName.instance": "Instance",
+  "lostItems.list.columnName.permanentItemLocation": "Permanent item location",
+  "lostItems.list.columnName.feeFineOwner": "Fee/fine owner",
+  "lostItems.list.columnName.feeFineType": "Fee/fine type",
+  "lostItems.list.columnName.actions": "Actions",
+  "lostItems.list.columnName.action.patronDetails": "Patron details",
+  "lostItems.list.columnName.action.loanDetails": "Loan details",
+  "lostItems.list.columnName.action.itemDetails": "Item details",
+  "lostItems.list.filters": "Search & filters",
+  "lostItems.list.searchResults": "Lost items requiring actual cost",
+  "lostItems.list.filters.lossType": "Loss type",
+  "lostItems.list.filters.lossType.agedToLost": "Aged to lost",
+  "lostItems.list.filters.lossType.declaredLost": "Declared lost"
 }

@@ -996,5 +996,10 @@
     "reports": "تقارير",
     "actionMenu.lostItems": "المواد الضائعة التي تتطلب تكلفة فعلية",
     "lostItems.message.noAccessToActualCostPage": "لا يمتلك المستخدم صلاحية للوصول إلى صفحة معالجة \"المواد الضائعة التي تحتاج إلى تكلفة فعلية\"",
-    "permission.lost-items.requiring-actual-cost": "المستخدمون: إمكانية معالجة المواد الضائعة التي تتطلب تكلفة فعلية"
+    "permission.lost-items.requiring-actual-cost": "المستخدمون: إمكانية معالجة المواد الضائعة التي تتطلب تكلفة فعلية",
+    "errors.personal.dateOfBirth": "Please enter correct birth date",
+    "errors.extended.dateEnrolled": "Please enter correct enrolled date",
+    "errors.expirationDate": "Please enter correct expiration date",
+    "user.unknown": "Unknown user",
+    "errors.proxyBorrowerNotFound": "Proxy borrower not found"
 }

@@ -32,7 +32,7 @@
       }
     ],
     "okapiInterfaces": {
-      "users": "15.0",
+      "users": "15.0 16.0",
       "configuration": "2.0",
       "permissions": "5.5",
       "login": "6.0 7.0",
@@ -40,6 +40,7 @@
       "tags": "1.0"
     },
     "optionalOkapiInterfaces": {
+      "actual-cost-record-storage": "0.3",
       "automated-patron-blocks": "0.1",
       "circulation": "9.0 10.0 11.0 12.0 13.0",
       "feesfines": "16.1 17.0",
