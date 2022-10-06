@@ -38,7 +38,7 @@ class Filters extends React.Component {
     activeFilters: PropTypes.object,
     onChangeHandlers: PropTypes.shape({
       clearGroup: PropTypes.func.isRequired,
-      state: PropTypes.object.isRequired,
+      state: PropTypes.func.isRequired,
     }).isRequired,
     resultOffset: PropTypes.shape({
       replace: PropTypes.func.isRequired,

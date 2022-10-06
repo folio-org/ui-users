@@ -15,7 +15,7 @@ import {
 } from '@folio/stripes/components';
 
 import {
-  ShowLongContentInPopover,
+  InstanceDetails,
   RenderActions,
 } from './components';
 
@@ -102,7 +102,7 @@ export const lostItemsListFormatter = {
       </>
     );
   },
-  [COLUMNS_NAME.INSTANCE]: (actualCostRecord) => (<ShowLongContentInPopover text={get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.INSTANCE_TITLE], '')} />),
+  [COLUMNS_NAME.INSTANCE]: (actualCostRecord) => (<InstanceDetails actualCostRecord={actualCostRecord} />),
   [COLUMNS_NAME.PERMANENT_ITEM_LOCATION]: (actualCostRecord) => (get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.PERMANENT_ITEM_LOCATION], '')),
   [COLUMNS_NAME.FEE_FINE_OWNER]: (actualCostRecord) => (get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.FEE_FINE_OWNER], '')),
   [COLUMNS_NAME.FEE_FINE_TYPE]: (actualCostRecord) => (get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.FEE_FINE_TYPE], '')),
@@ -166,6 +166,8 @@ LostItemsList.propTypes = {
     }).isRequired,
     item: PropTypes.shape({
       id: PropTypes.string.isRequired,
+      materialType: PropTypes.string.isRequired,
+      loanType: PropTypes.string.isRequired,
       holdingsRecordId: PropTypes.string.isRequired,
       permanentLocation: PropTypes.string.isRequired,
     }).isRequired,
@@ -177,12 +179,17 @@ LostItemsList.propTypes = {
     }).isRequired,
     instance: PropTypes.shape({
       id: PropTypes.string.isRequired,
+      identifiers: PropTypes.arrayOf(PropTypes.shape({
+        identifierTypeId: PropTypes.string,
+        identifierType: PropTypes.string,
+        value: PropTypes.string,
+      })),
       title: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired),
   totalCount: PropTypes.number.isRequired,
   onNeedMoreData: PropTypes.func.isRequired,
-  emptyMessage: PropTypes.node.isRequired,
+  emptyMessage: PropTypes.node,
   onSort: PropTypes.func.isRequired,
   sortOrder: PropTypes.string.isRequired,
 };
