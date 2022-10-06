@@ -73,7 +73,6 @@ LoanDetailsLink.propTypes = {
   }).isRequired,
 };
 
-
 const ItemDetailsLink = ({ actualCostRecord }) => {
   const itemId = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.ITEM_ID], '');
   const instanceId = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.INSTANCE_ID], '');

@@ -25,6 +25,10 @@
 * Make visible loan history for deleted users. UIU-2659.
 * Leverage `yarn.lock`. UIU-2688.
 * List of items for lost items requiring actual cost. Refs UIU-1382.
+* Lost items requiring ACTUAL COST: Implement additional information in 'Instance' column. Refs UIU-1871.
+* Lost items requiring ACTUAL COST: Implement additional information in 'Patron' column. Refs UIU-1870.
+* Add permissions for lost items page. Refs UIU-2690.
+* Fix sorting by "Patron" column on the "Lost items requiring actual cost" page. Refs UIU-2691.
 
 ## [8.1.0](https://github.com/folio-org/ui-users/tree/v8.1.0) (2022-06-27)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.0.0...v8.1.0)

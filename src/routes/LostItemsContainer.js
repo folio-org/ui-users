@@ -56,7 +56,9 @@ function buildQuery(queryParams, pathComponents, resourceData, logger, props) {
   return makeQueryFunction(
     'cql.allRecords=1',
     SEARCH_FIELDS.map(index => `${index}="%{query.query}*"`).join(' or '),
-    {},
+    {
+      [ACTUAL_COST_RECORD_FIELD_NAME.USER]: `${ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.USER_LAST_NAME]} ${ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.USER_FIRST_NAME]}`,
+    },
     [...filterConfig, ...customFilterConfig],
     2,
   )(queryParams, pathComponents, resourceData, logger, props);
