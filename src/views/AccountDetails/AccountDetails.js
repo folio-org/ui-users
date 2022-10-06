@@ -1,6 +1,5 @@
 import React from 'react';
 import _ from 'lodash';
-import get from 'lodash/get';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import {
@@ -228,9 +227,9 @@ class AccountDetails extends React.Component {
       resources,
       intl,
     } = this.props;
-    const feeFineActions = _.get(resources, ['feefineactions', 'records'], []);
-    const accounts = _.get(resources, ['accounts', 'records'], []);
-    const loans = _.get(resources, ['loans', 'records'], []);
+    const feeFineActions = resources?.feefineactions?.records || [];
+    const accounts = resources?.accounts?.records || [];
+    const loans = resources?.loans?.records || [];
 
     return {
       intl,
@@ -319,6 +318,7 @@ class AccountDetails extends React.Component {
     history.push({ pathname: `/users/${params.id}/accounts/${status}` });
   };
 
+feeFineActions
   getActionMenu = () => () => {
     const {
       account,
@@ -326,10 +326,10 @@ class AccountDetails extends React.Component {
       itemDetails
     } = this.props;
 
-    const feeFineActions = get(resources, ['feefineactions', 'records'], []);
-    const isAccountsPending = _.get(resources, ['accounts', 'isPending'], true);
-    const isActionsPending = _.get(resources, ['accountActions', 'isPending'], true);
-    const allFeeFineActions = _.get(resources, ['feefineactions', 'records'], []);
+    const feeFineActions = resources?.feefineactions?.records || [];
+    const isAccountsPending = resources?.accounts?.isPending ?? true;
+    const isActionsPending = resources?.accountActions?.isPending ?? true;
+    const allFeeFineActions = resources?.feefineactions?.records || [];
     const isClaimReturnedItem = (itemDetails?.statusItemName === itemStatuses.CLAIMED_RETURNED);
 
     const disabled = account.remaining === 0;
@@ -427,8 +427,8 @@ class AccountDetails extends React.Component {
       itemDetails,
     } = this.props;
 
-    const allAccounts = _.get(resources, ['feefineshistory', 'records'], []);
-    const loan = _.get(resources, ['loans', 'records'], []).filter((l) => l.id === account.loanId);
+    const allAccounts = resources?.feefineshistory?.records || [];
+    const loan = (resources?.loans?.records || []).filter((l) => l.id === account.loanId);
     const loanPolicyId = loan[0]?.loanPolicyId;
     const loanPolicyName = loan[0]?.loanPolicy.name;
     const loanCloseDate = loan[0]?.loanCloseDate;
@@ -485,7 +485,7 @@ class AccountDetails extends React.Component {
       comments: action => (action.comments ? (<div>{action.comments.split('\n').map(c => (<Row><Col>{c}</Col></Row>))}</div>) : ''),
     };
 
-    const feeFineActions = _.get(resources, ['feefineactions', 'records'], []);
+    const feeFineActions = resources?.feefineactions?.records || [];
     const latestPaymentStatus = account.paymentStatus.name;
 
     const actions = this.state.data || [];
