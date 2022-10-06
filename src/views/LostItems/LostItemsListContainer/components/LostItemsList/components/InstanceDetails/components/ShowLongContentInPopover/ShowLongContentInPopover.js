@@ -4,37 +4,41 @@ import {
   InfoPopover,
 } from '@folio/stripes/components';
 
+const defaultAdditionalText = '';
 const defaultContentLength = 75;
 const buttonProps = {
   icon: 'ellipsis',
   iconSize: 'medium',
 };
 
-export const getComponentText = (text, contentLength = defaultContentLength) => {
+export const getComponentText = (text, additionalText = defaultAdditionalText, contentLength = defaultContentLength) => {
+  const contentAdditionalText = additionalText ? ` (${additionalText})` : '';
+
   if (text.length > contentLength) {
     let splitPosition = text.slice(0, contentLength + 1).lastIndexOf(' ');
     splitPosition = splitPosition > 0 ? splitPosition : contentLength;
 
     return {
       contentText: text.slice(0, splitPosition),
-      popoverText: text,
+      popoverText: text + contentAdditionalText,
     };
   }
 
   return {
-    contentText: text,
+    contentText: text + contentAdditionalText,
     popoverText: '',
   };
 };
 
 const ShowLongContentInPopover = ({
   text,
+  additionalText,
   contentLength,
 }) => {
   const {
     contentText,
     popoverText,
-  } = getComponentText(text, contentLength);
+  } = getComponentText(text, additionalText, contentLength);
 
   return (
     <div data-testid="longContentInPopover">
@@ -50,10 +54,12 @@ const ShowLongContentInPopover = ({
 
 ShowLongContentInPopover.propTypes = {
   text: PropTypes.string.isRequired,
+  additionalText: PropTypes.string,
   contentLength: PropTypes.number,
 };
 
 ShowLongContentInPopover.defaultProps = {
+  additionalText: defaultAdditionalText,
   contentLength: defaultContentLength,
 };
 
