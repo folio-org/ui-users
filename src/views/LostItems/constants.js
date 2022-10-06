@@ -6,6 +6,7 @@ export const PAGE_AMOUNT = 100;
 
 export const ACTUAL_COST_RECORD_FIELD_NAME = {
   LOSS_TYPE: 'lossType',
+  USER: 'user',
   USER_ID: 'id',
   USER_BARCODE: 'barcode',
   USER_FIRST_NAME: 'firstName',
