@@ -74,6 +74,7 @@ export const lostItemsListFormatter = {
     const lastName = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.USER_LAST_NAME], '');
     const firstName = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.USER_FIRST_NAME], '');
     const middleName = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.USER_MIDDLE_NAME], '');
+    const patronGroup = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.USER_PATRON_GROUP], '');
     let patronName = lastName;
 
     if (firstName || middleName) {
@@ -86,7 +87,12 @@ export const lostItemsListFormatter = {
       patronName = patronName.concat(middleName);
     }
 
-    return patronName;
+    return (
+      <div>
+        <div>{patronName}</div>
+        <div>{`(${patronGroup})`}</div>
+      </div>
+    );
   },
   [COLUMNS_NAME.LOSS_TYPE]: (actualCostRecord) => {
     const lossType = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.LOSS_TYPE], '');
