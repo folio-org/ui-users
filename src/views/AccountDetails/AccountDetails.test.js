@@ -85,7 +85,7 @@ const loanResources = {
 };
 
 const renderAccountDetails = (extraProps = {}) => renderWithRouter(
-  <AccountDetails {...props} {...extraProps}/>
+  <AccountDetails {...props} {...extraProps} />
 );
 
 afterEach(() => jest.clearAllMocks());
@@ -114,16 +114,13 @@ describe('Checking Action Menu', () => {
   });
 
   test('Pay button should be present', () => {
-//    renderAccountDetails({ account });
-  //  expect(screen.getByRole('button', { name: 'ui-users.accounts.history.button.pay })).toBeVisible();
     renderAccountDetails({ account });
-    expect(screen.findAllByText('button', { id: 'ui-users.accounts.history.button.pay' })).toBeInTheDocument();
-    //expect(screen.getByTestId('data-test-payAccountActionsHistory')[0]).toBeEnabled();
+    expect(document.querySelector('#payAccountActionsHistory')).toBeInTheDocument();
   });
 
   test('Export button should be present', () => {
     renderAccountDetails({ account });
-    expect(screen.queryByText('ui-users.export.button')).toBeInTheDocument();
+    expect(document.querySelector('#exportAccountActionsHistoryReport')).toBeInTheDocument();
   });
 });
 

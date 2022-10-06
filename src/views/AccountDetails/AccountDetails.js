@@ -22,7 +22,6 @@ import {
 } from '@folio/stripes/components';
 import {
   IfPermission,
-  IfInterface,
   AppIcon,
 } from '@folio/stripes/core';
 
@@ -343,80 +342,67 @@ class AccountDetails extends React.Component {
     if (showActionMenu) {
       return (
         <div data-test-actions-menu>
-          <IfInterface name="feesfines">
-            <Button
-              data-test-payAccountActionsHistory
-              id="payAccountActionsHistory"
-              buttonStyle="dropdownItem"
-              disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending || isClaimReturnedItem}
-              onClick={this.pay}
-            >
-              <Icon icon="cart">
-                <FormattedMessage id="ui-users.accounts.history.button.pay" />
-              </Icon>
-            </Button>
-          </IfInterface>
-          <IfInterface name="feesfines">
-            <Button
-              id="waiveAccountActionsHistory"
-              buttonStyle="dropdownItem"
-              disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending || isClaimReturnedItem}
-              onClick={this.waive}
-            >
-              <Icon icon="cancel">
-                <FormattedMessage id="ui-users.accounts.history.button.waive" />
-              </Icon>
-            </Button>
-          </IfInterface>
-          <IfInterface name="feesfines">
-            <Button
-              id="refundAccountActionsHistory"
-              buttonStyle="dropdownItem"
-              disabled={!refundAllowed || buttonDisabled || isActionsPending || isAccountsPending || isClaimReturnedItem}
-              onClick={this.refund}
-            >
-              <Icon icon="replace">
-                <FormattedMessage id="ui-users.accounts.history.button.refund" />
-              </Icon>
-            </Button>
-          </IfInterface>
-          <IfInterface name="feesfines">
-            <Button
-              id="transferAccountActionsHistory"
-              buttonStyle="dropdownItem"
-              disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending || isClaimReturnedItem}
-              onClick={this.transfer}
-            >
-              <Icon icon="transfer">
-                <FormattedMessage id="ui-users.accounts.history.button.transfer" />
-              </Icon>
-            </Button>
-          </IfInterface>
-          <IfInterface name="feesfines">
-            <Button
-              id="errorAccountActionsHistory"
-              buttonStyle="dropdownItem"
-              disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending || !cancelAllowed || isClaimReturnedItem}
-              onClick={this.error}
-            >
-              <Icon icon="trash">
-                <FormattedMessage id="ui-users.accounts.button.error" />
-              </Icon>
-            </Button>
-          </IfInterface>
-          <IfInterface name="feesfines">
-            <Button
-              id="exportAccountActionsHistoryReport"
-              buttonStyle="dropdownItem"
-              data-test-export-account-actions-history-report
-              disabled={_.isEmpty(allFeeFineActions)}
-              onClick={this.generateFeesFinesReport}
-            >
-              <Icon icon="download">
-                <FormattedMessage id="ui-users.export.button" />
-              </Icon>
-            </Button>
-          </IfInterface>
+          <Button
+            id="payAccountActionsHistory"
+            buttonStyle="dropdownItem"
+            disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending || isClaimReturnedItem}
+            onClick={this.pay}
+          >
+            <Icon icon="cart">
+              <FormattedMessage id="ui-users.accounts.history.button.pay" />
+            </Icon>
+          </Button>
+          <Button
+            id="waiveAccountActionsHistory"
+            buttonStyle="dropdownItem"
+            disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending || isClaimReturnedItem}
+            onClick={this.waive}
+          >
+            <Icon icon="cancel">
+              <FormattedMessage id="ui-users.accounts.history.button.waive" />
+            </Icon>
+          </Button>
+          <Button
+            id="refundAccountActionsHistory"
+            buttonStyle="dropdownItem"
+            disabled={!refundAllowed || buttonDisabled || isActionsPending || isAccountsPending || isClaimReturnedItem}
+            onClick={this.refund}
+          >
+            <Icon icon="replace">
+              <FormattedMessage id="ui-users.accounts.history.button.refund" />
+            </Icon>
+          </Button>
+          <Button
+            id="transferAccountActionsHistory"
+            buttonStyle="dropdownItem"
+            disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending || isClaimReturnedItem}
+            onClick={this.transfer}
+          >
+            <Icon icon="transfer">
+              <FormattedMessage id="ui-users.accounts.history.button.transfer" />
+            </Icon>
+          </Button>
+          <Button
+            id="errorAccountActionsHistory"
+            buttonStyle="dropdownItem"
+            disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending || !cancelAllowed || isClaimReturnedItem}
+            onClick={this.error}
+          >
+            <Icon icon="trash">
+              <FormattedMessage id="ui-users.accounts.button.error" />
+            </Icon>
+          </Button>
+          <Button
+            id="exportAccountActionsHistoryReport"
+            buttonStyle="dropdownItem"
+            data-test-export-account-actions-history-report
+            disabled={_.isEmpty(allFeeFineActions)}
+            onClick={this.generateFeesFinesReport}
+          >
+            <Icon icon="download">
+              <FormattedMessage id="ui-users.export.button" />
+            </Icon>
+          </Button>
         </div>
       );
     } else {
