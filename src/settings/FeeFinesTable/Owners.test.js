@@ -1,5 +1,6 @@
 import renderWithRouter from 'helpers/renderWithRouter';
 import Owners from './Owners';
+import { SHARED_OWNER } from '../../constants';
 
 jest.unmock('@folio/stripes/components');
 
@@ -17,7 +18,7 @@ describe('Owners component', () => {
         },
         {
           id: 'test1256',
-          owner: 'Shared'
+          owner: SHARED_OWNER
         }
       ]
     };
@@ -32,7 +33,7 @@ describe('Owners component', () => {
       dataOptions: [
         {
           id: 'test1256',
-          owner: 'Shared'
+          owner: SHARED_OWNER,
         }
       ]
     };

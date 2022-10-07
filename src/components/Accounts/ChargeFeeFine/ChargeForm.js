@@ -22,6 +22,7 @@ import { effectiveCallNumber } from '@folio/stripes/util';
 import UserInfo from './UserInfo';
 import FeeFineInfo from './FeeFineInfo';
 import ItemInfo from './ItemInfo';
+import { SHARED_OWNER } from '../../../constants';
 
 function showValidationErrors({ feeFineId, ownerId, amount }) {
   const errors = {};
@@ -93,7 +94,7 @@ class ChargeForm extends React.Component {
     const { owners: prevOwners } = prevProps;
 
     if (prevOwners !== owners) {
-      const shared = (owners.find(o => o.owner === 'Shared') || {}).id;
+      const shared = (owners.find(o => o.owner === SHARED_OWNER) || {}).id;
       onFindShared(shared);
     }
   }
@@ -188,7 +189,7 @@ class ChargeForm extends React.Component {
     const ownerOptions = [];
 
     this.props.owners.forEach((own = {}) => {
-      if (own.owner !== 'Shared') ownerOptions.push({ label: own.owner, value: own.id });
+      if (own.owner !== SHARED_OWNER) ownerOptions.push({ label: own.owner, value: own.id });
     });
 
     feeFineTypeOptions.forEach((feefineItem) => {

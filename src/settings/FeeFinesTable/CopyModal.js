@@ -17,6 +17,7 @@ import {
 } from '@folio/stripes/components';
 import stripesFinalForm from '@folio/stripes/final-form';
 
+import { SHARED_OWNER } from '../../constants';
 import css from './FeeFinesTable.css';
 
 const validate = (type) => {
@@ -50,7 +51,7 @@ class CopyForm extends React.Component {
     const options = [];
 
     this.props.owners.forEach((o) => {
-      if (o.owner !== 'Shared') options.push({ label: o.owner, value: o.id });
+      if (o.owner !== SHARED_OWNER) options.push({ label: o.owner, value: o.id });
     });
 
     return (

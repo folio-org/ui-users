@@ -79,7 +79,7 @@ jobs:
         run: yarn config set @folio:registry $FOLIO_NPM_REGISTRY
 
       - name: Run yarn install
-        run: yarn install --ignore-scripts
+        run: yarn install --ignore-scripts --frozen-lockfile
 
       - name: Run yarn list
         run: yarn list --pattern @folio
@@ -159,14 +159,6 @@ jobs:
           name: jest-coverage-report
           path: ${{ env.JEST_COVERAGE_REPORT_DIR }}
           retention-days: 30
-
-      - name: Publish yarn.lock
-        uses: actions/upload-artifact@v2
-        if: failure()
-        with:
-          name: yarn.lock
-          path: yarn.lock
-          retention-days: 5
 
       - name: Set default branch as env variable
         run: echo "DEFAULT_BRANCH=${{ github.event.repository.default_branch }}" >> $GITHUB_ENV

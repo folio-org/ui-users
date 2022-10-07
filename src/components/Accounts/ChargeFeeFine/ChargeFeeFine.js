@@ -21,6 +21,7 @@ import {
   loadServicePoints,
   deleteOptionalActionFields,
 } from '../accountFunctions';
+import { SHARED_OWNER } from '../../../constants';
 
 class ChargeFeeFine extends React.Component {
   static propTypes = {
@@ -249,7 +250,7 @@ class ChargeFeeFine extends React.Component {
 
     if (_.get(resources, ['activeRecord', 'shared']) === undefined) {
       const owners = _.get(resources, ['owners', 'records'], []);
-      const shared = (owners.find(o => o.owner === 'Shared') || {}).id || '0';
+      const shared = (owners.find(o => o.owner === SHARED_OWNER) || {}).id || '0';
       mutator.activeRecord.update({ shared });
     }
     mutator.activeRecord.update({ ownerId });
@@ -438,7 +439,7 @@ class ChargeFeeFine extends React.Component {
     const feefines = _.get(resources, ['allfeefines', 'records'], []);
     const owners = _.get(resources, ['owners', 'records'], []);
     const list = [];
-    const shared = owners.find(o => o.owner === 'Shared');
+    const shared = owners.find(o => o.owner === SHARED_OWNER);
     feefines.forEach(f => {
       if (!list.find(o => (o || {}).id === f.ownerId)) {
         const owner = owners.find(o => (o || {}).id === f.ownerId);
