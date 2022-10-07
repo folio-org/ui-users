@@ -22,6 +22,7 @@ import {
 
 import { getFullName } from '../../util';
 import getWarning from '../../util/getProxySponsorWarning';
+import validateMinDate from '../../validators/validateMinDate';
 
 import css from './ProxyEditItem.css';
 
@@ -182,6 +183,7 @@ class ProxyEditItem extends React.Component {
                     label={<FormattedMessage id="ui-users.expirationDate" />}
                     dateFormat="YYYY-MM-DD"
                     name={`${name}.proxy.expirationDate`}
+                    validate={validateMinDate('ui-users.errors.expirationDate')}
                   />
                 </Col>
                 <OnChange name={`${name}.proxy.expirationDate`}>

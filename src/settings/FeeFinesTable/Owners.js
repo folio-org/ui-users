@@ -9,10 +9,12 @@ import {
   Headline,
 } from '@folio/stripes/components';
 
+import { SHARED_OWNER } from '../../constants';
+
 const Owners = ({ dataOptions, onChange, filterShared }) => {
   const { formatMessage } = useIntl();
   const options = [];
-  const shared = dataOptions.find(d => d.owner === 'Shared') || {};
+  const shared = dataOptions.find(d => d.owner === SHARED_OWNER) || {};
 
   if (shared.id && filterShared === false) {
     options.push(

@@ -11,6 +11,24 @@
 * Confirm button is not disabled after the click and each click on this button sends the request to the server. Refs UIU-2645.
 * When formatting names, correctly treat empty-strings as missing. Refs UIU-2610.
 * Additional updates to Pop-up note Refs UIU-2653
+* Modify error message when a Fee/Fine Owner enters a Fee/Fine Type that is duplicated by "Shared" Fee/Fine Owner. Refs UIU-2560.
+* Correctly import from `stripes/core` not `stripes-core`. Refs UIU-2642.
+* Create permission for "Lost items requiring actual costs" processing page. Refs UIU-2491.
+* Add decimal places for "Fees/fines incurred" column on "Loan History" page. Refs UIU-2236.
+* Add selected actual service points to "Financial Transaction Detail Report" title line. Refs UIU-2666.
+* Fix issue with Qindex select automatically triggering the search on change. Refs UIU-2665.
+* create Jest/RTL test for NoteEditPage.js. Refs UIU-2424
+* Clear Fee/Fine Type error message after changing owner. Refs UIU-2670.
+* Bump `users` interface to version `16.0`. Refs UIU-2648.
+* Update `permUserId` before updating permissions. Fixes UIU-2672.
+* Fix broken link to item in export fees fines report. Refs UIU-2540.
+* Make visible loan history for deleted users. UIU-2659.
+* Leverage `yarn.lock`. UIU-2688.
+* List of items for lost items requiring actual cost. Refs UIU-1382.
+* Lost items requiring ACTUAL COST: Implement additional information in 'Instance' column. Refs UIU-1871.
+* Lost items requiring ACTUAL COST: Implement additional information in 'Patron' column. Refs UIU-1870.
+* Add permissions for lost items page. Refs UIU-2690.
+* Fix sorting by "Patron" column on the "Lost items requiring actual cost" page. Refs UIU-2691.
 
 ## [8.1.0](https://github.com/folio-org/ui-users/tree/v8.1.0) (2022-06-27)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.0.0...v8.1.0)
@@ -36,6 +54,7 @@
 * Create Jest/RTL test for ActionsDropdown.js. Refs UIU-2331
 * Create Jest/RTL test for PasswordControl. Refs UIU-2300.
 * Create Jest/RTL test for CustomFieldsSettings. Refs UIU-2386.
+* Create Jest/RTL test for NoteCreatePage.js. Refs UIU-2423.
 * Fix Patron blocks settings order. Refs UIU-2448.
 * Update NodeJS to Active LTS. Refs UIU-2607.
 * Use single formatted message for successfully callout message. Refs UIU-1657.
@@ -49,6 +68,7 @@
 * create Jest/RTL test for src/components/Accounts/Filters. Refs UIU-2356.
 * Handle time zone issues in user info date displays. Fixes UIU-2623.
 * User should be directed to the last open page when working in more than one browser. Refs UIU-2605.
+* create Jest/RTL test for NoteCreatePage.js. Refs UIU-2423.
 
 ## [8.0.0](https://github.com/folio-org/ui-users/tree/v8.0.0) (2022-03-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v7.1.0...v8.0.0)
@@ -246,6 +266,9 @@
 * Create Jest/RTL test for `loanActionMap`. Refs UIU-2333.
 * Create Jest/RTL test for `OpenLoansControl`. Refs UIU-2347.
 * Create Jest/RTL test for `PatronBlockLayer`. Refs UIU-2361.
+* Create Jest/RTL test for `withClaimReturned`. Refs UIU-2352.
+* Create Jest/RTL test for `navigationHandlers`. Refs UIU-2369.
+* Create Jest/RTL test for `ItemInfo`. Refs UIU-2363.
 
 ## [6.1.0](https://github.com/folio-org/ui-users/tree/v6.1.0) (2021-06-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v6.0.0...v6.1.0)

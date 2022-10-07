@@ -12,8 +12,8 @@ jest.mock('@folio/stripes/components', () => ({
       <span>{props.children}</span>
     </span>
   )),
-  Button: jest.fn(({ children, onClick = jest.fn() }) => (
-    <button data-test-button type="button" onClick={onClick}>
+  Button: jest.fn(({ children, onClick = jest.fn(), ...rest }) => (
+    <button data-test-button type="button" {...rest} onClick={onClick}>
       <span>
         {children}
       </span>
@@ -34,6 +34,8 @@ jest.mock('@folio/stripes/components', () => ({
       </div>
     </div>
   )),
+  Dropdown: jest.fn(({ children, ...rest }) => <div {...rest}>{ children }</div>),
+  DropdownMenu: jest.fn(({ children, ...rest }) => <div {...rest}>{ children }</div>),
   Datepicker: jest.fn(({ ref, children, ...rest }) => (
     <div ref={ref} {...rest}>
       {children}
@@ -57,6 +59,9 @@ jest.mock('@folio/stripes/components', () => ({
     <button type="button" {...buttonProps}>
       <span {...rest} />
     </button>
+  )),
+  InfoPopover: jest.fn(({ children, ...rest }) => (
+    <span {...rest}>{children}</span>
   )),
   KeyValue: jest.fn(({ label, children, value }) => (
     <>
