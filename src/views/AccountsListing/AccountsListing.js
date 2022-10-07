@@ -12,20 +12,18 @@ import {
   ButtonGroup,
   Checkbox,
   Col,
-  Dropdown,
-  DropdownMenu,
+  Icon,
   filterState,
   Pane,
   PaneHeader,
-  PaneHeaderIconButton,
-  PaneMenu,
+  MenuSection,
   Paneset,
   Row,
   Callout,
 } from '@folio/stripes/components';
 import css from './AccountsListing.css';
 
-import { getFullName } from '../../components/util';
+import { getFullName, isRefundAllowed } from '../../components/util';
 import Actions from '../../components/Accounts/Actions/FeeFineActions';
 import FeeFineReport from '../../components/data/reports/FeeFineReport';
 import {
@@ -104,6 +102,7 @@ class AccountsHistory extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
+      hasPerm: PropTypes.func,
     }),
     resources: PropTypes.shape({
       feefineshistory: PropTypes.shape({
@@ -116,6 +115,7 @@ class AccountsHistory extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
       query: PropTypes.object,
+      filter: PropTypes.object,
     }),
     okapi: PropTypes.object,
     user: PropTypes.object,
@@ -124,10 +124,10 @@ class AccountsHistory extends React.Component {
     patronGroup: PropTypes.object,
     mutator: PropTypes.shape({
       user: PropTypes.shape({
-        update: PropTypes.func.isRequired,
+        update: PropTypes.func,
       }),
       query: PropTypes.shape({
-        update: PropTypes.func.isRequired,
+        update: PropTypes.func,
       }),
       activeRecord: PropTypes.object,
     }),
@@ -135,6 +135,7 @@ class AccountsHistory extends React.Component {
       query: PropTypes.object.isRequired,
     }),
     history: PropTypes.object,
+    update: PropTypes.func,
     loans: PropTypes.arrayOf(PropTypes.object),
     location: PropTypes.object,
     match: PropTypes.object,
@@ -199,15 +200,15 @@ class AccountsHistory extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const filter = _.get(this.props.resources, ['filter', 'records'], []);
-    const nextFilter = _.get(nextProps.resources, ['filter', 'records'], []);
-    const accounts = _.get(this.props.resources, ['feefineshistory', 'records'], []);
-    const loans = _.get(this.props.resources, ['loans', 'records'], []);
-    const nextLoans = _.get(nextProps.resources, ['loans', 'records'], []);
+    const filter = this.props.resources?.filter?.records || [];
+    const nextFilter = nextProps.resources?.filter?.records || [];
+    const accounts = this.props.resources?.feefineshistory?.records || [];
+    const loans = this.props.resources?.loans?.records || [];
+    const nextLoans = nextProps.resources?.loans?.records || [];
 
-    const nextAccounts = _.get(nextProps.resources, ['feefineshistory', 'records'], []);
-    const comments = _.get(this.props.resources, ['comments', 'records'], []);
-    const nextComments = _.get(nextProps.resources, ['comments', 'records'], []);
+    const nextAccounts = nextProps.resources?.feefineshistory?.records || [];
+    const comments = this.props.resources?.comments?.records || [];
+    const nextComments = nextProps.resources?.comments?.records || [];
     if (JSON.stringify(accounts) !== JSON.stringify(nextAccounts)) {
       let selected = 0;
       this.state.selectedAccounts.forEach(a => {
@@ -234,7 +235,7 @@ class AccountsHistory extends React.Component {
       resources
     } = this.props;
 
-    let filterAccounts = _.get(resources, ['filter', 'records'], []);
+    let filterAccounts = resources?.filter?.records || [];
     filterAccounts = this.filterAccountsByStatus(filterAccounts, params.accountstatus);
     const feeFineTypes = count(filterAccounts.map(a => (a.feeFineType)));
     const feeFineOwners = count(filterAccounts.map(a => (a.feeFineOwner)));
@@ -394,9 +395,9 @@ class AccountsHistory extends React.Component {
       },
       intl,
     } = this.props;
-    const feeFineActions = _.get(comments, 'records', []);
-    const accounts = _.get(feefineshistory, 'records', []);
-    const loansList = _.get(loans, 'records', []);
+    const feeFineActions = comments?.records || [];
+    const accounts = feefineshistory?.records || [];
+    const loansList = loans?.records || [];
 
     const reportData = {
       intl,
@@ -432,6 +433,101 @@ class AccountsHistory extends React.Component {
     });
   }
 
+  getActionMenu = renderColumnsMenu => () => {
+    const {
+      match: { params },
+      resources,
+      intl,
+    } = this.props;
+    const selectedAccounts = this.state.selectedAccounts.map(a => this.accounts.find(ac => ac.id === a.id) || {});
+
+    const feeFineActions = resources?.comments?.records || [];
+    const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
+    const canRefund = selectedAccounts.some((a) => isRefundAllowed(a, feeFineActions));
+
+    const showActionMenu = this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
+    if (showActionMenu) {
+      return (
+        <>
+          <MenuSection
+            label={intl.formatMessage({ id: 'ui-users.actions' })}
+            id="actions-menu-section"
+          >
+            <Button
+              id="open-closed-all-charge-button"
+              buttonStyle="dropdownItem"
+              marginBottom0
+              disabled={buttonDisabled}
+              to={`/users/${params.id}/charge`}
+            >
+              <Icon icon="plus-sign">
+                <FormattedMessage id="ui-users.accounts.button.new" />
+              </Icon>
+            </Button>
+            <Button
+              id="open-closed-all-pay-button"
+              buttonStyle="dropdownItem"
+              marginBottom0
+              disabled={!((this.state.actions.regularpayment === true) && (buttonDisabled === false))}
+              onClick={() => { this.onChangeActions({ regular: true }); }}
+            >
+              <Icon icon="cart">
+                <FormattedMessage id="ui-users.accounts.history.button.pay" />
+              </Icon>
+            </Button>
+            <Button
+              id="open-closed-all-wave-button"
+              marginBottom0
+              disabled={!((this.state.actions.waive === true) && (buttonDisabled === false))}
+              buttonStyle="dropdownItem"
+              onClick={() => { this.onChangeActions({ waiveMany: true }); }}
+            >
+              <Icon icon="cancel">
+                <FormattedMessage id="ui-users.accounts.history.button.waive" />
+              </Icon>
+            </Button>
+            <Button
+              id="open-closed-all-refund-button"
+              marginBottom0
+              disabled={!((this.state.actions.refund === true) && (buttonDisabled === false) && (canRefund === true))}
+              buttonStyle="dropdownItem"
+              onClick={() => { this.onChangeActions({ refundMany: true }); }}
+            >
+              <Icon icon="replace">
+                <FormattedMessage id="ui-users.accounts.history.button.refund" />
+              </Icon>
+            </Button>
+            <Button
+              id="open-closed-all-transfer-button"
+              marginBottom0
+              disabled={!((this.state.actions.transfer === true) && (buttonDisabled === false))}
+              buttonStyle="dropdownItem"
+              onClick={() => { this.onChangeActions({ transferMany: true }); }}
+            >
+              <Icon icon="transfer">
+                <FormattedMessage id="ui-users.accounts.history.button.transfer" />
+              </Icon>
+            </Button>
+            <Button
+              id="fee-fine-report-export-button"
+              marginBottom0
+              disabled={_.isEmpty(feeFineActions)}
+              buttonStyle="dropdownItem"
+              onClick={this.generateFeesFinesReport}
+            >
+              <Icon icon="download">
+                <FormattedMessage id="ui-users.export.button" />
+              </Icon>
+            </Button>
+          </MenuSection>
+          {renderColumnsMenu}
+        </>
+      );
+    } else {
+      return null;
+    }
+  }
+
   render() {
     const {
       location,
@@ -445,9 +541,9 @@ class AccountsHistory extends React.Component {
       loans
     } = this.props;
     const query = location.search ? queryString.parse(location.search) : {};
-    let accounts = _.get(resources, ['feefineshistory', 'records'], []);
+    let accounts = resources?.feefineshistory?.records || [];
     const allAccounts = accounts;
-    const feeFineActions = _.get(resources, ['comments', 'records'], []);
+    const feeFineActions = resources?.comments?.records || [];
     let queryLoan = '';
     if (query.loan) {
       accounts = accounts.filter(a => a.loanId === query.loan);
@@ -456,7 +552,6 @@ class AccountsHistory extends React.Component {
     // const open = accounts.filter(a => a.status.name === 'Open') || [];// a.status.name
     // const closed = accounts.filter(a => a.status.name === 'Closed') || [];// a.status.name
     accounts = this.filterAccountsByStatus(accounts, params.accountstatus);
-    const badgeCount = accounts.length;
     // if (query.layer === 'open-accounts') badgeCount = open.length;
     // else if (query.layer === 'closed-accounts') badgeCount = closed.length;
     const filters = filterState(this.queryParam('f'));
@@ -478,41 +573,20 @@ class AccountsHistory extends React.Component {
       'returnedDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' }),
     };
 
-    const firstMenu = (
-      <PaneMenu>
-        <PaneHeaderIconButton
-          id="filter-button"
-          icon="search"
-          onClick={this.toggleFilterPane}
-          badgeCount={(userOwned && accounts.length) ? badgeCount : undefined}
-        />
-        <Dropdown
-          open={this.state.toggleDropdownState}
-          onToggle={this.onDropdownClick}
-          className={css.dropDownStyle}
-          group
-          pullRight
-          label={<FormattedMessage id="ui-users.accounts.history.button.select" />}
-          buttonProps={{
-            'data-test-select-columns': true,
-            'bottomMargin0': true,
-          }}
-        >
-          <DropdownMenu data-role="menu">
-            <ul>
-              {this.renderCheckboxList(columnMapping)}
-            </ul>
-          </DropdownMenu>
-        </Dropdown>
-      </PaneMenu>
+    const columnMenu = (
+      <MenuSection
+        id="sectionShowColumns"
+        label={intl.formatMessage({ id: 'ui-users.showColumns' })}
+      >
+        <ul>
+          {this.renderCheckboxList(columnMapping)}
+        </ul>
+      </MenuSection>
     );
 
     const header = (
       <Row style={{ width: '100%' }}>
-        <Col xs={2}>
-          {firstMenu}
-        </Col>
-        <Col className={css.buttonGroupWrap} xsOffset={2} xs={5}>
+        <Col className={css.buttonGroupWrap} xsOffset={4} xs={5}>
           <ButtonGroup
             fullWidth
           >
@@ -588,6 +662,7 @@ class AccountsHistory extends React.Component {
     return (
       <Paneset>
         <Pane
+          id="pane-account-listing"
           defaultWidth="100%"
           dismissible
           padContent={false}
@@ -612,6 +687,7 @@ class AccountsHistory extends React.Component {
               />
             </div>
           )}
+          actionMenu={this.getActionMenu(columnMenu)}
         >
           <Paneset>
             <Filters
@@ -640,7 +716,6 @@ class AccountsHistory extends React.Component {
                 actions={this.state.actions}
                 query={query}
                 onChangeActions={this.onChangeActions}
-                onExportFeesFinesReport={this.generateFeesFinesReport}
                 patronGroup={patronGroup}
                 handleOptionsChange={this.handleOptionsChange}
               />
