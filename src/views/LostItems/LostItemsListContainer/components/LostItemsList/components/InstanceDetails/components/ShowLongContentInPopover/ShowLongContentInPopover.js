@@ -4,6 +4,8 @@ import {
   InfoPopover,
 } from '@folio/stripes/components';
 
+import css from './ShowLongContentInPopover.css';
+
 const defaultAdditionalText = '';
 const defaultContentLength = 75;
 const buttonProps = {
@@ -39,12 +41,13 @@ const ShowLongContentInPopover = ({
     contentText,
     popoverText,
   } = getComponentText(text, additionalText, contentLength);
+  const infoPopoverContent = <div className={css.longContentInPopover}>{popoverText}</div>;
 
   return (
     <div data-testid="longContentInPopover">
       {contentText}
       {popoverText && <InfoPopover
-        content={popoverText}
+        content={infoPopoverContent}
         buttonProps={buttonProps}
         data-testid="infoPopover"
       />}
