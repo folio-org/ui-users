@@ -265,6 +265,9 @@
 * Create Jest/RTL test for `accountFunctions`. Refs UIU-2334.
 * Create Jest/RTL test for `loanActionMap`. Refs UIU-2333.
 * Create Jest/RTL test for `OpenLoansControl`. Refs UIU-2347.
+* Create Jest/RTL test for `CommentRequiredForm`. Refs UIU-2381.
+* Create Jest/RTL test for `PatronBlockForm`. Refs UIU-2353.
+* Create Jest/RTL test for `PatronBlockLayer`. Refs UIU-2361.
 * Create Jest/RTL test for `withClaimReturned`. Refs UIU-2352.
 * Create Jest/RTL test for `navigationHandlers`. Refs UIU-2369.
 * Create Jest/RTL test for `ItemInfo`. Refs UIU-2363.
