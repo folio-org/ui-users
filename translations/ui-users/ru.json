@@ -167,7 +167,7 @@
     "feefines.errors.amountNumeric": "Сумма по умолчанию должна быть числом",
     "feefines.errors.amountPositive": "Сумма по умолчанию должна быть положительной",
     "feefines.errors.exist": "Fee/fine type exists",
-    "feefines.errors.existShared": "Fee/fine type exists for other Fee/fine owner(s)",
+    "feefines.errors.existShared": "Fee/fine type exists for Shared Fee/fine owner",
     "feefines.modal.error": "Выберите один для продолжения",
     "feefines.modal.yes": "Да",
     "feefines.modal.no": "Нет",
@@ -990,5 +990,16 @@
     "charge.comment.label": "Comments",
     "errors.permissionChangeFailed": "Permissions were not changed",
     "charge.message.successfully": "The {feeFineType} fee/fine of <strong>{amount}</strong> has been successfully <strong>{paymentName}</strong> for <strong>{fullName}</strong>",
-    "details.field.barcode.notFound": "{barcode} (not found)"
+    "details.field.barcode.notFound": "{barcode} (not found)",
+    "notes.popupModal.label": "User note",
+    "feefines.errors.existOther": "Fee/fine type exists for other Fee/fine owner(s)",
+    "reports": "Reports",
+    "actionMenu.lostItems": "Lost items requiring actual cost",
+    "lostItems.message.noAccessToActualCostPage": "User does not have permission to access \"Lost items needing actual cost\" processing page",
+    "permission.lost-items.requiring-actual-cost": "Users: Can process lost items requiring actual cost",
+    "errors.personal.dateOfBirth": "Please enter correct birth date",
+    "errors.extended.dateEnrolled": "Please enter correct enrolled date",
+    "errors.expirationDate": "Please enter correct expiration date",
+    "user.unknown": "Unknown user",
+    "errors.proxyBorrowerNotFound": "Proxy borrower not found"
 }

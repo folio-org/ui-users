@@ -23,6 +23,7 @@ import {
 
 import {
   MAX_RECORDS,
+  SHARED_OWNER,
 } from '../constants';
 
 const columnMapping = {
@@ -108,7 +109,7 @@ class FeeFineSettings extends React.Component {
 
   componentDidMount() {
     this.props.mutator.owners.GET().then(records => {
-      const shared = records.find(o => o.owner === 'Shared');
+      const shared = records.find(o => o.owner === SHARED_OWNER);
       this.shared = shared;
       const ownerId = (shared) ? shared.id : ((records.length > 0) ? records[0].id : '');
       this.setState({ ownerId, owners: records });
@@ -164,7 +165,6 @@ class FeeFineSettings extends React.Component {
     const { intl: { formatMessage } } = this.props;
 
     const feefines = _.get(this.props.resources, ['feefines', 'records'], []);
-    const { owners } = this.state;
     const myFeeFines = feefines.filter(f => f.ownerId !== this.state.ownerId) || [];
     const label = formatMessage({ id: 'ui-users.feefines.singular' });
     const itemErrors = validate(item, index, items, 'feeFineType', label);
@@ -184,21 +184,13 @@ class FeeFineSettings extends React.Component {
     if (this.state.ownerId === (this.shared || {}).id) {
       const includes = this.includes(item, index, myFeeFines, 'feeFineType', 'ownerId');
       if (includes) {
-        itemErrors.feeFineType =
-          <FormattedMessage
-            id="ui-users.feefines.errors.existShared"
-            values={{ owner: (owners.find(o => o.id === includes) || {}).owner }}
-          />;
+        itemErrors.feeFineType = <FormattedMessage id="ui-users.feefines.errors.existOther" />;
       }
     } else {
       const shareds = feefines.filter(f => f.ownerId === (this.shared || {}).id) || [];
       const includes = this.includes(item, index, shareds, 'feeFineType', 'ownerId');
       if (includes) {
-        itemErrors.feeFineType =
-          <FormattedMessage
-            id="ui-users.feefines.errors.existShared"
-            values={{ owner: 'Shared' }}
-          />;
+        itemErrors.feeFineType = <FormattedMessage id="ui-users.feefines.errors.existShared" />;
       }
     }
 
@@ -350,6 +342,7 @@ class FeeFineSettings extends React.Component {
         validate={this.validate}
         visibleFields={['feeFineType', 'defaultAmount', 'chargeNoticeId', 'actionNoticeId']}
         formType="final-form"
+        shouldReinitialize
       />
     );
   }

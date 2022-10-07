@@ -5,6 +5,7 @@ import '__mock__/matchMedia.mock';
 
 import renderWithRouter from 'helpers/renderWithRouter';
 import RefundsReportModal from './RefundsReportModal';
+import { SHARED_OWNER } from '../../constants';
 
 jest.unmock('@folio/stripes/components');
 jest.unmock('@folio/stripes/smart-components');
@@ -45,7 +46,7 @@ const ownerData = [
       updatedByUserId: 'e1130416-f25f-5929-8c1d-b33d3f50f414',
       updatedDate: '2021-12-27T12:09:22.973+00:00',
     },
-    owner: 'Shared',
+    owner: SHARED_OWNER,
     servicePointOwner: []
   }
 ];

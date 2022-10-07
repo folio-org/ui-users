@@ -301,3 +301,7 @@ export const financialTransactionsMainReportColumns = [
   'lostItemPolicy',
   'loanDetails'
 ];
+
+export const SHARED_OWNER = 'Shared';
+
+export const MIN_ALLOWED_DATE = '1900-01-01';

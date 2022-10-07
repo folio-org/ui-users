@@ -262,7 +262,10 @@ class UserSearch extends React.Component {
 
     return (
       <>
-        <MenuSection label={intl.formatMessage({ id: 'ui-users.actions' })} id="actions-menu-section">
+        <MenuSection
+          label={intl.formatMessage({ id: 'ui-users.actions' })}
+          id="actions-menu-section"
+        >
           <IfPermission perm="users.item.post,login.item.post,perms.users.item.post">
             <PaneMenu>
               <FormattedMessage id="stripes-smart-components.addNew">
@@ -282,6 +285,22 @@ class UserSearch extends React.Component {
               </FormattedMessage>
             </PaneMenu>
           </IfPermission>
+          <IfPermission perm="ui-users.lost-items.requiring-actual-cost">
+            <Button
+              id="requiring-actual-cost"
+              to="/users/lost-items"
+              buttonStyle="dropdownItem"
+            >
+              <Icon icon="edit">
+                <FormattedMessage id="ui-users.actionMenu.lostItems" />
+              </Icon>
+            </Button>
+          </IfPermission>
+        </MenuSection>
+        <MenuSection
+          label={intl.formatMessage({ id: 'ui-users.reports' })}
+          id="reports-menu-section"
+        >
           <IfInterface name="circulation">
             <IfPermission perm="ui-users.loans.view">
               <Button
@@ -397,11 +416,6 @@ class UserSearch extends React.Component {
     const { history } = this.props;
     history.push('/users/create');
   }
-
-  onChangeIndex = (e) => {
-    const index = e.target.value;
-    this.props.mutator.query.update({ qindex: index });
-  };
 
   shortcuts = [
     {
@@ -577,7 +591,7 @@ class UserSearch extends React.Component {
     const {
       startDate,
       endDate,
-      servicePoint,
+      servicePoint: servicePoints,
       feeFineOwner,
     } = data;
     const {
@@ -586,7 +600,7 @@ class UserSearch extends React.Component {
       intl,
     } = this.props;
     const reportParameters = {
-      createdAt: servicePoint.map(s => s.value),
+      createdAt: servicePoints.map(servicePoint => servicePoint.value),
       feeFineOwner,
       startDate,
       endDate,
@@ -605,7 +619,7 @@ class UserSearch extends React.Component {
         const selectedOwner = resources.owners.records.find(({ id }) => id === feeFineOwner);
         const headerData = {
           ...reportParameters,
-          createdAt: reportParameters.createdAt.join(', '),
+          createdAt: servicePoints.map(servicePoint => servicePoint.label).join(', '),
           feeFineOwner: selectedOwner.owner,
         };
         const reportParams = {
@@ -750,6 +764,7 @@ class UserSearch extends React.Component {
                                   autoFocus
                                   autoComplete="off"
                                   name="query"
+                                  indexName="qindex"
                                   id="input-user-search"
                                   className={css.searchField}
                                   onChange={(e) => {
@@ -761,8 +776,8 @@ class UserSearch extends React.Component {
                                   }}
                                   value={searchValue.query}
                                   searchableIndexes={searchableIndexes}
-                                  selectedIndex={get(resources.query, 'qindex')}
-                                  onChangeIndex={this.onChangeIndex}
+                                  selectedIndex={searchValue.qindex}
+                                  onChangeIndex={getSearchHandlers().query}
                                   marginBottom0
                                   data-test-user-search-input
                                 />
@@ -880,7 +895,8 @@ class UserSearch extends React.Component {
             />
           )}
         </div>
-      </HasCommand>);
+      </HasCommand>
+    );
   }
 }
 
