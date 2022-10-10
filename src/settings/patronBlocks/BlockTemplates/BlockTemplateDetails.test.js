@@ -1,13 +1,10 @@
-import { screen, render } from '@testing-library/dom';
+import { screen } from '@testing-library/dom';
 import renderWithRouter from 'helpers/renderWithRouter';
-import { Form } from 'react-final-form';
 
 import { fireEvent } from '@testing-library/react';
 import BlockTemplateDetails from './BlockTemplateDetails';
 
 jest.unmock('@folio/stripes/components');
-
-const onSubmit = jest.fn();
 
 const renderBlockTemplateDetails = (props) => renderWithRouter(<BlockTemplateDetails {...props} />);
 
