@@ -43,13 +43,9 @@ import getProxySponsorWarning from '../../components/util/getProxySponsorWarning
 
 import css from './UserForm.css';
 
-function validate(values, props) {
+function validate(values) {
   const errors = {};
   errors.personal = {};
-
-  if (!props) {
-    return errors;
-  }
 
   if (!values.personal || !values.personal.lastName) {
     errors.personal.lastName = <FormattedMessage id="ui-users.errors.missingRequiredField" />;
@@ -59,7 +55,7 @@ function validate(values, props) {
     errors.username = <FormattedMessage id="ui-users.errors.missingRequiredUsername" />;
   }
 
-  if (!props.initialValues.id && (!values.creds || !values.creds.password) && values.username) {
+  if (!values.id && (!values.creds || !values.creds.password) && values.username) {
     errors.creds = { password: <FormattedMessage id="ui-users.errors.missingRequiredPassword" /> };
   }
 
