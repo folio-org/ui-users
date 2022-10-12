@@ -55,10 +55,6 @@ function validate(values) {
     errors.username = <FormattedMessage id="ui-users.errors.missingRequiredUsername" />;
   }
 
-  if (!values.id && (!values.creds || !values.creds.password) && values.username) {
-    errors.creds = { password: <FormattedMessage id="ui-users.errors.missingRequiredPassword" /> };
-  }
-
   if (!values.patronGroup) {
     errors.patronGroup = <FormattedMessage id="ui-users.errors.missingRequiredPatronGroup" />;
   }
