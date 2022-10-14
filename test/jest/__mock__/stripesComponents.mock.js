@@ -7,6 +7,9 @@ jest.mock('@folio/stripes/components', () => ({
   AccordionSet: jest.fn(({ children, ...rest }) => (
     <span {...rest}>{children}</span>
   )),
+  AccordionStatus: jest.fn(({ children, ...rest }) => (
+    <span {...rest}>{children}</span>
+  )),
   Badge: jest.fn((props) => (
     <span>
       <span>{props.children}</span>
@@ -160,7 +163,9 @@ jest.mock('@folio/stripes/components', () => ({
       {lastMenu ?? null}
     </div>
   )),
+  PaneHeaderIconButton: jest.fn(({ children }) => <div className="paneHeaderIconButton">{ children }</div>),
   PaneMenu: jest.fn((props) => <div>{props.children}</div>),
+  PaneSet: jest.fn((props) => <div>{props.children}</div>),
   RadioButton: jest.fn(({ label, name, ...rest }) => (
     <div>
       <label htmlFor="male">{label}</label>

@@ -43,7 +43,7 @@ import getProxySponsorWarning from '../../components/util/getProxySponsorWarning
 
 import css from './UserForm.css';
 
-function validate(values) {
+export function validate(values) {
   const errors = {};
   errors.personal = {};
 
