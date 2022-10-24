@@ -1,5 +1,7 @@
 # Change history for ui-users
 
+## 8.3.0 IN PROGRESS
+
 ## [8.2.0](https://github.com/folio-org/ui-users/tree/v8.2.0) (2022-10-24)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v8.2.0)
 
