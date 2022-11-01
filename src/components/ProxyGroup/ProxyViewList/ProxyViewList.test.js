@@ -17,7 +17,7 @@ const props = (data, itemname) => {
     label: <div>Label</div>,
     stripes: STRIPES,
   };
-};
+};  
 
 describe('Checking ProxyViewList ', () => {
   it('if it renders', () => {
