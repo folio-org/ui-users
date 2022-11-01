@@ -97,9 +97,8 @@ class ProxyEditItem extends React.Component {
       index,
       namespace,
     } = this.props;
-
+    
     const formValues = this.state.formValues;
-
     this.toggleStatus(!getWarning(formValues, namespace, index));
   }
 
