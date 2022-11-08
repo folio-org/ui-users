@@ -109,6 +109,8 @@ jest.mock(
   })
 );
 
+jest.mock('../../components/ErrorPane', () => 'UserNotFound');
+
 jest.mock(
   '../../components/UserDetailSections',
   () => ({
@@ -168,7 +170,7 @@ const getProxies = jest.fn();
 const getUserServicePoints = jest.fn();
 const getPreferredServicePoint = jest.fn();
 
-const renderUserDetail = (stripes) => {
+const renderUserDetail = (stripes, props) => {
   return render(
     <StripesContext.Provider value={stripes}>
       <UserDetail
@@ -181,6 +183,7 @@ const renderUserDetail = (stripes) => {
         getUserServicePoints={getUserServicePoints}
         getPreferredServicePoint={getPreferredServicePoint}
         okapi={okapi}
+        {...props}
       />
     </StripesContext.Provider>
   );
@@ -279,6 +282,34 @@ describe('UserDetail', () => {
       test('should call doFetchOpenTransactions', async () => {
         expect(doFetchOpenTransactions).toHaveBeenCalled();
       });
+    });
+  });
+
+  describe('when user is not found', () => {
+    const invalidUserResources = {
+      ...resources,
+      selUser: {
+        failed: {
+          httpStatus: 404
+        }
+      }
+    };
+    it('should render "UserNotFound"', () => {
+      renderUserDetail(stripes, { resources: invalidUserResources });
+      expect(screen.getByText('ui-users.errors.userNotFound')).toBeDefined();
+    });
+  });
+
+  describe('when user information is not available', () => {
+    const resourcesWithoutUserInfo = Object.keys(resources).reduce((acc, prop) => {
+      if (prop !== 'selUser') {
+        acc[prop] = resources[prop];
+      }
+      return acc;
+    }, {});
+    it('should load loading pane when selUser prop is not available', () => {
+      renderUserDetail(stripes, { resources: resourcesWithoutUserInfo });
+      expect(screen.getByText('LoadingPane')).toBeDefined();
     });
   });
 });
