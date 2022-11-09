@@ -268,6 +268,11 @@ describe('UserDetail', () => {
       expect(document.querySelector('#pane-userdetails')).toBeInTheDocument();
     });
 
+    test('UserDetail pane to display user full name', async () => {
+      renderUserDetail(stripes);
+      expect(screen.getAllByText('psych, rick').length).toBeGreaterThan(0);
+    });
+
     test('should render checkDelete button in action menu ', async () => {
       renderUserDetail(stripes);
       expect(screen.getByRole('button', { name: 'ui-users.details.checkDelete' })).toBeVisible();
@@ -294,7 +299,7 @@ describe('UserDetail', () => {
         }
       }
     };
-    it('should render "UserNotFound"', () => {
+    test('should render "UserNotFound"', () => {
       renderUserDetail(stripes, { resources: invalidUserResources });
       expect(screen.getByText('ui-users.errors.userNotFound')).toBeDefined();
     });
@@ -307,7 +312,7 @@ describe('UserDetail', () => {
       }
       return acc;
     }, {});
-    it('should load loading pane when selUser prop is not available', () => {
+    test('should load loading pane when selUser prop is not available', () => {
       renderUserDetail(stripes, { resources: resourcesWithoutUserInfo });
       expect(screen.getByText('LoadingPane')).toBeDefined();
     });
