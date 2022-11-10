@@ -101,33 +101,33 @@ const ActualCostConfirm = ({
     >
       <Row>
         <Col xs={12}>
-            <Row>
-              <Col xs={12}>
-                <p className={css.breakLongText}>
-                  { type === ACTUAL_COST_TYPES.BILL &&
-                    <FormattedMessage
-                      id="ui-users.lostItems.modal.bill.confirm.text"
-                      values={{
-                        actualCostToBill,
-                        patronName,
-                        instanceTitle,
-                        materialType,
-                      }}
-                    />
-                  }
-                  { type === ACTUAL_COST_TYPES.DO_NOT_BILL &&
-                    <FormattedMessage
-                      id="ui-users.lostItems.modal.doNotBill.confirm.text"
-                      values={{
-                        patronName,
-                        instanceTitle,
-                        materialType,
-                      }}
-                    />
-                  }
-                </p>
-              </Col>
-            </Row>
+          <Row>
+            <Col xs={12}>
+              <p className={css.breakLongText}>
+                { type === ACTUAL_COST_TYPES.BILL &&
+                  <FormattedMessage
+                    id="ui-users.lostItems.modal.bill.confirm.text"
+                    values={{
+                      actualCostToBill,
+                      patronName,
+                      instanceTitle,
+                      materialType,
+                    }}
+                  />
+                }
+                { type === ACTUAL_COST_TYPES.DO_NOT_BILL &&
+                  <FormattedMessage
+                    id="ui-users.lostItems.modal.doNotBill.confirm.text"
+                    values={{
+                      patronName,
+                      instanceTitle,
+                      materialType,
+                    }}
+                  />
+                }
+              </p>
+            </Col>
+          </Row>
         </Col>
       </Row>
       <Row>
