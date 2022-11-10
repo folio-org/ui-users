@@ -84,6 +84,7 @@ jest.mock('@folio/stripes/components', () => ({
     </>
   )),
   Loading: () => <div>Loading</div>,
+  LoadingPane: () => <div>LoadingPane</div>,
   // oy, dismissible. we need to pull it out of props so it doesn't
   // get applied to the div as an attribute, which must have a string-value,
   // which will shame you in the console:
