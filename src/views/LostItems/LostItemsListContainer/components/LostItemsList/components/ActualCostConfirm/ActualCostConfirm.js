@@ -101,7 +101,6 @@ const ActualCostConfirm = ({
     >
       <Row>
         <Col xs={12}>
-
             <Row>
               <Col xs={12}>
                 <p className={css.breakLongText}>
