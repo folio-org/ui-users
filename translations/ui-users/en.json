@@ -428,7 +428,6 @@
   "feefines.modal.cancel": "Cancel",
   "feefines.modal.title": "Copy existing fee/fine owner table entries?",
   "feefines.nodata": "There are no Fee/fine: Manual charges",
-  "feefines.details.dateClose": "Date fee/fine closed",
   "owners.label": "Fee/fine: Owners",
   "owners.select": "Select owner",
   "owners.singular": "Fee/fine owner",
