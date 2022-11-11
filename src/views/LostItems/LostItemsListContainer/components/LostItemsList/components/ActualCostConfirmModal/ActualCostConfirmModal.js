@@ -24,9 +24,9 @@ import {
   DEFAULT_VALUE,
 } from '../../../../../constants';
 
-import css from './ActualCostConfirm.css';
+import css from './ActualCostConfirmModal.css';
 
-const ActualCostConfirm = ({
+const ActualCostConfirmModal = ({
   setActualCostModal,
   actualCostConfirmModal,
   setActualCostConfirmModal,
@@ -154,7 +154,7 @@ const ActualCostConfirm = ({
   );
 };
 
-ActualCostConfirm.propTypes = {
+ActualCostConfirmModal.propTypes = {
   setActualCostModal: PropTypes.func.isRequired,
   actualCostConfirmModal: PropTypes.shape({
     isOpen: PropTypes.bool.isRequired,
@@ -164,4 +164,4 @@ ActualCostConfirm.propTypes = {
   setActualCost: PropTypes.func.isRequired,
 };
 
-export default ActualCostConfirm;
+export default ActualCostConfirmModal;

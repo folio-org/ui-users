@@ -17,8 +17,8 @@ import {
 } from '@folio/stripes/components';
 
 import {
-  ActualCost,
-  ActualCostConfirm,
+  ActualCostModal,
+  ActualCostConfirmModal,
   InstanceDetails,
   RenderActions,
 } from './components';
@@ -108,7 +108,7 @@ const LostItemsList = ({
       return (
         <div>
           <div>{patronName}</div>
-          <div>{`(${patronGroup})`}</div>
+          <div>({patronGroup})</div>
         </div>
       );
     },
@@ -162,14 +162,14 @@ const LostItemsList = ({
         autosize
         hasMargin
       />
-      <ActualCost
+      <ActualCostModal
         actualCostModal={actualCostModal}
         setActualCostModal={setActualCostModal}
         setActualCostConfirmModal={setActualCostConfirmModal}
         actualCost={actualCost}
         setActualCost={setActualCost}
       />
-      <ActualCostConfirm
+      <ActualCostConfirmModal
         setActualCostModal={setActualCostModal}
         actualCostConfirmModal={actualCostConfirmModal}
         setActualCostConfirmModal={setActualCostConfirmModal}

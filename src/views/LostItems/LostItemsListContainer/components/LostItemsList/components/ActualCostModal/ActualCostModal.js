@@ -30,7 +30,7 @@ import {
   ACTUAL_COST_PROP_TYPES,
 } from '../../../../../constants';
 
-const ActualCost = ({
+const ActualCostModal = ({
   actualCostModal,
   setActualCostModal,
   setActualCostConfirmModal,
@@ -166,7 +166,7 @@ const ActualCost = ({
   );
 };
 
-ActualCost.propTypes = {
+ActualCostModal.propTypes = {
   actualCostModal: PropTypes.shape({
     isOpen: PropTypes.bool.isRequired,
   }),
@@ -176,4 +176,4 @@ ActualCost.propTypes = {
   setActualCost: PropTypes.func.isRequired,
 };
 
-export default ActualCost;
+export default ActualCostModal;
