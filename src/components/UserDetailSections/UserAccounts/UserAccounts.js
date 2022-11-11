@@ -19,7 +19,6 @@ import {
   accountStatuses,
   refundStatuses,
   refundClaimReturned,
-  loanActions,
 } from '../../../constants';
 
 
@@ -76,12 +75,7 @@ const UserAccounts = ({
     const feeFineActions = resources.feefineactions.records ?? [];
     const refunded = feeFineActions.filter((feeFineAction) => refundStatusesValues.includes(feeFineAction.typeAction));
     const refundedTotal = refunded.reduce((acc, { amountAction }) => (acc + amountAction), 0);
-
-    const loansClaim = resources.loansHistory.records?.filter(loan => loan?.action === loanActions.CLAIMED_RETURNED);
-    let claim = [];
-    loansClaim.forEach((loan) => {
-      claim = claim.concat(open.filter(account => account?.loanId === loan.id));
-    });
+    const claim = resources.accounts?.records?.filter(account => account.paymentStatus.name === refundClaimReturned.PAYMENT_STATUS) || [];
 
     const claimTotal = claim.reduce((acc, { remaining }) => (acc + parseFloat(remaining)), 0);
     const openTotal = open.reduce((acc, { remaining }) => (acc + parseFloat(remaining)), 0) - claimTotal;
@@ -191,6 +185,16 @@ UserAccounts.propTypes = {
     params: PropTypes.object,
   }).isRequired,
   resources: PropTypes.shape({
+    accounts: PropTypes.shape({
+      records: PropTypes.arrayOf(
+        PropTypes.shape({
+          paymentStatus: PropTypes.shape({
+            name: PropTypes.string,
+          }),
+          remaining: PropTypes.number,
+        })
+      ),
+    }).isRequired,
     loansHistory: PropTypes.shape({
       records: PropTypes.arrayOf(PropTypes.object),
     }),
