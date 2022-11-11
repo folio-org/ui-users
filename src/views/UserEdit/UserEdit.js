@@ -293,6 +293,7 @@ class UserEdit extends React.Component {
       // Create a new permissions user record first
       await permUserMutator.POST({ userId }).then(record => {
         record.permissions = permissionNames;
+        permUserId.replace(record.id);
         permissionsMutator
           .PUT(record)
           .catch((e) => showErrorCallout(e, this.context.sendCallout));

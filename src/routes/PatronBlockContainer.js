@@ -73,7 +73,8 @@ class PatronBlockContainer extends React.Component {
       <PatronBlockLayer
         user={this.getUser()}
         {...this.props}
-      />);
+      />
+    );
   }
 }
 

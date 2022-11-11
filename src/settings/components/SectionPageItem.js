@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { IfInterface, IfPermission } from '@folio/stripes/core';
 import {
   NavListItem,
@@ -28,6 +29,16 @@ const SectionPageItem = ({ setting, path }) => {
   }
 
   return sectionItem;
+};
+
+SectionPageItem.propTypes = {
+  path: PropTypes.string,
+  setting: PropTypes.shape({
+    interface: PropTypes.string,
+    label: PropTypes.element,
+    perm: PropTypes.string,
+    route: PropTypes.string,
+  })
 };
 
 export default SectionPageItem;

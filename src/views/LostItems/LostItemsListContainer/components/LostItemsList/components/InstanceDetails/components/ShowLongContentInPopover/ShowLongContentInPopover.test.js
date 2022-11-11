@@ -16,7 +16,7 @@ const testIds = {
 };
 
 describe('getComponentText', () => {
-  describe('with default contentLength', () => {
+  describe('with default props', () => {
     it('should return contentText with popoverText', () => {
       expect(getComponentText(longText)).toEqual({
         contentText: 'In publishing and graphic design, Lorem ipsum is a placeholder text',
@@ -42,21 +42,20 @@ describe('getComponentText', () => {
     });
   });
 
-  describe('without default contentLength', () => {
-    it('should return contentText with popoverText', () => {
-      const contentLength = 50;
+  describe('without default props', () => {
+    const contentLength = 50;
+    const additionalText = 'book';
 
-      expect(getComponentText(longText, contentLength)).toEqual({
+    it('should return contentText with popoverText', () => {
+      expect(getComponentText(longText, additionalText, contentLength)).toEqual({
         contentText: 'In publishing and graphic design, Lorem ipsum is a',
-        popoverText: longText,
+        popoverText: `${longText} (${additionalText})`,
       });
     });
 
     it('should return contentText without popoverText', () => {
-      const contentLength = 50;
-
-      expect(getComponentText(shortText, contentLength)).toEqual({
-        contentText: shortText,
+      expect(getComponentText(shortText, additionalText, contentLength)).toEqual({
+        contentText: `${shortText} (${additionalText})`,
         popoverText: '',
       });
     });

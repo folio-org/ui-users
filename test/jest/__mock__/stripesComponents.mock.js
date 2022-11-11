@@ -7,13 +7,16 @@ jest.mock('@folio/stripes/components', () => ({
   AccordionSet: jest.fn(({ children, ...rest }) => (
     <span {...rest}>{children}</span>
   )),
+  AccordionStatus: jest.fn(({ children, ...rest }) => (
+    <span {...rest}>{children}</span>
+  )),
   Badge: jest.fn((props) => (
     <span>
       <span>{props.children}</span>
     </span>
   )),
-  Button: jest.fn(({ children, onClick = jest.fn() }) => (
-    <button data-test-button type="button" onClick={onClick}>
+  Button: jest.fn(({ children, onClick = jest.fn(), ...rest }) => (
+    <button data-test-button type="button" {...rest} onClick={onClick}>
       <span>
         {children}
       </span>
@@ -34,6 +37,8 @@ jest.mock('@folio/stripes/components', () => ({
       </div>
     </div>
   )),
+  Dropdown: jest.fn(({ children, ...rest }) => <div {...rest}>{ children }</div>),
+  DropdownMenu: jest.fn(({ children, ...rest }) => <div {...rest}>{ children }</div>),
   Datepicker: jest.fn(({ ref, children, ...rest }) => (
     <div ref={ref} {...rest}>
       {children}
@@ -79,6 +84,7 @@ jest.mock('@folio/stripes/components', () => ({
     </>
   )),
   Loading: () => <div>Loading</div>,
+  LoadingPane: () => <div>LoadingPane</div>,
   // oy, dismissible. we need to pull it out of props so it doesn't
   // get applied to the div as an attribute, which must have a string-value,
   // which will shame you in the console:
@@ -158,7 +164,9 @@ jest.mock('@folio/stripes/components', () => ({
       {lastMenu ?? null}
     </div>
   )),
+  PaneHeaderIconButton: jest.fn(({ children }) => <div className="paneHeaderIconButton">{ children }</div>),
   PaneMenu: jest.fn((props) => <div>{props.children}</div>),
+  PaneSet: jest.fn((props) => <div>{props.children}</div>),
   RadioButton: jest.fn(({ label, name, ...rest }) => (
     <div>
       <label htmlFor="male">{label}</label>
