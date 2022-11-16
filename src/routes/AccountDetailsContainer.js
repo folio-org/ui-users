@@ -17,6 +17,7 @@ import {
   args,
 } from './feeFineConfig';
 import { getContributors } from '../components/util';
+import CurrentUserServicePointAbsenteeErrorModal from '../components/CurrentUserServicePointAbsenteeErrorModal';
 
 class AccountDetailsContainer extends React.Component {
   static manifest = Object.freeze({
@@ -256,6 +257,10 @@ class AccountDetailsContainer extends React.Component {
     const patronGroup = this.getPatronGroup();
     const itemDetails = this.getItemDetails();
     const owedAmount = this.getOwedAmount();
+
+    if (!this.props.okapi.currentUser.curServicePoint?.id) {
+      return <CurrentUserServicePointAbsenteeErrorModal />;
+    }
 
     if (!account) {
       return (
