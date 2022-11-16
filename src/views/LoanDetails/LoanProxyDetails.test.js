@@ -16,65 +16,39 @@ const proxyData = {
 };
 
 const showErrorMock = jest.fn();
-const renderLoanProxyDetails = (props) => renderWithRouter(<LoanProxyDetails {...props} />);
+
+const props = (propID, proxyID) => {
+  return {
+    id: propID,
+    resources: {
+      proxy: {
+        records: [{ id: proxyID }]
+      }
+    },
+    mutator: {
+      proxy: {
+        GET: jest.fn().mockResolvedValue(proxyData),
+      },
+    },
+    showErrorCallout: showErrorMock,
+    user
+  };
+};
+
+const renderLoanProxyDetails = (props1) => renderWithRouter(<LoanProxyDetails {...props1} />);
 describe('Render LoanProxyDetails component', () => {
   it('When props ID and proxy ID are same', () => {
-    const props = {
-      id: 'testId',
-      resources: {
-        proxy: {
-          records: [{ id: 'testId' }]
-        }
-      },
-      mutator: {
-        proxy: {
-          GET: jest.fn().mockResolvedValue(proxyData),
-        },
-      },
-      showErrorCallout: showErrorMock,
-      user
-    };
-    renderLoanProxyDetails(props);
+    renderLoanProxyDetails(props('testId', 'testId'));
     expect(screen.getAllByText('ui-users.loans.details.proxyBorrower')).toBeTruthy();
   });
 
   it('When Proxies id is blank', () => {
-    const props = {
-      id: 'testId',
-      resources: {
-        proxy: {
-          records: [{ id: '' }]
-        }
-      },
-      mutator: {
-        proxy: {
-          GET: jest.fn().mockResolvedValue(proxyData),
-        },
-      },
-      showErrorCallout: showErrorMock,
-      user
-    };
-    renderLoanProxyDetails(props);
+    renderLoanProxyDetails(props('testId', ''));
     expect(screen.getAllByText('ui-users.user.unknown')).toBeTruthy();
   });
 
   it('When Props id is blank', () => {
-    const props = {
-      id: '',
-      resources: {
-        proxy: {
-          records: [{ id: 'testId' }]
-        }
-      },
-      mutator: {
-        proxy: {
-          GET: jest.fn().mockResolvedValue(proxyData),
-        },
-      },
-      showErrorCallout: showErrorMock,
-      user
-    };
-    renderLoanProxyDetails(props);
+    renderLoanProxyDetails(props('', 'testId'));
     expect(screen.getAllByText('-')).toBeTruthy();
   });
 });
