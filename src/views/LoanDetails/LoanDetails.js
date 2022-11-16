@@ -412,7 +412,7 @@ class LoanDetails extends React.Component {
     };
 
     const itemRequestCount = requestCounts[this.props.loan.itemId] || 0;
-    const requestQueueValue = (itemRequestCount && stripes.hasPerm('ui-users.requests.all,ui-requests.all'))
+    const requestQueueValue = (itemRequestCount && stripes.hasPerm('ui-users.requests.all,ui-requests.view'))
       ? (<Link to={getOpenRequestsPath(loan.itemId)}>{itemRequestCount}</Link>)
       : itemRequestCount;
     const contributorsList = this.getContributorslist(loan);
