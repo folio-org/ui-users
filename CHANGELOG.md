@@ -15,6 +15,7 @@
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.2.0...v8.2.1)
 
 * Fix problem with displaying suspended claim returned fees/fines. Refs UIU-2726.
+* Adjust permissions in order to see the link to open request queue. Fixes UIU-2661.
 
 ## [8.2.0](https://github.com/folio-org/ui-users/tree/v8.2.0) (2022-10-24)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v8.2.0)
