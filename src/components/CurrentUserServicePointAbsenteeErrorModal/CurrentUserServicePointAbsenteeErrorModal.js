@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import ReactRouterPropTypes from 'react-router-prop-types';
 import { injectIntl } from 'react-intl';
 
 import ErrorModal from '../ErrorModal';
@@ -21,9 +20,13 @@ const CurrentUserServicePointAbsenteeErrorModal = ({
   );
 };
 
-CurrentUserServicePointAbsenteeErrorModal.prototype = {
-  intl: PropTypes.object.isRequired,
-  history: ReactRouterPropTypes.history.isRequired,
-}
+CurrentUserServicePointAbsenteeErrorModal.propTypes = {
+  intl: PropTypes.shape({
+    formatMessage: PropTypes.func.isRequired,
+  }).isRequired,
+  history: PropTypes.shape({
+    goBack: PropTypes.func.isRequired,
+  }).isRequired,
+};
 
 export default injectIntl(withRouter(CurrentUserServicePointAbsenteeErrorModal));

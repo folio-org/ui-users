@@ -105,7 +105,13 @@ class AccountsListingContainer extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }),
-    okapi: PropTypes.object,
+    okapi: PropTypes.shape({
+      currentUser: PropTypes.shape({
+        curServicePoint: PropTypes.shape({
+          id: PropTypes.string,
+        }),
+      }).isRequired,
+    }).isRequired,
     user: PropTypes.object,
     // onCancel: PropTypes.func.isRequired,
     // onClickViewChargeFeeFine: PropTypes.func.isRequired,

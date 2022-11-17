@@ -152,6 +152,13 @@ class AccountDetailsContainer extends React.Component {
         update: PropTypes.func.isRequired
       }).isRequired
     }),
+    okapi: PropTypes.shape({
+      currentUser: PropTypes.shape({
+        curServicePoint: PropTypes.shape({
+          id: PropTypes.string,
+        }),
+      }).isRequired,
+    }).isRequired,
   }
 
   componentDidMount() {

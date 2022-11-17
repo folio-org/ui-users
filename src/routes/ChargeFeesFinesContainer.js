@@ -165,7 +165,13 @@ class ChargeFeesFinesContainer extends React.Component {
       }),
     }).isRequired,
     stripes: PropTypes.object.isRequired,
-    okapi: PropTypes.object,
+    okapi: PropTypes.shape({
+      currentUser: PropTypes.shape({
+        curServicePoint: PropTypes.shape({
+          id: PropTypes.string,
+        }),
+      }).isRequired,
+    }).isRequired,
     initialize: PropTypes.func,
     servicePointsIds: PropTypes.arrayOf(PropTypes.string),
     defaultServicePointId: PropTypes.string,
