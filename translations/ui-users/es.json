@@ -1020,5 +1020,22 @@
     "lostItems.list.filters.lossType.declaredLost": "Declared lost",
     "lostItems.list.columnName.instance.subString.ISBN": "ISBN: ",
     "lostItems.list.columnName.instance.subString.loanType": "Loan type: ",
-    "lostItems.list.columnName.instance.subString.effectiveCallNumber": "Effective call number string: "
+    "lostItems.list.columnName.instance.subString.effectiveCallNumber": "Effective call number string: ",
+    "lostItems.list.columnName.action.bill": "Facturación del coste real",
+    "lostItems.list.columnName.action.doNotBill": "No facturar",
+    "lostItems.modal.bill.title": "Coste real para facturar",
+    "lostItems.modal.bill.confirm.title": "Confirmar el coste real para facturar",
+    "lostItems.modal.bill.confirm.text": "Se cargará una tasa/multa",
+    "lostItems.modal.doNotBill.title": "No facturar",
+    "lostItems.modal.doNotBill.confirm.title": "Confirmar que no se creará ninguna factura para",
+    "lostItems.modal.doNotBill.confirm.text": "No se cargará ninguna tarifa por pérdida de artículos.  Después de pulsar el botón.  Confirmar.  Esto no puede deshacerse",
+    "lostItems.modal.feeFineOwner": "Cuota/multa del propietario",
+    "lostItems.modal.feeFineType": "Tipo de tasa/multa",
+    "lostItems.modal.actualCostToBill": "Coste real para facturar al cliente",
+    "lostItems.modal.additionalInformationForStaff": "Información adicional para el personal",
+    "lostItems.modal.additionalInformationForPatron": "Información adicional para el patrón",
+    "lostItems.modal.button.cancel": "Cancelar",
+    "lostItems.modal.button.continue": "Continuar",
+    "lostItems.modal.button.keepEditing": "Seguir editando",
+    "lostItems.modal.button.confirm": "Confirmar"
 }
