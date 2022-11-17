@@ -68,7 +68,6 @@ class ChargeForm extends React.Component {
     isPending: PropTypes.object,
     onSubmit: PropTypes.func,
     servicePointsIds: PropTypes.arrayOf(PropTypes.string),
-    defaultServicePointId: PropTypes.string,
     location: PropTypes.object,
     history: PropTypes.object,
     initialValues: PropTypes.object,

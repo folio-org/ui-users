@@ -53,7 +53,6 @@ class ChargeFeeFine extends React.Component {
       }),
     }).isRequired,
     stripes: PropTypes.object.isRequired,
-
     okapi: PropTypes.object,
     selectedLoan: PropTypes.object,
     user: PropTypes.object,
@@ -453,7 +452,7 @@ class ChargeFeeFine extends React.Component {
     const accounts = _.get(resources, ['accounts', 'records'], []);
     const settings = _.get(resources, ['commentRequired', 'records', 0], {});
     const barcode = _.get(resources, 'activeRecord.barcode');
-    const defaultServicePointId = curServicePoint.id;
+    const defaultServicePointId = curServicePoint?.id;
     const servicePointsIds = _.get(resources, ['curUserServicePoint', 'records', 0, 'servicePointsIds'], []);
     let selected = parseFloat(0);
     accounts.forEach(a => {
@@ -505,7 +504,6 @@ class ChargeFeeFine extends React.Component {
         <ChargeForm
           form="feeFineChargeForm"
           initialValues={initialChargeValues}
-          defaultServicePointId={defaultServicePointId}
           feeFineTypeOptions={currentOwnerFeeFineTypes}
           servicePointsIds={servicePointsIds}
           onSubmit={this.onSubmitCharge}

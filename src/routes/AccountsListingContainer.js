@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { stripesConnect } from '@folio/stripes/core';
 import { LoadingView } from '@folio/stripes/components';
 
+import CurrentUserServicePointAbsenteeErrorModal from '../components/CurrentUserServicePointAbsenteeErrorModal';
 import { AccountsListing } from '../views';
 import { MAX_RECORDS } from '../constants';
 import {
@@ -104,7 +105,13 @@ class AccountsListingContainer extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }),
-    okapi: PropTypes.object,
+    okapi: PropTypes.shape({
+      currentUser: PropTypes.shape({
+        curServicePoint: PropTypes.shape({
+          id: PropTypes.string,
+        }),
+      }).isRequired,
+    }).isRequired,
     user: PropTypes.object,
     // onCancel: PropTypes.func.isRequired,
     // onClickViewChargeFeeFine: PropTypes.func.isRequired,
@@ -158,6 +165,11 @@ class AccountsListingContainer extends React.Component {
     const user = this.getUser();
     const loans = resources?.loans ? resources.loans.records : [];
     const patronGroup = this.getPatronGroup();
+
+    if (!this.props.okapi.currentUser.curServicePoint?.id) {
+      return <CurrentUserServicePointAbsenteeErrorModal />;
+    }
+
     if (!user) {
       return (
         <LoadingView
