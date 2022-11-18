@@ -1,5 +1,10 @@
 # Change history for ui-users
 
+## [8.2.1](https://github.com/folio-org/ui-users/tree/v8.2.1) (2022-11-17)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v8.2.0...v8.2.1)
+
+* Fix problem with displaying suspended claim returned fees/fines. Refs UIU-2726.
+
 ## [8.2.0](https://github.com/folio-org/ui-users/tree/v8.2.0) (2022-10-24)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v8.2.0)
 
