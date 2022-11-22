@@ -61,16 +61,16 @@ const ActualCostConfirmModal = ({
   const renderFooter = (
     <ModalFooter>
       <Button
-        id="continueActualCost"
-        data-testid="continueActualCost"
+        id="confirmActualCost"
+        data-testid="confirmActualCost"
         buttonStyle="primary"
         onClick={onConfirm}
       >
         <FormattedMessage id="ui-users.lostItems.modal.button.confirm" />
       </Button>
       <Button
-        id="cancelActualCost"
-        data-testid="cancelActualCost"
+        id="keepEditingActualCost"
+        data-testid="keepEditingActualCost"
         onClick={onKeepEditing}
       >
         <FormattedMessage id="ui-users.lostItems.modal.button.keepEditing" />
