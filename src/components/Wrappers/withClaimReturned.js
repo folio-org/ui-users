@@ -72,6 +72,7 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
       claimReturnedDialogOpen: false,
       loan: null,
       itemRequestCount: 0,
+      inProgress: false,
     };
   }
 
@@ -96,11 +97,16 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
     this.setState({ claimReturnedDialogOpen: false });
   }
 
+  toggleButton = (inProgress) => {
+    this.setState({ inProgress });
+  };
+
   render() {
     const {
       claimReturnedDialogOpen,
       loan,
       itemRequestCount,
+      inProgress,
     } = this.state;
 
     const modalLabel = <FormattedMessage id="ui-users.loans.confirmClaimedReturned" />;
@@ -109,6 +115,8 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
       <>
         <WrappedComponent
           claimReturned={this.openClaimReturnedDialog}
+          inProgress={inProgress}
+          toggleButton={this.toggleButton}
           {...this.props}
         />
         { loan &&
@@ -119,7 +127,9 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
             loanAction={loanActionMutators.CLAIMED_RETURNED}
             modalLabel={modalLabel}
             open={claimReturnedDialogOpen}
+            inProgress={inProgress}
             onClose={this.hideClaimReturnedDialog}
+            toggleButton={this.toggleButton}
           />
         }
       </>
