@@ -4,6 +4,7 @@
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.2.1...v8.2.2)
 
 * Fix systems error when attempting to create a new fee/fine if logged in user isn't logged into a service point. Refs UIU-2728.
+* Disable 'Claimed return' button after click to prevent multiple submissions. Refs UIU-2732.
 
 ## [8.2.1](https://github.com/folio-org/ui-users/tree/v8.2.1) (2022-11-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.2.0...v8.2.1)
