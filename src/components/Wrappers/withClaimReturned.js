@@ -115,7 +115,7 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
       <>
         <WrappedComponent
           claimReturned={this.openClaimReturnedDialog}
-          claimReturnedInProgress={claimReturnedInProgress}
+          isInProgress={claimReturnedInProgress}
           toggleButton={this.setClaimReturnedInProgress}
           {...this.props}
         />
@@ -127,7 +127,7 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
             loanAction={loanActionMutators.CLAIMED_RETURNED}
             modalLabel={modalLabel}
             open={claimReturnedDialogOpen}
-            claimReturnedInProgress={claimReturnedInProgress}
+            isInProgress={claimReturnedInProgress}
             onClose={this.hideClaimReturnedDialog}
             toggleButton={this.setClaimReturnedInProgress}
           />

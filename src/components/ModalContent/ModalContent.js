@@ -92,7 +92,7 @@ class ModalContent extends React.Component {
     onClose: PropTypes.func.isRequired,
     handleError: PropTypes.func.isRequired,
     declarationInProgress: PropTypes.bool.isRequired,
-    claimReturnedInProgress: PropTypes.bool,
+    isInProgress: PropTypes.bool,
     toggleButton: PropTypes.func,
     validateAction: PropTypes.func,
     itemRequestCount: PropTypes.number.isRequired,
@@ -240,7 +240,7 @@ class ModalContent extends React.Component {
       onClose,
       itemRequestCount,
       declarationInProgress,
-      claimReturnedInProgress,
+      isInProgress,
     } = this.props;
 
     const { additionalInfo } = this.state;
@@ -251,7 +251,7 @@ class ModalContent extends React.Component {
     //  - either to determine the content of the message about open requests
     //  - or whether to show this message at all.
     const countIndex = stripes.hasPerm('ui-users.requests.all') ? itemRequestCount : -1;
-    const isConfirmButtonDisabled = !additionalInfo || claimReturnedInProgress || declarationInProgress;
+    const isConfirmButtonDisabled = !additionalInfo || isInProgress || declarationInProgress;
 
     return (
       <div>
