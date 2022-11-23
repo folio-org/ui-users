@@ -21,6 +21,7 @@ class LoanActionDialog extends React.Component {
     loanAction: PropTypes.string.isRequired,
     modalLabel: PropTypes.object.isRequired,
     toggleButton: PropTypes.func,
+    isInProgress: PropTypes.bool,
     validateAction: PropTypes.func,
     itemRequestCount: PropTypes.number.isRequired,
   };
