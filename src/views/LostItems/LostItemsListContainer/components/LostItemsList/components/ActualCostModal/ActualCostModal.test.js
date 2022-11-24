@@ -189,5 +189,9 @@ describe('ActualCostModal', () => {
 
       expect(screen.getByText(doNotBillValue)).toBeVisible();
     });
+
+    it('should not render additional patron information', () => {
+      expect(screen.queryByText(messageIds.additionalInformationForPatron)).not.toBeInTheDocument();
+    });
   });
 });

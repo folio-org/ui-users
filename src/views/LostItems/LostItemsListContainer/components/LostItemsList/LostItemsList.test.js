@@ -15,12 +15,13 @@ import '../../../../../../test/jest/__mock__';
 // eslint-disable-next-line import/no-named-as-default
 import LostItemsList, {
   triggerOnSort,
-  basicListFormatter,
+  basicLostItemsListFormatter,
   COLUMNS_NAME,
   visibleColumns,
   columnMapping,
   columnWidths,
 } from './LostItemsList';
+import { getPatronName } from './util';
 import {
   ActualCostModal,
   ActualCostConfirmModal,
@@ -33,8 +34,6 @@ import {
   PAGE_AMOUNT,
 } from '../../../constants';
 
-const patronName = 'name';
-
 jest.mock('./components', () => ({
   ...jest.requireActual('./components'),
   ActualCostModal: jest.fn(() => null),
@@ -42,7 +41,7 @@ jest.mock('./components', () => ({
   InstanceDetails: jest.fn(() => null),
 }));
 jest.mock('./util', () => ({
-  getPatronName: jest.fn(() => patronName)
+  getPatronName: jest.fn(() => null),
 }));
 jest.mock('react-intl', () => ({
   ...jest.requireActual('react-intl'),
@@ -71,7 +70,7 @@ describe('LostItemsList', () => {
     const event = {};
     const onSort = jest.fn();
 
-    describe('when "meta.name" is equal "COLUMNS_NAME.ACTION"', () => {
+    describe('when there is action column', () => {
       it('should return "noop"', () => {
         const meta = {
           name: COLUMNS_NAME.ACTION,
@@ -81,8 +80,8 @@ describe('LostItemsList', () => {
       });
     });
 
-    describe('when "meta.name" is not equal "COLUMNS_NAME.ACTION"', () => {
-      it('should "onSort" with correct arguments', () => {
+    describe('when there is not action column', () => {
+      it('should trigger "onSort" with correct arguments', () => {
         const meta = {
           name: 'test',
         };
@@ -94,7 +93,7 @@ describe('LostItemsList', () => {
     });
   });
 
-  describe('basicListFormatter', () => {
+  describe('basicLostItemsListFormatter', () => {
     const basicActualCostRecord = {
       user: {
         patronGroup: 'patronGroup',
@@ -113,39 +112,21 @@ describe('LostItemsList', () => {
     describe('Patron formatter', () => {
       describe('when patron group is presented', () => {
         beforeEach(() => {
-          render(basicListFormatter[COLUMNS_NAME.PATRON](basicActualCostRecord));
+          render(basicLostItemsListFormatter[COLUMNS_NAME.PATRON](basicActualCostRecord));
         });
 
-        it('should render "patronName"', () => {
-          expect(screen.getByText(patronName)).toBeVisible();
+        it('should trigger "getPatronName" with correct arguments', () => {
+          expect(getPatronName).toHaveBeenCalledWith(basicActualCostRecord);
         });
 
         it('should render "patronGroup"', () => {
-          expect(screen.getByText(`(${basicActualCostRecord.user.patronGroup})`)).toBeVisible();
-        });
-      });
-
-      describe('when patron group is not presented', () => {
-        const actualCostRecord = {
-          user: {},
-        };
-
-        beforeEach(() => {
-          render(basicListFormatter[COLUMNS_NAME.PATRON](actualCostRecord));
-        });
-
-        it('should render "patronName"', () => {
-          expect(screen.getByText(patronName)).toBeVisible();
-        });
-
-        it('should render empty "patronGroup"', () => {
-          expect(screen.getByText('()')).toBeVisible();
+          expect(screen.getByText(/patronGroup/)).toBeVisible();
         });
       });
     });
 
     describe('Loss type formatter', () => {
-      render(basicListFormatter[COLUMNS_NAME.LOSS_TYPE](basicActualCostRecord));
+      render(basicLostItemsListFormatter[COLUMNS_NAME.LOSS_TYPE](basicActualCostRecord));
 
       it('should trigger "FormattedMessage" with correct id', () => {
         expect(FormattedMessage).toHaveBeenCalledWith({
@@ -155,7 +136,7 @@ describe('LostItemsList', () => {
     });
 
     describe('Loss date formatter', () => {
-      render(basicListFormatter[COLUMNS_NAME.LOSS_DATE](basicActualCostRecord));
+      render(basicLostItemsListFormatter[COLUMNS_NAME.LOSS_DATE](basicActualCostRecord));
 
       it('should trigger "FormattedDate" with correct value', () => {
         expect(FormattedDate).toHaveBeenCalledWith({
@@ -171,7 +152,7 @@ describe('LostItemsList', () => {
     });
 
     describe('Instance formatter', () => {
-      render(basicListFormatter[COLUMNS_NAME.INSTANCE](basicActualCostRecord));
+      render(basicLostItemsListFormatter[COLUMNS_NAME.INSTANCE](basicActualCostRecord));
 
       it('should trigger "InstanceDetails" with correct props', () => {
         const expectedProps = {
@@ -184,7 +165,7 @@ describe('LostItemsList', () => {
 
     describe('Permanent item location formatter', () => {
       it('should return correct data', () => {
-        const result = basicListFormatter[COLUMNS_NAME.PERMANENT_ITEM_LOCATION](basicActualCostRecord);
+        const result = basicLostItemsListFormatter[COLUMNS_NAME.PERMANENT_ITEM_LOCATION](basicActualCostRecord);
 
         expect(result).toEqual(basicActualCostRecord.item.permanentLocation);
       });
@@ -192,7 +173,7 @@ describe('LostItemsList', () => {
 
     describe('Fee fine owner formatter', () => {
       it('should return correct data', () => {
-        const result = basicListFormatter[COLUMNS_NAME.FEE_FINE_OWNER](basicActualCostRecord);
+        const result = basicLostItemsListFormatter[COLUMNS_NAME.FEE_FINE_OWNER](basicActualCostRecord);
 
         expect(result).toEqual(basicActualCostRecord.feeFine.owner);
       });
@@ -200,7 +181,7 @@ describe('LostItemsList', () => {
 
     describe('Fee fine type formatter', () => {
       it('should return correct data', () => {
-        const result = basicListFormatter[COLUMNS_NAME.FEE_FINE_TYPE](basicActualCostRecord);
+        const result = basicLostItemsListFormatter[COLUMNS_NAME.FEE_FINE_TYPE](basicActualCostRecord);
 
         expect(result).toEqual(basicActualCostRecord.feeFine.type);
       });

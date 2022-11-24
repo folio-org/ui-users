@@ -87,7 +87,7 @@ export const triggerOnSort = (e, meta, onSort) => {
 
   return onSort(e, meta);
 };
-export const basicListFormatter = {
+export const basicLostItemsListFormatter = {
   [COLUMNS_NAME.PATRON]: (actualCostRecord) => {
     const patronGroup = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.USER_PATRON_GROUP], DEFAULT_VALUE);
     const patronName = getPatronName(actualCostRecord);
@@ -132,7 +132,7 @@ const LostItemsList = ({
   const [actualCost, setActualCost] = useState(ACTUAL_COST_DEFAULT);
 
   const lostItemsListFormatter = {
-    ...basicListFormatter,
+    ...basicLostItemsListFormatter,
     [COLUMNS_NAME.ACTION]: (actualCostRecord) => (<RenderActions
       actualCostRecord={actualCostRecord}
       setActualCostModal={setActualCostModal}

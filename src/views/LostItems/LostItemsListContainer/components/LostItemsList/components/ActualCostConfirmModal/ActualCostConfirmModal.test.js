@@ -134,5 +134,9 @@ describe('ActualCostConfirmModal', () => {
     it('should render confirm do not bill message', () => {
       expect(screen.getByText(messageIds.doNotBillConfirmText)).toBeVisible();
     });
+
+    it('should not render additional patron information', () => {
+      expect(screen.queryByText(messageIds.additionalInformationForPatron)).not.toBeInTheDocument();
+    });
   });
 });
