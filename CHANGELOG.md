@@ -1,5 +1,10 @@
 # Change history for ui-users
 
+## [8.2.2](https://github.com/folio-org/ui-users/tree/v8.2.2) (2022-11-24)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v8.2.1...v8.2.2)
+
+* Fix systems error when attempting to create a new fee/fine if logged in user isn't logged into a service point. Refs UIU-2728.
+
 ## [8.2.1](https://github.com/folio-org/ui-users/tree/v8.2.1) (2022-11-17)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.2.0...v8.2.1)
 
