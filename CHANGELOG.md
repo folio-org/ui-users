@@ -7,6 +7,7 @@
 * Adjust permissions in order to see the link to open request queue. Fixes UIU-2661.
 * Fix systems error when attempting to create a new fee/fine if logged in user isn't logged into a service point. Refs UIU-2728.
 * Disable 'Claimed return' button after click to prevent multiple submissions. Refs UIU-2732.
+* Cover Actual cost functionality by jest/RTL tests. Refs UIU-2727.
 
 ## [8.2.0](https://github.com/folio-org/ui-users/tree/v8.2.0) (2022-10-24)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v8.2.0)

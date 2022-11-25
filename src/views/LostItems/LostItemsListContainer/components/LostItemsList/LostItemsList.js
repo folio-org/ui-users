@@ -40,7 +40,7 @@ import {
   getPatronName,
 } from './util';
 
-const COLUMNS_NAME = {
+export const COLUMNS_NAME = {
   PATRON: ACTUAL_COST_RECORD_FIELD_NAME.USER,
   LOSS_TYPE: ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.LOSS_TYPE],
   LOSS_DATE: ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.LOSS_DATE],
@@ -50,7 +50,7 @@ const COLUMNS_NAME = {
   FEE_FINE_TYPE: ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.FEE_FINE_TYPE],
   ACTION: 'ACTION',
 };
-const visibleColumns = [
+export const visibleColumns = [
   COLUMNS_NAME.PATRON,
   COLUMNS_NAME.LOSS_TYPE,
   COLUMNS_NAME.LOSS_DATE,
@@ -60,7 +60,7 @@ const visibleColumns = [
   COLUMNS_NAME.FEE_FINE_TYPE,
   COLUMNS_NAME.ACTION,
 ];
-const columnWidths = {
+export const columnWidths = {
   [COLUMNS_NAME.PATRON]: { max: 150 },
   [COLUMNS_NAME.LOSS_TYPE]: { max: 150 },
   [COLUMNS_NAME.LOSS_DATE]: { max: 100 },
@@ -70,7 +70,7 @@ const columnWidths = {
   [COLUMNS_NAME.FEE_FINE_TYPE]: { max: 150 },
   [COLUMNS_NAME.ACTION]: { max: 50 },
 };
-const columnMapping = {
+export const columnMapping = {
   [COLUMNS_NAME.PATRON]: <FormattedMessage id="ui-users.lostItems.list.columnName.patron" />,
   [COLUMNS_NAME.LOSS_TYPE]: <FormattedMessage id="ui-users.lostItems.list.columnName.lossType" />,
   [COLUMNS_NAME.LOSS_DATE]: <FormattedMessage id="ui-users.lostItems.list.columnName.dateOfLoss" />,
@@ -87,6 +87,37 @@ export const triggerOnSort = (e, meta, onSort) => {
 
   return onSort(e, meta);
 };
+export const basicLostItemsListFormatter = {
+  [COLUMNS_NAME.PATRON]: (actualCostRecord) => {
+    const patronGroup = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.USER_PATRON_GROUP], DEFAULT_VALUE);
+    const patronName = getPatronName(actualCostRecord);
+
+    return (
+      <div>
+        <div>{patronName}</div>
+        <div>({patronGroup})</div>
+      </div>
+    );
+  },
+  [COLUMNS_NAME.LOSS_TYPE]: (actualCostRecord) => {
+    const lossType = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.LOSS_TYPE], DEFAULT_VALUE);
+
+    return <FormattedMessage id={ITEM_STATUSES_TRANSLATIONS_KEYS[lossType]} />;
+  },
+  [COLUMNS_NAME.LOSS_DATE]: (actualCostRecord) => {
+    const lossDate = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.LOSS_DATE], DEFAULT_VALUE);
+
+    return (
+      <>
+        <FormattedDate value={lossDate} />, <FormattedTime value={lossDate} />
+      </>
+    );
+  },
+  [COLUMNS_NAME.INSTANCE]: (actualCostRecord) => (<InstanceDetails actualCostRecord={actualCostRecord} />),
+  [COLUMNS_NAME.PERMANENT_ITEM_LOCATION]: (actualCostRecord) => (get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.PERMANENT_ITEM_LOCATION], DEFAULT_VALUE)),
+  [COLUMNS_NAME.FEE_FINE_OWNER]: (actualCostRecord) => (get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.FEE_FINE_OWNER], DEFAULT_VALUE)),
+  [COLUMNS_NAME.FEE_FINE_TYPE]: (actualCostRecord) => (get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.FEE_FINE_TYPE], DEFAULT_VALUE)),
+};
 
 const LostItemsList = ({
   contentData,
@@ -101,35 +132,7 @@ const LostItemsList = ({
   const [actualCost, setActualCost] = useState(ACTUAL_COST_DEFAULT);
 
   const lostItemsListFormatter = {
-    [COLUMNS_NAME.PATRON]: (actualCostRecord) => {
-      const patronGroup = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.USER_PATRON_GROUP], DEFAULT_VALUE);
-      const patronName = getPatronName(actualCostRecord);
-
-      return (
-        <div>
-          <div>{patronName}</div>
-          <div>({patronGroup})</div>
-        </div>
-      );
-    },
-    [COLUMNS_NAME.LOSS_TYPE]: (actualCostRecord) => {
-      const lossType = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.LOSS_TYPE], DEFAULT_VALUE);
-
-      return <FormattedMessage id={ITEM_STATUSES_TRANSLATIONS_KEYS[lossType]} />;
-    },
-    [COLUMNS_NAME.LOSS_DATE]: (actualCostRecord) => {
-      const lossDate = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.LOSS_DATE], DEFAULT_VALUE);
-
-      return (
-        <>
-          <FormattedDate value={lossDate} />, <FormattedTime value={lossDate} />
-        </>
-      );
-    },
-    [COLUMNS_NAME.INSTANCE]: (actualCostRecord) => (<InstanceDetails actualCostRecord={actualCostRecord} />),
-    [COLUMNS_NAME.PERMANENT_ITEM_LOCATION]: (actualCostRecord) => (get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.PERMANENT_ITEM_LOCATION], DEFAULT_VALUE)),
-    [COLUMNS_NAME.FEE_FINE_OWNER]: (actualCostRecord) => (get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.FEE_FINE_OWNER], DEFAULT_VALUE)),
-    [COLUMNS_NAME.FEE_FINE_TYPE]: (actualCostRecord) => (get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.FEE_FINE_TYPE], DEFAULT_VALUE)),
+    ...basicLostItemsListFormatter,
     [COLUMNS_NAME.ACTION]: (actualCostRecord) => (<RenderActions
       actualCostRecord={actualCostRecord}
       setActualCostModal={setActualCostModal}
