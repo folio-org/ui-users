@@ -71,12 +71,16 @@ describe('LostItemsList', () => {
     const onSort = jest.fn();
 
     describe('when there is action column', () => {
-      it('should return "noop"', () => {
-        const meta = {
-          name: COLUMNS_NAME.ACTION,
-        };
+      const meta = {
+        name: COLUMNS_NAME.ACTION,
+      };
 
+      it('should return "noop"', () => {
         expect(triggerOnSort(event, meta, onSort)).toEqual(noop);
+      });
+
+      it('should not trigger "onSort"', () => {
+        expect(onSort).not.toHaveBeenCalled();
       });
     });
 
