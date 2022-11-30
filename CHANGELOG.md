@@ -1,5 +1,10 @@
 # Change history for ui-users
 
+## [8.2.3](https://github.com/folio-org/ui-users/tree/v8.2.3) (2022-11-30)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v8.2.2...v8.2.3)
+
+* Disable 'Claimed return' button after click to prevent multiple submissions. Refs UIU-2732.
+
 ## [8.2.2](https://github.com/folio-org/ui-users/tree/v8.2.2) (2022-11-24)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.2.1...v8.2.2)
 
