@@ -23,18 +23,18 @@ LoanActionDialogMock.propTypes = {
 
 jest.mock('../LoanActionDialog', () => LoanActionDialogMock);
 
-const DeclareLost = ({ declareLost, declarationInProgress, toggleButton }) => (
+const DeclareLost = ({ declareLost, declareLostInProgress, setDeclareLostInProgress }) => (
   <>
-    <button type="button" data-testid="enable" onClick={() => toggleButton(false)}>Enable</button>
-    { !declarationInProgress ?
+    <button type="button" data-testid="enable" onClick={() => setDeclareLostInProgress(false)}>Enable</button>
+    { !declareLostInProgress ?
       <button type="button" data-testid="declareLost" onClick={() => declareLost(loans[0], 1)}>Declaration</button> : ''}
   </>
 );
 
 DeclareLost.propTypes = {
-  toggleButton: PropTypes.func,
+  setDeclareLostInProgress: PropTypes.func,
   declareLost: PropTypes.func,
-  declarationInProgress: PropTypes.bool,
+  declareLostInProgress: PropTypes.bool,
 };
 
 const WrappedComponent = withDeclareLost(DeclareLost);
