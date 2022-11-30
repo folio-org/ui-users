@@ -3,6 +3,7 @@ import {
   refundStatuses,
   outstandingStatus,
   waiveStatuses,
+  cancelStatuses,
 } from '../../constants';
 
 export function count(array) {
@@ -109,10 +110,11 @@ export function accountRefundInfo(account, feeFineActions = []) {
   const hasBeenPaid = accountFeeFinesActions.some(({ typeAction }) => {
     return paymentStatusesAllowedToRefund.includes(typeAction);
   });
+  const canceledAsError = accountFeeFinesActions.some(({ typeAction }) => typeAction === cancelStatuses.cancelledError);
 
   const paidAmount = (parseFloat(account.amount - account.remaining) * 100) / 100;
 
-  return { hasBeenPaid, paidAmount };
+  return { hasBeenPaid, paidAmount, canceledAsError };
 }
 
 export function calculateTotalPaymentAmount(accounts = [], feeFineActions = []) {

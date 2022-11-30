@@ -8,6 +8,7 @@ jest.mock('../Accounts/accountFunctions', () => ({
   accountRefundInfo: jest.fn(() => ({
     hasBeenPaid: true,
     paidAmount: 100,
+    canceledAsError: false,
   })),
   calculateSelectedAmount: jest.fn(() => 100),
 }));
@@ -51,6 +52,20 @@ describe('isRefundAllowed', () => {
 
   it('should return "false" if "paidAmount" more than 0, "calculateSelectedAmount" less or equal 0, and "hasBeenPaid" is true', () => {
     calculateSelectedAmount.mockReturnValueOnce(0);
+
+    expect(isRefundAllowed(mockedAccount, mockedActions)).toBe(false);
+  });
+
+  it('should return true if fee/fine was not cancelled as an error', () => {
+    expect(isRefundAllowed(mockedAccount, mockedActions)).toBe(true);
+  });
+
+  it('should return false if fee/fine was cancelled as an error', () => {
+    accountRefundInfo.mockReturnValueOnce({
+      hasBeenPaid: true,
+      paidAmount: 10,
+      canceledAsError: true,
+    });
 
     expect(isRefundAllowed(mockedAccount, mockedActions)).toBe(false);
   });
