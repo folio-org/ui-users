@@ -6,6 +6,10 @@ describe('shouldSuppress', () => {
       expect(shouldSuppress({ records: [] }, '123')).toBe(false);
     });
 
+    test('returns false if value is empty', async () => {
+      expect(shouldSuppress({ records: [{ value: '' }] }, '123')).toBe(false);
+    });
+
     test('if records array does not contain a match', async () => {
       expect(shouldSuppress({ records: [{ value: '["456"]' }] }, '123')).toBe(false);
     });
