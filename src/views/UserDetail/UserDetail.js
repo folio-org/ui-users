@@ -404,7 +404,7 @@ class UserDetail extends React.Component {
     }
   }
 
-  handleDeleteClick() {
+  handleDeleteClick = () => {
     const { mutator } = this.props;
     const userId = this.props.match.params.id;
 
