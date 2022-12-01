@@ -10,6 +10,7 @@
 * Cover Actual cost functionality by jest/RTL tests. Refs UIU-2727.
 * Fix problem with Fee/Fine list loading. Refs UIU-2735.
 * Refactor code for disable 'Declare lost' button after click to prevent multiple submissions. Refs UIU-2736.
+* Suppress delete of users stored in a configuration entry. Refs UIU-2738.
 
 ## [8.2.0](https://github.com/folio-org/ui-users/tree/v8.2.0) (2022-10-24)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v8.2.0)

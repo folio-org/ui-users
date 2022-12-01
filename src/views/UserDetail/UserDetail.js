@@ -20,11 +20,9 @@ import {
 import {
   Pane,
   PaneMenu,
-  Icon,
   IconButton,
   expandAllFunction,
   ExpandAllButton,
-  Button,
   Callout,
   Row,
   Col,
@@ -69,7 +67,8 @@ import OpenTransactionModal from './components/OpenTransactionModal';
 import DeleteUserModal from './components/DeleteUserModal';
 import ExportFeesFinesReportButton from './components';
 import ErrorPane from '../../components/ErrorPane';
-import ActionMenuEditOption from './components/ActionMenuEditOption';
+import ActionMenuEditButton from './components/ActionMenuEditButton';
+import ActionMenuDeleteButton from './components/ActionMenuDeleteOption';
 
 class UserDetail extends React.Component {
   static propTypes = {
@@ -455,7 +454,7 @@ class UserDetail extends React.Component {
               userId={this.props.match.params.id}
             />
           </IfInterface>
-          <ActionMenuEditOption
+          <ActionMenuEditButton
             id={this.props.match.params.id}
             suppressEdit={this.props.resources.suppressEdit}
             onToggle={onToggle}
@@ -469,21 +468,12 @@ class UserDetail extends React.Component {
               callout={this.callout}
             />
           </IfInterface>
-          <IfPermission perm="ui-users.delete,ui-users.opentransactions">
-            <Button
-              buttonStyle="dropdownItem"
-              data-test-actions-menu-check-delete
-              id="clickable-checkdeleteuser"
-              onClick={() => {
-                this.handleDeleteClick();
-                onToggle();
-              }}
-            >
-              <Icon icon="trash">
-                <FormattedMessage id="ui-users.details.checkDelete" />
-              </Icon>
-            </Button>
-          </IfPermission>
+          <ActionMenuDeleteButton
+            handleDeleteClick={this.handleDeleteClick}
+            id={this.props.match.params.id}
+            onToggle={onToggle}
+            suppressEdit={this.props.resources.suppressEdit}
+          />
         </>
       );
     } else {

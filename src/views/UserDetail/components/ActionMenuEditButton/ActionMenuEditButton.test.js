@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 
 import { IfPermission } from '@folio/stripes/core';
 
-import ActionMenuEditOption from './ActionMenuEditOption';
+import ActionMenuEditButton from './ActionMenuEditButton';
 
 describe('render ActionMenuEditOption', () => {
   IfPermission.mockImplementation(({ children }) => children);
@@ -18,7 +18,7 @@ describe('render ActionMenuEditOption', () => {
         editButton: jest.fn(),
       };
 
-      render(<ActionMenuEditOption {...props} />);
+      render(<ActionMenuEditButton {...props} />);
 
       expect(screen.getByText('ui-users.edit')).toBeTruthy();
     });
@@ -32,7 +32,7 @@ describe('render ActionMenuEditOption', () => {
         editButton: jest.fn(),
       };
 
-      render(<ActionMenuEditOption {...props} />);
+      render(<ActionMenuEditButton {...props} />);
 
       expect(screen.getByText('ui-users.edit')).toBeTruthy();
     });
@@ -46,7 +46,7 @@ describe('render ActionMenuEditOption', () => {
         editButton: jest.fn(),
       };
 
-      render(<ActionMenuEditOption {...props} />);
+      render(<ActionMenuEditButton {...props} />);
 
       expect(screen.getByText('ui-users.edit')).toBeTruthy();
     });
@@ -59,7 +59,7 @@ describe('render ActionMenuEditOption', () => {
         editButton: jest.fn(),
       };
 
-      render(<ActionMenuEditOption {...props} />);
+      render(<ActionMenuEditButton {...props} />);
       userEvent.click(screen.getByText('ui-users.edit'));
 
       expect(props.onToggle).toHaveBeenCalled();
@@ -85,7 +85,7 @@ describe('render ActionMenuEditOption', () => {
           editButton: jest.fn(),
         };
 
-        render(<ActionMenuEditOption {...props} />);
+        render(<ActionMenuEditButton {...props} />);
 
         // eslint-disable-next-line no-console
         expect(console.error).toHaveBeenCalledTimes(1);
@@ -103,7 +103,7 @@ describe('render ActionMenuEditOption', () => {
         editButton: jest.fn(),
       };
 
-      render(<ActionMenuEditOption {...props} />);
+      render(<ActionMenuEditButton {...props} />);
 
       expect(screen.queryByText('ui-users.edit')).not.toBeInTheDocument();
     });
@@ -118,7 +118,7 @@ describe('render ActionMenuEditOption', () => {
         editButton: jest.fn(),
       };
 
-      render(<ActionMenuEditOption {...props} />);
+      render(<ActionMenuEditButton {...props} />);
 
       expect(screen.queryByText('ui-users.edit')).not.toBeInTheDocument();
     });
