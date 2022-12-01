@@ -1037,5 +1037,8 @@
     "lostItems.modal.button.cancel": "Cancelar",
     "lostItems.modal.button.continue": "Continuar",
     "lostItems.modal.button.keepEditing": "Continuar editando",
-    "lostItems.modal.button.confirm": "Confirmar"
+    "lostItems.modal.button.confirm": "Confirmar",
+    "errorModal.currentUserServicePointAbsentee.label": "<strong> Acesso negado </strong>",
+    "errorModal.currentUserServicePointAbsentee.message": "Você deve selecionar um ponto de serviço para criar e visualizar <strong> taxas/multas dos usuários </strong> . Adicione um ou mais pontos de serviço ao seu registro de usuário no aplicativo <strong> Usuários </strong> . Entre em contato com um administrador se você não puder adicionar pontos de serviço ao seu registro.",
+    "errorModal.currentUserServicePointAbsentee.confirmButtonText": "Voltar"
 }

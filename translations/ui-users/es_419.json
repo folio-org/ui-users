@@ -1037,5 +1037,8 @@
     "lostItems.modal.button.cancel": "Cancelar",
     "lostItems.modal.button.continue": "Continuar",
     "lostItems.modal.button.keepEditing": "Seguir editando",
-    "lostItems.modal.button.confirm": "Confirmar"
+    "lostItems.modal.button.confirm": "Confirmar",
+    "errorModal.currentUserServicePointAbsentee.label": "<strong>Access denied</strong>",
+    "errorModal.currentUserServicePointAbsentee.message": "You must select a service point to create and view <strong>patron fees/fines</strong>. Please add one or more service points to your user record in the <strong>Users</strong> app. Contact an administrator if you do not have the ability to add service points to your record.",
+    "errorModal.currentUserServicePointAbsentee.confirmButtonText": "Back"
 }
