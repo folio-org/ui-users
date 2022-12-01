@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { IfPermission } from '@folio/stripes/core';
 import { Button, Icon } from '@folio/stripes/components';
 
+import { shouldSuppress } from '../utils';
+
 /**
  * ActionMenuDeleteButton
  * Handle display of the "Delete" button in the Action menu.
@@ -19,22 +21,8 @@ import { Button, Icon } from '@folio/stripes/components';
  *
  * @returns component
  */
-const ActionMenuDeleteButton = ({ id, suppressEdit, onToggle, handleDeleteClick }) => {
-  let suppress = false;
-  if (suppressEdit?.records?.[0]) {
-    try {
-      const value = suppressEdit?.records?.[0]?.value;
-      if (value) {
-        const list = JSON.parse(value);
-        if (Array.isArray(list)) {
-          suppress = !!list.find(i => i === id);
-        }
-      }
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.error(`could not parse JSON: ${suppressEdit?.records?.[0]}`, e);
-    }
-  }
+const ActionMenuDeleteButton = ({ id, suppressList, onToggle, handleDeleteClick }) => {
+  const suppress = shouldSuppress(suppressList, id);
 
   let button = <></>;
   if (!suppress) {
@@ -64,7 +52,7 @@ ActionMenuDeleteButton.propTypes = {
   handleDeleteClick: PropTypes.func,
   id: PropTypes.string,
   onToggle: PropTypes.func,
-  suppressEdit: PropTypes.shape({
+  suppressList: PropTypes.shape({
     records: PropTypes.arrayOf(PropTypes.object)
   }),
 };

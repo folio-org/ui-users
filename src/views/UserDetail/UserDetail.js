@@ -456,7 +456,7 @@ class UserDetail extends React.Component {
           </IfInterface>
           <ActionMenuEditButton
             id={this.props.match.params.id}
-            suppressEdit={this.props.resources.suppressEdit}
+            suppressList={this.props.resources.suppressEdit}
             onToggle={onToggle}
             goToEdit={this.goToEdit}
             editButton={this.editButton}
@@ -472,7 +472,7 @@ class UserDetail extends React.Component {
             handleDeleteClick={this.handleDeleteClick}
             id={this.props.match.params.id}
             onToggle={onToggle}
-            suppressEdit={this.props.resources.suppressEdit}
+            suppressList={this.props.resources.suppressEdit}
           />
         </>
       );

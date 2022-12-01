@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { IfPermission } from '@folio/stripes/core';
 import { Button, Icon } from '@folio/stripes/components';
 
+import { shouldSuppress } from '../utils';
+
 /**
  * actionMenuEditButton
  * Handle display of the "Edit" button in the Action menu.
@@ -19,22 +21,8 @@ import { Button, Icon } from '@folio/stripes/components';
  *
  * @returns component
  */
-const ActionMenuEditButton = ({ id, suppressEdit, onToggle, goToEdit, editButton }) => {
-  let suppress = false;
-  if (suppressEdit?.records?.[0]) {
-    try {
-      const value = suppressEdit?.records?.[0]?.value;
-      if (value) {
-        const list = JSON.parse(value);
-        if (Array.isArray(list)) {
-          suppress = !!list.find(i => i === id);
-        }
-      }
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.error(`could not parse JSON: ${suppressEdit?.records?.[0]}`, e);
-    }
-  }
+const ActionMenuEditButton = ({ id, suppressList, onToggle, goToEdit, editButton }) => {
+  const suppress = shouldSuppress(suppressList, id);
 
   let button = <></>;
   if (!suppress) {
@@ -69,7 +57,7 @@ ActionMenuEditButton.propTypes = {
   id: PropTypes.string,
   goToEdit: PropTypes.func,
   onToggle: PropTypes.func,
-  suppressEdit: PropTypes.shape({
+  suppressList: PropTypes.shape({
     records: PropTypes.arrayOf(PropTypes.object)
   }),
 };

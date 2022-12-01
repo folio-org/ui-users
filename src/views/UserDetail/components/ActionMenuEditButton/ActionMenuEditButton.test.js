@@ -10,12 +10,13 @@ describe('render ActionMenuEditOption', () => {
   IfPermission.mockImplementation(({ children }) => children);
 
   describe('renders', () => {
-    test('if suppressEdit resource is empty', async () => {
+    test('if suppressList resource is empty', async () => {
       const props = {
         id: '123',
         onToggle: jest.fn(),
         goToEdit: jest.fn(),
         editButton: jest.fn(),
+        shouldSuppress: jest.fn(),
       };
 
       render(<ActionMenuEditButton {...props} />);
@@ -23,13 +24,14 @@ describe('render ActionMenuEditOption', () => {
       expect(screen.getByText('ui-users.edit')).toBeTruthy();
     });
 
-    test('if suppressEdit records array is empty', async () => {
+    test('if suppressList records array is empty', async () => {
       const props = {
         id: '123',
-        suppressEdit: { records: [] },
+        suppressList: { records: [] },
         onToggle: jest.fn(),
         goToEdit: jest.fn(),
         editButton: jest.fn(),
+        shouldSuppress: jest.fn(),
       };
 
       render(<ActionMenuEditButton {...props} />);
@@ -37,13 +39,14 @@ describe('render ActionMenuEditOption', () => {
       expect(screen.getByText('ui-users.edit')).toBeTruthy();
     });
 
-    test('if suppressEdit records array does not contain match', async () => {
+    test('if suppressList records array does not contain match', async () => {
       const props = {
         id: '123',
-        suppressEdit: { records: [{ value: '["456"]' }] },
+        suppressList: { records: [{ value: '["456"]' }] },
         onToggle: jest.fn(),
         goToEdit: jest.fn(),
         editButton: jest.fn(),
+        shouldSuppress: jest.fn(),
       };
 
       render(<ActionMenuEditButton {...props} />);
@@ -51,13 +54,14 @@ describe('render ActionMenuEditOption', () => {
       expect(screen.getByText('ui-users.edit')).toBeTruthy();
     });
 
-    test('if suppressEdit records does not contain an array', async () => {
+    test('if suppressList records does not contain an array', async () => {
       const props = {
         id: '123',
-        suppressEdit: { records: [{ value: '{"monkey": "bagel"}' }] },
+        suppressList: { records: [{ value: '{"monkey": "bagel"}' }] },
         onToggle: jest.fn(),
         goToEdit: jest.fn(),
         editButton: jest.fn(),
+        shouldSuppress: jest.fn(),
       };
 
       render(<ActionMenuEditButton {...props} />);
@@ -71,6 +75,7 @@ describe('render ActionMenuEditOption', () => {
         onToggle: jest.fn(),
         goToEdit: jest.fn(),
         editButton: jest.fn(),
+        shouldSuppress: jest.fn(),
       };
 
       render(<ActionMenuEditButton {...props} />);
@@ -79,42 +84,17 @@ describe('render ActionMenuEditOption', () => {
       expect(props.onToggle).toHaveBeenCalled();
       expect(props.goToEdit).toHaveBeenCalled();
     });
-
-    describe('logs error on invalid JSON', () => {
-      beforeAll(() => {
-        // eslint-disable-next-line no-console
-        console.error = jest.fn();
-      });
-      afterAll(() => {
-        // eslint-disable-next-line no-console
-        console.error.mockRestore();
-      });
-
-      test('value is incorrectly serialized', () => {
-        const props = {
-          id: '123',
-          suppressEdit: { records: [{ value: '["123", 456"]' }] },
-          onToggle: jest.fn(),
-          goToEdit: jest.fn(),
-          editButton: jest.fn(),
-        };
-
-        render(<ActionMenuEditButton {...props} />);
-
-        // eslint-disable-next-line no-console
-        expect(console.error).toHaveBeenCalledTimes(1);
-      });
-    });
   });
 
   describe('does not render', () => {
     test('if supress records value matches', async () => {
       const props = {
         id: '123',
-        suppressEdit: { records: [{ value: '["123", "456"]' }] },
+        suppressList: { records: [{ value: '["123", "456"]' }] },
         onToggle: jest.fn(),
         goToEdit: jest.fn(),
         editButton: jest.fn(),
+        shouldSuppress: jest.fn(),
       };
 
       render(<ActionMenuEditButton {...props} />);
@@ -130,6 +110,7 @@ describe('render ActionMenuEditOption', () => {
         onToggle: jest.fn(),
         goToEdit: jest.fn(),
         editButton: jest.fn(),
+        shouldSuppress: jest.fn(),
       };
 
       render(<ActionMenuEditButton {...props} />);
