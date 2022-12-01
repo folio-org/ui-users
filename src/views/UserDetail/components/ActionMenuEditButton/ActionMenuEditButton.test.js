@@ -40,7 +40,21 @@ describe('render ActionMenuEditOption', () => {
     test('if suppressEdit records array does not contain match', async () => {
       const props = {
         id: '123',
-        suppressEdit: { records: '["456"]' },
+        suppressEdit: { records: [{ value: '["456"]' }] },
+        onToggle: jest.fn(),
+        goToEdit: jest.fn(),
+        editButton: jest.fn(),
+      };
+
+      render(<ActionMenuEditButton {...props} />);
+
+      expect(screen.getByText('ui-users.edit')).toBeTruthy();
+    });
+
+    test('if suppressEdit records does not contain an array', async () => {
+      const props = {
+        id: '123',
+        suppressEdit: { records: [{ value: '{"monkey": "bagel"}' }] },
         onToggle: jest.fn(),
         goToEdit: jest.fn(),
         editButton: jest.fn(),
@@ -76,7 +90,7 @@ describe('render ActionMenuEditOption', () => {
         console.error.mockRestore();
       });
 
-      test('value is incorrectly serialize', () => {
+      test('value is incorrectly serialized', () => {
         const props = {
           id: '123',
           suppressEdit: { records: [{ value: '["123", 456"]' }] },

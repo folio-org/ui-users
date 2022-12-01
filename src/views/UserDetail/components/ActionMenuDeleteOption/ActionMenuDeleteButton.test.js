@@ -13,9 +13,8 @@ describe('render ActionMenuDeleteButton', () => {
     test('if suppressEdit resource is empty', async () => {
       const props = {
         id: '123',
+        handleDeleteClick: jest.fn(),
         onToggle: jest.fn(),
-        goToEdit: jest.fn(),
-        editButton: jest.fn(),
       };
 
       render(<ActionMenuDeleteButton {...props} />);
@@ -27,9 +26,8 @@ describe('render ActionMenuDeleteButton', () => {
       const props = {
         id: '123',
         suppressEdit: { records: [] },
+        handleDeleteClick: jest.fn(),
         onToggle: jest.fn(),
-        goToEdit: jest.fn(),
-        editButton: jest.fn(),
       };
 
       render(<ActionMenuDeleteButton {...props} />);
@@ -40,10 +38,22 @@ describe('render ActionMenuDeleteButton', () => {
     test('if suppressEdit records array does not contain match', async () => {
       const props = {
         id: '123',
-        suppressEdit: { records: '["456"]' },
+        suppressEdit: { records: [{ value: '["456"]' }] },
         onToggle: jest.fn(),
-        goToEdit: jest.fn(),
-        editButton: jest.fn(),
+        handleDeleteClick: jest.fn(),
+      };
+
+      render(<ActionMenuDeleteButton {...props} />);
+
+      expect(screen.getByText('ui-users.details.checkDelete')).toBeTruthy();
+    });
+
+    test('if suppressEdit records does not contain an array', async () => {
+      const props = {
+        id: '123',
+        suppressEdit: { records: [{ value: '{"monkey": "bagel"}' }] },
+        onToggle: jest.fn(),
+        handleDeleteClick: jest.fn(),
       };
 
       render(<ActionMenuDeleteButton {...props} />);
@@ -55,15 +65,14 @@ describe('render ActionMenuDeleteButton', () => {
       const props = {
         id: '123',
         onToggle: jest.fn(),
-        goToEdit: jest.fn(),
-        editButton: jest.fn(),
+        handleDeleteClick: jest.fn(),
       };
 
       render(<ActionMenuDeleteButton {...props} />);
       userEvent.click(screen.getByText('ui-users.details.checkDelete'));
 
       expect(props.onToggle).toHaveBeenCalled();
-      expect(props.goToEdit).toHaveBeenCalled();
+      expect(props.handleDeleteClick).toHaveBeenCalled();
     });
 
     describe('logs error on invalid JSON', () => {
@@ -76,13 +85,12 @@ describe('render ActionMenuDeleteButton', () => {
         console.error.mockRestore();
       });
 
-      test('value is incorrectly serialize', () => {
+      test('value is incorrectly serialized', () => {
         const props = {
           id: '123',
           suppressEdit: { records: [{ value: '["123", 456"]' }] },
           onToggle: jest.fn(),
-          goToEdit: jest.fn(),
-          editButton: jest.fn(),
+          handleDeleteClick: jest.fn(),
         };
 
         render(<ActionMenuDeleteButton {...props} />);
@@ -99,8 +107,7 @@ describe('render ActionMenuDeleteButton', () => {
         id: '123',
         suppressEdit: { records: [{ value: '["123", "456"]' }] },
         onToggle: jest.fn(),
-        goToEdit: jest.fn(),
-        editButton: jest.fn(),
+        handleDeleteClick: jest.fn(),
       };
 
       render(<ActionMenuDeleteButton {...props} />);
@@ -114,8 +121,7 @@ describe('render ActionMenuDeleteButton', () => {
       const props = {
         id: '123',
         onToggle: jest.fn(),
-        goToEdit: jest.fn(),
-        editButton: jest.fn(),
+        handleDeleteClick: jest.fn(),
       };
 
       render(<ActionMenuDeleteButton {...props} />);

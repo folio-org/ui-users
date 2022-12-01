@@ -15,7 +15,13 @@ jest.mock('@folio/stripes/components', () => ({
       <span>{props.children}</span>
     </span>
   )),
-  Button: jest.fn(({ children, onClick = jest.fn(), ...rest }) => (
+  Button: jest.fn(({
+    children,
+    onClick = jest.fn(),
+    // eslint-disable-next-line no-unused-vars
+    buttonStyle, buttonRef,
+    ...rest
+  }) => (
     <button data-test-button type="button" {...rest} onClick={onClick}>
       <span>
         {children}

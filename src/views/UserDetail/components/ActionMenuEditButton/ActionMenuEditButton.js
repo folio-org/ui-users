@@ -69,7 +69,9 @@ ActionMenuEditButton.propTypes = {
   id: PropTypes.string,
   goToEdit: PropTypes.func,
   onToggle: PropTypes.func,
-  suppressEdit: PropTypes.bool,
+  suppressEdit: PropTypes.shape({
+    records: PropTypes.arrayOf(PropTypes.object)
+  }),
 };
 
 export default ActionMenuEditButton;

@@ -64,7 +64,9 @@ ActionMenuDeleteButton.propTypes = {
   handleDeleteClick: PropTypes.func,
   id: PropTypes.string,
   onToggle: PropTypes.func,
-  suppressEdit: PropTypes.bool,
+  suppressEdit: PropTypes.shape({
+    records: PropTypes.arrayOf(PropTypes.object)
+  }),
 };
 
 export default ActionMenuDeleteButton;
