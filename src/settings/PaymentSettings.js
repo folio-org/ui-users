@@ -4,9 +4,7 @@ import {
   injectIntl,
   FormattedMessage,
 } from 'react-intl';
-import { Field } from 'react-final-form';
 import {
-  Select,
   Label,
 } from '@folio/stripes/components';
 import { ControlledVocab } from '@folio/stripes/smart-components';
@@ -83,24 +81,6 @@ class PaymentSettings extends React.Component {
     } = this.state;
     const label = formatMessage({ id: 'ui-users.payments.singular' });
 
-    const fieldComponents = {
-      'allowedRefundMethod': ({ fieldProps }) => (
-        <Field
-          {...fieldProps}
-          component={Select}
-          dataOptions={[{ label: formatMessage({ id: 'ui-users.feefines.modal.yes' }), value: true }, { label: formatMessage({ id: 'ui-users.feefines.modal.no' }), value: false }]}
-          marginBottom0
-          data-testid="field-allowedRefundMethod"
-        />
-      )
-    };
-
-    const formatter = {
-      'allowedRefundMethod': (item) => ((item.allowedRefundMethod)
-        ? formatMessage({ id: 'ui-users.feefines.modal.yes' })
-        : formatMessage({ id: 'ui-users.feefines.modal.no' })),
-    };
-
     const preCreateHook = (item) => {
       item.ownerId = ownerId;
       return item;
@@ -111,11 +91,9 @@ class PaymentSettings extends React.Component {
         {...this.props}
         baseUrl="payments"
         columnMapping={columnMapping}
-        fieldComponents={fieldComponents}
-        formatter={formatter}
         hiddenFields={['numberOfObjects']}
         id="settings-payments"
-        itemTemplate={{ allowedRefundMethod: true }}
+        itemTemplate={{ allowedRefundMethod: false }}
         label={formatMessage({ id: 'ui-users.payments.label' })}
         labelSingular={label}
         nameKey="payment"
@@ -126,7 +104,7 @@ class PaymentSettings extends React.Component {
         rowFilterFunction={(item) => (item.ownerId === ownerId)}
         sortby="nameMethod"
         validate={(item, index, items) => validate(item, index, items, 'nameMethod', label)}
-        visibleFields={['nameMethod', 'allowedRefundMethod']}
+        visibleFields={['nameMethod']}
         formType="final-form"
       />
     );
