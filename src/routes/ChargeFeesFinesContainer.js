@@ -7,6 +7,7 @@ import {
 } from '@folio/stripes/core';
 
 import { ChargeFeeFine } from '../components/Accounts';
+import CurrentUserServicePointAbsenteeErrorModal from '../components/CurrentUserServicePointAbsenteeErrorModal';
 import { MAX_RECORDS } from '../constants';
 
 class ChargeFeesFinesContainer extends React.Component {
@@ -164,7 +165,13 @@ class ChargeFeesFinesContainer extends React.Component {
       }),
     }).isRequired,
     stripes: PropTypes.object.isRequired,
-    okapi: PropTypes.object,
+    okapi: PropTypes.shape({
+      currentUser: PropTypes.shape({
+        curServicePoint: PropTypes.shape({
+          id: PropTypes.string,
+        }),
+      }).isRequired,
+    }).isRequired,
     initialize: PropTypes.func,
     servicePointsIds: PropTypes.arrayOf(PropTypes.string),
     defaultServicePointId: PropTypes.string,
@@ -197,6 +204,10 @@ class ChargeFeesFinesContainer extends React.Component {
   }
 
   render() {
+    if (!this.props.okapi.currentUser.curServicePoint?.id) {
+      return <CurrentUserServicePointAbsenteeErrorModal />;
+    }
+
     return <ChargeFeeFine user={this.getUser()} selectedLoan={this.getLoan()} {...this.props} />;
   }
 }

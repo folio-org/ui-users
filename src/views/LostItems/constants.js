@@ -1,11 +1,15 @@
+import PropTypes from 'prop-types';
+
 import {
   itemStatuses,
 } from '../../constants';
 
+export const DEFAULT_VALUE = '';
 export const PAGE_AMOUNT = 100;
 
 export const ACTUAL_COST_RECORD_FIELD_NAME = {
   LOSS_TYPE: 'lossType',
+  USER: 'user',
   USER_ID: 'id',
   USER_BARCODE: 'barcode',
   USER_FIRST_NAME: 'firstName',
@@ -59,6 +63,68 @@ export const ITEM_STATUSES_TRANSLATIONS_KEYS = {
   [itemStatuses.DECLARED_LOST]: 'ui-users.lostItems.list.filters.lossType.declaredLost',
 };
 
+export const ACTUAL_COST_TYPES = {
+  BILL: 'bill',
+  DO_NOT_BILL: 'doNotBill',
+};
+
+export const ACTUAL_COST_MODAL_DEFAULT = {
+  isOpen: false,
+};
+
+export const ACTUAL_COST_CONFIRM_MODAL_DEFAULT = {
+  isOpen: false,
+};
+
+export const ACTUAL_COST_DEFAULT = {
+  actualCostRecord: {},
+  additionalInfo: {
+    actualCostToBill: '0',
+    additionalInformationForStaff: DEFAULT_VALUE,
+    additionalInformationForPatron: DEFAULT_VALUE,
+  },
+};
+
 // When installing the BE module, the default data for "Resource identifier types" is set from the json and this "id" corresponds to the "ISBN"
 // https://github.com/folio-org/mod-inventory-storage/blob/master/reference-data/identifier-types/isbn.json
 export const ISBN_ID = '8261054f-be78-422d-bd51-4ed9f33c3422';
+
+export const ACTUAL_COST_RECORD_PROP_TYPES = PropTypes.shape({
+  user: PropTypes.shape({
+    firstName: PropTypes.string.isRequired,
+    lastName: PropTypes.string,
+    middleName: PropTypes.string,
+  }).isRequired,
+  item: PropTypes.shape({
+    materialType: PropTypes.string.isRequired,
+  }).isRequired,
+  feeFine: PropTypes.shape({
+    owner: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+  }).isRequired,
+  instance: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+  }).isRequired,
+}).isRequired;
+
+export const ADDITIONAL_INFO_PROP_TYPES = PropTypes.shape({
+  actualCostToBill: PropTypes.string.isRequired,
+  additionalInformationForStaff: PropTypes.string.isRequired,
+  additionalInformationForPatron: PropTypes.string.isRequired,
+});
+
+export const ACTUAL_COST_PROP_TYPES = PropTypes.shape({
+  actualCostRecord: ACTUAL_COST_RECORD_PROP_TYPES,
+  additionalInfo: ADDITIONAL_INFO_PROP_TYPES,
+  type: PropTypes.oneOf([ACTUAL_COST_TYPES.BILL, ACTUAL_COST_TYPES.DO_NOT_BILL]).isRequired,
+}).isRequired;
+
+export const BILL_AND_DO_NOT_BILL_ACTUAL_COST_PROP_TYPES = {
+  actualCostRecord: ACTUAL_COST_RECORD_PROP_TYPES,
+  setActualCostModal: PropTypes.func.isRequired,
+  actualCost: PropTypes.shape({
+    actualCostRecord: PropTypes.object.isRequired,
+    additionalInfo: ADDITIONAL_INFO_PROP_TYPES,
+  }).isRequired,
+  setActualCost: PropTypes.func.isRequired,
+};

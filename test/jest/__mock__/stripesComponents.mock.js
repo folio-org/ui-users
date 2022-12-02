@@ -7,6 +7,9 @@ jest.mock('@folio/stripes/components', () => ({
   AccordionSet: jest.fn(({ children, ...rest }) => (
     <span {...rest}>{children}</span>
   )),
+  AccordionStatus: jest.fn(({ children, ...rest }) => (
+    <span {...rest}>{children}</span>
+  )),
   Badge: jest.fn((props) => (
     <span>
       <span>{props.children}</span>
@@ -81,6 +84,7 @@ jest.mock('@folio/stripes/components', () => ({
     </>
   )),
   Loading: () => <div>Loading</div>,
+  LoadingPane: () => <div>LoadingPane</div>,
   // oy, dismissible. we need to pull it out of props so it doesn't
   // get applied to the div as an attribute, which must have a string-value,
   // which will shame you in the console:
@@ -106,6 +110,9 @@ jest.mock('@folio/stripes/components', () => ({
   }),
   ModalFooter: jest.fn((props) => (
     <div>{props.children}</div>
+  )),
+  MultiColumnList: jest.fn((props) => (
+    <div data-testid={props['data-testid']} />
   )),
   MultiSelection: jest.fn(({ children, dataOptions }) => (
     <div>
@@ -160,7 +167,9 @@ jest.mock('@folio/stripes/components', () => ({
       {lastMenu ?? null}
     </div>
   )),
+  PaneHeaderIconButton: jest.fn(({ children }) => <div className="paneHeaderIconButton">{ children }</div>),
   PaneMenu: jest.fn((props) => <div>{props.children}</div>),
+  PaneSet: jest.fn((props) => <div>{props.children}</div>),
   RadioButton: jest.fn(({ label, name, ...rest }) => (
     <div>
       <label htmlFor="male">{label}</label>
@@ -200,6 +209,17 @@ jest.mock('@folio/stripes/components', () => ({
       </div>
     );
   }),
+  TextArea: jest.fn((props) => (
+    <div>
+      <label htmlFor={props.label}>{props.label}</label>
+      <textarea
+        id={props.label}
+        value={props.value}
+        cols="30"
+        rows="10"
+      />
+    </div>
+  )),
   TextField: jest.fn((props) => {
     return (
       <div>
