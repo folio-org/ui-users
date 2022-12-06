@@ -21,7 +21,7 @@ jest.mock('@folio/stripes/core', () => {
       interfaces: {},
       isFinished: true,
       modules: {},
-      okapi: {},
+      okapi: '',
     },
     epics: {
       add: jest.fn(),
@@ -32,7 +32,7 @@ jest.mock('@folio/stripes/core', () => {
     icons: {},
     locale: 'en-US',
     logger: {
-      log: () => {},
+      log: jest.fn(),
     },
     metadata: {},
     okapi: {
@@ -64,9 +64,9 @@ jest.mock('@folio/stripes/core', () => {
           token: 'abc',
         },
       }),
-      dispatch: () => {},
-      subscribe: () => {},
-      replaceReducer: () => {},
+      dispatch: jest.fn(),
+      subscribe: jest.fn(),
+      replaceReducer: jest.fn(),
     },
     timezone: 'UTC',
     user: {
@@ -111,7 +111,13 @@ jest.mock('@folio/stripes/core', () => {
 
     const fakeStripes = stripes || STRIPES;
 
-    return <Component {...rest} mutator={fakeMutator} resources={fakeResources} stripes={fakeStripes} />;
+    return (<Component
+      {...rest}
+      mutator={fakeMutator}
+      refreshRemote={jest.fn()}
+      resources={fakeResources}
+      stripes={fakeStripes}
+    />);
   };
 
   return {

@@ -60,7 +60,6 @@ class AccountsListingContainer extends React.Component {
       type: 'okapi',
       records: 'accounts',
       path: 'accounts',
-      recordsRequired: '%{activeRecord.records}',
       perRequest: MAX_RECORDS,
       GET: {
         params: {

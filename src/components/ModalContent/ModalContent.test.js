@@ -228,7 +228,7 @@ const renderModalContent = (props) => render(<ModalContent {...props} />);
 describe('Modal Content', () => {
   const commonProps = {
     isLoading: false,
-    declarationInProgress: false,
+    isInProgress: false,
     resources: {},
     mutator,
     loanAction: 'declareLost',

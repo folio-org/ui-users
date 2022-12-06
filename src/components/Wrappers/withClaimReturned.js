@@ -115,8 +115,6 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
       <>
         <WrappedComponent
           claimReturned={this.openClaimReturnedDialog}
-          isInProgress={claimReturnedInProgress}
-          toggleButton={this.setClaimReturnedInProgress}
           {...this.props}
         />
         { loan &&
