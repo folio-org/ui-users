@@ -9,6 +9,7 @@ import {
 // It then generates a custom config for each of them
 // replacing the name "customFields-fieldName"
 // with "customFields.fieldName" for CQL representation.
+// eslint-disable-next-line import/prefer-default-export
 export function buildFilterConfig(filters) {
   const customFilterConfig = [];
   const parsedFilters = parseFilters(filters);
