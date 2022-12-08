@@ -1,5 +1,10 @@
 # Change history for ui-users
 
+## [8.2.4](https://github.com/folio-org/ui-users/tree/v8.2.4) (2022-12-08)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v8.2.3...v8.2.4)
+
+* Adjust permissions in order to see the link to open request queue. Fixes UIU-2661.
+
 ## [8.2.3](https://github.com/folio-org/ui-users/tree/v8.2.3) (2022-11-30)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.2.2...v8.2.3)
 
