@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import user from 'fixtures/okapiCurrentUser';
 
 import renderWithRouter from 'helpers/renderWithRouter';
@@ -16,7 +16,6 @@ const proxyData = {
 };
 
 const showErrorMock = jest.fn();
-
 const props = (propID, proxyID) => {
   return {
     id: propID,
@@ -27,7 +26,7 @@ const props = (propID, proxyID) => {
     },
     mutator: {
       proxy: {
-        GET: jest.fn().mockResolvedValue(proxyData),
+        GET: jest.fn().mockResolvedValueOnce(proxyData),
       },
     },
     showErrorCallout: showErrorMock,
@@ -36,6 +35,7 @@ const props = (propID, proxyID) => {
 };
 
 const renderLoanProxyDetails = (props1) => renderWithRouter(<LoanProxyDetails {...props1} />);
+
 describe('Render LoanProxyDetails component', () => {
   it('When props ID and proxy ID are same', () => {
     renderLoanProxyDetails(props('testId', 'testId'));
@@ -50,5 +50,24 @@ describe('Render LoanProxyDetails component', () => {
   it('When Props id is blank', () => {
     renderLoanProxyDetails(props('', 'testId'));
     expect(screen.getAllByText('-')).toBeTruthy();
+  });
+
+  it('When execption is catched', async () => {
+    const newprops = {
+      id: 'test',
+      resources: {
+        proxy: null
+      },
+      mutator: {
+        proxy: {
+          GET: jest.fn().mockRejectedValueOnce(),
+        },
+      },
+      showErrorCallout: showErrorMock,
+    };
+    renderLoanProxyDetails(newprops);
+    await waitFor(() => {
+      expect(showErrorMock).toHaveBeenCalled();
+    });
   });
 });
