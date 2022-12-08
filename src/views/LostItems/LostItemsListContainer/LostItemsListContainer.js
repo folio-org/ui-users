@@ -11,6 +11,8 @@ import {
   Pane,
   PaneMenu,
   Paneset,
+  Button,
+  Icon,
 } from '@folio/stripes/components';
 import {
   SearchAndSortQuery,
@@ -22,7 +24,10 @@ import {
 import {
   Filters,
   LostItemsList,
+  Search,
 } from './components';
+
+import styles from './LostItemsListContainer.css';
 
 class LostItemsListContainer extends React.Component {
   static propTypes = {
@@ -120,7 +125,13 @@ class LostItemsListContainer extends React.Component {
           onSort,
           getFilterHandlers,
           activeFilters,
+          resetAll,
+          getSearchHandlers,
+          searchValue,
+          onSubmitSearch,
         }) => {
+          const isResetButtonDisabled = !activeFilters.string && !searchValue.query;
+
           return (
             <Paneset id="lostItemsPaneSet">
               {filterPaneIsVisible &&
@@ -134,12 +145,32 @@ class LostItemsListContainer extends React.Component {
                     </PaneMenu>
                   }
                 >
-                  <Filters
-                    activeFilters={activeFilters.state}
-                    resources={resources}
-                    onChangeHandlers={getFilterHandlers()}
-                    resultOffset={resultOffset}
-                  />
+                  <form
+                    onSubmit={onSubmitSearch}
+                    className={styles.lostItemsForm}
+                  >
+                    <Search
+                      getSearchHandlers={getSearchHandlers}
+                      searchValue={searchValue}
+                    />
+                    <Button
+                      buttonStyle="none"
+                      id="lostItemsResetAllButton"
+                      disabled={isResetButtonDisabled}
+                      onClick={resetAll}
+                      buttonClass={styles.resetButton}
+                    >
+                      <Icon icon="times-circle-solid" size="small">
+                        <FormattedMessage id="stripes-smart-components.resetAll" />
+                      </Icon>
+                    </Button>
+                    <Filters
+                      activeFilters={activeFilters.state}
+                      resources={resources}
+                      onChangeHandlers={getFilterHandlers()}
+                      resultOffset={resultOffset}
+                    />
+                  </form>
                 </Pane>
               }
               <Pane

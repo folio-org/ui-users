@@ -10,12 +10,12 @@ import {
   makeQueryFunction,
   StripesConnectedSource,
   buildUrl,
-  parseFilters,
 } from '@folio/stripes/smart-components';
 
 import filterConfig from './filterConfig';
 import { UserSearch } from '../views';
 import { MAX_RECORDS } from '../constants';
+import { buildFilterConfig } from './utils';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
@@ -32,32 +32,6 @@ const searchFields = [
   'customFields="%{query}*"'
 ];
 const compileQuery = template(`(${searchFields.join(' or ')})`, { interpolate: /%{([\s\S]+?)}/g });
-
-// Generates a filter config in a dynamic fashion for currently
-// registerd custom fields.
-// This function loops through all currently applied filters
-// and it looks for filters which contain 'customFields` name.
-// It then generates a custom config for each of them
-// replacing the name "customFields-fieldName"
-// with "customFields.fieldName" for CQL representation.
-function buildFilterConfig(filters) {
-  const customFilterConfig = [];
-  const parsedFilters = parseFilters(filters);
-
-  Object.keys(parsedFilters).forEach(name => {
-    if (name.match('customFields')) {
-      customFilterConfig.push(
-        {
-          name,
-          cql: name.split('-').join('.'),
-          values: [],
-          operator: '=',
-        },
-      );
-    }
-  });
-  return customFilterConfig;
-}
 
 function buildQuery(queryParams, pathComponents, resourceData, logger, props) {
   const customFilterConfig = buildFilterConfig(queryParams.filters);

@@ -7,7 +7,6 @@ import {
 import {
   makeQueryFunction,
   StripesConnectedSource,
-  parseFilters,
   buildUrl,
 } from '@folio/stripes/smart-components';
 
@@ -21,26 +20,7 @@ import {
   PAGE_AMOUNT,
   SEARCH_FIELDS,
 } from '../views/LostItems/constants';
-
-function buildFilterConfig(filters) {
-  const customFilterConfig = [];
-  const parsedFilters = parseFilters(filters);
-
-  Object.keys(parsedFilters).forEach(name => {
-    if (name.match('customFields')) {
-      customFilterConfig.push(
-        {
-          name,
-          cql: name.split('-').join('.'),
-          values: [],
-          operator: '=',
-        },
-      );
-    }
-  });
-
-  return customFilterConfig;
-}
+import { buildFilterConfig } from './utils';
 
 const filterConfig = [
   {
@@ -55,7 +35,7 @@ function buildQuery(queryParams, pathComponents, resourceData, logger, props) {
 
   return makeQueryFunction(
     'cql.allRecords=1',
-    SEARCH_FIELDS.map(index => `${index}="%{query.query}*"`).join(' or '),
+    SEARCH_FIELDS.map(index => `${index}=="*%{query.query}*"`).join(' or '),
     {
       [ACTUAL_COST_RECORD_FIELD_NAME.USER]: `${ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.USER_LAST_NAME]} ${ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.USER_FIRST_NAME]}`,
     },
