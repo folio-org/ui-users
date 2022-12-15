@@ -31,6 +31,8 @@ import {
 } from '../../../../../constants';
 
 const actualCostToBillField = 'actualCostToBill';
+const BILLED_AMOUNT_MAX = 9999.99;
+const BILLED_AMOUNT_MIN = 0.01;
 
 const ActualCostModal = ({
   actualCostModal,
@@ -55,7 +57,7 @@ const ActualCostModal = ({
   const feeFineOwner = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.FEE_FINE_OWNER], DEFAULT_VALUE);
   const feeFineType = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.FEE_FINE_TYPE], DEFAULT_VALUE);
   const [isBillAmountTouched, setBillAmountTouched] = useState(false);
-  const isAmountInvalid = !Number(actualCostToBill) || Number(actualCostToBill) < 0.01 || Number(actualCostToBill) > 9999.99;
+  const isAmountInvalid = !Number(actualCostToBill) || Number(actualCostToBill) < BILLED_AMOUNT_MIN || Number(actualCostToBill) > BILLED_AMOUNT_MAX;
   const billAmountError = isBillAmountTouched && isAmountInvalid ?
     <FormattedMessage id="ui-users.lostItems.feeFineAmount.error" /> :
     null;
