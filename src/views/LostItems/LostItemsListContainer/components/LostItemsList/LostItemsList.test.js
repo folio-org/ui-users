@@ -20,6 +20,8 @@ import LostItemsList, {
   visibleColumns,
   columnMapping,
   columnWidths,
+  isBilledRecord,
+  getBilledAmount,
 } from './LostItemsList';
 import { getPatronName } from './util';
 import {
@@ -290,6 +292,43 @@ describe('LostItemsList', () => {
 
         expect(MultiColumnList).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
       });
+    });
+  });
+
+  describe('isBilledRecord', () => {
+    it('should return true', () => {
+      const recordId = 'recordId';
+
+      expect(isBilledRecord(recordId, [{ id: recordId }])).toBe(true);
+    });
+
+    it('should return false', () => {
+      const recordId = 'recordId';
+
+      expect(isBilledRecord(recordId, [])).toBe(false);
+    });
+  });
+
+  describe('getBilledAmount', () => {
+    const billedAmount = '10.50';
+    const recordId = 'recordId';
+
+    it('should return billed amount', () => {
+      const billedRecords = [{
+        id: recordId,
+        billedAmount,
+      }];
+
+      expect(getBilledAmount(recordId, billedRecords)).toBe(billedAmount);
+    });
+
+    it('should return undefined if there is no record with correct id', () => {
+      const billedRecords = [{
+        id: 'test',
+        billedAmount,
+      }];
+
+      expect(getBilledAmount(recordId, billedRecords)).toBeUndefined();
     });
   });
 });

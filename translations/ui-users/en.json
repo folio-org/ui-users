@@ -1041,5 +1041,9 @@
   "lostItems.list.searchResults": "Lost items requiring actual cost",
   "lostItems.list.filters.lossType": "Loss type",
   "lostItems.list.filters.lossType.agedToLost": "Aged to lost",
-  "lostItems.list.filters.lossType.declaredLost": "Declared lost"
+  "lostItems.list.filters.lossType.declaredLost": "Declared lost",
+  "lostItems.feeFineAmount.error": "Actual cost to bill patron must be greater than 0.00 and less than 9999.99",
+  "lostItems.notification.success": "A fee/fine of <strong>{amount}</strong> has been successfully <strong>charged</strong> to <strong>{patronName}</strong>",
+  "lostItems.notification.alreadyBilled": "<strong>{patronName}</strong> has already been billed for this item by another user",
+  "lostItems.notification.serverError": "A system error has occurred - please try again later or contact your FOLIO support staff"
 }
