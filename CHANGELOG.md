@@ -11,6 +11,7 @@
 * Fix problem with Fee/Fine list loading. Refs UIU-2735.
 * Refactor code for disable 'Declare lost' button after click to prevent multiple submissions. Refs UIU-2736.
 * Implement searching for "Lost items requiring actual cost" page. Refs UIU-1866.
+* Enable dependabot. Refs UIU-2747, FOLIO-3664.
 
 ## [8.2.0](https://github.com/folio-org/ui-users/tree/v8.2.0) (2022-10-24)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v8.2.0)
