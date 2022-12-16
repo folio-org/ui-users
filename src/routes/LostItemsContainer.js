@@ -45,7 +45,7 @@ function buildQuery(queryParams, pathComponents, resourceData, logger, props) {
   const statusQueryParam = 'status=="Open"';
 
   if (cql) {
-    cql = `(${cql}) and (${statusQueryParam})`;
+    cql = `(${statusQueryParam}) and ${cql}`;
   }
 
   return cql;

@@ -13,7 +13,6 @@ import {
   Paneset,
   Button,
   Icon,
-  Callout,
 } from '@folio/stripes/components';
 import {
   SearchAndSortQuery,
@@ -21,6 +20,9 @@ import {
   CollapseFilterPaneButton,
   ExpandFilterPaneButton,
 } from '@folio/stripes/smart-components';
+import {
+  CalloutContext,
+} from '@folio/stripes/core';
 
 import {
   Filters,
@@ -63,9 +65,10 @@ class LostItemsListContainer extends React.Component {
     source: PropTypes.object,
   }
 
+  static contextType = CalloutContext;
+
   constructor(props) {
     super(props);
-    this.callout = null;
     this.state = {
       filterPaneIsVisible: true,
     };
@@ -101,7 +104,7 @@ class LostItemsListContainer extends React.Component {
           }}
         />;
 
-        this.callout.sendCallout({
+        this.context.sendCallout({
           message,
         });
       })
@@ -117,7 +120,7 @@ class LostItemsListContainer extends React.Component {
           message = <FormattedMessage id="ui-users.lostItems.notification.serverError" />;
         }
 
-        this.callout.sendCallout({
+        this.context.sendCallout({
           message,
           type: 'error',
         });
@@ -266,7 +269,6 @@ class LostItemsListContainer extends React.Component {
                   billedRecords={billedRecords}
                 />
               </Pane>
-              <Callout ref={(ref) => { this.callout = ref; }} />
             </Paneset>
           );
         }}
