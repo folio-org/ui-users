@@ -296,13 +296,13 @@ describe('LostItemsList', () => {
   });
 
   describe('isBilledRecord', () => {
-    it('should return true', () => {
+    it('should return true when id is found', () => {
       const recordId = 'recordId';
 
       expect(isBilledRecord(recordId, [{ id: recordId }])).toBe(true);
     });
 
-    it('should return false', () => {
+    it('should return false when no id found', () => {
       const recordId = 'recordId';
 
       expect(isBilledRecord(recordId, [])).toBe(false);

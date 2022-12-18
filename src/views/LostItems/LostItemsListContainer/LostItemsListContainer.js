@@ -20,9 +20,7 @@ import {
   CollapseFilterPaneButton,
   ExpandFilterPaneButton,
 } from '@folio/stripes/smart-components';
-import {
-  CalloutContext,
-} from '@folio/stripes/core';
+import { CalloutContext } from '@folio/stripes/core';
 
 import {
   Filters,

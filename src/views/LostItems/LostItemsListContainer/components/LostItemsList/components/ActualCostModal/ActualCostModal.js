@@ -58,9 +58,9 @@ const ActualCostModal = ({
   const feeFineType = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.FEE_FINE_TYPE], DEFAULT_VALUE);
   const [isBillAmountTouched, setBillAmountTouched] = useState(false);
   const isAmountInvalid = !Number(actualCostToBill) || Number(actualCostToBill) < BILLED_AMOUNT_MIN || Number(actualCostToBill) > BILLED_AMOUNT_MAX;
-  const billAmountError = isBillAmountTouched && isAmountInvalid ?
-    <FormattedMessage id="ui-users.lostItems.feeFineAmount.error" /> :
-    null;
+  const billAmountError = isBillAmountTouched && isAmountInvalid
+    ? <FormattedMessage id="ui-users.lostItems.feeFineAmount.error" />
+    : null;
   const setTouched = () => {
     if (!isBillAmountTouched) {
       setBillAmountTouched(true);
