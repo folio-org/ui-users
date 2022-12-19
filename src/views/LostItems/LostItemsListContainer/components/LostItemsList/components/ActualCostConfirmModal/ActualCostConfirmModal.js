@@ -32,6 +32,7 @@ const ActualCostConfirmModal = ({
   setActualCostConfirmModal,
   actualCost,
   setActualCost,
+  billRecord,
 }) => {
   const {
     isOpen,
@@ -55,6 +56,7 @@ const ActualCostConfirmModal = ({
     });
   };
   const onConfirm = () => {
+    billRecord(actualCost);
     setActualCostConfirmModal(ACTUAL_COST_CONFIRM_MODAL_DEFAULT);
     setActualCost(ACTUAL_COST_DEFAULT);
   };
@@ -162,6 +164,7 @@ ActualCostConfirmModal.propTypes = {
   setActualCostConfirmModal: PropTypes.func.isRequired,
   actualCost: ACTUAL_COST_PROP_TYPES,
   setActualCost: PropTypes.func.isRequired,
+  billRecord: PropTypes.func.isRequired,
 };
 
 export default ActualCostConfirmModal;

@@ -32,8 +32,7 @@ const filterConfig = [
 
 function buildQuery(queryParams, pathComponents, resourceData, logger, props) {
   const customFilterConfig = buildFilterConfig(queryParams.filters);
-
-  return makeQueryFunction(
+  const getCql = makeQueryFunction(
     'cql.allRecords=1',
     SEARCH_FIELDS.map(index => `${index}=="*%{query.query}*"`).join(' or '),
     {
@@ -41,7 +40,15 @@ function buildQuery(queryParams, pathComponents, resourceData, logger, props) {
     },
     [...filterConfig, ...customFilterConfig],
     2,
-  )(queryParams, pathComponents, resourceData, logger, props);
+  );
+  let cql = getCql(queryParams, pathComponents, resourceData, logger, props);
+  const statusQueryParam = 'status=="Open"';
+
+  if (cql) {
+    cql = `(${statusQueryParam}) and ${cql}`;
+  }
+
+  return cql;
 }
 
 class LostItemsContainer extends React.Component {
@@ -65,6 +72,15 @@ class LostItemsContainer extends React.Component {
         params: {
           query: buildQuery,
         },
+      },
+    },
+    billedRecord: {
+      type: 'okapi',
+      fetch: false,
+      throwErrors: false,
+      clientGeneratePk: false,
+      POST: {
+        path: 'actual-cost-fee-fine/bill',
       },
     },
   });
@@ -94,12 +110,26 @@ class LostItemsContainer extends React.Component {
     }).isRequired,
   }
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      billedRecords: [],
+    };
+  }
+
   componentDidMount() {
     this.source = new StripesConnectedSource(this.props, this.props.stripes.logger);
   }
 
   componentDidUpdate() {
     this.source.update(this.props);
+  }
+
+  addBilledRecord = (record) => {
+    this.setState((prevState) => ({
+      billedRecords: [...prevState.billedRecords, record],
+    }));
   }
 
   onNeedMoreData = (askAmount, index) => {
@@ -167,6 +197,8 @@ class LostItemsContainer extends React.Component {
         onNeedMoreData={this.onNeedMoreData}
         queryGetter={this.queryGetter}
         querySetter={this.querySetter}
+        addBilledRecord={this.addBilledRecord}
+        billedRecords={this.state.billedRecords}
         {...this.props}
       />
     );
