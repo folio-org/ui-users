@@ -846,7 +846,9 @@
           "ui-users.loans.view",
           "ui-users.feesfines.actions.all",
           "ui-inventory.instance.view",
-          "actual-cost-record-storage.actual-cost-records.collection.get"
+          "actual-cost-record-storage.actual-cost-records.collection.get",
+          "actual-cost-fee-fine-bill.post",
+          "actual-cost-fee-fine-cancel.post"
         ],
         "visible": true
       }
