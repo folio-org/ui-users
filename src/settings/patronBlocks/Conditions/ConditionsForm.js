@@ -17,22 +17,12 @@ import stripesFinalForm from '@folio/stripes/final-form';
 import css from '../patronBlocks.css';
 
 function showValidationErrors(values) {
-  const {
-    blockBorrowing,
-    blockRenewals,
-    blockRequests,
-    message,
-  } = values;
-  const isCheckboxChecked = blockBorrowing || blockRenewals || blockRequests;
+  const { message } = values;
   const isTextAreaValueExists = !!message;
   const errors = {};
 
-  if (!isTextAreaValueExists && isCheckboxChecked) {
+  if (!isTextAreaValueExists) {
     errors.message = <FormattedMessage id="ui-users.settings.error.noMessage" />;
-  }
-
-  if (isTextAreaValueExists && !isCheckboxChecked) {
-    errors.message = <FormattedMessage id="ui-users.settings.error.noCheckbox" />;
   }
 
   return errors;
@@ -55,38 +45,6 @@ class ConditionsForm extends Component {
       getState: PropTypes.func.isRequired,
     }),
     handleSubmit: PropTypes.func.isRequired,
-  };
-
-  getValueFromState = () => {
-    const {
-      values: {
-        blockBorrowing,
-        blockRenewals,
-        blockRequests,
-        message,
-      },
-    } = this.props.form.getState();
-
-    return {
-      blockBorrowing,
-      blockRenewals,
-      blockRequests,
-      message,
-    };
-  }
-
-  isCheckboxChecked = () => {
-    const {
-      blockBorrowing,
-      blockRenewals,
-      blockRequests,
-    } = this.getValueFromState();
-
-    return blockBorrowing || blockRenewals || blockRequests;
-  }
-
-  isTextAreaRequired = () => {
-    return this.isCheckboxChecked();
   };
 
   renderFooter = () => {
@@ -178,7 +136,7 @@ class ConditionsForm extends Component {
                 component={TextArea}
                 value={this.props.initialValues.message}
                 label={<FormattedMessage id="ui-users.settings.block.message" />}
-                required={this.isTextAreaRequired()}
+                required
               />
             </Col>
           </Row>
