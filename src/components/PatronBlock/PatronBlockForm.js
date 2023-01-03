@@ -140,7 +140,11 @@ class PatronBlockForm extends React.Component {
   renderLastMenu = () => {
     const { params } = this.props;
 
-    const del = params.patronblockid ? <Button id="patron-block-delete" marginBottom0 buttonStyle="danger" onClick={this.props.onDeleteItem}><FormattedMessage id="ui-users.blocks.form.button.delete" /></Button> : '';
+    const del = params.patronblockid ?
+      <Button id="patron-block-delete" marginBottom0 buttonStyle="danger" onClick={this.props.onDeleteItem}>
+        <FormattedMessage id="ui-users.blocks.form.button.delete" />
+      </Button>
+      : '';
 
     return (
       <PaneMenu>
