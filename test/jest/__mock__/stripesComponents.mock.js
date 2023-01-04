@@ -111,6 +111,9 @@ jest.mock('@folio/stripes/components', () => ({
   ModalFooter: jest.fn((props) => (
     <div>{props.children}</div>
   )),
+  MultiColumnList: jest.fn((props) => (
+    <div data-testid={props['data-testid']} />
+  )),
   MultiSelection: jest.fn(({ children, dataOptions }) => (
     <div>
       <select multiple>
@@ -184,6 +187,11 @@ jest.mock('@folio/stripes/components', () => ({
     </fieldset>
   )),
   Row: jest.fn(({ children }) => <div className="row">{ children }</div>),
+  SearchField: jest.fn((props) => (
+    <input
+      {...props}
+    />
+  )),
   Select: jest.fn(({ children, dataOptions }) => {
     const dummyData = [{
       value: 'testValue',
@@ -206,6 +214,17 @@ jest.mock('@folio/stripes/components', () => ({
       </div>
     );
   }),
+  TextArea: jest.fn((props) => (
+    <div>
+      <label htmlFor={props.label}>{props.label}</label>
+      <textarea
+        id={props.label}
+        value={props.value}
+        cols="30"
+        rows="10"
+      />
+    </div>
+  )),
   TextField: jest.fn((props) => {
     return (
       <div>
