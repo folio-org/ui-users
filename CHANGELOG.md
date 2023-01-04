@@ -11,6 +11,10 @@
 * Fix problem with Fee/Fine list loading. Refs UIU-2735.
 * Refactor code for disable 'Declare lost' button after click to prevent multiple submissions. Refs UIU-2736.
 * Implement searching for "Lost items requiring actual cost" page. Refs UIU-1866.
+* Implement "Bill actual cost" functionality. Refs UIU-1863.
+* Add new interface version to "request-storage". Refs UIU-2749.
+* Create/Edit Patron Block: Move Save & close button to the footer pane. Refs UIU-1698.
+* In Settings > Users > Patron Blocks > Conditions, mark "Message to be displayed" as required. Refs UIU-2487.
 
 ## [8.2.0](https://github.com/folio-org/ui-users/tree/v8.2.0) (2022-10-24)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v8.2.0)

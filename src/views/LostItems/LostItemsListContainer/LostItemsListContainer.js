@@ -20,12 +20,15 @@ import {
   CollapseFilterPaneButton,
   ExpandFilterPaneButton,
 } from '@folio/stripes/smart-components';
+import { CalloutContext } from '@folio/stripes/core';
 
 import {
   Filters,
   LostItemsList,
   Search,
 } from './components';
+import { getPatronName } from './components/LostItemsList/util';
+import { STATUS_CODES } from '../../../constants';
 
 import styles from './LostItemsListContainer.css';
 
@@ -41,9 +44,26 @@ class LostItemsListContainer extends React.Component {
       resultOffset: PropTypes.shape({
         replace: PropTypes.func.isRequired,
       }),
+      billedRecord: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
     }).isRequired,
+    okapi: PropTypes.shape({
+      currentUser: PropTypes.shape({
+        curServicePoint: PropTypes.shape({
+          id: PropTypes.string,
+        }).isRequired,
+      }).isRequired,
+    }).isRequired,
+    billedRecords: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.string,
+      amount: PropTypes.string,
+    })).isRequired,
+    addBilledRecord: PropTypes.func.isRequired,
     source: PropTypes.object,
   }
+
+  static contextType = CalloutContext;
 
   constructor(props) {
     super(props);
@@ -51,6 +71,59 @@ class LostItemsListContainer extends React.Component {
       filterPaneIsVisible: true,
     };
   }
+
+  billRecord = (actualCost) => {
+    const {
+      mutator,
+      okapi,
+      addBilledRecord,
+    } = this.props;
+    const payload = {
+      actualCostRecordId: actualCost.actualCostRecord.id,
+      amount: Number(actualCost.additionalInfo.actualCostToBill),
+      additionalInfoForStaff: actualCost.additionalInfo.additionalInformationForStaff,
+      additionalInfoForPatron: actualCost.additionalInfo.additionalInformationForPatron,
+      servicePointId: okapi.currentUser.curServicePoint?.id,
+    };
+    const patronName = getPatronName(actualCost.actualCostRecord);
+
+    mutator.billedRecord.POST(payload)
+      .then((res) => {
+        const billedAmount = res.feeFine.billedAmount.toFixed(2);
+        addBilledRecord({
+          id: res.id,
+          billedAmount,
+        });
+        const message = <FormattedMessage
+          id="ui-users.lostItems.notification.success"
+          values={{
+            patronName,
+            amount: billedAmount,
+          }}
+        />;
+
+        this.context.sendCallout({
+          message,
+        });
+      })
+      .catch((e) => {
+        let message;
+
+        if (e.status === STATUS_CODES.unprocessableEntity) {
+          message = <FormattedMessage
+            id="ui-users.lostItems.notification.alreadyBilled"
+            values={{ patronName }}
+          />;
+        } else {
+          message = <FormattedMessage id="ui-users.lostItems.notification.serverError" />;
+        }
+
+        this.context.sendCallout({
+          message,
+          type: 'error',
+        });
+      });
+  };
 
   toggleFilterPane = () => {
     this.setState(curState => ({
@@ -89,6 +162,7 @@ class LostItemsListContainer extends React.Component {
       mutator: {
         resultOffset,
       },
+      billedRecords,
     } = this.props;
     const {
       filterPaneIsVisible,
@@ -189,6 +263,8 @@ class LostItemsListContainer extends React.Component {
                   emptyMessage={emptyMessage}
                   onSort={onSort}
                   sortOrder={sortOrder}
+                  billRecord={this.billRecord}
+                  billedRecords={billedRecords}
                 />
               </Pane>
             </Paneset>

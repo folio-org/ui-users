@@ -81,7 +81,7 @@ export const ACTUAL_COST_CONFIRM_MODAL_DEFAULT = {
 export const ACTUAL_COST_DEFAULT = {
   actualCostRecord: {},
   additionalInfo: {
-    actualCostToBill: '0',
+    actualCostToBill: '',
     additionalInformationForStaff: DEFAULT_VALUE,
     additionalInformationForPatron: DEFAULT_VALUE,
   },
@@ -129,4 +129,5 @@ export const BILL_AND_DO_NOT_BILL_ACTUAL_COST_PROP_TYPES = {
     additionalInfo: ADDITIONAL_INFO_PROP_TYPES,
   }).isRequired,
   setActualCost: PropTypes.func.isRequired,
+  disabled: PropTypes.bool.isRequired,
 };
