@@ -23,16 +23,13 @@ function showValidationErrors(values) {
     blockRenewals,
     blockRequests,
   } = values;
+  
   const isTextAreaValueExists = !!message;
   const isCheckboxChecked = blockBorrowing || blockRenewals || blockRequests;
   const errors = {};
 
   if (!isTextAreaValueExists) {
     errors.message = <FormattedMessage id="ui-users.settings.error.noMessage" />;
-  }
-
-  if (isTextAreaValueExists && !isCheckboxChecked) {
-    errors.message = <FormattedMessage id="ui-users.settings.error.noCheckbox" />;
   }
 
   return errors;
