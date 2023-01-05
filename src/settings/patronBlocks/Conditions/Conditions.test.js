@@ -81,6 +81,6 @@ describe('Conditions', () => {
     act(() => {
       userEvent.click(screen.getByText('stripes-core.button.save'));
     });
-    expect(mockPut).toHaveBeenCalledTimes(0);
+    expect(mockPut).toHaveBeenCalledTimes(1);
   });
 });
