@@ -40,7 +40,7 @@ const mockPut = jest.fn().mockImplementation(() => Promise.resolve());
 
 const mutator = {
   patronBlockCondition: {
-    DELETE: jest.fn().mockReturnValue(Promise.resolve()),
+    DELETE: jest.fn(),
     POST: jest.fn(),
     PUT: mockPut,
     cancel: jest.fn(),
