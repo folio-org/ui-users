@@ -17,12 +17,22 @@ import stripesFinalForm from '@folio/stripes/final-form';
 import css from '../patronBlocks.css';
 
 function showValidationErrors(values) {
-  const { message } = values;
+  const {
+    message,
+    blockBorrowing,
+    blockRenewals,
+    blockRequests,
+  } = values;
   const isTextAreaValueExists = !!message;
+  const isCheckboxChecked = blockBorrowing || blockRenewals || blockRequests;
   const errors = {};
 
   if (!isTextAreaValueExists) {
     errors.message = <FormattedMessage id="ui-users.settings.error.noMessage" />;
+  }
+
+  if (isTextAreaValueExists && !isCheckboxChecked) {
+    errors.message = <FormattedMessage id="ui-users.settings.error.noCheckbox" />;
   }
 
   return errors;
