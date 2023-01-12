@@ -83,6 +83,15 @@ class LostItemsContainer extends React.Component {
         path: 'actual-cost-fee-fine/bill',
       },
     },
+    cancelledRecord: {
+      type: 'okapi',
+      fetch: false,
+      throwErrors: false,
+      clientGeneratePk: false,
+      POST: {
+        path: 'actual-cost-fee-fine/cancel',
+      },
+    },
   });
 
   static propTypes = {
@@ -115,6 +124,7 @@ class LostItemsContainer extends React.Component {
 
     this.state = {
       billedRecords: [],
+      cancelledRecords: [],
     };
   }
 
@@ -129,6 +139,12 @@ class LostItemsContainer extends React.Component {
   addBilledRecord = (record) => {
     this.setState((prevState) => ({
       billedRecords: [...prevState.billedRecords, record],
+    }));
+  }
+
+  addCancelledRecord = (recordId) => {
+    this.setState((prevState) => ({
+      cancelledRecords: [...prevState.cancelledRecords, recordId],
     }));
   }
 
@@ -199,6 +215,8 @@ class LostItemsContainer extends React.Component {
         querySetter={this.querySetter}
         addBilledRecord={this.addBilledRecord}
         billedRecords={this.state.billedRecords}
+        addCancelledRecord={this.addCancelledRecord}
+        cancelledRecords={this.state.cancelledRecords}
         {...this.props}
       />
     );

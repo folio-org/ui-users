@@ -22,6 +22,7 @@ import LostItemsList, {
   columnWidths,
   isBilledRecord,
   getBilledAmount,
+  isCancelledRecord,
 } from './LostItemsList';
 import { getPatronName } from './util';
 import {
@@ -329,6 +330,26 @@ describe('LostItemsList', () => {
       }];
 
       expect(getBilledAmount(recordId, billedRecords)).toBeUndefined();
+    });
+  });
+
+  describe('isCancelledRecord', () => {
+    describe('when id is presented', () => {
+      it('should return true', () => {
+        const recordId = 'recordId';
+        const cancelledRecords = [recordId];
+
+        expect(isCancelledRecord(recordId, cancelledRecords)).toBe(true);
+      });
+    });
+
+    describe('when id is not presented', () => {
+      it('should return false', () => {
+        const recordId = 'recordId';
+        const cancelledRecords = [];
+
+        expect(isCancelledRecord(recordId, cancelledRecords)).toBe(false);
+      });
     });
   });
 });
