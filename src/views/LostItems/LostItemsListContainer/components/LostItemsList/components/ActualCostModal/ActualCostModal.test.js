@@ -47,7 +47,7 @@ const initialProps = {
       item: {},
     },
     additionalInfo: {
-      actualCostToBill: 'actualCostToBill',
+      actualCostToBill: '10',
       additionalInformationForStaff: 'additionalInformationForStaff',
       additionalInformationForPatron: 'additionalInformationForPatron',
     },

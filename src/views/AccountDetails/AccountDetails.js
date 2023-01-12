@@ -431,7 +431,6 @@ feeFineActions
     const loan = (resources?.loans?.records || []).filter((l) => l.id === account.loanId);
     const loanPolicyId = loan[0]?.loanPolicyId;
     const loanPolicyName = loan[0]?.loanPolicy.name;
-    const loanCloseDate = loan[0]?.loanCloseDate;
     // not all accounts are attached to loans. for those that are
     const hasLoan = !!account.barcode;
 
@@ -615,12 +614,7 @@ feeFineActions
                 value={latestPaymentStatus}
               />
             </Col>
-            <Col xs={1.5} sm={3}>
-              <KeyValue
-                label={<FormattedMessage id="ui-users.feefines.details.dateClose" />}
-                value={loanCloseDate ? <FormattedTime value={loanCloseDate} /> : <NoValue />}
-              />
-            </Col>
+            <Col xs={1.5} sm={3} />
           </Row>
           <Row>
             <Col

@@ -23,6 +23,7 @@ const initialProps = {
   actualCost: {
     type: ACTUAL_COST_TYPES.BILL,
     actualCostRecord: {
+      id: 'id',
       feeFine: {},
       user: {},
     },
@@ -32,6 +33,7 @@ const initialProps = {
       additionalInformationForPatron: 'additionalInformationForPatron',
     },
   },
+  billRecord: jest.fn(),
 };
 const messageIds = {
   billConfirmText: 'ui-users.lostItems.modal.bill.confirm.text',
@@ -84,13 +86,15 @@ describe('ActualCostConfirmModal', () => {
         expect(screen.getByText(messageIds.confirmButton)).toBeVisible();
       });
 
-      it('should trigger "setActualCostConfirmModal" and "setActualCost" with correct data', () => {
+      it('should trigger "setActualCostConfirmModal", "billRecord" and "setActualCost" with correct data', () => {
         const confirmButton = screen.getByTestId(testIds.confirmActualCost);
+        const billRecordPayload = initialProps.actualCost;
 
         fireEvent.click(confirmButton);
 
         expect(initialProps.setActualCostConfirmModal).toHaveBeenCalledWith(ACTUAL_COST_CONFIRM_MODAL_DEFAULT);
         expect(initialProps.setActualCost).toHaveBeenCalledWith(ACTUAL_COST_DEFAULT);
+        expect(initialProps.billRecord).toHaveBeenCalledWith(billRecordPayload);
       });
 
       it('should render "keepEditing" button label', () => {
