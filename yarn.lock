@@ -1140,17 +1140,12 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bigtest/convergence@^0.10.0":
-  version "0.10.0"
-  resolved "https://registry.yarnpkg.com/@bigtest/convergence/-/convergence-0.10.0.tgz#ed2212b7034c84917ccfbaa8cf875730ee535702"
-  integrity sha512-jJBPq3TTmMD/s/5k/mINzL6EXyPdNq0cEDZXufICFjpXmuUabRS/PX/NfzmXVlNENDJ6yOrDnrsO4IJboNTu9g==
-
 "@bigtest/convergence@^1.1.1":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@bigtest/convergence/-/convergence-1.1.2.tgz#1028f28378aae6876b3c07e577a2d4a320ad0acf"
   integrity sha512-f/tpOfdd5p40Omejmc+jwrNL0nZ0RDV2LEQQdIWYHtMdKfQQRQpdAhyfNVPLuLeKHw5D9dUX8v9WOrwGsMBTAw==
 
-"@bigtest/globals@^0.7.5":
+"@bigtest/globals@^0.7.5", "@bigtest/globals@^0.7.6":
   version "0.7.6"
   resolved "https://registry.yarnpkg.com/@bigtest/globals/-/globals-0.7.6.tgz#e435d370059cfde66b20d31ba1d91cf0db63ba53"
   integrity sha512-VEMqUGmCPskM6/YKtBEOyS0sgrIfH0zcNTd1AXTJXCSMtiI5eIe46Nq6nEebjdLeI4gJiVDflvQmgidTNHvC9w==
@@ -1169,12 +1164,16 @@
     element-is-visible "^1.0.0"
     lodash.isequal "^4.5.0"
 
-"@bigtest/interactor@^0.7.2":
-  version "0.7.2"
-  resolved "https://registry.yarnpkg.com/@bigtest/interactor/-/interactor-0.7.2.tgz#64e82cbd935d2a7e62b58be7488d461e997a7b31"
-  integrity sha512-OwNRGT4E2sjI1PvwIWRRTilU+fUZWEF7HybLtfv2XoX55biWSowgsk1HU+jpq0LVuHGzB1y8f5Dc4v0zzntX6g==
+"@bigtest/interactor@^0.31.1":
+  version "0.31.1"
+  resolved "https://registry.yarnpkg.com/@bigtest/interactor/-/interactor-0.31.1.tgz#2eb3b59730dea2b028234f999b84869544981dbc"
+  integrity sha512-bvZxHDyb9HyqgQjxfYujFIQ5spnl0WdIB5ze1jUO2Igvmq+ND/oD84IHMyG58Jhu9KfBWdk+2smF++9QcgrPbQ==
   dependencies:
-    "@bigtest/convergence" "^0.10.0"
+    "@bigtest/globals" "^0.7.6"
+    "@bigtest/performance" "^0.5.0"
+    change-case "^4.1.1"
+    element-is-visible "^1.0.0"
+    lodash.isequal "^4.5.0"
 
 "@bigtest/mocha@^0.5.2":
   version "0.5.2"
@@ -4744,7 +4743,7 @@ decimal.js@^10.2.1:
   resolved "https://registry.yarnpkg.com/decimal.js/-/decimal.js-10.4.2.tgz#0341651d1d997d86065a2ce3a441fbd0d8e8b98e"
   integrity sha512-ic1yEvwT6GuvaYwBLLY6/aFFgjZdySKTE8en/fkU3QICTmRtgtSlFn0u0BXN06InZwtfCelR7j8LRiDI/02iGA==
 
-decode-uri-component@^0.2.0, decode-uri-component@^0.2.2:
+decode-uri-component@^0.2.0:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/decode-uri-component/-/decode-uri-component-0.2.2.tgz#e69dbe25d37941171dd540e024c444cd5188e1e9"
   integrity sha512-FqUYQ+8o158GyGTrMFJms9qh3CqTKvAqgqsTnkLI8sKu0028orqBhxNMFkFen0zGyg6epACD32pjVk58ngIErQ==

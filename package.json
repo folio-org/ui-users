@@ -872,7 +872,7 @@
     "@babel/plugin-transform-runtime": "^7.13.10",
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-react": "^7.9.0",
-    "@bigtest/interactor": "^0.7.2",
+    "@bigtest/interactor": "^0.31.1",
     "@bigtest/mocha": "^0.5.2",
     "@bigtest/react": "^0.1.2",
     "@folio/eslint-config-stripes": "^6.0.0",
