@@ -16,6 +16,7 @@
 * Create/Edit Patron Block: Move Save & close button to the footer pane. Refs UIU-1698.
 * In Settings > Users > Patron Blocks > Conditions, mark "Message to be displayed" as required. Refs UIU-2487.
 * Enable dependabot. Refs UIU-2747, FOLIO-3664.
+* Suppress delete of users stored in a configuration entry. Refs UIU-2738.
 * Remove deps related to deprecated BigTest infrastructure. Refs UIU-2745.
 
 ## [8.2.0](https://github.com/folio-org/ui-users/tree/v8.2.0) (2022-10-24)
