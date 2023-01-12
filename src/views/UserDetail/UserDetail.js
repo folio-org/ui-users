@@ -68,7 +68,7 @@ import DeleteUserModal from './components/DeleteUserModal';
 import ExportFeesFinesReportButton from './components';
 import ErrorPane from '../../components/ErrorPane';
 import ActionMenuEditButton from './components/ActionMenuEditButton';
-import ActionMenuDeleteButton from './components/ActionMenuDeleteOption';
+import ActionMenuDeleteButton from './components/ActionMenuDeleteButton';
 
 class UserDetail extends React.Component {
   static propTypes = {
