@@ -152,13 +152,16 @@ const LostItemsList = ({
           {
             isBilled &&
             <div className={styles.recordStatusWrapper}>
-              <b><FormattedMessage id="ui-users.lostItems.recordStatus.billed" />: {getBilledAmount(actualCostRecord.id, billedRecords)}</b>
+              <FormattedMessage
+                id="ui-users.lostItems.recordStatus.billed"
+                values={{ amount: getBilledAmount(actualCostRecord.id, billedRecords) }}
+              />
             </div>
           }
           {
             isCancelled &&
             <div className={styles.recordStatusWrapper}>
-              <b><FormattedMessage id="ui-users.lostItems.recordStatus.notBilled" /></b>
+              <FormattedMessage id="ui-users.lostItems.recordStatus.notBilled" />
             </div>
           }
           <RenderActions
