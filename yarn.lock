@@ -1140,16 +1140,6 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bigtest/convergence@^0.10.0":
-  version "0.10.0"
-  resolved "https://registry.yarnpkg.com/@bigtest/convergence/-/convergence-0.10.0.tgz#ed2212b7034c84917ccfbaa8cf875730ee535702"
-  integrity sha512-jJBPq3TTmMD/s/5k/mINzL6EXyPdNq0cEDZXufICFjpXmuUabRS/PX/NfzmXVlNENDJ6yOrDnrsO4IJboNTu9g==
-
-"@bigtest/convergence@^1.1.1":
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/@bigtest/convergence/-/convergence-1.1.2.tgz#1028f28378aae6876b3c07e577a2d4a320ad0acf"
-  integrity sha512-f/tpOfdd5p40Omejmc+jwrNL0nZ0RDV2LEQQdIWYHtMdKfQQRQpdAhyfNVPLuLeKHw5D9dUX8v9WOrwGsMBTAw==
-
 "@bigtest/globals@^0.7.5":
   version "0.7.6"
   resolved "https://registry.yarnpkg.com/@bigtest/globals/-/globals-0.7.6.tgz#e435d370059cfde66b20d31ba1d91cf0db63ba53"
@@ -1169,31 +1159,10 @@
     element-is-visible "^1.0.0"
     lodash.isequal "^4.5.0"
 
-"@bigtest/interactor@^0.7.2":
-  version "0.7.2"
-  resolved "https://registry.yarnpkg.com/@bigtest/interactor/-/interactor-0.7.2.tgz#64e82cbd935d2a7e62b58be7488d461e997a7b31"
-  integrity sha512-OwNRGT4E2sjI1PvwIWRRTilU+fUZWEF7HybLtfv2XoX55biWSowgsk1HU+jpq0LVuHGzB1y8f5Dc4v0zzntX6g==
-  dependencies:
-    "@bigtest/convergence" "^0.10.0"
-
-"@bigtest/mocha@^0.5.2":
-  version "0.5.2"
-  resolved "https://registry.yarnpkg.com/@bigtest/mocha/-/mocha-0.5.2.tgz#df54959636067448a1c0fd36d19ba1b1a491604f"
-  integrity sha512-DBm+ndNyJndjxNp84v+oGaqfuWz4XnVKIKseFzFpqr2y2p1Don81m5o6vB14DnS1vIQvPhDsnWHU6v7ekq9u6g==
-  dependencies:
-    "@bigtest/convergence" "^1.1.1"
-
 "@bigtest/performance@^0.5.0":
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/@bigtest/performance/-/performance-0.5.0.tgz#195f2c445cbe2ebe4357e08f7b39449240bf62d7"
   integrity sha512-5lmaul6UIdyEApxapYumCShEdKca7PjwYlcIHiu/5iI032DUQsq4dygYMX07cgevfCZSR2fss57uMGfdB22GbQ==
-
-"@bigtest/react@^0.1.2":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@bigtest/react/-/react-0.1.2.tgz#52b1c0ac7d3bbded421f1407e0e8a589c5261951"
-  integrity sha512-hAgpHGumryJX93Z8sudWtaaqKJM0SSfFLFZOvSKXDOP1iIqcd2rsVCFpKqk9fjr9mTaA6sZ1OWToh7Hy6wEqJA==
-  dependencies:
-    history "^4.7.2"
 
 "@bigtest/suite@^0.11.2":
   version "0.11.3"
@@ -4744,7 +4713,7 @@ decimal.js@^10.2.1:
   resolved "https://registry.yarnpkg.com/decimal.js/-/decimal.js-10.4.2.tgz#0341651d1d997d86065a2ce3a441fbd0d8e8b98e"
   integrity sha512-ic1yEvwT6GuvaYwBLLY6/aFFgjZdySKTE8en/fkU3QICTmRtgtSlFn0u0BXN06InZwtfCelR7j8LRiDI/02iGA==
 
-decode-uri-component@^0.2.0, decode-uri-component@^0.2.2:
+decode-uri-component@^0.2.0:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/decode-uri-component/-/decode-uri-component-0.2.2.tgz#e69dbe25d37941171dd540e024c444cd5188e1e9"
   integrity sha512-FqUYQ+8o158GyGTrMFJms9qh3CqTKvAqgqsTnkLI8sKu0028orqBhxNMFkFen0zGyg6epACD32pjVk58ngIErQ==
@@ -6720,7 +6689,7 @@ highlight-words-core@^1.2.0:
   resolved "https://registry.yarnpkg.com/highlight-words-core/-/highlight-words-core-1.2.2.tgz#1eff6d7d9f0a22f155042a00791237791b1eeaaa"
   integrity sha512-BXUKIkUuh6cmmxzi5OIbUJxrG8OAk2MqoL1DtO3Wo9D2faJg2ph5ntyuQeLqaHJmzER6H5tllCDA9ZnNe9BVGg==
 
-history@^4.6.3, history@^4.7.2, history@^4.9.0:
+history@^4.6.3, history@^4.9.0:
   version "4.10.1"
   resolved "https://registry.yarnpkg.com/history/-/history-4.10.1.tgz#33371a65e3a83b267434e2b3f3b1b4c58aad4cf3"
   integrity sha512-36nwAD620w12kuzPAsyINPWJqlNbij+hpK1k9XRloDtym8mxzGYl2c17LnV6IAGB2Dmg4tEa7G7DlawS0+qjew==
