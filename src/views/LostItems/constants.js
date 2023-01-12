@@ -55,7 +55,9 @@ export const ACTUAL_COST_RECORD_FIELD_PATH = {
 };
 
 export const SEARCH_FIELDS = [
-  ACTUAL_COST_RECORD_FIELD_NAME.LOSS_TYPE,
+  ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.INSTANCE_TITLE],
+  ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.USER_FIRST_NAME],
+  ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.USER_LAST_NAME],
 ];
 
 export const ITEM_STATUSES_TRANSLATIONS_KEYS = {
@@ -79,7 +81,7 @@ export const ACTUAL_COST_CONFIRM_MODAL_DEFAULT = {
 export const ACTUAL_COST_DEFAULT = {
   actualCostRecord: {},
   additionalInfo: {
-    actualCostToBill: '0',
+    actualCostToBill: '',
     additionalInformationForStaff: DEFAULT_VALUE,
     additionalInformationForPatron: DEFAULT_VALUE,
   },
@@ -127,4 +129,5 @@ export const BILL_AND_DO_NOT_BILL_ACTUAL_COST_PROP_TYPES = {
     additionalInfo: ADDITIONAL_INFO_PROP_TYPES,
   }).isRequired,
   setActualCost: PropTypes.func.isRequired,
+  disabled: PropTypes.bool.isRequired,
 };

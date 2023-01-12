@@ -13,6 +13,7 @@ const BillActualCost = ({
   setActualCostModal,
   actualCost,
   setActualCost,
+  disabled,
 }) => {
   const onClick = () => {
     setActualCostModal({
@@ -30,6 +31,7 @@ const BillActualCost = ({
       data-testid="billActualCostButton"
       buttonStyle="dropdownItem"
       onClick={onClick}
+      disabled={disabled}
     >
       <FormattedMessage id="ui-users.lostItems.list.columnName.action.bill" />
     </Button>

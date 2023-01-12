@@ -22,6 +22,7 @@ const RenderActions = ({
   setActualCostModal,
   actualCost,
   setActualCost,
+  isBillButtonDisabled,
 }) => {
   return (
     <Dropdown
@@ -42,12 +43,14 @@ const RenderActions = ({
           setActualCostModal={setActualCostModal}
           actualCost={actualCost}
           setActualCost={setActualCost}
+          disabled={isBillButtonDisabled}
         />
         <DoNotBillActualCost
           actualCostRecord={actualCostRecord}
           setActualCostModal={setActualCostModal}
           actualCost={actualCost}
           setActualCost={setActualCost}
+          disabled={isBillButtonDisabled}
         />
         <PatronDetailsLink actualCostRecord={actualCostRecord} />
         <LoanDetailsLink actualCostRecord={actualCostRecord} />
@@ -85,6 +88,7 @@ RenderActions.propTypes = {
   }).isRequired,
   actualCost: ACTUAL_COST_PROP_TYPES,
   setActualCost: PropTypes.func.isRequired,
+  isBillButtonDisabled: PropTypes.bool.isRequired,
 };
 
 export default RenderActions;

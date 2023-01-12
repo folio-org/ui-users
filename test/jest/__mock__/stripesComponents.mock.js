@@ -193,6 +193,11 @@ jest.mock('@folio/stripes/components', () => ({
     </fieldset>
   )),
   Row: jest.fn(({ children }) => <div className="row">{ children }</div>),
+  SearchField: jest.fn((props) => (
+    <input
+      {...props}
+    />
+  )),
   Select: jest.fn(({ children, dataOptions }) => {
     const dummyData = [{
       value: 'testValue',
