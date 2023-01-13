@@ -58,6 +58,38 @@ class ConditionsForm extends Component {
     handleSubmit: PropTypes.func.isRequired,
   };
 
+  getValueFromState = () => {
+    const {
+      values: {
+        blockBorrowing,
+        blockRenewals,
+        blockRequests,
+        message,
+      },
+    } = this.props.form.getState();
+
+    return {
+      blockBorrowing,
+      blockRenewals,
+      blockRequests,
+      message,
+    };
+  }
+
+  isCheckboxChecked = () => {
+    const {
+      blockBorrowing,
+      blockRenewals,
+      blockRequests,
+    } = this.getValueFromState();
+
+    return blockBorrowing || blockRenewals || blockRequests;
+  }
+
+  isTextAreaRequired = () => {
+    return this.isCheckboxChecked();
+  };
+
   renderFooter = () => {
     const {
       pristine,
@@ -147,7 +179,7 @@ class ConditionsForm extends Component {
                 component={TextArea}
                 value={this.props.initialValues.message}
                 label={<FormattedMessage id="ui-users.settings.block.message" />}
-                required
+                required={this.isTextAreaRequired()}
               />
             </Col>
           </Row>
