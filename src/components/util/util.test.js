@@ -49,9 +49,10 @@ describe('accountsMatchStatus', () => {
 
 describe('checkUserActive', () => {
   it('returns true for active users', () => {
+    const expirationDate = new Date();
     const user = {
       active: true,
-      expirationDate: new Date(),
+      expirationDate: expirationDate.setDate(expirationDate.getDate() + 2),
     };
 
     expect(checkUserActive(user)).toBe(true);
