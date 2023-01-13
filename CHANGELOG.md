@@ -15,6 +15,8 @@
 * Add new interface version to "request-storage". Refs UIU-2749.
 * Create/Edit Patron Block: Move Save & close button to the footer pane. Refs UIU-1698.
 * In Settings > Users > Patron Blocks > Conditions, mark "Message to be displayed" as required. Refs UIU-2487.
+* Enable dependabot. Refs UIU-2747, FOLIO-3664.
+* Suppress delete of users stored in a configuration entry. Refs UIU-2738.
 
 ## [8.2.0](https://github.com/folio-org/ui-users/tree/v8.2.0) (2022-10-24)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v8.2.0)
