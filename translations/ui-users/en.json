@@ -432,7 +432,6 @@
   "feefines.modal.cancel": "Cancel",
   "feefines.modal.title": "Copy existing fee/fine owner table entries?",
   "feefines.nodata": "There are no Fee/fine: Manual charges",
-  "feefines.details.dateClose": "Date fee/fine closed",
   "owners.label": "Fee/fine: Owners",
   "owners.select": "Select owner",
   "owners.singular": "Fee/fine owner",
@@ -1007,6 +1006,9 @@
   "index.all": "Keyword (name, email, identifier)",
   "loan404": "The requested loan could not be retrieved.",
   "notes.popupModal.label": "User note",
+  "errorModal.currentUserServicePointAbsentee.label": "<strong>Access denied</strong>",
+  "errorModal.currentUserServicePointAbsentee.message": "You must select a service point to create and view <strong>patron fees/fines</strong>. Please add one or more service points to your user record in the <strong>Users</strong> app. Contact an administrator if you do not have the ability to add service points to your record.",
+  "errorModal.currentUserServicePointAbsentee.confirmButtonText": "Back",
   "lostItems.list.columnName.patron": "Patron",
   "lostItems.list.columnName.lossType": "Loss type",
   "lostItems.list.columnName.dateOfLoss": "Date of loss",
@@ -1042,5 +1044,9 @@
   "lostItems.list.searchResults": "Lost items requiring actual cost",
   "lostItems.list.filters.lossType": "Loss type",
   "lostItems.list.filters.lossType.agedToLost": "Aged to lost",
-  "lostItems.list.filters.lossType.declaredLost": "Declared lost"
+  "lostItems.list.filters.lossType.declaredLost": "Declared lost",
+  "lostItems.feeFineAmount.error": "Actual cost to bill patron must be greater than 0.00 and less than 9999.99",
+  "lostItems.notification.success": "A fee/fine of <strong>{amount}</strong> has been successfully <strong>charged</strong> to <strong>{patronName}</strong>",
+  "lostItems.notification.alreadyBilled": "<strong>{patronName}</strong> has already been billed for this item by another user",
+  "lostItems.notification.serverError": "A system error has occurred - please try again later or contact your FOLIO support staff"
 }

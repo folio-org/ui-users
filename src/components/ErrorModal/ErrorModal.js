@@ -1,6 +1,8 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
+import { omit } from 'lodash';
+
 import {
   Button,
   Modal,
@@ -8,24 +10,31 @@ import {
 } from '@folio/stripes/components';
 
 const ErrorModal = (props) => {
+  const modalProps = omit(props, ['confirmButtonText']);
   const footer = (
     <ModalFooter>
       <Button
+        data-testid="confirmButton"
         buttonStyle="primary"
         onClick={props.onClose}
       >
-        <FormattedMessage id="ui-users.okay" />
+        {
+          props.confirmButtonText
+            ? props.confirmButtonText
+            : <FormattedMessage id="ui-users.okay" />
+        }
       </Button>
     </ModalFooter>
   );
 
   return (
     <Modal
+      data-testid="errorModal"
       data-test-error-modal
       size="small"
       footer={footer}
       dismissible
-      {...props}
+      {...modalProps}
     >
       <p>{props.message}</p>
     </Modal>
@@ -37,6 +46,7 @@ ErrorModal.propTypes = {
   onClose: PropTypes.func,
   label: PropTypes.string,
   message: PropTypes.string,
+  confirmButtonText: PropTypes.string,
   id: PropTypes.string,
 };
 

@@ -15,7 +15,8 @@ import {
   TextArea,
   Checkbox,
   Datepicker,
-  Selection
+  Selection,
+  PaneFooter
 } from '@folio/stripes/components';
 import {
   AppIcon,
@@ -137,24 +138,48 @@ class PatronBlockForm extends React.Component {
   );
 
   renderLastMenu = () => {
+    const { params } = this.props;
+
+    const del = params.patronblockid ?
+      <Button id="patron-block-delete" marginBottom0 buttonStyle="danger" onClick={this.props.onDeleteItem}>
+        <FormattedMessage id="ui-users.blocks.form.button.delete" />
+      </Button>
+      : '';
+
+    return (
+      <PaneMenu>
+        {del}
+      </PaneMenu>
+    );
+  }
+
+  footer = () => {
     const {
       pristine,
       submitting,
+      onClose,
       invalid,
       params,
     } = this.props;
+
+    const cancel =
+      <Button
+        id="expirationDate-modal-cancel-btn"
+        onClick={onClose}
+      >
+        <FormattedMessage id="ui-users.cancel" />
+      </Button>;
 
     const submit =
       <Button id="patron-block-save-close" marginBottom0 buttonStyle="primary" type="submit" disabled={pristine || submitting || invalid}>
         { params.patronblockid ? <FormattedMessage id="ui-users.blocks.form.button.save" /> : <FormattedMessage id="ui-users.blocks.form.button.create" />}
       </Button>;
-    const del = params.patronblockid ? <Button id="patron-block-delete" marginBottom0 buttonStyle="danger" onClick={this.props.onDeleteItem}><FormattedMessage id="ui-users.blocks.form.button.delete" /></Button> : '';
 
     return (
-      <PaneMenu>
-        {del}
-        {submit}
-      </PaneMenu>
+      <PaneFooter
+        renderStart={cancel}
+        renderEnd={submit}
+      />
     );
   }
 
@@ -223,6 +248,7 @@ class PatronBlockForm extends React.Component {
             defaultWidth="fill"
             firstMenu={this.renderFirstMenu()}
             lastMenu={this.renderLastMenu()}
+            footer={this.footer()}
             appIcon={<AppIcon app="users" size="small" />}
             paneTitle={title}
           >

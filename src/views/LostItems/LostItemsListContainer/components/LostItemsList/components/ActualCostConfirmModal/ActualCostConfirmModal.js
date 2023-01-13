@@ -32,6 +32,7 @@ const ActualCostConfirmModal = ({
   setActualCostConfirmModal,
   actualCost,
   setActualCost,
+  billRecord,
 }) => {
   const {
     isOpen,
@@ -55,22 +56,23 @@ const ActualCostConfirmModal = ({
     });
   };
   const onConfirm = () => {
+    billRecord(actualCost);
     setActualCostConfirmModal(ACTUAL_COST_CONFIRM_MODAL_DEFAULT);
     setActualCost(ACTUAL_COST_DEFAULT);
   };
   const renderFooter = (
     <ModalFooter>
       <Button
-        id="continueActualCost"
-        data-testid="continueActualCost"
+        id="confirmActualCost"
+        data-testid="confirmActualCost"
         buttonStyle="primary"
         onClick={onConfirm}
       >
         <FormattedMessage id="ui-users.lostItems.modal.button.confirm" />
       </Button>
       <Button
-        id="cancelActualCost"
-        data-testid="cancelActualCost"
+        id="keepEditingActualCost"
+        data-testid="keepEditingActualCost"
         onClick={onKeepEditing}
       >
         <FormattedMessage id="ui-users.lostItems.modal.button.keepEditing" />
@@ -162,6 +164,7 @@ ActualCostConfirmModal.propTypes = {
   setActualCostConfirmModal: PropTypes.func.isRequired,
   actualCost: ACTUAL_COST_PROP_TYPES,
   setActualCost: PropTypes.func.isRequired,
+  billRecord: PropTypes.func.isRequired,
 };
 
 export default ActualCostConfirmModal;

@@ -1,0 +1,3 @@
+.billAmountWrapper {
+  margin-bottom: calc(var(--control-margin-bottom) / 2);
+}
