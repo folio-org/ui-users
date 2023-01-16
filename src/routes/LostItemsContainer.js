@@ -34,7 +34,7 @@ function buildQuery(queryParams, pathComponents, resourceData, logger, props) {
   const customFilterConfig = buildFilterConfig(queryParams.filters);
   const getCql = makeQueryFunction(
     'cql.allRecords=1',
-    SEARCH_FIELDS.map(index => `${index}=="*%{query.query}*"`).join(' or '),
+    `(${SEARCH_FIELDS.map(index => `${index}=="*%{query.query}*"`).join(' or ')})`,
     {
       [ACTUAL_COST_RECORD_FIELD_NAME.USER]: `${ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.USER_LAST_NAME]} ${ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.USER_FIRST_NAME]}`,
     },
@@ -45,7 +45,7 @@ function buildQuery(queryParams, pathComponents, resourceData, logger, props) {
   const statusQueryParam = 'status=="Open"';
 
   if (cql) {
-    cql = `(${statusQueryParam}) and ${cql}`;
+    cql = `${statusQueryParam} and ${cql}`;
   }
 
   return cql;
