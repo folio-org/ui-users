@@ -18,6 +18,7 @@
 * Enable dependabot. Refs UIU-2747, FOLIO-3664.
 * Suppress delete of users stored in a configuration entry. Refs UIU-2738.
 * Remove BigTest infrastructure including tests, deps, config. Refs UIU-2745.
+* Add support for `request-storage` version `5.0` for `<UserRequests>`. Refs UIU-2765.
 
 ## [8.2.0](https://github.com/folio-org/ui-users/tree/v8.2.0) (2022-10-24)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v8.2.0)
