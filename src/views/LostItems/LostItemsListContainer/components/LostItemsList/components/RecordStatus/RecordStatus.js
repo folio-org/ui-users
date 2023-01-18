@@ -32,7 +32,7 @@ const RecordStatus = ({
   );
 };
 
-RecordStatus.propType = {
+RecordStatus.propTypes = {
   recordId: PropTypes.string.isRequired,
   billedRecords: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string,
