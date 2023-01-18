@@ -21,6 +21,7 @@ import {
   ActualCostConfirmModal,
   InstanceDetails,
   RenderActions,
+  RecordStatus,
 } from './components';
 
 import {
@@ -39,8 +40,6 @@ import {
 import {
   getPatronName,
 } from './util';
-
-import styles from './LostItemsList.css';
 
 export const COLUMNS_NAME = {
   PATRON: ACTUAL_COST_RECORD_FIELD_NAME.USER,
@@ -122,7 +121,6 @@ export const basicLostItemsListFormatter = {
 };
 export const isBilledRecord = (recordId, billedRecords) => billedRecords.some(record => record.id === recordId);
 export const isCancelledRecord = (recordId, cancelledRecords) => cancelledRecords.some(id => id === recordId);
-export const getBilledAmount = (recordId, billedRecords) => billedRecords.find(record => record.id === recordId)?.billedAmount;
 export const getRecordStatus = (recordId, billedRecords, cancelledRecords) => {
   const isBilled = isBilledRecord(recordId, billedRecords);
   const isCancelled = isCancelledRecord(recordId, cancelledRecords);
@@ -161,21 +159,12 @@ const LostItemsList = ({
 
       return (
         <div>
-          {
-            isBilled &&
-            <div className={styles.recordStatusWrapper}>
-              <FormattedMessage
-                id="ui-users.lostItems.recordStatus.billed"
-                values={{ amount: getBilledAmount(actualCostRecord.id, billedRecords) }}
-              />
-            </div>
-          }
-          {
-            isCancelled &&
-            <div className={styles.recordStatusWrapper}>
-              <FormattedMessage id="ui-users.lostItems.recordStatus.notBilled" />
-            </div>
-          }
+          <RecordStatus
+            recordId={actualCostRecord.id}
+            billedRecords={billedRecords}
+            isBilled={isBilled}
+            isCancelled={isCancelled}
+          />
           <RenderActions
             isBillButtonDisabled={isBillButtonDisabled}
             actualCostRecord={actualCostRecord}

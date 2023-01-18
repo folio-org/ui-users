@@ -21,7 +21,6 @@ import LostItemsList, {
   columnMapping,
   columnWidths,
   isBilledRecord,
-  getBilledAmount,
   isCancelledRecord,
   getRecordStatus,
 } from './LostItemsList';
@@ -308,29 +307,6 @@ describe('LostItemsList', () => {
       const recordId = 'recordId';
 
       expect(isBilledRecord(recordId, [])).toBe(false);
-    });
-  });
-
-  describe('getBilledAmount', () => {
-    const billedAmount = '10.50';
-    const recordId = 'recordId';
-
-    it('should return billed amount', () => {
-      const billedRecords = [{
-        id: recordId,
-        billedAmount,
-      }];
-
-      expect(getBilledAmount(recordId, billedRecords)).toBe(billedAmount);
-    });
-
-    it('should return undefined if there is no record with correct id', () => {
-      const billedRecords = [{
-        id: 'test',
-        billedAmount,
-      }];
-
-      expect(getBilledAmount(recordId, billedRecords)).toBeUndefined();
     });
   });
 
