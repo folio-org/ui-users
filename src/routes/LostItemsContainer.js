@@ -32,9 +32,10 @@ const filterConfig = [
 
 function buildQuery(queryParams, pathComponents, resourceData, logger, props) {
   const customFilterConfig = buildFilterConfig(queryParams.filters);
+  const mapFields = index => `${index}=="*%{query.query}*"`;
   const getCql = makeQueryFunction(
     'cql.allRecords=1',
-    `(${SEARCH_FIELDS.map(index => `${index}=="*%{query.query}*"`).join(' or ')})`,
+    `(${SEARCH_FIELDS.map(mapFields).join(' or ')})`,
     {
       [ACTUAL_COST_RECORD_FIELD_NAME.USER]: `${ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.USER_LAST_NAME]} ${ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.USER_FIRST_NAME]}`,
     },
