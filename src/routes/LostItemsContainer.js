@@ -32,9 +32,10 @@ const filterConfig = [
 
 function buildQuery(queryParams, pathComponents, resourceData, logger, props) {
   const customFilterConfig = buildFilterConfig(queryParams.filters);
+  const mapFields = index => `${index}=="*%{query.query}*"`;
   const getCql = makeQueryFunction(
     'cql.allRecords=1',
-    SEARCH_FIELDS.map(index => `${index}=="*%{query.query}*"`).join(' or '),
+    `(${SEARCH_FIELDS.map(mapFields).join(' or ')})`,
     {
       [ACTUAL_COST_RECORD_FIELD_NAME.USER]: `${ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.USER_LAST_NAME]} ${ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.USER_FIRST_NAME]}`,
     },
@@ -45,7 +46,7 @@ function buildQuery(queryParams, pathComponents, resourceData, logger, props) {
   const statusQueryParam = 'status=="Open"';
 
   if (cql) {
-    cql = `(${statusQueryParam}) and ${cql}`;
+    cql = `${statusQueryParam} and ${cql}`;
   }
 
   return cql;
@@ -83,6 +84,15 @@ class LostItemsContainer extends React.Component {
         path: 'actual-cost-fee-fine/bill',
       },
     },
+    cancelledRecord: {
+      type: 'okapi',
+      fetch: false,
+      throwErrors: false,
+      clientGeneratePk: false,
+      POST: {
+        path: 'actual-cost-fee-fine/cancel',
+      },
+    },
   });
 
   static propTypes = {
@@ -115,6 +125,7 @@ class LostItemsContainer extends React.Component {
 
     this.state = {
       billedRecords: [],
+      cancelledRecords: [],
     };
   }
 
@@ -129,6 +140,12 @@ class LostItemsContainer extends React.Component {
   addBilledRecord = (record) => {
     this.setState((prevState) => ({
       billedRecords: [...prevState.billedRecords, record],
+    }));
+  }
+
+  addCancelledRecord = (recordId) => {
+    this.setState((prevState) => ({
+      cancelledRecords: [...prevState.cancelledRecords, recordId],
     }));
   }
 
@@ -199,6 +216,8 @@ class LostItemsContainer extends React.Component {
         querySetter={this.querySetter}
         addBilledRecord={this.addBilledRecord}
         billedRecords={this.state.billedRecords}
+        addCancelledRecord={this.addCancelledRecord}
+        cancelledRecords={this.state.cancelledRecords}
         {...this.props}
       />
     );

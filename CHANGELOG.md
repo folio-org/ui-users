@@ -19,6 +19,7 @@
 * Suppress delete of users stored in a configuration entry. Refs UIU-2738.
 * Remove BigTest infrastructure including tests, deps, config. Refs UIU-2745.
 * Add support for `request-storage` version `5.0` for `<UserRequests>`. Refs UIU-2765.
+* Implement "Do not bill actual cost" functionality. Refs UIU-2705.
 
 ## [8.2.0](https://github.com/folio-org/ui-users/tree/v8.2.0) (2022-10-24)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v8.2.0)
