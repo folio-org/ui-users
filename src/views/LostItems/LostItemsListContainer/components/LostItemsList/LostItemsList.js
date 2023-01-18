@@ -123,6 +123,16 @@ export const basicLostItemsListFormatter = {
 export const isBilledRecord = (recordId, billedRecords) => billedRecords.some(record => record.id === recordId);
 export const isCancelledRecord = (recordId, cancelledRecords) => cancelledRecords.some(id => id === recordId);
 export const getBilledAmount = (recordId, billedRecords) => billedRecords.find(record => record.id === recordId)?.billedAmount;
+export const getRecordStatus = (recordId, billedRecords, cancelledRecords) => {
+  const isBilled = isBilledRecord(recordId, billedRecords);
+  const isCancelled = isCancelledRecord(recordId, cancelledRecords);
+
+  return {
+    isBilled,
+    isCancelled,
+    isBillButtonDisabled: isBilled || isCancelled,
+  };
+};
 
 const LostItemsList = ({
   contentData,
@@ -143,9 +153,11 @@ const LostItemsList = ({
   const lostItemsListFormatter = {
     ...basicLostItemsListFormatter,
     [COLUMNS_NAME.ACTION]: (actualCostRecord) => {
-      const isBilled = isBilledRecord(actualCostRecord.id, billedRecords);
-      const isCancelled = isCancelledRecord(actualCostRecord.id, cancelledRecords);
-      const isBillButtonDisabled = isBilled || isCancelled;
+      const {
+        isBilled,
+        isCancelled,
+        isBillButtonDisabled,
+      } = getRecordStatus(actualCostRecord.id, billedRecords, cancelledRecords);
 
       return (
         <div>
