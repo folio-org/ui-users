@@ -5,7 +5,6 @@ import {
   cleanup,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { prettyDOM } from '@testing-library/dom';
 
 import renderWithRouter from 'helpers/renderWithRouter';
 import PatronBlockForm from './PatronBlockForm';
