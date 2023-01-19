@@ -5,6 +5,8 @@ import {
   cleanup,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { prettyDOM } from '@testing-library/dom';
+
 import renderWithRouter from 'helpers/renderWithRouter';
 import PatronBlockForm from './PatronBlockForm';
 import '__mock__/matchMedia.mock';
@@ -69,12 +71,12 @@ const props = {
   initialValues: {},
   blockTemplates: [
     {
-      id: 1,
+      id: '1',
       code: 'testCode1',
       name: 'name1'
     },
     {
-      id: 2,
+      id: '2',
       code: 'testCode2',
       name: 'name2'
     }
@@ -95,16 +97,24 @@ describe('Patron Block Form', () => {
   it('should render the component', () => {
     expect(screen.getByText('ui-users.blocks.form.button.create')).toBeInTheDocument();
   });
+
   it('Toggle button must work', () => {
     userEvent.click(document.querySelector('[id=accordion-toggle-button-blockInformationSection]'));
     expect(screen.getByText('ui-users.blocks.form.label.information')).toBeInTheDocument();
   });
+
   it('Expand button must work', () => {
     userEvent.click(document.querySelector('[data-tast-expand-button="true"]'));
     expect(screen.getByText('ui-users.blocks.form.label.block')).toBeInTheDocument();
   });
+
   it('Change template must work', () => {
-    userEvent.click(document.querySelector('[id="option-stripes-selection-45-1-1"]'));
+    // the following should work, in place of the SUPER BRITTLE
+    // id-based selector, but of course it doesn't. grrrrrr.
+    // const list = screen.getByRole('option');
+    // userEvent.click(list[1]);
+    // userEvent.click(screen.getByText('name1 (testCode1)', { selector: 'li', exact: false }));
+    userEvent.click(document.querySelector('[id="option-stripes-selection-48-1-1"]'));
     expect(screen.getByText('name2 (testCode2)')).toBeInTheDocument();
   });
 });

@@ -1,4 +1,4 @@
-import _, { get, isEmpty, isNil } from 'lodash';
+import { cloneDeep, get, isEmpty, isEqual, isNil } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -108,7 +108,7 @@ class PatronBlockForm extends React.Component {
 
   handleSectionToggle({ id }) {
     this.setState((curState) => {
-      const newState = _.cloneDeep(curState);
+      const newState = cloneDeep(curState);
       newState.sections[id] = !newState.sections[id];
       return newState;
     });
@@ -116,7 +116,7 @@ class PatronBlockForm extends React.Component {
 
   handleExpandAll(obj) {
     this.setState((curState) => {
-      const newState = _.cloneDeep(curState);
+      const newState = cloneDeep(curState);
       newState.sections = obj;
       return newState;
     });
@@ -124,16 +124,12 @@ class PatronBlockForm extends React.Component {
 
   renderFirstMenu = () => (
     <PaneMenu>
-      <FormattedMessage id="ui-users.blocks.form.button.close">
-        {ariaLabel => (
-          <PaneHeaderIconButton
-            id="close-patron-block"
-            onClick={this.props.onClose}
-            aria-label={ariaLabel}
-            icon="times"
-          />
-        )}
-      </FormattedMessage>
+      <PaneHeaderIconButton
+        id="close-patron-block"
+        onClick={this.props.onClose}
+        aria-label={this.props.intl.formatMessage({ id: 'ui-users.blocks.form.button.close' })}
+        icon="times"
+      />
     </PaneMenu>
   );
 
@@ -278,7 +274,7 @@ class PatronBlockForm extends React.Component {
                   onToggle={this.handleSectionToggle}
                   open={this.state.sections.blockInformationSection}
                 >
-                  {!_.isEmpty(initialValues) ?
+                  {!isEmpty(initialValues) ?
                     <Row>
                       <Col xs={12} sm={10} md={7} lg={5}>
                         <this.connectedViewMetaData metadata={initialValues.metadata} />
@@ -379,7 +375,7 @@ class PatronBlockForm extends React.Component {
 }
 
 export default stripesFinalForm({
-  initialValuesEqual: (a, b) => _.isEqual(a, b),
+  initialValuesEqual: (a, b) => isEqual(a, b),
   navigationCheck: true,
   subscription: {
     invalid: true,
