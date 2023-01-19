@@ -270,7 +270,7 @@ class PatronBlockForm extends React.Component {
               <Col xs>
                 <Accordion
                   id="blockInformationSection"
-                  label={<FormattedMessage id="ui-users.blocks.form.label.information" />}
+                  label={intl.formatMessage({ id: 'ui-users.blocks.form.label.information' })}
                   onToggle={this.handleSectionToggle}
                   open={this.state.sections.blockInformationSection}
                 >

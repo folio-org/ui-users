@@ -4,6 +4,7 @@ import {
   screen,
   cleanup,
 } from '@testing-library/react';
+import { within } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 
 import renderWithRouter from 'helpers/renderWithRouter';
@@ -64,7 +65,7 @@ const props = {
   onSubmit: jest.fn(),
   connect: jest.fn(),
   intl: {
-    formatMessage: jest.fn(),
+    formatMessage: ({ id }) => id,
   },
   stripes: STRIPES,
   initialValues: {},
@@ -103,18 +104,22 @@ describe('Patron Block Form', () => {
   });
 
   it('Expand button must work', () => {
+    // note data-tast: this typo is fixed in stripes-components v11,
+    // which will cause this test to break
     userEvent.click(document.querySelector('[data-tast-expand-button="true"]'));
     expect(screen.getByText('ui-users.blocks.form.label.block')).toBeInTheDocument();
   });
 
   it('Change template must work', () => {
-    // the following should work, in place of the SUPER BRITTLE
-    // id-based selector, but of course it doesn't. grrrrrr.
-    // const list = screen.getByRole('option');
-    // userEvent.click(list[1]);
-    // userEvent.click(screen.getByText('name1 (testCode1)', { selector: 'li', exact: false }));
-    userEvent.click(document.querySelector('[id="option-stripes-selection-48-1-1"]'));
-    expect(screen.getByText('name2 (testCode2)')).toBeInTheDocument();
+    // click to open the Selection, then click a specific option.
+    // after clicking, the way stripes-components renders a <Selection>
+    // with a selected element, the selected element will be present twice.
+    userEvent.click(screen.getByText('ui-users.blocks.form.label.template'));
+
+    const list = screen.getByRole('listbox');
+    userEvent.click(within(list).getByText('name2', { exact: false }));
+
+    expect(screen.getAllByText('name2 (testCode2)').length).toEqual(2);
   });
 });
 
