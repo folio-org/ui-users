@@ -110,11 +110,11 @@ describe('CancellationModal component', () => {
     expect(onCloseMock).toHaveBeenCalled();
   });
   it('Comment check', () => {
-    userEvent.type(document.querySelector('[id="textarea-input-5"]'), 'TestComment');
+    userEvent.type(document.querySelector('[name="comment"]'), 'TestComment');
     expect(screen.getByText('TestComment')).toBeInTheDocument();
   });
   it('Notify Patron check', () => {
-    userEvent.click(document.querySelector('[id="checkbox-8"]'));
+    userEvent.click(document.querySelector('[name="notify"]'));
     expect(screen.getByText('ui-users.accounts.field.infoPatron')).toBeInTheDocument();
   });
   it('Empty accounts data check', () => {

@@ -1,4 +1,4 @@
-import { waitFor, screen, cleanup } from '@testing-library/react';
+import { screen, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import renderWithRouter from 'helpers/renderWithRouter';
@@ -29,21 +29,26 @@ describe('Comment Modal component', () => {
   beforeEach(() => {
     renderCommentModal(propData);
   });
+
   afterEach(cleanup);
+
   it('Check if modal Renders', () => {
     expect(screen.getByText('ui-users.accounts.comment.field.feeFineComment')).toBeInTheDocument();
   });
+
   it('Onclose modal check', () => {
     userEvent.click(screen.getByText('ui-users.accounts.comment.field.cancel'));
     expect(MockFunc).toHaveBeenCalled();
   });
+
   it('Comment check', () => {
-    userEvent.type(document.querySelector('[id="textarea-input-3"]'), 'TestComment');
+    userEvent.type(document.querySelector('[name="comment"]'), 'TestComment');
     expect(screen.getByText('TestComment')).toBeInTheDocument();
   });
+
   it('OnSubmit modal check', async () => {
-    userEvent.type(document.querySelector('[id="textarea-input-4"]'), 'New Comment');
-    await waitFor(() => userEvent.click(screen.getByText('ui-users.accounts.comment.field.save')));
+    userEvent.type(document.querySelector('[name="comment"]'), 'New Comment');
+    userEvent.click(screen.getByText('ui-users.accounts.comment.field.save'));
     expect(MockFunc).toHaveBeenCalled();
   });
 });
