@@ -13,7 +13,7 @@ import { refundClaimReturned,
 
 describe('Constants', () => {
   test('refundClaimReturned', () => {
-    expect(Object.keys(refundClaimReturned).length).toEqual(11);
+    expect(Object.keys(refundClaimReturned).length).toEqual(12);
   });
   test('requestStatuses', () => {
     expect(Object.keys(requestStatuses).length).toEqual(8);
