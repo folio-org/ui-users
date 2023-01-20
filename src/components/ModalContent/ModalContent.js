@@ -185,7 +185,7 @@ class ModalContent extends React.Component {
     const feeFines = [];
     get(resources, ['feefineshistory', 'records'], []).forEach((currentFeeFine) => {
       if (currentFeeFine.loanId === loanId && currentFeeFine.status.name === 'Open' &&
-        (currentFeeFine.feeFineType === refundClaimReturned.LOST_ITEM_FEE || currentFeeFine.feeFineType === refundClaimReturned.LOST_ITEM_PROCESSING_FEE)) {
+        (currentFeeFine.feeFineType === refundClaimReturned.LOST_ITEM_FEE || currentFeeFine.feeFineType === refundClaimReturned.LOST_ITEM_PROCESSING_FEE || currentFeeFine.feeFineType === refundClaimReturned.LOST_ITEM_FEE_ACTUAL_COST)) {
         feeFines.push(currentFeeFine);
       }
     });
