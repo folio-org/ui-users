@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "8.3.0",
+  "version": "9.0.0",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -872,11 +872,11 @@
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-react": "^7.9.0",
     "@folio/eslint-config-stripes": "^6.0.0",
-    "@folio/stripes": "^7.0.0",
+    "@folio/stripes": "^8.0.0",
     "@folio/stripes-cli": "^2.4.0",
-    "@folio/stripes-components": "^10.0.0",
-    "@folio/stripes-core": "^8.0.0",
-    "@folio/stripes-final-form": "^6.0.0",
+    "@folio/stripes-components": "^11.0.0",
+    "@folio/stripes-core": "^9.0.0",
+    "@folio/stripes-final-form": "^7.0.0",
     "@formatjs/cli": "^4.2.20",
     "@jest/globals": "^26.6.2",
     "@testing-library/dom": "^7.26.3",
@@ -897,7 +897,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-intl": "^5.8.0",
-    "react-redux": "^7.2.2",
+    "react-redux": "^8.0.5",
     "react-router-dom": "^5.2.0",
     "redux": "^4.0.0",
     "regenerator-runtime": "^0.13.9"
@@ -918,10 +918,11 @@
     "uuid": "^8.3.2"
   },
   "peerDependencies": {
-    "@folio/stripes": "^7.0.0",
+    "@folio/stripes": "^8.0.0",
     "moment": "^2.24.0",
     "react": "^17.0.2",
     "react-intl": "^5.8.0",
+    "react-redux": "^8.0.5",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0"
   },
