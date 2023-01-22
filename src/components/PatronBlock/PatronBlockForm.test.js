@@ -104,9 +104,7 @@ describe('Patron Block Form', () => {
   });
 
   it('Expand button must work', () => {
-    // note data-tast: this typo is fixed in stripes-components v11,
-    // which will cause this test to break
-    userEvent.click(document.querySelector('[data-tast-expand-button="true"]'));
+    userEvent.click(document.querySelector('[data-test-expand-button="true"]'));
     expect(screen.getByText('ui-users.blocks.form.label.block')).toBeInTheDocument();
   });
 
