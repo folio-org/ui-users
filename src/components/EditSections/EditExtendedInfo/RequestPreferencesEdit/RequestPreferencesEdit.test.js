@@ -1,13 +1,9 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { Form } from 'react-final-form';
 import userEvent from '@testing-library/user-event';
-import PropTypes from 'prop-types';
-import { StripesContext } from '@folio/stripes-core/src/StripesContext';
+import renderWithRouter from 'helpers/renderWithRouter';
 
 import '__mock__/stripesComponents.mock';
-
-import renderWithRouter from 'helpers/renderWithRouter';
-import { nullOrStringIsRequiredTypeValidator } from '../../../../customTypeValidators';
 
 import RequestPreferencesEdit from './RequestPreferencesEdit';
 
@@ -35,6 +31,7 @@ const renderRequestPreferencesEdit = (props) => {
   );
 };
 
+
 const props = {
   accordionId: 'EditContactInfo',
   expanded: true,
@@ -49,6 +46,7 @@ const props = {
       name2: 'servicenameDefault',
       id2: ''
     }
+
   ],
   addresses: [{
     addressType: 'Industrial Zone'
@@ -63,25 +61,24 @@ const props = {
   }],
   id: '111999',
   name: 'servicePointPickUp'
+
 };
 
-const renderRequestPreferencesEdit1 = () => renderWithRouter(<RequestPreferencesEdit {...props} />);
 
 describe('request preference point', () => {
   it('Must be rendered request preferences', () => {
     renderRequestPreferencesEdit(props);
-    screen.debug(undefined, Infinity);
     expect(screen.getByText('ui-users.requests.preferences')).toBeTruthy();
   });
 
   it('Must be rendered', () => {
     renderRequestPreferencesEdit(props);
     expect(screen.getByText('ui-users.requests.selectDeliveryAddress')).toBeInTheDocument();
+    expect(screen.getByText('ui-users.requests.defaultDeliveryAddress')).toBeInTheDocument();
   });
 
   it('Must be rendered request null value', () => {
     renderRequestPreferencesEdit(props);
-    screen.debug(undefined, Infinity);
     expect(document.querySelector('ui-users.errors.missingRequiredField')).toBeNull();
   });
 
