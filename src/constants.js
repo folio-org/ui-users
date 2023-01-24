@@ -67,6 +67,7 @@ export const MAX_RECORDS = '10000';
 export const refundClaimReturned = {
   PAYMENT_STATUS: 'Suspended claim returned',
   LOST_ITEM_FEE: 'Lost item fee',
+  LOST_ITEM_FEE_ACTUAL_COST: 'Lost item fee (actual cost)',
   LOST_ITEM_PROCESSING_FEE: 'Lost item processing fee',
   TRANSFERRED_ACTION: 'Transferred',
   PAID_ACTION: 'Paid',
