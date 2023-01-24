@@ -175,7 +175,7 @@ jest.mock('@folio/stripes/components', () => ({
   )),
   PaneHeaderIconButton: jest.fn(({ children }) => <div className="paneHeaderIconButton">{ children }</div>),
   PaneMenu: jest.fn((props) => <div>{props.children}</div>),
-  PaneSet: jest.fn((props) => <div>{props.children}</div>),
+  Paneset: jest.fn((props) => <div>{props.children}</div>),
   RadioButton: jest.fn(({ label, name, ...rest }) => (
     <div>
       <label htmlFor="male">{label}</label>
