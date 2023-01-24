@@ -340,7 +340,30 @@ describe('Modal Content', () => {
 
     fireEvent.click(document.querySelector('[data-test-dialog-confirm-button="true"]'));
   });
+  it('Claimed return for Lost item (actual cost) check', async () => {
+    const record = [
+      {
+        loanId: '40f5e9d9-38ac-458e-ade7-7795bd821652',
+        status: {
+          name: 'Open'
+        },
+        feeFineType: 'Lost item fee (actual cost)',
+      }];
+    const actionName = 'claimedReturned';
+    const props = {
+      ...commonProps,
+      resources: resources(record),
+      loan: loan(actionName),
+    };
+    renderModalContent(props);
+    expect(screen.getByText('ui-users.loans.declareLostDialogBody')).toBeDefined();
 
+    fireEvent.change(document.querySelector('[data-test-additional-info-textarea="true"]'), { target: {
+      value: 'test'
+    } });
+
+    fireEvent.click(document.querySelector('[data-test-dialog-confirm-button="true"]'));
+  });
   it('Check if users have open fine', async () => {
     const record = [
       {

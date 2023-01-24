@@ -20,12 +20,14 @@ refundTransfers = async (loan, props) => {
     } = props;
 
     const lostStatus = refundClaimReturned.LOST_ITEM_FEE;
+    const lostStatusActualCost = refundClaimReturned.LOST_ITEM_FEE_ACTUAL_COST;
     const processingStatus = refundClaimReturned.LOST_ITEM_PROCESSING_FEE;
 
     const pathParts = [
       'accounts?query=',
       `loanId=="${loan.id}"`,
       ` and (feeFineType=="${lostStatus}"`,
+      ` or feeFineType=="${lostStatusActualCost}"`,
       ` or feeFineType=="${processingStatus}")`
     ];
     const path = pathParts.reduce((acc, val) => acc + val, '');
