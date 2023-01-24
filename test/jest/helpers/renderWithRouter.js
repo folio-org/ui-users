@@ -23,18 +23,24 @@ const translations = {
   ...prefixKeys(stripesCoreTranslations, 'stripes-core'),
 };
 
+let rtlApi;
+
 const history = createMemoryHistory();
-const renderWithRouter = children => render(
-  <Router history={history}>
-    <CalloutContext.Provider value={{ sendCallout: () => { } }}>
-      <IntlProvider
-        locale="en"
-        messages={translations}
-      >
-        {children}
-      </IntlProvider>
-    </CalloutContext.Provider>
-  </Router>
-);
+const renderWithRouter = (children, options = {}) => {
+  const renderFn = options.rerender ? rtlApi.rerender : render;
+  rtlApi = renderFn(
+    <Router history={history}>
+      <CalloutContext.Provider value={{ sendCallout: () => { } }}>
+        <IntlProvider
+          locale="en"
+          messages={translations}
+        >
+          {children}
+        </IntlProvider>
+      </CalloutContext.Provider>
+    </Router>
+  );
+  return rtlApi;
+};
 
 export default renderWithRouter;
