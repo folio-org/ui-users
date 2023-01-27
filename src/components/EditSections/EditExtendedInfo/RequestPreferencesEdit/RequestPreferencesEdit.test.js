@@ -14,83 +14,100 @@ jest.unmock('@folio/stripes/components');
 jest.unmock('@folio/stripes/smart-components');
 
 const onSubmit = jest.fn();
-const setFieldMock = jest.fn();
+const setFieldValueMock = jest.fn();
 
-const renderRequestPreferencesEdit = (props) => {
-  const component = () => (
-    <>
-      <RequestPreferencesEdit {...props} />
-    </>
-  );
+const props = {
+  deliveryAvailable: true,
+  servicePoints: [
+    {
+      id: '1',
+      name: 'Service point 1'
+    },
+    {
+      id: '2',
+      name: 'Service point 2'
+    }
+  ],
+  addresses: [
+    {
+      addressType: 'addressType1'
+    },
+    {
+      addressType: 'addressType2'
+    }
+  ],
+  addressTypes: [
+    {
+      id: 'addressType1',
+      addressType: 'Address 1'
+    },
+    {
+      id: 'addressType2',
+      addressType: 'Address 2'
+    }
+  ],
+  setFieldValue: setFieldValueMock,
+  defaultDeliveryAddressTypeId: 'addressType1'
+};
+
+const renderRequestPreferencesEdit = (data, options) => {
+  const component = () => {
+    return (
+      <RequestPreferencesEdit {...data} />
+    );
+  };
   renderWithRouter(
     <Form
       id="form-user"
       onSubmit={onSubmit}
       render={component}
-    />
+    />,
+    options
   );
 };
-
-
-const props = {
-  accordionId: 'EditContactInfo',
-  expanded: true,
-  onToggle: jest.fn(),
-  setFieldValue: setFieldMock,
-  deliveryAvailable: true,
-  intl: { formatMessage : jest.fn() },
-  servicePoints: [
-    {
-      name: 'servicePointsName',
-      id: 'd003c876-90f1-40da-90bc-a5dd3dedb9c6a',
-      name2: 'servicenameDefault',
-      id2: ''
-    }
-
-  ],
-  addresses: [{
-    addressType: 'Industrial Zone'
-  }],
-  addressTypes: [{
-    addressType: 'Home',
-    id: '123123'
-  },
-  {
-    addressType: 'Work',
-    id: '123123132'
-  }],
-  id: '111999',
-  name: 'servicePointPickUp'
-
-};
-
-
 describe('request preference point', () => {
-  it('Must be rendered request preferences', () => {
+  it('Component should render', () => {
     renderRequestPreferencesEdit(props);
-    expect(screen.getByText('ui-users.requests.preferences')).toBeTruthy();
+    expect(screen.getByRole('checkbox', { name: /ui-users.requests.holdShelf/i })).toBeInTheDocument();
+    expect(screen.getByRole('checkbox', { name: /ui-users.requests.delivery/i })).toBeInTheDocument();
+    expect(screen.getByRole('combobox', { name: /ui-users.requests.defaultPickupServicePoint/i })).toBeInTheDocument();
+    expect(screen.getByRole('combobox', { name: /ui-users.requests.fulfillmentPreference/i })).toBeInTheDocument();
+    expect(screen.getByRole('combobox', { name: /ui-users.requests.defaultDeliveryAddress/i })).toBeInTheDocument();
   });
 
-  it('Must be rendered', () => {
+  it('setFieldValue to be called when on deliveryAvailable changed', () => {
     renderRequestPreferencesEdit(props);
-    expect(screen.getByText('ui-users.requests.selectDeliveryAddress')).toBeInTheDocument();
-    expect(screen.getByText('ui-users.requests.defaultDeliveryAddress')).toBeInTheDocument();
+    renderRequestPreferencesEdit({
+      ...props,
+      deliveryAvailable: false,
+      addresses: [
+        {
+          addressType: 'addressType3'
+        },
+        {
+          addressType: 'addressType4'
+        }
+      ],
+      defaultDeliveryAddressTypeId: 'addressType1'
+    }, { rerender: true });
+    expect(setFieldValueMock).toBeCalled();
   });
-
-  it('Must be rendered request null value', () => {
+  it('defaultPickupServicePoint value should be changed', () => {
     renderRequestPreferencesEdit(props);
-    expect(document.querySelector('ui-users.errors.missingRequiredField')).toBeNull();
+    const dropDown = screen.getByRole('combobox', { name: /ui-users.requests.defaultPickupServicePoint/i });
+    userEvent.selectOptions(dropDown, '1');
+    expect(dropDown).toHaveDisplayValue('Service point 1');
   });
-
-  it('Checkbox selection', async () => {
+  it('defaultDeliveryAddress value should be changed', () => {
     renderRequestPreferencesEdit(props);
-    userEvent.click(document.querySelector('[name="requestPreferences.holdShelf"]'));
-    userEvent.selectOptions(document.querySelector('[data-test-fulfillment-preference="true"]'), 'Hold Shelf');
-    expect(screen.findByDisplayValue('Hold Shelf')).toBeTruthy();
+    const dropDown = screen.getByRole('combobox', { name: /ui-users.requests.defaultDeliveryAddress/i });
+    userEvent.selectOptions(dropDown, 'addressType1');
+    expect(dropDown).toHaveDisplayValue('Address 1');
   });
-
-  it('Service PointsWith Pickup Location', () => {
+  it('Requests delivery checkbox should be checked', () => {
     renderRequestPreferencesEdit(props);
-    expect(screen.findByLabelText('folio_users_service_points.records"')).toBeTruthy();
+    const checkbox = screen.getByRole('checkbox', { name: /ui-users.requests.delivery/i });
+    userEvent.click(checkbox);
+    expect(checkbox).toBeChecked();
   });
 });
