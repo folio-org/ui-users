@@ -1042,9 +1042,9 @@
     "errorModal.currentUserServicePointAbsentee.confirmButtonText": "返回",
     "lostItems.feeFineAmount.error": "向读者开具账单的实际费用必须大于 0.00 且小于 9999.99",
     "lostItems.notification.serverError": "发生系统错误 - 请稍后重试或联系FOLIO支持人员",
-    "lostItems.recordStatus.billed": "<strong>Billed: {amount}</strong>",
-    "lostItems.recordStatus.notBilled": "<strong>Not billed</strong>",
-    "lostItems.notification.billed": "A fee/fine of <strong>{amount}</strong> has been successfully <strong>charged</strong> to <strong>{patronName}</strong>",
-    "lostItems.notification.billedBefore": "<strong>{patronName}</strong> has already been billed for this item by another user",
-    "lostItems.notification.cancelled": "A lost item fee <strong>will not be charged</strong> to <strong>{patronName}</strong>"
+    "lostItems.recordStatus.billed": "<strong>计费： {amount} </strong>",
+    "lostItems.recordStatus.notBilled": "<strong>不计费</strong>",
+    "lostItems.notification.billed": "<strong> {amount} </strong>的费用/罚款已成功<strong>收取</strong>给<strong> {patronName} </strong>",
+    "lostItems.notification.billedBefore": "<strong> {patronName} </strong>已由其他用户为此单件付费",
+    "lostItems.notification.cancelled": "<strong>不会向<strong> {patronName} </strong>收取丢失单件费用 < </strong>"
 }
