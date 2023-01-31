@@ -32,6 +32,8 @@ const ActualCostConfirmModal = ({
   setActualCostConfirmModal,
   actualCost,
   setActualCost,
+  billRecord,
+  cancelRecord,
 }) => {
   const {
     isOpen,
@@ -48,6 +50,7 @@ const ActualCostConfirmModal = ({
   const patronName = getPatronName(actualCostRecord);
   const instanceTitle = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.INSTANCE_TITLE], DEFAULT_VALUE);
   const materialType = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.MATERIAL_TYPE], DEFAULT_VALUE);
+  const isBillType = type === ACTUAL_COST_TYPES.BILL;
   const onKeepEditing = () => {
     setActualCostConfirmModal(ACTUAL_COST_CONFIRM_MODAL_DEFAULT);
     setActualCostModal({
@@ -55,6 +58,11 @@ const ActualCostConfirmModal = ({
     });
   };
   const onConfirm = () => {
+    if (isBillType) {
+      billRecord(actualCost);
+    } else {
+      cancelRecord(actualCost);
+    }
     setActualCostConfirmModal(ACTUAL_COST_CONFIRM_MODAL_DEFAULT);
     setActualCost(ACTUAL_COST_DEFAULT);
   };
@@ -78,7 +86,7 @@ const ActualCostConfirmModal = ({
     </ModalFooter>
   );
   const getTitle = () => (
-    type === ACTUAL_COST_TYPES.BILL ?
+    isBillType ?
       <FormattedMessage
         id="ui-users.lostItems.modal.bill.confirm.title"
         values={{ patronName }}
@@ -104,7 +112,7 @@ const ActualCostConfirmModal = ({
           <Row>
             <Col xs={12}>
               <p className={css.breakLongText}>
-                { type === ACTUAL_COST_TYPES.BILL &&
+                { isBillType &&
                   <FormattedMessage
                     id="ui-users.lostItems.modal.bill.confirm.text"
                     values={{
@@ -139,7 +147,7 @@ const ActualCostConfirmModal = ({
           />
         </Col>
       </Row>
-      { type === ACTUAL_COST_TYPES.BILL &&
+      { isBillType &&
         <Row>
           <Col xs={12}>
             <br />
@@ -162,6 +170,8 @@ ActualCostConfirmModal.propTypes = {
   setActualCostConfirmModal: PropTypes.func.isRequired,
   actualCost: ACTUAL_COST_PROP_TYPES,
   setActualCost: PropTypes.func.isRequired,
+  billRecord: PropTypes.func.isRequired,
+  cancelRecord: PropTypes.func.isRequired,
 };
 
 export default ActualCostConfirmModal;

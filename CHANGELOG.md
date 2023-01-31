@@ -1,6 +1,6 @@
 # Change history for ui-users
 
-## 8.3.0 IN PROGRESS
+## 9.0.0 IN PROGRESS
 * Implement modal windows for BILL ACTUAL COST and DO NOT BILL. Refs UIU-2714.
 * create Jest/RTL test for UserDetail.js. Refs UIU-2421
 * Fix problem with displaying suspended claim returned fees/fines. Refs UIU-2726.
@@ -8,6 +8,22 @@
 * Fix systems error when attempting to create a new fee/fine if logged in user isn't logged into a service point. Refs UIU-2728.
 * Disable 'Claimed return' button after click to prevent multiple submissions. Refs UIU-2732.
 * Cover Actual cost functionality by jest/RTL tests. Refs UIU-2727.
+* Fix problem with Fee/Fine list loading. Refs UIU-2735.
+* Refactor code for disable 'Declare lost' button after click to prevent multiple submissions. Refs UIU-2736.
+* Implement searching for "Lost items requiring actual cost" page. Refs UIU-1866.
+* Implement "Bill actual cost" functionality. Refs UIU-1863.
+* Add new interface version to "request-storage". Refs UIU-2749.
+* Create/Edit Patron Block: Move Save & close button to the footer pane. Refs UIU-1698.
+* In Settings > Users > Patron Blocks > Conditions, mark "Message to be displayed" as required. Refs UIU-2487.
+* Enable dependabot. Refs UIU-2747, FOLIO-3664.
+* Suppress delete of users stored in a configuration entry. Refs UIU-2738.
+* Remove BigTest infrastructure including tests, deps, config. Refs UIU-2745.
+* Add support for `request-storage` version `5.0` for `<UserRequests>`. Refs UIU-2765.
+* Implement "Do not bill actual cost" functionality. Refs UIU-2705.
+* *BREAKING* Upgrade to `@folio/stripes` `v8`. Refs UIU-2761.
+* *BREAKING* Upgrade `react-redux` to `v8`. Refs UIU-2775.
+* Create Jest/RTL test for UserDetailFullscreen.js. Refs UIU-2429.
+* Add support for checkbox custom field filter. Fixes UIU-2759.
 
 ## [8.2.0](https://github.com/folio-org/ui-users/tree/v8.2.0) (2022-10-24)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v8.2.0)

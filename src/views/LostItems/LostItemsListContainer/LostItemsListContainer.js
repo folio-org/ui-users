@@ -11,6 +11,8 @@ import {
   Pane,
   PaneMenu,
   Paneset,
+  Button,
+  Icon,
 } from '@folio/stripes/components';
 import {
   SearchAndSortQuery,
@@ -18,11 +20,17 @@ import {
   CollapseFilterPaneButton,
   ExpandFilterPaneButton,
 } from '@folio/stripes/smart-components';
+import { CalloutContext } from '@folio/stripes/core';
 
 import {
   Filters,
   LostItemsList,
+  Search,
 } from './components';
+import { getPatronName } from './components/LostItemsList/util';
+import { STATUS_CODES } from '../../../constants';
+
+import styles from './LostItemsListContainer.css';
 
 class LostItemsListContainer extends React.Component {
   static propTypes = {
@@ -36,9 +44,31 @@ class LostItemsListContainer extends React.Component {
       resultOffset: PropTypes.shape({
         replace: PropTypes.func.isRequired,
       }),
+      billedRecord: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+      cancelledRecord: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
     }).isRequired,
+    okapi: PropTypes.shape({
+      currentUser: PropTypes.shape({
+        curServicePoint: PropTypes.shape({
+          id: PropTypes.string,
+        }).isRequired,
+      }).isRequired,
+    }).isRequired,
+    billedRecords: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.string,
+      amount: PropTypes.string,
+    })).isRequired,
+    addBilledRecord: PropTypes.func.isRequired,
+    cancelledRecords: PropTypes.arrayOf(PropTypes.string).isRequired,
+    addCancelledRecord: PropTypes.func.isRequired,
     source: PropTypes.object,
   }
+
+  static contextType = CalloutContext;
 
   constructor(props) {
     super(props);
@@ -46,6 +76,102 @@ class LostItemsListContainer extends React.Component {
       filterPaneIsVisible: true,
     };
   }
+
+  billRecord = (actualCost) => {
+    const {
+      mutator,
+      okapi,
+      addBilledRecord,
+    } = this.props;
+    const payload = {
+      actualCostRecordId: actualCost.actualCostRecord.id,
+      amount: Number(actualCost.additionalInfo.actualCostToBill),
+      additionalInfoForStaff: actualCost.additionalInfo.additionalInformationForStaff,
+      additionalInfoForPatron: actualCost.additionalInfo.additionalInformationForPatron,
+      servicePointId: okapi.currentUser.curServicePoint?.id,
+    };
+    const patronName = getPatronName(actualCost.actualCostRecord);
+
+    mutator.billedRecord.POST(payload)
+      .then((res) => {
+        const billedAmount = res.feeFine.billedAmount.toFixed(2);
+        addBilledRecord({
+          id: res.id,
+          billedAmount,
+        });
+        const message = <FormattedMessage
+          id="ui-users.lostItems.notification.billed"
+          values={{
+            patronName,
+            amount: billedAmount,
+          }}
+        />;
+
+        this.context.sendCallout({
+          message,
+        });
+      })
+      .catch((e) => {
+        let message;
+
+        if (e.status === STATUS_CODES.unprocessableEntity) {
+          message = <FormattedMessage
+            id="ui-users.lostItems.notification.billedBefore"
+            values={{ patronName }}
+          />;
+        } else {
+          message = <FormattedMessage id="ui-users.lostItems.notification.serverError" />;
+        }
+
+        this.context.sendCallout({
+          message,
+          type: 'error',
+        });
+      });
+  };
+
+  cancelRecord = (actualCost) => {
+    const {
+      mutator,
+      addCancelledRecord,
+    } = this.props;
+    const payload = {
+      actualCostRecordId: actualCost.actualCostRecord.id,
+      additionalInfoForStaff: actualCost.additionalInfo.additionalInformationForStaff,
+    };
+    const patronName = getPatronName(actualCost.actualCostRecord);
+
+    mutator.cancelledRecord.POST(payload)
+      .then((res) => {
+        addCancelledRecord(res.id);
+
+        const message = <FormattedMessage
+          id="ui-users.lostItems.notification.cancelled"
+          values={{ patronName }}
+        />;
+
+        this.context.sendCallout({
+          message,
+        });
+      })
+      .catch((e) => {
+        let message;
+
+        if (e.status === STATUS_CODES.unprocessableEntity) {
+          message = <FormattedMessage
+            id="ui-users.lostItems.notification.billedBefore"
+            values={{ patronName }}
+          />;
+        } else {
+          message = <FormattedMessage id="ui-users.lostItems.notification.serverError" />;
+        }
+
+        this.context.sendCallout({
+          message,
+          type: 'error',
+        });
+      });
+  };
 
   toggleFilterPane = () => {
     this.setState(curState => ({
@@ -84,6 +210,8 @@ class LostItemsListContainer extends React.Component {
       mutator: {
         resultOffset,
       },
+      billedRecords,
+      cancelledRecords,
     } = this.props;
     const {
       filterPaneIsVisible,
@@ -120,7 +248,13 @@ class LostItemsListContainer extends React.Component {
           onSort,
           getFilterHandlers,
           activeFilters,
+          resetAll,
+          getSearchHandlers,
+          searchValue,
+          onSubmitSearch,
         }) => {
+          const isResetButtonDisabled = !activeFilters.string && !searchValue.query;
+
           return (
             <Paneset id="lostItemsPaneSet">
               {filterPaneIsVisible &&
@@ -134,12 +268,32 @@ class LostItemsListContainer extends React.Component {
                     </PaneMenu>
                   }
                 >
-                  <Filters
-                    activeFilters={activeFilters.state}
-                    resources={resources}
-                    onChangeHandlers={getFilterHandlers()}
-                    resultOffset={resultOffset}
-                  />
+                  <form
+                    onSubmit={onSubmitSearch}
+                    className={styles.lostItemsForm}
+                  >
+                    <Search
+                      getSearchHandlers={getSearchHandlers}
+                      searchValue={searchValue}
+                    />
+                    <Button
+                      buttonStyle="none"
+                      id="lostItemsResetAllButton"
+                      disabled={isResetButtonDisabled}
+                      onClick={resetAll}
+                      buttonClass={styles.resetButton}
+                    >
+                      <Icon icon="times-circle-solid" size="small">
+                        <FormattedMessage id="stripes-smart-components.resetAll" />
+                      </Icon>
+                    </Button>
+                    <Filters
+                      activeFilters={activeFilters.state}
+                      resources={resources}
+                      onChangeHandlers={getFilterHandlers()}
+                      resultOffset={resultOffset}
+                    />
+                  </form>
                 </Pane>
               }
               <Pane
@@ -158,6 +312,10 @@ class LostItemsListContainer extends React.Component {
                   emptyMessage={emptyMessage}
                   onSort={onSort}
                   sortOrder={sortOrder}
+                  billRecord={this.billRecord}
+                  billedRecords={billedRecords}
+                  cancelRecord={this.cancelRecord}
+                  cancelledRecords={cancelledRecords}
                 />
               </Pane>
             </Paneset>

@@ -88,8 +88,8 @@ class LoanDetails extends React.Component {
     declareLost: PropTypes.func,
     markAsMissing: PropTypes.func,
     claimReturned: PropTypes.func,
-    toggleButton: PropTypes.func,
-    declarationInProgress: PropTypes.bool,
+    setDeclareLostInProgress: PropTypes.func,
+    declareLostInProgress: PropTypes.bool,
     patronBlocks: PropTypes.arrayOf(PropTypes.object),
     intl: PropTypes.object.isRequired,
     match: PropTypes.object.isRequired,
@@ -99,7 +99,7 @@ class LoanDetails extends React.Component {
   };
 
   static defaultProps = {
-    toggleButton: noop,
+    setDeclareLostInProgress: noop,
     loanAccountActions: [],
   };
 
@@ -127,7 +127,7 @@ class LoanDetails extends React.Component {
     const prevItemStatus = prevProps.loan?.item?.status?.name;
     const thistItemStatus = this.props.loan?.item?.status?.name;
     if (prevItemStatus && prevItemStatus !== thistItemStatus) {
-      this.props.toggleButton(false);
+      this.props.setDeclareLostInProgress(false);
     }
   }
 
@@ -346,7 +346,7 @@ class LoanDetails extends React.Component {
       declareLost,
       markAsMissing,
       claimReturned,
-      declarationInProgress,
+      declareLostInProgress,
       loanIsMissing,
       isLoading,
       showErrorCallout,
@@ -544,7 +544,7 @@ class LoanDetails extends React.Component {
                 <IfPermission perm="ui-users.loans.declare-item-lost">
                   <Button
                     data-test-declare-lost-button
-                    disabled={declarationInProgress || buttonDisabled || isDeclaredLostItem}
+                    disabled={declareLostInProgress || buttonDisabled || isDeclaredLostItem}
                     buttonStyle="primary"
                     onClick={() => declareLost(loan, itemRequestCount)}
                   >

@@ -7,7 +7,6 @@ import {
 import {
   makeQueryFunction,
   StripesConnectedSource,
-  parseFilters,
   buildUrl,
 } from '@folio/stripes/smart-components';
 
@@ -21,26 +20,7 @@ import {
   PAGE_AMOUNT,
   SEARCH_FIELDS,
 } from '../views/LostItems/constants';
-
-function buildFilterConfig(filters) {
-  const customFilterConfig = [];
-  const parsedFilters = parseFilters(filters);
-
-  Object.keys(parsedFilters).forEach(name => {
-    if (name.match('customFields')) {
-      customFilterConfig.push(
-        {
-          name,
-          cql: name.split('-').join('.'),
-          values: [],
-          operator: '=',
-        },
-      );
-    }
-  });
-
-  return customFilterConfig;
-}
+import { buildFilterConfig } from './utils';
 
 const filterConfig = [
   {
@@ -52,16 +32,24 @@ const filterConfig = [
 
 function buildQuery(queryParams, pathComponents, resourceData, logger, props) {
   const customFilterConfig = buildFilterConfig(queryParams.filters);
-
-  return makeQueryFunction(
+  const mapFields = index => `${index}=="*%{query.query}*"`;
+  const getCql = makeQueryFunction(
     'cql.allRecords=1',
-    SEARCH_FIELDS.map(index => `${index}="%{query.query}*"`).join(' or '),
+    `(${SEARCH_FIELDS.map(mapFields).join(' or ')})`,
     {
       [ACTUAL_COST_RECORD_FIELD_NAME.USER]: `${ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.USER_LAST_NAME]} ${ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.USER_FIRST_NAME]}`,
     },
     [...filterConfig, ...customFilterConfig],
     2,
-  )(queryParams, pathComponents, resourceData, logger, props);
+  );
+  let cql = getCql(queryParams, pathComponents, resourceData, logger, props);
+  const statusQueryParam = 'status=="Open"';
+
+  if (cql) {
+    cql = `${statusQueryParam} and ${cql}`;
+  }
+
+  return cql;
 }
 
 class LostItemsContainer extends React.Component {
@@ -85,6 +73,24 @@ class LostItemsContainer extends React.Component {
         params: {
           query: buildQuery,
         },
+      },
+    },
+    billedRecord: {
+      type: 'okapi',
+      fetch: false,
+      throwErrors: false,
+      clientGeneratePk: false,
+      POST: {
+        path: 'actual-cost-fee-fine/bill',
+      },
+    },
+    cancelledRecord: {
+      type: 'okapi',
+      fetch: false,
+      throwErrors: false,
+      clientGeneratePk: false,
+      POST: {
+        path: 'actual-cost-fee-fine/cancel',
       },
     },
   });
@@ -114,12 +120,33 @@ class LostItemsContainer extends React.Component {
     }).isRequired,
   }
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      billedRecords: [],
+      cancelledRecords: [],
+    };
+  }
+
   componentDidMount() {
     this.source = new StripesConnectedSource(this.props, this.props.stripes.logger);
   }
 
   componentDidUpdate() {
     this.source.update(this.props);
+  }
+
+  addBilledRecord = (record) => {
+    this.setState((prevState) => ({
+      billedRecords: [...prevState.billedRecords, record],
+    }));
+  }
+
+  addCancelledRecord = (recordId) => {
+    this.setState((prevState) => ({
+      cancelledRecords: [...prevState.cancelledRecords, recordId],
+    }));
   }
 
   onNeedMoreData = (askAmount, index) => {
@@ -187,6 +214,10 @@ class LostItemsContainer extends React.Component {
         onNeedMoreData={this.onNeedMoreData}
         queryGetter={this.queryGetter}
         querySetter={this.querySetter}
+        addBilledRecord={this.addBilledRecord}
+        billedRecords={this.state.billedRecords}
+        addCancelledRecord={this.addCancelledRecord}
+        cancelledRecords={this.state.cancelledRecords}
         {...this.props}
       />
     );

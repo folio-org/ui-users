@@ -18,13 +18,14 @@ import css from '../patronBlocks.css';
 
 function showValidationErrors(values) {
   const {
+    message,
     blockBorrowing,
     blockRenewals,
     blockRequests,
-    message,
   } = values;
-  const isCheckboxChecked = blockBorrowing || blockRenewals || blockRequests;
+
   const isTextAreaValueExists = !!message;
+  const isCheckboxChecked = blockBorrowing || blockRenewals || blockRequests;
   const errors = {};
 
   if (!isTextAreaValueExists && isCheckboxChecked) {

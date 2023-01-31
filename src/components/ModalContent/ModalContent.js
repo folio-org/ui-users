@@ -91,7 +91,6 @@ class ModalContent extends React.Component {
     loan: PropTypes.object.isRequired,
     onClose: PropTypes.func.isRequired,
     handleError: PropTypes.func.isRequired,
-    declarationInProgress: PropTypes.bool.isRequired,
     isInProgress: PropTypes.bool,
     toggleButton: PropTypes.func,
     validateAction: PropTypes.func,
@@ -186,7 +185,7 @@ class ModalContent extends React.Component {
     const feeFines = [];
     get(resources, ['feefineshistory', 'records'], []).forEach((currentFeeFine) => {
       if (currentFeeFine.loanId === loanId && currentFeeFine.status.name === 'Open' &&
-        (currentFeeFine.feeFineType === refundClaimReturned.LOST_ITEM_FEE || currentFeeFine.feeFineType === refundClaimReturned.LOST_ITEM_PROCESSING_FEE)) {
+        (currentFeeFine.feeFineType === refundClaimReturned.LOST_ITEM_FEE || currentFeeFine.feeFineType === refundClaimReturned.LOST_ITEM_PROCESSING_FEE || currentFeeFine.feeFineType === refundClaimReturned.LOST_ITEM_FEE_ACTUAL_COST)) {
         feeFines.push(currentFeeFine);
       }
     });
@@ -239,7 +238,6 @@ class ModalContent extends React.Component {
       loanAction,
       onClose,
       itemRequestCount,
-      declarationInProgress,
       isInProgress,
     } = this.props;
 
@@ -251,7 +249,7 @@ class ModalContent extends React.Component {
     //  - either to determine the content of the message about open requests
     //  - or whether to show this message at all.
     const countIndex = stripes.hasPerm('ui-users.requests.all') ? itemRequestCount : -1;
-    const isConfirmButtonDisabled = !additionalInfo || isInProgress || declarationInProgress;
+    const isConfirmButtonDisabled = !additionalInfo || isInProgress;
 
     return (
       <div>

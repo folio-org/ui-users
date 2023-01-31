@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { screen, waitFor } from '@testing-library/react';
+import { act, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import renderWithRouter from 'helpers/renderWithRouter';
@@ -36,11 +36,11 @@ const resources = {
   }
 };
 
-const mockPut = jest.fn();
+const mockPut = jest.fn().mockImplementation(() => Promise.resolve());
 
 const mutator = {
   patronBlockCondition: {
-    DELETE: jest.fn().mockReturnValue(Promise.resolve()),
+    DELETE: jest.fn(),
     POST: jest.fn(),
     PUT: mockPut,
     cancel: jest.fn(),
@@ -78,7 +78,9 @@ describe('Conditions', () => {
   it('handle Submit in conditions form', async () => {
     userEvent.type(document.querySelector('[data-test-block-message="true"]'), 'Testing');
     expect(screen.getByText('Testing')).toBeInTheDocument();
-    userEvent.click(screen.getByText('stripes-core.button.save'));
+    act(() => {
+      userEvent.click(screen.getByText('stripes-core.button.save'));
+    });
     expect(mockPut).toHaveBeenCalledTimes(0);
   });
 });

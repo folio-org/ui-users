@@ -13,7 +13,7 @@ const withDeclareLost = WrappedComponent => class WithDeclareLost extends React.
       declareLostDialogOpen: false,
       loan: null,
       itemRequestCount: 0,
-      declarationInProgress: false,
+      declareLostInProgress: false,
     };
   }
 
@@ -29,14 +29,14 @@ const withDeclareLost = WrappedComponent => class WithDeclareLost extends React.
     this.setState({ declareLostDialogOpen: false });
   }
 
-  toggleButton = (declarationInProgress) => {
-    this.setState({ declarationInProgress });
+  setDeclareLostInProgress = (declareLostInProgress) => {
+    this.setState({ declareLostInProgress });
   };
 
   render() {
     const {
       declareLostDialogOpen,
-      declarationInProgress,
+      declareLostInProgress,
       loan,
       itemRequestCount,
     } = this.state;
@@ -47,8 +47,8 @@ const withDeclareLost = WrappedComponent => class WithDeclareLost extends React.
       <>
         <WrappedComponent
           declareLost={this.declareLost}
-          declarationInProgress={declarationInProgress}
-          toggleButton={this.toggleButton}
+          declareLostInProgress={declareLostInProgress}
+          setDeclareLostInProgress={this.setDeclareLostInProgress}
           {...this.props}
         />
         { loan &&
@@ -58,9 +58,9 @@ const withDeclareLost = WrappedComponent => class WithDeclareLost extends React.
             loanAction={loanActionMutators.DECLARE_LOST}
             modalLabel={modalLabel}
             open={declareLostDialogOpen}
-            declarationInProgress={declarationInProgress}
+            isInProgress={declareLostInProgress}
             onClose={this.hideDeclareLostDialog}
-            toggleButton={this.toggleButton}
+            toggleButton={this.setDeclareLostInProgress}
             {...this.props}
           />
         }

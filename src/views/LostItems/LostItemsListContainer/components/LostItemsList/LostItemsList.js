@@ -21,6 +21,7 @@ import {
   ActualCostConfirmModal,
   InstanceDetails,
   RenderActions,
+  RecordStatus,
 } from './components';
 
 import {
@@ -68,7 +69,7 @@ export const columnWidths = {
   [COLUMNS_NAME.PERMANENT_ITEM_LOCATION]: { max: 150 },
   [COLUMNS_NAME.FEE_FINE_OWNER]: { max: 150 },
   [COLUMNS_NAME.FEE_FINE_TYPE]: { max: 150 },
-  [COLUMNS_NAME.ACTION]: { max: 50 },
+  [COLUMNS_NAME.ACTION]: { max: 150 },
 };
 export const columnMapping = {
   [COLUMNS_NAME.PATRON]: <FormattedMessage id="ui-users.lostItems.list.columnName.patron" />,
@@ -118,6 +119,18 @@ export const basicLostItemsListFormatter = {
   [COLUMNS_NAME.FEE_FINE_OWNER]: (actualCostRecord) => (get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.FEE_FINE_OWNER], DEFAULT_VALUE)),
   [COLUMNS_NAME.FEE_FINE_TYPE]: (actualCostRecord) => (get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.FEE_FINE_TYPE], DEFAULT_VALUE)),
 };
+export const isBilledRecord = (recordId, billedRecords) => billedRecords.some(record => record.id === recordId);
+export const isCancelledRecord = (recordId, cancelledRecords) => cancelledRecords.some(id => id === recordId);
+export const getRecordStatus = (recordId, billedRecords, cancelledRecords) => {
+  const isBilled = isBilledRecord(recordId, billedRecords);
+  const isCancelled = isCancelledRecord(recordId, cancelledRecords);
+
+  return {
+    isBilled,
+    isCancelled,
+    isBillButtonDisabled: isBilled || isCancelled,
+  };
+};
 
 const LostItemsList = ({
   contentData,
@@ -126,6 +139,10 @@ const LostItemsList = ({
   emptyMessage,
   onSort,
   sortOrder,
+  billRecord,
+  billedRecords,
+  cancelRecord,
+  cancelledRecords,
 }) => {
   const [actualCostModal, setActualCostModal] = useState(ACTUAL_COST_MODAL_DEFAULT);
   const [actualCostConfirmModal, setActualCostConfirmModal] = useState(ACTUAL_COST_CONFIRM_MODAL_DEFAULT);
@@ -133,12 +150,31 @@ const LostItemsList = ({
 
   const lostItemsListFormatter = {
     ...basicLostItemsListFormatter,
-    [COLUMNS_NAME.ACTION]: (actualCostRecord) => (<RenderActions
-      actualCostRecord={actualCostRecord}
-      setActualCostModal={setActualCostModal}
-      actualCost={actualCost}
-      setActualCost={setActualCost}
-    />),
+    [COLUMNS_NAME.ACTION]: (actualCostRecord) => {
+      const {
+        isBilled,
+        isCancelled,
+        isBillButtonDisabled,
+      } = getRecordStatus(actualCostRecord.id, billedRecords, cancelledRecords);
+
+      return (
+        <div>
+          <RecordStatus
+            recordId={actualCostRecord.id}
+            billedRecords={billedRecords}
+            isBilled={isBilled}
+            isCancelled={isCancelled}
+          />
+          <RenderActions
+            isBillButtonDisabled={isBillButtonDisabled}
+            actualCostRecord={actualCostRecord}
+            setActualCostModal={setActualCostModal}
+            actualCost={actualCost}
+            setActualCost={setActualCost}
+          />
+        </div>
+      );
+    }
   };
 
   return (
@@ -178,6 +214,8 @@ const LostItemsList = ({
         setActualCostConfirmModal={setActualCostConfirmModal}
         actualCost={actualCost}
         setActualCost={setActualCost}
+        billRecord={billRecord}
+        cancelRecord={cancelRecord}
       />
     </>
   );
@@ -225,6 +263,13 @@ LostItemsList.propTypes = {
   emptyMessage: PropTypes.node,
   onSort: PropTypes.func.isRequired,
   sortOrder: PropTypes.string.isRequired,
+  billRecord: PropTypes.func.isRequired,
+  billedRecords: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    amount: PropTypes.number.isRequired,
+  })).isRequired,
+  cancelRecord: PropTypes.func.isRequired,
+  cancelledRecords: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default LostItemsList;

@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "8.3.0",
+  "version": "9.0.0",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -47,7 +47,7 @@
       "loan-policy-storage": "1.0 2.0",
       "loan-storage": "4.0 5.0 6.0 7.0",
       "notes": "2.0 3.0",
-      "request-storage": "2.5 3.0 4.0"
+      "request-storage": "2.5 3.0 4.0 5.0"
     },
     "permissionSets": [
       {
@@ -846,7 +846,9 @@
           "ui-users.loans.view",
           "ui-users.feesfines.actions.all",
           "ui-inventory.instance.view",
-          "actual-cost-record-storage.actual-cost-records.collection.get"
+          "actual-cost-record-storage.actual-cost-records.collection.get",
+          "actual-cost-fee-fine-bill.post",
+          "actual-cost-fee-fine-cancel.post"
         ],
         "visible": true
       }
@@ -857,7 +859,6 @@
     "build": "stripes build",
     "lint": "eslint .",
     "test": "yarn run test:jest",
-    "test:bigtest": "stripes test karma",
     "test:jest": "jest",
     "build-mod-descriptor": "stripes mod descriptor --full --strict | jq '.[]' > module-descriptor.json ",
     "formatjs-compile": "formatjs compile-folder --ast --format simple ./translations/ui-users ./translations/ui-users/compiled"
@@ -870,15 +871,12 @@
     "@babel/plugin-transform-runtime": "^7.13.10",
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-react": "^7.9.0",
-    "@bigtest/interactor": "^0.7.2",
-    "@bigtest/mocha": "^0.5.2",
-    "@bigtest/react": "^0.1.2",
     "@folio/eslint-config-stripes": "^6.0.0",
-    "@folio/stripes": "^7.0.0",
+    "@folio/stripes": "^8.0.0",
     "@folio/stripes-cli": "^2.4.0",
-    "@folio/stripes-components": "^10.0.0",
-    "@folio/stripes-core": "^8.0.0",
-    "@folio/stripes-final-form": "^6.0.0",
+    "@folio/stripes-components": "^11.0.0",
+    "@folio/stripes-core": "^9.0.0",
+    "@folio/stripes-final-form": "^7.0.0",
     "@formatjs/cli": "^4.2.20",
     "@jest/globals": "^26.6.2",
     "@testing-library/dom": "^7.26.3",
@@ -887,27 +885,22 @@
     "@testing-library/user-event": "^12.1.10",
     "babel-jest": "^26.6.3",
     "babel-plugin-module-resolver": "^4.1.0",
-    "chai": "^4.2.0",
     "core-js": "^3.6.4",
     "eslint": "^7.32.0",
     "eslint-import-resolver-alias": "^1.1.2",
-    "faker": "^4.1.0",
     "history": "^5.0.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.6.3",
     "jest-canvas-mock": "^2.3.0",
     "jest-junit": "^12.0.0",
-    "miragejs": "^0.1.32",
-    "mocha": "^5.2.0",
     "moment": "^2.24.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-intl": "^5.8.0",
-    "react-redux": "^7.2.2",
+    "react-redux": "^8.0.5",
     "react-router-dom": "^5.2.0",
     "redux": "^4.0.0",
-    "regenerator-runtime": "^0.13.9",
-    "sinon": "^7.1.1"
+    "regenerator-runtime": "^0.13.9"
   },
   "dependencies": {
     "final-form-set-field-data": "^1.0.2",
@@ -925,10 +918,11 @@
     "uuid": "^8.3.2"
   },
   "peerDependencies": {
-    "@folio/stripes": "^7.0.0",
+    "@folio/stripes": "^8.0.0",
     "moment": "^2.24.0",
     "react": "^17.0.2",
     "react-intl": "^5.8.0",
+    "react-redux": "^8.0.5",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0"
   },

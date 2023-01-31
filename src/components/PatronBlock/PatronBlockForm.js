@@ -1,4 +1,4 @@
-import _, { get, isEmpty, isNil } from 'lodash';
+import { cloneDeep, get, isEmpty, isEqual, isNil } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -15,7 +15,8 @@ import {
   TextArea,
   Checkbox,
   Datepicker,
-  Selection
+  Selection,
+  PaneFooter
 } from '@folio/stripes/components';
 import {
   AppIcon,
@@ -107,7 +108,7 @@ class PatronBlockForm extends React.Component {
 
   handleSectionToggle({ id }) {
     this.setState((curState) => {
-      const newState = _.cloneDeep(curState);
+      const newState = cloneDeep(curState);
       newState.sections[id] = !newState.sections[id];
       return newState;
     });
@@ -115,7 +116,7 @@ class PatronBlockForm extends React.Component {
 
   handleExpandAll(obj) {
     this.setState((curState) => {
-      const newState = _.cloneDeep(curState);
+      const newState = cloneDeep(curState);
       newState.sections = obj;
       return newState;
     });
@@ -123,38 +124,58 @@ class PatronBlockForm extends React.Component {
 
   renderFirstMenu = () => (
     <PaneMenu>
-      <FormattedMessage id="ui-users.blocks.form.button.close">
-        {ariaLabel => (
-          <PaneHeaderIconButton
-            id="close-patron-block"
-            onClick={this.props.onClose}
-            aria-label={ariaLabel}
-            icon="times"
-          />
-        )}
-      </FormattedMessage>
+      <PaneHeaderIconButton
+        id="close-patron-block"
+        onClick={this.props.onClose}
+        aria-label={this.props.intl.formatMessage({ id: 'ui-users.blocks.form.button.close' })}
+        icon="times"
+      />
     </PaneMenu>
   );
 
   renderLastMenu = () => {
+    const { params } = this.props;
+
+    const del = params.patronblockid ?
+      <Button id="patron-block-delete" marginBottom0 buttonStyle="danger" onClick={this.props.onDeleteItem}>
+        <FormattedMessage id="ui-users.blocks.form.button.delete" />
+      </Button>
+      : '';
+
+    return (
+      <PaneMenu>
+        {del}
+      </PaneMenu>
+    );
+  }
+
+  footer = () => {
     const {
       pristine,
       submitting,
+      onClose,
       invalid,
       params,
     } = this.props;
+
+    const cancel =
+      <Button
+        id="expirationDate-modal-cancel-btn"
+        onClick={onClose}
+      >
+        <FormattedMessage id="ui-users.cancel" />
+      </Button>;
 
     const submit =
       <Button id="patron-block-save-close" marginBottom0 buttonStyle="primary" type="submit" disabled={pristine || submitting || invalid}>
         { params.patronblockid ? <FormattedMessage id="ui-users.blocks.form.button.save" /> : <FormattedMessage id="ui-users.blocks.form.button.create" />}
       </Button>;
-    const del = params.patronblockid ? <Button id="patron-block-delete" marginBottom0 buttonStyle="danger" onClick={this.props.onDeleteItem}><FormattedMessage id="ui-users.blocks.form.button.delete" /></Button> : '';
 
     return (
-      <PaneMenu>
-        {del}
-        {submit}
-      </PaneMenu>
+      <PaneFooter
+        renderStart={cancel}
+        renderEnd={submit}
+      />
     );
   }
 
@@ -223,6 +244,7 @@ class PatronBlockForm extends React.Component {
             defaultWidth="fill"
             firstMenu={this.renderFirstMenu()}
             lastMenu={this.renderLastMenu()}
+            footer={this.footer()}
             appIcon={<AppIcon app="users" size="small" />}
             paneTitle={title}
           >
@@ -248,11 +270,11 @@ class PatronBlockForm extends React.Component {
               <Col xs>
                 <Accordion
                   id="blockInformationSection"
-                  label={<FormattedMessage id="ui-users.blocks.form.label.information" />}
+                  label={intl.formatMessage({ id: 'ui-users.blocks.form.label.information' })}
                   onToggle={this.handleSectionToggle}
                   open={this.state.sections.blockInformationSection}
                 >
-                  {!_.isEmpty(initialValues) ?
+                  {!isEmpty(initialValues) ?
                     <Row>
                       <Col xs={12} sm={10} md={7} lg={5}>
                         <this.connectedViewMetaData metadata={initialValues.metadata} />
@@ -353,7 +375,7 @@ class PatronBlockForm extends React.Component {
 }
 
 export default stripesFinalForm({
-  initialValuesEqual: (a, b) => _.isEqual(a, b),
+  initialValuesEqual: (a, b) => isEqual(a, b),
   navigationCheck: true,
   subscription: {
     invalid: true,

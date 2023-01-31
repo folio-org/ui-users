@@ -15,6 +15,7 @@ const customFieldTypeToFilterMap = {
   MULTI_SELECT_DROPDOWN: MultiSelectionFilter,
   RADIO_BUTTON: CheckboxFilter,
   SINGLE_SELECT_DROPDOWN: MultiSelectionFilter,
+  SINGLE_CHECKBOX: CheckboxFilter,
 };
 
 const CustomFieldsFilter = ({
@@ -32,12 +33,11 @@ const CustomFieldsFilter = ({
   const {
     refId,
     name,
-    selectField: {
-      options: {
-        values,
-      },
-    },
+    selectField,
   } = customField;
+
+
+  const values = selectField?.options?.values ?? [{ id: 'true', value: name }];
   const filterName = `customFields-${refId}`;
   const selectedValues = activeFilters[filterName];
   const dataOptions = values.map(({ id: value, value: label }) => ({ label, value }));
