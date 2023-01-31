@@ -58,6 +58,7 @@ const ActualCostModal = ({
   const feeFineType = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.FEE_FINE_TYPE], DEFAULT_VALUE);
   const [isBillAmountTouched, setBillAmountTouched] = useState(false);
   const isAmountInvalid = !Number(actualCostToBill) || Number(actualCostToBill) < BILLED_AMOUNT_MIN || Number(actualCostToBill) > BILLED_AMOUNT_MAX;
+  const isBillType = type === ACTUAL_COST_TYPES.BILL;
   const billAmountError = isBillAmountTouched && isAmountInvalid
     ? <FormattedMessage id="ui-users.lostItems.feeFineAmount.error" />
     : null;
@@ -78,13 +79,14 @@ const ActualCostModal = ({
     });
     setBillAmountTouched(false);
   };
+  const isContinueButtonDisabled = isAmountInvalid && isBillType;
   const renderFooter = (
     <ModalFooter>
       <Button
         id="continueActualCost"
         data-testid="continueActualCost"
         buttonStyle="primary"
-        disabled={isAmountInvalid}
+        disabled={isContinueButtonDisabled}
         onClick={onContinue}
       >
         <FormattedMessage id="ui-users.lostItems.modal.button.continue" />
@@ -121,7 +123,7 @@ const ActualCostModal = ({
     });
   };
   const getTitle = () => (
-    type === ACTUAL_COST_TYPES.BILL ?
+    isBillType ?
       <FormattedMessage
         id="ui-users.lostItems.modal.bill.title"
         values={{ patronName }}
@@ -156,7 +158,7 @@ const ActualCostModal = ({
           />
         </Col>
         <Col xs={4}>
-          { type === ACTUAL_COST_TYPES.BILL &&
+          { isBillType &&
             <TextField
               label={<FormattedMessage id="ui-users.lostItems.modal.actualCostToBill" />}
               required
@@ -183,7 +185,7 @@ const ActualCostModal = ({
           />
         </Col>
       </Row>
-      { type === ACTUAL_COST_TYPES.BILL &&
+      { isBillType &&
         <Row>
           <Col xs={12}>
             <TextArea

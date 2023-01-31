@@ -15,7 +15,13 @@ jest.mock('@folio/stripes/components', () => ({
       <span>{props.children}</span>
     </span>
   )),
-  Button: jest.fn(({ children, onClick = jest.fn(), ...rest }) => (
+  Button: jest.fn(({
+    children,
+    onClick = jest.fn(),
+    // eslint-disable-next-line no-unused-vars
+    buttonStyle, buttonRef,
+    ...rest
+  }) => (
     <button data-test-button type="button" {...rest} onClick={onClick}>
       <span>
         {children}
@@ -169,7 +175,7 @@ jest.mock('@folio/stripes/components', () => ({
   )),
   PaneHeaderIconButton: jest.fn(({ children }) => <div className="paneHeaderIconButton">{ children }</div>),
   PaneMenu: jest.fn((props) => <div>{props.children}</div>),
-  PaneSet: jest.fn((props) => <div>{props.children}</div>),
+  Paneset: jest.fn((props) => <div>{props.children}</div>),
   RadioButton: jest.fn(({ label, name, ...rest }) => (
     <div>
       <label htmlFor="male">{label}</label>

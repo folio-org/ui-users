@@ -976,7 +976,6 @@
     "permissions-accordion.confirm-heading": "هل تريد الاستمرار في تغيير الصلاحيات؟",
     "permissions-accordion.confirm-message": "هناك صلاحيات غير مرئية تمثل جزءاً من هذه المجموعة وستتم إزالتها عند حفظ التغييرات. هل ترغب في المتابعة؟",
     "permissions-accordion.confirm-continue": "متابعة",
-    "feefines.details.dateClose": "تاريخ إغلاق الرسم/الغرامة",
     "permissions.unassignAllPermissions": "إلغاء تعيين كل الصلاحيات",
     "permissions.calloutMessage": "تم إلغاء تعيين كل صلاحيات المستخدم",
     "permissions.modal.unassignAll.header": "إلغاء تعيين كل الصلاحيات",
@@ -1013,7 +1012,7 @@
     "lostItems.list.columnName.action.patronDetails": "Patron details",
     "lostItems.list.columnName.action.loanDetails": "Loan details",
     "lostItems.list.columnName.action.itemDetails": "Item details",
-    "lostItems.list.filters": "Search & filters",
+    "lostItems.list.filters": "Search & filter",
     "lostItems.list.searchResults": "Lost items requiring actual cost",
     "lostItems.list.filters.lossType": "Loss type",
     "lostItems.list.filters.lossType.agedToLost": "Aged to lost",
@@ -1037,5 +1036,15 @@
     "lostItems.modal.button.cancel": "Cancel",
     "lostItems.modal.button.continue": "Continue",
     "lostItems.modal.button.keepEditing": "Keep editing",
-    "lostItems.modal.button.confirm": "Confirm"
+    "lostItems.modal.button.confirm": "Confirm",
+    "errorModal.currentUserServicePointAbsentee.label": "<strong>Access denied</strong>",
+    "errorModal.currentUserServicePointAbsentee.message": "You must select a service point to create and view <strong>patron fees/fines</strong>. Please add one or more service points to your user record in the <strong>Users</strong> app. Contact an administrator if you do not have the ability to add service points to your record.",
+    "errorModal.currentUserServicePointAbsentee.confirmButtonText": "Back",
+    "lostItems.feeFineAmount.error": "Actual cost to bill patron must be greater than 0.00 and less than 9999.99",
+    "lostItems.notification.serverError": "A system error has occurred - please try again later or contact your FOLIO support staff",
+    "lostItems.recordStatus.billed": "<strong>Billed: {amount}</strong>",
+    "lostItems.recordStatus.notBilled": "<strong>Not billed</strong>",
+    "lostItems.notification.billed": "A fee/fine of <strong>{amount}</strong> has been successfully <strong>charged</strong> to <strong>{patronName}</strong>",
+    "lostItems.notification.billedBefore": "<strong>{patronName}</strong> has already been billed for this item by another user",
+    "lostItems.notification.cancelled": "A lost item fee <strong>will not be charged</strong> to <strong>{patronName}</strong>"
 }

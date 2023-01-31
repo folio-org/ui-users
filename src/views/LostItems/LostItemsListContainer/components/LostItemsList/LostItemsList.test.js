@@ -21,7 +21,8 @@ import LostItemsList, {
   columnMapping,
   columnWidths,
   isBilledRecord,
-  getBilledAmount,
+  isCancelledRecord,
+  getRecordStatus,
 } from './LostItemsList';
 import { getPatronName } from './util';
 import {
@@ -309,26 +310,78 @@ describe('LostItemsList', () => {
     });
   });
 
-  describe('getBilledAmount', () => {
-    const billedAmount = '10.50';
-    const recordId = 'recordId';
+  describe('isCancelledRecord', () => {
+    describe('when id is presented', () => {
+      it('should return true', () => {
+        const recordId = 'recordId';
+        const cancelledRecords = [recordId];
 
-    it('should return billed amount', () => {
-      const billedRecords = [{
-        id: recordId,
-        billedAmount,
-      }];
-
-      expect(getBilledAmount(recordId, billedRecords)).toBe(billedAmount);
+        expect(isCancelledRecord(recordId, cancelledRecords)).toBe(true);
+      });
     });
 
-    it('should return undefined if there is no record with correct id', () => {
+    describe('when id is not presented', () => {
+      it('should return false', () => {
+        const recordId = 'recordId';
+        const cancelledRecords = [];
+
+        expect(isCancelledRecord(recordId, cancelledRecords)).toBe(false);
+      });
+    });
+  });
+
+  describe('getRecordStatus', () => {
+    const recordId = 'id';
+
+    describe('when record is "Billed"', () => {
+      const billedRecords = [{
+        id: recordId,
+      }];
+      const cancelledRecords = [];
+
+      it('should return data for billed record', () => {
+        const expectedResult = {
+          isBilled: true,
+          isCancelled: false,
+          isBillButtonDisabled: true,
+        };
+
+        expect(getRecordStatus(recordId, billedRecords, cancelledRecords)).toEqual(expectedResult);
+      });
+    });
+
+    describe('when record is "Cancelled"', () => {
       const billedRecords = [{
         id: 'test',
-        billedAmount,
       }];
+      const cancelledRecords = [recordId];
 
-      expect(getBilledAmount(recordId, billedRecords)).toBeUndefined();
+      it('should return data for cancelled record', () => {
+        const expectedResult = {
+          isBilled: false,
+          isCancelled: true,
+          isBillButtonDisabled: true,
+        };
+
+        expect(getRecordStatus(recordId, billedRecords, cancelledRecords)).toEqual(expectedResult);
+      });
+    });
+
+    describe('when record is not "Billed" and not "Cancelled"', () => {
+      const billedRecords = [{
+        id: 'test',
+      }];
+      const cancelledRecords = ['test'];
+
+      it('should return data for not cancelled and not billed record', () => {
+        const expectedResult = {
+          isBilled: false,
+          isCancelled: false,
+          isBillButtonDisabled: false,
+        };
+
+        expect(getRecordStatus(recordId, billedRecords, cancelledRecords)).toEqual(expectedResult);
+      });
     });
   });
 });

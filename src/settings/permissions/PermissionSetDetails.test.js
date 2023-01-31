@@ -76,7 +76,7 @@ describe('PermissionSetDetails component', () => {
   });
   it('Checking expand all button', () => {
     renderPermissionSetDetails(props);
-    fireEvent.click(document.querySelector('[data-tast-expand-button="true"]'));
+    fireEvent.click(document.querySelector('[data-test-expand-button="true"]'));
     expect(renderPermissionSetDetails(props)).toBeTruthy();
   });
   it('Checking expand - general information', () => {
