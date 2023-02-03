@@ -339,6 +339,7 @@ class EditUserInfo extends React.Component {
                   <Col xs={12}>
                     <NumberGeneratorModalButton
                       callback={(generated) => change('barcode', generated)}
+                      id="userbarcode"
                       generator="Patron"
                     />
                   </Col>
