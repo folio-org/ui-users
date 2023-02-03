@@ -780,7 +780,7 @@ class UserDetail extends React.Component {
                 </IfPermission>
 
                 <IfPermission perm="ui-users.requests.all">
-                  <IfInterface name="request-storage" version="2.5 3.0 4.0">
+                  <IfInterface name="request-storage" version="2.5 3.0 4.0 5.0">
                     <IfInterface name="circulation">
                       <UserRequests
                         expanded={sections.requestsSection}

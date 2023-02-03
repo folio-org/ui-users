@@ -21,6 +21,7 @@ import {
   ActualCostConfirmModal,
   InstanceDetails,
   RenderActions,
+  RecordStatus,
 } from './components';
 
 import {
@@ -39,8 +40,6 @@ import {
 import {
   getPatronName,
 } from './util';
-
-import styles from './LostItemsList.css';
 
 export const COLUMNS_NAME = {
   PATRON: ACTUAL_COST_RECORD_FIELD_NAME.USER,
@@ -121,7 +120,17 @@ export const basicLostItemsListFormatter = {
   [COLUMNS_NAME.FEE_FINE_TYPE]: (actualCostRecord) => (get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.FEE_FINE_TYPE], DEFAULT_VALUE)),
 };
 export const isBilledRecord = (recordId, billedRecords) => billedRecords.some(record => record.id === recordId);
-export const getBilledAmount = (recordId, billedRecords) => billedRecords.find(record => record.id === recordId)?.billedAmount;
+export const isCancelledRecord = (recordId, cancelledRecords) => cancelledRecords.some(id => id === recordId);
+export const getRecordStatus = (recordId, billedRecords, cancelledRecords) => {
+  const isBilled = isBilledRecord(recordId, billedRecords);
+  const isCancelled = isCancelledRecord(recordId, cancelledRecords);
+
+  return {
+    isBilled,
+    isCancelled,
+    isBillButtonDisabled: isBilled || isCancelled,
+  };
+};
 
 const LostItemsList = ({
   contentData,
@@ -132,6 +141,8 @@ const LostItemsList = ({
   sortOrder,
   billRecord,
   billedRecords,
+  cancelRecord,
+  cancelledRecords,
 }) => {
   const [actualCostModal, setActualCostModal] = useState(ACTUAL_COST_MODAL_DEFAULT);
   const [actualCostConfirmModal, setActualCostConfirmModal] = useState(ACTUAL_COST_CONFIRM_MODAL_DEFAULT);
@@ -140,18 +151,22 @@ const LostItemsList = ({
   const lostItemsListFormatter = {
     ...basicLostItemsListFormatter,
     [COLUMNS_NAME.ACTION]: (actualCostRecord) => {
-      const isBilled = isBilledRecord(actualCostRecord.id, billedRecords);
+      const {
+        isBilled,
+        isCancelled,
+        isBillButtonDisabled,
+      } = getRecordStatus(actualCostRecord.id, billedRecords, cancelledRecords);
 
       return (
         <div>
-          {
-            isBilled &&
-            <div className={styles.billAmountWrapper}>
-              <b>Billed: {getBilledAmount(actualCostRecord.id, billedRecords)}</b>
-            </div>
-          }
+          <RecordStatus
+            recordId={actualCostRecord.id}
+            billedRecords={billedRecords}
+            isBilled={isBilled}
+            isCancelled={isCancelled}
+          />
           <RenderActions
-            isBillButtonDisabled={isBilled}
+            isBillButtonDisabled={isBillButtonDisabled}
             actualCostRecord={actualCostRecord}
             setActualCostModal={setActualCostModal}
             actualCost={actualCost}
@@ -200,6 +215,7 @@ const LostItemsList = ({
         actualCost={actualCost}
         setActualCost={setActualCost}
         billRecord={billRecord}
+        cancelRecord={cancelRecord}
       />
     </>
   );
@@ -252,6 +268,8 @@ LostItemsList.propTypes = {
     id: PropTypes.number.isRequired,
     amount: PropTypes.number.isRequired,
   })).isRequired,
+  cancelRecord: PropTypes.func.isRequired,
+  cancelledRecords: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default LostItemsList;

@@ -976,7 +976,6 @@
     "permissions-accordion.confirm-heading": "Continue changing permissions? ",
     "permissions-accordion.confirm-message": "Invisible permissions are part of this set and will be removed when changes are saved. Would you like to continue?",
     "permissions-accordion.confirm-continue": "Continue",
-    "feefines.details.dateClose": "Date fee/fine closed",
     "permissions.unassignAllPermissions": "Unassign all permissions",
     "permissions.calloutMessage": "User's permissions are all unassigned.",
     "permissions.modal.unassignAll.header": "Unassign all permissions",
@@ -1037,5 +1036,15 @@
     "lostItems.modal.button.cancel": "Cancel",
     "lostItems.modal.button.continue": "Continue",
     "lostItems.modal.button.keepEditing": "Keep editing",
-    "lostItems.modal.button.confirm": "Confirm"
+    "lostItems.modal.button.confirm": "Confirm",
+    "errorModal.currentUserServicePointAbsentee.label": "<strong>Access denied</strong>",
+    "errorModal.currentUserServicePointAbsentee.message": "You must select a service point to create and view <strong>patron fees/fines</strong>. Please add one or more service points to your user record in the <strong>Users</strong> app. Contact an administrator if you do not have the ability to add service points to your record.",
+    "errorModal.currentUserServicePointAbsentee.confirmButtonText": "Back",
+    "lostItems.feeFineAmount.error": "Actual cost to bill patron must be greater than 0.00 and less than 9999.99",
+    "lostItems.notification.serverError": "A system error has occurred - please try again later or contact your FOLIO support staff",
+    "lostItems.recordStatus.billed": "<strong>Billed: {amount}</strong>",
+    "lostItems.recordStatus.notBilled": "<strong>Not billed</strong>",
+    "lostItems.notification.billed": "A fee/fine of <strong>{amount}</strong> has been successfully <strong>charged</strong> to <strong>{patronName}</strong>",
+    "lostItems.notification.billedBefore": "<strong>{patronName}</strong> has already been billed for this item by another user",
+    "lostItems.notification.cancelled": "A lost item fee <strong>will not be charged</strong> to <strong>{patronName}</strong>"
 }

@@ -47,6 +47,9 @@ class LostItemsListContainer extends React.Component {
       billedRecord: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }),
+      cancelledRecord: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
     }).isRequired,
     okapi: PropTypes.shape({
       currentUser: PropTypes.shape({
@@ -60,6 +63,8 @@ class LostItemsListContainer extends React.Component {
       amount: PropTypes.string,
     })).isRequired,
     addBilledRecord: PropTypes.func.isRequired,
+    cancelledRecords: PropTypes.arrayOf(PropTypes.string).isRequired,
+    addCancelledRecord: PropTypes.func.isRequired,
     source: PropTypes.object,
   }
 
@@ -95,7 +100,7 @@ class LostItemsListContainer extends React.Component {
           billedAmount,
         });
         const message = <FormattedMessage
-          id="ui-users.lostItems.notification.success"
+          id="ui-users.lostItems.notification.billed"
           values={{
             patronName,
             amount: billedAmount,
@@ -111,7 +116,50 @@ class LostItemsListContainer extends React.Component {
 
         if (e.status === STATUS_CODES.unprocessableEntity) {
           message = <FormattedMessage
-            id="ui-users.lostItems.notification.alreadyBilled"
+            id="ui-users.lostItems.notification.billedBefore"
+            values={{ patronName }}
+          />;
+        } else {
+          message = <FormattedMessage id="ui-users.lostItems.notification.serverError" />;
+        }
+
+        this.context.sendCallout({
+          message,
+          type: 'error',
+        });
+      });
+  };
+
+  cancelRecord = (actualCost) => {
+    const {
+      mutator,
+      addCancelledRecord,
+    } = this.props;
+    const payload = {
+      actualCostRecordId: actualCost.actualCostRecord.id,
+      additionalInfoForStaff: actualCost.additionalInfo.additionalInformationForStaff,
+    };
+    const patronName = getPatronName(actualCost.actualCostRecord);
+
+    mutator.cancelledRecord.POST(payload)
+      .then((res) => {
+        addCancelledRecord(res.id);
+
+        const message = <FormattedMessage
+          id="ui-users.lostItems.notification.cancelled"
+          values={{ patronName }}
+        />;
+
+        this.context.sendCallout({
+          message,
+        });
+      })
+      .catch((e) => {
+        let message;
+
+        if (e.status === STATUS_CODES.unprocessableEntity) {
+          message = <FormattedMessage
+            id="ui-users.lostItems.notification.billedBefore"
             values={{ patronName }}
           />;
         } else {
@@ -163,6 +211,7 @@ class LostItemsListContainer extends React.Component {
         resultOffset,
       },
       billedRecords,
+      cancelledRecords,
     } = this.props;
     const {
       filterPaneIsVisible,
@@ -265,6 +314,8 @@ class LostItemsListContainer extends React.Component {
                   sortOrder={sortOrder}
                   billRecord={this.billRecord}
                   billedRecords={billedRecords}
+                  cancelRecord={this.cancelRecord}
+                  cancelledRecords={cancelledRecords}
                 />
               </Pane>
             </Paneset>

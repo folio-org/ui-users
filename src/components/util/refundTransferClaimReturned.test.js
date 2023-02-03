@@ -148,6 +148,44 @@ describe('refundTransferClaimReturned component', () => {
     await refundTransferClaimReturned.refundTransfers(loan('Declared lost'), props(actions));
     expect(refundTransferClaimReturned).toBeDefined();
   });
+  it('Refund transfer for Declared lost with actual cost', async () => {
+    const actions = [{
+      loanId: '40f5e9d9-38ac-458e-ade7-7795bd821652',
+      status: {
+        name: 'Open'
+      },
+      feeFineType: 'Lost item fee (actual cost)',
+      typeAction: 'Refund',
+      transactionInformation: {
+        Card: '123345',
+        paymentMethod: 'Card'
+      },
+      amountAction: 10.0,
+      paymentMethod: 'Card',
+    },
+    ];
+    await refundTransferClaimReturned.refundTransfers(loan('Declared lost'), props(actions));
+    expect(refundTransferClaimReturned).toBeDefined();
+  });
+  it('Refund transfer for Aged to lost with actual cost', async () => {
+    const actions = [{
+      loanId: '40f5e9d9-38ac-458e-ade7-7795bd821652',
+      status: {
+        name: 'Open'
+      },
+      feeFineType: 'Lost item fee (actual cost)',
+      typeAction: 'Transferred',
+      transactionInformation: {
+        Card: '123345'
+      },
+      amountAction: 10.0,
+      paymentMethod: 'Card',
+    },
+    ];
+
+    await refundTransferClaimReturned.refundTransfers(loan('Aged to lost'), props(actions));
+    expect(refundTransferClaimReturned).toBeDefined();
+  });
   it('Refund transfer for Declared lost and refund paid', async () => {
     const actions = [{
       loanId: '40f5e9d9-38ac-458e-ade7-7795bd821652',
@@ -179,6 +217,24 @@ describe('refundTransferClaimReturned component', () => {
     },
     ];
     await refundTransferClaimReturned.refundTransfers(loan('Lost and paid'), props(actions));
+    expect(refundTransferClaimReturned).toBeDefined();
+  });
+  it('Refund transfer for Declared lost and refund paid with actual cost', async () => {
+    const actions = [{
+      loanId: '40f5e9d9-38ac-458e-ade7-7795bd821652',
+      status: {
+        name: 'Open'
+      },
+      feeFineType: 'Lost item fee (actual cost)',
+      typeAction: 'Paid',
+      transactionInformation: {
+        Card: '123345',
+        paymentMethod: 'Card'
+      },
+      paymentMethod: 'Card',
+    },
+    ];
+    await refundTransferClaimReturned.refundTransfers(loan('Declared lost'), props(actions));
     expect(refundTransferClaimReturned).toBeDefined();
   });
 });

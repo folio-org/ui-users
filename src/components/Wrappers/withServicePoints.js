@@ -4,8 +4,7 @@ import { get, keyBy } from 'lodash';
 
 import {
   stripesShape,
-  setServicePoints,
-  setCurServicePoint,
+  updateUser,
   HandlerManager,
   coreEvents as events,
 } from '@folio/stripes/core';
@@ -175,11 +174,11 @@ const withServicePoints = WrappedComponent => class WithServicePointsComponent e
     setCurrentServicePoint(servicePoints, defaultServicePointId) {
       const { stripes: { store } } = this.props;
 
-      setServicePoints(store, servicePoints);
+      updateUser(store, { servicePoints });
 
       if (defaultServicePointId) {
-        const sp = servicePoints.find(r => r.id === defaultServicePointId);
-        setCurServicePoint(store, sp);
+        const curServicePoint = servicePoints.find(r => r.id === defaultServicePointId);
+        updateUser(store, { curServicePoint });
       } else if (this._isMounted) {
         this.setState({
           showChangeServicePointHandler: true
