@@ -34,9 +34,10 @@ describe('UserPermissions component', () => {
   });
   it('Adding comment and saving', () => {
     fireEvent.click(screen.getByText('ui-users.blocks.overrideButton'));
-    fireEvent.change(document.querySelector('[id="textarea-input-2"]'), { target: {
-      value: 'test'
-    } });
+    fireEvent.change(
+      screen.getByLabelText('ui-users.blocks.modal.comment', { exact: false }),
+      { target: { value: 'test' } }
+    );
     fireEvent.click(document.querySelector('[data-test-override-patron-block-modal-save="true"]'));
     expect(screen.getByText('test')).toBeTruthy();
   });

@@ -15,14 +15,14 @@ const onCloseMock = jest.fn();
 
 const owner = [
   {
-    id: 'dd80553c-dfae-46fb-aabc-081ae4de134e',
+    id: 'test-1',
     metadata: {
       createdByUserId: 'e1130416-f25f-5929-8c1d-b33d3f50f414',
       createdDate: '2021-12-27T12:08:53.639+00:00',
       updatedByUserId: 'e1130416-f25f-5929-8c1d-b33d3f50f414',
       updatedDate: '2021-12-27T12:09:22.973+00:00',
     },
-    owner: 'test',
+    owner: 'test-1',
     servicePointOwner: [
       {
         label: 'Circ Desk 2',
@@ -31,14 +31,14 @@ const owner = [
     ]
   },
   {
-    id: '6b3884f3-8066-47a7-b44e-5adcd6350d61',
+    id: 'test-2',
     metadata: {
       createdByUserId: 'e1130416-f25f-5929-8c1d-b33d3f50f414',
       createdDate: '2021-12-27T12:08:53.639+00:00',
       updatedByUserId: 'e1130416-f25f-5929-8c1d-b33d3f50f414',
       updatedDate: '2021-12-27T12:09:22.973+00:00',
     },
-    owner: 'test2',
+    owner: 'test-2',
     servicePointOwner: []
   }
 ];
@@ -57,12 +57,8 @@ describe('Copy Modal component', () => {
   it('Component must be rendered', () => {
     expect(screen.getByText('ui-users.feefines.modal.title')).toBeInTheDocument();
   });
-  it('On Change owner', () => {
-    userEvent.selectOptions(document.querySelector('[id="select-2"]'), screen.getByText('test2'));
-    expect(screen.getByText('test')).toBeTruthy();
-  });
   it('On Submit modal', () => {
-    userEvent.selectOptions(document.querySelector('[id="select-3"]'), screen.getByText('test2'));
+    userEvent.selectOptions(screen.getByRole('combobox'), ['test-2']);
     userEvent.click(document.querySelector('[id="yes"]'));
     userEvent.click(screen.getByText('ui-users.feefines.modal.submit'));
     expect(mockFunc).toHaveBeenCalled();

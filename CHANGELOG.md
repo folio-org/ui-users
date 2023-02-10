@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## 8.1.4 (IN PROGRESS)
+
+* Use stable tests.
+
 ## [8.1.3](https://github.com/folio-org/ui-users/tree/v8.1.3) (2022-08-23)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.2...v8.1.3)
 
