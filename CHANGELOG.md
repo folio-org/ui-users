@@ -4,6 +4,7 @@
 
 * Use stable tests.
 * Update `permUserId` before updating permissions. Fixes UIU-2672/UIU-2789.
+* Show correct service points when navigating among users. Refs UIU-2790.
 
 ## [8.1.3](https://github.com/folio-org/ui-users/tree/v8.1.3) (2022-08-23)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.2...v8.1.3)
