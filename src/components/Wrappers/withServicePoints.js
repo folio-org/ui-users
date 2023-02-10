@@ -87,14 +87,25 @@ const withServicePoints = WrappedComponent => class WithServicePointsComponent e
       // Save the id of the record in the service-points-users table for later use when mutating it.
       const servicePointUserId = get(nextProps.resources.servicePointsUsers, ['records', 0, 'id'], '');
       const localServicePointUserId = nextProps.resources.servicePointUserId;
+
+      // Why this gross shouldUpdateState variable? It makes things easy:
+      // if the id is changing, then we know the SPs cached in state need
+      // to change too. The test below that compares servicePointsUsers
+      // with servicePoints is insufficient when transitioning between
+      // users with the same numbers of SPs assigned or if both queries
+      // are still in-progress. Thus, shouldUpdateState serves to clear
+      // out state when the ID changes, and then the array comparison
+      // serves to fill in state when the queries complete.
+      let shouldUpdateState = false;
       if (servicePointUserId && servicePointUserId !== localServicePointUserId) {
         nextProps.mutator.servicePointUserId.replace(servicePointUserId);
+        shouldUpdateState = true;
       }
 
       // Check if new user service points have been received and the list of all service points has also been received.
       const userServicePointsIds = get(nextProps.resources.servicePointsUsers, ['records', 0, 'servicePointsIds'], []);
       const servicePoints = get(nextProps.resources.servicePoints, ['records'], []);
-      if ((userServicePointsIds.length !== state.userServicePoints.length) && servicePoints.length) {
+      if (shouldUpdateState || ((userServicePointsIds.length !== state.userServicePoints.length) && servicePoints.length)) {
         const servicePointsById = keyBy(servicePoints, 'id');
         const userServicePoints = userServicePointsIds
           .filter(id => servicePointsById[id])
