@@ -1,6 +1,7 @@
 # Change history for ui-users
 
-## [8.1.4] IN PROGRESS
+## [8.1.4](https://github.com/folio-org/ui-users/tree/v8.1.4) (2023-02-10)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.3...v8.1.4)
 
 * Use stable tests.
 * Update `permUserId` before updating permissions. Fixes UIU-2672/UIU-2789.
