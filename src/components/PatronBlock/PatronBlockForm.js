@@ -123,16 +123,12 @@ class PatronBlockForm extends React.Component {
 
   renderFirstMenu = () => (
     <PaneMenu>
-      <FormattedMessage id="ui-users.blocks.form.button.close">
-        {ariaLabel => (
-          <PaneHeaderIconButton
-            id="close-patron-block"
-            onClick={this.props.onClose}
-            aria-label={ariaLabel}
-            icon="times"
-          />
-        )}
-      </FormattedMessage>
+      <PaneHeaderIconButton
+        id="close-patron-block"
+        onClick={this.props.onClose}
+        aria-label={this.props.intl.formatMessage({ id: 'ui-users.blocks.form.button.close' })}
+        icon="times"
+      />
     </PaneMenu>
   );
 
@@ -248,7 +244,7 @@ class PatronBlockForm extends React.Component {
               <Col xs>
                 <Accordion
                   id="blockInformationSection"
-                  label={<FormattedMessage id="ui-users.blocks.form.label.information" />}
+                  label={intl.formatMessage({ id: 'ui-users.blocks.form.label.information' })}
                   onToggle={this.handleSectionToggle}
                   open={this.state.sections.blockInformationSection}
                 >
