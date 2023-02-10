@@ -1,6 +1,7 @@
 # Change history for ui-users
 
-## 8.2.5 IN PROGRESS
+## [8.2.5](https://github.com/folio-org/ui-users/tree/v8.2.5) (2023-02-10)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v8.2.4...v8.2.5)
 
 * Show correct service points when navigating among users. Refs UIU-2790.
 
