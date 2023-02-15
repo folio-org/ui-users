@@ -96,6 +96,8 @@ export const refundStatuses = {
   RefundedPartially: 'Refunded partially',
 };
 
+export const cancelledStatus = 'Cancelled as error';
+
 export const outstandingStatus = 'Outstanding';
 
 export const FEE_FINE_ACTIONS = {
