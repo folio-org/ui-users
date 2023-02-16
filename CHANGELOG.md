@@ -26,6 +26,7 @@
 * Add support for checkbox custom field filter. Fixes UIU-2759.
 * Use `updateUser` from `@folio/stripes-core` to update service-point data. Refs UIU-2788.
 * Show correct service points when navigating among users. Refs UIU-2790.
+* Make unavailable "Refund" option for cancelled fee/fine that was already refunded. Refs UIU-2700.
 
 ## [8.2.0](https://github.com/folio-org/ui-users/tree/v8.2.0) (2022-10-24)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v8.2.0)

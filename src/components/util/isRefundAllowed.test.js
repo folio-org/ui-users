@@ -8,6 +8,7 @@ jest.mock('../Accounts/accountFunctions', () => ({
   accountRefundInfo: jest.fn(() => ({
     hasBeenPaid: true,
     paidAmount: 100,
+    isCanceledAfterRefund: false,
   })),
   calculateSelectedAmount: jest.fn(() => 100),
 }));
@@ -27,23 +28,35 @@ describe('isRefundAllowed', () => {
     expect(calculateSelectedAmount).toHaveBeenCalledWith([mockedAccount], true, mockedActions);
   });
 
-  it('should return "true" if "paidAmount" and "calculateSelectedAmount" more than 0, and "hasBeenPaid" is true', () => {
+  it('should return "true" if "paidAmount" and "calculateSelectedAmount" more than 0, "isCanceledAfterRefund" is false, and "hasBeenPaid" is true', () => {
     expect(isRefundAllowed(mockedAccount, mockedActions)).toBe(true);
   });
 
-  it('should return "false" if "paidAmount" and "calculateSelectedAmount" more than 0, and "hasBeenPaid" is false', () => {
+  it('should return "false" if "paidAmount" and "calculateSelectedAmount" more than 0, "isCanceledAfterRefund" is true, and "hasBeenPaid" is false', () => {
     accountRefundInfo.mockReturnValueOnce({
       hasBeenPaid: false,
       paidAmount: 100,
+      isCanceledAfterRefund: true,
     });
 
     expect(isRefundAllowed(mockedAccount, mockedActions)).toBe(false);
   });
 
-  it('should return "false" if "paidAmount" less or equal 0, "calculateSelectedAmount" more than 0, and "hasBeenPaid" is true', () => {
+  it('should return "false" if "paidAmount" and "calculateSelectedAmount" more than 0, "isCanceledAfterRefund" is true, and "hasBeenPaid" is true', () => {
+    accountRefundInfo.mockReturnValueOnce({
+      hasBeenPaid: true,
+      paidAmount: 100,
+      isCanceledAfterRefund: true,
+    });
+
+    expect(isRefundAllowed(mockedAccount, mockedActions)).toBe(false);
+  });
+
+  it('should return "false" if "paidAmount" less or equal 0, "calculateSelectedAmount" more than 0, "isCanceledAfterRefund" is true, and "hasBeenPaid" is true', () => {
     accountRefundInfo.mockReturnValueOnce({
       hasBeenPaid: true,
       paidAmount: 0,
+      isCanceledAfterRefund: true,
     });
 
     expect(isRefundAllowed(mockedAccount, mockedActions)).toBe(false);
