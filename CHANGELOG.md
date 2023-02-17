@@ -27,6 +27,8 @@
 * Use `updateUser` from `@folio/stripes-core` to update service-point data. Refs UIU-2788.
 * Show correct service points when navigating among users. Refs UIU-2790.
 * Make unavailable "Refund" option for cancelled fee/fine that was already refunded. Refs UIU-2700.
+* Fix problem with additional information comment that can't be added after a page reload. Refs UIU-2794.
+* Allow proxy/sponsor lists to be emptied completely. Refs UIU-2804.
 * Show an error if the proxy record is corrupt, instead of an NPE. Refs UIU-2803.
 
 ## [8.2.0](https://github.com/folio-org/ui-users/tree/v8.2.0) (2022-10-24)

@@ -47,6 +47,9 @@ class Actions extends React.Component {
       type: 'okapi',
       records: 'feefineactions',
       path: `feefineactions?query=(userId==%{user.id})&limit=${MAX_RECORDS}`,
+      POST: {
+        path: 'feefineactions',
+      },
       shouldRefresh: (resource, action, refresh) => {
         const { path } = action.meta;
 
