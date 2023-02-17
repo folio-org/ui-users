@@ -31,7 +31,7 @@ describe('Render ProxyItem component', () => {
     expect(screen.getAllByText('ui-users.proxy.relationshipStatus')).toBeTruthy();
     expect(screen.getByText('ui-users.expirationDate')).toBeInTheDocument();
 
-    // we want to see the expiration date
+    // expiration date should match record.proxy
     const expirationDate = screen.getByTestId('expirationDate');
     expect(within(expirationDate).queryByText('11/23/2021')).toBeTruthy();
   });
@@ -58,11 +58,12 @@ describe('Render ProxyItem component', () => {
     expect(screen.getAllByText('ui-users.proxy.relationshipStatus')).toBeTruthy();
     expect(screen.getByText('ui-users.expirationDate')).toBeInTheDocument();
 
+    // expiration data should be empty
     const expirationDate = screen.getByTestId('expirationDate');
     expect(within(expirationDate).queryByText('stripes-components.noValue.noValueSet')).toBeTruthy();
   });
 
-  it('without proxy data', () => {
+  it('without proxy data shows an error', () => {
     const props = {
       record: {}
     };
