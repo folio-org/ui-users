@@ -67,6 +67,7 @@ export const MAX_RECORDS = '10000';
 export const refundClaimReturned = {
   PAYMENT_STATUS: 'Suspended claim returned',
   LOST_ITEM_FEE: 'Lost item fee',
+  LOST_ITEM_FEE_ACTUAL_COST: 'Lost item fee (actual cost)',
   LOST_ITEM_PROCESSING_FEE: 'Lost item processing fee',
   TRANSFERRED_ACTION: 'Transferred',
   PAID_ACTION: 'Paid',
@@ -94,6 +95,8 @@ export const refundStatuses = {
   RefundedFully: 'Refunded fully',
   RefundedPartially: 'Refunded partially',
 };
+
+export const cancelledStatus = 'Cancelled as error';
 
 export const outstandingStatus = 'Outstanding';
 
@@ -305,3 +308,7 @@ export const financialTransactionsMainReportColumns = [
 export const SHARED_OWNER = 'Shared';
 
 export const MIN_ALLOWED_DATE = '1900-01-01';
+
+export const STATUS_CODES = {
+  unprocessableEntity: 422,
+};

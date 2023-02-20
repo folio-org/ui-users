@@ -21,6 +21,7 @@ class LoanActionDialog extends React.Component {
     loanAction: PropTypes.string.isRequired,
     modalLabel: PropTypes.object.isRequired,
     toggleButton: PropTypes.func,
+    isInProgress: PropTypes.bool,
     validateAction: PropTypes.func,
     itemRequestCount: PropTypes.number.isRequired,
   };
@@ -62,8 +63,8 @@ class LoanActionDialog extends React.Component {
     );
 
     const errorModal =
-      this.state?.errorMessage === NO_FEE_FINE_OWNER_FOUND_MESSAGE
-        ? <ErrorModal
+      this.state?.errorMessage === NO_FEE_FINE_OWNER_FOUND_MESSAGE ?
+        <ErrorModal
           label={<FormattedMessage id="ui-users.feefines.errors.notBilledTitle" />}
           open={!!this.state.errorMessage}
           message={informativeErrorMessage}

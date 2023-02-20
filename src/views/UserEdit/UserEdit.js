@@ -217,8 +217,8 @@ class UserEdit extends React.Component {
     const { proxies, sponsors, permissions, servicePoints, preferredServicePoint } = user;
 
     if (stripes.hasPerm('proxiesfor.item.put,proxiesfor.item.post')) {
-      if (proxies) updateProxies(proxies);
-      if (sponsors) updateSponsors(sponsors);
+      updateProxies(proxies || []);
+      updateSponsors(sponsors || []);
     }
 
     if (permissions) {
@@ -292,6 +292,7 @@ class UserEdit extends React.Component {
       // Create a new permissions user record first
       await permUserMutator.POST({ userId }).then(record => {
         record.permissions = permissionNames;
+        permUserId.replace(record.id);
         permissionsMutator
           .PUT(record)
           .catch((e) => showErrorCallout(e, this.context.sendCallout));

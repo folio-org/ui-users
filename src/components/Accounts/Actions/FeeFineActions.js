@@ -47,6 +47,9 @@ class Actions extends React.Component {
       type: 'okapi',
       records: 'feefineactions',
       path: `feefineactions?query=(userId==%{user.id})&limit=${MAX_RECORDS}`,
+      POST: {
+        path: 'feefineactions',
+      },
       shouldRefresh: (resource, action, refresh) => {
         const { path } = action.meta;
 
@@ -629,7 +632,7 @@ class Actions extends React.Component {
 
     const account = this.props.accounts[0] || {};
     const feeFineActions = _.get(resources, ['feefineactions', 'records'], []);
-    const defaultServicePointId = curServicePoint.id;
+    const defaultServicePointId = curServicePoint?.id;
     const servicePointsIds = _.get(resources, ['curUserServicePoint', 'records', 0, 'servicePointsIds'], []);
     const payments = _.get(resources, ['payments', 'records'], []);
     const refunds = _.get(resources, ['refunds', 'records'], []);
@@ -749,7 +752,6 @@ class Actions extends React.Component {
                 commentRequired={settings[m.comment]}
                 form={m.form ? m.form : `${m.action}-modal`}
                 onClose={this.onCloseActionModal}
-                defaultServicePointId={defaultServicePointId}
                 servicePointsIds={servicePointsIds}
                 balance={parseFloat(this.props.balance).toFixed(2)}
                 accounts={(m.accounts) ? m.accounts : ((m.item) ? this.props.accounts : accounts)}

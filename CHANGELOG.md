@@ -1,6 +1,37 @@
 # Change history for ui-users
 
-## 8.2.0 IN PROGRESS
+## 9.0.0 IN PROGRESS
+* Implement modal windows for BILL ACTUAL COST and DO NOT BILL. Refs UIU-2714.
+* create Jest/RTL test for UserDetail.js. Refs UIU-2421
+* Fix problem with displaying suspended claim returned fees/fines. Refs UIU-2726.
+* Adjust permissions in order to see the link to open request queue. Fixes UIU-2661.
+* Fix systems error when attempting to create a new fee/fine if logged in user isn't logged into a service point. Refs UIU-2728.
+* Disable 'Claimed return' button after click to prevent multiple submissions. Refs UIU-2732.
+* Cover Actual cost functionality by jest/RTL tests. Refs UIU-2727.
+* Fix problem with Fee/Fine list loading. Refs UIU-2735.
+* Refactor code for disable 'Declare lost' button after click to prevent multiple submissions. Refs UIU-2736.
+* Implement searching for "Lost items requiring actual cost" page. Refs UIU-1866.
+* Implement "Bill actual cost" functionality. Refs UIU-1863.
+* Add new interface version to "request-storage". Refs UIU-2749.
+* Create/Edit Patron Block: Move Save & close button to the footer pane. Refs UIU-1698.
+* In Settings > Users > Patron Blocks > Conditions, mark "Message to be displayed" as required. Refs UIU-2487.
+* Enable dependabot. Refs UIU-2747, FOLIO-3664.
+* Suppress delete of users stored in a configuration entry. Refs UIU-2738.
+* Remove BigTest infrastructure including tests, deps, config. Refs UIU-2745.
+* Add support for `request-storage` version `5.0` for `<UserRequests>`. Refs UIU-2765.
+* Implement "Do not bill actual cost" functionality. Refs UIU-2705.
+* *BREAKING* Upgrade to `@folio/stripes` `v8`. Refs UIU-2761.
+* *BREAKING* Upgrade `react-redux` to `v8`. Refs UIU-2775.
+* Create Jest/RTL test for UserDetailFullscreen.js. Refs UIU-2429.
+* Add support for checkbox custom field filter. Fixes UIU-2759.
+* Use `updateUser` from `@folio/stripes-core` to update service-point data. Refs UIU-2788.
+* Show correct service points when navigating among users. Refs UIU-2790.
+* Make unavailable "Refund" option for cancelled fee/fine that was already refunded. Refs UIU-2700.
+* Fix problem with additional information comment that can't be added after a page reload. Refs UIU-2794.
+* Allow proxy/sponsor lists to be emptied completely. Refs UIU-2804.
+
+## [8.2.0](https://github.com/folio-org/ui-users/tree/v8.2.0) (2022-10-24)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v8.2.0)
 
 * Spread out the fields on the new Fee/Fine modal. Fixes UIU-2620.
 * Accurately count open-loans when there are > 1000. Refs UIU-2631.
@@ -19,8 +50,19 @@
 * Fix issue with Qindex select automatically triggering the search on change. Refs UIU-2665.
 * create Jest/RTL test for NoteEditPage.js. Refs UIU-2424
 * Clear Fee/Fine Type error message after changing owner. Refs UIU-2670.
+* Bump `users` interface to version `16.0`. Refs UIU-2648.
+* Update `permUserId` before updating permissions. Fixes UIU-2672.
 * Fix broken link to item in export fees fines report. Refs UIU-2540.
 * Make visible loan history for deleted users. UIU-2659.
+* Leverage `yarn.lock`. UIU-2688.
+* List of items for lost items requiring actual cost. Refs UIU-1382.
+* Lost items requiring ACTUAL COST: Implement additional information in 'Instance' column. Refs UIU-1871.
+* Lost items requiring ACTUAL COST: Implement additional information in 'Patron' column. Refs UIU-1870.
+* Add permissions for lost items page. Refs UIU-2690.
+* Fix sorting by "Patron" column on the "Lost items requiring actual cost" page. Refs UIU-2691.
+* A long Instance title climbs out of popover boundaries on the "Lost items requiring actual cost" page. Refs UIU-2693.
+* Fix validation regression on user form. Fixes UIU-2696.
+* Remove password validation from `<UserForm>`. Fixes UIU-2697.
 
 ## [8.1.0](https://github.com/folio-org/ui-users/tree/v8.1.0) (2022-06-27)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.0.0...v8.1.0)
@@ -257,6 +299,9 @@
 * Create Jest/RTL test for `accountFunctions`. Refs UIU-2334.
 * Create Jest/RTL test for `loanActionMap`. Refs UIU-2333.
 * Create Jest/RTL test for `OpenLoansControl`. Refs UIU-2347.
+* Create Jest/RTL test for `CommentRequiredForm`. Refs UIU-2381.
+* Create Jest/RTL test for `PatronBlockForm`. Refs UIU-2353.
+* Create Jest/RTL test for `PatronBlockLayer`. Refs UIU-2361.
 * Create Jest/RTL test for `withClaimReturned`. Refs UIU-2352.
 * Create Jest/RTL test for `navigationHandlers`. Refs UIU-2369.
 * Create Jest/RTL test for `ItemInfo`. Refs UIU-2363.

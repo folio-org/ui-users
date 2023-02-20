@@ -1,0 +1,4 @@
+.breakLongText {
+  word-break: normal;
+  overflow-wrap: anywhere;
+}

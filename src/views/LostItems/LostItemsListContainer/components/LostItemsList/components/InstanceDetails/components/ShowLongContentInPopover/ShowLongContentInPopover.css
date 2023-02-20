@@ -1,0 +1,4 @@
+.longContentInPopover {
+  word-break: normal;
+  overflow-wrap: anywhere;
+}

@@ -1,6 +1,7 @@
 import account from 'fixtures/account';
 
-import { count,
+import {
+  count,
   calculateSelectedAmount,
   calculateRemainingAmount,
   loadServicePoints,
@@ -8,7 +9,12 @@ import { count,
   calculateTotalPaymentAmount,
   calculateOwedFeeFines,
   isCancelAllowed,
-  deleteOptionalActionFields } from './accountFunctions';
+  deleteOptionalActionFields,
+} from './accountFunctions';
+import {
+  cancelledStatus,
+  paymentStatusesAllowedToRefund,
+} from '../../constants';
 
 
 const tempArray = [{
@@ -87,10 +93,71 @@ describe('Account Functions', () => {
     expect(ownerId1).toBe('a152c90d-e94d-4784-ab4f-4208a0672673');
     expect(ownerId2).toBe('a152c90d-e94d-4784-ab4f-4208a0672673');
   });
-  it('If accountRefundInfo works', async () => {
-    const data = accountRefundInfo(account);
-    expect(data.paidAmount).toBe(90);
+
+  describe('accountRefundInfo', () => {
+    const userAccount = {
+      id: 'id',
+      amount: 100,
+      remaining: 20,
+      paymentStatus: {
+        name: '',
+      },
+    };
+
+    describe('when "feeFineActions" is empty', () => {
+      it('should return correct fee/fine information', () => {
+        const expectedResult = {
+          isCanceledAfterRefund: false,
+          hasBeenPaid: false,
+          paidAmount: 80,
+        };
+        const result = accountRefundInfo(userAccount);
+
+        expect(result).toEqual(expectedResult);
+      });
+    });
+
+    describe('when "feeFineActions" is not empty', () => {
+      it('should return correct fee/fine information', () => {
+        const expectedResult = {
+          isCanceledAfterRefund: false,
+          hasBeenPaid: true,
+          paidAmount: 80,
+        };
+        const feeFineActions = [{
+          accountId: userAccount.id,
+          typeAction: paymentStatusesAllowedToRefund[0],
+        }];
+        const result = accountRefundInfo(userAccount, feeFineActions);
+
+        expect(result).toEqual(expectedResult);
+      });
+    });
+
+    describe('when remaining amount equals 0 and fee/fine was cancelled', () => {
+      it('should return correct fee/fine information', () => {
+        const expectedResult = {
+          isCanceledAfterRefund: true,
+          hasBeenPaid: true,
+          paidAmount: 100,
+        };
+        const feeFineActions = [{
+          accountId: userAccount.id,
+          typeAction: paymentStatusesAllowedToRefund[0],
+        }];
+        const result = accountRefundInfo({
+          ...userAccount,
+          remaining: 0,
+          paymentStatus: {
+            name: cancelledStatus,
+          },
+        }, feeFineActions);
+
+        expect(result).toEqual(expectedResult);
+      });
+    });
   });
+
   it('If calculateTotalPaymentAmount works', async () => {
     const data = calculateTotalPaymentAmount([account]);
     expect(data).toBe(0);
