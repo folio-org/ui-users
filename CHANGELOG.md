@@ -1,6 +1,8 @@
 # Change history for ui-users
 
-## 9.0.0 IN PROGRESS
+## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v9.0.0)
+
 * Implement modal windows for BILL ACTUAL COST and DO NOT BILL. Refs UIU-2714.
 * create Jest/RTL test for UserDetail.js. Refs UIU-2421
 * Fix problem with displaying suspended claim returned fees/fines. Refs UIU-2726.
