@@ -1,7 +1,7 @@
 import { screen } from '@testing-library/dom';
 import renderWithRouter from 'helpers/renderWithRouter';
 
-import { fireEvent } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import BlockTemplateDetails from './BlockTemplateDetails';
 
 jest.unmock('@folio/stripes/components');
@@ -40,7 +40,7 @@ describe('Render BlockTemplateDetails component with', () => {
 
   it('Expand Button for template information', () => {
     renderBlockTemplateDetails(props);
-    fireEvent.click(document.querySelector('[id="accordion-toggle-button-templateInformation"]'));
+    userEvent.click(document.querySelector('[id="accordion-toggle-button-templateInformation"]'));
     expect(renderBlockTemplateDetails(props)).toBeTruthy();
   });
 
