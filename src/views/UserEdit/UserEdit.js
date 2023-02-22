@@ -218,8 +218,8 @@ class UserEdit extends React.Component {
     const { proxies, sponsors, permissions, servicePoints, preferredServicePoint } = user;
 
     if (stripes.hasPerm('proxiesfor.item.put,proxiesfor.item.post')) {
-      if (proxies) updateProxies(proxies);
-      if (sponsors) updateSponsors(sponsors);
+      updateProxies(proxies || []);
+      updateSponsors(sponsors || []);
     }
 
     if (permissions) {
