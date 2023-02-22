@@ -1,6 +1,8 @@
 # Change history for ui-users
 
-## 9.0.0 IN PROGRESS
+## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v9.0.0)
+
 * Implement modal windows for BILL ACTUAL COST and DO NOT BILL. Refs UIU-2714.
 * create Jest/RTL test for UserDetail.js. Refs UIU-2421
 * Fix problem with displaying suspended claim returned fees/fines. Refs UIU-2726.
@@ -29,6 +31,7 @@
 * Make unavailable "Refund" option for cancelled fee/fine that was already refunded. Refs UIU-2700.
 * Fix problem with additional information comment that can't be added after a page reload. Refs UIU-2794.
 * Allow proxy/sponsor lists to be emptied completely. Refs UIU-2804.
+* Show an error if the proxy record is corrupt, instead of an NPE. Refs UIU-2803.
 
 ## [8.2.0](https://github.com/folio-org/ui-users/tree/v8.2.0) (2022-10-24)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v8.2.0)
