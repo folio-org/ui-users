@@ -71,7 +71,7 @@ const PermissionsAccordion = (props) => {
    * be removed.
    *
    *
-   * See openPermissionsModal for a detailed explanation.
+   * See openPermissionModal for a detailed explanation.
    */
   const confirmEdit = () => {
     setConfirmEditModalOpen(false);
@@ -84,7 +84,7 @@ const PermissionsAccordion = (props) => {
    * to cancel editing of permissions since it would result in the removal of
    * permissions with `visible: false`.
    *
-   * See openPermissionsModal for a detailed explanation.
+   * See openPermissionModal for a detailed explanation.
    */
   const cancelEdit = () => {
     setConfirmEditModalOpen(false);
