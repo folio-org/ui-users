@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import user from 'fixtures/okapiCurrentUser';
 
 import renderWithRouter from 'helpers/renderWithRouter';
@@ -8,7 +8,7 @@ jest.unmock('@folio/stripes/components');
 
 const renderProxyItem = (props) => renderWithRouter(<ProxyItem {...props} />);
 describe('Render ProxyItem component', () => {
-  it('When Proxies are given with expiration date', () => {
+  it('with expiration date', () => {
     const props = {
       record: {
         proxy : {
@@ -26,11 +26,17 @@ describe('Render ProxyItem component', () => {
       }
     };
     renderProxyItem(props);
+
     expect(screen.getAllByText('ui-users.proxy.notificationsTo')).toBeTruthy();
     expect(screen.getAllByText('ui-users.proxy.relationshipStatus')).toBeTruthy();
     expect(screen.getByText('ui-users.expirationDate')).toBeInTheDocument();
+
+    // expiration date should match record.proxy
+    const expirationDate = screen.getByTestId('expirationDate');
+    expect(within(expirationDate).queryByText('11/23/2021')).toBeTruthy();
   });
-  it('When Proxies are given without expiration date', () => {
+
+  it('without expiration date', () => {
     const props = {
       record: {
         proxy : {
@@ -47,6 +53,22 @@ describe('Render ProxyItem component', () => {
       }
     };
     renderProxyItem(props);
-    expect(screen.getAllByText('ui-users.proxy.requestForSponsor')).toBeTruthy();
+
+    expect(screen.getAllByText('ui-users.proxy.notificationsTo')).toBeTruthy();
+    expect(screen.getAllByText('ui-users.proxy.relationshipStatus')).toBeTruthy();
+    expect(screen.getByText('ui-users.expirationDate')).toBeInTheDocument();
+
+    // expiration data should be empty
+    const expirationDate = screen.getByTestId('expirationDate');
+    expect(within(expirationDate).queryByText('stripes-components.noValue.noValueSet')).toBeTruthy();
+  });
+
+  it('without proxy data shows an error', () => {
+    const props = {
+      record: {}
+    };
+    renderProxyItem(props);
+
+    expect(screen.getByText('ui-users.errors.proxies.invalidUserLabel')).toBeInTheDocument();
   });
 });

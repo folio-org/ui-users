@@ -10,8 +10,7 @@ import withServicePoints from './withServicePoints';
 jest.mock('@folio/stripes/core', () => {
   return {
     ...jest.requireActual('@folio/stripes/core'),
-    setServicePoints: () => jest.fn(),
-    setCurServicePoint: () => jest.fn(),
+    updateUser: () => jest.fn(),
     HandlerManager: () => <div>HandlerManagerMock</div>
   };
 });
@@ -48,51 +47,48 @@ const props = {
   resources,
   stripes: {
     hasPerm: jest.fn().mockReturnValue(true),
+    hasInterface: jest.fn().mockReturnValue(true),
     user: {
       user: {
         id: '1'
       }
-    }
+    },
+    clone: jest.fn()
   },
 };
 
 const MockComponent = ({ getUserServicePoints, getPreferredServicePoint, updateServicePoints }) => {
   useEffect(() => {
-    const isMounted = true;
-    if (isMounted) {
-      getUserServicePoints();
-      getPreferredServicePoint();
-      updateServicePoints(okapiCurrentUser.servicePoints, '-');
-    }
-  });
+    getUserServicePoints();
+    getPreferredServicePoint();
+    updateServicePoints(okapiCurrentUser.servicePoints, '-');
+  }, [getUserServicePoints, getPreferredServicePoint, updateServicePoints]);
 
   return (
-    <>
-      <div data-testid="userService">Test Mock Component</div>
-    </>
+    <div data-testid="userService">Test Mock Component</div>
   );
 };
 
 MockComponent.propTypes = {
   getUserServicePoints: PropTypes.func,
   getPreferredServicePoint: PropTypes.func,
-  updateServicePoints: PropTypes.bool,
+  updateServicePoints: PropTypes.func,
 };
 
 const WrappedComponent = withServicePoints(MockComponent);
-const renderwithServicePoints = () => render(<WrappedComponent {...props} />);
+const renderWithServicePoints = () => render(<WrappedComponent {...props} />);
 
 describe('withDeclareLost', () => {
   test('render wrapped component', () => {
-    renderwithServicePoints();
+    renderWithServicePoints();
     expect(screen.getByText('Test Mock Component')).toBeInTheDocument();
   });
   test('Check if update is called', () => {
-    renderwithServicePoints();
+    renderWithServicePoints();
     expect(mockPut).toHaveBeenCalled();
   });
   test('Check if service points are called', () => {
-    renderwithServicePoints();
+    renderWithServicePoints();
     expect(mockGet).toHaveBeenCalled();
   });
 });

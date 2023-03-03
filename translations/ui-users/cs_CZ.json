@@ -755,7 +755,7 @@
     "manualBlockTemplate.deleteTemplateMessage": "{name} bude odstraněno ze šablon bloku čtenáře.",
     "manualBlockTemplate.untitledTemplate": "Šablona bloku čtenáře bez názvu",
     "field.disabled": "Toto pole je zakázáno",
-    "loan404": "Vyžádanou výpůjčku nelze získat zpět.",
+    "loan404": "Vyžádanou výpůjčku nelze načíst.",
     "actions": "Akce",
     "showColumns": "Zobrazit sloupce",
     "permission.loans.change-due-date": "Uživatelé: Změna data splatnosti uživatelských výpůjček",

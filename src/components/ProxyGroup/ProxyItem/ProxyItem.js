@@ -3,12 +3,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedTime, FormattedDate } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { Row, Col, KeyValue, LayoutHeader } from '@folio/stripes/components';
+import { Row, Col, KeyValue, LayoutHeader, NoValue } from '@folio/stripes/components';
 
 import { getFullName } from '../../util';
 import css from './ProxyItem.css';
 
 const ProxyItem = ({ record }) => {
+  if (!record.user) {
+    return <FormattedMessage id="ui-users.errors.proxies.invalidUserLabel" />;
+  }
+
   const creationDateTime = <FormattedTime
     value={record.proxy.metadata.createdDate}
     day="numeric"
@@ -34,7 +38,7 @@ const ProxyItem = ({ record }) => {
   );
 
   const expirationDate = (record.proxy && record.proxy.expirationDate) ?
-    <FormattedDate value={record.proxy.expirationDate} /> : '-';
+    <FormattedDate value={record.proxy.expirationDate} /> : <NoValue />;
 
   return (
     <div className={css.item}>
@@ -45,8 +49,9 @@ const ProxyItem = ({ record }) => {
             <Row>
               <Col xs={12}>
                 <KeyValue
+                  data-testid="status"
                   label={<FormattedMessage id="ui-users.proxy.relationshipStatus" />}
-                  value={_.get(record, ['proxy', 'status'], '-')}
+                  value={_.get(record, ['proxy', 'status'], <NoValue />)}
                 />
               </Col>
             </Row>
@@ -55,6 +60,7 @@ const ProxyItem = ({ record }) => {
             <Row>
               <Col xs={12}>
                 <KeyValue
+                  data-testid="expirationDate"
                   label={<FormattedMessage id="ui-users.expirationDate" />}
                   value={expirationDate}
                 />
@@ -67,8 +73,9 @@ const ProxyItem = ({ record }) => {
             <Row>
               <Col xs={12}>
                 <KeyValue
+                  data-testid="requestForSponsor"
                   label={<FormattedMessage id="ui-users.proxy.requestForSponsor" />}
-                  value={_.get(record, ['proxy', 'requestForSponsor'], '-')}
+                  value={_.get(record, ['proxy', 'requestForSponsor'], <NoValue />)}
                 />
               </Col>
             </Row>
@@ -77,8 +84,9 @@ const ProxyItem = ({ record }) => {
             <Row>
               <Col xs={12}>
                 <KeyValue
+                  data-testid="notificationsTo"
                   label={<FormattedMessage id="ui-users.proxy.notificationsTo" />}
-                  value={_.get(record, ['proxy', 'notificationsTo'], '-')}
+                  value={_.get(record, ['proxy', 'notificationsTo'], <NoValue />)}
                 />
               </Col>
             </Row>
@@ -89,8 +97,9 @@ const ProxyItem = ({ record }) => {
             <Row>
               <Col xs={12}>
                 <KeyValue
+                  data-testid="accrueTo"
                   label={<FormattedMessage id="ui-users.proxy.accrueTo" />}
-                  value={_.get(record, ['proxy', 'accrueTo'], '-')}
+                  value={_.get(record, ['proxy', 'accrueTo'], <NoValue />)}
                 />
               </Col>
             </Row>
