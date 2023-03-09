@@ -19,18 +19,50 @@ import {
 import {
   ACTUAL_COST_RECORD_FIELD_NAME,
   ACTUAL_COST_RECORD_FIELD_PATH,
-  ITEM_STATUSES_TRANSLATIONS_KEYS,
+  ITEM_LOSS_TYPES_TRANSLATIONS_KEYS,
+  LOST_ITEM_STATUSES_TRANSLATIONS_KEYS,
+  LOST_ITEM_STATUSES,
 } from '../../../constants';
 
-const statusFilter = [
+const filtersList = [
   {
-    label: ITEM_STATUSES_TRANSLATIONS_KEYS[itemStatuses.AGED_TO_LOST],
-    value: itemStatuses.AGED_TO_LOST,
+    filters: [
+      {
+        label: ITEM_LOSS_TYPES_TRANSLATIONS_KEYS[itemStatuses.AGED_TO_LOST],
+        value: itemStatuses.AGED_TO_LOST,
+      },
+      {
+        label: ITEM_LOSS_TYPES_TRANSLATIONS_KEYS[itemStatuses.DECLARED_LOST],
+        value: itemStatuses.DECLARED_LOST,
+      },
+    ],
+    id: 'lossTypeFilterAccordion',
+    label: <FormattedMessage id="ui-users.lostItems.list.filters.lossType" />,
+    filterPath: ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.LOSS_TYPE],
   },
   {
-    label: ITEM_STATUSES_TRANSLATIONS_KEYS[itemStatuses.DECLARED_LOST],
-    value: itemStatuses.DECLARED_LOST,
-  },
+    filters: [
+      {
+        label: LOST_ITEM_STATUSES_TRANSLATIONS_KEYS[LOST_ITEM_STATUSES.OPEN],
+        value: LOST_ITEM_STATUSES.OPEN,
+      },
+      {
+        label: LOST_ITEM_STATUSES_TRANSLATIONS_KEYS[LOST_ITEM_STATUSES.BILLED],
+        value: LOST_ITEM_STATUSES.BILLED,
+      },
+      {
+        label: LOST_ITEM_STATUSES_TRANSLATIONS_KEYS[LOST_ITEM_STATUSES.CANCELLED],
+        value: LOST_ITEM_STATUSES.CANCELLED,
+      },
+      {
+        label: LOST_ITEM_STATUSES_TRANSLATIONS_KEYS[LOST_ITEM_STATUSES.EXPIRED],
+        value: LOST_ITEM_STATUSES.EXPIRED,
+      },
+    ],
+    id: 'statusFilterAccordion',
+    label: <FormattedMessage id="ui-users.lostItems.list.filters.status" />,
+    filterPath: ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.STATUS],
+  }
 ];
 
 class Filters extends React.Component {
@@ -80,28 +112,35 @@ class Filters extends React.Component {
         clearGroup,
       },
     } = this.props;
-    const {
-      lossType = [],
-    } = activeFilters;
 
     return (
       <AccordionSet>
-        <Accordion
-          id="lossTypeFilterAccordion"
-          data-testid="lossTypeFilterAccordion"
-          displayClearButton
-          header={FilterAccordionHeader}
-          label={<FormattedMessage id="ui-users.lostItems.list.filters.lossType" />}
-          separator={false}
-          onClearFilter={() => clearGroup(ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.LOSS_TYPE])}
-        >
-          <CheckboxFilter
-            dataOptions={this.getStaticFilterValues(statusFilter)}
-            name={ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.LOSS_TYPE]}
-            selectedValues={lossType}
-            onChange={this.handleFilterChange}
-          />
-        </Accordion>
+        {
+          filtersList.map(({
+            id,
+            label,
+            filterPath,
+            filters,
+          }) => (
+            <Accordion
+              key={id}
+              id={id}
+              data-testid={id}
+              displayClearButton
+              header={FilterAccordionHeader}
+              label={label}
+              separator={false}
+              onClearFilter={() => clearGroup(filterPath)}
+            >
+              <CheckboxFilter
+                dataOptions={this.getStaticFilterValues(filters)}
+                name={filterPath}
+                selectedValues={activeFilters[filterPath]}
+                onChange={this.handleFilterChange}
+              />
+            </Accordion>
+          ))
+        }
       </AccordionSet>
     );
   }
