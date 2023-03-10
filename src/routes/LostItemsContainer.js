@@ -28,6 +28,11 @@ const filterConfig = [
     cql: ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.LOSS_TYPE],
     values: [],
   },
+  {
+    name: ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.STATUS],
+    cql: ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.STATUS],
+    values: [],
+  },
 ];
 
 function buildQuery(queryParams, pathComponents, resourceData, logger, props) {
@@ -35,21 +40,15 @@ function buildQuery(queryParams, pathComponents, resourceData, logger, props) {
   const mapFields = index => `${index}=="*%{query.query}*"`;
   const getCql = makeQueryFunction(
     'cql.allRecords=1',
-    `(${SEARCH_FIELDS.map(mapFields).join(' or ')})`,
+    SEARCH_FIELDS.map(mapFields).join(' or '),
     {
       [ACTUAL_COST_RECORD_FIELD_NAME.USER]: `${ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.USER_LAST_NAME]} ${ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.USER_FIRST_NAME]}`,
     },
     [...filterConfig, ...customFilterConfig],
     2,
   );
-  let cql = getCql(queryParams, pathComponents, resourceData, logger, props);
-  const statusQueryParam = 'status=="Open"';
 
-  if (cql) {
-    cql = `${statusQueryParam} and ${cql}`;
-  }
-
-  return cql;
+  return getCql(queryParams, pathComponents, resourceData, logger, props);
 }
 
 class LostItemsContainer extends React.Component {

@@ -29,6 +29,7 @@ export const ACTUAL_COST_RECORD_FIELD_NAME = {
   ITEM: 'item',
   ITEM_ID: 'itemId',
   HOLDINGS_RECORD_ID: 'holdingsRecordId',
+  STATUS: 'status',
 };
 
 export const ACTUAL_COST_RECORD_FIELD_PATH = {
@@ -52,6 +53,14 @@ export const ACTUAL_COST_RECORD_FIELD_PATH = {
   [ACTUAL_COST_RECORD_FIELD_NAME.ITEM_ID]: 'item.id',
   [ACTUAL_COST_RECORD_FIELD_NAME.ITEM]: 'item',
   [ACTUAL_COST_RECORD_FIELD_NAME.HOLDINGS_RECORD_ID]: 'item.holdingsRecordId',
+  [ACTUAL_COST_RECORD_FIELD_NAME.STATUS]: 'status',
+};
+
+export const LOST_ITEM_STATUSES = {
+  OPEN: 'Open',
+  BILLED: 'Billed',
+  CANCELLED: 'Cancelled',
+  EXPIRED: 'Expired',
 };
 
 export const SEARCH_FIELDS = [
@@ -60,9 +69,16 @@ export const SEARCH_FIELDS = [
   ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.USER_LAST_NAME],
 ];
 
-export const ITEM_STATUSES_TRANSLATIONS_KEYS = {
+export const ITEM_LOSS_TYPES_TRANSLATIONS_KEYS = {
   [itemStatuses.AGED_TO_LOST]: 'ui-users.lostItems.list.filters.lossType.agedToLost',
   [itemStatuses.DECLARED_LOST]: 'ui-users.lostItems.list.filters.lossType.declaredLost',
+};
+
+export const LOST_ITEM_STATUSES_TRANSLATIONS_KEYS = {
+  [LOST_ITEM_STATUSES.OPEN]: 'ui-users.lostItems.list.filters.status.open',
+  [LOST_ITEM_STATUSES.BILLED]: 'ui-users.lostItems.list.filters.status.billed',
+  [LOST_ITEM_STATUSES.CANCELLED]: 'ui-users.lostItems.list.filters.status.cancelled',
+  [LOST_ITEM_STATUSES.EXPIRED]: 'ui-users.lostItems.list.filters.status.expired',
 };
 
 export const ACTUAL_COST_TYPES = {
