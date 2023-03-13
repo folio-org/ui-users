@@ -2,6 +2,7 @@
 
 ## 9.1.0 IN PROGRESS
 
+* Add STATUS FILTER to LOST ITEMS REQUIRING ACTUAL COST processing page. Refs UIU-2748.
 * Update Jest from v26 to v29. Refs UIU-2820.
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)

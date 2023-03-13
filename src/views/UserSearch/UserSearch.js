@@ -45,6 +45,12 @@ import CashDrawerReconciliationReportPDF from '../../components/data/reports/cas
 import CashDrawerReconciliationReportCSV from '../../components/data/reports/cashDrawerReconciliationReportCSV';
 import FinancialTransactionsReport from '../../components/data/reports/FinancialTransactionsReport';
 import Filters from './Filters';
+import {
+  ACTUAL_COST_RECORD_FIELD_NAME,
+  ACTUAL_COST_RECORD_FIELD_PATH,
+  LOST_ITEM_STATUSES,
+} from '../LostItems/constants';
+
 import css from './UserSearch.css';
 
 const VISIBLE_COLUMNS_STORAGE_KEY = 'users-visible-columns';
@@ -288,7 +294,10 @@ class UserSearch extends React.Component {
           <IfPermission perm="ui-users.lost-items.requiring-actual-cost">
             <Button
               id="requiring-actual-cost"
-              to="/users/lost-items"
+              to={{
+                pathname: '/users/lost-items',
+                search: `?filters=${ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.STATUS]}.${LOST_ITEM_STATUSES.OPEN}`
+              }}
               buttonStyle="dropdownItem"
             >
               <Icon icon="edit">
