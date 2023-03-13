@@ -1,57 +1,147 @@
-import React from 'react';
-import { render } from '@testing-library/react';
-import { FormattedMessage } from 'react-intl';
+import {
+  cleanup,
+  render,
+} from '@testing-library/react';
+import {
+  FormattedMessage,
+  FormattedDate,
+  FormattedTime,
+} from 'react-intl';
 
 import RecordStatus, {
   getBilledAmount,
 } from './RecordStatus';
+import { getRecordStatus } from '../../util';
+import {
+  LOST_ITEM_STATUS_TRANSLATIONS_KEYS,
+  LOST_ITEM_STATUSES,
+} from '../../../../../constants';
 
 import '../../../../../../../../test/jest/__mock__';
 
+jest.mock('../../util', () => ({
+  getRecordStatus: jest.fn(),
+}));
+
+const labelIds = {
+  open: LOST_ITEM_STATUS_TRANSLATIONS_KEYS[LOST_ITEM_STATUSES.OPEN],
+  billed: LOST_ITEM_STATUS_TRANSLATIONS_KEYS[LOST_ITEM_STATUSES.BILLED],
+  cancelled: LOST_ITEM_STATUS_TRANSLATIONS_KEYS[LOST_ITEM_STATUSES.CANCELLED],
+  expired: LOST_ITEM_STATUS_TRANSLATIONS_KEYS[LOST_ITEM_STATUSES.EXPIRED],
+};
+const initialProps = {
+  actualCostRecord: {
+    id: 'id',
+    status: LOST_ITEM_STATUSES.OPEN,
+    expirationDate: 'expirationDate',
+  },
+  billedRecords: [],
+  cancelledRecords: [],
+};
+
 describe('RecordStatus', () => {
-  describe('RecordStatus component', () => {
-    const messageIds = {
-      billed: 'ui-users.lostItems.recordStatus.billed',
-      notBilled: 'ui-users.lostItems.recordStatus.notBilled',
-    };
+  describe('component', () => {
+    afterEach(cleanup);
 
     describe('when record is billed', () => {
-      const recordId = 'id';
-      const billedRecords = [{ recordId }];
-
+      getRecordStatus.mockReturnValueOnce({
+        isBilled: true,
+      });
       render(
         <RecordStatus
-          isBilled
-          isCancelled={false}
-          billedRecords={billedRecords}
-          recordId={recordId}
+          {...initialProps}
         />
       );
 
       it('should trigger "FormattedMessage" with correct id', () => {
-        expect(FormattedMessage).toHaveBeenCalledWith(expect.objectContaining({
-          id: messageIds.billed,
-        }), {});
+        const expectedProps = {
+          id: labelIds.billed,
+        };
+
+        expect(FormattedMessage).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
       });
     });
 
     describe('when record is cancelled', () => {
-      const recordId = 'id';
-      const billedRecords = [{ id: 'test' }];
-
+      getRecordStatus.mockReturnValueOnce({
+        isCancelled: true,
+      });
       render(
         <RecordStatus
-          isBilled={false}
-          isCancelled
-          billedRecords={billedRecords}
-          recordId={recordId}
+          {...initialProps}
         />
       );
 
       it('should trigger "FormattedMessage" with correct id', () => {
-        expect(FormattedMessage).toHaveBeenCalledWith({
-          id: messageIds.notBilled,
-        }, {});
+        const expectedProps = {
+          id: labelIds.cancelled,
+        };
+
+        expect(FormattedMessage).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
+      });
+    });
+
+    describe('when record is expired', () => {
+      const props = {
+        ...initialProps,
+        actualCostRecord: {
+          ...initialProps.actualCostRecord,
+          status: LOST_ITEM_STATUSES.EXPIRED,
+        },
+      };
+
+      getRecordStatus.mockReturnValueOnce({
+        isBilling: false,
+        isCancelled: false,
+      });
+      render(
+        <RecordStatus
+          {...props}
+        />
+      );
+
+      it('should trigger "FormattedMessage" with correct id', () => {
+        const expectedProps = {
+          id: labelIds.expired,
+        };
+
+        expect(FormattedMessage).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
+      });
+
+      it('should trigger "FormattedDate" with correct value', () => {
+        const expectedProps = {
+          value: initialProps.actualCostRecord.expirationDate,
+        };
+
+        expect(FormattedDate).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
+      });
+
+      it('should trigger "FormattedTime" with correct value', () => {
+        const expectedProps = {
+          value: initialProps.actualCostRecord.expirationDate,
+        };
+
+        expect(FormattedTime).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
+      });
+    });
+
+    describe('when record is open', () => {
+      getRecordStatus.mockReturnValueOnce({
+        isCancelled: false,
+        isBilled: false,
+      });
+      render(
+        <RecordStatus
+          {...initialProps}
+        />
+      );
+
+      it('should trigger "FormattedMessage" with correct id', () => {
+        const expectedProps = {
+          id: labelIds.open,
+        };
+
+        expect(FormattedMessage).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
       });
     });
   });
