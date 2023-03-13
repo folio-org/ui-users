@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 const path = require('path');
 
-const esModules = ['@folio', 'ky'].join('|');
+const esModules = ['@folio', 'ky', 'uuid'].join('|');
 
 module.exports = {
   collectCoverageFrom: [
@@ -17,6 +17,7 @@ module.exports = {
   moduleNameMapper: {
     '^.+\\.(css|png|svg)$': 'identity-obj-proxy',
   },
+  testEnvironment: 'jsdom',
   testMatch: ['**/(lib|src)/**/?(*.)test.{js,jsx}'],
   testPathIgnorePatterns: ['/node_modules/', '/test/bigtest/', '/test/ui-testing/'],
   setupFiles: [

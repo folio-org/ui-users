@@ -54,12 +54,15 @@ jest.mock('react-intl', () => ({
 }));
 
 const initialProps = {
+  billedRecords: [],
+  billRecord: jest.fn(),
+  cancelRecord: jest.fn(),
   contentData: [],
-  totalCount: 10,
-  onNeedMoreData: jest.fn(),
   emptyMessage: 'empty message',
+  onNeedMoreData: jest.fn(),
   onSort: jest.fn(),
   sortOrder: '-',
+  totalCount: 10,
 };
 const testIds = {
   lostItemsList: 'lostItemsList',

@@ -75,38 +75,38 @@ describe('UserForm', () => {
   //   in, or you might have mixed up default and named imports.
   // not sure exactly what the problem is. Maybe we need to mock stripesFinalForm?
   describe.skip('UserForm calls submit handler', () => {
-    const submitHandler = jest.fn();
-    const props = {
-      formData: {
-        patronGroups: [],
-      },
-      initialValues: {
-        id: 'id',
-        creds: {
-          password: 'password',
-        },
-        patronGroup: 'patronGroup',
-        personal: {
-          lastName: 'lastName',
-          preferredContactTypeId: 'preferredContactTypeId',
-          addresses: [
-            { addressType: 'addressType' },
-          ],
-        },
-        preferredServicePoint: 'preferredServicePoint',
-        servicePoints: ['a', 'b'],
-        username: 'username',
-      },
-      onCancel: jest.fn(),
-      onSubmit: jest.fn(),
-      uniquenessValidator: {
-        reset: jest.fn(),
-        GET: jest.fn(),
-      }
-    };
+    // const submitHandler = jest.fn();
+    // const props = {
+    //   formData: {
+    //     patronGroups: [],
+    //   },
+    //   initialValues: {
+    //     id: 'id',
+    //     creds: {
+    //       password: 'password',
+    //     },
+    //     patronGroup: 'patronGroup',
+    //     personal: {
+    //       lastName: 'lastName',
+    //       preferredContactTypeId: 'preferredContactTypeId',
+    //       addresses: [
+    //         { addressType: 'addressType' },
+    //       ],
+    //     },
+    //     preferredServicePoint: 'preferredServicePoint',
+    //     servicePoints: ['a', 'b'],
+    //     username: 'username',
+    //   },
+    //   onCancel: jest.fn(),
+    //   onSubmit: jest.fn(),
+    //   uniquenessValidator: {
+    //     reset: jest.fn(),
+    //     GET: jest.fn(),
+    //   }
+    // };
 
-    renderWithRouter(<UserForm {...props} />);
-    userEvent.click(screen.getByText('ui-users.saveAndClose'));
-    expect(submitHandler).toHaveBeenCalled();
+    // renderWithRouter(<UserForm {...props} />);
+    // userEvent.click(screen.getByText('ui-users.saveAndClose'));
+    // expect(submitHandler).toHaveBeenCalled();
   });
 });
