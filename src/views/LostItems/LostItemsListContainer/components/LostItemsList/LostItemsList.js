@@ -103,7 +103,7 @@ export const basicLostItemsListFormatter = {
   [COLUMNS_NAME.LOSS_TYPE]: (actualCostRecord) => {
     const lossType = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.LOSS_TYPE], DEFAULT_VALUE);
 
-    return <FormattedMessage id={ITEM_LOSS_TYPES_TRANSLATIONS_KEYS[lossType]} />;
+    return lossType && <FormattedMessage id={ITEM_LOSS_TYPES_TRANSLATIONS_KEYS[lossType]} />;
   },
   [COLUMNS_NAME.LOSS_DATE]: (actualCostRecord) => {
     const lossDate = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.LOSS_DATE], DEFAULT_VALUE);

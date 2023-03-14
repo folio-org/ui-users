@@ -117,6 +117,13 @@ class LostItemsContainer extends React.Component {
       logger: PropTypes.object.isRequired,
       hasPerm: PropTypes.func.isRequired,
     }).isRequired,
+    okapi: PropTypes.shape({
+      currentUser: PropTypes.shape({
+        curServicePoint: PropTypes.shape({
+          id: PropTypes.string,
+        }).isRequired,
+      }).isRequired,
+    }).isRequired,
   }
 
   constructor(props) {
@@ -217,7 +224,9 @@ class LostItemsContainer extends React.Component {
         billedRecords={this.state.billedRecords}
         addCancelledRecord={this.addCancelledRecord}
         cancelledRecords={this.state.cancelledRecords}
-        {...this.props}
+        resources={this.props.resources}
+        mutator={this.props.mutator}
+        okapi={this.props.okapi}
       />
     );
   }
