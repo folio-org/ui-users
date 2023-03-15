@@ -13,6 +13,7 @@ import {
   ItemDetailsLink,
   LoanDetailsLink,
   PatronDetailsLink,
+  FeeFineDetailsLink,
 } from './components';
 import {
   ACTUAL_COST_PROP_TYPES,
@@ -66,6 +67,11 @@ const RenderActions = ({
         <PatronDetailsLink actualCostRecord={actualCostRecord} />
         <LoanDetailsLink actualCostRecord={actualCostRecord} />
         <ItemDetailsLink actualCostRecord={actualCostRecord} />
+        <FeeFineDetailsLink
+          actualCostRecord={actualCostRecord}
+          isBilled={isBilled}
+          billedRecords={billedRecords}
+        />
       </DropdownMenu>
     </Dropdown>
   );
