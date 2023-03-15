@@ -114,7 +114,7 @@ class LostItemsListContainer extends React.Component {
       .catch((e) => {
         let message;
 
-        if (e.status === STATUS_CODES.unprocessableEntity) {
+        if (e.status === STATUS_CODES.UNPROCESSABLE_ENTITY) {
           message = <FormattedMessage
             id="ui-users.lostItems.notification.billedBefore"
             values={{ patronName }}
@@ -157,7 +157,7 @@ class LostItemsListContainer extends React.Component {
       .catch((e) => {
         let message;
 
-        if (e.status === STATUS_CODES.unprocessableEntity) {
+        if (e.status === STATUS_CODES.UNPROCESSABLE_ENTITY) {
           message = <FormattedMessage
             id="ui-users.lostItems.notification.billedBefore"
             values={{ patronName }}

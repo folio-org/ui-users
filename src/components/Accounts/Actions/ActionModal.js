@@ -62,7 +62,6 @@ class ActionModal extends React.Component {
     this.state = {
       actionAllowed: false,
       accountRemainingAmount: '0.00',
-      prevValidatedAmount: null,
       prevValidationError: '',
     };
 
@@ -258,8 +257,6 @@ class ActionModal extends React.Component {
 
     const {
       actionAllowed,
-      accountRemainingAmount,
-      prevValidatedAmount,
       prevValidationError,
     } = this.state;
 
@@ -268,10 +265,9 @@ class ActionModal extends React.Component {
 
       this.setState({
         accountRemainingAmount: selectedAmount,
-        prevValidatedAmount: null,
       });
       error = <FormattedMessage id="ui-users.accounts.error.field" />;
-    } else if (value !== prevValidatedAmount && this._isMounted) {
+    } else if (this._isMounted) {
       const response = await this.triggerCheckEndpoint(value, accounts);
       const {
         allowed,
@@ -279,14 +275,12 @@ class ActionModal extends React.Component {
         remainingAmount,
       } = await response.json();
 
-      this.setState({ prevValidatedAmount: value });
-
       if (!_.isUndefined(errorMessage)) {
         this.setState({ prevValidationError: errorMessage });
         error = errorMessage;
       }
 
-      if (actionAllowed !== allowed || accountRemainingAmount !== remainingAmount) {
+      if (actionAllowed !== allowed || remainingAmount) {
         this.setState({
           actionAllowed: allowed,
           accountRemainingAmount: remainingAmount,
