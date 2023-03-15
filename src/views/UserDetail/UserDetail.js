@@ -69,6 +69,7 @@ import ExportFeesFinesReportButton from './components';
 import ErrorPane from '../../components/ErrorPane';
 import ActionMenuEditButton from './components/ActionMenuEditButton';
 import ActionMenuDeleteButton from './components/ActionMenuDeleteButton';
+import LostItemsLink from '../../components/LostItemsLink';
 
 class UserDetail extends React.Component {
   static propTypes = {
@@ -461,6 +462,7 @@ class UserDetail extends React.Component {
             goToEdit={this.goToEdit}
             editButton={this.editButton}
           />
+          <LostItemsLink />
           <IfInterface name="feesfines">
             <ExportFeesFinesReportButton
               feesFinesReportData={feesFinesReportData}

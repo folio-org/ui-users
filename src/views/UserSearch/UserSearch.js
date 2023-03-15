@@ -45,11 +45,7 @@ import CashDrawerReconciliationReportPDF from '../../components/data/reports/cas
 import CashDrawerReconciliationReportCSV from '../../components/data/reports/cashDrawerReconciliationReportCSV';
 import FinancialTransactionsReport from '../../components/data/reports/FinancialTransactionsReport';
 import Filters from './Filters';
-import {
-  ACTUAL_COST_RECORD_FIELD_NAME,
-  ACTUAL_COST_RECORD_FIELD_PATH,
-  LOST_ITEM_STATUSES,
-} from '../LostItems/constants';
+import LostItemsLink from '../../components/LostItemsLink';
 
 import css from './UserSearch.css';
 
@@ -291,20 +287,7 @@ class UserSearch extends React.Component {
               </FormattedMessage>
             </PaneMenu>
           </IfPermission>
-          <IfPermission perm="ui-users.lost-items.requiring-actual-cost">
-            <Button
-              id="requiring-actual-cost"
-              to={{
-                pathname: '/users/lost-items',
-                search: `?filters=${ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.STATUS]}.${LOST_ITEM_STATUSES.OPEN}`
-              }}
-              buttonStyle="dropdownItem"
-            >
-              <Icon icon="edit">
-                <FormattedMessage id="ui-users.actionMenu.lostItems" />
-              </Icon>
-            </Button>
-          </IfPermission>
+          <LostItemsLink />
         </MenuSection>
         <MenuSection
           label={intl.formatMessage({ id: 'ui-users.reports' })}

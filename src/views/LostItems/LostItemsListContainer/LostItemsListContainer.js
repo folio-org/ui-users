@@ -289,7 +289,6 @@ class LostItemsListContainer extends React.Component {
                     </Button>
                     <Filters
                       activeFilters={activeFilters.state}
-                      resources={resources}
                       onChangeHandlers={getFilterHandlers()}
                       resultOffset={resultOffset}
                     />

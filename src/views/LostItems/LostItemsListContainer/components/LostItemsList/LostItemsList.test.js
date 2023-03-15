@@ -6,11 +6,7 @@ import {
 } from '@testing-library/react';
 import { noop } from 'lodash';
 import { MultiColumnList } from '@folio/stripes/components';
-import {
-  FormattedDate,
-  FormattedTime,
-  FormattedMessage,
-} from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import '../../../../../../test/jest/__mock__';
 // eslint-disable-next-line import/no-named-as-default
