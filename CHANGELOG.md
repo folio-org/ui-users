@@ -2,8 +2,9 @@
 
 ## 9.1.0 IN PROGRESS
 
-* Add STATUS FILTER to LOST ITEMS REQUIRING ACTUAL COST processing page. Refs UIU-2748.
+* Add "Status" filter to LOST ITEMS REQUIRING ACTUAL COST processing page. Refs UIU-2748.
 * Fix problem with remaining amount (not shown correct value after filling the payment amount). Refs UIU-2812.
+* Add "Status" column to LOST ITEMS REQUIRING ACTUAL COST processing page. Refs UIU-2772.
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v9.0.0)
