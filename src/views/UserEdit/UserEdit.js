@@ -221,9 +221,7 @@ class UserEdit extends React.Component {
       updateSponsors(sponsors || []);
     }
 
-    if (permissions) {
-      this.updatePermissions(user.id, permissions);
-    }
+    this.updatePermissions(user.id, permissions);
 
     if (servicePoints && stripes.hasPerm('inventory-storage.service-points-users.item.post,inventory-storage.service-points-users.item.put')) {
       updateServicePoints(servicePoints, preferredServicePoint);
@@ -267,7 +265,7 @@ class UserEdit extends React.Component {
     const { perms: permUserRecords } = this.props.resources;
     // the perms parameter is an array of permission objects, but the permissions API
     // wants an array of permission names.
-    const permissionNames = Object.values(perms).map(p => p.permissionName);
+    const permissionNames = Object.values(perms ?? []).map(p => p.permissionName);
 
     // If the user record has never had any associated permissions, a user permissions
     // record may not exist. The PUT operation will fail if that's the case; thus,

@@ -2,6 +2,8 @@
 
 ## 9.1.0 IN PROGRESS
 
+* Add STATUS FILTER to LOST ITEMS REQUIRING ACTUAL COST processing page. Refs UIU-2748.
+* Correctly handle removing all permissions from given user. Fixes UIU-2822.
 * Add "Status" filter to LOST ITEMS REQUIRING ACTUAL COST processing page. Refs UIU-2748.
 * Fix problem with remaining amount (not shown correct value after filling the payment amount). Refs UIU-2812.
 * Add "Status" column to LOST ITEMS REQUIRING ACTUAL COST processing page. Refs UIU-2772.
