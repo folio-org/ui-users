@@ -310,5 +310,5 @@ export const SHARED_OWNER = 'Shared';
 export const MIN_ALLOWED_DATE = '1900-01-01';
 
 export const STATUS_CODES = {
-  unprocessableEntity: 422,
+  UNPROCESSABLE_ENTITY: 422,
 };

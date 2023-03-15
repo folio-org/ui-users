@@ -6,6 +6,7 @@ import Modals from './Modals';
 import '__mock__/stripesCore.mock';
 import '__mock__/stripesSmartComponent.mock';
 
+jest.unmock('react-intl');
 jest.unmock('@folio/stripes/components');
 
 const renderModals = (props) => renderWithRouter(<Modals {...props} />);

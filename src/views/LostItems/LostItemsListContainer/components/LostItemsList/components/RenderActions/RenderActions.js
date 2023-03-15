@@ -14,16 +14,27 @@ import {
   LoanDetailsLink,
   PatronDetailsLink,
 } from './components';
-
-import { ACTUAL_COST_PROP_TYPES } from '../../../../../constants';
+import {
+  ACTUAL_COST_PROP_TYPES,
+  LOST_ITEM_STATUSES,
+} from '../../../../../constants';
+import { getRecordStatus } from '../../util';
 
 const RenderActions = ({
   actualCostRecord,
   setActualCostModal,
   actualCost,
   setActualCost,
-  isBillButtonDisabled,
+  billedRecords,
+  cancelledRecords,
 }) => {
+  const isNotOpenStatus = actualCostRecord.status !== LOST_ITEM_STATUSES.OPEN;
+  const {
+    isBilled,
+    isCancelled,
+  } = getRecordStatus(actualCostRecord.id, billedRecords, cancelledRecords);
+  const isBillButtonDisabled = isNotOpenStatus || isBilled || isCancelled;
+
   return (
     <Dropdown
       data-testid="lostItemsListActionsDropdown"
@@ -63,6 +74,8 @@ const RenderActions = ({
 RenderActions.propTypes = {
   setActualCostModal: PropTypes.func.isRequired,
   actualCostRecord: PropTypes.shape({
+    status: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
     user: PropTypes.shape({
       id: PropTypes.string.isRequired,
       firstName: PropTypes.string.isRequired,
@@ -88,7 +101,11 @@ RenderActions.propTypes = {
   }).isRequired,
   actualCost: ACTUAL_COST_PROP_TYPES,
   setActualCost: PropTypes.func.isRequired,
-  isBillButtonDisabled: PropTypes.bool.isRequired,
+  billedRecords: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string,
+    billedAmount: PropTypes.string,
+  })).isRequired,
+  cancelledRecords: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default RenderActions;

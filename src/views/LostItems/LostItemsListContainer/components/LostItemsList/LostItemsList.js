@@ -2,11 +2,7 @@ import React, {
   useState,
 } from 'react';
 import PropTypes from 'prop-types';
-import {
-  FormattedDate,
-  FormattedTime,
-  FormattedMessage,
-} from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import {
   get,
   noop,
@@ -22,6 +18,7 @@ import {
   InstanceDetails,
   RenderActions,
   RecordStatus,
+  DateTimeFormatter,
 } from './components';
 
 import {
@@ -49,6 +46,7 @@ export const COLUMNS_NAME = {
   PERMANENT_ITEM_LOCATION: ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.PERMANENT_ITEM_LOCATION],
   FEE_FINE_OWNER: ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.FEE_FINE_OWNER],
   FEE_FINE_TYPE: ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.FEE_FINE_TYPE],
+  STATUS: ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.STATUS],
   ACTION: 'ACTION',
 };
 export const visibleColumns = [
@@ -59,6 +57,7 @@ export const visibleColumns = [
   COLUMNS_NAME.PERMANENT_ITEM_LOCATION,
   COLUMNS_NAME.FEE_FINE_OWNER,
   COLUMNS_NAME.FEE_FINE_TYPE,
+  COLUMNS_NAME.STATUS,
   COLUMNS_NAME.ACTION,
 ];
 export const columnWidths = {
@@ -69,6 +68,7 @@ export const columnWidths = {
   [COLUMNS_NAME.PERMANENT_ITEM_LOCATION]: { max: 150 },
   [COLUMNS_NAME.FEE_FINE_OWNER]: { max: 150 },
   [COLUMNS_NAME.FEE_FINE_TYPE]: { max: 150 },
+  [COLUMNS_NAME.STATUS]: { max: 150 },
   [COLUMNS_NAME.ACTION]: { max: 150 },
 };
 export const columnMapping = {
@@ -79,6 +79,7 @@ export const columnMapping = {
   [COLUMNS_NAME.PERMANENT_ITEM_LOCATION]: <FormattedMessage id="ui-users.lostItems.list.columnName.permanentItemLocation" />,
   [COLUMNS_NAME.FEE_FINE_OWNER]: <FormattedMessage id="ui-users.lostItems.list.columnName.feeFineOwner" />,
   [COLUMNS_NAME.FEE_FINE_TYPE]: <FormattedMessage id="ui-users.lostItems.list.columnName.feeFineType" />,
+  [COLUMNS_NAME.STATUS]: <FormattedMessage id="ui-users.lostItems.list.columnName.status" />,
   [COLUMNS_NAME.ACTION]: <FormattedMessage id="ui-users.lostItems.list.columnName.actions" />,
 };
 export const triggerOnSort = (e, meta, onSort) => {
@@ -88,7 +89,13 @@ export const triggerOnSort = (e, meta, onSort) => {
 
   return onSort(e, meta);
 };
-export const basicLostItemsListFormatter = {
+export const getListFormatter = ({
+  billedRecords,
+  cancelledRecords,
+  setActualCost,
+  setActualCostModal,
+  actualCost,
+}) => ({
   [COLUMNS_NAME.PATRON]: (actualCostRecord) => {
     const patronGroup = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.USER_PATRON_GROUP], DEFAULT_VALUE);
     const patronName = getPatronName(actualCostRecord);
@@ -103,34 +110,35 @@ export const basicLostItemsListFormatter = {
   [COLUMNS_NAME.LOSS_TYPE]: (actualCostRecord) => {
     const lossType = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.LOSS_TYPE], DEFAULT_VALUE);
 
-    return <FormattedMessage id={ITEM_LOSS_TYPES_TRANSLATIONS_KEYS[lossType]} />;
+    return lossType && <FormattedMessage id={ITEM_LOSS_TYPES_TRANSLATIONS_KEYS[lossType]} />;
   },
   [COLUMNS_NAME.LOSS_DATE]: (actualCostRecord) => {
     const lossDate = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.LOSS_DATE], DEFAULT_VALUE);
 
-    return (
-      <>
-        <FormattedDate value={lossDate} />, <FormattedTime value={lossDate} />
-      </>
-    );
+    return <DateTimeFormatter value={lossDate} />;
   },
   [COLUMNS_NAME.INSTANCE]: (actualCostRecord) => (<InstanceDetails actualCostRecord={actualCostRecord} />),
   [COLUMNS_NAME.PERMANENT_ITEM_LOCATION]: (actualCostRecord) => (get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.PERMANENT_ITEM_LOCATION], DEFAULT_VALUE)),
   [COLUMNS_NAME.FEE_FINE_OWNER]: (actualCostRecord) => (get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.FEE_FINE_OWNER], DEFAULT_VALUE)),
   [COLUMNS_NAME.FEE_FINE_TYPE]: (actualCostRecord) => (get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.FEE_FINE_TYPE], DEFAULT_VALUE)),
-};
-export const isBilledRecord = (recordId, billedRecords) => billedRecords.some(record => record.id === recordId);
-export const isCancelledRecord = (recordId, cancelledRecords) => cancelledRecords.some(id => id === recordId);
-export const getRecordStatus = (recordId, billedRecords, cancelledRecords) => {
-  const isBilled = isBilledRecord(recordId, billedRecords);
-  const isCancelled = isCancelledRecord(recordId, cancelledRecords);
-
-  return {
-    isBilled,
-    isCancelled,
-    isBillButtonDisabled: isBilled || isCancelled,
-  };
-};
+  [COLUMNS_NAME.STATUS]: (actualCostRecord) => (
+    <RecordStatus
+      billedRecords={billedRecords}
+      cancelledRecords={cancelledRecords}
+      actualCostRecord={actualCostRecord}
+    />
+  ),
+  [COLUMNS_NAME.ACTION]: (actualCostRecord) => (
+    <RenderActions
+      billedRecords={billedRecords}
+      cancelledRecords={cancelledRecords}
+      actualCostRecord={actualCostRecord}
+      setActualCostModal={setActualCostModal}
+      actualCost={actualCost}
+      setActualCost={setActualCost}
+    />
+  ),
+});
 
 const LostItemsList = ({
   contentData,
@@ -148,34 +156,13 @@ const LostItemsList = ({
   const [actualCostConfirmModal, setActualCostConfirmModal] = useState(ACTUAL_COST_CONFIRM_MODAL_DEFAULT);
   const [actualCost, setActualCost] = useState(ACTUAL_COST_DEFAULT);
 
-  const lostItemsListFormatter = {
-    ...basicLostItemsListFormatter,
-    [COLUMNS_NAME.ACTION]: (actualCostRecord) => {
-      const {
-        isBilled,
-        isCancelled,
-        isBillButtonDisabled,
-      } = getRecordStatus(actualCostRecord.id, billedRecords, cancelledRecords);
-
-      return (
-        <div>
-          <RecordStatus
-            recordId={actualCostRecord.id}
-            billedRecords={billedRecords}
-            isBilled={isBilled}
-            isCancelled={isCancelled}
-          />
-          <RenderActions
-            isBillButtonDisabled={isBillButtonDisabled}
-            actualCostRecord={actualCostRecord}
-            setActualCostModal={setActualCostModal}
-            actualCost={actualCost}
-            setActualCost={setActualCost}
-          />
-        </div>
-      );
-    }
-  };
+  const lostItemsListFormatter = getListFormatter({
+    billedRecords,
+    cancelledRecords,
+    setActualCost,
+    setActualCostModal,
+    actualCost,
+  });
 
   return (
     <>
