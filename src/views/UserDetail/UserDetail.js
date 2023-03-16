@@ -47,6 +47,7 @@ import {
   UserLoans,
   UserRequests,
   UserAccounts,
+  UserAffiliations,
   UserServicePoints,
 } from '../../components/UserDetailSections';
 
@@ -184,6 +185,7 @@ class UserDetail extends React.Component {
       showDeleteUserModal: false,
       sections: {
         userInformationSection: true,
+        affiliationsSection: false,
         extendedInfoSection: false,
         contactInfoSection: false,
         proxySection: false,
@@ -696,6 +698,18 @@ class UserDetail extends React.Component {
                   expanded={sections.userInformationSection}
                   onToggle={this.handleSectionToggle}
                 />
+
+                <IfInterface name="consortia">
+                  <IfPermission perm="consortia.user-tenants.collection.get">
+                    <UserAffiliations
+                      accordionId="affiliationsSection"
+                      expanded={sections.affiliationsSection}
+                      onToggle={this.handleSectionToggle}
+                      userId={user?.id}
+                    />
+                  </IfPermission>
+                </IfInterface>
+
                 <IfInterface name="feesfines">
                   {hasPatronBlocksPermissions &&
                     <PatronBlock

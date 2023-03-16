@@ -1,0 +1,90 @@
+[
+  {
+    "id": "2b51c2f5-6779-4913-9cc8-05508ea406a4",
+    "isPrimary": false,
+    "tenantId": "diku",
+    "tenantName": "Snapshot",
+    "userId": "f2a0e0ce-cef9-51e5-979a-7cea9db21ecf",
+    "username": "diku_admin"
+  },
+  {
+    "id": "f899c9c9-ab2b-498b-99be-45fe36beac87",
+    "isPrimary": false,
+    "tenantName": "East Central College",
+    "tenantId": "f00123454235",
+    "userId": "f2a0e0ce-cef9-51e5-979a-7cea9db21ecf",
+    "username": "diku_admin"
+  },
+  {
+    "id": "d8314344-0397-4c83-887f-c990b635b44c",
+    "isPrimary": false,
+    "tenantName": "Jefferson College",
+    "tenantId": "f001234009965",
+    "userId": "f2a0e0ce-cef9-51e5-979a-7cea9db21ecf",
+    "username": "diku_admin"
+  },
+  {
+    "id": "2f75b3fa-4017-4b83-83ba-b3038b259c6d",
+    "isPrimary": false,
+    "tenantName": "Mineral Area College",
+    "tenantId": "f001234252634",
+    "userId": "f2a0e0ce-cef9-51e5-979a-7cea9db21ecf",
+    "username": "diku_admin"
+  },
+  {
+    "id": "d4138473-c177-4893-b150-6a9eca35de1f",
+    "isPrimary": false,
+    "tenantName": "St. Louis Community College",
+    "tenantId": "f001234154456",
+    "userId": "f2a0e0ce-cef9-51e5-979a-7cea9db21ecf",
+    "username": "diku_admin"
+  },
+  {
+    "id": "5d0acbd9-7672-445c-97b1-128f30e7a9cc",
+    "isPrimary": false,
+    "tenantName": "Three Rivers College",
+    "tenantId": "f001234009923",
+    "userId": "f2a0e0ce-cef9-51e5-979a-7cea9db21ecf",
+    "username": "diku_admin"
+  },
+  {
+    "id": "1e0990cd-ce69-42ec-9acd-d489a8ea6904",
+    "isPrimary": false,
+    "tenantName": "Columbia College",
+    "tenantId": "f001277776665",
+    "userId": "f2a0e0ce-cef9-51e5-979a-7cea9db21ecf",
+    "username": "diku_admin"
+  },
+  {
+    "id": "b4508843-8c8e-49f4-a2eb-114018e4d6d8",
+    "isPrimary": true,
+    "tenantName": "Lincoln University",
+    "tenantId": "f001234009933",
+    "userId": "f2a0e0ce-cef9-51e5-979a-7cea9db21ecf",
+    "username": "diku_admin"
+  },
+  {
+    "id": "48a5ed2a-f3d5-4067-b452-516767d39ff1",
+    "isPrimary": false,
+    "tenantName": "Stephens College",
+    "tenantId": "f001231234444",
+    "userId": "f2a0e0ce-cef9-51e5-979a-7cea9db21ecf",
+    "username": "diku_admin"
+  },
+  {
+    "id": "b17b47ed-5974-4d6c-9209-21f5e74c4482",
+    "isPrimary": false,
+    "tenantName": "Missouri State Library",
+    "tenantId": "f001234009956",
+    "userId": "f2a0e0ce-cef9-51e5-979a-7cea9db21ecf",
+    "username": "diku_admin"
+  },
+  {
+    "id": "cc446647-877c-475c-9b6f-0fbc8484d994",
+    "isPrimary": false,
+    "tenantName": "St. Charles Community College",
+    "tenantId": "f001234009912",
+    "userId": "f2a0e0ce-cef9-51e5-979a-7cea9db21ecf",
+    "username": "diku_admin"
+  }
+]
