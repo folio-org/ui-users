@@ -15,8 +15,8 @@ import { useUserAffiliations } from '../../../hooks';
 
 import css from './UserAffiliations.css';
 
-const ItemFormatter = ({ id, tenantName, isPrimary }) => (
-  <li key={id} className={isPrimary && css.primary}>{tenantName}</li>
+const ItemFormatter = ({ tenantName, isPrimary }) => (
+  <li className={isPrimary && css.primary}>{tenantName}</li>
 );
 
 const UserAffiliations = ({
@@ -67,7 +67,6 @@ const UserAffiliations = ({
 };
 
 ItemFormatter.propTypes = {
-  id: PropTypes.string.isRequired,
   isPrimary: PropTypes.bool,
   tenantName: PropTypes.string.isRequired,
 };
