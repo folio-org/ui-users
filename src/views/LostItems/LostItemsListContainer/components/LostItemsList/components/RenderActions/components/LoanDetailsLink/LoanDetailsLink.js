@@ -9,7 +9,7 @@ import {
   ACTUAL_COST_RECORD_FIELD_NAME,
   ACTUAL_COST_RECORD_FIELD_PATH,
   DEFAULT_VALUE,
-} from '../../../../../../constants';
+} from '../../../../../../../constants';
 
 const LoanDetailsLink = ({ actualCostRecord }) => {
   const userId = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.USER_ID], DEFAULT_VALUE);

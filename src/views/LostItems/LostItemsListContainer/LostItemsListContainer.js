@@ -97,6 +97,7 @@ class LostItemsListContainer extends React.Component {
         const billedAmount = res.feeFine.billedAmount.toFixed(2);
         addBilledRecord({
           id: res.id,
+          feeFineId: res.feeFine.accountId,
           billedAmount,
         });
         const message = <FormattedMessage

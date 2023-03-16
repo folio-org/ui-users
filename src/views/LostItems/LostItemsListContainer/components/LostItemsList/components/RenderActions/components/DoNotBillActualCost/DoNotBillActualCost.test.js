@@ -5,17 +5,17 @@ import {
   screen,
 } from '@testing-library/react';
 
-import '../../../../../../../../../test/jest/__mock__';
+import '../../../../../../../../../../test/jest/__mock__';
 
-import { ACTUAL_COST_DEFAULT } from '../../../../../../constants';
+import { ACTUAL_COST_DEFAULT } from '../../../../../../../constants';
 
-import BillActualCost from './BillActualCost';
+import DoNotBillActualCost from './DoNotBillActualCost';
 
 const testIds = {
-  billActualCostButton: 'billActualCostButton',
+  doNotBillActualCostButton: 'doNotBillActualCostButton',
 };
 const labelIds = {
-  billActualCostLabel: 'ui-users.lostItems.list.columnName.action.bill',
+  billActualCostLabel: 'ui-users.lostItems.list.columnName.action.doNotBill',
 };
 const setActualCostModal = jest.fn();
 const setActualCost = jest.fn();
@@ -49,32 +49,32 @@ const initialProps = {
   setActualCost,
 };
 
-describe('BillActualCost', () => {
+describe('DoNotBillActualCost', () => {
   beforeEach(() => {
     render(
-      <BillActualCost
+      <DoNotBillActualCost
         {...initialProps}
       />
     );
   });
 
   it('should render link', () => {
-    expect(screen.getByTestId(testIds.billActualCostButton)).toBeVisible();
+    expect(screen.getByTestId(testIds.doNotBillActualCostButton)).toBeVisible();
   });
 
   it('should render label', () => {
     expect(screen.getByText(labelIds.billActualCostLabel)).toBeVisible();
   });
 
-  describe('when click on bill actual cost button', () => {
+  describe('when click on do not bill actual cost button', () => {
     it('should call setActualCostModal', () => {
-      fireEvent.click(screen.getByTestId(testIds.billActualCostButton));
+      fireEvent.click(screen.getByTestId(testIds.doNotBillActualCostButton));
 
       expect(setActualCostModal).toHaveBeenCalled();
     });
 
     it('should call setActualCost', () => {
-      fireEvent.click(screen.getByTestId(testIds.billActualCostButton));
+      fireEvent.click(screen.getByTestId(testIds.doNotBillActualCostButton));
 
       expect(setActualCost).toHaveBeenCalled();
     });

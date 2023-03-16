@@ -11,6 +11,7 @@ import RenderActions from './RenderActions';
 import {
   BillActualCost,
   DoNotBillActualCost,
+  FeeFineDetailsLink,
 } from './components';
 import { LOST_ITEM_STATUSES } from '../../../../../constants';
 import { getRecordStatus } from '../../util';
@@ -25,6 +26,7 @@ jest.mock('./components', () => ({
   ...jest.requireActual('./components'),
   BillActualCost: jest.fn(() => null),
   DoNotBillActualCost: jest.fn(() => null),
+  FeeFineDetailsLink: jest.fn(() => null),
 }));
 
 const testIds = {
@@ -49,6 +51,7 @@ const initialProps = {
     status: LOST_ITEM_STATUSES.OPEN,
   },
   actualCost: {},
+  billedRecords: [],
   setActualCostModal: jest.fn(),
   setActualCost: jest.fn(),
 };
@@ -123,6 +126,16 @@ describe('RenderActions', () => {
 
     it('should trigger "DoNotBillActualCost" with correct props', () => {
       expect(DoNotBillActualCost).toHaveBeenCalledWith(expectedActualCostProps, {});
+    });
+
+    it('should trigger "FeeFineDetailsLink" with correct props', () => {
+      const expectedProps = {
+        actualCostRecord: initialProps.actualCostRecord,
+        isBilled: false,
+        billedRecords: initialProps.billedRecords,
+      };
+
+      expect(FeeFineDetailsLink).toHaveBeenCalledWith(expectedProps, {});
     });
   });
 });

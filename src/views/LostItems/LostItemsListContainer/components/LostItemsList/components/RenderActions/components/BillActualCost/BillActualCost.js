@@ -6,7 +6,7 @@ import { Button } from '@folio/stripes/components';
 import {
   ACTUAL_COST_TYPES,
   BILL_AND_DO_NOT_BILL_ACTUAL_COST_PROP_TYPES,
-} from '../../../../../../constants';
+} from '../../../../../../../constants';
 
 const BillActualCost = ({
   actualCostRecord,
