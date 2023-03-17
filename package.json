@@ -109,7 +109,7 @@
       },
       {
         "permissionName": "ui-users.consortia.affiliations.view",
-        "displayName": "Users: Can view user affiliations",
+        "displayName": "Users: View affiliations",
         "description": "View a list of affiliations assigned to an user",
         "subPermissions": [
           "consortia.user-tenants.collection.get"
