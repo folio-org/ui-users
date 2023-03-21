@@ -31,7 +31,6 @@ const props = {
     user: {
       update: jest.fn(),
     },
-    servicePoints: {},
   },
   mutator: {
     activeRecord: {

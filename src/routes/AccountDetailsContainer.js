@@ -106,17 +106,6 @@ class AccountDetailsContainer extends React.Component {
         return refresh || action.meta.path === 'accounts-bulk';
       },
     },
-    // Service points are needed here to properly display SP name in <AccountDetails>
-    // for fees/fines assigned to an item during checkout.
-    servicePoints: {
-      type: 'okapi',
-      records: 'servicepoints',
-      path: 'service-points',
-      params: {
-        query: 'cql.allRecords=1',
-        limit: MAX_RECORDS,
-      },
-    },
   });
 
   static propTypes = {
