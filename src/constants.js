@@ -312,3 +312,5 @@ export const MIN_ALLOWED_DATE = '1900-01-01';
 export const STATUS_CODES = {
   UNPROCESSABLE_ENTITY: 422,
 };
+
+export const CONSORTIA_USER_TENANTS_API = 'consortia/user-tenants';
