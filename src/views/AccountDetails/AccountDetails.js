@@ -79,7 +79,6 @@ class AccountDetails extends React.Component {
       accounts: PropTypes.object.isRequired,
       feefineactions: PropTypes.object.isRequired,
       loans: PropTypes.object.isRequired,
-      servicePoints: PropTypes.object.isRequired,
     }),
     mutator: PropTypes.shape({
       activeRecord: PropTypes.shape({
@@ -425,6 +424,11 @@ feeFineActions
       match: { params },
       user,
       itemDetails,
+      okapi: {
+        currentUser: {
+          servicePoints,
+        },
+      },
     } = this.props;
 
     const allAccounts = resources?.feefineshistory?.records || [];
@@ -479,7 +483,7 @@ feeFineActions
       amount: action => (action.amountAction > 0 ? formatCurrencyAmount(action.amountAction) : '-'),
       balance: action => (action.balance > 0 ? formatCurrencyAmount(action.balance) : '-'),
       transactioninfo: action => action.transactionInformation || '-',
-      created: action => getServicePointOfCurrentAction(action, this.props.resources.servicePoints.records),
+      created: action => getServicePointOfCurrentAction(action, servicePoints),
       source: action => action.source,
       comments: action => (action.comments ? (<div>{action.comments.split('\n').map(c => (<Row><Col>{c}</Col></Row>))}</div>) : ''),
     };
