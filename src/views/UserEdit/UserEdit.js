@@ -223,7 +223,7 @@ class UserEdit extends React.Component {
 
     this.updatePermissions(user.id, permissions);
 
-    if (servicePoints && stripes.hasPerm('inventory-storage.service-points-users.item.post,inventory-storage.service-points-users.item.put')) {
+    if (stripes.hasPerm('inventory-storage.service-points-users.item.post,inventory-storage.service-points-users.item.put')) {
       updateServicePoints(servicePoints, preferredServicePoint);
     }
 
