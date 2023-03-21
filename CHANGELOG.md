@@ -9,6 +9,7 @@
 * Add "Status" column to LOST ITEMS REQUIRING ACTUAL COST processing page. Refs UIU-2772.
 * Add "Lost items requiring actual cost" to Actions dropdown in User details record. Refs UIU-2810.
 * Add "Fee/fine details" to LOST ITEMS REQUIRING ACTUAL COST processing page. Refs UIU-2773.
+* Fix ability to remove all service points. Fixes UIU-2819.
 * Add close button to "Lost items requiring actual cost" page. Refs UIU-2813.
 * Fix permission error when viewing fees/fines for payment. Refs UIU-2824.
 
