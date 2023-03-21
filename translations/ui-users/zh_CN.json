@@ -1042,9 +1042,18 @@
     "errorModal.currentUserServicePointAbsentee.confirmButtonText": "返回",
     "lostItems.feeFineAmount.error": "向读者开具账单的实际费用必须大于 0.00 且小于 9999.99",
     "lostItems.notification.serverError": "发生系统错误 - 请稍后重试或联系FOLIO支持人员",
-    "lostItems.recordStatus.billed": "<strong>计费： {amount} </strong>",
-    "lostItems.recordStatus.notBilled": "<strong>不计费</strong>",
+    "lostItems.recordStatus.billed": "计费： {amount}",
     "lostItems.notification.billed": "<strong> {amount} </strong>的费用/罚款已成功<strong>收取</strong>给<strong> {patronName} </strong>",
     "lostItems.notification.billedBefore": "<strong> {patronName} </strong>已由其他用户为此单件付费",
-    "lostItems.notification.cancelled": "<strong>不会向<strong> {patronName} </strong>收取丢失单件费用 < </strong>"
+    "lostItems.notification.cancelled": "<strong>不会向<strong> {patronName} </strong>收取丢失单件费用 < </strong>",
+    "lostItems.list.filters.status": "Status",
+    "lostItems.list.filters.status.open": "Open",
+    "lostItems.list.filters.status.billed": "Billed",
+    "lostItems.list.filters.status.cancelled": "Cancelled",
+    "lostItems.list.filters.status.expired": "Expired",
+    "lostItems.list.columnName.status": "Status",
+    "lostItems.recordStatus.open": "Open",
+    "lostItems.recordStatus.cancelled": "Cancelled",
+    "lostItems.recordStatus.expired": "Expired: ",
+    "lostItems.list.columnName.action.feeFineDetails": "Fee/fine details"
 }
