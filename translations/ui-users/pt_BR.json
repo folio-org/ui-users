@@ -1055,5 +1055,8 @@
     "lostItems.recordStatus.open": "Aberto",
     "lostItems.recordStatus.cancelled": "Cancelado",
     "lostItems.recordStatus.expired": "Expirado: ",
-    "lostItems.list.columnName.action.feeFineDetails": "Detalhes da taxa/multa"
+    "lostItems.list.columnName.action.feeFineDetails": "Detalhes da taxa/multa",
+    "affiliations.section.label": "Afiliações",
+    "affiliations.section.empty": "Nenhuma afiliação encontrada",
+    "permission.consortia.affiliations.view": "Usuários: Ver afiliações"
 }
