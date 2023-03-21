@@ -2,6 +2,9 @@ import {
   screen,
   render,
 } from '@testing-library/react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { createMemoryHistory } from 'history';
+
 import { Button } from '@folio/stripes/components';
 
 import '../../../test/jest/__mock__';
@@ -22,8 +25,12 @@ const labelIds = {
 
 describe('LostItemsLink', () => {
   beforeEach(() => {
+    const history = createMemoryHistory();
+
     render(
-      <LostItemsLink />
+      <Router history={history}>
+        <LostItemsLink />
+      </Router>
     );
   });
 
@@ -42,7 +49,14 @@ describe('LostItemsLink', () => {
   it('should trigger "Button" with correct props', () => {
     const expectedProps = {
       buttonStyle: 'dropdownItem',
-      to: `/users/lost-items?filters=${ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.STATUS]}.${LOST_ITEM_STATUSES.OPEN}`,
+      to: {
+        pathname: '/users/lost-items',
+        search: `?filters=${ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.STATUS]}.${LOST_ITEM_STATUSES.OPEN}`,
+        state: {
+          pathname: '/',
+          search: '',
+        },
+      }
     };
 
     expect(Button).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});

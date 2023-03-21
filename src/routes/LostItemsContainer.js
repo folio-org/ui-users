@@ -201,6 +201,28 @@ class LostItemsContainer extends React.Component {
     return this.props?.resources?.query ?? {};
   }
 
+  onClose = () => {
+    const {
+      history,
+      history: {
+        location: {
+          state,
+        }
+      }
+    } = this.props;
+
+    if (state) {
+      const {
+        pathname,
+        search,
+      } = state;
+
+      history.push(`${pathname}${search}`);
+    } else {
+      history.push('/users');
+    }
+  }
+
   render() {
     const hasPermission = this.props.stripes.hasPerm('ui-users.lost-items.requiring-actual-cost');
 
@@ -227,6 +249,7 @@ class LostItemsContainer extends React.Component {
         resources={this.props.resources}
         mutator={this.props.mutator}
         okapi={this.props.okapi}
+        onClose={this.onClose}
       />
     );
   }
