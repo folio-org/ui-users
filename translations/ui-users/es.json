@@ -1055,5 +1055,8 @@
     "lostItems.recordStatus.open": "Open",
     "lostItems.recordStatus.cancelled": "Cancelled",
     "lostItems.recordStatus.expired": "Expired: ",
-    "lostItems.list.columnName.action.feeFineDetails": "Fee/fine details"
+    "lostItems.list.columnName.action.feeFineDetails": "Fee/fine details",
+    "affiliations.section.label": "Affiliations",
+    "affiliations.section.empty": "No affiliations found",
+    "permission.consortia.affiliations.view": "Users: View affiliations"
 }
