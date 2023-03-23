@@ -146,6 +146,8 @@ jest.mock('@folio/stripes/core', () => {
     connect: stripesConnect,
     stripesConnect,
     useStripes: () => STRIPES,
+    useOkapiKy: jest.fn(),
+    useNamespace: jest.fn(() => ['@folio/users']),
     withStripes:
       // eslint-disable-next-line react/prop-types
       (Component) => ({ stripes, ...rest }) => {

@@ -8,8 +8,8 @@ import {
 import {
   useStripes,
   IfInterface,
+  StripesContext,
 } from '@folio/stripes/core';
-import { StripesContext } from '@folio/stripes-core/src/StripesContext';
 import '__mock__';
 import UserDetail from './UserDetail';
 import {

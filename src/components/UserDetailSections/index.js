@@ -6,6 +6,7 @@ export { default as PatronBlock } from './PatronBlock';
 export { default as UserLoans } from './UserLoans';
 export { default as UserRequests } from './UserRequests';
 export { default as UserAccounts } from './UserAccounts';
+export { default as UserAffiliations } from './UserAffiliations';
 export { default as UserPermissions } from './UserPermissions';
 export { default as UserServicePoints } from './UserServicePoints';
 export { default as RequestPreferencesView } from './ExtendedInfo/components/RequestPreferencesView';
