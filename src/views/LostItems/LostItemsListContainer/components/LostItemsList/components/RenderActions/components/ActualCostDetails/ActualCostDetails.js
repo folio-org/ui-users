@@ -12,7 +12,7 @@ const ActualCostDetails = ({
   actualCostRecord: {
     additionalInfoForPatron,
     additionalInfoForStaff,
-    feefine,
+    feeFine,
   },
   actualCost,
   setActualCost,
@@ -27,7 +27,7 @@ const ActualCostDetails = ({
       ...actualCost,
       actualCostRecord,
       additionalInfo: {
-        actualCostToBill: feefine?.billedAmount,
+        actualCostToBill: feeFine?.billedAmount,
         additionalInformationForPatron: additionalInfoForPatron,
         additionalInformationForStaff: additionalInfoForStaff,
       }
