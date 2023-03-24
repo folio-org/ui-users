@@ -194,7 +194,7 @@ class PermissionsModal extends React.Component {
       // multi-value arrays correspond to translations with substitutions, html, etc.,
       // but those are not relevent here.
       if (typeof label === 'string') {
-        return /\.permission\./.test(key) && label.toLowerCase().match(query.toLowerCase());
+        return /\.permission\./.test(key) && (label.toLowerCase().match(query.toLowerCase()) || label.toLowerCase() === query.toLowerCase());
       } else if (Array.isArray(label) && label.length === 1) {
         return /\.permission\./.test(key) && label[0].value.toLowerCase().match(query.toLowerCase());
       }
