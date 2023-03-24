@@ -64,7 +64,9 @@ describe('useUserAffiliations', () => {
   });
 
   it('should not fetch user\'s consortium affiliations by user\'s id when there is not consortium', async () => {
-    const getMock = jest.fn().mockReturnValue(Promise.resolve());
+    const getMock = jest.fn(() => ({
+      json: () => Promise.resolve({}),
+    }));
 
     useOkapiKy.mockClear().mockReturnValue({ get: getMock });
 
