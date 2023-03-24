@@ -3,13 +3,11 @@ import { render } from '@testing-library/react';
 import { sortBy } from 'lodash';
 import { FormattedMessage } from 'react-intl';
 
-import {
-  PermissionSets,
-  PatronGroupsSettings,
-  AddressTypesSettings,
-  CustomFieldsSettingsPane,
-  DepartmentsSettings,
-} from './sections';
+import PermissionSets from './permissions/PermissionSets';
+import PatronGroupsSettings from './PatronGroupsSettings';
+import AddressTypesSettings from './AddressTypesSettings';
+import CustomFieldsSettingsPane from './CustomFieldsSettings';
+import DepartmentsSettings from './DepartmentsSettings';
 
 const settingsGeneral = [
   {
