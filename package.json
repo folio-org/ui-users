@@ -112,7 +112,17 @@
         "displayName": "Users: View affiliations",
         "description": "View a list of affiliations assigned to an user",
         "subPermissions": [
+          "consortia.consortium.collection.get",
           "consortia.user-tenants.collection.get"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.consortia.affiliations.edit",
+        "displayName": "Users: Assign and unassign affiliations",
+        "description": "Assign and unassign affiliations",
+        "subPermissions": [
+          "ui-users.consortia.affiliations.view"
         ],
         "visible": true
       },

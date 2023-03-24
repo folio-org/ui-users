@@ -55,10 +55,24 @@ describe('useUserAffiliations', () => {
 
     await waitFor(() => !result.current.isLoading);
 
+    expect(mockGet.mock.calls.length).toBe(2);
     expect(mockGet).toHaveBeenCalledWith(
       `${CONSORTIA_API}/${consortium.id}/${CONSORTIA_USER_TENANTS_API}`,
       expect.objectContaining({ searchParams: { userId } }),
     );
     expect(result.current.affiliations).toEqual(affiliations);
+  });
+
+  it('should not fetch user\'s consortium affiliations by user\'s id when there is not consortium', async () => {
+    const getMock = jest.fn().mockReturnValue(Promise.resolve());
+
+    useOkapiKy.mockClear().mockReturnValue({ get: getMock });
+
+    const userId = 'usedId';
+    const { result, waitFor } = renderHook(() => useUserAffiliations({ userId }), { wrapper });
+
+    await waitFor(() => !result.current.isLoading);
+
+    expect(getMock.mock.calls.length).toBe(1);
   });
 });
