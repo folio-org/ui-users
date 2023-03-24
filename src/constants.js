@@ -313,4 +313,5 @@ export const STATUS_CODES = {
   UNPROCESSABLE_ENTITY: 422,
 };
 
-export const CONSORTIA_USER_TENANTS_API = 'consortia/user-tenants';
+export const CONSORTIA_API = 'consortia';
+export const CONSORTIA_USER_TENANTS_API = 'user-tenants';
