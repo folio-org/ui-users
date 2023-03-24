@@ -5,7 +5,10 @@ import {
   useOkapiKy,
 } from '@folio/stripes/core';
 
-import { CONSORTIA_USER_TENANTS_API } from '../../constants';
+import {
+  CONSORTIA_API,
+  CONSORTIA_USER_TENANTS_API,
+} from '../../constants';
 
 const useUserAffiliations = ({ userId } = {}, options = {}) => {
   const ky = useOkapiKy();
@@ -15,7 +18,20 @@ const useUserAffiliations = ({ userId } = {}, options = {}) => {
 
   const { isLoading, data = {} } = useQuery(
     [namespace, userId],
-    () => ky.get(CONSORTIA_USER_TENANTS_API, { searchParams }).json(),
+    async () => {
+      const { consortia } = await ky.get(CONSORTIA_API).json();
+
+      if (consortia?.length) {
+        const [consortium] = consortia;
+
+        return ky.get(
+          `${CONSORTIA_API}/${consortium.id}/${CONSORTIA_USER_TENANTS_API}`,
+          { searchParams },
+        ).json();
+      }
+
+      return Promise.resolve();
+    },
     {
       enabled: Boolean(userId),
       ...options,
