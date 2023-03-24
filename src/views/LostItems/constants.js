@@ -102,6 +102,10 @@ export const ACTUAL_COST_MODAL_DEFAULT = {
   isOpen: false,
 };
 
+export const ACTUAL_COST_DETAILS_MODAL_DEFAULT = {
+  isOpen: false,
+};
+
 export const ACTUAL_COST_CONFIRM_MODAL_DEFAULT = {
   isOpen: false,
 };
@@ -152,6 +156,17 @@ export const ACTUAL_COST_PROP_TYPES = PropTypes.shape({
 export const BILL_AND_DO_NOT_BILL_ACTUAL_COST_PROP_TYPES = {
   actualCostRecord: ACTUAL_COST_RECORD_PROP_TYPES,
   setActualCostModal: PropTypes.func.isRequired,
+  actualCost: PropTypes.shape({
+    actualCostRecord: PropTypes.object.isRequired,
+    additionalInfo: ADDITIONAL_INFO_PROP_TYPES,
+  }).isRequired,
+  setActualCost: PropTypes.func.isRequired,
+  disabled: PropTypes.bool.isRequired,
+};
+
+export const ACTUAL_COST_DETAILS_PROP_TYPES = {
+  actualCostRecord: ACTUAL_COST_RECORD_PROP_TYPES,
+  setActualCostDetailsModal: PropTypes.func.isRequired,
   actualCost: PropTypes.shape({
     actualCostRecord: PropTypes.object.isRequired,
     additionalInfo: ADDITIONAL_INFO_PROP_TYPES,

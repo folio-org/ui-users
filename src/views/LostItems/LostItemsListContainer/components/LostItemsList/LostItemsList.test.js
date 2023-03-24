@@ -35,6 +35,7 @@ import {
 
 jest.mock('./components', () => ({
   ActualCostModal: jest.fn(() => null),
+  ActualCostDetailsModal: jest.fn(() => null),
   ActualCostConfirmModal: jest.fn(() => null),
   InstanceDetails: jest.fn(() => null),
   RecordStatus: jest.fn(() => null),
