@@ -1,10 +1,7 @@
 import React from 'react';
-import { screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { FormattedMessage } from 'react-intl';
 
-import renderWithRouter from '../../../test/jest/helpers/renderWithRouter';
-import UserForm, { validate } from './UserForm';
+import { validate } from './UserForm';
 
 describe('UserForm', () => {
   describe('validate', () => {
