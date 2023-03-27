@@ -22,6 +22,7 @@ export const ACTUAL_COST_RECORD_FIELD_NAME = {
   PERMANENT_ITEM_LOCATION: 'permanentItemLocation',
   FEE_FINE_TYPE: 'feeFineType',
   FEE_FINE_OWNER: 'feeFineOwner',
+  FEE_FINE_ACCOUNT_ID: 'feeFineId',
   LOAN_ID: 'loanId',
   LOAN_TYPE: 'loanType',
   INSTANCE_ID: 'instanceId',
@@ -30,6 +31,7 @@ export const ACTUAL_COST_RECORD_FIELD_NAME = {
   ITEM_ID: 'itemId',
   HOLDINGS_RECORD_ID: 'holdingsRecordId',
   STATUS: 'status',
+  BILLED_AMOUNT: 'billedAmount',
 };
 
 export const ACTUAL_COST_RECORD_FIELD_PATH = {
@@ -46,6 +48,7 @@ export const ACTUAL_COST_RECORD_FIELD_PATH = {
   [ACTUAL_COST_RECORD_FIELD_NAME.PERMANENT_ITEM_LOCATION]: 'item.permanentLocation',
   [ACTUAL_COST_RECORD_FIELD_NAME.FEE_FINE_TYPE]: 'feeFine.type',
   [ACTUAL_COST_RECORD_FIELD_NAME.FEE_FINE_OWNER]: 'feeFine.owner',
+  [ACTUAL_COST_RECORD_FIELD_NAME.FEE_FINE_ACCOUNT_ID]: 'feeFine.accountId',
   [ACTUAL_COST_RECORD_FIELD_NAME.LOAN_ID]: 'loan.id',
   [ACTUAL_COST_RECORD_FIELD_NAME.LOAN_TYPE]: 'item.loanType',
   [ACTUAL_COST_RECORD_FIELD_NAME.INSTANCE_ID]: 'instance.id',
@@ -54,6 +57,7 @@ export const ACTUAL_COST_RECORD_FIELD_PATH = {
   [ACTUAL_COST_RECORD_FIELD_NAME.ITEM]: 'item',
   [ACTUAL_COST_RECORD_FIELD_NAME.HOLDINGS_RECORD_ID]: 'item.holdingsRecordId',
   [ACTUAL_COST_RECORD_FIELD_NAME.STATUS]: 'status',
+  [ACTUAL_COST_RECORD_FIELD_NAME.BILLED_AMOUNT]: 'feeFine.billedAmount',
 };
 
 export const LOST_ITEM_STATUSES = {
@@ -74,11 +78,18 @@ export const ITEM_LOSS_TYPES_TRANSLATIONS_KEYS = {
   [itemStatuses.DECLARED_LOST]: 'ui-users.lostItems.list.filters.lossType.declaredLost',
 };
 
-export const LOST_ITEM_STATUSES_TRANSLATIONS_KEYS = {
+export const LOST_ITEM_STATUS_FILTER_TRANSLATIONS_KEYS = {
   [LOST_ITEM_STATUSES.OPEN]: 'ui-users.lostItems.list.filters.status.open',
   [LOST_ITEM_STATUSES.BILLED]: 'ui-users.lostItems.list.filters.status.billed',
   [LOST_ITEM_STATUSES.CANCELLED]: 'ui-users.lostItems.list.filters.status.cancelled',
   [LOST_ITEM_STATUSES.EXPIRED]: 'ui-users.lostItems.list.filters.status.expired',
+};
+
+export const LOST_ITEM_STATUS_TRANSLATIONS_KEYS = {
+  [LOST_ITEM_STATUSES.OPEN]: 'ui-users.lostItems.recordStatus.open',
+  [LOST_ITEM_STATUSES.BILLED]: 'ui-users.lostItems.recordStatus.billed',
+  [LOST_ITEM_STATUSES.CANCELLED]: 'ui-users.lostItems.recordStatus.cancelled',
+  [LOST_ITEM_STATUSES.EXPIRED]: 'ui-users.lostItems.recordStatus.expired',
 };
 
 export const ACTUAL_COST_TYPES = {

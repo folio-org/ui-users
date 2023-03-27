@@ -117,6 +117,13 @@ class LostItemsContainer extends React.Component {
       logger: PropTypes.object.isRequired,
       hasPerm: PropTypes.func.isRequired,
     }).isRequired,
+    okapi: PropTypes.shape({
+      currentUser: PropTypes.shape({
+        curServicePoint: PropTypes.shape({
+          id: PropTypes.string,
+        }).isRequired,
+      }).isRequired,
+    }).isRequired,
   }
 
   constructor(props) {
@@ -194,6 +201,28 @@ class LostItemsContainer extends React.Component {
     return this.props?.resources?.query ?? {};
   }
 
+  onClose = () => {
+    const {
+      history,
+      history: {
+        location: {
+          state,
+        }
+      }
+    } = this.props;
+
+    if (state) {
+      const {
+        pathname,
+        search,
+      } = state;
+
+      history.push(`${pathname}${search}`);
+    } else {
+      history.push('/users');
+    }
+  }
+
   render() {
     const hasPermission = this.props.stripes.hasPerm('ui-users.lost-items.requiring-actual-cost');
 
@@ -217,7 +246,10 @@ class LostItemsContainer extends React.Component {
         billedRecords={this.state.billedRecords}
         addCancelledRecord={this.addCancelledRecord}
         cancelledRecords={this.state.cancelledRecords}
-        {...this.props}
+        resources={this.props.resources}
+        mutator={this.props.mutator}
+        okapi={this.props.okapi}
+        onClose={this.onClose}
       />
     );
   }

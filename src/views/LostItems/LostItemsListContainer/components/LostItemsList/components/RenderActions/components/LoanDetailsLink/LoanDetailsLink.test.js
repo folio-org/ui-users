@@ -4,15 +4,15 @@ import {
   screen,
 } from '@testing-library/react';
 
-import '../../../../../../../../../test/jest/__mock__';
+import '../../../../../../../../../../test/jest/__mock__';
 
-import ItemDetailsLink from './ItemDetailsLink';
+import LoanDetailsLink from './LoanDetailsLink';
 
 const testIds = {
-  itemDetailsLink: 'itemDetailsLink',
+  loanDetailsLink: 'loanDetailsLink',
 };
 const labelIds = {
-  itemDetailsLabel: 'ui-users.lostItems.list.columnName.action.itemDetails',
+  loanDetailsLabel: 'ui-users.lostItems.list.columnName.action.loanDetails',
 };
 const initialProps = {
   actualCostRecord: {
@@ -32,26 +32,26 @@ const initialProps = {
   },
 };
 
-describe('ItemDetailsLink', () => {
+describe('LoanDetailsLink', () => {
   beforeEach(() => {
     render(
-      <ItemDetailsLink
+      <LoanDetailsLink
         {...initialProps}
       />
     );
   });
 
   it('should render link', () => {
-    expect(screen.getByTestId(testIds.itemDetailsLink)).toBeVisible();
+    expect(screen.getByTestId(testIds.loanDetailsLink)).toBeVisible();
   });
 
   it('should render label', () => {
-    expect(screen.getByText(labelIds.itemDetailsLabel)).toBeVisible();
+    expect(screen.getByText(labelIds.loanDetailsLabel)).toBeVisible();
   });
 
   it('should have correct props', () => {
-    const dropdownButton = screen.getByTestId(testIds.itemDetailsLink);
+    const dropdownButton = screen.getByTestId(testIds.loanDetailsLink);
 
-    expect(dropdownButton).toHaveAttribute('to', '/inventory/view/88805c06-dbdb-4aa0-9695-d4d19c733225/88805c06-dbdb-4aa0-9695-d4d19c733224/88805c06-dbdb-4aa0-9695-d4d19c733223');
+    expect(dropdownButton).toHaveAttribute('to', '/users/88805c06-dbdb-4aa0-9695-d4d19c733221/loans/view/88805c06-dbdb-4aa0-9695-d4d19c733222');
   });
 });

@@ -61,7 +61,7 @@ describe('FeeFineActions', () => {
     },
   };
   const mockedCurServicePoint = {
-    id: 'curServicePointId',
+    id: '7c5abc9f-f3d7-4856-b8d7-6712462ca007',
   };
   const mockedCurrentUser = {
     curServicePoint: mockedCurServicePoint,

@@ -35,6 +35,7 @@ import styles from './LostItemsListContainer.css';
 class LostItemsListContainer extends React.Component {
   static propTypes = {
     onNeedMoreData: PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired,
     queryGetter: PropTypes.func,
     querySetter: PropTypes.func,
     resources: PropTypes.shape({
@@ -97,6 +98,7 @@ class LostItemsListContainer extends React.Component {
         const billedAmount = res.feeFine.billedAmount.toFixed(2);
         addBilledRecord({
           id: res.id,
+          feeFineId: res.feeFine.accountId,
           billedAmount,
         });
         const message = <FormattedMessage
@@ -114,7 +116,7 @@ class LostItemsListContainer extends React.Component {
       .catch((e) => {
         let message;
 
-        if (e.status === STATUS_CODES.unprocessableEntity) {
+        if (e.status === STATUS_CODES.UNPROCESSABLE_ENTITY) {
           message = <FormattedMessage
             id="ui-users.lostItems.notification.billedBefore"
             values={{ patronName }}
@@ -157,7 +159,7 @@ class LostItemsListContainer extends React.Component {
       .catch((e) => {
         let message;
 
-        if (e.status === STATUS_CODES.unprocessableEntity) {
+        if (e.status === STATUS_CODES.UNPROCESSABLE_ENTITY) {
           message = <FormattedMessage
             id="ui-users.lostItems.notification.billedBefore"
             values={{ patronName }}
@@ -206,6 +208,7 @@ class LostItemsListContainer extends React.Component {
       queryGetter,
       source,
       onNeedMoreData,
+      onClose,
       resources,
       mutator: {
         resultOffset,
@@ -289,7 +292,6 @@ class LostItemsListContainer extends React.Component {
                     </Button>
                     <Filters
                       activeFilters={activeFilters.state}
-                      resources={resources}
                       onChangeHandlers={getFilterHandlers()}
                       resultOffset={resultOffset}
                     />
@@ -302,6 +304,8 @@ class LostItemsListContainer extends React.Component {
                 paneSub={resultPaneSub}
                 firstMenu={this.renderResultsFirstMenu(activeFilters)}
                 defaultWidth="fill"
+                dismissible
+                onClose={onClose}
                 padContent={false}
                 noOverflow
               >

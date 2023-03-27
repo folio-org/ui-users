@@ -2,33 +2,29 @@ import React from 'react';
 import {
   render,
   screen,
+  cleanup,
 } from '@testing-library/react';
 import { noop } from 'lodash';
 import { MultiColumnList } from '@folio/stripes/components';
-import {
-  FormattedDate,
-  FormattedTime,
-  FormattedMessage,
-} from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import '../../../../../../test/jest/__mock__';
 // eslint-disable-next-line import/no-named-as-default
 import LostItemsList, {
   triggerOnSort,
-  basicLostItemsListFormatter,
+  getListFormatter,
   COLUMNS_NAME,
   visibleColumns,
   columnMapping,
   columnWidths,
-  isBilledRecord,
-  isCancelledRecord,
-  getRecordStatus,
 } from './LostItemsList';
 import { getPatronName } from './util';
 import {
   ActualCostModal,
   ActualCostConfirmModal,
   InstanceDetails,
+  RenderActions,
+  RecordStatus,
 } from './components';
 import {
   ACTUAL_COST_CONFIRM_MODAL_DEFAULT,
@@ -38,10 +34,11 @@ import {
 } from '../../../constants';
 
 jest.mock('./components', () => ({
-  ...jest.requireActual('./components'),
   ActualCostModal: jest.fn(() => null),
   ActualCostConfirmModal: jest.fn(() => null),
   InstanceDetails: jest.fn(() => null),
+  RecordStatus: jest.fn(() => null),
+  RenderActions: jest.fn(() => null),
 }));
 jest.mock('./util', () => ({
   getPatronName: jest.fn(() => null),
@@ -103,7 +100,7 @@ describe('LostItemsList', () => {
     });
   });
 
-  describe('basicLostItemsListFormatter', () => {
+  describe('getListFormatter', () => {
     const basicActualCostRecord = {
       user: {
         patronGroup: 'patronGroup',
@@ -118,11 +115,21 @@ describe('LostItemsList', () => {
       lossType: 'Aged to lost',
       lossDate: 'lossDate',
     };
+    const getListFormatterArgs = {
+      billedRecords: [],
+      cancelledRecords: jest.fn(),
+      setActualCost: jest.fn(),
+      setActualCostModal: jest.fn(),
+      actualCost: {},
+    };
+    const formatter = getListFormatter(getListFormatterArgs);
+
+    afterEach(cleanup);
 
     describe('Patron formatter', () => {
       describe('when patron group is presented', () => {
         beforeEach(() => {
-          render(basicLostItemsListFormatter[COLUMNS_NAME.PATRON](basicActualCostRecord));
+          render(formatter[COLUMNS_NAME.PATRON](basicActualCostRecord));
         });
 
         it('should trigger "getPatronName" with correct arguments', () => {
@@ -136,7 +143,7 @@ describe('LostItemsList', () => {
     });
 
     describe('Loss type formatter', () => {
-      render(basicLostItemsListFormatter[COLUMNS_NAME.LOSS_TYPE](basicActualCostRecord));
+      render(formatter[COLUMNS_NAME.LOSS_TYPE](basicActualCostRecord));
 
       it('should trigger "FormattedMessage" with correct id', () => {
         expect(FormattedMessage).toHaveBeenCalledWith({
@@ -145,24 +152,8 @@ describe('LostItemsList', () => {
       });
     });
 
-    describe('Loss date formatter', () => {
-      render(basicLostItemsListFormatter[COLUMNS_NAME.LOSS_DATE](basicActualCostRecord));
-
-      it('should trigger "FormattedDate" with correct value', () => {
-        expect(FormattedDate).toHaveBeenCalledWith({
-          value: basicActualCostRecord.lossDate,
-        }, {});
-      });
-
-      it('should trigger "FormattedTime" with correct value', () => {
-        expect(FormattedTime).toHaveBeenCalledWith({
-          value: basicActualCostRecord.lossDate,
-        }, {});
-      });
-    });
-
     describe('Instance formatter', () => {
-      render(basicLostItemsListFormatter[COLUMNS_NAME.INSTANCE](basicActualCostRecord));
+      render(formatter[COLUMNS_NAME.INSTANCE](basicActualCostRecord));
 
       it('should trigger "InstanceDetails" with correct props', () => {
         const expectedProps = {
@@ -175,7 +166,7 @@ describe('LostItemsList', () => {
 
     describe('Permanent item location formatter', () => {
       it('should return correct data', () => {
-        const result = basicLostItemsListFormatter[COLUMNS_NAME.PERMANENT_ITEM_LOCATION](basicActualCostRecord);
+        const result = formatter[COLUMNS_NAME.PERMANENT_ITEM_LOCATION](basicActualCostRecord);
 
         expect(result).toEqual(basicActualCostRecord.item.permanentLocation);
       });
@@ -183,7 +174,7 @@ describe('LostItemsList', () => {
 
     describe('Fee fine owner formatter', () => {
       it('should return correct data', () => {
-        const result = basicLostItemsListFormatter[COLUMNS_NAME.FEE_FINE_OWNER](basicActualCostRecord);
+        const result = formatter[COLUMNS_NAME.FEE_FINE_OWNER](basicActualCostRecord);
 
         expect(result).toEqual(basicActualCostRecord.feeFine.owner);
       });
@@ -191,9 +182,44 @@ describe('LostItemsList', () => {
 
     describe('Fee fine type formatter', () => {
       it('should return correct data', () => {
-        const result = basicLostItemsListFormatter[COLUMNS_NAME.FEE_FINE_TYPE](basicActualCostRecord);
+        const result = formatter[COLUMNS_NAME.FEE_FINE_TYPE](basicActualCostRecord);
 
         expect(result).toEqual(basicActualCostRecord.feeFine.type);
+      });
+    });
+
+    describe('Status formatter', () => {
+      render(
+        formatter[COLUMNS_NAME.STATUS](basicActualCostRecord)
+      );
+
+      it('should trigger "RecordStatus" with correct props', () => {
+        const expectedProps = {
+          billedRecords: getListFormatterArgs.billedRecords,
+          cancelledRecords: getListFormatterArgs.cancelledRecords,
+          actualCostRecord: basicActualCostRecord,
+        };
+
+        expect(RecordStatus).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
+      });
+    });
+
+    describe('Action formatter', () => {
+      render(
+        formatter[COLUMNS_NAME.ACTION](basicActualCostRecord)
+      );
+
+      it('should trigger "RenderActions" with correct props', () => {
+        const expectedProps = {
+          billedRecords: getListFormatterArgs.billedRecords,
+          cancelledRecords: getListFormatterArgs.cancelledRecords,
+          setActualCostModal: getListFormatterArgs.setActualCostModal,
+          actualCost: getListFormatterArgs.actualCost,
+          setActualCost: getListFormatterArgs.setActualCost,
+          actualCostRecord: basicActualCostRecord,
+        };
+
+        expect(RenderActions).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
       });
     });
   });
@@ -295,95 +321,6 @@ describe('LostItemsList', () => {
         };
 
         expect(MultiColumnList).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
-      });
-    });
-  });
-
-  describe('isBilledRecord', () => {
-    it('should return true when id is found', () => {
-      const recordId = 'recordId';
-
-      expect(isBilledRecord(recordId, [{ id: recordId }])).toBe(true);
-    });
-
-    it('should return false when no id found', () => {
-      const recordId = 'recordId';
-
-      expect(isBilledRecord(recordId, [])).toBe(false);
-    });
-  });
-
-  describe('isCancelledRecord', () => {
-    describe('when id is presented', () => {
-      it('should return true', () => {
-        const recordId = 'recordId';
-        const cancelledRecords = [recordId];
-
-        expect(isCancelledRecord(recordId, cancelledRecords)).toBe(true);
-      });
-    });
-
-    describe('when id is not presented', () => {
-      it('should return false', () => {
-        const recordId = 'recordId';
-        const cancelledRecords = [];
-
-        expect(isCancelledRecord(recordId, cancelledRecords)).toBe(false);
-      });
-    });
-  });
-
-  describe('getRecordStatus', () => {
-    const recordId = 'id';
-
-    describe('when record is "Billed"', () => {
-      const billedRecords = [{
-        id: recordId,
-      }];
-      const cancelledRecords = [];
-
-      it('should return data for billed record', () => {
-        const expectedResult = {
-          isBilled: true,
-          isCancelled: false,
-          isBillButtonDisabled: true,
-        };
-
-        expect(getRecordStatus(recordId, billedRecords, cancelledRecords)).toEqual(expectedResult);
-      });
-    });
-
-    describe('when record is "Cancelled"', () => {
-      const billedRecords = [{
-        id: 'test',
-      }];
-      const cancelledRecords = [recordId];
-
-      it('should return data for cancelled record', () => {
-        const expectedResult = {
-          isBilled: false,
-          isCancelled: true,
-          isBillButtonDisabled: true,
-        };
-
-        expect(getRecordStatus(recordId, billedRecords, cancelledRecords)).toEqual(expectedResult);
-      });
-    });
-
-    describe('when record is not "Billed" and not "Cancelled"', () => {
-      const billedRecords = [{
-        id: 'test',
-      }];
-      const cancelledRecords = ['test'];
-
-      it('should return data for not cancelled and not billed record', () => {
-        const expectedResult = {
-          isBilled: false,
-          isCancelled: false,
-          isBillButtonDisabled: false,
-        };
-
-        expect(getRecordStatus(recordId, billedRecords, cancelledRecords)).toEqual(expectedResult);
       });
     });
   });

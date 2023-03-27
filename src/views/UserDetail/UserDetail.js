@@ -47,6 +47,7 @@ import {
   UserLoans,
   UserRequests,
   UserAccounts,
+  UserAffiliations,
   UserServicePoints,
 } from '../../components/UserDetailSections';
 
@@ -69,6 +70,7 @@ import ExportFeesFinesReportButton from './components';
 import ErrorPane from '../../components/ErrorPane';
 import ActionMenuEditButton from './components/ActionMenuEditButton';
 import ActionMenuDeleteButton from './components/ActionMenuDeleteButton';
+import LostItemsLink from '../../components/LostItemsLink';
 
 class UserDetail extends React.Component {
   static propTypes = {
@@ -183,6 +185,7 @@ class UserDetail extends React.Component {
       showDeleteUserModal: false,
       sections: {
         userInformationSection: true,
+        affiliationsSection: false,
         extendedInfoSection: false,
         contactInfoSection: false,
         proxySection: false,
@@ -461,6 +464,7 @@ class UserDetail extends React.Component {
             goToEdit={this.goToEdit}
             editButton={this.editButton}
           />
+          <LostItemsLink />
           <IfInterface name="feesfines">
             <ExportFeesFinesReportButton
               feesFinesReportData={feesFinesReportData}
@@ -694,6 +698,18 @@ class UserDetail extends React.Component {
                   expanded={sections.userInformationSection}
                   onToggle={this.handleSectionToggle}
                 />
+
+                <IfInterface name="consortia">
+                  <IfPermission perm="consortia.user-tenants.collection.get">
+                    <UserAffiliations
+                      accordionId="affiliationsSection"
+                      expanded={sections.affiliationsSection}
+                      onToggle={this.handleSectionToggle}
+                      userId={user?.id}
+                    />
+                  </IfPermission>
+                </IfInterface>
+
                 <IfInterface name="feesfines">
                   {hasPatronBlocksPermissions &&
                     <PatronBlock
