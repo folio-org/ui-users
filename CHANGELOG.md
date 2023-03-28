@@ -1,5 +1,11 @@
 # Change history for ui-users
 
+## [9.0.1](https://github.com/folio-org/ui-users/tree/v9.0.1) (2023-03-27)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v9.0.0...v9.0.1)
+
+* Fix problem with remaining amount (not shown correct value after filling the payment amount). Refs UIU-2812.
+* Correctly handle removing all permissions from given user. Fixes UIU-2822.
+
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v9.0.0)
 
