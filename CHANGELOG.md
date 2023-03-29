@@ -1,5 +1,10 @@
 # Change history for ui-users
 
+## [9.0.2](https://github.com/folio-org/ui-users/tree/v9.0.2) (2023-03-29)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v9.0.1...v9.0.2)
+
+* Fix permission error when viewing fees/fines for payment. Refs UIU-2824.
+
 ## [9.0.1](https://github.com/folio-org/ui-users/tree/v9.0.1) (2023-03-27)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v9.0.0...v9.0.1)
 
