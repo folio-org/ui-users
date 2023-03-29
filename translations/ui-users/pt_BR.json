@@ -1058,5 +1058,6 @@
     "lostItems.list.columnName.action.feeFineDetails": "Detalhes da taxa/multa",
     "affiliations.section.label": "Afiliações",
     "affiliations.section.empty": "Nenhuma afiliação encontrada",
-    "permission.consortia.affiliations.view": "Usuários: Ver afiliações"
+    "permission.consortia.affiliations.view": "Usuários: Ver afiliações",
+    "permission.consortia.affiliations.edit": "Usuários: Atribuir e cancelar a atribuição de afiliações"
 }
