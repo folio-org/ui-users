@@ -19,6 +19,7 @@ import {
   ACTUAL_COST_RECORD_FIELD_PATH,
   PAGE_AMOUNT,
   SEARCH_FIELDS,
+  ACTUAL_COST_RECORD_NAME,
 } from '../views/LostItems/constants';
 import { buildFilterConfig } from './utils';
 
@@ -62,7 +63,7 @@ class LostItemsContainer extends React.Component {
     resultOffset: {
       initialValue: 0,
     },
-    records: {
+    [ACTUAL_COST_RECORD_NAME]: {
       type: 'okapi',
       records: 'actualCostRecords',
       resultOffset: '%{resultOffset}',
@@ -99,10 +100,10 @@ class LostItemsContainer extends React.Component {
     history: PropTypes.object,
     resources: PropTypes.shape({
       query: PropTypes.object,
-      records: PropTypes.object,
+      [ACTUAL_COST_RECORD_NAME]: PropTypes.object,
     }).isRequired,
     mutator: PropTypes.shape({
-      records: PropTypes.shape({
+      [ACTUAL_COST_RECORD_NAME]: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }).isRequired,
       query: PropTypes.shape({
@@ -136,11 +137,11 @@ class LostItemsContainer extends React.Component {
   }
 
   componentDidMount() {
-    this.source = new StripesConnectedSource(this.props, this.props.stripes.logger);
+    this.source = new StripesConnectedSource(this.props, this.props.stripes.logger, ACTUAL_COST_RECORD_NAME);
   }
 
   componentDidUpdate() {
-    this.source.update(this.props);
+    this.source.update(this.props, ACTUAL_COST_RECORD_NAME);
   }
 
   addBilledRecord = (record) => {
@@ -233,7 +234,7 @@ class LostItemsContainer extends React.Component {
     }
 
     if (this.source) {
-      this.source.update(this.props);
+      this.source.update(this.props, ACTUAL_COST_RECORD_NAME);
     }
 
     return (

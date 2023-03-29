@@ -15,6 +15,7 @@
 * Fix paths to `StripesContext`. Fixes UIU-2834.
 * * Support `feesfines` interface version `18.0`. Refs UIU-2825
 * A result is not displayed in list of permissions after clicking on the 'Search' button. Refs UIU-2835.
+* Get rid of blinking list on lost items page. Refs UIU-2831.
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v9.0.0)
