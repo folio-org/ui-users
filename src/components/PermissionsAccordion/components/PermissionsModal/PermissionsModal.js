@@ -179,6 +179,11 @@ class PermissionsModal extends React.Component {
   // and a set of permissions, return a subset of permissions for which the query
   // appears in the *translated* display name (if found in Okapi translations).
   getMatchedTranslations = (query, permissions) => {
+    // Given a label like "Settings (Remote storage): Can create, edit, delete remote storage settings"
+    // to match the value of a query that looks like "Settings (Remote Storage): ..."
+    // the query needs to be formatted with escaped special characters
+    // i.e., the characters like '(' needs to be treated literally, rather than as a regex special character.
+    const escapedQuery = query.toLowerCase().replace(/([()[\]{}.+*\\^$|-])/g, '\\$1');
     const translations = this.props.stripes.okapi.translations;
 
     // Translations are received from Stripes as an object with properties of the form
@@ -194,9 +199,9 @@ class PermissionsModal extends React.Component {
       // multi-value arrays correspond to translations with substitutions, html, etc.,
       // but those are not relevent here.
       if (typeof label === 'string') {
-        return /\.permission\./.test(key) && (label.toLowerCase().match(query.toLowerCase()) || label.toLowerCase() === query.toLowerCase());
+        return /\.permission\./.test(key) && label.toLowerCase().match(escapedQuery);
       } else if (Array.isArray(label) && label.length === 1) {
-        return /\.permission\./.test(key) && label[0].value.toLowerCase().match(query.toLowerCase());
+        return /\.permission\./.test(key) && label[0].value.toLowerCase().match(escapedQuery);
       }
       return false;
     });

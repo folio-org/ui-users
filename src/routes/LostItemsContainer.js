@@ -133,7 +133,7 @@ class LostItemsContainer extends React.Component {
     this.state = {
       billedRecords: [],
       cancelledRecords: [],
-      userLocation: {
+      usersLocation: {
         pathname: props.location.state?.pathname,
         search: props.location.state?.search,
       },
@@ -208,10 +208,10 @@ class LostItemsContainer extends React.Component {
 
   onClose = () => {
     const { history } = this.props;
-    const { userLocation } = this.state;
+    const { usersLocation } = this.state;
 
-    if (userLocation.pathname) {
-      history.push(`${userLocation.pathname}${userLocation.search}`);
+    if (usersLocation.pathname) {
+      history.push(`${usersLocation.pathname}${usersLocation.search}`);
     } else {
       history.push('/users?sort=name');
     }
