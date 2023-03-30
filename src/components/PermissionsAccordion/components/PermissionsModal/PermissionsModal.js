@@ -193,10 +193,11 @@ class PermissionsModal extends React.Component {
       // the property "value" that contains the translation value.
       // multi-value arrays correspond to translations with substitutions, html, etc.,
       // but those are not relevent here.
+      const escapedQuery = query.toLowerCase().replace(/([()[\]{}.+*\\^$|-])/g, '\\$1');
       if (typeof label === 'string') {
-        return /\.permission\./.test(key) && (label.toLowerCase().match(query.toLowerCase()) || label.toLowerCase() === query.toLowerCase());
+        return /\.permission\./.test(key) && label.toLowerCase().match(escapedQuery);
       } else if (Array.isArray(label) && label.length === 1) {
-        return /\.permission\./.test(key) && label[0].value.toLowerCase().match(query.toLowerCase());
+        return /\.permission\./.test(key) && label[0].value.toLowerCase().match(escapedQuery);
       }
       return false;
     });
