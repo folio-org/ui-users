@@ -1056,7 +1056,8 @@
     "lostItems.recordStatus.cancelled": "Cancelado",
     "lostItems.recordStatus.expired": "Caducado: ",
     "lostItems.list.columnName.action.feeFineDetails": "Detalles de la tasa/multa",
-    "affiliations.section.label": "Affiliations",
-    "affiliations.section.empty": "No affiliations found",
-    "permission.consortia.affiliations.view": "Users: View affiliations"
+    "affiliations.section.label": "Afiliaciones",
+    "affiliations.section.empty": "No se han encontrado afiliaciones",
+    "permission.consortia.affiliations.view": "Usuarios: Ver afiliaciones",
+    "permission.consortia.affiliations.edit": "Usuarios: Asignar y desasignar afiliaciones"
 }
