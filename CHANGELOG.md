@@ -3,7 +3,7 @@
 ## [9.0.3](https://github.com/folio-org/ui-users/tree/v9.0.3) (2023-03-31)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v9.0.2...v9.0.3)
 
-* Fix permission error when viewing fees/fines for payment. Refs UIU-2824.
+* A result is not displayed in list of permissions after clicking on the 'Search' button. Refs UIU-2835.
 
 ## [9.0.2](https://github.com/folio-org/ui-users/tree/v9.0.2) (2023-03-29)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v9.0.1...v9.0.2)
