@@ -29,6 +29,7 @@ import {
 } from './components';
 import { getPatronName } from './components/LostItemsList/util';
 import { STATUS_CODES } from '../../../constants';
+import { ACTUAL_COST_RECORD_NAME } from '../constants';
 
 import styles from './LostItemsListContainer.css';
 
@@ -39,7 +40,7 @@ class LostItemsListContainer extends React.Component {
     queryGetter: PropTypes.func,
     querySetter: PropTypes.func,
     resources: PropTypes.shape({
-      records: PropTypes.object,
+      [ACTUAL_COST_RECORD_NAME]: PropTypes.object,
     }).isRequired,
     mutator: PropTypes.shape({
       resultOffset: PropTypes.shape({
@@ -220,7 +221,7 @@ class LostItemsListContainer extends React.Component {
       filterPaneIsVisible,
     } = this.state;
 
-    const actualCostRecords = resources.records.records ?? [];
+    const actualCostRecords = resources[ACTUAL_COST_RECORD_NAME].records ?? [];
     const query = queryGetter ? queryGetter() || {} : {};
     const count = source ? source.totalCount() : 0;
     const sortOrder = query.sort || '';

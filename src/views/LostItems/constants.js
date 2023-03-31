@@ -6,6 +6,7 @@ import {
 
 export const DEFAULT_VALUE = '';
 export const PAGE_AMOUNT = 100;
+export const ACTUAL_COST_RECORD_NAME = 'actualCostRecords';
 
 export const ACTUAL_COST_RECORD_FIELD_NAME = {
   LOSS_TYPE: 'lossType',
