@@ -18,7 +18,7 @@ on: [push, pull_request]
 jobs:
   build-npm:
     env:
-      YARN_TEST_OPTIONS: '--ci --coverage --colors'
+      YARN_TEST_OPTIONS: '--ci --coverage --colors --runInBand'
       SQ_ROOT_DIR: './src'
       PUBLISH_MOD_DESCRIPTOR: 'true'
       COMPILE_TRANSLATION_FILES: 'true'
