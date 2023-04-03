@@ -32,7 +32,7 @@ const initialProps = {
     },
   },
 };
-const messageIds = {
+const labelIds = {
   actualCostDetails: 'ui-users.lostItems.list.columnName.action.actualCostDetails',
   summaryMessageCharged: 'ui-users.lostItems.modal.summaryMessageCharged',
   summaryMessageNotCharged: 'ui-users.lostItems.modal.summaryMessageNotCharged',
@@ -60,24 +60,24 @@ describe('ActualCostDetailsModal', () => {
     });
 
     it('should have correct title', () => {
-      expect(screen.getByText(messageIds.actualCostDetails)).toBeVisible();
+      expect(screen.getByText(labelIds.actualCostDetails)).toBeVisible();
     });
 
     it('should render summary message', () => {
-      expect(screen.getByText(messageIds.summaryMessageNotCharged)).toBeVisible();
+      expect(screen.getByText(labelIds.summaryMessageNotCharged)).toBeVisible();
     });
 
     it('should render "additionalInformationForStaff" message', () => {
-      expect(screen.getByText(messageIds.additionalInformationForStaff)).toBeVisible();
+      expect(screen.getByText(labelIds.additionalInformationForStaff)).toBeVisible();
     });
 
     it('should render "additionalInformationForPatron" message', () => {
-      expect(screen.getByText(messageIds.additionalInformationForPatron)).toBeVisible();
+      expect(screen.getByText(labelIds.additionalInformationForPatron)).toBeVisible();
     });
 
     describe('footer', () => {
       it('should render "OK" button label', () => {
-        expect(screen.getByText(messageIds.okay)).toBeVisible();
+        expect(screen.getByText(labelIds.okay)).toBeVisible();
       });
 
       it('should trigger onClose when "OK" button is clicked', () => {
@@ -112,7 +112,7 @@ describe('ActualCostDetailsModal', () => {
     });
 
     it('should render summary message', () => {
-      expect(screen.getByText(messageIds.summaryMessageCharged)).toBeVisible();
+      expect(screen.getByText(labelIds.summaryMessageCharged)).toBeVisible();
     });
   });
 });
