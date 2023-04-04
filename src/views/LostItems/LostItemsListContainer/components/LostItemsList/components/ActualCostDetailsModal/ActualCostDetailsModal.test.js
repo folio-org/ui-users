@@ -38,7 +38,7 @@ const labelIds = {
   summaryMessageNotCharged: 'ui-users.lostItems.modal.summaryMessageNotCharged',
   additionalInformationForStaff: 'ui-users.lostItems.modal.additionalInformationForStaff',
   additionalInformationForPatron: 'ui-users.lostItems.modal.additionalInformationForPatron',
-  okay: 'ui-users.okay',
+  close: 'ui-users.lostItems.modal.button.close',
 };
 const testIds = {
   actualCostDetails: 'actualCostDetails',
@@ -77,7 +77,7 @@ describe('ActualCostDetailsModal', () => {
 
     describe('footer', () => {
       it('should render "OK" button label', () => {
-        expect(screen.getByText(labelIds.okay)).toBeVisible();
+        expect(screen.getByText(labelIds.close)).toBeVisible();
       });
 
       it('should trigger onClose when "OK" button is clicked', () => {

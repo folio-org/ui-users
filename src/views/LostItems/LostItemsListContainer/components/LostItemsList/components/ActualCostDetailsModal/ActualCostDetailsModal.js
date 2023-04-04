@@ -53,7 +53,7 @@ const ActualCostDetailsModal = ({
         buttonStyle="primary"
         onClick={onClose}
       >
-        <FormattedMessage id="ui-users.okay" />
+        <FormattedMessage id="ui-users.lostItems.modal.button.close" />
       </Button>
     </ModalFooter>
   );

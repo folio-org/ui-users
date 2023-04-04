@@ -1045,6 +1045,7 @@
   "lostItems.modal.button.continue": "Continue",
   "lostItems.modal.button.keepEditing": "Keep editing",
   "lostItems.modal.button.confirm": "Confirm",
+  "lostItems.modal.button.close": "Close",
   "lostItems.list.filters": "Search & filter",
   "lostItems.list.searchResults": "Lost items requiring actual cost",
   "lostItems.list.filters.lossType": "Loss type",
