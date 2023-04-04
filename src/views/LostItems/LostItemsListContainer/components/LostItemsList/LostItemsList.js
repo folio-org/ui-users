@@ -15,6 +15,7 @@ import {
 import {
   ActualCostModal,
   ActualCostConfirmModal,
+  ActualCostDetailsModal,
   InstanceDetails,
   RenderActions,
   RecordStatus,
@@ -31,6 +32,7 @@ import {
   ITEM_LOSS_TYPES_TRANSLATIONS_KEYS,
   PAGE_AMOUNT,
   ACTUAL_COST_MODAL_DEFAULT,
+  ACTUAL_COST_DETAILS_MODAL_DEFAULT,
   ACTUAL_COST_CONFIRM_MODAL_DEFAULT,
   ACTUAL_COST_DEFAULT,
 } from '../../../constants';
@@ -94,6 +96,7 @@ export const getListFormatter = ({
   cancelledRecords,
   setActualCost,
   setActualCostModal,
+  setActualCostDetailsModal,
   actualCost,
 }) => ({
   [COLUMNS_NAME.PATRON]: (actualCostRecord) => {
@@ -134,6 +137,7 @@ export const getListFormatter = ({
       cancelledRecords={cancelledRecords}
       actualCostRecord={actualCostRecord}
       setActualCostModal={setActualCostModal}
+      setActualCostDetailsModal={setActualCostDetailsModal}
       actualCost={actualCost}
       setActualCost={setActualCost}
     />
@@ -153,6 +157,7 @@ const LostItemsList = ({
   cancelledRecords,
 }) => {
   const [actualCostModal, setActualCostModal] = useState(ACTUAL_COST_MODAL_DEFAULT);
+  const [actualCostDetailsModal, setActualCostDetailsModal] = useState(ACTUAL_COST_DETAILS_MODAL_DEFAULT);
   const [actualCostConfirmModal, setActualCostConfirmModal] = useState(ACTUAL_COST_CONFIRM_MODAL_DEFAULT);
   const [actualCost, setActualCost] = useState(ACTUAL_COST_DEFAULT);
 
@@ -161,6 +166,7 @@ const LostItemsList = ({
     cancelledRecords,
     setActualCost,
     setActualCostModal,
+    setActualCostDetailsModal,
     actualCost,
   });
 
@@ -203,6 +209,12 @@ const LostItemsList = ({
         setActualCost={setActualCost}
         billRecord={billRecord}
         cancelRecord={cancelRecord}
+      />
+      <ActualCostDetailsModal
+        actualCost={actualCost}
+        setActualCost={setActualCost}
+        actualCostDetailsModal={actualCostDetailsModal}
+        setActualCostDetailsModal={setActualCostDetailsModal}
       />
     </>
   );

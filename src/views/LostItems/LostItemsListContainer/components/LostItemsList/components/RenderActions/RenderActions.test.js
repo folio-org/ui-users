@@ -9,6 +9,7 @@ import '../../../../../../../../test/jest/__mock__';
 
 import RenderActions from './RenderActions';
 import {
+  ActualCostDetails,
   BillActualCost,
   DoNotBillActualCost,
   FeeFineDetailsLink,
@@ -24,6 +25,7 @@ jest.mock('../../util', () => ({
 }));
 jest.mock('./components', () => ({
   ...jest.requireActual('./components'),
+  ActualCostDetails: jest.fn(() => null),
   BillActualCost: jest.fn(() => null),
   DoNotBillActualCost: jest.fn(() => null),
   FeeFineDetailsLink: jest.fn(() => null),
@@ -53,6 +55,7 @@ const initialProps = {
   actualCost: {},
   billedRecords: [],
   setActualCostModal: jest.fn(),
+  setActualCostDetailsModal: jest.fn(),
   setActualCost: jest.fn(),
 };
 
@@ -104,6 +107,28 @@ describe('RenderActions', () => {
     it('should trigger "DoNotBillActualCost" with correct props', () => {
       expect(DoNotBillActualCost).toHaveBeenCalledWith(expectedActualCostProps, {});
     });
+
+    it('should trigger "FeeFineDetailsLink" with correct props', () => {
+      const expectedProps = {
+        actualCostRecord: initialProps.actualCostRecord,
+        isBilled: true,
+        billedRecords: initialProps.billedRecords,
+      };
+
+      expect(FeeFineDetailsLink).toHaveBeenCalledWith(expectedProps, {});
+    });
+
+    it('should trigger "ActualCostDetails" with correct props', () => {
+      const expectedProps = {
+        actualCostRecord: initialProps.actualCostRecord,
+        actualCost: initialProps.actualCost,
+        setActualCostDetailsModal: initialProps.setActualCostDetailsModal,
+        setActualCost: initialProps.setActualCost,
+        disabled: true,
+      };
+
+      expect(ActualCostDetails).toHaveBeenCalledWith(expectedProps, {});
+    });
   });
 
   describe('when record was cancelled', () => {
@@ -136,6 +161,18 @@ describe('RenderActions', () => {
       };
 
       expect(FeeFineDetailsLink).toHaveBeenCalledWith(expectedProps, {});
+    });
+
+    it('should trigger "ActualCostDetails" with correct props', () => {
+      const expectedProps = {
+        actualCostRecord: initialProps.actualCostRecord,
+        actualCost: initialProps.actualCost,
+        setActualCostDetailsModal: initialProps.setActualCostDetailsModal,
+        setActualCost: initialProps.setActualCost,
+        disabled: true,
+      };
+
+      expect(ActualCostDetails).toHaveBeenCalledWith(expectedProps, {});
     });
   });
 });
