@@ -889,7 +889,7 @@
     "@babel/plugin-proposal-class-properties": "^7.13.0",
     "@babel/plugin-proposal-decorators": "^7.13.5",
     "@babel/plugin-transform-runtime": "^7.21.4",
-    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-env": "^7.21.4",
     "@babel/preset-react": "^7.9.0",
     "@folio/eslint-config-stripes": "^6.0.0",
     "@folio/jest-config-stripes": "^1.0.0",
