@@ -13,7 +13,6 @@ import {
 } from '@folio/stripes/components';
 
 import { getPatronName } from '../../util';
-
 import {
   ACTUAL_COST_CONFIRM_MODAL_DEFAULT,
   ACTUAL_COST_DEFAULT,

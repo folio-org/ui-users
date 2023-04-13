@@ -35,7 +35,7 @@ const initialProps = {
   },
   billRecord: jest.fn(),
 };
-const messageIds = {
+const labelIds = {
   billConfirmText: 'ui-users.lostItems.modal.bill.confirm.text',
   doNotBillConfirmText: 'ui-users.lostItems.modal.doNotBill.confirm.text',
   additionalInformationForStaff: 'ui-users.lostItems.modal.additionalInformationForStaff',
@@ -66,24 +66,24 @@ describe('ActualCostConfirmModal', () => {
     });
 
     it('should have correct title', () => {
-      expect(screen.getByText(messageIds.confirmBillTitle)).toBeVisible();
+      expect(screen.getByText(labelIds.confirmBillTitle)).toBeVisible();
     });
 
     it('should render confirm bill message', () => {
-      expect(screen.getByText(messageIds.billConfirmText)).toBeVisible();
+      expect(screen.getByText(labelIds.billConfirmText)).toBeVisible();
     });
 
     it('should render "additionalInformationForStaff" message', () => {
-      expect(screen.getByText(messageIds.additionalInformationForStaff)).toBeVisible();
+      expect(screen.getByText(labelIds.additionalInformationForStaff)).toBeVisible();
     });
 
     it('should render "additionalInformationForPatron" message', () => {
-      expect(screen.getByText(messageIds.additionalInformationForPatron)).toBeVisible();
+      expect(screen.getByText(labelIds.additionalInformationForPatron)).toBeVisible();
     });
 
     describe('footer', () => {
       it('should render "Confirm" button label', () => {
-        expect(screen.getByText(messageIds.confirmButton)).toBeVisible();
+        expect(screen.getByText(labelIds.confirmButton)).toBeVisible();
       });
 
       it('should trigger "setActualCostConfirmModal", "billRecord" and "setActualCost" with correct data', () => {
@@ -98,7 +98,7 @@ describe('ActualCostConfirmModal', () => {
       });
 
       it('should render "keepEditing" button label', () => {
-        expect(screen.getByText(messageIds.keepEditing)).toBeVisible();
+        expect(screen.getByText(labelIds.keepEditing)).toBeVisible();
       });
 
       it('should trigger "setActualCostConfirmModal" and "setActualCostModal" with correct data', () => {
@@ -132,15 +132,15 @@ describe('ActualCostConfirmModal', () => {
     });
 
     it('should have correct title', () => {
-      expect(screen.getByText(messageIds.confirmDoNotBillTitle)).toBeVisible();
+      expect(screen.getByText(labelIds.confirmDoNotBillTitle)).toBeVisible();
     });
 
     it('should render confirm do not bill message', () => {
-      expect(screen.getByText(messageIds.doNotBillConfirmText)).toBeVisible();
+      expect(screen.getByText(labelIds.doNotBillConfirmText)).toBeVisible();
     });
 
     it('should not render additional patron information', () => {
-      expect(screen.queryByText(messageIds.additionalInformationForPatron)).not.toBeInTheDocument();
+      expect(screen.queryByText(labelIds.additionalInformationForPatron)).not.toBeInTheDocument();
     });
   });
 });
