@@ -925,7 +925,7 @@
     "react-final-form-arrays": "^3.1.0",
     "react-final-form-listeners": "^1.0.3",
     "react-router-prop-types": "^1.0.4",
-    "uuid": "^8.3.2"
+    "uuid": "^9.0.0"
   },
   "peerDependencies": {
     "@folio/stripes": "^8.0.0",
