@@ -10,7 +10,9 @@ import {
   ACTUAL_COST_DEFAULT,
   ACTUAL_COST_DETAILS_MODAL_DEFAULT,
 } from '../../../../../constants';
-import ActualCostDetailsModal from './ActualCostDetailsModal';
+import ActualCostDetailsModal, {
+  getActualCostToBillViewValue,
+} from './ActualCostDetailsModal';
 
 const initialProps = {
   actualCostDetailsModal: {
@@ -26,7 +28,7 @@ const initialProps = {
       status: 'Cancelled'
     },
     additionalInfo: {
-      actualCostToBill: 'actualCostToBill',
+      actualCostToBill: 10,
       additionalInformationForStaff: 'additionalInformationForStaff',
       additionalInformationForPatron: 'additionalInformationForPatron',
     },
@@ -46,6 +48,20 @@ const testIds = {
 };
 
 describe('ActualCostDetailsModal', () => {
+  describe('getActualCostToBillViewValue', () => {
+    it('should return 0 when value absent', () => {
+      expect(getActualCostToBillViewValue()).toEqual('0.00');
+    });
+
+    it('should return decimal value with 2 digits when digit part absent', () => {
+      expect(getActualCostToBillViewValue(0.1)).toEqual('0.10');
+    });
+
+    it('should return decimal value with 2 digits when digit part more than 2 digits', () => {
+      expect(getActualCostToBillViewValue(0.101)).toEqual('0.10');
+    });
+  });
+
   describe('when the record has "Cancelled" status', () => {
     beforeEach(() => {
       render(
