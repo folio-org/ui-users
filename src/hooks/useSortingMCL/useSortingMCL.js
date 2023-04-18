@@ -6,10 +6,10 @@ const { asc, desc } = SORT_DIRECTIONS;
 
 const useSortingMCL = (sortableFields) => {
   const [sortOrder, setSortOrder] = useState('');
-  const [sortDirection, setSortDirection] = useState('');
+  const [sortDirection, setSortDirection] = useState({});
 
   const toggleSortingDirection = useCallback(() => {
-    setSortDirection((curr) => (curr === asc ? desc : asc));
+    setSortDirection((curr) => (curr.name === asc.name ? desc : asc));
   }, []);
 
   const changeSorting = useCallback((e, { name }) => {
