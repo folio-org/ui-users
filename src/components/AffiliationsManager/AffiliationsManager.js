@@ -30,7 +30,7 @@ const AffiliationsManager = ({
 
 AffiliationsManager.propTypes = {
   disabled: PropTypes.bool,
-  onUpdateAffiliations: PropTypes.bool.isRequired,
+  onUpdateAffiliations: PropTypes.func.isRequired,
   renderTrigger: PropTypes.func,
   userId: PropTypes.string.isRequired,
   withTrigger: PropTypes.bool,

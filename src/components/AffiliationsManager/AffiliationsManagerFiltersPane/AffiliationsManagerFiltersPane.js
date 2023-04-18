@@ -111,6 +111,7 @@ const AffiliationsManagerFiltersPane = ({
         </Button>
 
         <Button
+          data-testid="reset-all-affiliations-filters"
           buttonClass={css.resetButton}
           buttonStyle="none"
           onClick={clearAll}
