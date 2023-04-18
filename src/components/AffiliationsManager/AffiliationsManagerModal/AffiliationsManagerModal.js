@@ -1,3 +1,4 @@
+import orderBy from 'lodash/orderBy';
 import PropTypes from 'prop-types';
 import { useCallback, useMemo, useReducer } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -9,6 +10,7 @@ import {
 
 import {
   useConsortiumTenants,
+  useSortingMCL,
   useToggle,
   useUserAffiliations,
 } from '../../../hooks';
@@ -22,13 +24,23 @@ import useAffiliationsAssignment from '../useAffiliationsAssignment';
 import AffiliationsManagerModalFooter from './AffiliationsManagerModalFooter';
 
 import css from '../AffiliationsManager.css';
-import { SEARCH_FIELD_NAME } from '../constants';
+import {
+  AFFILIATIONS_COLUMN_NAMES,
+  AFFILIATIONS_SORTABLE_FIELDS,
+  SEARCH_FIELD_NAME,
+} from '../constants';
 
 const INITIAL_FILTERS = {};
 
 const AffiliationManagerModal = ({ onClose, onSubmit, userId }) => {
   const [isFiltersVisible, toggleFilters] = useToggle(true);
   const [filters, dispatch] = useReducer(filtersReducer, INITIAL_FILTERS);
+
+  const {
+    sortOrder,
+    sortDirection,
+    changeSorting,
+  } = useSortingMCL(AFFILIATIONS_SORTABLE_FIELDS);
 
   const {
     affiliations,
@@ -61,17 +73,27 @@ const AffiliationManagerModal = ({ onClose, onSubmit, userId }) => {
     />
   );
 
+  const sorters = useMemo(() => ({
+    [AFFILIATIONS_COLUMN_NAMES.name]: ({ name }) => name.toLocaleLowerCase(),
+    [AFFILIATIONS_COLUMN_NAMES.status]: ({ id }) => Boolean(assignment[id]),
+  }), [assignment]);
+
   const contentData = useMemo(() => {
     const {
       [SEARCH_FIELD_NAME]: searchQuery,
       ...activeFilters
     } = filters;
 
-    return filtersConfig
-      .reduce((filtered, config) => config.filter(filtered, activeFilters, assignment), tenants)
-      .filter(({ name }) => (searchQuery ? name.toLowerCase().includes(searchQuery.toLowerCase()) : true))
-      .sort((a, b) => a.name.localeCompare(b.name));
-  }, [assignment, filters, tenants]);
+    return (
+      orderBy(
+        filtersConfig
+          .reduce((filtered, config) => config.filter(filtered, activeFilters, assignment), tenants)
+          .filter(({ name }) => (searchQuery ? name.toLowerCase().includes(searchQuery.toLowerCase()) : true)),
+        sorters[sortOrder],
+        sortDirection.name,
+      )
+    );
+  }, [assignment, filters, sortDirection.name, sortOrder, sorters, tenants]);
 
   // TODO: add logic to display unassigned affiliations
   const displayWarning = true;
@@ -106,6 +128,9 @@ const AffiliationManagerModal = ({ onClose, onSubmit, userId }) => {
           isAllAssigned={isAllAssigned}
           isFiltersVisible={isFiltersVisible}
           isLoading={isLoading}
+          sortDirection={sortDirection}
+          sortOrder={sortOrder}
+          changeSorting={changeSorting}
           toggleFilters={toggleFilters}
           toggleRecord={toggle}
           toggleAllRecords={toggleAll}

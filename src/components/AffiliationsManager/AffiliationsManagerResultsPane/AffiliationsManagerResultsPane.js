@@ -54,11 +54,14 @@ const getResultFormatter = ({ toggle, assignment }) => ({
 
 const AffiliationsManagerResultsPane = ({
   assignment,
+  changeSorting,
   contentData,
   displayWarning,
   isAllAssigned,
   isFiltersVisible,
   isLoading,
+  sortDirection,
+  sortOrder,
   toggleFilters,
   toggleRecord,
   toggleAllRecords,
@@ -105,12 +108,16 @@ const AffiliationsManagerResultsPane = ({
 
       <MultiColumnList
         id="user-affiliations-list"
+        columnIdPrefix="affiliations-manager"
         columnWidths={AFFILIATIONS_COLUMN_WIDTHS}
-        visibleColumns={AFFILIATIONS_VISIBLE_COLUMNS}
-        contentData={contentData}
         columnMapping={columnMapping}
+        contentData={contentData}
         formatter={formatter}
         loading={isLoading}
+        onHeaderClick={changeSorting}
+        sortDirection={sortDirection.fullName}
+        sortOrder={sortOrder}
+        visibleColumns={AFFILIATIONS_VISIBLE_COLUMNS}
       />
     </Pane>
   );
@@ -118,11 +125,14 @@ const AffiliationsManagerResultsPane = ({
 
 AffiliationsManagerResultsPane.propTypes = {
   assignment: PropTypes.object.isRequired,
+  changeSorting: PropTypes.func.isRequired,
   contentData: PropTypes.arrayOf(PropTypes.object).isRequired,
   displayWarning: PropTypes.bool.isRequired,
   isAllAssigned: PropTypes.bool.isRequired,
   isFiltersVisible: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
+  sortDirection: PropTypes.object.isRequired,
+  sortOrder: PropTypes.string.isRequired,
   toggleAllRecords: PropTypes.func.isRequired,
   toggleFilters: PropTypes.func.isRequired,
   toggleRecord: PropTypes.func.isRequired,
