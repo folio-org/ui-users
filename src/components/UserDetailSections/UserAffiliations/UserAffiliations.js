@@ -46,7 +46,7 @@ const UserAffiliations = ({
     <AffiliationsManager
       disabled={isLoading}
       userId={userId}
-      onUpdateAffiliations={console.log}
+      onUpdateAffiliations={() => {}}
     />
   );
 
