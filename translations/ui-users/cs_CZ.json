@@ -1059,5 +1059,9 @@
     "affiliations.section.label": "Příslušnost",
     "affiliations.section.empty": "Nebyly nalezena žádná příslušnost",
     "permission.consortia.affiliations.view": "Uživatelé: Zobrazit příslušnost",
-    "permission.consortia.affiliations.edit": "Users: Assign and unassign affiliations"
+    "permission.consortia.affiliations.edit": "Uživatelé: Přiřadit a zrušit příslušnost",
+    "lostItems.list.columnName.action.actualCostDetails": "Podrobnosti o skutečných nákladech",
+    "lostItems.modal.summaryMessageCharged": "Poplatek/pokuta ve výši <strong>{actualCostToBill}</strong> byl/a <strong>naúčtován/a</strong> čtenáři <strong>{patronName}</strong> za <strong>{instanceTitle} ( {materialType} )</strong>.",
+    "lostItems.modal.summaryMessageNotCharged": "Poplatek/pokuta <strong>nebyla naúčtována</strong> čtenáři <strong>{patronName}</strong> za <strong>{instanceTitle} ( {materialType} )</strong>.",
+    "lostItems.modal.button.close": "Zavřít"
 }
