@@ -1,3 +1,4 @@
+import orderBy from 'lodash/orderBy';
 import PropTypes from 'prop-types';
 import {
   difference,
