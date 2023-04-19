@@ -26,8 +26,10 @@ const useUserAffiliations = ({ userId } = {}, options = {}) => {
   const searchParams = { userId };
 
   const {
+    isFetching,
     isLoading: isAffiliationsLoading,
     data = {},
+    refetch,
   } = useQuery(
     [namespace, userId, consortium?.id],
     async () => {
@@ -47,7 +49,9 @@ const useUserAffiliations = ({ userId } = {}, options = {}) => {
   return ({
     affiliations: data.userTenants || DEFAULT_DATA,
     totalRecords: data.totalRecords,
+    isFetching,
     isLoading,
+    refetch,
   });
 };
 

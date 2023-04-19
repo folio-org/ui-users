@@ -1,6 +1,10 @@
-import orderBy from 'lodash/orderBy';
 import PropTypes from 'prop-types';
-import { useCallback, useMemo, useReducer } from 'react';
+import {
+  difference,
+  intersection,
+  orderBy,
+} from 'lodash';
+import { useCallback, useMemo, useReducer, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import {
@@ -21,18 +25,19 @@ import {
 } from '../AffiliationsManagerFiltersPane';
 import AffiliationsManagerResultsPane from '../AffiliationsManagerResultsPane';
 import useAffiliationsAssignment from '../useAffiliationsAssignment';
-import AffiliationsManagerModalFooter from './AffiliationsManagerModalFooter';
-
-import css from '../AffiliationsManager.css';
 import {
   AFFILIATIONS_COLUMN_NAMES,
   AFFILIATIONS_SORTABLE_FIELDS,
   SEARCH_FIELD_NAME,
 } from '../constants';
+import AffiliationsManagerModalFooter from './AffiliationsManagerModalFooter';
+
+import css from '../AffiliationsManager.css';
 
 const INITIAL_FILTERS = {};
 
 const AffiliationManagerModal = ({ onClose, onSubmit, userId }) => {
+  const [isDisplayWarning, setDisplayWarning] = useState(false);
   const [isFiltersVisible, toggleFilters] = useToggle(true);
   const [filters, dispatch] = useReducer(filtersReducer, INITIAL_FILTERS);
 
@@ -58,12 +63,32 @@ const AffiliationManagerModal = ({ onClose, onSubmit, userId }) => {
     toggle,
     toggleAll,
     totalAssigned,
-  } = useAffiliationsAssignment({ affiliations, tenants });
+  } = useAffiliationsAssignment({
+    affiliations,
+    tenants,
+    onUnassignedCheck: setDisplayWarning,
+  });
 
-  // TODO: provide calculated changes in assignment to onSubmit()
-  const handleOnSubmit = useCallback(() => {
-    onSubmit();
-  }, [onSubmit]);
+  const isLoading = isConsortiumTenantsLoading || isUsersAffiliationsLoading;
+
+  const affiliationIds = useMemo(() => affiliations.map(({ tenantId }) => tenantId), [affiliations]);
+
+  const handleOnSubmit = useCallback(async () => {
+    const getAffiliationIds = (assigned) => (
+      Object
+        .entries(assignment)
+        .filter((entry => (assigned ? Boolean(entry[1]) : !entry[1])))
+        .map(entry => entry[0])
+    );
+
+    const buildResult = (tenantIds) => tenantIds.map(tenantId => ({ tenantId, userId }));
+
+    const added = buildResult(difference(getAffiliationIds(true), affiliationIds));
+    const removed = buildResult(intersection(getAffiliationIds(false), affiliationIds));
+
+    await onSubmit({ added, removed });
+    onClose();
+  }, [affiliationIds, assignment, onClose, onSubmit, userId]);
 
   const modalFooter = (
     <AffiliationsManagerModalFooter
@@ -95,11 +120,6 @@ const AffiliationManagerModal = ({ onClose, onSubmit, userId }) => {
     );
   }, [assignment, filters, sortDirection.name, sortOrder, sorters, tenants]);
 
-  // TODO: add logic to display unassigned affiliations
-  const displayWarning = true;
-
-  const isLoading = isConsortiumTenantsLoading || isUsersAffiliationsLoading;
-
   return (
     <Modal
       open
@@ -124,7 +144,7 @@ const AffiliationManagerModal = ({ onClose, onSubmit, userId }) => {
         <AffiliationsManagerResultsPane
           assignment={assignment}
           contentData={contentData}
-          displayWarning={displayWarning}
+          displayWarning={isDisplayWarning}
           isAllAssigned={isAllAssigned}
           isFiltersVisible={isFiltersVisible}
           isLoading={isLoading}

@@ -6,7 +6,7 @@ import {
   useState,
 } from 'react';
 
-const useAffiliationsAssignment = ({ affiliations, tenants }) => {
+const useAffiliationsAssignment = ({ affiliations, tenants, onUnassignedCheck }) => {
   const [assignment, setAssignment] = useState({});
 
   useEffect(() => {
@@ -29,18 +29,33 @@ const useAffiliationsAssignment = ({ affiliations, tenants }) => {
     Object.values(assignment).filter(Boolean).length
   ), [assignment]);
 
+  const checkUnassigned = useCallback((_assignment) => {
+    onUnassignedCheck(affiliations.some(({ tenantId }) => !_assignment[tenantId]));
+  }, [affiliations, onUnassignedCheck]);
+
   const toggle = useCallback(({ id }) => {
-    setAssignment(prev => ({ ...prev, [id]: !prev[id] }));
-  }, []);
+    setAssignment(prev => {
+      const newAssignment = { ...prev, [id]: !prev[id] };
+
+      checkUnassigned(newAssignment);
+
+      return newAssignment;
+    });
+  }, [checkUnassigned]);
 
   const toggleAll = useCallback(() => {
-    setAssignment(prev => (
-      Object.entries(prev).reduce((acc, [key]) => {
+    setAssignment(prev => {
+      const newAssignment = Object.entries(prev).reduce((acc, [key]) => {
         acc[key] = !isAllAssigned;
 
         return acc;
-      }, {})));
-  }, [isAllAssigned]);
+      }, {});
+
+      checkUnassigned(newAssignment);
+
+      return newAssignment;
+    });
+  }, [checkUnassigned, isAllAssigned]);
 
   return {
     assignment,

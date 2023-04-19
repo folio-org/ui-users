@@ -28,6 +28,7 @@ const useConsortiumTenants = () => {
   };
 
   const {
+    isFetching,
     isLoading: isAffiliationsLoading,
     data = {},
   } = useQuery(
@@ -48,6 +49,7 @@ const useConsortiumTenants = () => {
   return ({
     tenants: data.tenants || DEFAULT_DATA,
     totalRecords: data.totalRecords,
+    isFetching,
     isLoading,
   });
 };
