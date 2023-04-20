@@ -22,7 +22,6 @@ const assignmentStatusConfig = {
     return filtered.filter(({ id }) => {
       const isAssigned = Boolean(assignment[id]);
 
-      // TODO: optionally think about another logic
       return (
         (filterUnassigned && !isAssigned && !filterAssigned)
         || (!filterUnassigned && isAssigned && filterAssigned)
