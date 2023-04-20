@@ -28,7 +28,20 @@ jest.mock('../../util', () => ({
 jest.mock('@folio/stripes/util', () => ({
   effectiveCallNumber: jest.fn(),
 }));
-
+jest.mock('@folio/stripes/components', () => ({
+  ...jest.requireActual('@folio/stripes/components'),
+  ConfirmationModal: jest.fn(({ heading, message, onConfirm, onCancel }) => (
+    <div>
+      <span>ConfirmationModal</span>
+      {heading}
+      <div>{message}</div>
+      <div>
+        <button type="button" onClick={onConfirm}>confirm</button>
+        <button type="button" onClick={onCancel}>cancel</button>
+      </div>
+    </div>
+  )),
+}));
 const STRIPES = {
   connect: (Component) => Component,
   config: {},
@@ -226,6 +239,73 @@ describe('Given ClosedLoans', () => {
     fireEvent.click(dropdownButton);
 
     expect(dropdownButton).toBeInTheDocument();
+  });
+
+  describe('when click anonymise all button', () => {
+    it('should open confirmation modal on clicking "anonymize all" button', () => {
+      renderClosedLoans(props);
+      fireEvent.click(document.querySelector('[id="anonymize-all"]'));
+
+      expect(screen.getByText('ConfirmationModal')).toBeDefined();
+    });
+
+    it('should open confirmation modal with heading "ui-users.anonymization.confirmation.header"', () => {
+      renderClosedLoans(props);
+      fireEvent.click(document.querySelector('[id="anonymize-all"]'));
+
+      expect(screen.getByText('ui-users.anonymization.confirmation.header')).toBeDefined();
+    });
+
+    it('should open confirmation modal with message "ui-users.anonymization.confirmation.message"', () => {
+      renderClosedLoans(props);
+      fireEvent.click(document.querySelector('[id="anonymize-all"]'));
+
+      expect(screen.getByText('ui-users.anonymization.confirmation.message')).toBeDefined();
+    });
+
+    it('should open confirmation modal with confirm button', () => {
+      renderClosedLoans(props);
+      fireEvent.click(document.querySelector('[id="anonymize-all"]'));
+
+      expect(screen.getByRole('button', { name: /confirm/ })).toBeDefined();
+    });
+
+    it('should open confirmation modal with cancel button', () => {
+      renderClosedLoans(props);
+      fireEvent.click(document.querySelector('[id="anonymize-all"]'));
+
+      expect(screen.getByRole('button', { name: /cancel/ })).toBeDefined();
+    });
+
+    it('should call anonymizeLoans method on clicking confirm button', () => {
+      renderClosedLoans(props);
+      fireEvent.click(document.querySelector('[id="anonymize-all"]'));
+      fireEvent.click(screen.getByRole('button', { name: /confirm/ }));
+
+      waitFor(() => {
+        expect(mockAnonymizeLoans).toHaveBeenCalled();
+      });
+    });
+
+    it('should close confirmation modal on clicking confirm button', () => {
+      renderClosedLoans(props);
+      fireEvent.click(document.querySelector('[id="anonymize-all"]'));
+      fireEvent.click(screen.getByRole('button', { name: /confirm/ }));
+
+      waitFor(() => {
+        expect(screen.queryByText('ConfirmationModal')).not.toBeDefined();
+      });
+    });
+
+    it('should close confirmation modal on clicking cancel button', () => {
+      renderClosedLoans(props);
+      fireEvent.click(document.querySelector('[id="anonymize-all"]'));
+      fireEvent.click(screen.getByRole('button', { name: /cancel/ }));
+
+      waitFor(() => {
+        expect(screen.queryByText('ConfirmationModal')).not.toBeDefined();
+      });
+    });
   });
 
   it('should handle anonymizeLoans with proper params', () => {
