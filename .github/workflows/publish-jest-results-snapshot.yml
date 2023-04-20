@@ -1,13 +1,12 @@
 # This workflow will publish the Jest unit test results and retain them for a period of 30 days. This also gives permission
 # to forked repositories and dependabots to do write operations which are configured in this workflow.
 
-name: Publish Jest Results
+name: Publish Jest Results Snapshot
 
 on:
   workflow_run:
     workflows: [buildNPM Snapshot]
-    types:
-      - completed
+    types: [completed]
 
 jobs:
   publish-jest-results-snapshot:
@@ -16,7 +15,6 @@ jobs:
       ARTIFACT_NAME: "Jest Unit Test Result"
 
     runs-on: ubuntu-latest
-    if: github.event.workflow_run.conclusion == 'success'
 
     steps:
       - name: Download test results file
@@ -34,7 +32,6 @@ jobs:
 
       - name: Unzip test results file
         run: unzip ./${{ env.ARTIFACT_NAME }}.zip
-        
 
       - name: Publish Jest unit test results
         if: always()
