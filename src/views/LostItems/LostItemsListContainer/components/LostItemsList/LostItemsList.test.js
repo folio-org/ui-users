@@ -21,6 +21,7 @@ import LostItemsList, {
 import { getPatronName } from './util';
 import {
   ActualCostModal,
+  ActualCostDetailsModal,
   ActualCostConfirmModal,
   InstanceDetails,
   RenderActions,
@@ -29,12 +30,14 @@ import {
 import {
   ACTUAL_COST_CONFIRM_MODAL_DEFAULT,
   ACTUAL_COST_DEFAULT,
+  ACTUAL_COST_DETAILS_MODAL_DEFAULT,
   ACTUAL_COST_MODAL_DEFAULT,
   PAGE_AMOUNT,
 } from '../../../constants';
 
 jest.mock('./components', () => ({
   ActualCostModal: jest.fn(() => null),
+  ActualCostDetailsModal: jest.fn(() => null),
   ActualCostConfirmModal: jest.fn(() => null),
   InstanceDetails: jest.fn(() => null),
   RecordStatus: jest.fn(() => null),
@@ -51,17 +54,20 @@ jest.mock('react-intl', () => ({
 }));
 
 const initialProps = {
+  billedRecords: [],
+  billRecord: jest.fn(),
+  cancelRecord: jest.fn(),
   contentData: [],
-  totalCount: 10,
-  onNeedMoreData: jest.fn(),
   emptyMessage: 'empty message',
+  onNeedMoreData: jest.fn(),
   onSort: jest.fn(),
   sortOrder: '-',
+  totalCount: 10,
 };
 const testIds = {
   lostItemsList: 'lostItemsList',
 };
-const messageIds = {
+const labelIds = {
   lossType: 'ui-users.lostItems.list.filters.lossType.agedToLost',
 };
 
@@ -117,6 +123,7 @@ describe('LostItemsList', () => {
       cancelledRecords: jest.fn(),
       setActualCost: jest.fn(),
       setActualCostModal: jest.fn(),
+      setActualCostDetailsModal: jest.fn(),
       actualCost: {},
     };
     const formatter = getListFormatter(getListFormatterArgs);
@@ -144,7 +151,7 @@ describe('LostItemsList', () => {
 
       it('should trigger "FormattedMessage" with correct id', () => {
         expect(FormattedMessage).toHaveBeenCalledWith({
-          id: messageIds.lossType,
+          id: labelIds.lossType,
         }, {});
       });
     });
@@ -211,6 +218,7 @@ describe('LostItemsList', () => {
           billedRecords: getListFormatterArgs.billedRecords,
           cancelledRecords: getListFormatterArgs.cancelledRecords,
           setActualCostModal: getListFormatterArgs.setActualCostModal,
+          setActualCostDetailsModal: getListFormatterArgs.setActualCostDetailsModal,
           actualCost: getListFormatterArgs.actualCost,
           setActualCost: getListFormatterArgs.setActualCost,
           actualCostRecord: basicActualCostRecord,
@@ -244,6 +252,17 @@ describe('LostItemsList', () => {
       };
 
       expect(ActualCostModal).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
+    });
+
+    it('"ActualCostDetailsModal" should be called with correct props', () => {
+      const expectedProps = {
+        actualCost: ACTUAL_COST_DEFAULT,
+        setActualCost: expect.any(Function),
+        actualCostDetailsModal: ACTUAL_COST_DETAILS_MODAL_DEFAULT,
+        setActualCostDetailsModal: expect.any(Function),
+      };
+
+      expect(ActualCostDetailsModal).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
     });
 
     it('"ActualCostConfirmModal" should be called with correct props', () => {
