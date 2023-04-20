@@ -1,4 +1,4 @@
-# This workflow will publish the Jest unit test results and retain them for a period of 30 days. This also gives permission 
+# This workflow will publish the Jest unit test results and retain them for a period of 30 days. This also gives permission
 # to forked repositories and dependabots to do write operations which are configured in this workflow.
 
 name: Publish Jest Results
@@ -12,9 +12,8 @@ permissions: {}
 
 jobs:
   publish-jest-results-snapshot:
-
     env:
-      JEST_JUNIT_OUTPUT_DIR: 'artifacts/jest-junit'
+      JEST_JUNIT_OUTPUT_DIR: "artifacts/jest-junit"
 
     runs-on: ubuntu-latest
     if: github.event.workflow_run.conclusion != 'skipped'
@@ -23,19 +22,19 @@ jobs:
       pull-requests: write
       actions: read
     steps:
-    - name: Download and Extract Artifacts
-      env: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        mkdir -p artifacts && cd artifacts
-        artifacts_url=${{ github.event.workflow_run.artifacts_url }}
-        gh api --paginate "$artifacts_url" -q '.artifacts[] | [.name, .archive_download_url] | @tsv' | while read artifact
-        do
-          IFS=$'\t' read name url <<< "$artifact"
-          gh api $url > "$name.zip"
-          unzip -d "$name" "$name.zip"
-        done
+      - name: Download and Extract Artifacts
+        env: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p artifacts && cd artifacts
+          artifacts_url=${{ github.event.workflow_run.artifacts_url }}
+          gh api --paginate "$artifacts_url" -q '.artifacts[] | [.name, .archive_download_url] | @tsv' | while read artifact
+          do
+            IFS=$'\t' read name url <<< "$artifact"
+            gh api $url > "$name.zip"
+            unzip -d "$name" "$name.zip"
+          done
 
-    - name: Publish Jest unit test results
+      - name: Publish Jest unit test results
         uses: EnricoMi/publish-unit-test-result-action@v2
         with:
           commit: ${{ github.event.workflow_run.head_sha }}
