@@ -97,7 +97,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: Jest Unit Test Results
+          name: jest-test-results
           path: ${{ env.JEST_JUNIT_OUTPUT_DIR }}/*.xml
           retention-days: 30
 
