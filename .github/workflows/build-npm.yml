@@ -101,7 +101,6 @@ jobs:
           path: ${{ env.JEST_JUNIT_OUTPUT_DIR }}/*.xml
           retention-days: 30
 
-
       - name: Publish Jest coverage report
         uses: actions/upload-artifact@v2
         if: always()
