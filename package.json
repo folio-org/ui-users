@@ -884,12 +884,12 @@
     "formatjs-compile": "formatjs compile-folder --ast --format simple ./translations/ui-users ./translations/ui-users/compiled"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.0",
+    "@babel/core": "^7.21.4",
     "@babel/eslint-parser": "^7.15.0",
     "@babel/plugin-proposal-class-properties": "^7.13.0",
     "@babel/plugin-proposal-decorators": "^7.13.5",
-    "@babel/plugin-transform-runtime": "^7.13.10",
-    "@babel/preset-env": "^7.0.0",
+    "@babel/plugin-transform-runtime": "^7.21.4",
+    "@babel/preset-env": "^7.21.4",
     "@babel/preset-react": "^7.9.0",
     "@folio/eslint-config-stripes": "^6.0.0",
     "@folio/jest-config-stripes": "^1.0.0",
@@ -918,14 +918,14 @@
     "jspdf": "^2.3.1",
     "jspdf-autotable": "^3.5.14",
     "lodash": "^4.17.4",
-    "moment-timezone": "^0.5.14",
+    "moment-timezone": "^0.5.43",
     "prop-types": "^15.5.10",
     "query-string": "^5.0.0",
     "react-final-form": "^6.3.0",
     "react-final-form-arrays": "^3.1.0",
     "react-final-form-listeners": "^1.0.3",
     "react-router-prop-types": "^1.0.4",
-    "uuid": "^8.3.2"
+    "uuid": "^9.0.0"
   },
   "peerDependencies": {
     "@folio/stripes": "^8.0.0",

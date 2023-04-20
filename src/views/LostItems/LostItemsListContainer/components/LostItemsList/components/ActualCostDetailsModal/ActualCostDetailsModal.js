@@ -23,6 +23,10 @@ import {
   LOST_ITEM_STATUSES,
 } from '../../../../../constants';
 
+export const getActualCostToBillViewValue = (value = 0) => (
+  value.toFixed(2)
+);
+
 const ActualCostDetailsModal = ({
   actualCostDetailsModal: {
     isOpen,
@@ -73,21 +77,21 @@ const ActualCostDetailsModal = ({
           {
             actualCostRecord.status === LOST_ITEM_STATUSES.BILLED
               ? <FormattedMessage
-                  id="ui-users.lostItems.modal.summaryMessageCharged"
-                  values={{
-                    actualCostToBill,
-                    patronName,
-                    instanceTitle,
-                    materialType,
-                  }}
+                id="ui-users.lostItems.modal.summaryMessageCharged"
+                values={{
+                  actualCostToBill: getActualCostToBillViewValue(actualCostToBill),
+                  patronName,
+                  instanceTitle,
+                  materialType,
+                }}
               />
               : <FormattedMessage
-                  id="ui-users.lostItems.modal.summaryMessageNotCharged"
-                  values={{
-                    patronName,
-                    instanceTitle,
-                    materialType,
-                  }}
+                id="ui-users.lostItems.modal.summaryMessageNotCharged"
+                values={{
+                  patronName,
+                  instanceTitle,
+                  materialType,
+                }}
               />
           }
         </Col>
