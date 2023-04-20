@@ -20,7 +20,7 @@ const batchRequest = async (arr, handler) => (
       return prevSettled.concat(
         await Promise.allSettled(itemsChunk.map(item => {
           return handler(item);
-        }))
+        })),
       );
     }, Promise.resolve([]))
 );

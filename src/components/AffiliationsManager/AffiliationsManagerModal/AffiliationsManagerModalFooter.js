@@ -20,14 +20,12 @@ const AffiliationsManagerModalFooter = ({
       >
         <FormattedMessage id="ui-users.cancel" />
       </Button>
-
       <div>
         <FormattedMessage
           id="ui-users.affiliations.manager.modal.totalSelected"
           values={{ count: totalSelected }}
         />
       </div>
-
       <Button
         id="clickable-affiliations-manager-modal-submit"
         marginBottom0

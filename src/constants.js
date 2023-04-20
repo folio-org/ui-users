@@ -323,7 +323,7 @@ export const SORT_DIRECTIONS = {
   desc: {
     name: 'desc',
     fullName: 'descending',
-  }
+  },
 };
 
 export const CONSORTIA_API = 'consortia';

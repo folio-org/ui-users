@@ -4,7 +4,12 @@ import {
   intersection,
   orderBy,
 } from 'lodash';
-import { useCallback, useMemo, useReducer, useState } from 'react';
+import {
+  useCallback,
+  useMemo,
+  useReducer,
+  useState,
+} from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import {

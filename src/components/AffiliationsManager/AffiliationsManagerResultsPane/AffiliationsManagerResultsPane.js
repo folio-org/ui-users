@@ -105,7 +105,6 @@ const AffiliationsManagerResultsPane = ({
       >
         <FormattedMessage id="ui-users.affiliations.manager.modal.warning.unassigned" />
       </MessageBanner>
-
       <MultiColumnList
         id="user-affiliations-list"
         columnIdPrefix="affiliations-manager"

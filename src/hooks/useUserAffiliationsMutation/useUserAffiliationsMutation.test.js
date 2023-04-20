@@ -53,7 +53,7 @@ describe('useUserAffiliationsMutation', () => {
 
     expect(kyMock.post).toHaveBeenCalledWith(
       `${CONSORTIA_API}/id/${CONSORTIA_USER_TENANTS_API}`,
-      expect.objectContaining({ json })
+      expect.objectContaining({ json }),
     );
   });
 
@@ -69,7 +69,7 @@ describe('useUserAffiliationsMutation', () => {
 
     expect(kyMock.delete).toHaveBeenCalledWith(
       `${CONSORTIA_API}/id/${CONSORTIA_USER_TENANTS_API}`,
-      expect.objectContaining({ searchParams })
+      expect.objectContaining({ searchParams }),
     );
   });
 

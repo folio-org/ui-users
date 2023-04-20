@@ -14,7 +14,7 @@ import { CollapseFilterPaneButton } from '@folio/stripes/smart-components';
 
 import {
   AFFILIATIONS_FILTERS_ACTION_TYPES,
-  SEARCH_FIELD_NAME
+  SEARCH_FIELD_NAME,
 } from '../constants';
 import filtersConfig from './filtersConfig';
 

@@ -59,14 +59,14 @@ describe('useAffiliationsAssignment', () => {
 
     expect(result.current.isAllAssigned).toBeTruthy();
     expect(result.current.assignment).toEqual(
-      affiliations.reduce((acc, { tenantId }) => ({ ...acc, [tenantId]: true }), {})
+      affiliations.reduce((acc, { tenantId }) => ({ ...acc, [tenantId]: true }), {}),
     );
 
     act(() => result.current.toggleAll());
 
     expect(result.current.isAllAssigned).toBeFalsy();
     expect(result.current.assignment).toEqual(
-      affiliations.reduce((acc, { tenantId }) => ({ ...acc, [tenantId]: false }), {})
+      affiliations.reduce((acc, { tenantId }) => ({ ...acc, [tenantId]: false }), {}),
     );
   });
 
