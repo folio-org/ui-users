@@ -594,7 +594,6 @@ class UserDetail extends React.Component {
     const addressTypes = (resources.addressTypes || {}).records || [];
     const addresses = getFormAddressList(get(user, 'personal.addresses', []));
     const addressesList = this.getAddressesList(addresses, addressTypes);
-    const permissions = (resources.permissions || {}).records || [];
     const settings = (resources.settings || {}).records || [];
     const sponsors = this.props.getSponsors();
     const proxies = this.props.getProxies();
@@ -814,7 +813,6 @@ class UserDetail extends React.Component {
                     <UserPermissions
                       expanded={sections.permissionsSection}
                       onToggle={this.handleSectionToggle}
-                      userPermissions={permissions}
                       accordionId="permissionsSection"
                       {...this.props}
                     />
