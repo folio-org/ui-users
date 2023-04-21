@@ -8,6 +8,7 @@ import {
 import {
   CONSORTIA_API,
   CONSORTIA_USER_TENANTS_API,
+  MAX_RECORDS,
 } from '../../constants';
 
 import useConsortium from '../useConsortium';
@@ -23,7 +24,10 @@ const useUserAffiliations = ({ userId } = {}, options = {}) => {
     isLoading: isConsortiumLoading,
   } = useConsortium();
 
-  const searchParams = { userId };
+  const searchParams = {
+    userId,
+    limit: MAX_RECORDS,
+  };
 
   const {
     isFetching,

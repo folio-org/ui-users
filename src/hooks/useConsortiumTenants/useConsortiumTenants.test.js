@@ -10,7 +10,7 @@ import affiliations from '../../../test/jest/fixtures/affiliations';
 import {
   CONSORTIA_API,
   CONSORTIA_TENANTS_API,
-  LIMIT_MAX,
+  MAX_RECORDS,
 } from '../../constants';
 import useConsortiumTenants from './useConsortiumTenants';
 
@@ -51,7 +51,7 @@ describe('useConsortiumTenants', () => {
     expect(mockGet.mock.calls.length).toBe(1);
     expect(mockGet).toHaveBeenCalledWith(
       `${CONSORTIA_API}/test/${CONSORTIA_TENANTS_API}`,
-      expect.objectContaining({ searchParams: { limit: LIMIT_MAX } }),
+      expect.objectContaining({ searchParams: { limit: MAX_RECORDS } }),
     );
     expect(result.current.tenants).toEqual(affiliations);
   });

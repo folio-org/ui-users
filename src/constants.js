@@ -313,8 +313,6 @@ export const STATUS_CODES = {
   UNPROCESSABLE_ENTITY: 422,
 };
 
-export const LIMIT_MAX = 1000;
-
 export const SORT_DIRECTIONS = {
   asc: {
     name: 'asc',

@@ -8,7 +8,7 @@ import {
 import {
   CONSORTIA_API,
   CONSORTIA_TENANTS_API,
-  LIMIT_MAX,
+  MAX_RECORDS,
 } from '../../constants';
 import useConsortium from '../useConsortium';
 
@@ -24,7 +24,7 @@ const useConsortiumTenants = () => {
   } = useConsortium();
 
   const searchParams = {
-    limit: LIMIT_MAX,
+    limit: MAX_RECORDS,
   };
 
   const {
