@@ -1059,5 +1059,9 @@
     "affiliations.section.label": "附属关系",
     "affiliations.section.empty": "未找到隶属关系",
     "permission.consortia.affiliations.view": "用户：查看隶属关系",
-    "permission.consortia.affiliations.edit": "用户：分配和取消分配隶属关系"
+    "permission.consortia.affiliations.edit": "用户：分配和取消分配隶属关系",
+    "lostItems.list.columnName.action.actualCostDetails": "Actual cost details",
+    "lostItems.modal.summaryMessageCharged": "A fee/fine of <strong>{actualCostToBill}</strong> was <strong>charged</strong> to <strong>{patronName}</strong> for <strong>{instanceTitle} ({materialType})</strong>.",
+    "lostItems.modal.summaryMessageNotCharged": "A fee/fine was <strong>not charged</strong> to <strong>{patronName}</strong> for <strong>{instanceTitle} ({materialType})</strong>.",
+    "lostItems.modal.button.close": "Close"
 }
