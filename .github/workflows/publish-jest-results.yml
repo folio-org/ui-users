@@ -39,7 +39,9 @@ jobs:
 
       - name: Unzip Test Results
         id: unzip-test-res
-        run: unzip jest-test-results.zip  -d /${{ env.JEST_JUNIT_OUTPUT_DIR }}/
+        run: |
+          mkdir ${{ env.JEST_JUNIT_OUTPUT_DIR }}
+          unzip jest-test-results.zip  -d /${{ env.JEST_JUNIT_OUTPUT_DIR }}/
 
 
       - name: Publish Jest unit test results
