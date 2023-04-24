@@ -27,8 +27,6 @@ describe('AffiliationsSelect', () => {
   it('should render affiliation select with provided options', () => {
     renderAffiliationsSelect();
 
-    screen.debug();
-
     expect(screen.getByRole('combobox')).toHaveValue(affiliations[2].tenantId);
     affiliations.forEach(({ tenantName, isPrimary }) => {
       expect(screen.getByText(isPrimary ? `${tenantName} ui-users.affiliations.primary.label` : tenantName)).toBeInTheDocument();

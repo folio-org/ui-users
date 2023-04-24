@@ -6,6 +6,7 @@ import {
 
 import { useOkapiKy } from '@folio/stripes/core';
 
+import permissions from 'fixtures/permissions';
 import useUserTenantPermissions from './useUserTenantPermissions';
 
 const queryClient = new QueryClient();
@@ -17,14 +18,9 @@ const wrapper = ({ children }) => (
   </QueryClientProvider>
 );
 
-const permissionNames = [
-  { id: 'permission-1', displayName: 'Permission 1' },
-  { id: 'permission-2', displayName: 'Permission 2' },
-];
-
 const response = {
-  permissionNames,
-  totalRecords: permissionNames.length,
+  permissionNames: permissions,
+  totalRecords: permissions.length,
 };
 
 describe('useUserTenantPermissions', () => {
