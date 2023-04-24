@@ -19,6 +19,7 @@
 * Get rid of blinking list on lost items page. Refs UIU-2831.
 * Add actual cost details to lost items requiring actual cost processing page. Refs UIU-2774.
 * Display `expirationDate` based on the current timezone. Refs UIU-2839.
+* Assign/unassign users affiliations. Refs UIU-2801.
 * Confirmation modal for manual anonymization. Refs UIU-1631.
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)

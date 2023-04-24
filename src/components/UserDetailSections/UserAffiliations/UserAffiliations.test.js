@@ -7,10 +7,11 @@ import { useUserAffiliations } from '../../../hooks';
 import UserAffiliations from './UserAffiliations';
 
 jest.unmock('@folio/stripes/components');
-jest.mock(
-  '../../../hooks/useUserAffiliations',
-  () => jest.fn(() => ({ affiliations: [], totalRecords: 0 })),
-);
+jest.mock('../../../hooks', () => ({
+  ...jest.requireActual('../../../hooks'),
+  useUserAffiliations: jest.fn(() => ({ affiliations: [], totalRecords: 0 })),
+  useUserAffiliationsMutation: jest.fn(() => ({ handleAssignment: jest.fn(), isLoading: false })),
+}));
 
 const defaultProps = {
   accordionId: 'affiliations',
