@@ -10,6 +10,7 @@ import { Select } from '@folio/stripes/components';
 import { affiliationsShape } from '../../shapes';
 
 const AffiliationsSelect = ({
+  id,
   affiliations,
   value,
   onChange,
@@ -39,6 +40,7 @@ const AffiliationsSelect = ({
 
   return (
     <Select
+      id={`${id}-affiliations-select`}
       dataOptions={dataOptions}
       onChange={handleChange}
       value={value}
@@ -47,9 +49,14 @@ const AffiliationsSelect = ({
   );
 };
 
+AffiliationsSelect.defaultProps = {
+  id: 'user-assigned',
+};
+
 AffiliationsSelect.propTypes = {
   affiliations: affiliationsShape,
   onChange: PropTypes.func.isRequired,
+  id: PropTypes.string,
   isLoading: PropTypes.bool,
   value: PropTypes.string.isRequired,
 };

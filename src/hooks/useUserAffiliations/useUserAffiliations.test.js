@@ -1,8 +1,9 @@
+import { renderHook } from '@testing-library/react-hooks';
 import {
   QueryClient,
   QueryClientProvider,
 } from 'react-query';
-import { renderHook } from '@testing-library/react-hooks';
+import orderBy from 'lodash/orderBy';
 
 import { useOkapiKy } from '@folio/stripes/core';
 
@@ -58,7 +59,7 @@ describe('useUserAffiliations', () => {
       `${CONSORTIA_API}/${consortium.id}/${CONSORTIA_USER_TENANTS_API}`,
       expect.objectContaining({ searchParams: { userId, limit: MAX_RECORDS } }),
     );
-    expect(result.current.affiliations).toEqual(affiliations);
+    expect(result.current.affiliations).toEqual(orderBy(affiliations, 'tenantName'));
   });
 
   it('should not fetch user\'s consortium affiliations by user\'s id when there is not consortium', async () => {

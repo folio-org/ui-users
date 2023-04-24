@@ -3,8 +3,6 @@ import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
-import { useStripes } from '@folio/stripes/core';
-
 import {
   useUserAffiliations,
   useUserTenantPermissions,
@@ -12,12 +10,11 @@ import {
 import RenderPermissions from '../../RenderPermissions';
 
 const propTypes = {
-  userPermissions: PropTypes.arrayOf(PropTypes.object),
   stripes: PropTypes.object.isRequired,
 };
 
 const UserPermissions = (props) => {
-  const stripes = useStripes();
+  const { stripes } = props;
   const { id: userId } = useParams();
   const [tenantId, setTenantId] = useState(stripes.okapi.tenant);
 
