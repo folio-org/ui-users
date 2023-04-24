@@ -11,8 +11,15 @@ import consortia from '../../../test/jest/fixtures/consortia';
 import {
   CONSORTIA_API,
   CONSORTIA_USER_TENANTS_API,
+  MAX_RECORDS,
 } from '../../constants';
+import useConsortium from '../useConsortium';
 import useUserAffiliations from './useUserAffiliations';
+
+jest.mock('../useConsortium', () => jest.fn(() => ({
+  consortium: null,
+  isLoading: false,
+})));
 
 const queryClient = new QueryClient();
 
@@ -25,7 +32,6 @@ const wrapper = ({ children }) => (
 
 const [consortium] = consortia;
 const response = {
-  consortia,
   userTenants: affiliations,
   totalRecords: affiliations.length,
 };
@@ -37,16 +43,8 @@ describe('useUserAffiliations', () => {
 
   beforeEach(() => {
     mockGet.mockClear();
+    useConsortium.mockClear().mockReturnValue({ consortium, isLoading: false });
     useOkapiKy.mockClear().mockReturnValue({ get: mockGet });
-  });
-
-  it('should fetch system consortia', async () => {
-    const userId = 'usedId';
-    const { result, waitFor } = renderHook(() => useUserAffiliations({ userId }), { wrapper });
-
-    await waitFor(() => !result.current.isLoading);
-
-    expect(mockGet).toHaveBeenCalledWith(CONSORTIA_API);
   });
 
   it('should fetch user\'s consortium affiliations by user\'s id when there is consortium', async () => {
@@ -55,10 +53,10 @@ describe('useUserAffiliations', () => {
 
     await waitFor(() => !result.current.isLoading);
 
-    expect(mockGet.mock.calls.length).toBe(2);
+    expect(mockGet.mock.calls.length).toBe(1);
     expect(mockGet).toHaveBeenCalledWith(
       `${CONSORTIA_API}/${consortium.id}/${CONSORTIA_USER_TENANTS_API}`,
-      expect.objectContaining({ searchParams: { userId } }),
+      expect.objectContaining({ searchParams: { userId, limit: MAX_RECORDS } }),
     );
     expect(result.current.affiliations).toEqual(affiliations);
   });
@@ -69,12 +67,13 @@ describe('useUserAffiliations', () => {
     }));
 
     useOkapiKy.mockClear().mockReturnValue({ get: getMock });
+    useConsortium.mockReturnValue({ isLoading: false, consortium: undefined });
 
     const userId = 'usedId';
     const { result, waitFor } = renderHook(() => useUserAffiliations({ userId }), { wrapper });
 
     await waitFor(() => !result.current.isLoading);
 
-    expect(getMock.mock.calls.length).toBe(1);
+    expect(getMock.mock.calls.length).toBe(0);
   });
 });
