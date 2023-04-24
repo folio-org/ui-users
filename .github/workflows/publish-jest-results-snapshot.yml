@@ -11,12 +11,13 @@ on:
 jobs:
   publish-jest-results-snapshot:
     runs-on: ubuntu-latest
-    #if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
       - name: Download test results artifact
+        if: ${{github.event.workflow_run.event == 'pull_request' || github.event.workflow_run.event == 'push'}}
         uses: actions/github-script@v6
         with:
           script: |
@@ -49,5 +50,4 @@ jobs:
           event_name: ${{ github.event.workflow_run.event }}
           files: "${{ env.JEST_JUNIT_OUTPUT_DIR }}/*.xml"
           check_name: Jest Unit Test Results
-          comment_mode: update last
           comment_title: Jest Unit Test Results
