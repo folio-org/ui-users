@@ -1,15 +1,15 @@
 # This workflow will publish the Jest unit test results and retain them for a period of 30 days. This also gives permission
 # to forked repositories and dependabots to do write operations which are configured in this workflow.
 
-name: Publish Jest Results Snapshot
+name: Publish Jest Results 
 
 on:
   workflow_run:
-    workflows: [buildNPM Snapshot]
+    workflows: [buildNPM Snapshot, buildNPM Release]
     types: [completed]
 
 jobs:
-  publish-jest-results-snapshot:
+  publish-jest-results:
     env:
       JEST_JUNIT_OUTPUT_DIR: 'artifacts/jest-junit'
 
