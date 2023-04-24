@@ -146,15 +146,20 @@ jobs:
           customHeaders: '{ "Accept": "application/json; charset=utf-8" }'
           data: ${{ steps.moduleDescriptor.outputs.content }}
 
-      - name: Publish Jest unit test results
-        uses: docker://ghcr.io/enricomi/publish-unit-test-result-action:v1
-        if: always()
+      - name: Upload event file
+        uses: actions/upload-artifact@v3
         with:
-          github_token: ${{ github.token }}
-          files: "${{ env.JEST_JUNIT_OUTPUT_DIR }}/*.xml"
-          check_name: Jest Unit Test Results
-          comment_mode: update last
-          comment_title: Jest Unit Test Statistics
+          name: Event File
+          path: ${{ github.event_path }}
+          retention-days: 30
+      
+      - name: Upload Jest results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: jest-test-results
+          path: ${{ env.JEST_JUNIT_OUTPUT_DIR }}/*.xml
+          retention-days: 30
 
       - name: Publish Jest coverage report
         uses: actions/upload-artifact@v2
