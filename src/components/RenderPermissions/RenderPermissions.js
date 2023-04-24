@@ -33,6 +33,7 @@ class RenderPermissions extends React.Component {
     onChangeAffiliation: PropTypes.func,
     onToggle: PropTypes.func,
     permToRead: PropTypes.string.isRequired,
+    selectedAffiliation: PropTypes.string,
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired,
       config: PropTypes.shape({
@@ -86,6 +87,7 @@ class RenderPermissions extends React.Component {
       listedPermissions,
       stripes,
       permToRead,
+      selectedAffiliation,
       heading,
     } = this.props;
 
@@ -108,6 +110,7 @@ class RenderPermissions extends React.Component {
                 affiliations={affiliations}
                 onChange={onChangeAffiliation}
                 isLoading={isLoading}
+                value={selectedAffiliation}
               />
             )}
           </IfPermission>

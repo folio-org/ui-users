@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
@@ -33,11 +33,18 @@ const UserPermissions = (props) => {
 
   const isLoading = isAffiliationsFetching || isPermissionsFetching;
 
+  useEffect(() => {
+    if (!affiliations.some(({ tenantId: assigned }) => tenantId === assigned)) {
+      setTenantId(stripes.okapi.tenant);
+    }
+  }, [affiliations, stripes.okapi.tenant, tenantId]);
+
   return (<RenderPermissions
     {...props}
     heading={<FormattedMessage id="ui-users.permissions.userPermissions" />}
     permToRead="perms.users.get"
     affiliations={affiliations}
+    selectedAffiliation={tenantId}
     isLoading={isLoading}
     onChangeAffiliation={setTenantId}
     listedPermissions={userPermissions}
