@@ -1,3 +1,4 @@
+import orderBy from 'lodash/orderBy';
 import { useQuery } from 'react-query';
 
 import {
@@ -37,10 +38,15 @@ const useUserAffiliations = ({ userId } = {}, options = {}) => {
   } = useQuery(
     [namespace, userId, consortium?.id],
     async () => {
-      return ky.get(
+      const { userTenants, totalRecords } = await ky.get(
         `${CONSORTIA_API}/${consortium.id}/${CONSORTIA_USER_TENANTS_API}`,
         { searchParams },
       ).json();
+
+      return {
+        userTenants: orderBy(userTenants, 'tenantName'),
+        totalRecords,
+      };
     },
     {
       enabled: Boolean(consortium?.id && userId),
