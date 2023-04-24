@@ -15,9 +15,6 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
       - name: Download test results artifact
         if: ${{github.event.workflow_run.event == 'pull_request' || github.event.workflow_run.event == 'push'}}
         uses: actions/github-script@v6
