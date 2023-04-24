@@ -10,6 +10,9 @@ on:
 
 jobs:
   publish-jest-results-snapshot:
+    env:
+      JEST_JUNIT_OUTPUT_DIR: 'artifacts/jest-junit'
+
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
@@ -39,7 +42,8 @@ jobs:
             fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/jest-test-results.zip`, Buffer.from(download.data));
 
       - name: Unzip Test Results
-        run: unzip jest-test-results.zip
+        id: unzip-test-res
+        run: unzip jest-test-results.zip /${{ env.JEST_JUNIT_OUTPUT_DIR }}/
 
 
       - name: Publish Jest unit test results
