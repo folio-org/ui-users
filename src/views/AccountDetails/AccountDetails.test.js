@@ -14,7 +14,7 @@ jest.unmock('@folio/stripes/components');
 jest.mock('../../components/Accounts/Actions/FeeFineActions', () => (prop) => <div><button type="button" onClick={() => prop.handleEdit()}>handleEdit</button></div>);
 jest.mock('../../components/util/isRefundAllowed', () => jest.fn().mockReturnValue(true));
 
-const spyOncalculateSortParams = jest.spyOn(require('../../components/util/util'), 'calculateSortParams');
+const spyOnCalculateSortParams = jest.spyOn(require('../../components/util/util'), 'calculateSortParams');
 
 const spyOnFeeFineReport = jest.spyOn(require('../../components/data/reports/FeeFineReport'), 'default');
 
@@ -197,17 +197,17 @@ describe('Account Details', () => {
   it('calculateSortParams should be called when clicking column headers', () => {
     renderAccountDetails({ account: accountWithAdditionalDetails });
     userEvent.click(screen.getByRole('button', { name: 'ui-users.details.columns.date' }));
-    expect(spyOncalculateSortParams).toBeCalledTimes(1);
+    expect(spyOnCalculateSortParams).toBeCalledTimes(1);
     userEvent.click(screen.getByRole('button', { name: 'ui-users.details.columns.action' }));
-    expect(spyOncalculateSortParams).toBeCalledTimes(2);
+    expect(spyOnCalculateSortParams).toBeCalledTimes(2);
     userEvent.click(screen.getByRole('button', { name: 'ui-users.details.columns.amount' }));
-    expect(spyOncalculateSortParams).toBeCalledTimes(3);
+    expect(spyOnCalculateSortParams).toBeCalledTimes(3);
     userEvent.click(screen.getByRole('button', { name: 'ui-users.details.columns.balance' }));
-    expect(spyOncalculateSortParams).toBeCalledTimes(4);
+    expect(spyOnCalculateSortParams).toBeCalledTimes(4);
     userEvent.click(screen.getByRole('button', { name: 'ui-users.details.columns.transactioninfo' }));
-    expect(spyOncalculateSortParams).toBeCalledTimes(5);
+    expect(spyOnCalculateSortParams).toBeCalledTimes(5);
     userEvent.click(screen.getByRole('button', { name: 'ui-users.details.columns.source' }));
-    expect(spyOncalculateSortParams).toBeCalledTimes(6);
+    expect(spyOnCalculateSortParams).toBeCalledTimes(6);
   });
   it('GET method should be called when the handleEdit button is clicked', () => {
     renderAccountDetails({ account: accountWithAdditionalDetails });
