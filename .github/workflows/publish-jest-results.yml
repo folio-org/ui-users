@@ -43,7 +43,6 @@ jobs:
           mkdir ${{ env.JEST_JUNIT_OUTPUT_DIR }}
           unzip jest-test-results.zip  -d /${{ env.JEST_JUNIT_OUTPUT_DIR }}/
 
-
       - name: Publish Jest unit test results
         if: always()
         uses: EnricoMi/publish-unit-test-result-action@v2
