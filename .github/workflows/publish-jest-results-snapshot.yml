@@ -49,5 +49,5 @@ jobs:
           event_name: ${{ github.event.workflow_run.event }}
           files: "${{ env.JEST_JUNIT_OUTPUT_DIR }}/*.xml"
           check_name: Jest Unit Test Results
-          comment_mode: update last
+          comment_mode: off
           comment_title: Jest Unit Test Results
