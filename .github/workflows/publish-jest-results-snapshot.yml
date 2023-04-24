@@ -10,8 +10,10 @@ on:
 
 jobs:
   publish-jest-results-snapshot:
+    env:
+      JEST_JUNIT_OUTPUT_DIR: 'artifacts/jest-junit'
+    
     runs-on: ubuntu-latest
-    #if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -47,7 +49,7 @@ jobs:
         with:
           commit: ${{ github.event.workflow_run.head_sha }}
           event_name: ${{ github.event.workflow_run.event }}
-          files: "${{ env.JEST_JUNIT_OUTPUT_DIR }}/*.xml"
+          files: "junit.xml"
           check_name: Jest Unit Test Results
           comment_mode: off
           comment_title: Jest Unit Test Results
