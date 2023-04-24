@@ -7,17 +7,16 @@ import {
 
 import {
   CONSORTIA_API,
-  CONSORTIA_USER_TENANTS_API,
+  CONSORTIA_TENANTS_API,
   MAX_RECORDS,
 } from '../../constants';
-
 import useConsortium from '../useConsortium';
 
 const DEFAULT_DATA = [];
 
-const useUserAffiliations = ({ userId } = {}, options = {}) => {
+const useConsortiumTenants = () => {
   const ky = useOkapiKy();
-  const [namespace] = useNamespace({ key: 'user-affiliations' });
+  const [namespace] = useNamespace({ key: 'consortium-tenants' });
 
   const {
     consortium,
@@ -25,7 +24,6 @@ const useUserAffiliations = ({ userId } = {}, options = {}) => {
   } = useConsortium();
 
   const searchParams = {
-    userId,
     limit: MAX_RECORDS,
   };
 
@@ -33,30 +31,27 @@ const useUserAffiliations = ({ userId } = {}, options = {}) => {
     isFetching,
     isLoading: isAffiliationsLoading,
     data = {},
-    refetch,
   } = useQuery(
-    [namespace, userId, consortium?.id],
+    [namespace, consortium?.id],
     async () => {
       return ky.get(
-        `${CONSORTIA_API}/${consortium.id}/${CONSORTIA_USER_TENANTS_API}`,
+        `${CONSORTIA_API}/${consortium.id}/${CONSORTIA_TENANTS_API}`,
         { searchParams },
       ).json();
     },
     {
-      enabled: Boolean(consortium?.id && userId),
-      ...options,
+      enabled: Boolean(consortium?.id),
     },
   );
 
   const isLoading = isAffiliationsLoading || isConsortiumLoading;
 
   return ({
-    affiliations: data.userTenants || DEFAULT_DATA,
+    tenants: data.tenants || DEFAULT_DATA,
     totalRecords: data.totalRecords,
     isFetching,
     isLoading,
-    refetch,
   });
 };
 
-export default useUserAffiliations;
+export default useConsortiumTenants;
