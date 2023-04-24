@@ -1,24 +1,22 @@
 # This workflow will publish the Jest unit test results and retain them for a period of 30 days. This also gives permission
 # to forked repositories and dependabots to do write operations which are configured in this workflow.
 
-name: Publish Jest Results Snapshot
+name: Publish Jest Results 
 
 on:
   workflow_run:
-    workflows: [buildNPM Snapshot]
+    workflows: [buildNPM Snapshot, buildNPM Release]
     types: [completed]
 
 jobs:
-  publish-jest-results-snapshot:
+  publish-jest-results:
     env:
       JEST_JUNIT_OUTPUT_DIR: 'artifacts/jest-junit'
-    
+
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
       - name: Download test results artifact
+        if: ${{github.event.workflow_run.event == 'pull_request' || github.event.workflow_run.event == 'push'}}
         uses: actions/github-script@v6
         with:
           script: |
@@ -40,7 +38,8 @@ jobs:
             fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/jest-test-results.zip`, Buffer.from(download.data));
 
       - name: Unzip Test Results
-        run: unzip jest-test-results.zip
+        id: unzip-test-res
+        run: unzip jest-test-results.zip  -d /${{ env.JEST_JUNIT_OUTPUT_DIR }}/
 
 
       - name: Publish Jest unit test results
@@ -49,7 +48,7 @@ jobs:
         with:
           commit: ${{ github.event.workflow_run.head_sha }}
           event_name: ${{ github.event.workflow_run.event }}
-          files: "junit.xml"
+          files: "${{ env.JEST_JUNIT_OUTPUT_DIR }}/*.xml"
           check_name: Jest Unit Test Results
           comment_mode: off
           comment_title: Jest Unit Test Results
