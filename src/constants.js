@@ -313,5 +313,17 @@ export const STATUS_CODES = {
   UNPROCESSABLE_ENTITY: 422,
 };
 
+export const SORT_DIRECTIONS = {
+  asc: {
+    name: 'asc',
+    fullName: 'ascending',
+  },
+  desc: {
+    name: 'desc',
+    fullName: 'descending',
+  },
+};
+
 export const CONSORTIA_API = 'consortia';
+export const CONSORTIA_TENANTS_API = 'tenants';
 export const CONSORTIA_USER_TENANTS_API = 'user-tenants';
