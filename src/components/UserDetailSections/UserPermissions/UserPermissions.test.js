@@ -1,57 +1,79 @@
+import userEvent from '@testing-library/user-event'
+import { screen } from '@testing-library/react'
+
 import renderWithRouter from 'helpers/renderWithRouter';
+import affiliations from 'fixtures/affiliations';
+import permissions from 'fixtures/permissions';
+import {
+  useUserAffiliations,
+  useUserTenantPermissions,
+} from '../../../hooks';
 import UserPermissions from './UserPermissions';
 
-
 jest.unmock('@folio/stripes/components');
+jest.mock('@folio/stripes/core', () => ({
+  ...jest.requireActual('@folio/stripes/core'),
+  IfInterface: jest.fn(({ children }) => children),
+  IfPermission: jest.fn(({ children }) => children),
+}));
+jest.mock('../../../hooks', () => ({
+  useUserAffiliations: jest.fn(),
+  useUserTenantPermissions: jest.fn(),
+}));
 
-const renderUserPermissions = (props) => renderWithRouter(<UserPermissions {...props} />);
 const STRIPES = {
   config: {},
   hasPerm: jest.fn().mockReturnValue(true),
+  okapi: {
+    tenant: 'diku',
+  }
 };
 
+const defaultProps = {
+  accordionId: 'assignedPermissions',
+  expanded: true,
+  onToggle: jest.fn(),
+  heading: <div>User Permissions</div>,
+  permToRead: 'perms.permissions.get',
+  intl: {},
+  stripes: STRIPES,
+};
+
+const renderUserPermissions = (props = {}) => renderWithRouter(
+  <UserPermissions
+    {...defaultProps}
+    {...props}
+  />
+);
+
 describe('UserPermissions component', () => {
-  it('Component must be rendered', () => {
-    const props = {
-      accordionId: 'assignedPermissions',
-      expanded: true,
-      onToggle: jest.fn(),
-      heading: <div>User Permissions</div>,
-      permToRead: 'perms.permissions.get',
-      userPermissions: [
-        {
-          deprecated: false,
-          description: 'Grants all permissions included in Agreements: Search & view agreements plus the ability to delete agreements. This does not include the ability to edit agreements, only to delete them',
-          displayName: 'Agreements: Delete agreements',
-          grantedTo: ['8fafcfdb-419c-483e-a698-d7f8f46ea694'],
-          id: '026bc082-add6-4cdd-a4fd-a588439a57b6',
-          moduleName: 'folio_agreements',
-          moduleVersion: '8.1.1000825',
-          mutable: false,
-          permissionName: 'ui-agreements.agreements.delete',
-          subPermissions: ['ui-agreements.agreements.view', 'erm.agreements.item.delete'],
-          tags: [],
-          visible: true,
-        },
-        {
-          deprecated: false,
-          description: 'Grants all permissions included in Agreements: Search & view agreements plus the ability to delete agreements. This does not include the ability to edit agreements, only to delete them',
-          displayName: 'Agreements: Edit agreements',
-          grantedTo: ['8fafcfdb-419c-483e-a698-d7f8f46ea694'],
-          id: 'b52da718-7770-407a-af6d-668d258b2309',
-          moduleName: 'folio_agreements',
-          moduleVersion: '8.1.1000825',
-          mutable: false,
-          permissionName: 'ui-agreements.agreements.edit',
-          subPermissions: ['ui-agreements.agreements.view', 'erm.agreements.item.delete'],
-          tags: [],
-          visible: true,
-        }
-      ],
-      intl: {},
-      stripes: STRIPES,
-    };
-    renderUserPermissions(props);
-    expect(renderUserPermissions(props)).toBeTruthy();
+  beforeEach(() => {
+    useUserAffiliations.mockClear().mockReturnValue({ isFetching: false, affiliations });
+    useUserTenantPermissions.mockClear().mockImplementation(({ tenantId }) => ({
+      isFetching: false,
+      userPermissions: tenantId === 'diku' ? permissions : [],
+    }));
+  });
+
+  it('should render user permissions accordion', () => {
+    renderUserPermissions();
+
+    expect(screen.getByText('ui-users.permissions.userPermissions')).toBeInTheDocument();
+    expect(screen.getByText('ui-agreements.permission.agreements.edit')).toBeInTheDocument();
+    expect(screen.getByText('ui-agreements.permission.agreements.delete')).toBeInTheDocument();
+  });
+
+  describe('Consortia', () => {
+    it('should update permissions list after selecting another affiliation', () => {
+      renderUserPermissions();
+
+      expect(screen.getByText('ui-agreements.permission.agreements.edit')).toBeInTheDocument();
+      expect(screen.getByText('ui-agreements.permission.agreements.delete')).toBeInTheDocument();
+
+      userEvent.selectOptions(screen.getByRole('combobox'), affiliations[1].tenantId);
+
+      expect(screen.queryByText('ui-agreements.permission.agreements.edit')).not.toBeInTheDocument();
+      expect(screen.queryByText('ui-agreements.permission.agreements.delete')).not.toBeInTheDocument();
+    });
   });
 });

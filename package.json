@@ -122,7 +122,10 @@
         "displayName": "Users: Assign and unassign affiliations",
         "description": "Assign and unassign affiliations",
         "subPermissions": [
-          "ui-users.consortia.affiliations.view"
+          "ui-users.consortia.affiliations.view",
+          "consortia.tenants.collection.get",
+          "consortia.user-tenants.item.post",
+          "consortia.user-tenants.item.delete"
         ],
         "visible": true
       },
