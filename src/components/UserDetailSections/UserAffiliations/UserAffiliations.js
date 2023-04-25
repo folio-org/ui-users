@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import { useStripes } from '@folio/stripes/core';
 import {
   Accordion,
   Badge,
@@ -11,7 +12,11 @@ import {
   Loading,
 } from '@folio/stripes/components';
 
-import { useUserAffiliations } from '../../../hooks';
+import {
+  useUserAffiliations,
+  useUserAffiliationsMutation,
+} from '../../../hooks';
+import AffiliationsManager from '../../AffiliationsManager';
 
 import css from './UserAffiliations.css';
 
@@ -25,16 +30,39 @@ const UserAffiliations = ({
   onToggle,
   userId,
 }) => {
+  const stripes = useStripes();
+
   const {
     affiliations,
     totalRecords,
-    isLoading,
+    isFetching,
+    refetch,
   } = useUserAffiliations({ userId });
+
+  const {
+    handleAssignment,
+    isLoading: isAffiliationsMutating,
+  } = useUserAffiliationsMutation();
+
+  const isLoading = isFetching || isAffiliationsMutating;
+
+  const onUpdateAffiliations = useCallback(({ added, removed }) => {
+    return handleAssignment({ added, removed })
+      .then(refetch);
+  }, [handleAssignment, refetch]);
 
   const label = (
     <Headline size="large" tag="h3">
       <FormattedMessage id="ui-users.affiliations.section.label" />
     </Headline>
+  );
+
+  const displayWhenOpen = stripes.hasPerm('ui-users.consortia.affiliations.edit') && (
+    <AffiliationsManager
+      disabled={isLoading}
+      userId={userId}
+      onUpdateAffiliations={onUpdateAffiliations}
+    />
   );
 
   const displayWhenClosed = isLoading
@@ -59,6 +87,7 @@ const UserAffiliations = ({
       id={accordionId}
       onToggle={onToggle}
       label={label}
+      displayWhenOpen={displayWhenOpen}
       displayWhenClosed={displayWhenClosed}
     >
       {isLoading ? <Loading /> : affiliationsList}
