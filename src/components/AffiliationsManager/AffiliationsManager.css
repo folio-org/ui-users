@@ -1,0 +1,8 @@
+.modalContent {
+  padding: 0;
+  height: 80vh;
+  
+  & .resetButton {
+    padding: 0 3px;
+  }
+}

@@ -33,7 +33,7 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
-      - uses: folio-org/checkout@v2
+      - uses: actions/checkout@v2
         with:
           fetch-depth: 0
 
@@ -67,8 +67,12 @@ jobs:
         run: yarn lint
         continue-on-error: true
 
+      - name: Get number of CPU cores
+        id: cpu-cores
+        uses: SimenB/github-actions-cpu-cores@v1
+
       - name: Run yarn test
-        run: xvfb-run --server-args="-screen 0 1024x768x24" yarn test $YARN_TEST_OPTIONS
+        run: xvfb-run --server-args="-screen 0 1024x768x24" yarn test $YARN_TEST_OPTIONS  --max-workers ${{ steps.cpu-cores.outputs.count }}
 
       - name: Run yarn formatjs-compile
         if : ${{ env.COMPILE_TRANSLATION_FILES == 'true' }}
@@ -82,15 +86,20 @@ jobs:
         if: ${{ env.PUBLISH_MOD_DESCRIPTOR == 'true' }}
         run: cat module-descriptor.json
 
-      - name: Publish Jest unit test results
-        uses: docker://ghcr.io/enricomi/publish-unit-test-result-action:v1
-        if: always()
+      - name: Upload event file
+        uses: actions/upload-artifact@v3
         with:
-          github_token: ${{ github.token }}
-          files: "${{ env.JEST_JUNIT_OUTPUT_DIR }}/*.xml"
-          check_name: Jest Unit Test Results
-          comment_mode: update last
-          comment_title: Jest Unit Test Statistics
+          name: Event File
+          path: ${{ github.event_path }}
+          retention-days: 30
+      
+      - name: Upload Jest results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: jest-test-results
+          path: ${{ env.JEST_JUNIT_OUTPUT_DIR }}/*.xml
+          retention-days: 30
 
       - name: Publish Jest coverage report
         uses: actions/upload-artifact@v2
@@ -107,7 +116,7 @@ jobs:
         run: git fetch --no-tags ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY} +refs/heads/${{ env.DEFAULT_BRANCH }}:refs/remotes/origin/${{ env.DEFAULT_BRANCH }}
 
       - name: Run SonarCloud scan
-        uses: sonarsource/sonarcloud-github-action@master
+        uses: sonarsource/sonarcloud-github-action@v1.8
         with:
           args: >
             -Dsonar.organization=folio-org

@@ -14,6 +14,7 @@ import {
   LoanDetailsLink,
   PatronDetailsLink,
   FeeFineDetailsLink,
+  ActualCostDetails,
 } from './components';
 import {
   ACTUAL_COST_PROP_TYPES,
@@ -24,17 +25,20 @@ import { getRecordStatus } from '../../util';
 const RenderActions = ({
   actualCostRecord,
   setActualCostModal,
+  setActualCostDetailsModal,
   actualCost,
   setActualCost,
   billedRecords,
   cancelledRecords,
 }) => {
-  const isNotOpenStatus = actualCostRecord.status !== LOST_ITEM_STATUSES.OPEN;
+  const isOpenStatus = actualCostRecord.status === LOST_ITEM_STATUSES.OPEN;
+  const isExpiredStatus = actualCostRecord.status === LOST_ITEM_STATUSES.EXPIRED;
   const {
     isBilled,
     isCancelled,
   } = getRecordStatus(actualCostRecord.id, billedRecords, cancelledRecords);
-  const isBillButtonDisabled = isNotOpenStatus || isBilled || isCancelled;
+  const isBillButtonDisabled = !isOpenStatus || isBilled || isCancelled;
+  const isActualCostDetailsButtonDisabled = isExpiredStatus || isOpenStatus;
 
   return (
     <Dropdown
@@ -72,6 +76,13 @@ const RenderActions = ({
           isBilled={isBilled}
           billedRecords={billedRecords}
         />
+        <ActualCostDetails
+          actualCostRecord={actualCostRecord}
+          actualCost={actualCost}
+          setActualCost={setActualCost}
+          setActualCostDetailsModal={setActualCostDetailsModal}
+          disabled={isActualCostDetailsButtonDisabled}
+        />
       </DropdownMenu>
     </Dropdown>
   );
@@ -79,6 +90,7 @@ const RenderActions = ({
 
 RenderActions.propTypes = {
   setActualCostModal: PropTypes.func.isRequired,
+  setActualCostDetailsModal: PropTypes.func.isRequired,
   actualCostRecord: PropTypes.shape({
     status: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,

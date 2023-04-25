@@ -1024,7 +1024,7 @@
     "lostItems.list.columnName.action.doNotBill": "청구하지 않음",
     "lostItems.modal.bill.title": "{patronName} 에게 청구할 실제 비용",
     "lostItems.modal.bill.confirm.title": "{patronName} 에게 청구할 실제 비용 확인",
-    "lostItems.modal.bill.confirm.text": "<strong> {actualCostToBill} </strong> 의 수수료/벌금이 <strong> {actualCostToBill} {patronName} </strong> <strong> {instanceTitle} ( {materialType} ) </strong> <strong> 청구됩니다. </strong> .",
+    "lostItems.modal.bill.confirm.text": "<strong> {actualCostToBill} </strong> 의 수수료/벌금이 <strong>{patronName} </strong> <strong> {instanceTitle} ( {materialType} ) </strong> <strong> 청구됩니다. </strong> .",
     "lostItems.modal.doNotBill.title": "{patronName} 청구하지 마세요.",
     "lostItems.modal.doNotBill.confirm.title": "{patronName}에 대해 생성할 청구서가 없는지 확인합니다.",
     "lostItems.modal.doNotBill.confirm.text": "<div> <strong> 분실물 수수료 없음 </strong> <strong> {patronName} </strong> <strong> {instanceTitle} ({materialType}) </strong>. </div> <div> <strong> 확인 </strong> 버튼을 누른 후에는 <strong> 취소할 수 없습니다 </strong> . </div>",
@@ -1058,5 +1058,10 @@
     "lostItems.list.columnName.action.feeFineDetails": "Fee/fine details",
     "affiliations.section.label": "Affiliations",
     "affiliations.section.empty": "No affiliations found",
-    "permission.consortia.affiliations.view": "Users: View affiliations"
+    "permission.consortia.affiliations.view": "Users: View affiliations",
+    "permission.consortia.affiliations.edit": "Users: Assign and unassign affiliations",
+    "lostItems.list.columnName.action.actualCostDetails": "Actual cost details",
+    "lostItems.modal.summaryMessageCharged": "A fee/fine of <strong>{actualCostToBill}</strong> was <strong>charged</strong> to <strong>{patronName}</strong> for <strong>{instanceTitle} ({materialType})</strong>.",
+    "lostItems.modal.summaryMessageNotCharged": "A fee/fine was <strong>not charged</strong> to <strong>{patronName}</strong> for <strong>{instanceTitle} ({materialType})</strong>.",
+    "lostItems.modal.button.close": "Close"
 }
