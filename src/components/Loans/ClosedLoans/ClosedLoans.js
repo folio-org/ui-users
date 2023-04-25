@@ -15,6 +15,7 @@ import {
   Popover,
   IconButton,
   ExportCsv,
+  ConfirmationModal,
 } from '@folio/stripes/components';
 import {
   IfPermission,
@@ -123,6 +124,7 @@ class ClosedLoans extends React.Component {
         this.columnMapping.checkinServicePoint,
       ],
       sortDirection: ['asc', 'asc'],
+      confirmAnonymizationModalOpen: false,
       anonymizationErrorModalOpen: false,
       failedAnonymizationLoansCount: 0,
     };
@@ -284,6 +286,7 @@ class ClosedLoans extends React.Component {
     const response = await this.props.mutator.anonymize.POST({});
 
     this.handleLoansAssociatedFeesFinesAnonymizationError(response);
+    this.toggleLoansAnonymizationConfirmModal();
   }
 
   handleLoansAssociatedFeesFinesAnonymizationError(response) {
@@ -333,6 +336,12 @@ class ClosedLoans extends React.Component {
       anonymizationErrorModalOpen: false,
       failedAnonymizationLoansCount: 0,
     });
+  };
+
+  toggleLoansAnonymizationConfirmModal = () => {
+    this.setState((prev) => ({
+      confirmAnonymizationModalOpen: !prev.confirmAnonymizationModalOpen,
+    }));
   };
 
   renderDropDownMenu = loan => () => {
@@ -386,6 +395,7 @@ class ClosedLoans extends React.Component {
       sortDirection,
       anonymizationErrorModalOpen,
       failedAnonymizationLoansCount,
+      confirmAnonymizationModalOpen,
     } = this.state;
     const {
       loans,
@@ -436,7 +446,7 @@ class ClosedLoans extends React.Component {
                     <Button
                       marginBottom0
                       id="anonymize-all"
-                      onClick={this.anonymizeLoans}
+                      onClick={this.toggleLoansAnonymizationConfirmModal}
                     >
                       {anonymizeString}
                     </Button>
@@ -448,12 +458,21 @@ class ClosedLoans extends React.Component {
                   <ErrorModal
                     id="anonymization-fees-fines-modal"
                     open={anonymizationErrorModalOpen}
-                    label={intl.formatMessage({ id: 'ui-users.anonymization.confirmation.header' })}
+                    label={intl.formatMessage({ id: 'ui-users.anonymization.error.header' })}
                     message={intl.formatMessage(
-                      { id: 'ui-users.anonymization.confirmation.message' },
+                      { id: 'ui-users.anonymization.error.message' },
                       { amount: failedAnonymizationLoansCount }
                     )}
                     onClose={this.closeLoansAnonymizationErrorModal}
+                  />
+                  <ConfirmationModal
+                    open={confirmAnonymizationModalOpen}
+                    heading={intl.formatMessage({ id: 'ui-users.anonymization.confirmation.header' })}
+                    message={intl.formatMessage({ id: 'ui-users.anonymization.confirmation.message' })}
+                    onConfirm={this.anonymizeLoans}
+                    onCancel={this.toggleLoansAnonymizationConfirmModal}
+                    cancelLabel={intl.formatMessage({ id: 'ui-users.anonymization.confirmation.cancel' })}
+                    confirmLabel={intl.formatMessage({ id: 'ui-users.anonymization.confirmation.confirm' })}
                   />
                 </div>
               )}

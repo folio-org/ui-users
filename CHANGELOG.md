@@ -21,6 +21,7 @@
 * Display `expirationDate` based on the current timezone. Refs UIU-2839.
 * Assign/unassign users affiliations. Refs UIU-2801.
 * View affiliation associated permissions. Refs UIU-2800.
+* Confirmation modal for manual anonymization. Refs UIU-1631.
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v9.0.0)
