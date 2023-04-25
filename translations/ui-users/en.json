@@ -395,6 +395,7 @@
   "accounts.viewAllFeesFines": "View all fees/fines",
   "accounts.exportFeesFines": "Export fees/fines",
   "accounts.loading": "Loading accounts",
+  "affiliations.primary.label": "(Primary)",
   "affiliations.manager.filter.assignment": "Affiliation assignment status",
   "affiliations.manager.filter.assignment.assigned": "Assigned",
   "affiliations.manager.filter.assignment.unassigned": "Unassigned",
