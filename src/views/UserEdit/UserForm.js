@@ -361,7 +361,6 @@ class UserForm extends React.Component {
                   />
                   <EditExtendedInfo
                     accordionId="extendedInfo"
-                    expanded
                     userId={initialValues.id}
                     userFirstName={initialValues.personal.firstName}
                     userEmail={initialValues.personal.email}
@@ -377,7 +376,6 @@ class UserForm extends React.Component {
                     preferredContactTypeId={initialValues.preferredContactTypeId}
                   />
                   <EditCustomFieldsRecord
-                    expanded
                     formName="userForm"
                     accordionId="customFields"
                     backendModuleName="users"
