@@ -63,7 +63,9 @@ jest.mock('@folio/stripes/smart-components', () => {
           deprecated: '',
           subPermissions: [{ permissionName: 'circ-observer-sub' }]
         };
-        props.onBeforeSave(data);
+        if(props.onBeforeSave){
+          props.onBeforeSave(data);
+        }
         const values = {
           displayName: 'Circ-admin',
         };
