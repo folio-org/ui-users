@@ -1063,5 +1063,22 @@
     "lostItems.list.columnName.action.actualCostDetails": "Actual cost details",
     "lostItems.modal.summaryMessageCharged": "A fee/fine of <strong>{actualCostToBill}</strong> was <strong>charged</strong> to <strong>{patronName}</strong> for <strong>{instanceTitle} ({materialType})</strong>.",
     "lostItems.modal.summaryMessageNotCharged": "A fee/fine was <strong>not charged</strong> to <strong>{patronName}</strong> for <strong>{instanceTitle} ({materialType})</strong>.",
-    "lostItems.modal.button.close": "Close"
+    "lostItems.modal.button.close": "Close",
+    "affiliations.manager.filter.assignment": "Affiliation assignment status",
+    "affiliations.manager.filter.assignment.assigned": "Assigned",
+    "affiliations.manager.filter.assignment.unassigned": "Unassigned",
+    "affiliations.manager.modal.title": "Assign / Unassign affiliations",
+    "affiliations.manager.modal.aria.assign": "Assign affiliation",
+    "affiliations.manager.modal.aria.assignAll": "Assign all affiliations",
+    "affiliations.manager.modal.aria.search": "Search affiliations",
+    "affiliations.manager.modal.totalSelected": "Total selected: {count}",
+    "affiliations.manager.modal.warning.unassigned": "Unassigning an affiliation will remove all permissions associated with that affiliation for this user record.",
+    "affiliations.manager.result.title": "Affiliations",
+    "affiliations.manager.result.subTitle": "{amount, plural, one {# affiliation found} other {# affiliations found}}",
+    "affiliations.section.action.edit": "Assign / Unassign",
+    "affiliations.primary.label": "(Primary)",
+    "anonymization.confirmation.cancel": "Cancel",
+    "anonymization.confirmation.confirm": "Confirm",
+    "anonymization.error.header": "Anonymization prevented",
+    "anonymization.error.message": "{amount} loan(s) had associated fees/fines and could not be anonymized."
 }
