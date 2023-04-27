@@ -422,6 +422,9 @@ class ClosedLoans extends React.Component {
       ' ': { max: 35 }
     };
 
+    console.log('confirmAnonymizationModalOpen ', confirmAnonymizationModalOpen);
+    console.log('anonymizationErrorModalOpen ', anonymizationErrorModalOpen);
+
     return (
       <div
         data-test-closed-loans
