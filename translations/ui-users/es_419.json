@@ -536,7 +536,7 @@
     "accounts.comment.error.enterComment": "Introducir comentario",
     "owners.noServicePoints": "Puntos de servicio asociados no permitidos para tarifa compartida / propietario de la multa",
     "anonymization.confirmation.header": "Anonimización prevenida",
-    "anonymization.confirmation.message": " All loans for this user will be anonymized. The loans will no longer appear in the user’s closed loans. Anonymizing loans cannot be reversed.",
+    "anonymization.confirmation.message": " Todos los préstamos de este usuario serán anonimizados. Los préstamos ya no aparecerán en los préstamos cerrados del usuario. La anonimización de los préstamos no se puede revertir.",
     "requests.preferences": "Preferencias de reservas",
     "requests.fulfillmentPreference": "Preferencia de cumplimiento",
     "requests.defaultDeliveryAddress": "Dirección de entrega por defecto",
