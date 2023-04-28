@@ -4,9 +4,9 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { orderBy } from 'lodash';
 
 import { MultiColumnList } from '@folio/stripes/components';
+import { SORT_DIRECTIONS } from '../../../../constants';
 import PermissionLabel from '../../../PermissionLabel';
 import CheckboxColumn from '../CheckboxColumn';
-import { sortOrders } from '../../constants';
 import { getPermissionLabelString } from '../../../data/converters/permission';
 
 const PermissionsList = (props) => {
@@ -20,7 +20,7 @@ const PermissionsList = (props) => {
   } = props;
 
   const [sortedColumn, setSortedColumn] = useState('permissionName');
-  const [sortOrder, setSortOrder] = useState(sortOrders.asc.name);
+  const [sortOrder, setSortOrder] = useState(SORT_DIRECTIONS.asc.name);
 
   const rowUpdater = ({ id }) => assignedPermissionIds.includes(id);
 
@@ -54,11 +54,11 @@ const PermissionsList = (props) => {
   const onHeaderClick = (e, { name: columnName }) => {
     if (sortedColumn !== columnName) {
       setSortedColumn(columnName);
-      setSortOrder(sortOrders.desc.name);
+      setSortOrder(SORT_DIRECTIONS.desc.name);
     } else {
-      const newSortOrder = (sortOrder === sortOrders.desc.name)
-        ? sortOrders.asc.name
-        : sortOrders.desc.name;
+      const newSortOrder = (sortOrder === SORT_DIRECTIONS.desc.name)
+        ? SORT_DIRECTIONS.asc.name
+        : SORT_DIRECTIONS.desc.name;
       setSortOrder(newSortOrder);
     }
   };
@@ -128,7 +128,7 @@ const PermissionsList = (props) => {
         }}
         onRowClick={(e, { id: permissionId }) => togglePermission(permissionId)}
         onHeaderClick={onHeaderClick}
-        sortDirection={sortOrders[sortOrder].fullName}
+        sortDirection={SORT_DIRECTIONS[sortOrder].fullName}
         sortedColumn={sortedColumn}
       />
     </div>
