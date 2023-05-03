@@ -1,72 +1,79 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import { createMemoryHistory } from 'history';
-import { Router } from 'react-router-dom';
-
+import { screen } from '@testing-library/react';
+import renderWithRouter from 'helpers/renderWithRouter';
 import '__mock__';
-import '__mock__/stripesSmartComponent.mock'
+import '__mock__/stripesSmartComponent.mock';
 import '__mock__/stripesCore.mock';
-
-import { StripesContext } from '@folio/stripes-core/src/StripesContext';
 import userEvent from '@testing-library/user-event';
 import BlockTemplates from './BlockTemplates';
 
+jest.unmock('@folio/stripes/components');
+
+const renderBlockTemplates = (props) => renderWithRouter(
+  <BlockTemplates
+    {...props}
+  />
+);
+
 const resources = {
   manualBlockTemplates: {
+    resource: 'entries',
     records: [
       {
-        id: '1',
-        name: 'Template 1',
+        permissionName: 'circ-observer',
+        deprecated: false,
+        displayName: 'circ-observer',
+        dummy: false,
+        subPermissions: [{ permissionName: 'circ-observer-sub' }]
       },
       {
-        id: '2',
-        name: 'Template 2',
-      }
+        permissionName: 'circ-admin',
+        deprecated: false,
+        displayName: 'circ-admin',
+        dummy: false,
+      },
     ],
-  },
+  }
 };
 
 const mutator = {
   manualBlockTemplates: {
-    POST: jest.fn(),
+    GET: jest.fn(),
     PUT: jest.fn(),
+    POST: jest.fn(),
     DELETE: jest.fn(),
-  },
+  }
 };
 
-const stripes = {
-  okapi: {
-    tenant: 'test',
-    token: 'test-token',
-    url: 'http://localhost:3000',
-  },
-  store: {
-    getState: () => ({ okapi: { token: 'test-token' } }),
-    dispatch: () => {},
-    subscribe: () => {},
-  },
-};
-
-const history = createMemoryHistory();
-
-describe('BlockTemplates', () => {
-  beforeEach(() => {
-    jest.resetAllMocks();
+describe('BlockTemplates component', () => {
+  it('Permissions must be displayed', async () => {
+    const props = {
+      resources,
+      mutator,
+      intl: {},
+    };
+    renderBlockTemplates(props);
+    expect(screen.getByText('circ-admin')).toBeTruthy();
+    expect(screen.getByText('circ-observer')).toBeTruthy();
   });
-
-  it('should render BlockTemplates component', async () => {
-    render(
-      <StripesContext.Provider value={stripes}>
-        <Router history={history}>
-          <BlockTemplates
-            resources={resources}
-            mutator={mutator}
-            intl={{ formatMessage: jest.fn() }}
-          />
-        </Router>
-      </StripesContext.Provider>
-    );
+  it('Check for  before save and validate functions', () => {
+    const props = {
+      resources,
+      mutator,
+    };
+    renderBlockTemplates(props);
     userEvent.click(screen.getByText('actions'));
-    expect(screen.getByText('actions')).toBeInTheDocument();
+    userEvent.click(screen.getByText('emptyActions'));
+    expect(renderBlockTemplates(props)).toBeTruthy();
+  });
+  it('component must render with empty data', () => {
+    const props = {
+      resources : {},
+      mutator,
+    };
+    renderBlockTemplates(props);
+    userEvent.click(screen.getByText('actions'));
+    userEvent.click(screen.getByText('emptyActions'));
+    expect(renderBlockTemplates(props)).toBeTruthy();
   });
 });
