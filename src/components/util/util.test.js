@@ -379,6 +379,7 @@ describe('getResponseErrors', () => {
   it('should return empty array `[]`', async () => {
     expect(await getResponseErrors([])).toEqual([]);
     expect(await getResponseErrors()).toEqual([]);
+    expect(await getResponseErrors({ status: 'fulfilled' })).toEqual([]);
   });
   it('should return a single error message', async () => {
     expect(await getResponseErrors(errors[0])).toEqual({ 'errors': [{ 'message': 'test 0' }] });
