@@ -1,6 +1,6 @@
 import {
   screen,
-  waitForElementToBeRemoved
+  waitForElementToBeRemoved,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {
@@ -23,7 +23,7 @@ jest.unmock('@folio/stripes/components');
 jest.mock('@folio/stripes/core', () => ({
   ...jest.requireActual('@folio/stripes/core'),
   updateConsortium: jest.fn(),
-  useStripes: jest.fn(() => ({})),
+  useStripes: jest.fn(),
 }));
 jest.mock('../../../hooks', () => ({
   ...jest.requireActual('../../../hooks'),

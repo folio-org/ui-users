@@ -19,8 +19,8 @@ import { getResponseErrors } from '../../components/UserDetailSections/UserAffil
 
 jest.mock('@folio/stripes/core', () => ({
   ...jest.requireActual('@folio/stripes/core'),
-  useOkapiKy: jest.fn(() => ({})),
-  useStripes: jest.fn(() => ({})),
+  useOkapiKy: jest.fn(),
+  useStripes: jest.fn(),
 }));
 
 jest.mock('../../components/UserDetailSections/UserAffiliations/util', () => ({

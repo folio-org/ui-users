@@ -20,8 +20,8 @@ import useConsortiumTenants from './useConsortiumTenants';
 jest.mock('@folio/stripes/core', () => ({
   ...jest.requireActual('@folio/stripes/core'),
   useNamespace: jest.fn(() => ['test']),
-  useOkapiKy: jest.fn(() => ({})),
-  useStripes: jest.fn(() => ({})),
+  useOkapiKy: jest.fn(),
+  useStripes: jest.fn(),
 }));
 
 const queryClient = new QueryClient();
