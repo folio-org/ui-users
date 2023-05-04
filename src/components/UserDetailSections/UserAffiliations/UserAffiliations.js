@@ -52,32 +52,39 @@ const UserAffiliations = ({
   const isLoading = isFetching || isAffiliationsMutating;
 
   const onUpdateAffiliations = useCallback(async ({ added, removed }) => {
-    const responses = await handleAssignment({ added, removed });
-    const errors = await getResponseErrors(responses);
+    try {
+      const responses = await handleAssignment({ added, removed });
+      const errors = await getResponseErrors(responses);
 
-    if (errors.length) {
-      callout.sendCallout({
-        type: 'error',
-        message: (
-          <div>
+      if (errors.length) {
+        callout.sendCallout({
+          type: 'error',
+          message: (
             <div>
-              <strong>
-                <FormattedMessage id="ui-users.affiliations.manager.modal.changes.error" />
-              </strong>
+              <div>
+                <strong>
+                  <FormattedMessage id="ui-users.affiliations.manager.modal.changes.error" />
+                </strong>
+              </div>
+              <ul className={css.errorsList}>
+                {errors.map(({ message }) => <li key={message}>{message}</li>)}
+              </ul>
             </div>
-            <ul className={css.errorsList}>
-              {errors.map(({ message }) => <li key={message}>{message}</li>)}
-            </ul>
-          </div>
-        )
-      });
-    } else {
+          )
+        });
+      } else {
+        callout.sendCallout({
+          message: <FormattedMessage id="ui-users.affiliations.manager.modal.changes.success" />,
+          type: 'success',
+        });
+      }
+      await refetch();
+    } catch (error) {
       callout.sendCallout({
-        message: <FormattedMessage id="ui-users.affiliations.manager.modal.changes.success" />,
-        type: 'success',
+        message: <FormattedMessage id="ui-users.affiliations.manager.modal.generic.error" />,
+        type: 'error',
       });
     }
-    refetch();
   }, [callout, handleAssignment, refetch]);
 
   const label = (

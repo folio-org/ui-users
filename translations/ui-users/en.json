@@ -407,6 +407,7 @@
   "affiliations.manager.modal.warning.unassigned": "Unassigning an affiliation will remove all permissions associated with that affiliation for this user record.",
   "affiliations.manager.modal.changes.success": "User affiliation changes have been saved successfully.",
   "affiliations.manager.modal.changes.error": "User affiliation changes could not be saved.",
+  "affiliations.manager.modal.generic.error": "Something went wrong.",
   "affiliations.manager.result.title": "Affiliations",
   "affiliations.manager.result.subTitle": "{amount, plural, one {# affiliation found} other {# affiliations found}}",
   "affiliations.section.label": "Affiliations",
