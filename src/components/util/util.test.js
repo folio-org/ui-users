@@ -17,7 +17,8 @@ import {
   getRecordObject,
   retrieveNoteReferredEntityDataFromLocationState,
   getClosedRequestStatusesFilterString,
-  getOpenRequestStatusesFilterString
+  getOpenRequestStatusesFilterString,
+  getResponseErrors,
 } from './util';
 
 describe('accountsMatchStatus', () => {
@@ -362,5 +363,31 @@ describe('getContributors', () => {
   it('getOpenRequestStatusesFilterString  ', () => {
     const data = getOpenRequestStatusesFilterString();
     expect(data).toStrictEqual('requestStatus.Open - Awaiting pickup,requestStatus.Open - Awaiting delivery,requestStatus.Open - In transit,requestStatus.Open - Not yet filled');
+  });
+});
+
+describe('getResponseErrors', () => {
+  const errors = Array(2).fill().map((_, i) => ({
+    status: 'rejected',
+    reason: {
+      response: {
+        json: () => Promise.resolve({ errors: [{ message: `test ${i}` }] })
+      },
+    },
+  }));
+
+  it('should return empty array `[]`', async () => {
+    expect(await getResponseErrors([])).toEqual([]);
+    expect(await getResponseErrors()).toEqual([]);
+  });
+  it('should return a single error message', async () => {
+    expect(await getResponseErrors(errors[0])).toEqual({ 'errors': [{ 'message': 'test 0' }] });
+  });
+  it('should return a single error message', async () => {
+    const errorSchema = [{
+      status: 'fulfilled',
+      value: errors
+    }];
+    expect(await getResponseErrors(errorSchema)).toHaveLength(errors.length);
   });
 });

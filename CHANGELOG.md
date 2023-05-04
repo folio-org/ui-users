@@ -23,6 +23,7 @@
 * View affiliation associated permissions. Refs UIU-2800.
 * Confirmation modal for manual anonymization. Refs UIU-1631.
 * Fixed bug with certain accordions not closing in edit view. Refs UIU-2811.
+* Show success and Error toasts when Assign/unassign a users affiliations. Refs UIU-2852.
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v9.0.0)

@@ -2,7 +2,10 @@ import PropTypes from 'prop-types';
 import { useCallback, useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { useStripes } from '@folio/stripes/core';
+import {
+  useStripes,
+  useCallout
+} from '@folio/stripes/core';
 import {
   Accordion,
   Badge,
@@ -19,6 +22,7 @@ import {
 import AffiliationsManager from '../../AffiliationsManager';
 
 import css from './UserAffiliations.css';
+import { getResponseErrors } from '../../util/util';
 
 const ItemFormatter = ({ tenantName, isPrimary }) => (
   <li className={isPrimary && css.primary}>{tenantName}</li>
@@ -31,6 +35,7 @@ const UserAffiliations = ({
   userId,
 }) => {
   const stripes = useStripes();
+  const callout = useCallout();
 
   const {
     affiliations,
@@ -46,10 +51,34 @@ const UserAffiliations = ({
 
   const isLoading = isFetching || isAffiliationsMutating;
 
-  const onUpdateAffiliations = useCallback(({ added, removed }) => {
-    return handleAssignment({ added, removed })
-      .then(refetch);
-  }, [handleAssignment, refetch]);
+  const onUpdateAffiliations = useCallback(async ({ added, removed }) => {
+    const responses = await handleAssignment({ added, removed });
+    const errors = await getResponseErrors(responses);
+
+    if (errors.length) {
+      callout.sendCallout({
+        type: 'error',
+        message: (
+          <div>
+            <div>
+              <strong>
+                <FormattedMessage id="ui-users.affiliations.manager.modal.changes.error" />
+              </strong>
+            </div>
+            <ul className={css.errorsList}>
+              {errors.map(({ message }) => <li key={message}>{message}</li>)}
+            </ul>
+          </div>
+        )
+      });
+    } else {
+      callout.sendCallout({
+        message: <FormattedMessage id="ui-users.affiliations.manager.modal.changes.success" />,
+        type: 'success',
+      });
+    }
+    refetch();
+  }, [callout, handleAssignment, refetch]);
 
   const label = (
     <Headline size="large" tag="h3">

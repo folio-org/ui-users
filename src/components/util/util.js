@@ -177,3 +177,19 @@ export const getContributors = (account, instance) => {
 
   return contributors && contributors.map(({ name }) => name);
 };
+
+export const getResponseErrors = async (response) => {
+  if (!response || response === [] || response === {}) return [];
+
+  if (Array.isArray(response)) {
+    const allRejectedResponses = response.map(res => res.value.filter(i => i.status === 'rejected')).flat();
+    const errorsAsJson = await Promise.all(allRejectedResponses.map((i) => i.reason.response.json()));
+    return errorsAsJson?.map((i) => i.errors).flat();
+  }
+
+  if (response.status === 'rejected') {
+    return response.reason?.response?.json();
+  }
+
+  return [];
+};

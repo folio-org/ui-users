@@ -405,6 +405,8 @@
   "affiliations.manager.modal.aria.search": "Search affiliations",
   "affiliations.manager.modal.totalSelected": "Total selected: {count}",
   "affiliations.manager.modal.warning.unassigned": "Unassigning an affiliation will remove all permissions associated with that affiliation for this user record.",
+  "affiliations.manager.modal.changes.success": "User affiliation changes have been saved successfully.",
+  "affiliations.manager.modal.changes.error": "User affiliation changes could not be saved.",
   "affiliations.manager.result.title": "Affiliations",
   "affiliations.manager.result.subTitle": "{amount, plural, one {# affiliation found} other {# affiliations found}}",
   "affiliations.section.label": "Affiliations",
