@@ -4,7 +4,10 @@ import {
 } from 'react-query';
 import { renderHook } from '@testing-library/react-hooks';
 
-import { useOkapiKy } from '@folio/stripes/core';
+import {
+  useOkapiKy,
+  useStripes,
+} from '@folio/stripes/core';
 
 import affiliations from '../../../test/jest/fixtures/affiliations';
 import {
@@ -14,10 +17,11 @@ import {
 import useUserAffiliationsMutation from './useUserAffiliationsMutation';
 import { getResponseErrors } from '../../components/UserDetailSections/UserAffiliations/util';
 
-jest.mock('../useConsortium', () => jest.fn(() => ({
-  consortium: { id: 'id', name: 'MOBIUS' },
-  isLoading: false,
-})));
+jest.mock('@folio/stripes/core', () => ({
+  ...jest.requireActual('@folio/stripes/core'),
+  useOkapiKy: jest.fn(() => ({})),
+  useStripes: jest.fn(() => ({})),
+}));
 
 jest.mock('../../components/UserDetailSections/UserAffiliations/util', () => ({
   getResponseErrors: jest.fn(() => []),
@@ -33,16 +37,32 @@ const wrapper = ({ children }) => (
 );
 
 const userId = 'userId';
+const stripes = {
+  consortium: {
+    id: 'consortium-id',
+    centralTenant: affiliations[0].id,
+  },
+};
 
 describe('useUserAffiliationsMutation', () => {
+  const postMock = jest.fn(() => ({ json: () => Promise.resolve() }));
+  const deleteMock = jest.fn(() => ({ json: () => Promise.resolve() }));
+  const setHeaderMock = jest.fn();
   const kyMock = {
-    post: jest.fn(() => ({ json: () => Promise.resolve() })),
-    delete: jest.fn(() => ({ json: () => Promise.resolve() })),
+    extend: jest.fn(({ hooks: { beforeRequest } }) => {
+      beforeRequest.forEach(handler => handler({ headers: { set: setHeaderMock } }));
+
+      return {
+        post: postMock,
+        delete: deleteMock,
+      };
+    }),
   };
 
   beforeEach(() => {
-    kyMock.delete.mockClear();
-    kyMock.post.mockClear();
+    deleteMock.mockClear();
+    postMock.mockClear();
+    useStripes.mockClear().mockReturnValue(stripes);
     useOkapiKy.mockClear().mockReturnValue(kyMock);
   });
 
@@ -56,8 +76,8 @@ describe('useUserAffiliationsMutation', () => {
 
     await result.current.assignAffiliation(json);
 
-    expect(kyMock.post).toHaveBeenCalledWith(
-      `${CONSORTIA_API}/id/${CONSORTIA_USER_TENANTS_API}`,
+    expect(postMock).toHaveBeenCalledWith(
+      `${CONSORTIA_API}/${stripes.consortium.id}/${CONSORTIA_USER_TENANTS_API}`,
       expect.objectContaining({ json }),
     );
   });
@@ -72,8 +92,8 @@ describe('useUserAffiliationsMutation', () => {
 
     await result.current.unassignAffiliation(searchParams);
 
-    expect(kyMock.delete).toHaveBeenCalledWith(
-      `${CONSORTIA_API}/id/${CONSORTIA_USER_TENANTS_API}`,
+    expect(deleteMock).toHaveBeenCalledWith(
+      `${CONSORTIA_API}/${stripes.consortium.id}/${CONSORTIA_USER_TENANTS_API}`,
       expect.objectContaining({ searchParams }),
     );
   });

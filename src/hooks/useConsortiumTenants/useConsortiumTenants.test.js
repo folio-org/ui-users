@@ -4,7 +4,10 @@ import {
 } from 'react-query';
 import { renderHook } from '@testing-library/react-hooks';
 
-import { useOkapiKy } from '@folio/stripes/core';
+import {
+  useOkapiKy,
+  useStripes,
+} from '@folio/stripes/core';
 
 import affiliations from '../../../test/jest/fixtures/affiliations';
 import {
@@ -14,10 +17,12 @@ import {
 } from '../../constants';
 import useConsortiumTenants from './useConsortiumTenants';
 
-jest.mock('../useConsortium', () => jest.fn(() => ({
-  consortium: { id: 'test', name: 'MOBIUS' },
-  isLoading: false,
-})));
+jest.mock('@folio/stripes/core', () => ({
+  ...jest.requireActual('@folio/stripes/core'),
+  useNamespace: jest.fn(() => ['test']),
+  useOkapiKy: jest.fn(() => ({})),
+  useStripes: jest.fn(() => ({})),
+}));
 
 const queryClient = new QueryClient();
 
@@ -33,14 +38,32 @@ const response = {
   totalRecords: affiliations.length,
 };
 
+const stripes = {
+  consortium: {
+    id: 'consortium-id',
+    centralTenant: affiliations[0].id,
+  },
+};
+
 describe('useConsortiumTenants', () => {
   const mockGet = jest.fn(() => ({
     json: () => Promise.resolve(response),
   }));
+  const setHeaderMock = jest.fn();
+  const kyMock = {
+    extend: jest.fn(({ hooks: { beforeRequest } }) => {
+      beforeRequest.forEach(handler => handler({ headers: { set: setHeaderMock } }));
+
+      return {
+        get: mockGet,
+      };
+    }),
+  };
 
   beforeEach(() => {
     mockGet.mockClear();
-    useOkapiKy.mockClear().mockReturnValue({ get: mockGet });
+    useStripes.mockClear().mockReturnValue(stripes);
+    useOkapiKy.mockClear().mockReturnValue(kyMock);
   });
 
   it('should fetch consortium tenants', async () => {
@@ -50,7 +73,7 @@ describe('useConsortiumTenants', () => {
 
     expect(mockGet.mock.calls.length).toBe(1);
     expect(mockGet).toHaveBeenCalledWith(
-      `${CONSORTIA_API}/test/${CONSORTIA_TENANTS_API}`,
+      `${CONSORTIA_API}/${stripes.consortium.id}/${CONSORTIA_TENANTS_API}`,
       expect.objectContaining({ searchParams: { limit: MAX_RECORDS } }),
     );
     expect(result.current.tenants).toEqual(affiliations);

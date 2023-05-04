@@ -20,6 +20,11 @@ import { getResponseErrors } from './util';
 const queryClient = new QueryClient();
 
 jest.unmock('@folio/stripes/components');
+jest.mock('@folio/stripes/core', () => ({
+  ...jest.requireActual('@folio/stripes/core'),
+  updateConsortium: jest.fn(),
+  useStripes: jest.fn(() => ({})),
+}));
 jest.mock('../../../hooks', () => ({
   ...jest.requireActual('../../../hooks'),
   useUserAffiliations: jest.fn(),
@@ -30,6 +35,23 @@ jest.mock('./util', () => ({
   getResponseErrors: jest.fn(() => []),
 }));
 
+const stripes = {
+  user: {
+    user: {
+      id: 'userId',
+    }
+  },
+  consortium: {
+    activeAffiliation: {
+      tenantId: affiliations[0].tenantId,
+    },
+    userAffiliations: affiliations,
+  },
+  store: {},
+  hasPerm: jest.fn(() => true),
+  hasInterface: jest.fn(() => true),
+};
+
 const defaultProps = {
   accordionId: 'affiliations',
   expanded: true,
@@ -38,7 +60,7 @@ const defaultProps = {
   userName: 'mobius',
 };
 
-const renderPatronBlock = (props = {}) => renderWithRouter(
+const renderUserAffiliations = (props = {}) => renderWithRouter(
   <QueryClientProvider client={queryClient}>
     <UserAffiliations
       {...defaultProps}
@@ -56,7 +78,7 @@ describe('UserAffiliations', () => {
   });
 
   it('should render a list of user affiliations', () => {
-    renderPatronBlock();
+    renderUserAffiliations();
 
     affiliations.map(({ tenantName }) => {
       return expect(screen.getByText(tenantName)).toBeInTheDocument();
@@ -64,7 +86,7 @@ describe('UserAffiliations', () => {
   });
 
   it('should render primary affiliation list item with \'primary\' class', () => {
-    renderPatronBlock();
+    renderUserAffiliations();
 
     const primaryTenantListItem = screen.getByText(affiliations.find(({ isPrimary }) => isPrimary).tenantName);
     expect(primaryTenantListItem).toHaveClass('primary');
