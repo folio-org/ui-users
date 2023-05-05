@@ -74,7 +74,7 @@ class UserSearchContainer extends React.Component {
       },
       shouldRefresh: (resource, action, refresh) => {
         const { path } = action.meta;
-        return refresh || (path && path.match(/users/));
+        return refresh || (path?.match(/users/));
       },
     },
     patronGroups: {
@@ -208,7 +208,7 @@ class UserSearchContainer extends React.Component {
   }
 
   componentDidUpdate() {
-    const pg = (this.props.resources.patronGroups || {}).records || [];
+    const pg = (this.props?.resources?.patronGroups || {}).records || [];
     if (pg.length) {
       const pgFilterConfig = filterConfig.find(group => group.name === 'pg');
       const oldValuesLength = pgFilterConfig.values.length;
