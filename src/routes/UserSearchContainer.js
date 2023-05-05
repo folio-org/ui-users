@@ -25,6 +25,7 @@ const searchFields = [
   'personal.firstName="%{query}*"',
   'personal.preferredFirstName="%{query}*"',
   'personal.lastName="%{query}*"',
+  'personal.middleName="%{query}*"',
   'personal.email="%{query}*"',
   'barcode="%{query}*"',
   'id="%{query}*"',
