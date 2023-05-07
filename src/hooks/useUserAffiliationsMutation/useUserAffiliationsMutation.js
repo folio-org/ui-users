@@ -2,14 +2,12 @@ import chunk from 'lodash/chunk';
 import { useCallback } from 'react';
 import { useMutation } from 'react-query';
 
-import {
-  useOkapiKy,
-  useStripes,
-} from '@folio/stripes/core';
+import { useOkapiKy } from '@folio/stripes/core';
 
 import {
   CONSORTIA_API,
   CONSORTIA_USER_TENANTS_API,
+  OKAPI_TENANT_HEADER,
 } from '../../constants';
 import useConsortium from '../useConsortium';
 import { getResponseErrors } from '../../components/UserDetailSections/UserAffiliations/util';
@@ -31,15 +29,19 @@ const batchRequest = async (arr, handler) => (
 
 const useUserAffiliationsMutation = () => {
   const ky = useOkapiKy();
-  const { consortium } = useStripes();
+
+  const {
+    consortium,
+    isLoading: isConsortiumLoading,
+  } = useConsortium();
 
   const api = ky.extend({
     hooks: {
       beforeRequest: [
         request => {
-          request.headers.set('X-Okapi-Tenant', consortium.centralTenant);
-        }
-      ]
+          request.headers.set(OKAPI_TENANT_HEADER, consortium.centralTenant);
+        },
+      ],
     },
   });
 
@@ -67,7 +69,7 @@ const useUserAffiliationsMutation = () => {
     mutationFn: ({ tenantId, userId }) => {
       const searchParams = {
         tenantId,
-        userId
+        userId,
       };
 
       return api.delete(
@@ -99,7 +101,7 @@ const useUserAffiliationsMutation = () => {
     };
   }, [assignAffiliation, unassignAffiliation]);
 
-  const isLoading = isAssigningLoading || isUnassigningLoading;
+  const isLoading = isConsortiumLoading || isAssigningLoading || isUnassigningLoading;
 
   return {
     assignAffiliation,

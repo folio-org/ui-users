@@ -4,29 +4,35 @@ import { useQuery } from 'react-query';
 import {
   useNamespace,
   useOkapiKy,
-  useStripes,
 } from '@folio/stripes/core';
 
 import {
   CONSORTIA_API,
   CONSORTIA_USER_TENANTS_API,
   MAX_RECORDS,
+  OKAPI_TENANT_HEADER,
 } from '../../constants';
+
+import useConsortium from '../useConsortium';
 
 const DEFAULT_DATA = [];
 
 const useUserAffiliations = ({ userId } = {}, options = {}) => {
   const ky = useOkapiKy();
-  const { consortium } = useStripes();
   const [namespace] = useNamespace({ key: 'user-affiliations' });
+
+  const {
+    consortium,
+    isLoading: isConsortiumLoading,
+  } = useConsortium();
 
   const api = ky.extend({
     hooks: {
       beforeRequest: [
         request => {
-          request.headers.set('X-Okapi-Tenant', consortium.centralTenant);
-        }
-      ]
+          request.headers.set(OKAPI_TENANT_HEADER, consortium.centralTenant);
+        },
+      ],
     },
   });
 
@@ -38,12 +44,12 @@ const useUserAffiliations = ({ userId } = {}, options = {}) => {
   const enabled = Boolean(
     consortium?.centralTenant
     && consortium?.id
-    && userId
+    && userId,
   );
 
   const {
     isFetching,
-    isLoading,
+    isLoading: isAffiliationsLoading,
     data = {},
     refetch,
   } = useQuery(
@@ -64,6 +70,8 @@ const useUserAffiliations = ({ userId } = {}, options = {}) => {
       ...options,
     },
   );
+
+  const isLoading = isAffiliationsLoading || isConsortiumLoading;
 
   return ({
     affiliations: data.userTenants || DEFAULT_DATA,

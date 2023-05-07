@@ -5,10 +5,7 @@ import {
 } from 'react-query';
 import orderBy from 'lodash/orderBy';
 
-import {
-  useOkapiKy,
-  useStripes,
-} from '@folio/stripes/core';
+import { useOkapiKy } from '@folio/stripes/core';
 
 import affiliations from '../../../test/jest/fixtures/affiliations';
 import consortia from '../../../test/jest/fixtures/consortia';
@@ -17,14 +14,15 @@ import {
   CONSORTIA_USER_TENANTS_API,
   MAX_RECORDS,
 } from '../../constants';
+import useConsortium from '../useConsortium';
 import useUserAffiliations from './useUserAffiliations';
 
 jest.mock('@folio/stripes/core', () => ({
   ...jest.requireActual('@folio/stripes/core'),
   useNamespace: jest.fn(() => ['test']),
   useOkapiKy: jest.fn(),
-  useStripes: jest.fn(),
 }));
+jest.mock('../useConsortium', () => jest.fn());
 
 const queryClient = new QueryClient();
 
@@ -35,14 +33,14 @@ const wrapper = ({ children }) => (
   </QueryClientProvider>
 );
 
-const [consortium] = consortia;
 const response = {
   userTenants: affiliations,
   totalRecords: affiliations.length,
 };
 
-const stripes = {
-  consortium: { ...consortium, centralTenant: affiliations[0].id },
+const consortium = {
+  ...consortia[0],
+  centralTenant: 'mobius',
 };
 
 describe('useUserAffiliations', () => {
@@ -62,7 +60,7 @@ describe('useUserAffiliations', () => {
 
   beforeEach(() => {
     mockGet.mockClear();
-    useStripes.mockClear().mockReturnValue(stripes);
+    useConsortium.mockClear().mockReturnValue({ consortium });
     useOkapiKy.mockClear().mockReturnValue(kyMock);
   });
 
@@ -81,7 +79,7 @@ describe('useUserAffiliations', () => {
   });
 
   it('should not fetch user\'s consortium affiliations by user\'s id when there is not consortium', async () => {
-    useStripes.mockClear().mockReturnValue({ consortium: {} });
+    useConsortium.mockClear().mockReturnValue({ consortium: {} });
 
     const userId = 'usedId';
     const { result, waitFor } = renderHook(() => useUserAffiliations({ userId }), { wrapper });

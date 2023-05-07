@@ -1,27 +1,26 @@
+import { renderHook } from '@testing-library/react-hooks';
 import {
   QueryClient,
   QueryClientProvider,
 } from 'react-query';
-import { renderHook } from '@testing-library/react-hooks';
 
-import {
-  useOkapiKy,
-  useStripes,
-} from '@folio/stripes/core';
+import { useOkapiKy } from '@folio/stripes/core';
 
 import affiliations from '../../../test/jest/fixtures/affiliations';
+import consortia from '../../../test/jest/fixtures/consortia';
 import {
   CONSORTIA_API,
   CONSORTIA_USER_TENANTS_API,
 } from '../../constants';
+import useConsortium from '../useConsortium';
 import useUserAffiliationsMutation from './useUserAffiliationsMutation';
 import { getResponseErrors } from '../../components/UserDetailSections/UserAffiliations/util';
 
 jest.mock('@folio/stripes/core', () => ({
   ...jest.requireActual('@folio/stripes/core'),
   useOkapiKy: jest.fn(),
-  useStripes: jest.fn(),
 }));
+jest.mock('../useConsortium', () => jest.fn());
 
 jest.mock('../../components/UserDetailSections/UserAffiliations/util', () => ({
   getResponseErrors: jest.fn(() => []),
@@ -37,11 +36,9 @@ const wrapper = ({ children }) => (
 );
 
 const userId = 'userId';
-const stripes = {
-  consortium: {
-    id: 'consortium-id',
-    centralTenant: affiliations[0].id,
-  },
+const consortium = {
+  ...consortia[0],
+  centralTenant: 'mobius',
 };
 
 describe('useUserAffiliationsMutation', () => {
@@ -62,7 +59,7 @@ describe('useUserAffiliationsMutation', () => {
   beforeEach(() => {
     deleteMock.mockClear();
     postMock.mockClear();
-    useStripes.mockClear().mockReturnValue(stripes);
+    useConsortium.mockClear().mockReturnValue({ consortium });
     useOkapiKy.mockClear().mockReturnValue(kyMock);
   });
 
@@ -77,7 +74,7 @@ describe('useUserAffiliationsMutation', () => {
     await result.current.assignAffiliation(json);
 
     expect(postMock).toHaveBeenCalledWith(
-      `${CONSORTIA_API}/${stripes.consortium.id}/${CONSORTIA_USER_TENANTS_API}`,
+      `${CONSORTIA_API}/${consortium.id}/${CONSORTIA_USER_TENANTS_API}`,
       expect.objectContaining({ json }),
     );
   });
@@ -93,7 +90,7 @@ describe('useUserAffiliationsMutation', () => {
     await result.current.unassignAffiliation(searchParams);
 
     expect(deleteMock).toHaveBeenCalledWith(
-      `${CONSORTIA_API}/${stripes.consortium.id}/${CONSORTIA_USER_TENANTS_API}`,
+      `${CONSORTIA_API}/${consortium.id}/${CONSORTIA_USER_TENANTS_API}`,
       expect.objectContaining({ searchParams }),
     );
   });
