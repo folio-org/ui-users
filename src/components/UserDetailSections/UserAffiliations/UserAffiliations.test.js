@@ -20,11 +20,6 @@ import { getResponseErrors } from './util';
 const queryClient = new QueryClient();
 
 jest.unmock('@folio/stripes/components');
-jest.mock('@folio/stripes/core', () => ({
-  ...jest.requireActual('@folio/stripes/core'),
-  updateConsortium: jest.fn(),
-  useStripes: jest.fn(),
-}));
 jest.mock('../../../hooks', () => ({
   ...jest.requireActual('../../../hooks'),
   useUserAffiliations: jest.fn(),
@@ -112,7 +107,7 @@ describe('UserAffiliations', () => {
     }
 
     getResponseErrors.mockClear().mockReturnValue(mockErrorData);
-    renderPatronBlock();
+    renderUserAffiliations();
 
     const assignButton = screen.getByText('ui-users.affiliations.section.action.edit');
     userEvent.click(assignButton);
