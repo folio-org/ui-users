@@ -22,17 +22,44 @@ import {
 import AffiliationsManager from '../../AffiliationsManager';
 
 import css from './UserAffiliations.css';
-import { getResponseErrors } from '../../util/util';
+import { getResponseErrors } from '../../util';
+import { AFFILIATION_ERROR_CODES } from '../../../constants';
 
 const ItemFormatter = ({ tenantName, isPrimary }) => (
   <li className={isPrimary && css.primary}>{tenantName}</li>
 );
+
+function extractTenantNameFromErrorMessage(errorMessage) {
+  // If message includes tenant and find the tenant name in the error message and the word next to it.
+  const extractedMessage = errorMessage.match(/tenant (.*?)(?:\s|$)/g);
+  if (!extractedMessage) return '';
+  // Remove all non-alphanumeric characters from the tenant name.
+  const tenant = extractedMessage[0]?.split(' ')[1].replace(/\W/g, '');
+  return tenant;
+}
+
+function createErrorMesage({ message, code, userName }) {
+  const errorMessageId = AFFILIATION_ERROR_CODES[code] || AFFILIATION_ERROR_CODES.GENERIC_ERROR;
+  if (!errorMessageId) return message;
+
+  const tenantName = extractTenantNameFromErrorMessage(message);
+  const formattedError = <FormattedMessage
+    id={`ui-users.affiliations.manager.modal.changes.error.${errorMessageId}`}
+    values={{
+      tenantName,
+      userName,
+    }}
+  />;
+
+  return formattedError;
+}
 
 const UserAffiliations = ({
   accordionId,
   expanded,
   onToggle,
   userId,
+  userName,
 }) => {
   const stripes = useStripes();
   const callout = useCallout();
@@ -67,7 +94,13 @@ const UserAffiliations = ({
                 </strong>
               </div>
               <ul className={css.errorsList}>
-                {errors.map(({ message }) => <li key={message}>{message}</li>)}
+                {errors.map(({ message, code }, index) => {
+                  return (
+                    <li key={code + index}>
+                      {createErrorMesage({ message, code, userName })}
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           )
@@ -85,7 +118,7 @@ const UserAffiliations = ({
         type: 'error',
       });
     }
-  }, [callout, handleAssignment, refetch]);
+  }, [callout, handleAssignment, refetch, userName]);
 
   const label = (
     <Headline size="large" tag="h3">
@@ -141,6 +174,7 @@ UserAffiliations.propTypes = {
   expanded: PropTypes.bool.isRequired,
   onToggle: PropTypes.func.isRequired,
   userId: PropTypes.string,
+  userName: PropTypes.string,
 };
 
 export default UserAffiliations;

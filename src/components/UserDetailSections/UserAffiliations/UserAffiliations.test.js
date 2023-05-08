@@ -1,8 +1,8 @@
 import {
   screen,
-  fireEvent,
   waitForElementToBeRemoved
 } from '@testing-library/react';
+import userEvent from '@testing-library/user-event'
 import {
   QueryClient,
   QueryClientProvider,
@@ -35,6 +35,7 @@ const defaultProps = {
   expanded: true,
   onToggle: jest.fn(),
   userId: 'userId',
+  userName: 'mobius',
 };
 
 const renderPatronBlock = (props = {}) => renderWithRouter(
@@ -83,11 +84,11 @@ describe('UserAffiliations', () => {
     renderPatronBlock();
 
     const assignButton = screen.getByText('ui-users.affiliations.section.action.edit');
-    fireEvent.click(assignButton);
+    userEvent.click(assignButton);
     const listOfAssignedTenants = await screen.findAllByRole('checkbox');
     expect(listOfAssignedTenants).toHaveLength(2);
     const saveAndCloseButton = screen.getByText('ui-users.saveAndClose');
-    fireEvent.click(saveAndCloseButton);
+    userEvent.click(saveAndCloseButton);
     await waitForElementToBeRemoved(() => screen.queryByText('ui-users.affiliations.manager.modal.title'));
     expect(screen.queryByText('ui-users.saveAndClos')).toBeNull();
   });

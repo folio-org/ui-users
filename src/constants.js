@@ -327,3 +327,9 @@ export const SORT_DIRECTIONS = {
 export const CONSORTIA_API = 'consortia';
 export const CONSORTIA_TENANTS_API = 'tenants';
 export const CONSORTIA_USER_TENANTS_API = 'user-tenants';
+
+export const AFFILIATION_ERROR_CODES = {
+  PERMISSION_REQUIRED: 'permissionRequired',
+  HAS_PRIMARY_AFFILIATION_ERROR: 'hasPrimaryAffiliation',
+  NOT_FOUND_ERROR: 'notFound',
+};
