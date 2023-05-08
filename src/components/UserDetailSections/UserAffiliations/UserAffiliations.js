@@ -22,37 +22,14 @@ import {
 import AffiliationsManager from '../../AffiliationsManager';
 
 import css from './UserAffiliations.css';
-import { getResponseErrors } from '../../util';
-import { AFFILIATION_ERROR_CODES } from '../../../constants';
+import {
+  createErrorMessage,
+  getResponseErrors
+} from './util';
 
 const ItemFormatter = ({ tenantName, isPrimary }) => (
   <li className={isPrimary && css.primary}>{tenantName}</li>
 );
-
-function extractTenantNameFromErrorMessage(errorMessage) {
-  // If message includes tenant and find the tenant name in the error message and the word next to it.
-  const extractedMessage = errorMessage.match(/tenant (.*?)(?:\s|$)/g);
-  if (!extractedMessage) return '';
-  // Remove all non-alphanumeric characters from the tenant name.
-  const tenant = extractedMessage[0]?.split(' ')[1].replace(/\W/g, '');
-  return tenant;
-}
-
-function createErrorMesage({ message, code, userName }) {
-  const errorMessageId = AFFILIATION_ERROR_CODES[code] || AFFILIATION_ERROR_CODES.GENERIC_ERROR;
-  if (!errorMessageId) return message;
-
-  const tenantName = extractTenantNameFromErrorMessage(message);
-  const formattedError = <FormattedMessage
-    id={`ui-users.affiliations.manager.modal.changes.error.${errorMessageId}`}
-    values={{
-      tenantName,
-      userName,
-    }}
-  />;
-
-  return formattedError;
-}
 
 const UserAffiliations = ({
   accordionId,
@@ -94,10 +71,10 @@ const UserAffiliations = ({
                 </strong>
               </div>
               <ul className={css.errorsList}>
-                {errors.map(({ message, code }, index) => {
+                {errors.map(({ message, code }) => {
                   return (
-                    <li key={code + index}>
-                      {createErrorMesage({ message, code, userName })}
+                    <li key={code}>
+                      {createErrorMessage({ message, code, userName })}
                     </li>
                   );
                 })}

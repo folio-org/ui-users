@@ -15,7 +15,7 @@ import {
   useUserAffiliationsMutation
 } from '../../../hooks';
 import UserAffiliations from './UserAffiliations';
-import { getResponseErrors } from '../../util/util';
+import { getResponseErrors } from './util';
 
 const queryClient = new QueryClient();
 
@@ -26,7 +26,7 @@ jest.mock('../../../hooks', () => ({
   useUserAffiliationsMutation: jest.fn(),
 }));
 
-jest.mock('../../util/util', () => ({
+jest.mock('./util', () => ({
   getResponseErrors: jest.fn(() => []),
 }));
 
@@ -81,6 +81,11 @@ describe('UserAffiliations', () => {
         'message': 'User with id [0c50701e-45ff-4a2e-bff0-11bd5610378d] has primary affiliation with tenant [mobius]. Primary Affiliation cannot be deleted',
         'type': '-1',
         'code': 'HAS_PRIMARY_AFFILIATION_ERROR'
+      },
+      {
+        'message': 'Some error message',
+        'type': '-1',
+        'code': 'GENERIC_ERROR'
       }];
     }
 

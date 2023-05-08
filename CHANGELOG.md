@@ -26,7 +26,6 @@
 * Show success and Error toasts when Assign/unassign a users affiliations. Refs UIU-2852.
 * Users: Implement search by middle name. Refs UIU-2860.
 
-
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v9.0.0)
 
