@@ -2,7 +2,7 @@ import {
   screen,
   waitForElementToBeRemoved
 } from '@testing-library/react';
-import userEvent from '@testing-library/user-event'
+import userEvent from '@testing-library/user-event';
 import {
   QueryClient,
   QueryClientProvider,
@@ -77,7 +77,11 @@ describe('UserAffiliations', () => {
   `('should show $status message on click saveAndClose button', async ({ status }) => {
     let mockErrorData = [];
     if (status === 'error') {
-      mockErrorData = [{ message: 'error' }];
+      mockErrorData = [{
+        'message': 'User with id [0c50701e-45ff-4a2e-bff0-11bd5610378d] has primary affiliation with tenant [mobius]. Primary Affiliation cannot be deleted',
+        'type': '-1',
+        'code': 'HAS_PRIMARY_AFFILIATION_ERROR'
+      }];
     }
 
     getResponseErrors.mockClear().mockReturnValue(mockErrorData);
