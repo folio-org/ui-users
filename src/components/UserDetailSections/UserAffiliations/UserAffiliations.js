@@ -22,10 +22,7 @@ import {
 import AffiliationsManager from '../../AffiliationsManager';
 
 import css from './UserAffiliations.css';
-import {
-  createErrorMessage,
-  getResponseErrors
-} from './util';
+import { createErrorMessage } from './util';
 
 const ItemFormatter = ({ tenantName, isPrimary }) => (
   <li className={isPrimary && css.primary}>{tenantName}</li>
@@ -57,10 +54,14 @@ const UserAffiliations = ({
 
   const onUpdateAffiliations = useCallback(async ({ added, removed }) => {
     try {
-      const responses = await handleAssignment({ added, removed });
-      const errors = await getResponseErrors(responses);
+      const { success, errors } = await handleAssignment({ added, removed });
 
-      if (errors.length) {
+      if (success) {
+        callout.sendCallout({
+          message: <FormattedMessage id="ui-users.affiliations.manager.modal.changes.success" />,
+          type: 'success',
+        });
+      } else {
         callout.sendCallout({
           type: 'error',
           message: (
@@ -82,12 +83,8 @@ const UserAffiliations = ({
             </div>
           )
         });
-      } else {
-        callout.sendCallout({
-          message: <FormattedMessage id="ui-users.affiliations.manager.modal.changes.success" />,
-          type: 'success',
-        });
       }
+
       await refetch();
     } catch (error) {
       callout.sendCallout({
