@@ -23,6 +23,7 @@
 * View affiliation associated permissions. Refs UIU-2800.
 * Confirmation modal for manual anonymization. Refs UIU-1631.
 * Fixed bug with certain accordions not closing in edit view. Refs UIU-2811.
+* Users: Implement search by middle name. Refs UIU-2860.
 * Notify patron checkbox not checked correctly when fee/fine owner has default notice. Refs UIU-2823.
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
