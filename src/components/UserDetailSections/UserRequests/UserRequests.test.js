@@ -59,7 +59,7 @@ const props = (perm) => {
         records: [
           {
             requests: [{
-              fulfilmentPreference: 'Hold Shelf',
+              fulfillmentPreference: 'Hold Shelf',
               id: '9b120742-bd00-43db-9b72-477902f5cec7',
               instance: { title: 'A semantic web primer' },
               instanceId: '5bf370e0-8cca-4d9c-82e4-5170ab2a0a39',
@@ -82,7 +82,7 @@ const props = (perm) => {
         records: [
           {
             requests: [{
-              fulfilmentPreference: 'Hold Shelf',
+              fulfillmentPreference: 'Hold Shelf',
               id: '9b120742-bd00-43db-9b72-477902f5cec7',
               instance: { title: 'A semantic web primer' },
               instanceId: '5bf370e0-8cca-4d9c-82e4-5170ab2a0a39',
