@@ -316,6 +316,7 @@
         "subPermissions": [
           "settings.users.enabled",
           "configuration.entries.collection.get",
+          "user-settings.custom-fields.collection.get",
           "user-settings.custom-fields.item.option.stats.get"
         ],
         "visible": true

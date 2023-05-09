@@ -24,6 +24,7 @@
 * Confirmation modal for manual anonymization. Refs UIU-1631.
 * Fixed bug with certain accordions not closing in edit view. Refs UIU-2811.
 * Users: Implement search by middle name. Refs UIU-2860.
+* "ui-users.settings.customfields.view" permission insufficient to view custom fields on user settings. Refs UIU-2863.
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v9.0.0)
