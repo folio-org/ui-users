@@ -25,6 +25,8 @@
 * Fixed bug with certain accordions not closing in edit view. Refs UIU-2811.
 * Users: Implement search by middle name. Refs UIU-2860.
 * Notify patron checkbox not checked correctly when fee/fine owner has default notice. Refs UIU-2823.
+* Show success and Error toasts when Assign/unassign a users affiliations. Refs UIU-2852.
+
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v9.0.0)

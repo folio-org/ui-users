@@ -12,11 +12,16 @@ import {
   CONSORTIA_USER_TENANTS_API,
 } from '../../constants';
 import useUserAffiliationsMutation from './useUserAffiliationsMutation';
+import { getResponseErrors } from '../../components/UserDetailSections/UserAffiliations/util';
 
 jest.mock('../useConsortium', () => jest.fn(() => ({
   consortium: { id: 'id', name: 'MOBIUS' },
   isLoading: false,
 })));
+
+jest.mock('../../components/UserDetailSections/UserAffiliations/util', () => ({
+  getResponseErrors: jest.fn(() => []),
+}));
 
 const queryClient = new QueryClient();
 
@@ -81,9 +86,35 @@ describe('useUserAffiliationsMutation', () => {
       removed: affiliations.slice(3, 5).map(({ tenantId }) => ({ tenantId, userId })),
     };
 
-    await result.current.handleAssignment(payload);
+    const { success, errors } = await result.current.handleAssignment(payload);
 
     expect(kyMock.post).toHaveBeenCalledTimes(3);
     expect(kyMock.delete).toHaveBeenCalledTimes(2);
+    expect(success).toBe(true);
+    expect(errors).toEqual([]);
+  });
+
+  it('should return errors on update', async () => {
+    getResponseErrors.mockClear().mockReturnValue([{
+      'message': 'User with id [0c50701e-45ff-4a2e-bff0-11bd5610378d] has primary affiliation with tenant [mobius]. Primary Affiliation cannot be deleted',
+      'type': '-1',
+      'code': 'HAS_PRIMARY_AFFILIATION_ERROR'
+    },
+    {
+      'message': 'Some error message',
+      'type': '-1',
+      'code': 'GENERIC_ERROR'
+    }]);
+    const { result } = renderHook(() => useUserAffiliationsMutation(), { wrapper });
+
+    const payload = {
+      added: affiliations.slice(0, 3).map(({ tenantId }) => ({ tenantId, userId })),
+      removed: affiliations.slice(3, 5).map(({ tenantId }) => ({ tenantId, userId })),
+    };
+
+    const { success, errors } = await result.current.handleAssignment(payload);
+
+    expect(success).toBe(false);
+    expect(errors.length).toBe(2);
   });
 });

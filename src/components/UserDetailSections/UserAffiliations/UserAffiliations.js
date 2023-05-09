@@ -2,7 +2,10 @@ import PropTypes from 'prop-types';
 import { useCallback, useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { useStripes } from '@folio/stripes/core';
+import {
+  useStripes,
+  useCallout
+} from '@folio/stripes/core';
 import {
   Accordion,
   Badge,
@@ -19,6 +22,7 @@ import {
 import AffiliationsManager from '../../AffiliationsManager';
 
 import css from './UserAffiliations.css';
+import { createErrorMessage } from './util';
 
 const ItemFormatter = ({ tenantName, isPrimary }) => (
   <li className={isPrimary && css.primary}>{tenantName}</li>
@@ -29,8 +33,10 @@ const UserAffiliations = ({
   expanded,
   onToggle,
   userId,
+  userName,
 }) => {
   const stripes = useStripes();
+  const callout = useCallout();
 
   const {
     affiliations,
@@ -46,10 +52,47 @@ const UserAffiliations = ({
 
   const isLoading = isFetching || isAffiliationsMutating;
 
-  const onUpdateAffiliations = useCallback(({ added, removed }) => {
-    return handleAssignment({ added, removed })
-      .then(refetch);
-  }, [handleAssignment, refetch]);
+  const onUpdateAffiliations = useCallback(async ({ added, removed }) => {
+    try {
+      const { success, errors } = await handleAssignment({ added, removed });
+
+      if (success) {
+        callout.sendCallout({
+          message: <FormattedMessage id="ui-users.affiliations.manager.modal.changes.success" />,
+          type: 'success',
+        });
+      } else {
+        callout.sendCallout({
+          type: 'error',
+          message: (
+            <div>
+              <div>
+                <strong>
+                  <FormattedMessage id="ui-users.affiliations.manager.modal.changes.error" />
+                </strong>
+              </div>
+              <ul className={css.errorsList}>
+                {errors.map(({ message, code }) => {
+                  return (
+                    <li key={code}>
+                      {createErrorMessage({ message, code, userName })}
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          )
+        });
+      }
+
+      await refetch();
+    } catch (error) {
+      callout.sendCallout({
+        message: <FormattedMessage id="ui-users.affiliations.manager.modal.generic.error" />,
+        type: 'error',
+      });
+    }
+  }, [callout, handleAssignment, refetch, userName]);
 
   const label = (
     <Headline size="large" tag="h3">
@@ -105,6 +148,7 @@ UserAffiliations.propTypes = {
   expanded: PropTypes.bool.isRequired,
   onToggle: PropTypes.func.isRequired,
   userId: PropTypes.string,
+  userName: PropTypes.string,
 };
 
 export default UserAffiliations;

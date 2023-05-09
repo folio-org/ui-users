@@ -9,6 +9,7 @@ import {
   CONSORTIA_USER_TENANTS_API,
 } from '../../constants';
 import useConsortium from '../useConsortium';
+import { getResponseErrors } from '../../components/UserDetailSections/UserAffiliations/util';
 
 const CHUNK_SIZE = 5;
 
@@ -68,10 +69,25 @@ const useUserAffiliationsMutation = () => {
   });
 
   const handleAssignment = useCallback(async ({ added, removed }) => {
-    return Promise.allSettled([
+    const batchResponses = await Promise.allSettled([
       batchRequest(added, assignAffiliation),
       batchRequest(removed, unassignAffiliation),
     ]);
+
+    const errors = await getResponseErrors(batchResponses);
+    if (errors.length) {
+      return {
+        errors,
+        success: false,
+        responses: batchResponses,
+      };
+    }
+
+    return {
+      errors: [],
+      success: true,
+      responses: batchResponses,
+    };
   }, [assignAffiliation, unassignAffiliation]);
 
   const isLoading = isConsortiumLoading || isAssigningLoading || isUnassigningLoading;
