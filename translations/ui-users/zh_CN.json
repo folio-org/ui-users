@@ -1080,5 +1080,11 @@
     "anonymization.confirmation.cancel": "取消",
     "anonymization.confirmation.confirm": "确认",
     "anonymization.error.header": "匿名化被阻止",
-    "anonymization.error.message": "{amount}笔借阅有关联费用/罚款，因此无法匿名化。"
+    "anonymization.error.message": "{amount}笔借阅有关联费用/罚款，因此无法匿名化。",
+    "affiliations.manager.modal.changes.success": "User affiliation changes have been saved successfully.",
+    "affiliations.manager.modal.changes.error": "User affiliation changes could not be saved.",
+    "affiliations.manager.modal.changes.error.permissionRequired": "You do not have the necessary permission to edit the affiliation(s) of {userName}",
+    "affiliations.manager.modal.changes.error.hasPrimaryAffiliation": "User {userName} must have primary affiliation, cannot remove affiliation to {tenantName}",
+    "affiliations.manager.modal.changes.error.notFound": "User {userName} does not have a primary affiliation, a primary affiliation must be assigned before the user's affiliations can be changed.",
+    "affiliations.manager.modal.generic.error.generic": "Something went wrong."
 }

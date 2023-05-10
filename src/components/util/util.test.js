@@ -17,7 +17,7 @@ import {
   getRecordObject,
   retrieveNoteReferredEntityDataFromLocationState,
   getClosedRequestStatusesFilterString,
-  getOpenRequestStatusesFilterString
+  getOpenRequestStatusesFilterString,
 } from './util';
 
 describe('accountsMatchStatus', () => {
