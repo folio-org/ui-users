@@ -899,7 +899,7 @@
     "@folio/jest-config-stripes": "^1.0.0",
     "@folio/stripes": "^8.0.0",
     "@folio/stripes-cli": "^2.4.0",
-    "@formatjs/cli": "^6.0.4",
+    "@formatjs/cli": "^6.1.1",
     "core-js": "^3.6.4",
     "eslint": "^7.32.0",
     "eslint-import-resolver-alias": "^1.1.2",
