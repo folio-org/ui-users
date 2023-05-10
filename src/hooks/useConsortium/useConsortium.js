@@ -6,33 +6,66 @@ import {
   useStripes,
 } from '@folio/stripes/core';
 
-import { CONSORTIA_API } from '../../constants';
+import {
+  CONFIGURATIONS_ENTRIES_API,
+  CONSORTIA_API,
+  MAX_RECORDS,
+  OKAPI_TENANT_HEADER,
+} from '../../constants';
+
+const MODULE_NAME = 'CONSORTIA';
+const CONFIG_NAME = 'centralTenantId';
 
 const useConsortium = () => {
   const stripes = useStripes();
   const ky = useOkapiKy();
   const [namespace] = useNamespace({ key: 'consortium' });
 
+  const configsSearchParams = {
+    limit: MAX_RECORDS,
+    query: `(module=${MODULE_NAME} and configName=${CONFIG_NAME})`,
+  };
+
   const enabled = Boolean(
-    stripes.hasInterface('consortia') && stripes.hasPerm('consortia.consortium.collection.get')
+    stripes.hasInterface('consortia') && stripes.hasPerm('consortia.consortium.collection.get'),
   );
 
   const { isLoading, data } = useQuery(
     [namespace],
     async () => {
-      const { consortia } = await ky.get(CONSORTIA_API).json();
+      const { configs } = await ky.get(
+        CONFIGURATIONS_ENTRIES_API,
+        { searchParams: configsSearchParams },
+      ).json();
+
+      const centralTenant = configs[0]?.value;
+
+      if (!centralTenant) return Promise.resolve();
+
+      const api = ky.extend({
+        hooks: {
+          beforeRequest: [
+            request => {
+              request.headers.set(OKAPI_TENANT_HEADER, centralTenant);
+            },
+          ],
+        },
+      });
+
+      const { consortia } = await api.get(CONSORTIA_API).json();
 
       if (consortia?.length) {
         const [consortium] = consortia;
 
-        return consortium;
+        return {
+          ...consortium,
+          centralTenant,
+        };
       }
 
-      return Promise.resolve();
+      return Promise.resolve({ centralTenant });
     },
-    {
-      enabled,
-    },
+    { enabled },
   );
 
   return ({

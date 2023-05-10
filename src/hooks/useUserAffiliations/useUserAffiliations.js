@@ -10,6 +10,7 @@ import {
   CONSORTIA_API,
   CONSORTIA_USER_TENANTS_API,
   MAX_RECORDS,
+  OKAPI_TENANT_HEADER,
 } from '../../constants';
 
 import useConsortium from '../useConsortium';
@@ -25,10 +26,26 @@ const useUserAffiliations = ({ userId } = {}, options = {}) => {
     isLoading: isConsortiumLoading,
   } = useConsortium();
 
+  const api = ky.extend({
+    hooks: {
+      beforeRequest: [
+        request => {
+          request.headers.set(OKAPI_TENANT_HEADER, consortium.centralTenant);
+        },
+      ],
+    },
+  });
+
   const searchParams = {
     userId,
     limit: MAX_RECORDS,
   };
+
+  const enabled = Boolean(
+    consortium?.centralTenant
+    && consortium?.id
+    && userId,
+  );
 
   const {
     isFetching,
@@ -38,7 +55,7 @@ const useUserAffiliations = ({ userId } = {}, options = {}) => {
   } = useQuery(
     [namespace, userId, consortium?.id],
     async () => {
-      const { userTenants, totalRecords } = await ky.get(
+      const { userTenants, totalRecords } = await api.get(
         `${CONSORTIA_API}/${consortium.id}/${CONSORTIA_USER_TENANTS_API}`,
         { searchParams },
       ).json();
@@ -49,7 +66,7 @@ const useUserAffiliations = ({ userId } = {}, options = {}) => {
       };
     },
     {
-      enabled: Boolean(consortium?.id && userId),
+      enabled,
       ...options,
     },
   );

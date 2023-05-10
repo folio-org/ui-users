@@ -1,23 +1,26 @@
+import { renderHook } from '@testing-library/react-hooks';
 import {
   QueryClient,
   QueryClientProvider,
 } from 'react-query';
-import { renderHook } from '@testing-library/react-hooks';
 
 import { useOkapiKy } from '@folio/stripes/core';
 
 import affiliations from '../../../test/jest/fixtures/affiliations';
+import consortia from '../../../test/jest/fixtures/consortia';
 import {
   CONSORTIA_API,
   CONSORTIA_USER_TENANTS_API,
 } from '../../constants';
+import useConsortium from '../useConsortium';
 import useUserAffiliationsMutation from './useUserAffiliationsMutation';
 import { getResponseErrors } from '../../components/UserDetailSections/UserAffiliations/util';
 
-jest.mock('../useConsortium', () => jest.fn(() => ({
-  consortium: { id: 'id', name: 'MOBIUS' },
-  isLoading: false,
-})));
+jest.mock('@folio/stripes/core', () => ({
+  ...jest.requireActual('@folio/stripes/core'),
+  useOkapiKy: jest.fn(),
+}));
+jest.mock('../useConsortium', () => jest.fn());
 
 jest.mock('../../components/UserDetailSections/UserAffiliations/util', () => ({
   getResponseErrors: jest.fn(() => []),
@@ -33,16 +36,30 @@ const wrapper = ({ children }) => (
 );
 
 const userId = 'userId';
+const consortium = {
+  ...consortia[0],
+  centralTenant: 'mobius',
+};
 
 describe('useUserAffiliationsMutation', () => {
+  const postMock = jest.fn(() => ({ json: () => Promise.resolve() }));
+  const deleteMock = jest.fn(() => ({ json: () => Promise.resolve() }));
+  const setHeaderMock = jest.fn();
   const kyMock = {
-    post: jest.fn(() => ({ json: () => Promise.resolve() })),
-    delete: jest.fn(() => ({ json: () => Promise.resolve() })),
+    extend: jest.fn(({ hooks: { beforeRequest } }) => {
+      beforeRequest.forEach(handler => handler({ headers: { set: setHeaderMock } }));
+
+      return {
+        post: postMock,
+        delete: deleteMock,
+      };
+    }),
   };
 
   beforeEach(() => {
-    kyMock.delete.mockClear();
-    kyMock.post.mockClear();
+    deleteMock.mockClear();
+    postMock.mockClear();
+    useConsortium.mockClear().mockReturnValue({ consortium });
     useOkapiKy.mockClear().mockReturnValue(kyMock);
   });
 
@@ -56,8 +73,8 @@ describe('useUserAffiliationsMutation', () => {
 
     await result.current.assignAffiliation(json);
 
-    expect(kyMock.post).toHaveBeenCalledWith(
-      `${CONSORTIA_API}/id/${CONSORTIA_USER_TENANTS_API}`,
+    expect(postMock).toHaveBeenCalledWith(
+      `${CONSORTIA_API}/${consortium.id}/${CONSORTIA_USER_TENANTS_API}`,
       expect.objectContaining({ json }),
     );
   });
@@ -72,8 +89,8 @@ describe('useUserAffiliationsMutation', () => {
 
     await result.current.unassignAffiliation(searchParams);
 
-    expect(kyMock.delete).toHaveBeenCalledWith(
-      `${CONSORTIA_API}/id/${CONSORTIA_USER_TENANTS_API}`,
+    expect(deleteMock).toHaveBeenCalledWith(
+      `${CONSORTIA_API}/${consortium.id}/${CONSORTIA_USER_TENANTS_API}`,
       expect.objectContaining({ searchParams }),
     );
   });
@@ -88,8 +105,8 @@ describe('useUserAffiliationsMutation', () => {
 
     const { success, errors } = await result.current.handleAssignment(payload);
 
-    expect(kyMock.post).toHaveBeenCalledTimes(3);
-    expect(kyMock.delete).toHaveBeenCalledTimes(2);
+    expect(postMock).toHaveBeenCalledTimes(3);
+    expect(deleteMock).toHaveBeenCalledTimes(2);
     expect(success).toBe(true);
     expect(errors).toEqual([]);
   });

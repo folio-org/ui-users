@@ -17,10 +17,12 @@ import {
 import useConsortium from '../useConsortium';
 import useUserAffiliations from './useUserAffiliations';
 
-jest.mock('../useConsortium', () => jest.fn(() => ({
-  consortium: null,
-  isLoading: false,
-})));
+jest.mock('@folio/stripes/core', () => ({
+  ...jest.requireActual('@folio/stripes/core'),
+  useNamespace: jest.fn(() => ['test']),
+  useOkapiKy: jest.fn(),
+}));
+jest.mock('../useConsortium', () => jest.fn());
 
 const queryClient = new QueryClient();
 
@@ -31,21 +33,35 @@ const wrapper = ({ children }) => (
   </QueryClientProvider>
 );
 
-const [consortium] = consortia;
 const response = {
   userTenants: affiliations,
   totalRecords: affiliations.length,
+};
+
+const consortium = {
+  ...consortia[0],
+  centralTenant: 'mobius',
 };
 
 describe('useUserAffiliations', () => {
   const mockGet = jest.fn(() => ({
     json: () => Promise.resolve(response),
   }));
+  const setHeaderMock = jest.fn();
+  const kyMock = {
+    extend: jest.fn(({ hooks: { beforeRequest } }) => {
+      beforeRequest.forEach(handler => handler({ headers: { set: setHeaderMock } }));
+
+      return {
+        get: mockGet,
+      };
+    }),
+  };
 
   beforeEach(() => {
     mockGet.mockClear();
-    useConsortium.mockClear().mockReturnValue({ consortium, isLoading: false });
-    useOkapiKy.mockClear().mockReturnValue({ get: mockGet });
+    useConsortium.mockClear().mockReturnValue({ consortium });
+    useOkapiKy.mockClear().mockReturnValue(kyMock);
   });
 
   it('should fetch user\'s consortium affiliations by user\'s id when there is consortium', async () => {
@@ -63,18 +79,13 @@ describe('useUserAffiliations', () => {
   });
 
   it('should not fetch user\'s consortium affiliations by user\'s id when there is not consortium', async () => {
-    const getMock = jest.fn(() => ({
-      json: () => Promise.resolve({}),
-    }));
-
-    useOkapiKy.mockClear().mockReturnValue({ get: getMock });
-    useConsortium.mockReturnValue({ isLoading: false, consortium: undefined });
+    useConsortium.mockClear().mockReturnValue({ consortium: {} });
 
     const userId = 'usedId';
     const { result, waitFor } = renderHook(() => useUserAffiliations({ userId }), { wrapper });
 
     await waitFor(() => !result.current.isLoading);
 
-    expect(getMock.mock.calls.length).toBe(0);
+    expect(mockGet.mock.calls.length).toBe(0);
   });
 });

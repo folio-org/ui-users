@@ -1,6 +1,6 @@
 import {
   screen,
-  waitForElementToBeRemoved
+  waitForElementToBeRemoved,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {
@@ -11,6 +11,7 @@ import renderWithRouter from 'helpers/renderWithRouter';
 
 import affiliations from '../../../../test/jest/fixtures/affiliations';
 import {
+  useConsortiumTenants,
   useUserAffiliations,
   useUserAffiliationsMutation
 } from '../../../hooks';
@@ -22,6 +23,7 @@ const queryClient = new QueryClient();
 jest.unmock('@folio/stripes/components');
 jest.mock('../../../hooks', () => ({
   ...jest.requireActual('../../../hooks'),
+  useConsortiumTenants: jest.fn(),
   useUserAffiliations: jest.fn(),
   useUserAffiliationsMutation: jest.fn(),
 }));
@@ -38,7 +40,9 @@ const defaultProps = {
   userName: 'mobius',
 };
 
-const renderPatronBlock = (props = {}) => renderWithRouter(
+const tenants = affiliations.map(({ tenantId, tenantName }) => ({ id: tenantId, name: tenantName }));
+
+const renderUserAffiliations = (props = {}) => renderWithRouter(
   <QueryClientProvider client={queryClient}>
     <UserAffiliations
       {...defaultProps}
@@ -48,15 +52,18 @@ const renderPatronBlock = (props = {}) => renderWithRouter(
 );
 
 describe('UserAffiliations', () => {
+  const handleAssignment = jest.fn(() => Promise.resolve([]));
+
   beforeEach(() => {
-    useUserAffiliationsMutation.mockClear().mockReturnValue({ handleAssignment: () => [], isLoading: false });
+    useConsortiumTenants.mockClear().mockReturnValue({ tenants });
+    useUserAffiliationsMutation.mockClear().mockReturnValue({ handleAssignment, isLoading: false });
     useUserAffiliations
       .mockClear()
       .mockReturnValue({ affiliations, totalRecords: affiliations.length, isLoading: false, handleAssignment: () => [{}], refetch: () => {} });
   });
 
   it('should render a list of user affiliations', () => {
-    renderPatronBlock();
+    renderUserAffiliations();
 
     affiliations.map(({ tenantName }) => {
       return expect(screen.getByText(tenantName)).toBeInTheDocument();
@@ -64,7 +71,7 @@ describe('UserAffiliations', () => {
   });
 
   it('should render primary affiliation list item with \'primary\' class', () => {
-    renderPatronBlock();
+    renderUserAffiliations();
 
     const primaryTenantListItem = screen.getByText(affiliations.find(({ isPrimary }) => isPrimary).tenantName);
     expect(primaryTenantListItem).toHaveClass('primary');
@@ -90,15 +97,19 @@ describe('UserAffiliations', () => {
     }
 
     getResponseErrors.mockClear().mockReturnValue(mockErrorData);
-    renderPatronBlock();
+    renderUserAffiliations();
 
     const assignButton = screen.getByText('ui-users.affiliations.section.action.edit');
     userEvent.click(assignButton);
-    const listOfAssignedTenants = await screen.findAllByRole('checkbox');
-    expect(listOfAssignedTenants).toHaveLength(2);
+    const listOfAssignedTenants = await screen.findAllByRole('checkbox', {
+      name: 'ui-users.affiliations.manager.modal.aria.assign',
+      checked: true,
+    });
+    expect(listOfAssignedTenants).toHaveLength(affiliations.length);
     const saveAndCloseButton = screen.getByText('ui-users.saveAndClose');
     userEvent.click(saveAndCloseButton);
     await waitForElementToBeRemoved(() => screen.queryByText('ui-users.affiliations.manager.modal.title'));
-    expect(screen.queryByText('ui-users.saveAndClos')).toBeNull();
+    expect(handleAssignment).toHaveBeenCalled();
+    expect(screen.queryByText('ui-users.saveAndClose')).toBeNull();
   });
 });

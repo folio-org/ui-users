@@ -7,6 +7,7 @@ import { useOkapiKy } from '@folio/stripes/core';
 import {
   CONSORTIA_API,
   CONSORTIA_USER_TENANTS_API,
+  OKAPI_TENANT_HEADER,
 } from '../../constants';
 import useConsortium from '../useConsortium';
 import { getResponseErrors } from '../../components/UserDetailSections/UserAffiliations/util';
@@ -34,6 +35,16 @@ const useUserAffiliationsMutation = () => {
     isLoading: isConsortiumLoading,
   } = useConsortium();
 
+  const api = ky.extend({
+    hooks: {
+      beforeRequest: [
+        request => {
+          request.headers.set(OKAPI_TENANT_HEADER, consortium.centralTenant);
+        },
+      ],
+    },
+  });
+
   const {
     mutateAsync: assignAffiliation,
     isLoading: isAssigningLoading,
@@ -44,7 +55,7 @@ const useUserAffiliationsMutation = () => {
         userId,
       };
 
-      return ky.post(
+      return api.post(
         `${CONSORTIA_API}/${consortium.id}/${CONSORTIA_USER_TENANTS_API}`,
         { json },
       );
@@ -58,10 +69,10 @@ const useUserAffiliationsMutation = () => {
     mutationFn: ({ tenantId, userId }) => {
       const searchParams = {
         tenantId,
-        userId
+        userId,
       };
 
-      return ky.delete(
+      return api.delete(
         `${CONSORTIA_API}/${consortium.id}/${CONSORTIA_USER_TENANTS_API}`,
         { searchParams },
       );
