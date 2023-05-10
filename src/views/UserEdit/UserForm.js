@@ -369,6 +369,7 @@ class UserForm extends React.Component {
                     addressTypes={formData.addressTypes}
                     departments={formData.departments}
                     uniquenessValidator={uniquenessValidator}
+                    expanded={true}
                   />
                   <EditContactInfo
                     accordionId="contactInfo"
@@ -383,6 +384,7 @@ class UserForm extends React.Component {
                     finalFormCustomFieldsValues={form.getState().values.customFields}
                     fieldComponent={Field}
                     changeFinalFormField={form.change}
+                    expanded={true}
                   />
                   {initialValues.id &&
                     <div>
