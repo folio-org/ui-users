@@ -1080,5 +1080,11 @@
     "anonymization.confirmation.cancel": "Cancelar",
     "anonymization.confirmation.confirm": "Confirme",
     "anonymization.error.header": "Se impide el anonimato",
-    "anonymization.error.message": "{amount} préstamo(s) tenía(n) comisiones/multas asociadas y no pudo(n) ser anonimizado(s)."
+    "anonymization.error.message": "{amount} préstamo(s) tenía(n) comisiones/multas asociadas y no pudo(n) ser anonimizado(s).",
+    "affiliations.manager.modal.changes.success": "User affiliation changes have been saved successfully.",
+    "affiliations.manager.modal.changes.error": "User affiliation changes could not be saved.",
+    "affiliations.manager.modal.changes.error.permissionRequired": "You do not have the necessary permission to edit the affiliation(s) of {userName}",
+    "affiliations.manager.modal.changes.error.hasPrimaryAffiliation": "User {userName} must have primary affiliation, cannot remove affiliation to {tenantName}",
+    "affiliations.manager.modal.changes.error.notFound": "User {userName} does not have a primary affiliation, a primary affiliation must be assigned before the user's affiliations can be changed.",
+    "affiliations.manager.modal.generic.error.generic": "Something went wrong."
 }
