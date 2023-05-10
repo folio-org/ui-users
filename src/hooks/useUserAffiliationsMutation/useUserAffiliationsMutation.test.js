@@ -105,8 +105,8 @@ describe('useUserAffiliationsMutation', () => {
 
     const { success, errors } = await result.current.handleAssignment(payload);
 
-    expect(kyMock.post).toHaveBeenCalledTimes(3);
-    expect(kyMock.delete).toHaveBeenCalledTimes(2);
+    expect(postMock).toHaveBeenCalledTimes(3);
+    expect(deleteMock).toHaveBeenCalledTimes(2);
     expect(success).toBe(true);
     expect(errors).toEqual([]);
   });
