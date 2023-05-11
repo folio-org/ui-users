@@ -34,8 +34,6 @@ export function createErrorMessage({ message, code, userName }) {
 
   const tenantName = extractTenantNameFromErrorMessage(message);
 
-  if (!tenantName) return message;
-
   const formattedError = <FormattedMessage
     id={`ui-users.affiliations.manager.modal.changes.error.${errorMessageId}`}
     values={{

@@ -65,7 +65,13 @@ describe('createErrorMessage', () => {
       code: 'HAS_PRIMARY_AFFILIATION_ERROR',
       userName: 'test user',
     });
-    expect(formattedError).toBe(errorMessage);
+    expect(formattedError.props).toEqual({
+      id: 'ui-users.affiliations.manager.modal.changes.error.hasPrimaryAffiliation',
+      values: {
+        tenantName: '',
+        userName: 'test user',
+      },
+    });
   });
 
   it('should return error message with tenant name `mobius`', () => {
