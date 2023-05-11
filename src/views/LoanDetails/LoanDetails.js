@@ -551,6 +551,24 @@ class LoanDetails extends React.Component {
                     <FormattedMessage id="ui-users.loans.declareLost" />
                   </Button>
                 </IfPermission>
+                {/* XXX should check permission ui-users.loans.add-patron-note */}
+                <IfPermission perm="ui-users.loans.renew">
+                  <Button
+                    data-test-new-patron-info-button
+                    onClick={() => alert('patron info')}
+                  >
+                    <FormattedMessage id="ui-users.loans.newPatronInfo" />
+                  </Button>
+                </IfPermission>
+                {/* XXX should check permission ui-users.loans.add-staff-note */}
+                <IfPermission perm="ui-users.loans.renew">
+                  <Button
+                    data-test-new-staff-info-button
+                    onClick={() => alert('staff info')}
+                  >
+                    <FormattedMessage id="ui-users.loans.newStaffInfo" />
+                  </Button>
+                </IfPermission>
               </span>
             </Row>
             <Row>

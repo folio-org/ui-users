@@ -609,6 +609,22 @@
         "visible": true
       },
       {
+        "permissionName": "ui-users.loans.add-patron-note",
+        "displayName": "Users: User loans: add patron note",
+        "subPermissions": [
+          "XXX maybe we will need something here"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.loans.add-staff-note",
+        "displayName": "Users: User loans: add staff note",
+        "subPermissions": [
+          "XXX maybe we will need something here"
+        ],
+        "visible": true
+      },
+      {
         "permissionName": "ui-users.loans.declare-item-lost",
         "displayName": "Users: User loans declare lost",
         "description": "Also includes backend permissions to declare items lost",
