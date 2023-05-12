@@ -1,8 +1,6 @@
 import React from 'react';
 import userEvent from '@testing-library/user-event';
 import renderWithRouter from 'helpers/renderWithRouter';
-import { Provider } from 'react-redux';
-import createMockStore from 'redux-mock-store';
 import UserEdit from './UserEdit';
 
 jest.mock('@folio/stripes/components', () => ({
@@ -60,9 +58,6 @@ jest.mock('../../components/EditSections', () => ({
   EditProxy: jest.fn(() => null),
   EditServicePoints: jest.fn(() => null),
 }));
-const mockStore = createMockStore();
-const store = mockStore({});
-//const user = userEvent.setup();
 describe('UserEdit', () => {
   let props = {
     stripes: { hasPerm: jest.fn().mockReturnValue(true) },
@@ -312,11 +307,8 @@ describe('UserEdit', () => {
         },
       },
     };
-    const { container } = renderWithRouter(
-      <Provider store={store}>
-        <UserEdit {...props} />
-      </Provider>
-    );
+    const { container } = renderWithRouter(<UserEdit {...props} />);
+    
     expect(container).toBeInTheDocument();
   });
 
