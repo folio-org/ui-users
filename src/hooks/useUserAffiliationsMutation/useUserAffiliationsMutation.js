@@ -1,9 +1,8 @@
 import chunk from 'lodash/chunk';
 import { useCallback } from 'react';
 import { useMutation } from 'react-query';
-
 import { useOkapiKy } from '@folio/stripes/core';
-
+import { uniqBy } from 'lodash';
 import {
   CONSORTIA_API,
   CONSORTIA_USER_TENANTS_API,
@@ -86,9 +85,10 @@ const useUserAffiliationsMutation = () => {
     ]);
 
     const errors = await getResponseErrors(batchResponses);
-    if (errors.length) {
+    const uniqueErrorMessages = uniqBy(errors, 'message');
+    if (uniqueErrorMessages.length) {
       return {
-        errors,
+        errors: uniqueErrorMessages,
         success: false,
         responses: batchResponses,
       };

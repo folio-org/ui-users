@@ -64,6 +64,7 @@ const UserAffiliations = ({
       } else {
         callout.sendCallout({
           type: 'error',
+          timeout: 0,
           message: (
             <div>
               <div>
