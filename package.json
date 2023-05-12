@@ -917,6 +917,7 @@
     "regenerator-runtime": "^0.13.9"
   },
   "dependencies": {
+    "@testing-library/user-event": "^14.4.3",
     "final-form-set-field-data": "^1.0.2",
     "hashcode": "^1.0.3",
     "jspdf": "^2.3.1",
@@ -929,6 +930,7 @@
     "react-final-form-arrays": "^3.1.0",
     "react-final-form-listeners": "^1.0.3",
     "react-router-prop-types": "^1.0.4",
+    "redux-mock-store": "^1.5.4",
     "uuid": "^9.0.0"
   },
   "peerDependencies": {
