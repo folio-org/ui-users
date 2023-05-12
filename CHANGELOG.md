@@ -28,6 +28,7 @@
 * Show success and Error toasts when Assign/unassign a users affiliations. Refs UIU-2852.
 * "ui-users.settings.customfields.view" permission insufficient to view custom fields on user settings. Refs UIU-2863.
 * Align affiliation assignment with stripes-core updates (switch active affiliation). Refs UIU-2855.
+* Also support `circulation` `14.0`. Refs UIU-2858.
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v9.0.0)
