@@ -59,6 +59,7 @@ class UserEdit extends React.Component {
       getPreferredServicePoint,
       getUserServicePoints,
       resources,
+      stripes,
       match,
     } = this.props;
 
@@ -82,10 +83,6 @@ class UserEdit extends React.Component {
 
     const user = this.getUser();
     const userFormValues = cloneDeep(user);
-    const formRecordValues = getRecordObject(
-      resources,
-      'permissions',
-    );
 
     if (!userFormValues.personal) {
       userFormValues.personal = {};
@@ -95,7 +92,9 @@ class UserEdit extends React.Component {
 
     return {
       ...userFormValues,
-      ...formRecordValues,
+      permissions: {
+        [stripes.okapi.tenant]: resources.permissions?.records,
+      },
       preferredServicePoint: getPreferredServicePoint(),
       proxies: getProxies(),
       sponsors: getSponsors(),
@@ -256,47 +255,52 @@ class UserEdit extends React.Component {
   }
 
   async updatePermissions(userId, perms) {
-    const {
-      permissions: permissionsMutator,
-      perms: permUserMutator,
-      permUserId,
-    } = this.props.mutator;
-
-    const { perms: permUserRecords } = this.props.resources;
-    // the perms parameter is an array of permission objects, but the permissions API
-    // wants an array of permission names.
-    const permissionNames = Object.values(perms ?? []).map(p => p.permissionName);
-
-    // If the user record has never had any associated permissions, a user permissions
-    // record may not exist. The PUT operation will fail if that's the case; thus,
-    // if no record is found, one has to be created before we assign the permissions
-    // as the last step.
-    if (permUserRecords.records.length === 1) {
-      const record = permUserRecords.records[0];
-
-      // N.B. permUserId is the id of the *permissions user* record, not the regular
-      // user record!
-      permUserId.replace(record.id);
-      record.permissions = permissionNames;
-
-      // Currently there is a bug (https://issues.folio.org/browse/MODPERMS-100) that
-      // requires us to remove the metadata object before sending the request.
-      delete record.metadata;
-
-      permissionsMutator
-        .PUT(record)
-        .catch((e) => showErrorCallout(e, this.context.sendCallout));
-    } else {
-      // Create a new permissions user record first
-      await permUserMutator.POST({ userId }).then(record => {
-        record.permissions = permissionNames;
-        permUserId.replace(record.id);
-        permissionsMutator
-          .PUT(record)
-          .catch((e) => showErrorCallout(e, this.context.sendCallout));
-      });
-    }
+    console.log('userId', userId);
+    console.log('perms', perms);
   }
+
+  // async updatePermissions(userId, perms) {
+  //   const {
+  //     permissions: permissionsMutator,
+  //     perms: permUserMutator,
+  //     permUserId,
+  //   } = this.props.mutator;
+
+  //   const { perms: permUserRecords } = this.props.resources;
+  //   // the perms parameter is an array of permission objects, but the permissions API
+  //   // wants an array of permission names.
+  //   const permissionNames = Object.values(perms ?? []).map(p => p.permissionName);
+
+  //   // If the user record has never had any associated permissions, a user permissions
+  //   // record may not exist. The PUT operation will fail if that's the case; thus,
+  //   // if no record is found, one has to be created before we assign the permissions
+  //   // as the last step.
+  //   if (permUserRecords.records.length === 1) {
+  //     const record = permUserRecords.records[0];
+
+  //     // N.B. permUserId is the id of the *permissions user* record, not the regular
+  //     // user record!
+  //     permUserId.replace(record.id);
+  //     record.permissions = permissionNames;
+
+  //     // Currently there is a bug (https://issues.folio.org/browse/MODPERMS-100) that
+  //     // requires us to remove the metadata object before sending the request.
+  //     delete record.metadata;
+
+  //     permissionsMutator
+  //       .PUT(record)
+  //       .catch((e) => showErrorCallout(e, this.context.sendCallout));
+  //   } else {
+  //     // Create a new permissions user record first
+  //     await permUserMutator.POST({ userId }).then(record => {
+  //       record.permissions = permissionNames;
+  //       permUserId.replace(record.id);
+  //       permissionsMutator
+  //         .PUT(record)
+  //         .catch((e) => showErrorCallout(e, this.context.sendCallout));
+  //     });
+  //   }
+  // }
 
   render() {
     const {
