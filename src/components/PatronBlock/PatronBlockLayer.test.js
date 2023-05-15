@@ -3,8 +3,8 @@ import React from 'react';
 import {
   screen,
   cleanup,
-} from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+} from '@folio/jest-config-stripes/testing-library/react';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import PropTypes from 'prop-types';
 import renderWithRouter from 'helpers/renderWithRouter';
 import PatronBlockLayer from './PatronBlockLayer';

@@ -1,6 +1,6 @@
 import okapiCurrentUser from 'fixtures/okapiCurrentUser';
-import { screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { screen } from '@folio/jest-config-stripes/testing-library/react';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import { Form } from 'react-final-form';
 
 import '__mock__/stripesComponents.mock';
