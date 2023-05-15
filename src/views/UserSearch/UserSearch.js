@@ -25,7 +25,6 @@ import {
   SearchField,
   SRStatus,
   MenuSection,
-  MCLPagingTypes
 } from '@folio/stripes/components';
 
 import {
@@ -845,7 +844,7 @@ class UserSearch extends React.Component {
                             virtualize
                             hasMargin
                             pageAmount={100}
-                            pagingType={MCLPagingTypes.PREV_NEXT}
+                            pagingType="click"
                           />
                         </Pane>
                       )}
