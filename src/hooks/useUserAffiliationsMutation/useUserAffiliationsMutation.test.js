@@ -121,6 +121,11 @@ describe('useUserAffiliationsMutation', () => {
       'message': 'Some error message',
       'type': '-1',
       'code': 'GENERIC_ERROR'
+    },
+    {
+      'message': 'Some error message',
+      'type': '-1',
+      'code': 'GENERIC_ERROR'
     }]);
     const { result } = renderHook(() => useUserAffiliationsMutation(), { wrapper });
 
@@ -132,6 +137,6 @@ describe('useUserAffiliationsMutation', () => {
     const { success, errors } = await result.current.handleAssignment(payload);
 
     expect(success).toBe(false);
-    expect(errors.length).toBe(2);
+    expect(errors.length).toBe(2); // 1 error is filtered out due to uniqueness
   });
 });
