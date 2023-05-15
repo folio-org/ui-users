@@ -49,15 +49,15 @@ class ModalContent extends React.Component {
     patronInfo: {
       type: 'okapi',
       fetch: false,
-      POST: {
-        path: 'circulation/loans/!{loan.id}/addInfo',
+      PUT: {
+        path: 'circulation/loans/!{loan.id}',
       },
     },
     staffInfo: {
       type: 'okapi',
       fetch: false,
-      POST: {
-        path: 'circulation/loans/!{loan.id}/addInfo',
+      PUT: {
+        path: 'circulation/loans/!{loan.id}',
       },
     },
     cancel: {
@@ -86,6 +86,12 @@ class ModalContent extends React.Component {
       }).isRequired,
       markAsMissing: PropTypes.shape({
         POST: PropTypes.func.isRequired,
+      }).isRequired,
+      patronInfo: PropTypes.shape({
+        PUT: PropTypes.func.isRequired,
+      }).isRequired,
+      staffInfo: PropTypes.shape({
+        PUT: PropTypes.func.isRequired,
       }).isRequired,
       cancel: PropTypes.shape({
         POST: PropTypes.func.isRequired,
@@ -135,6 +141,7 @@ class ModalContent extends React.Component {
     const { additionalInfo } = this.state;
 
     const {
+      loan,
       loanAction,
       stripes: {
         user: {
@@ -146,16 +153,15 @@ class ModalContent extends React.Component {
     } = this.props;
 
     const {
-      mutator: {
-        [loanAction]: {
-          POST,
-        },
-      },
       onClose,
       toggleButton,
     } = this.props;
 
-    const requestData = { comment: additionalInfo };
+    const isInfo = (loanAction === 'patronInfo' || loanAction === 'staffInfo');
+    const mutatorFunction = this.props.mutator[loanAction][isInfo ? 'PUT' : 'POST'];
+    const requestData = isInfo ?
+      { ...loan, action: loanAction, actionComment: additionalInfo } :
+      { comment: additionalInfo };
 
     if (loanAction === loanActionMutators.CLAIMED_RETURNED) {
       requestData.itemClaimedReturnedDateTime = new Date().toISOString();
@@ -176,7 +182,7 @@ class ModalContent extends React.Component {
 
     toggleButton(true);
     try {
-      await POST(requestData);
+      await mutatorFunction(requestData);
     } catch (error) {
       this.processError(error);
     }
