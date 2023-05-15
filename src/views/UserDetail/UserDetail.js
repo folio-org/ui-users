@@ -52,6 +52,7 @@ import {
 } from '../../components/UserDetailSections';
 
 import HelperApp from '../../components/HelperApp';
+import IfConsortium from '../../components/IfConsortium';
 import {
   PatronBlockMessage
 } from '../../components/PatronBlock';
@@ -699,7 +700,7 @@ class UserDetail extends React.Component {
                   onToggle={this.handleSectionToggle}
                 />
 
-                <IfInterface name="consortia">
+                <IfConsortium>
                   <IfConsortiumPermission perm="consortia.user-tenants.collection.get">
                     <UserAffiliations
                       accordionId="affiliationsSection"
@@ -709,7 +710,7 @@ class UserDetail extends React.Component {
                       userName={user?.username}
                     />
                   </IfConsortiumPermission>
-                </IfInterface>
+                </IfConsortium>
 
                 <IfInterface name="feesfines">
                   {hasPatronBlocksPermissions &&

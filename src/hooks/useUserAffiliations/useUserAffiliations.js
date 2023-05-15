@@ -2,9 +2,9 @@ import orderBy from 'lodash/orderBy';
 import { useQuery } from 'react-query';
 
 import {
-  useStripes,
   useNamespace,
   useOkapiKy,
+  useStripes,
 } from '@folio/stripes/core';
 
 import {
@@ -36,8 +36,8 @@ const useUserAffiliations = ({ userId } = {}, options = {}) => {
 
   const {
     isFetching,
-    isLoading: isAffiliationsLoading,
-    data = {},
+    isLoading,
+    data = DEFAULT_DATA,
     refetch,
   } = useQuery(
     [namespace, userId, consortium?.id],
@@ -68,10 +68,8 @@ const useUserAffiliations = ({ userId } = {}, options = {}) => {
     },
   );
 
-  const isLoading = isAffiliationsLoading;
-
   return ({
-    affiliations: data.userTenants || DEFAULT_DATA,
+    affiliations: data.userTenants,
     totalRecords: data.totalRecords,
     isFetching,
     isLoading,
