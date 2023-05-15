@@ -609,16 +609,16 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.loans.add-patron-note",
-        "displayName": "Users: User loans: add patron note",
+        "permissionName": "ui-users.loans.add-patron-info",
+        "displayName": "Users: User loans: add patron information",
         "subPermissions": [
           "XXX maybe we will need something here"
         ],
         "visible": true
       },
       {
-        "permissionName": "ui-users.loans.add-staff-note",
-        "displayName": "Users: User loans: add staff note",
+        "permissionName": "ui-users.loans.add-staff-info",
+        "displayName": "Users: User loans: add staff information",
         "subPermissions": [
           "XXX maybe we will need something here"
         ],

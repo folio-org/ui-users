@@ -48,6 +48,7 @@ import {
   withDeclareLost,
   withClaimReturned,
   withMarkAsMissing,
+  withAddInfo,
 } from '../../components/Wrappers';
 import loanActionMap from '../../components/data/static/loanActionMap';
 import LoanProxyDetails from './LoanProxyDetails';
@@ -87,6 +88,7 @@ class LoanDetails extends React.Component {
     renew: PropTypes.func,
     declareLost: PropTypes.func,
     markAsMissing: PropTypes.func,
+    addInfo: PropTypes.func,
     claimReturned: PropTypes.func,
     setDeclareLostInProgress: PropTypes.func,
     declareLostInProgress: PropTypes.bool,
@@ -345,6 +347,7 @@ class LoanDetails extends React.Component {
       requestCounts,
       declareLost,
       markAsMissing,
+      addInfo,
       claimReturned,
       declareLostInProgress,
       loanIsMissing,
@@ -551,20 +554,20 @@ class LoanDetails extends React.Component {
                     <FormattedMessage id="ui-users.loans.declareLost" />
                   </Button>
                 </IfPermission>
-                {/* XXX should check permission ui-users.loans.add-patron-note */}
+                {/* XXX should check permission ui-users.loans.add-patron-info */}
                 <IfPermission perm="ui-users.loans.renew">
                   <Button
                     data-test-new-patron-info-button
-                    onClick={() => alert('patron info')}
+                    onClick={() => addInfo(loan, itemRequestCount, 'patron')}
                   >
                     <FormattedMessage id="ui-users.loans.newPatronInfo" />
                   </Button>
                 </IfPermission>
-                {/* XXX should check permission ui-users.loans.add-staff-note */}
+                {/* XXX should check permission ui-users.loans.add-staff-info */}
                 <IfPermission perm="ui-users.loans.renew">
                   <Button
                     data-test-new-staff-info-button
-                    onClick={() => alert('staff info')}
+                    onClick={() => addInfo(loan, itemRequestCount, 'staff')}
                   >
                     <FormattedMessage id="ui-users.loans.newStaffInfo" />
                   </Button>
@@ -761,4 +764,5 @@ export default compose(
   stripesConnect,
   withClaimReturned,
   withMarkAsMissing,
+  withAddInfo,
 )(LoanDetails);

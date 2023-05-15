@@ -46,6 +46,20 @@ class ModalContent extends React.Component {
         path: 'circulation/loans/!{loan.id}/declare-claimed-returned-item-as-missing',
       },
     },
+    patronInfo: {
+      type: 'okapi',
+      fetch: false,
+      POST: {
+        path: 'circulation/loans/!{loan.id}/addInfo',
+      },
+    },
+    staffInfo: {
+      type: 'okapi',
+      fetch: false,
+      POST: {
+        path: 'circulation/loans/!{loan.id}/addInfo',
+      },
+    },
     cancel: {
       type: 'okapi',
       path: 'accounts/%{activeRecord.id}/cancel',
