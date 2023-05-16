@@ -36,7 +36,7 @@ const settingsGeneral = [
     route: 'addresstypes',
     label: <FormattedMessage id="ui-users.settings.addressTypes" />,
     component: AddressTypesSettings,
-    perm: 'ui-users.settings.addresstypes',
+    perm: 'ui-users.settings.addresstypes.view',
   },
   {
     route: 'departments',

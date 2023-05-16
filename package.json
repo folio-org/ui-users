@@ -285,15 +285,23 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.settings.addresstypes",
-        "displayName": "Settings (Users): Can create, edit and remove address types",
+        "permissionName": "ui-users.settings.addresstypes.view",
+        "displayName": "Settings (Users): Can view address types",
         "subPermissions": [
           "addresstypes.collection.get",
           "addresstypes.item.get",
+          "settings.users.enabled"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.addresstypes.all",
+        "displayName": "Settings (Users): Can create, edit and remove address types",
+        "subPermissions": [
+          "ui-users.settings.addresstypes.view",
           "addresstypes.item.post",
           "addresstypes.item.put",
-          "addresstypes.item.delete",
-          "settings.users.enabled"
+          "addresstypes.item.delete"
         ],
         "visible": true
       },
