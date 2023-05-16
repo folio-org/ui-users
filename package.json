@@ -67,9 +67,8 @@
         "displayName": "Settings (Users): View all settings",
         "subPermissions": [
           "settings.users.enabled",
-          "perms.permissions.get",
-          "usergroups.collection.get",
-          "usergroups.item.get",
+          "ui-users.settings.permsets.view",
+          "ui-users.settings.usergroups.view",
           "addresstypes.collection.get",
           "addresstypes.item.get",
           "comments.collection.get",
@@ -251,7 +250,7 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.settings.permsets",
+        "permissionName": "ui-users.settings.permsets.all",
         "displayName": "Settings (Users): Can create, edit and remove permission sets",
         "description": "",
         "subPermissions": [
@@ -265,15 +264,23 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.settings.usergroups",
-        "displayName": "Settings (Users): Can create, edit and remove patron groups",
+        "permissionName": "ui-users.settings.usergroups.view",
+        "displayName": "Settings (Users): Can view patron groups",
         "subPermissions": [
           "usergroups.collection.get",
-          "usergroups.item.delete",
           "usergroups.item.get",
-          "usergroups.item.post",
-          "usergroups.item.put",
           "settings.users.enabled"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.usergroups.all",
+        "displayName": "Settings (Users): Can create, edit and remove patron groups",
+        "subPermissions": [
+          "ui-users.settings.usergroups.view",
+          "usergroups.item.delete",
+          "usergroups.item.post",
+          "usergroups.item.put"
         ],
         "visible": true
       },

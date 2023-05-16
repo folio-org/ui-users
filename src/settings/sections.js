@@ -30,7 +30,7 @@ const settingsGeneral = [
     route: 'groups',
     label: <FormattedMessage id="ui-users.settings.patronGroups" />,
     component: PatronGroupsSettings,
-    perm: 'ui-users.settings.usergroups',
+    perm: 'ui-users.settings.usergroups.view',
   },
   {
     route: 'addresstypes',
