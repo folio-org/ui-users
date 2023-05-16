@@ -78,7 +78,6 @@
           "feefines.item.get",
           "inventory-storage.service-points.collection.get",
           "templates.collection.get",
-          "user-settings.custom-fields.collection.get",
           "ui-users.settings.customfields.view",
           "owners.collection.get",
           "owners.item.get",
@@ -242,15 +241,24 @@
         "visible": true
       },
       {
+        "permissionName": "ui-users.settings.permsets.view",
+        "displayName": "Settings (Users): Can view permission sets",
+        "description": "",
+        "subPermissions": [
+          "perms.permissions.get",
+          "settings.users.enabled"
+        ],
+        "visible": true
+      },
+      {
         "permissionName": "ui-users.settings.permsets",
         "displayName": "Settings (Users): Can create, edit and remove permission sets",
         "description": "",
         "subPermissions": [
-          "perms.permissions.get",
+          "ui-users.settings.permsets.view",
           "perms.permissions.item.put",
           "perms.permissions.item.post",
           "perms.permissions.item.delete",
-          "settings.users.enabled",
           "perms.users.assign.immutable",
           "perms.users.assign.mutable"
         ],
