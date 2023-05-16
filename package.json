@@ -309,7 +309,8 @@
           "settings.users.enabled",
           "ui-users.settings.owners.view",
           "ui-users.settings.waives.view",
-          "ui-users.settings.payments.view"
+          "ui-users.settings.payments.view",
+          "ui-users.settings.refunds.view"
         ],
         "visible": true
       },
@@ -322,7 +323,7 @@
           "ui-users.settings.feefines",
           "ui-users.settings.waives.all",
           "ui-users.settings.payments.all",
-          "ui-users.settings.refunds",
+          "ui-users.settings.refunds.all",
           "ui-users.settings.comments",
           "ui-users.settings.transfers",
           "ui-users.settings.transfertypes"
@@ -426,15 +427,23 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.settings.refunds",
-        "displayName": "Settings (Users): Can create, edit and remove refunds",
+        "permissionName": "ui-users.settings.refunds.view",
+        "displayName": "Settings (Users): Can view refunds",
         "subPermissions": [
           "refunds.collection.get",
-          "refunds.item.delete",
           "refunds.item.get",
-          "refunds.item.post",
-          "refunds.item.put",
           "settings.users.enabled"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.refunds.all",
+        "displayName": "Settings (Users): Can create, edit and remove refunds",
+        "subPermissions": [
+          "ui-users.settings.refunds.view",
+          "refunds.item.delete",
+          "refunds.item.post",
+          "refunds.item.put"
         ],
         "visible": true
       },
@@ -948,7 +957,8 @@
           "ui-users.settings.customfields.view",
           "ui-users.settings.owners.view",
           "ui-users.settings.waives.view",
-          "ui-users.settings.payments.view"
+          "ui-users.settings.payments.view",
+          "ui-users.settings.refunds.view"
         ],
         "visible": true
       }

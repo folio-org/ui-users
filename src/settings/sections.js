@@ -90,7 +90,7 @@ const settingsFeefines = [
     route: 'refunds',
     label: <FormattedMessage id="ui-users.settings.refundReasons" />,
     component: RefundReasonsSettings,
-    perm: 'ui-users.settings.refunds',
+    perm: 'ui-users.settings.refunds.view',
   },
   {
     route: 'comments',
