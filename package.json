@@ -320,7 +320,8 @@
           "ui-users.settings.waives.view",
           "ui-users.settings.payments.view",
           "ui-users.settings.refunds.view",
-          "ui-users.settings.comments.view"
+          "ui-users.settings.comments.view",
+          "ui-users.settings.transfers.view"
         ],
         "visible": true
       },
@@ -335,7 +336,7 @@
           "ui-users.settings.payments.all",
           "ui-users.settings.refunds.all",
           "ui-users.settings.comments.all",
-          "ui-users.settings.transfers",
+          "ui-users.settings.transfers.all",
           "ui-users.settings.transfertypes"
         ],
         "visible": true
@@ -510,16 +511,24 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.settings.transfers",
-        "displayName": "Settings (Users): Can create, edit and remove transfer accounts ",
+        "permissionName": "ui-users.settings.transfers.view",
+        "displayName": "Settings (Users): Can view accounts ",
         "subPermissions": [
           "owners.collection.get",
           "transfers.collection.get",
-          "transfers.item.delete",
           "transfers.item.get",
-          "transfers.item.post",
-          "transfers.item.put",
           "settings.users.enabled"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.transfers.all",
+        "displayName": "Settings (Users): Can create, edit and remove transfer accounts ",
+        "subPermissions": [
+          "ui-users.settings.transfers.view",
+          "transfers.item.delete",
+          "transfers.item.post",
+          "transfers.item.put"
         ],
         "visible": true
       },
@@ -965,11 +974,7 @@
           "ui-users.settings.addresstypes.view",
           "ui-users.settings.departments.view",
           "ui-users.settings.customfields.view",
-          "ui-users.settings.owners.view",
-          "ui-users.settings.waives.view",
-          "ui-users.settings.payments.view",
-          "ui-users.settings.refunds.view",
-          "ui-users.settings.comments.view"
+          "ui-users.settings.feefines.view"
         ],
         "visible": true
       }

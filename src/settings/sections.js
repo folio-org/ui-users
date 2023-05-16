@@ -102,7 +102,7 @@ const settingsFeefines = [
     route: 'transfers',
     label: <FormattedMessage id="ui-users.settings.transferAccounts" />,
     component: TransferAccountsSettings,
-    perm: 'ui-users.settings.transfers',
+    perm: 'ui-users.settings.transfers.view',
   },
   {
     route: 'transfer-criteria',
