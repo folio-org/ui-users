@@ -3,7 +3,7 @@ import {
   render,
   screen,
   cleanup,
-} from '@testing-library/react';
+} from '@folio/jest-config-stripes/testing-library/react';
 import { noop } from 'lodash';
 import { MultiColumnList } from '@folio/stripes/components';
 import { FormattedMessage } from 'react-intl';

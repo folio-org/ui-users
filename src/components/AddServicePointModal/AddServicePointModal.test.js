@@ -1,6 +1,6 @@
 import okapiCurrentUser from 'fixtures/okapiCurrentUser';
-import { screen, cleanup } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { screen, cleanup } from '@folio/jest-config-stripes/testing-library/react';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
 import renderWithRouter from 'helpers/renderWithRouter';
 import AddServicePointModal from './AddServicePointModal';
