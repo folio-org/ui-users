@@ -72,14 +72,12 @@
           "ui-users.settings.addresstypes.view",
           "ui-users.settings.departments.view",
           "ui-users.settings.customfields.view",
+          "ui-users.settings.owners.view",
           "comments.collection.get",
           "comments.item.get",
           "feefines.collection.get",
           "feefines.item.get",
-          "inventory-storage.service-points.collection.get",
           "templates.collection.get",
-          "owners.collection.get",
-          "owners.item.get",
           "payments.collection.get",
           "payments.item.get",
           "users.collection.get",
@@ -341,6 +339,15 @@
         "visible": true
       },
       {
+        "permissionName": "ui-users.settings.feefines.view",
+        "displayName": "Settings (Users): Can view feefines-related entries",
+        "subPermissions": [
+          "settings.users.enabled",
+          "ui-users.settings.owners.view"
+        ],
+        "visible": true
+      },
+      {
         "permissionName": "ui-users.settings.feefines.all",
         "displayName": "Settings (Users): Can create, edit and remove all feefines-related entries",
         "subPermissions": [
@@ -408,16 +415,24 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.settings.owners",
-        "displayName": "Settings (Users): Can create, edit and remove owners",
+        "permissionName": "ui-users.settings.owners.view",
+        "displayName": "Settings (Users): Can view owners",
         "subPermissions": [
           "inventory-storage.service-points.collection.get",
           "owners.collection.get",
-          "owners.item.delete",
           "owners.item.get",
-          "owners.item.post",
-          "owners.item.put",
           "settings.users.enabled"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.owners.all",
+        "displayName": "Settings (Users): Can create, edit and remove owners",
+        "subPermissions": [
+          "ui-users.settings.owners.view",
+          "owners.item.delete",
+          "owners.item.post",
+          "owners.item.put"
         ],
         "visible": true
       },

@@ -66,7 +66,7 @@ const settingsFeefines = [
     route: 'owners',
     label: <FormattedMessage id="ui-users.settings.owners" />,
     component: OwnerSettings,
-    perm: 'ui-users.settings.owners',
+    perm: 'ui-users.settings.owners.view',
   },
   {
     route: 'feefinestable',
