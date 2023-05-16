@@ -136,6 +136,8 @@ jest.mock(
   }
 );
 
+jest.mock('../../components/IfConsortium', () => jest.fn(({ children }) => <>{children}</>));
+
 IfInterface.mockImplementation(({ children }) => children);
 
 const match = {

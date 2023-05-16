@@ -88,7 +88,7 @@ describe('useUserAffiliations', () => {
     useStripes.mockClear().mockReturnValue({ a: 1 });
 
     const userId = 'usedId';
-    const { result, waitFor } = renderHook(() => useUserAffiliations({ userId }), { wrapper });
+    const { result, waitFor } = renderHook(() => useUserAffiliations({ userId }, { assignedToCurrentUser: false }), { wrapper });
 
     await waitFor(() => !result.current.isLoading);
 

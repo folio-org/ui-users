@@ -28,7 +28,14 @@ const STRIPES = {
   hasPerm: jest.fn().mockReturnValue(true),
   okapi: {
     tenant: 'diku',
-  }
+  },
+  user: {
+    user: {
+      consortium: {
+
+      }
+    }
+  },
 };
 
 const defaultProps = {
