@@ -705,6 +705,7 @@ class UserDetail extends React.Component {
                       expanded={sections.affiliationsSection}
                       onToggle={this.handleSectionToggle}
                       userId={user?.id}
+                      userName={user?.username}
                     />
                   </IfPermission>
                 </IfInterface>

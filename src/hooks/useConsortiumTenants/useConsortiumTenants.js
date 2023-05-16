@@ -9,6 +9,7 @@ import {
   CONSORTIA_API,
   CONSORTIA_TENANTS_API,
   MAX_RECORDS,
+  OKAPI_TENANT_HEADER,
 } from '../../constants';
 import useConsortium from '../useConsortium';
 
@@ -23,9 +24,21 @@ const useConsortiumTenants = () => {
     isLoading: isConsortiumLoading,
   } = useConsortium();
 
+  const api = ky.extend({
+    hooks: {
+      beforeRequest: [
+        request => {
+          request.headers.set(OKAPI_TENANT_HEADER, consortium.centralTenant);
+        },
+      ],
+    },
+  });
+
   const searchParams = {
     limit: MAX_RECORDS,
   };
+
+  const enabled = Boolean(consortium?.centralTenant && consortium?.id);
 
   const {
     isFetching,
@@ -34,14 +47,12 @@ const useConsortiumTenants = () => {
   } = useQuery(
     [namespace, consortium?.id],
     async () => {
-      return ky.get(
+      return api.get(
         `${CONSORTIA_API}/${consortium.id}/${CONSORTIA_TENANTS_API}`,
         { searchParams },
       ).json();
     },
-    {
-      enabled: Boolean(consortium?.id),
-    },
+    { enabled },
   );
 
   const isLoading = isAffiliationsLoading || isConsortiumLoading;
