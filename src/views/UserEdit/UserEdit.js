@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { FormattedMessage } from 'react-intl';
 
 import {
+  chunk,
   cloneDeep,
   find,
   omit,
@@ -13,14 +14,20 @@ import {
 } from 'lodash';
 
 import { LoadingView } from '@folio/stripes/components';
-import { CalloutContext } from '@folio/stripes/core';
+import {
+  CalloutContext,
+  withOkapiKy,
+} from '@folio/stripes/core';
 
 import { getRecordObject } from '../../components/util';
 
 import UserForm from './UserForm';
 import { toUserAddresses, getFormAddressList } from '../../components/data/converters/address';
 import contactTypes from '../../components/data/static/contactTypes';
-import { deliveryFulfillmentValues } from '../../constants';
+import {
+  OKAPI_TENANT_HEADER,
+  deliveryFulfillmentValues,
+} from '../../constants';
 import { resourcesLoaded, showErrorCallout } from './UserEditHelpers';
 
 class UserEdit extends React.Component {
@@ -30,6 +37,7 @@ class UserEdit extends React.Component {
     history: PropTypes.object,
     location: PropTypes.object,
     match: PropTypes.object,
+    okapiKy: PropTypes.func.isRequired,
     updateProxies: PropTypes.func,
     updateSponsors: PropTypes.func,
     updateServicePoints: PropTypes.func,
@@ -254,53 +262,114 @@ class UserEdit extends React.Component {
       .catch((e) => showErrorCallout(e, this.context.sendCallout));
   }
 
-  async updatePermissions(userId, perms) {
-    console.log('userId', userId);
-    console.log('perms', perms);
+  async updatePermissions(userId, permissionsMap) {
+    const CHUNK_SIZE = 5;
+
+    const result = await chunk(Object.entries(permissionsMap), CHUNK_SIZE)
+      .reduce(async (prevPromise, itemsChunk) => {
+        const prev = await prevPromise;
+        const curr = await Promise.all(itemsChunk.map(([tenant, permissions]) => (
+          this.updateUserTenantPermissions(userId, permissions, tenant)
+        )));
+
+        return prev.concat(curr);
+      }, Promise.resolve([]));
+
+    return result;
   }
 
-  // async updatePermissions(userId, perms) {
-  //   const {
-  //     permissions: permissionsMutator,
-  //     perms: permUserMutator,
-  //     permUserId,
-  //   } = this.props.mutator;
+  updateUserTenantPermissions = async (userId, permissions, tenant) => {
+    const { stripes } = this.props;
 
-  //   const { perms: permUserRecords } = this.props.resources;
-  //   // the perms parameter is an array of permission objects, but the permissions API
-  //   // wants an array of permission names.
-  //   const permissionNames = Object.values(perms ?? []).map(p => p.permissionName);
+    // the perms parameter is an array of permission objects, but the permissions API
+    // wants an array of permission names.
+    const permissionNames = (permissions ?? []).map(p => p.permissionName);
+    const isCurrentTenant = tenant === stripes.okapi.tenant;
 
-  //   // If the user record has never had any associated permissions, a user permissions
-  //   // record may not exist. The PUT operation will fail if that's the case; thus,
-  //   // if no record is found, one has to be created before we assign the permissions
-  //   // as the last step.
-  //   if (permUserRecords.records.length === 1) {
-  //     const record = permUserRecords.records[0];
+    if (isCurrentTenant) return this.updateCurrentTenantPermissions(userId, permissionNames);
 
-  //     // N.B. permUserId is the id of the *permissions user* record, not the regular
-  //     // user record!
-  //     permUserId.replace(record.id);
-  //     record.permissions = permissionNames;
+    const recordService = this.getTenantPermUserRecordService(tenant);
+    const permUserRecord = await recordService.getByUserId(userId);
 
-  //     // Currently there is a bug (https://issues.folio.org/browse/MODPERMS-100) that
-  //     // requires us to remove the metadata object before sending the request.
-  //     delete record.metadata;
+    if (permUserRecord) {
+      return recordService.update({
+        ...omit(permUserRecord, 'metadata'),
+        permissions: permissionNames,
+      }).catch((e) => showErrorCallout(e, this.context.sendCallout));
+    } else {
+      const record = await recordService.create({ userId });
 
-  //     permissionsMutator
-  //       .PUT(record)
-  //       .catch((e) => showErrorCallout(e, this.context.sendCallout));
-  //   } else {
-  //     // Create a new permissions user record first
-  //     await permUserMutator.POST({ userId }).then(record => {
-  //       record.permissions = permissionNames;
-  //       permUserId.replace(record.id);
-  //       permissionsMutator
-  //         .PUT(record)
-  //         .catch((e) => showErrorCallout(e, this.context.sendCallout));
-  //     });
-  //   }
-  // }
+      return recordService.update({
+        ...omit(record, 'metadata'),
+        permissions: permissionNames,
+      }).catch((e) => showErrorCallout(e, this.context.sendCallout));
+    }
+  }
+
+  getTenantPermUserRecordService = (tenant) => {
+    const { okapiKy } = this.props;
+
+    const ky = okapiKy.extend({
+      hooks: {
+        beforeRequest: [
+          request => {
+            request.headers.set(OKAPI_TENANT_HEADER, tenant);
+          },
+        ],
+      }
+    });
+
+    const searchParams = {
+      full: true,
+      indexField: 'userId',
+    };
+
+    return {
+      getByUserId: (userId) => ky.get(`perms/users/${userId}`, { searchParams }).json(),
+      create: (json) => ky.post('perms/users', { json }).json(),
+      update: (json) => ky.put(`perms/users/${json.id}`, { json }).json(),
+    };
+  }
+
+  async updateCurrentTenantPermissions(userId, permissionNames) {
+    const {
+      permissions: permissionsMutator,
+      perms: permUserMutator,
+      permUserId,
+    } = this.props.mutator;
+
+    const { perms: permUserRecords } = this.props.resources;
+
+    // If the user record has never had any associated permissions, a user permissions
+    // record may not exist. The PUT operation will fail if that's the case; thus,
+    // if no record is found, one has to be created before we assign the permissions
+    // as the last step.
+    if (permUserRecords.records.length === 1) {
+      const record = permUserRecords.records[0];
+
+      // N.B. permUserId is the id of the *permissions user* record, not the regular
+      // user record!
+      permUserId.replace(record.id);
+      record.permissions = permissionNames;
+
+      // Currently there is a bug (https://issues.folio.org/browse/MODPERMS-100) that
+      // requires us to remove the metadata object before sending the request.
+      delete record.metadata;
+
+      permissionsMutator
+        .PUT(record)
+        .catch((e) => showErrorCallout(e, this.context.sendCallout));
+    } else {
+      // Create a new permissions user record first
+      await permUserMutator.POST({ userId }).then(record => {
+        record.permissions = permissionNames;
+        permUserId.replace(record.id);
+        permissionsMutator
+          .PUT(record)
+          .catch((e) => showErrorCallout(e, this.context.sendCallout));
+      });
+    }
+  }
 
   render() {
     const {
@@ -348,4 +417,4 @@ class UserEdit extends React.Component {
   }
 }
 
-export default UserEdit;
+export default withOkapiKy(UserEdit);

@@ -20,6 +20,7 @@ import {
   stripesConnect,
 } from '@folio/stripes/core';
 
+import { affiliationsShape } from '../../shapes';
 import PermissionModal from './components/PermissionsModal';
 import PermissionsAccordionList from './PermissionsAccordionList';
 import EnableUnassignAll from './EnableUnassignAll';
@@ -265,12 +266,7 @@ const PermissionsAccordion = (props) => {
 };
 
 PermissionsAccordion.propTypes = {
-  affiliations: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string,
-    tenantId: PropTypes.string,
-    tenantName: PropTypes.string,
-    userId: PropTypes.string,
-  })),
+  affiliations: affiliationsShape,
   disabled: PropTypes.bool,
   expanded: PropTypes.bool,
   intl: PropTypes.shape({
