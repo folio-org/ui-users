@@ -223,7 +223,6 @@ describe('Patron Block layer', () => {
     it('on Submit click without patronblock id', () => {
       renderPatronBlockLayer(secondaryProps);
       userEvent.click(screen.getByTestId('submit'));
-      screen.debug();
     });
     it('on Delete click without patronblock id', () => {
       renderPatronBlockLayer(secondaryProps);

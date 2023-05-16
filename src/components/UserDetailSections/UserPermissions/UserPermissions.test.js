@@ -1,5 +1,5 @@
-import userEvent from '@folio/jest-config-stripes/testing-library/user-event'
-import { screen } from '@folio/jest-config-stripes/testing-library/react'
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
+import { screen } from '@folio/jest-config-stripes/testing-library/react';
 
 import renderWithRouter from 'helpers/renderWithRouter';
 import affiliations from 'fixtures/affiliations';
