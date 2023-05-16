@@ -96,7 +96,7 @@ const settingsFeefines = [
     route: 'comments',
     label: <FormattedMessage id="ui-users.settings.commentRequired" />,
     component: CommentRequiredSettings,
-    perm: 'ui-users.settings.comments',
+    perm: 'ui-users.settings.comments.view',
   },
   {
     route: 'transfers',

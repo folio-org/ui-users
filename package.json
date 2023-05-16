@@ -290,15 +290,24 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.settings.comments",
-        "displayName": "Settings (Users): Can create, edit and remove comments",
+        "permissionName": "ui-users.settings.comments.view",
+        "displayName": "Settings (Users): Can view comments",
         "subPermissions": [
           "comments.collection.get",
-          "comments.item.delete",
           "comments.item.get",
           "comments.item.post",
-          "comments.item.put",
           "settings.users.enabled"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.comments.all",
+        "displayName": "Settings (Users): Can create, edit and remove comments",
+        "subPermissions": [
+          "ui-users.settings.comments.view",
+          "comments.item.delete",
+          "comments.item.post",
+          "comments.item.put"
         ],
         "visible": true
       },
@@ -310,7 +319,8 @@
           "ui-users.settings.owners.view",
           "ui-users.settings.waives.view",
           "ui-users.settings.payments.view",
-          "ui-users.settings.refunds.view"
+          "ui-users.settings.refunds.view",
+          "ui-users.settings.comments.view"
         ],
         "visible": true
       },
@@ -324,7 +334,7 @@
           "ui-users.settings.waives.all",
           "ui-users.settings.payments.all",
           "ui-users.settings.refunds.all",
-          "ui-users.settings.comments",
+          "ui-users.settings.comments.all",
           "ui-users.settings.transfers",
           "ui-users.settings.transfertypes"
         ],
@@ -958,7 +968,8 @@
           "ui-users.settings.owners.view",
           "ui-users.settings.waives.view",
           "ui-users.settings.payments.view",
-          "ui-users.settings.refunds.view"
+          "ui-users.settings.refunds.view",
+          "ui-users.settings.comments.view"
         ],
         "visible": true
       }
