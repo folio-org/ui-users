@@ -62,10 +62,12 @@ class UserSearchContainer extends React.Component {
     query: { initialValue: { sort: 'name' } },
     resultCount: { initialValue: INITIAL_RESULT_COUNT },
     resultOffset: { initialValue: 0 },
+    resultDensity : 'sparse',
     records: {
       type: 'okapi',
       records: 'users',
       resultOffset: '%{resultOffset}',
+      resultDensity: 'sparse',
       perRequest: 100,
       path: 'users',
       GET: {
