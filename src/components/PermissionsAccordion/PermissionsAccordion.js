@@ -190,6 +190,7 @@ const PermissionsAccordion = (props) => {
                 onChange={onChangeAffiliation}
                 isLoading={isLoading}
                 value={tenantId}
+                selection
               />
             )}
           </IfPermission>

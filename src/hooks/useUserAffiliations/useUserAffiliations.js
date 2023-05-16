@@ -1,7 +1,5 @@
-import {
-  flow,
-  orderBy,
-} from 'lodash/fp';
+import orderBy from 'lodash/orderBy';
+import { useMemo } from 'react';
 import { useQuery } from 'react-query';
 
 import {
@@ -53,7 +51,7 @@ const useUserAffiliations = ({ userId } = {}, options = {}) => {
     data = DEFAULT_DATA,
     refetch,
   } = useQuery(
-    [namespace, userId, consortium?.id, assignedToCurrentUser],
+    [namespace, userId, consortium?.id],
     async () => {
       const api = ky.extend({
         hooks: {
@@ -71,10 +69,7 @@ const useUserAffiliations = ({ userId } = {}, options = {}) => {
       ).json();
 
       return {
-        userTenants: flow(
-          filterAffiliations({ assignedToCurrentUser, currentUserTenants }),
-          orderBy('userTenants', 'asc'),
-        )(userTenants),
+        userTenants: orderBy(userTenants, 'userTenants'),
         totalRecords,
       };
     },
@@ -84,8 +79,12 @@ const useUserAffiliations = ({ userId } = {}, options = {}) => {
     },
   );
 
+  const affiliations = useMemo(() => (
+    filterAffiliations({ assignedToCurrentUser, currentUserTenants })(data.userTenants || DEFAULT_DATA)
+  ), [assignedToCurrentUser, currentUserTenants, data.userTenants]);
+
   return ({
-    affiliations: data.userTenants,
+    affiliations,
     totalRecords: data.totalRecords,
     isFetching,
     isLoading,
