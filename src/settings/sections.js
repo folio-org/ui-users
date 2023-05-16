@@ -84,7 +84,7 @@ const settingsFeefines = [
     route: 'payments',
     label: <FormattedMessage id="ui-users.settings.paymentMethods" />,
     component: PaymentSettings,
-    perm: 'ui-users.settings.payments',
+    perm: 'ui-users.settings.payments.view',
   },
   {
     route: 'refunds',
