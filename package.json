@@ -321,7 +321,8 @@
           "ui-users.settings.payments.view",
           "ui-users.settings.refunds.view",
           "ui-users.settings.comments.view",
-          "ui-users.settings.transfers.view"
+          "ui-users.settings.transfers.view",
+          "ui-users.settings.transfertypes.view"
         ],
         "visible": true
       },
@@ -337,7 +338,7 @@
           "ui-users.settings.refunds.all",
           "ui-users.settings.comments.all",
           "ui-users.settings.transfers.all",
-          "ui-users.settings.transfertypes"
+          "ui-users.settings.transfertypes.all"
         ],
         "visible": true
       },
@@ -533,15 +534,23 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.settings.transfertypes",
-        "displayName": "Settings (Users): Can create, edit and remove transfer criteria",
+        "permissionName": "ui-users.settings.transfertypes.view",
+        "displayName": "Settings (Users): Can view transfer criteria",
         "subPermissions": [
           "transfer-criterias.collection.get",
-          "transfer-criterias.item.delete",
           "transfer-criterias.item.get",
-          "transfer-criterias.item.post",
-          "transfer-criterias.item.put",
           "settings.users.enabled"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.transfertypes.all",
+        "displayName": "Settings (Users): Can create, edit and remove transfer criteria",
+        "subPermissions": [
+          "ui-users.settings.transfertypes.view",
+          "transfer-criterias.item.delete",
+          "transfer-criterias.item.post",
+          "transfer-criterias.item.put"
         ],
         "visible": true
       },
