@@ -47,7 +47,9 @@ const TenantsPermissionsAccordion = ({
     }
   }, [change, isPermissionsPresent, permissionsField]);
 
-  const sendErrorMessage = useCallback((code) => {
+  const handleError = useCallback(({ code }) => {
+    setActionsDisabled(true);
+
     callout.sendCallout({
       message: (
         <FormattedMessage
@@ -64,21 +66,21 @@ const TenantsPermissionsAccordion = ({
   }, [callout, tenantId, userId, username]);
 
   const handleLoadAffiliationsError = useCallback(() => {
-    setActionsDisabled(true);
-    sendErrorMessage(errorsMap.affiliationsLoadFailed);
-  }, [sendErrorMessage]);
+    handleError({ code: errorsMap.affiliationsLoadFailed });
+  }, [handleError]);
 
   const handleLoadPermissionsError = useCallback(() => {
-    setActionsDisabled(true);
-    sendErrorMessage(errorsMap.permissionsLoadFailed);
-  }, [sendErrorMessage]);
+    handleError({ code: errorsMap.permissionsLoadFailed });
+  }, [handleError]);
 
   const {
     affiliations,
     isFetching: isUserAffiliationsFetching,
   } = useUserAffiliations(
     { userId },
-    { onError: handleLoadAffiliationsError },
+    {
+      onError: handleLoadAffiliationsError
+    },
   );
 
   const {
