@@ -69,7 +69,7 @@ const useUserAffiliations = ({ userId } = {}, options = {}) => {
       ).json();
 
       return {
-        userTenants: orderBy(userTenants, 'userTenants'),
+        userTenants: orderBy(userTenants, 'tenantName'),
         totalRecords,
       };
     },
