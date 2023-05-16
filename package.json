@@ -69,15 +69,15 @@
           "settings.users.enabled",
           "ui-users.settings.permsets.view",
           "ui-users.settings.usergroups.view",
-          "addresstypes.collection.get",
-          "addresstypes.item.get",
+          "ui-users.settings.addresstypes.view",
+          "ui-users.settings.departments.view",
+          "ui-users.settings.customfields.view",
           "comments.collection.get",
           "comments.item.get",
           "feefines.collection.get",
           "feefines.item.get",
           "inventory-storage.service-points.collection.get",
           "templates.collection.get",
-          "ui-users.settings.customfields.view",
           "owners.collection.get",
           "owners.item.get",
           "payments.collection.get",
@@ -96,8 +96,7 @@
           "manual-block-templates.collection.get",
           "manual-block-templates.item.get",
           "patron-block-limits.collection.get",
-          "patron-block-limits.item.get",
-          "ui-users.settings.departments.view"
+          "patron-block-limits.item.get"
         ],
         "visible": true
       },
