@@ -2,7 +2,7 @@ import React from 'react';
 import { createMemoryHistory } from 'history';
 
 import { Router } from 'react-router-dom';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '@folio/jest-config-stripes/testing-library/react';
 
 import '__mock__/stripesCore.mock';
 import '__mock__/stripesSmartComponent.mock';

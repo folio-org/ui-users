@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@folio/jest-config-stripes/testing-library/react';
 import '../../../test/jest/__mock__/matchMedia.mock';
 
 import Filters from './Filters';

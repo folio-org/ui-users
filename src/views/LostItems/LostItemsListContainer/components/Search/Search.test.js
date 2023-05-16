@@ -3,7 +3,7 @@ import {
   render,
   screen,
   fireEvent,
-} from '@testing-library/react';
+} from '@folio/jest-config-stripes/testing-library/react';
 import {
   SearchField,
 } from '@folio/stripes/components';

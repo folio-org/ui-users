@@ -1,7 +1,7 @@
-import { screen } from '@testing-library/dom';
+import { screen } from '@folio/jest-config-stripes/testing-library/dom';
 import renderWithRouter from 'helpers/renderWithRouter';
 
-import userEvent from '@testing-library/user-event';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import BlockTemplateDetails from './BlockTemplateDetails';
 
 jest.unmock('@folio/stripes/components');

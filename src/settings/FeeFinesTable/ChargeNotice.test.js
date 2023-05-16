@@ -1,5 +1,5 @@
 import React from 'react';
-import userEvent from '@testing-library/user-event';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
 import renderWithRouter from 'helpers/renderWithRouter';
 import ChargeNotice from './ChargeNotice';

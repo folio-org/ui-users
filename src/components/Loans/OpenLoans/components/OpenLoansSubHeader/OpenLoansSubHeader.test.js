@@ -2,7 +2,7 @@ import okapiCurrentUser from 'fixtures/okapiCurrentUser';
 import {
   screen,
   fireEvent,
-} from '@testing-library/react';
+} from '@folio/jest-config-stripes/testing-library/react';
 
 import renderWithRouter from 'helpers/renderWithRouter';
 import loans from 'fixtures/openLoans';

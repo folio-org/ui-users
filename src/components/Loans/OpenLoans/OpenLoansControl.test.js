@@ -1,8 +1,8 @@
 import okapiCurrentUser from 'fixtures/okapiCurrentUser';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { screen } from '@folio/jest-config-stripes/testing-library/react';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
 import renderWithRouter from 'helpers/renderWithRouter';
 
