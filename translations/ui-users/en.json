@@ -57,6 +57,8 @@
   "data.loanActionMap.checkedInReturnedByPatron": "Checked in (returned by patron)",
   "data.loanActionMap.checkedInFoundByLibrary": "Checked in (found by library)",
   "data.loanActionMap.itemAgedToLost": "Aged to lost",
+  "data.loanActionMap.patronInfo": "Patron info only",
+  "data.loanActionMap.staffInfo": "Staff info only",
   "data.loanActionMap.unknownAction": "Unknown action",
   "user.unknown": "Unknown user",
   "action": "Action",
