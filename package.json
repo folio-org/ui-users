@@ -63,42 +63,6 @@
         ]
       },
       {
-        "permissionName": "ui-users.settings.view",
-        "displayName": "Settings (Users): View all settings",
-        "subPermissions": [
-          "settings.users.enabled",
-          "ui-users.settings.permsets.view",
-          "ui-users.settings.usergroups.view",
-          "ui-users.settings.addresstypes.view",
-          "ui-users.settings.departments.view",
-          "ui-users.settings.customfields.view",
-          "ui-users.settings.owners.view",
-          "comments.collection.get",
-          "comments.item.get",
-          "feefines.collection.get",
-          "feefines.item.get",
-          "templates.collection.get",
-          "payments.collection.get",
-          "payments.item.get",
-          "users.collection.get",
-          "refunds.collection.get",
-          "refunds.item.get",
-          "waives.collection.get",
-          "waives.item.get",
-          "transfers.collection.get",
-          "transfers.item.get",
-          "transfer-criterias.collection.get",
-          "transfer-criterias.item.get",
-          "patron-block-conditions.collection.get",
-          "patron-block-conditions.item.get",
-          "manual-block-templates.collection.get",
-          "manual-block-templates.item.get",
-          "patron-block-limits.collection.get",
-          "patron-block-limits.item.get"
-        ],
-        "visible": true
-      },
-      {
         "permissionName": "ui-users.view",
         "displayName": "Users: Can view user profile",
         "description": "Some subperms can be deleted later when submodules use modern permission names",
@@ -343,7 +307,8 @@
         "displayName": "Settings (Users): Can view feefines-related entries",
         "subPermissions": [
           "settings.users.enabled",
-          "ui-users.settings.owners.view"
+          "ui-users.settings.owners.view",
+          "ui-users.settings.waives.view"
         ],
         "visible": true
       },
@@ -352,9 +317,9 @@
         "displayName": "Settings (Users): Can create, edit and remove all feefines-related entries",
         "subPermissions": [
           "settings.users.enabled",
-          "ui-users.settings.owners",
+          "ui-users.settings.owners.all",
           "ui-users.settings.feefines",
-          "ui-users.settings.waives",
+          "ui-users.settings.waives.all",
           "ui-users.settings.payments",
           "ui-users.settings.refunds",
           "ui-users.settings.comments",
@@ -465,15 +430,23 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.settings.waives",
-        "displayName": "Settings (Users): Can create, edit and remove waives",
+        "permissionName": "ui-users.settings.waives.view",
+        "displayName": "Settings (Users): Can view waives",
         "subPermissions": [
           "waives.collection.get",
-          "waives.item.delete",
           "waives.item.get",
-          "waives.item.post",
-          "waives.item.put",
           "settings.users.enabled"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.waives.all",
+        "displayName": "Settings (Users): Can create, edit and remove waives",
+        "subPermissions": [
+          "ui-users.settings.waives.view",
+          "waives.item.delete",
+          "waives.item.post",
+          "waives.item.put"
         ],
         "visible": true
       },
@@ -951,6 +924,41 @@
           "actual-cost-record-storage.actual-cost-records.collection.get",
           "actual-cost-fee-fine-bill.post",
           "actual-cost-fee-fine-cancel.post"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.view",
+        "displayName": "Settings (Users): View all settings",
+        "subPermissions": [
+          "settings.users.enabled",
+          "ui-users.settings.permsets.view",
+          "ui-users.settings.usergroups.view",
+          "ui-users.settings.addresstypes.view",
+          "ui-users.settings.departments.view",
+          "ui-users.settings.customfields.view",
+          "ui-users.settings.owners.view",
+          "ui-users.settings.waives.view",
+          "comments.collection.get",
+          "comments.item.get",
+          "feefines.collection.get",
+          "feefines.item.get",
+          "templates.collection.get",
+          "payments.collection.get",
+          "payments.item.get",
+          "users.collection.get",
+          "refunds.collection.get",
+          "refunds.item.get",
+          "transfers.collection.get",
+          "transfers.item.get",
+          "transfer-criterias.collection.get",
+          "transfer-criterias.item.get",
+          "patron-block-conditions.collection.get",
+          "patron-block-conditions.item.get",
+          "manual-block-templates.collection.get",
+          "manual-block-templates.item.get",
+          "patron-block-limits.collection.get",
+          "patron-block-limits.item.get"
         ],
         "visible": true
       }

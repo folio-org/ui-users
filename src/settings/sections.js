@@ -78,7 +78,7 @@ const settingsFeefines = [
     route: 'waivereasons',
     label: <FormattedMessage id="ui-users.settings.waiveReasons" />,
     component: WaiveSettings,
-    perm: 'ui-users.settings.waives',
+    perm: 'ui-users.settings.waives.view',
   },
   {
     route: 'payments',
