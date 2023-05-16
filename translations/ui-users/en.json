@@ -972,6 +972,7 @@
   "permission.patron_blocks": "Users: Can create, edit and remove patron blocks",
   "permission.requests.all": "Users: View requests",
   "permission.reset.password": "Users: Create/reset password",
+  "permission.settings.view": "Settings (Users): View all settings",
   "permission.settings.addresstypes": "Settings (Users): Can create, edit and remove address types",
   "permission.settings.comments": "Settings (Users): Can create, edit and remove comments",
   "permission.settings.conditions": "Settings (Users): Can view and edit patron blocks conditions",
