@@ -31,10 +31,8 @@ const STRIPES = {
   },
   user: {
     user: {
-      consortium: {
-
-      }
-    }
+      consortium: {},
+    },
   },
 };
 
