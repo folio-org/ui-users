@@ -34,6 +34,7 @@
 * In Loan Details record, add buttons for adding patron info and staff info. Fixes UIU-2816.
 * In Loan Details record, display of patron info. Fixes UIU-2817.
 * In Loan Details record, display of staff info. Fixes UIU-2818.
+* Create tests for adding patron/staff info. Fixes UIU-2868.
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v9.0.0)
