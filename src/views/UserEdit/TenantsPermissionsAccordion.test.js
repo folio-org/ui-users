@@ -7,7 +7,7 @@ import '__mock__/intl.mock';
 
 import { useCallout, useStripes } from '@folio/stripes/core';
 
-import affiliations from '../../../test/jest/fixtures/affiliations';
+import affiliations from 'fixtures/affiliations';
 import {
   useUserAffiliations,
   useUserTenantPermissions,

@@ -1,6 +1,7 @@
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import { screen } from '@folio/jest-config-stripes/testing-library/react';
 
+import '__mock__/matchMedia.mock';
 import renderWithRouter from 'helpers/renderWithRouter';
 import affiliations from 'fixtures/affiliations';
 import permissions from 'fixtures/permissions';
@@ -79,7 +80,7 @@ describe('UserPermissions component', () => {
       expect(screen.getByText('ui-agreements.permission.agreements.edit')).toBeInTheDocument();
       expect(screen.getByText('ui-agreements.permission.agreements.delete')).toBeInTheDocument();
 
-      userEvent.selectOptions(screen.getByRole('combobox'), affiliations[1].tenantId);
+      userEvent.click(screen.getByText(affiliations[1].tenantName));
 
       expect(screen.queryByText('ui-agreements.permission.agreements.edit')).not.toBeInTheDocument();
       expect(screen.queryByText('ui-agreements.permission.agreements.delete')).not.toBeInTheDocument();

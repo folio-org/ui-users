@@ -9,7 +9,7 @@ import {
 } from 'react-query';
 import renderWithRouter from 'helpers/renderWithRouter';
 
-import affiliations from '../../../../test/jest/fixtures/affiliations';
+import affiliations from 'fixtures/affiliations';
 import {
   useConsortiumTenants,
   useUserAffiliations,
