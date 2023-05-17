@@ -55,6 +55,24 @@ import LoanProxyDetails from './LoanProxyDetails';
 
 import css from './LoanDetails.css';
 
+
+function formatLoanAction(la, loanActionsWithUser) {
+  const actionsOfThisType = loanActionsWithUser.filter(x => x.action === la.action);
+
+  // Actions within a loan all have the same `id` so we have to distinguish by date of update
+  const isFirst = (actionsOfThisType[0].metadata.updatedDate === la.metadata.updatedDate);
+
+  const translationTag = (
+    ((la.action === 'patronInfo' || la.action === 'staffInfo') && !isFirst) ?
+      loanActionMap[la.action] + '.superseded' :
+      loanActionMap[la.action] ??
+      loanActionMap.unknownAction
+  );
+
+  return <FormattedMessage id={translationTag} />;
+}
+
+
 class LoanDetails extends React.Component {
   static propTypes = {
     isLoading: PropTypes.bool,
@@ -402,7 +420,7 @@ class LoanDetails extends React.Component {
       <FormattedMessage id="ui-users.user.unknown" /> :
       <FormattedMessage id="ui-users.loans.action.source.system" />;
     const loanActionsFormatter = {
-      action: la => <FormattedMessage id={loanActionMap[la.action] ?? loanActionMap.unknownAction} />,
+      action: la => formatLoanAction(la, loanActionsWithUser),
       actionDate: la => <FormattedTime value={get(la, ['metadata', 'updatedDate'], '-')} day="numeric" month="numeric" year="numeric" />,
       dueDate: la => <FormattedTime value={la.dueDate} day="numeric" month="numeric" year="numeric" />,
       itemStatus: la => la.itemStatus,
