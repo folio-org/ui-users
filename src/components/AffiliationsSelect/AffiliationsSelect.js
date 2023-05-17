@@ -3,7 +3,10 @@ import {
   useCallback,
   useMemo,
 } from 'react';
-import { useIntl } from 'react-intl';
+import {
+  FormattedMessage,
+  useIntl,
+} from 'react-intl';
 
 import { Selection } from '@folio/stripes/components';
 
@@ -41,6 +44,7 @@ const AffiliationsSelect = ({
   return (
     <Selection
       id={`${id}-affiliations-select`}
+      label={<FormattedMessage id="ui-users.affiliations.select.label" />}
       dataOptions={dataOptions}
       onChange={handleChange}
       value={value}

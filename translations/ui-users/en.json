@@ -428,6 +428,7 @@
   "affiliations.section.label": "Affiliations",
   "affiliations.section.empty": "No affiliations found",
   "affiliations.section.action.edit": "Assign / Unassign",
+  "affiliations.select.label": "Affiliation",
   "contextMenu.homePage": "Home page",
   "contextMenu.settings": "Settings",
   "contextMenu.usageTips": "Usage tips",
