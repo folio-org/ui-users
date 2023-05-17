@@ -536,7 +536,7 @@
     "accounts.comment.error.enterComment": "Wprowadź komentarz",
     "owners.noServicePoints": "Powiązane punkty obsługi nie są dozwolone dla Współdzielenia właściciela opłaty/kary",
     "anonymization.confirmation.header": "Zapobieganie anonimizacji",
-    "anonymization.confirmation.message": "{amount} wypożyczeń miały powiązane opłaty/kary i nie mogły być zanonimizowane.",
+    "anonymization.confirmation.message": " All loans for this user will be anonymized. The loans will no longer appear in the user’s closed loans. Anonymizing loans cannot be reversed.",
     "requests.preferences": "Preferencje zamawiania",
     "requests.fulfillmentPreference": "Preferencje realizacji",
     "requests.defaultDeliveryAddress": "Domyślny adres dostawy",
