@@ -317,6 +317,7 @@
         "subPermissions": [
           "settings.users.enabled",
           "ui-users.settings.owners.view",
+          "ui-users.settings.manual-charges.view",
           "ui-users.settings.waives.view",
           "ui-users.settings.payments.view",
           "ui-users.settings.refunds.view",
@@ -999,7 +1000,8 @@
           "ui-users.settings.addresstypes.view",
           "ui-users.settings.departments.view",
           "ui-users.settings.customfields.view",
-          "ui-users.settings.feefines.view"
+          "ui-users.settings.feefines.view",
+          "ui-users.settings.conditions.view"
         ],
         "visible": true
       }
