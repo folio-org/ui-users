@@ -129,7 +129,7 @@ const settingsPatronBlocks = [
     route: 'manual-block-templates',
     label: <FormattedMessage id="ui-users.settings.manualBlockTemplates" />,
     component: BlockTemplates,
-    perm: 'ui-users.settings.patron-block-templates',
+    perm: 'ui-users.settings.patron-block-templates.view',
     interface: 'feesfines',
   },
 ];
