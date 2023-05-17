@@ -644,12 +644,22 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.settings.limits",
+        "permissionName": "ui-users.settings.limits.view",
+        "displayName": "Settings (Users): Can view patron blocks limits",
+        "subPermissions": [
+          "ui-users.settings.conditions.view",
+          "patron-block-limits.collection.get",
+          "patron-block-limits.item.get",
+          "usergroups.collection.get"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.limits.all",
         "displayName": "Settings (Users): Can create, edit and remove patron blocks limits",
         "subPermissions": [
           "ui-users.settings.conditions.edit",
-          "patron-block-limits.collection.get",
-          "patron-block-limits.item.get",
+          "ui-users.settings.conditions.view",
           "patron-block-limits.item.post",
           "patron-block-limits.item.put",
           "patron-block-limits.item.delete"
@@ -1001,7 +1011,8 @@
           "ui-users.settings.departments.view",
           "ui-users.settings.customfields.view",
           "ui-users.settings.feefines.view",
-          "ui-users.settings.conditions.view"
+          "ui-users.settings.conditions.view",
+          "ui-users.settings.limits.view"
         ],
         "visible": true
       }

@@ -123,7 +123,7 @@ const settingsPatronBlocks = [
     route: 'limits',
     label: <FormattedMessage id="ui-users.settings.limits" />,
     component: LimitsSettings,
-    perm: 'ui-users.settings.limits',
+    perm: 'ui-users.settings.limits.view',
   },
   {
     route: 'manual-block-templates',
