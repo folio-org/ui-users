@@ -3,6 +3,7 @@ import { useQuery } from 'react-query';
 import {
   useNamespace,
   useOkapiKy,
+  useStripes,
 } from '@folio/stripes/core';
 
 import {
@@ -11,34 +12,21 @@ import {
   MAX_RECORDS,
   OKAPI_TENANT_HEADER,
 } from '../../constants';
-import useConsortium from '../useConsortium';
 
 const DEFAULT_DATA = [];
 
 const useConsortiumTenants = () => {
+  const stripes = useStripes();
   const ky = useOkapiKy();
   const [namespace] = useNamespace({ key: 'consortium-tenants' });
 
-  const {
-    consortium,
-    isLoading: isConsortiumLoading,
-  } = useConsortium();
-
-  const api = ky.extend({
-    hooks: {
-      beforeRequest: [
-        request => {
-          request.headers.set(OKAPI_TENANT_HEADER, consortium.centralTenant);
-        },
-      ],
-    },
-  });
+  const consortium = stripes?.user?.user?.consortium;
 
   const searchParams = {
     limit: MAX_RECORDS,
   };
 
-  const enabled = Boolean(consortium?.centralTenant && consortium?.id);
+  const enabled = Boolean(consortium?.centralTenantId && consortium?.id);
 
   const {
     isFetching,
@@ -47,6 +35,16 @@ const useConsortiumTenants = () => {
   } = useQuery(
     [namespace, consortium?.id],
     async () => {
+      const api = ky.extend({
+        hooks: {
+          beforeRequest: [
+            request => {
+              request.headers.set(OKAPI_TENANT_HEADER, consortium.centralTenantId);
+            },
+          ],
+        },
+      });
+
       return api.get(
         `${CONSORTIA_API}/${consortium.id}/${CONSORTIA_TENANTS_API}`,
         { searchParams },
@@ -55,7 +53,7 @@ const useConsortiumTenants = () => {
     { enabled },
   );
 
-  const isLoading = isAffiliationsLoading || isConsortiumLoading;
+  const isLoading = isAffiliationsLoading;
 
   return ({
     tenants: data.tenants || DEFAULT_DATA,
