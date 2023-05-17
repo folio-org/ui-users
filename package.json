@@ -613,11 +613,19 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.settings.conditions",
-        "displayName": "Settings (Users): Can view and edit patron blocks conditions",
+        "permissionName": "ui-users.settings.conditions.view",
+        "displayName": "Settings (Users): Can view patron blocks conditions",
         "subPermissions": [
           "patron-block-conditions.collection.get",
-          "patron-block-conditions.item.get",
+          "patron-block-conditions.item.get"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.conditions.edit",
+        "displayName": "Settings (Users): Can view and edit patron blocks conditions",
+        "subPermissions": [
+          "ui-users.settings.conditions.view",
           "patron-block-conditions.item.put"
         ],
         "visible": true
@@ -638,7 +646,7 @@
         "permissionName": "ui-users.settings.limits",
         "displayName": "Settings (Users): Can create, edit and remove patron blocks limits",
         "subPermissions": [
-          "ui-users.settings.conditions",
+          "ui-users.settings.conditions.edit",
           "patron-block-limits.collection.get",
           "patron-block-limits.item.get",
           "patron-block-limits.item.post",
