@@ -72,7 +72,7 @@ const settingsFeefines = [
     route: 'feefinestable',
     label: <FormattedMessage id="ui-users.settings.manualCharges" />,
     component: FeeFineSettings,
-    perm: 'ui-users.settings.feefines',
+    perm: 'ui-users.settings.manual-charges.view',
   },
   {
     route: 'waivereasons',

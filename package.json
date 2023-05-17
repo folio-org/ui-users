@@ -343,19 +343,27 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.settings.feefines",
-        "displayName": "Settings (Users): Can create, edit and remove feefines",
+        "permissionName": "ui-users.settings.manual-charges.view",
+        "displayName": "Settings (Users): Can view manual charges",
         "subPermissions": [
           "feefines.collection.get",
-          "feefines.item.delete",
           "feefines.item.get",
-          "feefines.item.post",
-          "feefines.item.put",
-          "feefine-reports.refund.post",
           "inventory-storage.service-points.collection.get",
           "owners.collection.get",
           "templates.collection.get",
           "settings.users.enabled"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.manual-charges.all",
+        "displayName": "Settings (Users): Can create, edit and remove manual charges",
+        "subPermissions": [
+          "ui-users.settings.manual-charges.view",
+          "feefines.item.delete",
+          "feefines.item.post",
+          "feefines.item.put",
+          "feefine-reports.refund.post"
         ],
         "visible": true
       },
