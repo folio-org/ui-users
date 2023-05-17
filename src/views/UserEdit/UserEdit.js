@@ -37,7 +37,7 @@ class UserEdit extends React.Component {
     history: PropTypes.object,
     location: PropTypes.object,
     match: PropTypes.object,
-    okapiKy: PropTypes.func.isRequired,
+    okapiKy: PropTypes.object.isRequired,
     updateProxies: PropTypes.func,
     updateSponsors: PropTypes.func,
     updateServicePoints: PropTypes.func,
