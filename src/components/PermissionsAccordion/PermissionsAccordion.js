@@ -24,8 +24,9 @@ import { affiliationsShape } from '../../shapes';
 import PermissionModal from './components/PermissionsModal';
 import PermissionsAccordionList from './PermissionsAccordionList';
 import EnableUnassignAll from './EnableUnassignAll';
-import IfConsortium from '../IfConsortium/IfConsortium';
-import AffiliationsSelect from '../AffiliationsSelect/AffiliationsSelect';
+import AffiliationsSelect from '../AffiliationsSelect';
+import IfConsortium from '../IfConsortium';
+import IfConsortiumPermission from '../IfConsortiumPermission';
 
 const PermissionsAccordion = (props) => {
   const {
@@ -184,7 +185,7 @@ const PermissionsAccordion = (props) => {
         displayWhenClosed={<Badge>{permissionsAmount}</Badge>}
       >
         <IfConsortium>
-          <IfPermission perm="consortia.user-tenants.collection.get">
+          <IfConsortiumPermission perm="consortia.user-tenants.collection.get">
             {affiliations?.length > 1 && (
               <AffiliationsSelect
                 affiliations={affiliations}
@@ -194,7 +195,7 @@ const PermissionsAccordion = (props) => {
                 selection
               />
             )}
-          </IfPermission>
+          </IfConsortiumPermission>
         </IfConsortium>
         <FieldArray
           name={permissionsField}
