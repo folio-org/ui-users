@@ -5,10 +5,7 @@ import {
 } from 'react';
 import { useIntl } from 'react-intl';
 
-import {
-  Select,
-  Selection,
-} from '@folio/stripes/components';
+import { Selection } from '@folio/stripes/components';
 
 import { affiliationsShape } from '../../shapes';
 
@@ -18,10 +15,8 @@ const AffiliationsSelect = ({
   value,
   onChange,
   isLoading,
-  selection,
 }) => {
   const intl = useIntl();
-  const Component = selection ? Selection : Select;
 
   const dataOptions = useMemo(() => (
     affiliations?.map(({ tenantId, tenantName, isPrimary }) => {
@@ -39,13 +34,12 @@ const AffiliationsSelect = ({
     })
   ), [affiliations, intl]);
 
-  const handleChange = useCallback((data) => {
-    const result = selection ? data : data.target.value;
-    onChange(result);
-  }, [onChange, selection]);
+  const handleChange = useCallback((_value) => {
+    onChange(_value);
+  }, [onChange]);
 
   return (
-    <Component
+    <Selection
       id={`${id}-affiliations-select`}
       dataOptions={dataOptions}
       onChange={handleChange}
@@ -57,7 +51,6 @@ const AffiliationsSelect = ({
 
 AffiliationsSelect.defaultProps = {
   id: 'user-assigned',
-  selection: false,
 };
 
 AffiliationsSelect.propTypes = {
@@ -66,7 +59,6 @@ AffiliationsSelect.propTypes = {
   id: PropTypes.string,
   isLoading: PropTypes.bool,
   value: PropTypes.string.isRequired,
-  selection: PropTypes.bool,
 };
 
 export default AffiliationsSelect;
