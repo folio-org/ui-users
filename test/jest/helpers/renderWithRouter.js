@@ -2,7 +2,7 @@ import React from 'react';
 import { IntlProvider } from 'react-intl';
 import { CalloutContext } from '@folio/stripes/core';
 import { Router } from 'react-router-dom';
-import { render } from '@testing-library/react';
+import { render } from '@folio/jest-config-stripes/testing-library/react';
 import { createMemoryHistory } from 'history';
 
 let rtlApi;

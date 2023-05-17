@@ -1,4 +1,4 @@
-import { screen, fireEvent } from '@testing-library/react';
+import { screen, fireEvent } from '@folio/jest-config-stripes/testing-library/react';
 import '__mock__/stripesCore.mock';
 
 import renderWithRouter from 'helpers/renderWithRouter';

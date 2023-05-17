@@ -1,4 +1,4 @@
-import { waitFor } from '@testing-library/react';
+import { waitFor } from '@folio/jest-config-stripes/testing-library/react';
 
 import asyncValidateField from './asyncValidateField';
 import memoize from '../util/memoize';
