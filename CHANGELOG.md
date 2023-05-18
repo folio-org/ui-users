@@ -30,6 +30,7 @@
 * Align affiliation assignment with stripes-core updates (switch active affiliation). Refs UIU-2855.
 * Also support `circulation` `14.0`. Refs UIU-2858.
 * Import `@testing-library` deps from `jest-config-stripes`. Refs UIU-2866.
+* Also support `request-storage` `6.0`. Refs UIU-2875.
 * New permissions for adding Patron Info and Staff Info to loans. Fixes UIU-2865.
 * In Loan Details record, add buttons for adding patron info and staff info. Fixes UIU-2816.
 * In Loan Details record, display of patron info. Fixes UIU-2817.
