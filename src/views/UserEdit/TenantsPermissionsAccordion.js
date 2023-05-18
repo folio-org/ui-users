@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
 import { useCallback, useState } from 'react';
@@ -37,7 +36,7 @@ const TenantsPermissionsAccordion = ({
   const { change, getState } = form;
   const { id: userId, username } = initialValues;
   const permissionsField = `permissions.${tenantId}`;
-  const isPermissionsPresent = get(getState().values, permissionsField);
+  const isPermissionsPresent = Boolean(get(getState().values, permissionsField));
 
   const initPermissionsValue = useCallback(({ permissionNames }) => {
     setActionsDisabled(false);
