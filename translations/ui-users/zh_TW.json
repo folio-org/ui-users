@@ -536,7 +536,7 @@
     "accounts.comment.error.enterComment": "輸入評論",
     "owners.noServicePoints": "共享 費用 / 罰款 的負責人不允許使用相關的工作區",
     "anonymization.confirmation.header": "禁止匿名",
-    "anonymization.confirmation.message": "{amount}筆貸款有相關費用/罰款，無法匿名。",
+    "anonymization.confirmation.message": " All loans for this user will be anonymized. The loans will no longer appear in the user’s closed loans. Anonymizing loans cannot be reversed.",
     "requests.preferences": "預約偏好",
     "requests.fulfillmentPreference": "取件偏好設定",
     "requests.defaultDeliveryAddress": "預設的寄送地址",
