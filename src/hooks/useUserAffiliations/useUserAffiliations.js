@@ -48,7 +48,7 @@ const useUserAffiliations = ({ userId } = {}, options = {}) => {
   const {
     isFetching,
     isLoading,
-    data = DEFAULT_DATA,
+    data = {},
     refetch,
   } = useQuery(
     [namespace, userId, consortium?.id],

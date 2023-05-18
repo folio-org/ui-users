@@ -31,7 +31,7 @@ const useConsortiumTenants = () => {
   const {
     isFetching,
     isLoading,
-    data = DEFAULT_DATA,
+    data = {},
   } = useQuery(
     [namespace, consortium?.id],
     async () => {
@@ -54,7 +54,7 @@ const useConsortiumTenants = () => {
   );
 
   return ({
-    tenants: data.tenants,
+    tenants: data.tenants || DEFAULT_DATA,
     totalRecords: data.totalRecords,
     isFetching,
     isLoading,
