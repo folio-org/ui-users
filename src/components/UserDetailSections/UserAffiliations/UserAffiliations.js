@@ -3,7 +3,6 @@ import { useCallback, useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import {
-  useStripes,
   useCallout
 } from '@folio/stripes/core';
 import {
@@ -20,6 +19,7 @@ import {
   useUserAffiliationsMutation,
 } from '../../../hooks';
 import AffiliationsManager from '../../AffiliationsManager';
+import IfConsortiumPermission from '../../IfConsortiumPermission';
 
 import css from './UserAffiliations.css';
 import { createErrorMessage } from './util';
@@ -35,7 +35,6 @@ const UserAffiliations = ({
   userId,
   userName,
 }) => {
-  const stripes = useStripes();
   const callout = useCallout();
 
   const {
@@ -101,12 +100,14 @@ const UserAffiliations = ({
     </Headline>
   );
 
-  const displayWhenOpen = stripes.hasPerm('ui-users.consortia.affiliations.edit') && (
-    <AffiliationsManager
-      disabled={isLoading}
-      userId={userId}
-      onUpdateAffiliations={onUpdateAffiliations}
-    />
+  const displayWhenOpen = (
+    <IfConsortiumPermission perm="consortia.user-tenants.item.post">
+      <AffiliationsManager
+        disabled={isLoading}
+        userId={userId}
+        onUpdateAffiliations={onUpdateAffiliations}
+      />
+    </IfConsortiumPermission>
   );
 
   const displayWhenClosed = isLoading

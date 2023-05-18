@@ -127,6 +127,8 @@ jest.mock(
   })
 );
 
+jest.mock('../../components/IfConsortiumPermission', () => jest.fn().mockReturnValue(null));
+
 jest.mock(
   '../../../icons/app.png',
   () => {
