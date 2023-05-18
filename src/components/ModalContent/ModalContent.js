@@ -118,7 +118,8 @@ class ModalContent extends React.Component {
     activeRecord: PropTypes.object,
     user: PropTypes.object,
     resources: PropTypes.object,
-    okapi: PropTypes.object
+    okapi: PropTypes.object,
+    confirmTag: PropTypes.string,
   };
 
   static defaultProps = {
@@ -259,6 +260,7 @@ class ModalContent extends React.Component {
       onClose,
       itemRequestCount,
       isInProgress,
+      confirmTag = 'ui-users.confirm',
     } = this.props;
 
     const { additionalInfo } = this.state;
@@ -306,7 +308,7 @@ class ModalContent extends React.Component {
             disabled={isConfirmButtonDisabled}
             onClick={this.submit}
           >
-            <FormattedMessage id="ui-users.confirm" />
+            <FormattedMessage id={confirmTag} />
           </Button>
         </Layout>
       </div>
