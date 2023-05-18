@@ -27,6 +27,7 @@ jest.mock('../../../hooks', () => ({
   useUserAffiliations: jest.fn(),
   useUserAffiliationsMutation: jest.fn(),
 }));
+jest.mock('../../IfConsortiumPermission', () => jest.fn(({ children }) => children));
 
 jest.mock('./util', () => ({
   getResponseErrors: jest.fn(() => []),

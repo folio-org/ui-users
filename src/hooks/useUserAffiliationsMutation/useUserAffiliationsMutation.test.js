@@ -4,7 +4,10 @@ import {
   QueryClientProvider,
 } from 'react-query';
 
-import { useOkapiKy } from '@folio/stripes/core';
+import {
+  useOkapiKy,
+  useStripes,
+} from '@folio/stripes/core';
 
 import affiliations from '../../../test/jest/fixtures/affiliations';
 import consortia from '../../../test/jest/fixtures/consortia';
@@ -12,15 +15,14 @@ import {
   CONSORTIA_API,
   CONSORTIA_USER_TENANTS_API,
 } from '../../constants';
-import useConsortium from '../useConsortium';
 import useUserAffiliationsMutation from './useUserAffiliationsMutation';
 import { getResponseErrors } from '../../components/UserDetailSections/UserAffiliations/util';
 
 jest.mock('@folio/stripes/core', () => ({
   ...jest.requireActual('@folio/stripes/core'),
   useOkapiKy: jest.fn(),
+  useStripes: jest.fn(),
 }));
-jest.mock('../useConsortium', () => jest.fn());
 
 jest.mock('../../components/UserDetailSections/UserAffiliations/util', () => ({
   getResponseErrors: jest.fn(() => []),
@@ -38,7 +40,7 @@ const wrapper = ({ children }) => (
 const userId = 'userId';
 const consortium = {
   ...consortia[0],
-  centralTenant: 'mobius',
+  centralTenantId: 'mobius',
 };
 
 describe('useUserAffiliationsMutation', () => {
@@ -59,8 +61,12 @@ describe('useUserAffiliationsMutation', () => {
   beforeEach(() => {
     deleteMock.mockClear();
     postMock.mockClear();
-    useConsortium.mockClear().mockReturnValue({ consortium });
     useOkapiKy.mockClear().mockReturnValue(kyMock);
+    useStripes.mockClear().mockReturnValue({
+      user: {
+        user: { consortium },
+      }
+    });
   });
 
   it('should send POST request to add user-affiliation record', async () => {

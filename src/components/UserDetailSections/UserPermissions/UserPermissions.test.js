@@ -8,6 +8,7 @@ import {
   useUserAffiliations,
   useUserTenantPermissions,
 } from '../../../hooks';
+import IfConsortiumPermission from '../../IfConsortiumPermission';
 import UserPermissions from './UserPermissions';
 
 jest.unmock('@folio/stripes/components');
@@ -20,6 +21,7 @@ jest.mock('../../../hooks', () => ({
   useUserAffiliations: jest.fn(),
   useUserTenantPermissions: jest.fn(),
 }));
+jest.mock('../../IfConsortiumPermission', () => jest.fn());
 
 const STRIPES = {
   config: {},
@@ -56,6 +58,7 @@ describe('UserPermissions component', () => {
   });
 
   it('should render user permissions accordion', () => {
+    IfConsortiumPermission.mockReturnValue(null);
     renderUserPermissions();
 
     expect(screen.getByText('ui-users.permissions.userPermissions')).toBeInTheDocument();
@@ -65,6 +68,7 @@ describe('UserPermissions component', () => {
 
   describe('Consortia', () => {
     it('should update permissions list after selecting another affiliation', () => {
+      IfConsortiumPermission.mockImplementation(({ children }) => children);
       renderUserPermissions();
 
       expect(screen.getByText('ui-agreements.permission.agreements.edit')).toBeInTheDocument();

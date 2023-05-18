@@ -3,21 +3,19 @@ import {
   QueryClient,
   QueryClientProvider,
 } from 'react-query';
-import orderBy from 'lodash/orderBy';
 
 import {
   useOkapiKy,
   useStripes,
 } from '@folio/stripes/core';
 
-import affiliations from '../../../test/jest/fixtures/affiliations';
 import consortia from '../../../test/jest/fixtures/consortia';
 import {
   CONSORTIA_API,
-  CONSORTIA_USER_TENANTS_API,
+  CONSORTIA_TENANTS_API,
   MAX_RECORDS,
 } from '../../constants';
-import useUserAffiliations from './useUserAffiliations';
+import useConsortiumPermissions from './useConsortiumPermissions';
 
 jest.mock('@folio/stripes/core', () => ({
   ...jest.requireActual('@folio/stripes/core'),
@@ -35,17 +33,21 @@ const wrapper = ({ children }) => (
   </QueryClientProvider>
 );
 
-const response = {
-  userTenants: affiliations,
-  totalRecords: affiliations.length,
-};
-
+const user = { id: 'userId' };
 const consortium = {
   ...consortia[0],
   centralTenantId: 'mobius',
 };
 
-describe('useUserAffiliations', () => {
+const response = {
+  id: 'userPermissionId',
+  permissions: [
+    { subPermissions: ['users.view'] },
+    { subPermissions: ['consortia.view'] },
+  ],
+};
+
+describe('useConsortiumPermissions', () => {
   const mockGet = jest.fn(() => ({
     json: () => Promise.resolve(response),
   }));
@@ -65,33 +67,37 @@ describe('useUserAffiliations', () => {
     useOkapiKy.mockClear().mockReturnValue(kyMock);
     useStripes.mockClear().mockReturnValue({
       user: {
-        user: { consortium },
+        user: { ...user, consortium },
       }
     });
   });
 
-  it('should fetch user\'s consortium affiliations by user\'s id when there is consortium', async () => {
-    const userId = 'usedId';
-    const { result, waitFor } = renderHook(() => useUserAffiliations({ userId }), { wrapper });
+  it('should fetch consortium permissions', async () => {
+    const { result, waitFor } = renderHook(() => useConsortiumPermissions(), { wrapper });
 
     await waitFor(() => !result.current.isLoading);
 
-    expect(mockGet.mock.calls.length).toBe(1);
     expect(mockGet).toHaveBeenCalledWith(
-      `${CONSORTIA_API}/${consortium.id}/${CONSORTIA_USER_TENANTS_API}`,
-      expect.objectContaining({ searchParams: { userId, limit: MAX_RECORDS } }),
+      `perms/users/${user.id}`,
+      expect.objectContaining({ searchParams: { indexField: 'userId' } }),
     );
-    expect(result.current.affiliations).toEqual(orderBy(affiliations, 'tenantName'));
+    expect(mockGet).toHaveBeenCalledWith(
+      'perms/permissions',
+      expect.objectContaining({
+        searchParams: {
+          limit: MAX_RECORDS,
+          query: `(grantedTo=${response.id})`,
+          expanded: true,
+        },
+      }),
+    );
   });
 
-  it('should not fetch user\'s consortium affiliations by user\'s id when there is not consortium', async () => {
-    useStripes.mockClear().mockReturnValue({ a: 1 });
-
-    const userId = 'usedId';
-    const { result, waitFor } = renderHook(() => useUserAffiliations({ userId }), { wrapper });
+  it('should return consortia permissions', async () => {
+    const { result, waitFor } = renderHook(() => useConsortiumPermissions(), { wrapper });
 
     await waitFor(() => !result.current.isLoading);
 
-    expect(mockGet.mock.calls.length).toBe(0);
+    expect(result.current.permissions).toEqual({ 'consortia.view': true });
   });
 });
