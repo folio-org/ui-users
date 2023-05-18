@@ -48,11 +48,30 @@ import {
   withDeclareLost,
   withClaimReturned,
   withMarkAsMissing,
+  withAddInfo,
 } from '../../components/Wrappers';
 import loanActionMap from '../../components/data/static/loanActionMap';
 import LoanProxyDetails from './LoanProxyDetails';
 
 import css from './LoanDetails.css';
+
+
+function formatLoanAction(la, loanActionsWithUser) {
+  const actionsOfThisType = loanActionsWithUser.filter(x => x.action === la.action);
+
+  // Actions within a loan all have the same `id` so we have to distinguish by date of update
+  const isFirst = (actionsOfThisType[0].metadata.updatedDate === la.metadata.updatedDate);
+
+  const translationTag = (
+    ((la.action === 'patronInfo' || la.action === 'staffInfo') && !isFirst) ?
+      loanActionMap[la.action] + '.superseded' :
+      loanActionMap[la.action] ??
+      loanActionMap.unknownAction
+  );
+
+  return <FormattedMessage id={translationTag} />;
+}
+
 
 class LoanDetails extends React.Component {
   static propTypes = {
@@ -87,6 +106,7 @@ class LoanDetails extends React.Component {
     renew: PropTypes.func,
     declareLost: PropTypes.func,
     markAsMissing: PropTypes.func,
+    addInfo: PropTypes.func,
     claimReturned: PropTypes.func,
     setDeclareLostInProgress: PropTypes.func,
     declareLostInProgress: PropTypes.bool,
@@ -345,6 +365,7 @@ class LoanDetails extends React.Component {
       requestCounts,
       declareLost,
       markAsMissing,
+      addInfo,
       claimReturned,
       declareLostInProgress,
       loanIsMissing,
@@ -399,7 +420,7 @@ class LoanDetails extends React.Component {
       <FormattedMessage id="ui-users.user.unknown" /> :
       <FormattedMessage id="ui-users.loans.action.source.system" />;
     const loanActionsFormatter = {
-      action: la => <FormattedMessage id={loanActionMap[la.action] ?? loanActionMap.unknownAction} />,
+      action: la => formatLoanAction(la, loanActionsWithUser),
       actionDate: la => <FormattedTime value={get(la, ['metadata', 'updatedDate'], '-')} day="numeric" month="numeric" year="numeric" />,
       dueDate: la => <FormattedTime value={la.dueDate} day="numeric" month="numeric" year="numeric" />,
       itemStatus: la => la.itemStatus,
@@ -549,6 +570,22 @@ class LoanDetails extends React.Component {
                     onClick={() => declareLost(loan, itemRequestCount)}
                   >
                     <FormattedMessage id="ui-users.loans.declareLost" />
+                  </Button>
+                </IfPermission>
+                <IfPermission perm="ui-users.loans.add-patron-info">
+                  <Button
+                    data-test-new-patron-info-button
+                    onClick={() => addInfo(loan, 'patron')}
+                  >
+                    <FormattedMessage id="ui-users.loans.newPatronInfo" />
+                  </Button>
+                </IfPermission>
+                <IfPermission perm="ui-users.loans.add-staff-info">
+                  <Button
+                    data-test-new-staff-info-button
+                    onClick={() => addInfo(loan, 'staff')}
+                  >
+                    <FormattedMessage id="ui-users.loans.newStaffInfo" />
                   </Button>
                 </IfPermission>
               </span>
@@ -743,4 +780,5 @@ export default compose(
   stripesConnect,
   withClaimReturned,
   withMarkAsMissing,
+  withAddInfo,
 )(LoanDetails);
