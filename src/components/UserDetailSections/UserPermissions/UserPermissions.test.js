@@ -13,15 +13,11 @@ import IfConsortiumPermission from '../../IfConsortiumPermission';
 import UserPermissions from './UserPermissions';
 
 jest.unmock('@folio/stripes/components');
-jest.mock('@folio/stripes/core', () => ({
-  ...jest.requireActual('@folio/stripes/core'),
-  IfInterface: jest.fn(({ children }) => children),
-  IfPermission: jest.fn(({ children }) => children),
-}));
 jest.mock('../../../hooks', () => ({
   useUserAffiliations: jest.fn(),
   useUserTenantPermissions: jest.fn(),
 }));
+jest.mock('../../IfConsortium', () => jest.fn(({ children }) => <>{children}</>));
 jest.mock('../../IfConsortiumPermission', () => jest.fn());
 
 const STRIPES = {

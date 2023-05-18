@@ -3,7 +3,7 @@ import { render, screen } from '@folio/jest-config-stripes/testing-library/react
 
 import '__mock__/currencyData.mock';
 
-import affiliations from '../../../test/jest/fixtures/affiliations';
+import affiliations from 'fixtures/affiliations';
 import {
   useConsortiumTenants,
   useUserAffiliations,
