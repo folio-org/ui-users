@@ -1,10 +1,10 @@
 import React from 'react';
-import userEvent from '@testing-library/user-event';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import {
   render,
   screen,
   waitFor,
-} from '@testing-library/react';
+} from '@folio/jest-config-stripes/testing-library/react';
 import {
   useStripes,
   IfInterface,
@@ -126,6 +126,8 @@ jest.mock(
     UserServicePoints: jest.fn(() => null),
   })
 );
+
+jest.mock('../../components/IfConsortiumPermission', () => jest.fn().mockReturnValue(null));
 
 jest.mock(
   '../../../icons/app.png',

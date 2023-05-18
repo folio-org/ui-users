@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen } from '@folio/jest-config-stripes/testing-library/react';
 
 import renderWithRouter from 'helpers/renderWithRouter';
 import ContributorsView from './ContributorsView';

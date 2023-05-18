@@ -536,7 +536,7 @@
     "accounts.comment.error.enterComment": "Kommentar eingeben",
     "owners.noServicePoints": "Zugehörige Servicestellen nicht erlaubt für geteilte/n Forderungseigentümer/-in",
     "anonymization.confirmation.header": "Anonymisierung verhindert",
-    "anonymization.confirmation.message": "{amount} Ausleihe(n) haben/ hat offene Forderungen und konnten nicht anonymisiert werden",
+    "anonymization.confirmation.message": " All loans for this user will be anonymized. The loans will no longer appear in the user’s closed loans. Anonymizing loans cannot be reversed.",
     "requests.preferences": "Bestandsanfragenpräferenz",
     "requests.fulfillmentPreference": "Bereitstellungspräferenz",
     "requests.defaultDeliveryAddress": "Voreingestellte Lieferadresse",

@@ -1,7 +1,6 @@
 import React from 'react';
-import { screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { beforeEach } from '@jest/globals';
+import { screen, waitFor, within } from '@folio/jest-config-stripes/testing-library/react';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import { createMemoryHistory } from 'history';
 import renderWithRouter from 'helpers/renderWithRouter';
 import { nav } from '../../util';

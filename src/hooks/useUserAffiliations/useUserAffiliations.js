@@ -2,6 +2,7 @@ import orderBy from 'lodash/orderBy';
 import { useQuery } from 'react-query';
 
 import {
+  useStripes,
   useNamespace,
   useOkapiKy,
 } from '@folio/stripes/core';
@@ -13,28 +14,14 @@ import {
   OKAPI_TENANT_HEADER,
 } from '../../constants';
 
-import useConsortium from '../useConsortium';
-
 const DEFAULT_DATA = [];
 
 const useUserAffiliations = ({ userId } = {}, options = {}) => {
+  const stripes = useStripes();
   const ky = useOkapiKy();
   const [namespace] = useNamespace({ key: 'user-affiliations' });
 
-  const {
-    consortium,
-    isLoading: isConsortiumLoading,
-  } = useConsortium();
-
-  const api = ky.extend({
-    hooks: {
-      beforeRequest: [
-        request => {
-          request.headers.set(OKAPI_TENANT_HEADER, consortium.centralTenant);
-        },
-      ],
-    },
-  });
+  const consortium = stripes?.user?.user?.consortium;
 
   const searchParams = {
     userId,
@@ -42,7 +29,7 @@ const useUserAffiliations = ({ userId } = {}, options = {}) => {
   };
 
   const enabled = Boolean(
-    consortium?.centralTenant
+    consortium?.centralTenantId
     && consortium?.id
     && userId,
   );
@@ -55,6 +42,16 @@ const useUserAffiliations = ({ userId } = {}, options = {}) => {
   } = useQuery(
     [namespace, userId, consortium?.id],
     async () => {
+      const api = ky.extend({
+        hooks: {
+          beforeRequest: [
+            request => {
+              request.headers.set(OKAPI_TENANT_HEADER, consortium.centralTenantId);
+            },
+          ],
+        },
+      });
+
       const { userTenants, totalRecords } = await api.get(
         `${CONSORTIA_API}/${consortium.id}/${CONSORTIA_USER_TENANTS_API}`,
         { searchParams },
@@ -71,7 +68,7 @@ const useUserAffiliations = ({ userId } = {}, options = {}) => {
     },
   );
 
-  const isLoading = isAffiliationsLoading || isConsortiumLoading;
+  const isLoading = isAffiliationsLoading;
 
   return ({
     affiliations: data.userTenants || DEFAULT_DATA,

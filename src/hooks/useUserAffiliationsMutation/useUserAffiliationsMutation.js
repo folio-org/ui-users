@@ -1,15 +1,18 @@
 import chunk from 'lodash/chunk';
 import { useCallback } from 'react';
 import { useMutation } from 'react-query';
+import { uniqBy } from 'lodash';
 
-import { useOkapiKy } from '@folio/stripes/core';
+import {
+  useStripes,
+  useOkapiKy,
+} from '@folio/stripes/core';
 
 import {
   CONSORTIA_API,
   CONSORTIA_USER_TENANTS_API,
   OKAPI_TENANT_HEADER,
 } from '../../constants';
-import useConsortium from '../useConsortium';
 import { getResponseErrors } from '../../components/UserDetailSections/UserAffiliations/util';
 
 const CHUNK_SIZE = 5;
@@ -28,36 +31,29 @@ const batchRequest = async (arr, handler) => (
 );
 
 const useUserAffiliationsMutation = () => {
+  const stripes = useStripes();
   const ky = useOkapiKy();
 
-  const {
-    consortium,
-    isLoading: isConsortiumLoading,
-  } = useConsortium();
-
-  const api = ky.extend({
-    hooks: {
-      beforeRequest: [
-        request => {
-          request.headers.set(OKAPI_TENANT_HEADER, consortium.centralTenant);
-        },
-      ],
-    },
-  });
+  const consortium = stripes?.user?.user?.consortium;
 
   const {
     mutateAsync: assignAffiliation,
     isLoading: isAssigningLoading,
   } = useMutation({
     mutationFn: ({ tenantId, userId }) => {
-      const json = {
-        tenantId,
-        userId,
-      };
+      const api = ky.extend({
+        hooks: {
+          beforeRequest: [
+            request => {
+              request.headers.set(OKAPI_TENANT_HEADER, consortium.centralTenantId);
+            },
+          ],
+        },
+      });
 
       return api.post(
         `${CONSORTIA_API}/${consortium.id}/${CONSORTIA_USER_TENANTS_API}`,
-        { json },
+        { json: { tenantId, userId } },
       );
     },
   });
@@ -67,14 +63,19 @@ const useUserAffiliationsMutation = () => {
     isLoading: isUnassigningLoading,
   } = useMutation({
     mutationFn: ({ tenantId, userId }) => {
-      const searchParams = {
-        tenantId,
-        userId,
-      };
+      const api = ky.extend({
+        hooks: {
+          beforeRequest: [
+            request => {
+              request.headers.set(OKAPI_TENANT_HEADER, consortium.centralTenantId);
+            },
+          ],
+        },
+      });
 
       return api.delete(
         `${CONSORTIA_API}/${consortium.id}/${CONSORTIA_USER_TENANTS_API}`,
-        { searchParams },
+        { searchParams: { tenantId, userId } },
       );
     },
   });
@@ -86,9 +87,10 @@ const useUserAffiliationsMutation = () => {
     ]);
 
     const errors = await getResponseErrors(batchResponses);
-    if (errors.length) {
+    const uniqueErrorMessages = uniqBy(errors, 'message');
+    if (uniqueErrorMessages.length) {
       return {
-        errors,
+        errors: uniqueErrorMessages,
         success: false,
         responses: batchResponses,
       };
@@ -101,7 +103,7 @@ const useUserAffiliationsMutation = () => {
     };
   }, [assignAffiliation, unassignAffiliation]);
 
-  const isLoading = isConsortiumLoading || isAssigningLoading || isUnassigningLoading;
+  const isLoading = isAssigningLoading || isUnassigningLoading;
 
   return {
     assignAffiliation,

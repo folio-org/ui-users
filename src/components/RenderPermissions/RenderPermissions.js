@@ -11,10 +11,10 @@ import {
 } from '@folio/stripes/components';
 import {
   IfInterface,
-  IfPermission,
 } from '@folio/stripes/core';
 
 import AffiliationsSelect from '../AffiliationsSelect/AffiliationsSelect';
+import IfConsortiumPermission from '../IfConsortiumPermission';
 import PermissionLabel from '../PermissionLabel';
 import { getPermissionLabelString } from '../data/converters/permission';
 import { affiliationsShape } from '../../shapes';
@@ -104,7 +104,7 @@ class RenderPermissions extends React.Component {
         }
       >
         <IfInterface name="consortia">
-          <IfPermission perm="consortia.user-tenants.collection.get">
+          <IfConsortiumPermission perm="consortia.user-tenants.collection.get">
             {affiliations && (
               <AffiliationsSelect
                 affiliations={affiliations}
@@ -113,7 +113,7 @@ class RenderPermissions extends React.Component {
                 value={selectedAffiliation}
               />
             )}
-          </IfPermission>
+          </IfConsortiumPermission>
         </IfInterface>
 
         {this.renderList()}

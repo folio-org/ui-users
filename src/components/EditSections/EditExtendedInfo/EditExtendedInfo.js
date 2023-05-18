@@ -29,7 +29,7 @@ import DepartmentsNameEdit from './DepartmentsNameEdit';
 class EditExtendedInfo extends Component {
   static propTypes = {
     addressTypes: addressTypesShape,
-    expanded: PropTypes.bool.isRequired,
+    expanded: PropTypes.bool,
     departments: departmentsShape,
     userId: PropTypes.string,
     userEmail: PropTypes.string,

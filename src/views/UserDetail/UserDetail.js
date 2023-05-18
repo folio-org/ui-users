@@ -71,6 +71,7 @@ import ErrorPane from '../../components/ErrorPane';
 import ActionMenuEditButton from './components/ActionMenuEditButton';
 import ActionMenuDeleteButton from './components/ActionMenuDeleteButton';
 import LostItemsLink from '../../components/LostItemsLink';
+import IfConsortiumPermission from '../../components/IfConsortiumPermission';
 
 class UserDetail extends React.Component {
   static propTypes = {
@@ -699,7 +700,7 @@ class UserDetail extends React.Component {
                 />
 
                 <IfInterface name="consortia">
-                  <IfPermission perm="consortia.user-tenants.collection.get">
+                  <IfConsortiumPermission perm="consortia.user-tenants.collection.get">
                     <UserAffiliations
                       accordionId="affiliationsSection"
                       expanded={sections.affiliationsSection}
@@ -707,7 +708,7 @@ class UserDetail extends React.Component {
                       userId={user?.id}
                       userName={user?.username}
                     />
-                  </IfPermission>
+                  </IfConsortiumPermission>
                 </IfInterface>
 
                 <IfInterface name="feesfines">

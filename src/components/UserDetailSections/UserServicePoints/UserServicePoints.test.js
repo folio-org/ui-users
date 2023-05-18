@@ -1,6 +1,6 @@
-import { screen } from '@testing-library/react';
+import { screen } from '@folio/jest-config-stripes/testing-library/react';
 import okapiCurrentUser from 'fixtures/okapiCurrentUser';
-import userEvent from '@testing-library/user-event';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import '__mock__/stripesComponents.mock';
 
 import renderWithRouter from 'helpers/renderWithRouter';

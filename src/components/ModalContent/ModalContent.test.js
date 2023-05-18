@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '@folio/jest-config-stripes/testing-library/react';
 
 import '__mock__/stripesCore.mock';
 import '__mock__/stripesSmartComponent.mock';
