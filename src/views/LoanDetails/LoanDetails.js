@@ -575,7 +575,7 @@ class LoanDetails extends React.Component {
                 <IfPermission perm="ui-users.loans.add-patron-info">
                   <Button
                     data-test-new-patron-info-button
-                    onClick={() => addInfo(loan, itemRequestCount, 'patron')}
+                    onClick={() => addInfo(loan, 'patron')}
                   >
                     <FormattedMessage id="ui-users.loans.newPatronInfo" />
                   </Button>
@@ -583,7 +583,7 @@ class LoanDetails extends React.Component {
                 <IfPermission perm="ui-users.loans.add-staff-info">
                   <Button
                     data-test-new-staff-info-button
-                    onClick={() => addInfo(loan, itemRequestCount, 'staff')}
+                    onClick={() => addInfo(loan, 'staff')}
                   >
                     <FormattedMessage id="ui-users.loans.newStaffInfo" />
                   </Button>

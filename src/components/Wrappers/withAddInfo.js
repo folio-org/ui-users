@@ -18,12 +18,10 @@ const withAddInfo = WrappedComponent => class withAddInfoComponent extends React
     };
   }
 
-  // XXX Do we need itemRequestCount?
-  openAddInfoDialog = (loan, itemRequestCount, infoType) => {
+  openAddInfoDialog = (loan, infoType) => {
     this.setState({
       addInfoDialogOpen: true,
       loan,
-      itemRequestCount,
       infoType,
     });
   }
