@@ -30,6 +30,7 @@
 * Align affiliation assignment with stripes-core updates (switch active affiliation). Refs UIU-2855.
 * Also support `circulation` `14.0`. Refs UIU-2858.
 * Import `@testing-library` deps from `jest-config-stripes`. Refs UIU-2866.
+* Also support `request-storage` `6.0`. Refs UIU-2875.
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v9.0.0)
