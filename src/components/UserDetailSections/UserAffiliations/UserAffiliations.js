@@ -42,7 +42,7 @@ const UserAffiliations = ({
     totalRecords,
     isFetching,
     refetch,
-  } = useUserAffiliations({ userId });
+  } = useUserAffiliations({ userId }, { assignedToCurrentUser: false });
 
   const {
     handleAssignment,

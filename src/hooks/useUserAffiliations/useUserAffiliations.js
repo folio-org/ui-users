@@ -1,10 +1,11 @@
 import orderBy from 'lodash/orderBy';
+import { useMemo } from 'react';
 import { useQuery } from 'react-query';
 
 import {
-  useStripes,
   useNamespace,
   useOkapiKy,
+  useStripes,
 } from '@folio/stripes/core';
 
 import {
@@ -16,12 +17,22 @@ import {
 
 const DEFAULT_DATA = [];
 
+const filterAffiliations = ({ assignedToCurrentUser = true, currentUserTenants = [] }) => (affiliations = []) => {
+  if (!assignedToCurrentUser) return affiliations;
+
+  const currentUserTenantsIds = currentUserTenants.map(({ id }) => id);
+
+  return affiliations.filter(({ tenantId }) => currentUserTenantsIds.includes(tenantId));
+};
+
 const useUserAffiliations = ({ userId } = {}, options = {}) => {
   const stripes = useStripes();
   const ky = useOkapiKy();
   const [namespace] = useNamespace({ key: 'user-affiliations' });
 
   const consortium = stripes?.user?.user?.consortium;
+  const currentUserTenants = stripes?.user?.user?.tenants;
+  const { assignedToCurrentUser, ...queryOptions } = options;
 
   const searchParams = {
     userId,
@@ -36,7 +47,7 @@ const useUserAffiliations = ({ userId } = {}, options = {}) => {
 
   const {
     isFetching,
-    isLoading: isAffiliationsLoading,
+    isLoading,
     data = {},
     refetch,
   } = useQuery(
@@ -64,14 +75,16 @@ const useUserAffiliations = ({ userId } = {}, options = {}) => {
     },
     {
       enabled,
-      ...options,
+      ...queryOptions,
     },
   );
 
-  const isLoading = isAffiliationsLoading;
+  const affiliations = useMemo(() => (
+    filterAffiliations({ assignedToCurrentUser, currentUserTenants })(data.userTenants || DEFAULT_DATA)
+  ), [assignedToCurrentUser, currentUserTenants, data.userTenants]);
 
   return ({
-    affiliations: data.userTenants || DEFAULT_DATA,
+    affiliations,
     totalRecords: data.totalRecords,
     isFetching,
     isLoading,

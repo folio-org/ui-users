@@ -1,49 +1,39 @@
-import React from 'react';
-import userEvent from '@testing-library/user-event';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
+
 import renderWithRouter from 'helpers/renderWithRouter';
+
+import UserForm from './UserForm';
 import UserEdit from './UserEdit';
+
+const userFormData = {
+  requestPreferences: {},
+  personal: {
+    addresses: [],
+    email: 'ex@mp.le',
+  },
+  permissions: {
+    tenantId: [{ permissionName: 'users.item.get' }],
+    testTenant: [{ permissionName: 'users.item.get' }],
+  },
+};
 
 jest.mock('@folio/stripes/components', () => ({
   ...jest.requireActual('@folio/stripes/components'),
   LoadingView: () => 'LoadingView',
 }));
-jest.mock('lodash', () => ({
-  ...jest.requireActual('lodash'),
-  cloneDeep: jest.fn().mockImplementation((user) => {
-    return user.id
-      ? {}
-      : {
-        personal: {
-          email: 'fgdd@gmail.com',
-          addresses: [{ addresseLine1: 'park street' }],
-        },
-        active: 1,
-        permissions: { permissionName: 'test' },
-        departments: ['CS'],
-        expirationDate: new Date(1, 1, 1),
-      };
-  }),
-  find: jest.fn().mockReturnValue(null),
-  get: jest.fn().mockImplementation((resources) => {
-    return !!resources.selUser?.records[0]?.check;
-  }),
-  omit: jest.fn().mockReturnValue({ customFields: { id: false, val: true } }),
+jest.mock('./UserForm', () => jest.fn(({ onSubmit, onCancel }) => {
+  return (
+    <>
+      <div>UserForm </div>
+      <button type="button" id="clickable-cancel" onClick={onCancel}>
+        Cancel Form
+      </button>
+      <button type="button" id="clickable-save" onClick={() => onSubmit(userFormData)}>
+        Submit Form
+      </button>
+    </>
+  );
 }));
-jest.mock('./UserForm', () => {
-  return function Form({ onSubmit, onCancel }) {
-    return (
-      <>
-        <div>UserForm </div>
-        <button type="button" id="clickable-cancel" onClick={onCancel}>
-          Cancel Form
-        </button>
-        <button type="button" id="clickable-save" onClick={onSubmit}>
-          Submit Form
-        </button>
-      </>
-    );
-  };
-});
 jest.mock('@folio/stripes/smart-components', () => ({
   EditCustomFieldsRecord: () => 'EditCustomField',
 }));
@@ -60,13 +50,37 @@ jest.mock('../../components/EditSections', () => ({
 }));
 describe('UserEdit', () => {
   let props = {
-    stripes: { hasPerm: jest.fn().mockReturnValue(true) },
-    resources: {},
+    stripes: {
+      hasPerm: jest.fn().mockReturnValue(true),
+      okapi: {
+        tenant: 'tenantId',
+      },
+    },
+    resources: {
+      selUser: {
+        records: [{ id: 'userId' }],
+      },
+      patronGroups: {
+        records: [],
+      },
+      perms: {
+        records: [{ id: 'permUserRecordId' }],
+      },
+      addressTypes: {
+        records: [],
+      },
+      servicePoints: {
+        records: [],
+      },
+      departments: {
+        records: [],
+      },
+    },
     history: {
       push: jest.fn(),
     },
     location: {},
-    match: { params: { id: 1 } },
+    match: { params: { id: 'userId' } },
     updateProxies: jest.fn(),
     updateSponsors: jest.fn(),
     updateServicePoints: jest.fn(),
@@ -96,6 +110,12 @@ describe('UserEdit', () => {
     },
     getProxies: jest.fn(),
     getSponsors: jest.fn(),
+    okapiKy: {
+      extend: jest.fn(() => props.okapiKy),
+      get: jest.fn(() => ({ json: () => Promise.resolve() })),
+      post: jest.fn(() => ({ json: () => Promise.resolve({}) })),
+      put: jest.fn(() => ({ json: () => Promise.resolve({}) })),
+    },
   };
 
   it('should render without crashing', () => {
@@ -273,17 +293,6 @@ describe('UserEdit', () => {
   });
 
   it('should render without crashing departments', () => {
-    jest.mock('lodash', () => ({
-      ...jest.requireActual('lodash'),
-      cloneDeep: jest.fn().mockReturnValue({
-        personal: false,
-        active: 1,
-        permissions: { permissionName: 'test' },
-        departments: ['CS'],
-      }),
-      find: jest.fn().mockReturnValue(null),
-      get: jest.fn().mockReturnValue(false),
-    }));
     props = {
       ...props,
       match: {
@@ -308,7 +317,7 @@ describe('UserEdit', () => {
       },
     };
     const { container } = renderWithRouter(<UserEdit {...props} />);
-    
+
     expect(container).toBeInTheDocument();
   });
 
@@ -325,5 +334,18 @@ describe('UserEdit', () => {
     await userEvent.click(submitButton);
     expect(container.querySelector('#clickable-cancel')).toBeInTheDocument();
     expect(container.querySelector('#clickable-save')).toBeInTheDocument();
+  });
+
+  describe('Save user form', () => {
+    it('should handle user updates', async () => {
+      renderWithRouter(<UserEdit {...props} />);
+
+      await UserForm.mock.calls[0][0].onSubmit(userFormData);
+
+      expect(props.mutator.requestPreferences.POST).toHaveBeenCalled();
+      expect(props.updateProxies).toHaveBeenCalled();
+      expect(props.updateSponsors).toHaveBeenCalled();
+      expect(props.updateServicePoints).toHaveBeenCalled();
+    });
   });
 });

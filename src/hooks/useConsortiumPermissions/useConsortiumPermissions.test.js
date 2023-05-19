@@ -11,8 +11,6 @@ import {
 
 import consortia from '../../../test/jest/fixtures/consortia';
 import {
-  CONSORTIA_API,
-  CONSORTIA_TENANTS_API,
   MAX_RECORDS,
 } from '../../constants';
 import useConsortiumPermissions from './useConsortiumPermissions';

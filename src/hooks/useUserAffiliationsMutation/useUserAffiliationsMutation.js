@@ -1,11 +1,10 @@
-import chunk from 'lodash/chunk';
+import { chunk, uniqBy } from 'lodash';
 import { useCallback } from 'react';
 import { useMutation } from 'react-query';
-import { uniqBy } from 'lodash';
 
 import {
-  useStripes,
   useOkapiKy,
+  useStripes,
 } from '@folio/stripes/core';
 
 import {

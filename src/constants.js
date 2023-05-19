@@ -327,6 +327,7 @@ export const SORT_DIRECTIONS = {
 };
 
 export const OKAPI_TENANT_HEADER = 'X-Okapi-Tenant';
+export const OKAPI_TOKEN_HEADER = 'X-Okapi-Token';
 
 export const CONFIGURATIONS_API = 'configurations';
 export const CONFIGURATIONS_ENTRIES_API = `${CONFIGURATIONS_API}/entries`;

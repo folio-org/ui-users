@@ -55,7 +55,7 @@ const AffiliationManagerModal = ({ onClose, onSubmit, userId }) => {
   const {
     affiliations,
     isLoading: isUsersAffiliationsLoading,
-  } = useUserAffiliations({ userId });
+  } = useUserAffiliations({ userId }, { assignedToCurrentUser: false });
 
   const {
     tenants,

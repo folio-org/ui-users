@@ -45,6 +45,8 @@ const consortium = {
   centralTenantId: 'mobius',
 };
 
+const tenants = affiliations.map(({ tenantId, tenantName, isPrimary }) => ({ id: tenantId, name: tenantName, isPrimary }));
+
 describe('useUserAffiliations', () => {
   const mockGet = jest.fn(() => ({
     json: () => Promise.resolve(response),
@@ -65,7 +67,7 @@ describe('useUserAffiliations', () => {
     useOkapiKy.mockClear().mockReturnValue(kyMock);
     useStripes.mockClear().mockReturnValue({
       user: {
-        user: { consortium },
+        user: { consortium, tenants },
       }
     });
   });
@@ -88,7 +90,7 @@ describe('useUserAffiliations', () => {
     useStripes.mockClear().mockReturnValue({ a: 1 });
 
     const userId = 'usedId';
-    const { result, waitFor } = renderHook(() => useUserAffiliations({ userId }), { wrapper });
+    const { result, waitFor } = renderHook(() => useUserAffiliations({ userId }, { assignedToCurrentUser: false }), { wrapper });
 
     await waitFor(() => !result.current.isLoading);
 
