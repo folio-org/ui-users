@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { get } from 'lodash';
+import { get, noop } from 'lodash';
 import { useCallback, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -33,7 +33,7 @@ const TenantsPermissionsAccordion = ({
   const [tenantId, setTenantId] = useState(stripes.okapi.tenant);
   const [isActionsDisabled, setActionsDisabled] = useState(false);
 
-  const { change, getState } = form;
+  const { getState, registerField } = form;
   const { id: userId, username } = initialValues;
   const permissionsField = `permissions.${tenantId}`;
   const isPermissionsPresent = Boolean(get(getState().values, permissionsField));
@@ -42,9 +42,9 @@ const TenantsPermissionsAccordion = ({
     setActionsDisabled(false);
 
     if (!isPermissionsPresent) {
-      change(permissionsField, permissionNames);
+      registerField(permissionsField, noop, { value: true }, { initialValue: permissionNames });
     }
-  }, [change, isPermissionsPresent, permissionsField]);
+  }, [isPermissionsPresent, permissionsField, registerField]);
 
   const handleError = useCallback(({ code }) => {
     setActionsDisabled(true);
