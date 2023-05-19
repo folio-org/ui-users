@@ -34,11 +34,13 @@ export const loanActions = {
 
 // The names of the mutators which can executed on a given loan.
 // Currently used in:
-// "withMarkAsMissing", "withClaimReturned" and "withDeclareLost"
+// "withMarkAsMissing", "withClaimReturned", "withDeclareLost", "withAddInfo"
 export const loanActionMutators = {
   CLAIMED_RETURNED: 'claimReturned',
   DECLARE_LOST: 'declareLost',
   MARK_AS_MISSING: 'markAsMissing',
+  ADD_PATRON_INFO: 'patronInfo',
+  ADD_STAFF_INFO: 'staffInfo',
 };
 
 export const deliveryFulfillmentValues = {
