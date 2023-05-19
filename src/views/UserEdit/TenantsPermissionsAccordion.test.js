@@ -36,6 +36,7 @@ const defaultProps = {
       values: {},
     })),
     change: jest.fn(),
+    registerField: jest.fn(),
   },
   initialValues: {
     id: 'userId',
@@ -90,7 +91,7 @@ describe('TenantsPermissionsAccordion', () => {
 
     mockUserTenantPermsHookOpts.onSuccess({ permissionNames: ['user.item.get'] });
 
-    expect(defaultProps.form.change).toHaveBeenCalled();
+    expect(defaultProps.form.registerField).toHaveBeenCalled();
   });
 
   it('should handle errors when affiliations or permissions loading is failed', async () => {
