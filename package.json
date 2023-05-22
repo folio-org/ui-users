@@ -48,7 +48,7 @@
       "loan-policy-storage": "1.0 2.0",
       "loan-storage": "4.0 5.0 6.0 7.0",
       "notes": "2.0 3.0",
-      "request-storage": "2.5 3.0 4.0 5.0"
+      "request-storage": "2.5 3.0 4.0 5.0 6.0"
     },
     "permissionSets": [
       {
@@ -737,6 +737,22 @@
         "description": "Also includes backend permissions to perform loans renew through override",
         "subPermissions": [
           "circulation.override-renewal-block"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.loans.add-patron-info",
+        "displayName": "Users: User loans: add patron information",
+        "subPermissions": [
+          "circulation.loans.item.put"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.loans.add-staff-info",
+        "displayName": "Users: User loans: add staff information",
+        "subPermissions": [
+          "circulation.loans.item.put"
         ],
         "visible": true
       },

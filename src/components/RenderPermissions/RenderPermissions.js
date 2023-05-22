@@ -9,12 +9,10 @@ import {
   Headline,
   Loading
 } from '@folio/stripes/components';
-import {
-  IfInterface,
-  IfPermission,
-} from '@folio/stripes/core';
 
 import AffiliationsSelect from '../AffiliationsSelect/AffiliationsSelect';
+import IfConsortium from '../IfConsortium';
+import IfConsortiumPermission from '../IfConsortiumPermission';
 import PermissionLabel from '../PermissionLabel';
 import { getPermissionLabelString } from '../data/converters/permission';
 import { affiliationsShape } from '../../shapes';
@@ -103,8 +101,8 @@ class RenderPermissions extends React.Component {
           isLoading ? <Loading /> : <Badge>{listedPermissions.length}</Badge>
         }
       >
-        <IfInterface name="consortia">
-          <IfPermission perm="consortia.user-tenants.collection.get">
+        <IfConsortium>
+          <IfConsortiumPermission perm="consortia.user-tenants.collection.get">
             {affiliations && (
               <AffiliationsSelect
                 affiliations={affiliations}
@@ -113,8 +111,8 @@ class RenderPermissions extends React.Component {
                 value={selectedAffiliation}
               />
             )}
-          </IfPermission>
-        </IfInterface>
+          </IfConsortiumPermission>
+        </IfConsortium>
 
         {this.renderList()}
       </Accordion>
