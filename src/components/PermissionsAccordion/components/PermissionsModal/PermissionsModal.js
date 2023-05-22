@@ -185,12 +185,6 @@ class PermissionsModal extends React.Component {
     }
   }
 
-  setAssignedPermissionIds = (assignedPermissionIds) => {
-    if (this._isMounted) {
-      this.setState({ assignedPermissionIds });
-    }
-  }
-
   // Search for permissions
   onSubmitSearch = (searchText) => {
     const permissions = this.state.allPermissions || [];

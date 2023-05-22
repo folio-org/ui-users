@@ -66,8 +66,6 @@ class UserEdit extends React.Component {
       getSponsors,
       getPreferredServicePoint,
       getUserServicePoints,
-      resources,
-      stripes,
       match,
     } = this.props;
 
