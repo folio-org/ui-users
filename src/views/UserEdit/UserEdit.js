@@ -100,9 +100,6 @@ class UserEdit extends React.Component {
 
     return {
       ...userFormValues,
-      permissions: {
-        [stripes.okapi.tenant]: resources.permissions?.records,
-      },
       preferredServicePoint: getPreferredServicePoint(),
       proxies: getProxies(),
       sponsors: getSponsors(),

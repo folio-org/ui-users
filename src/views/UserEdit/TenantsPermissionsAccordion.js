@@ -1,6 +1,11 @@
 import PropTypes from 'prop-types';
 import { get, noop } from 'lodash';
-import { useCallback, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import {
@@ -30,6 +35,7 @@ const TenantsPermissionsAccordion = ({
 }) => {
   const stripes = useStripes();
   const callout = useCallout();
+  const unregisterHandlersRef = useRef([]);
   const [tenantId, setTenantId] = useState(stripes.okapi.tenant);
   const [isActionsDisabled, setActionsDisabled] = useState(false);
 
@@ -38,11 +44,18 @@ const TenantsPermissionsAccordion = ({
   const permissionsField = `permissions.${tenantId}`;
   const isPermissionsPresent = Boolean(get(getState().values, permissionsField));
 
+  useEffect(() => {
+    return () => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      unregisterHandlersRef.current.forEach((unregister) => unregister());
+    };
+  }, []);
+
   const initPermissionsValue = useCallback(({ permissionNames }) => {
     setActionsDisabled(false);
 
     if (!isPermissionsPresent) {
-      registerField(permissionsField, noop, { value: true }, { initialValue: permissionNames });
+      unregisterHandlersRef.current.push(registerField(permissionsField, noop, { value: true }, { initialValue: permissionNames }));
     }
   }, [isPermissionsPresent, permissionsField, registerField]);
 
