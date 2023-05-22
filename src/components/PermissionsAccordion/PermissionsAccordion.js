@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { FieldArray } from 'react-final-form-arrays';
+import noop from 'lodash/noop';
 
 import {
   FormattedMessage,
@@ -19,14 +20,21 @@ import {
   stripesConnect,
 } from '@folio/stripes/core';
 
+import { affiliationsShape } from '../../shapes';
 import PermissionModal from './components/PermissionsModal';
 import PermissionsAccordionList from './PermissionsAccordionList';
 import EnableUnassignAll from './EnableUnassignAll';
+import AffiliationsSelect from '../AffiliationsSelect';
+import IfConsortium from '../IfConsortium';
+import IfConsortiumPermission from '../IfConsortiumPermission';
 
 const PermissionsAccordion = (props) => {
   const {
     accordionId,
+    affiliations,
+    disabled,
     expanded,
+    onChangeAffiliation,
     onToggle,
     permToModify,
     permToDelete,
@@ -36,10 +44,11 @@ const PermissionsAccordion = (props) => {
     headlineContent,
     excludePermissionSets,
     initialValues: { personal },
+    isLoading,
     form: { change },
-    setButtonRef
+    setButtonRef,
+    tenantId,
   } = props;
-
   const getAssignedPermissions = () => {
     const { form: { getFieldState } } = props;
 
@@ -47,17 +56,18 @@ const PermissionsAccordion = (props) => {
   };
 
   const isAllowedPermissions = !!getAssignedPermissions().length;
+  const isActionsDisabled = disabled || isLoading;
 
   const [permissionModalOpen, setPermissionModalOpen] = useState(false);
   const [unassignModalOpen, setUnassignModalOpen] = useState(false);
-  const [isUnassignButtonEnable, setIsUnassignButtonEnable] = useState(false);
+  const [isUnassignButtonEnable, setIsUnassignButtonEnable] = useState(isActionsDisabled);
   const [confirmEditModalOpen, setConfirmEditModalOpen] = useState(false);
 
   const calloutRef = useRef();
 
   useEffect(() => {
-    setIsUnassignButtonEnable(isAllowedPermissions);
-  }, [isAllowedPermissions]);
+    setIsUnassignButtonEnable(isAllowedPermissions || isActionsDisabled);
+  }, [isAllowedPermissions, isActionsDisabled]);
 
   const addPermissions = (permissions) => {
     change(permissionsField, permissions);
@@ -174,6 +184,18 @@ const PermissionsAccordion = (props) => {
         }
         displayWhenClosed={<Badge>{permissionsAmount}</Badge>}
       >
+        <IfConsortium>
+          <IfConsortiumPermission perm="consortia.user-tenants.collection.get">
+            {affiliations?.length > 1 && (
+              <AffiliationsSelect
+                affiliations={affiliations}
+                onChange={onChangeAffiliation}
+                isLoading={isLoading}
+                value={tenantId}
+              />
+            )}
+          </IfConsortiumPermission>
+        </IfConsortium>
         <FieldArray
           name={permissionsField}
           component={PermissionsAccordionList}
@@ -189,6 +211,7 @@ const PermissionsAccordion = (props) => {
             id="clickable-add-permission"
             onClick={openPermissionModal}
             buttonRef={setButtonRef}
+            disabled={isActionsDisabled}
           >
             <FormattedMessage id="ui-users.permissions.addPermission" />
           </Button>
@@ -204,6 +227,7 @@ const PermissionsAccordion = (props) => {
             <FormattedMessage id="ui-users.permissions.unassignAllPermissions" />
           </Button>
           <PermissionModal
+            tenantId={tenantId}
             assignedPermissions={assignedPermissions}
             addPermissions={addPermissions}
             open={permissionModalOpen}
@@ -242,17 +266,22 @@ const PermissionsAccordion = (props) => {
 };
 
 PermissionsAccordion.propTypes = {
+  affiliations: affiliationsShape,
+  disabled: PropTypes.bool,
   expanded: PropTypes.bool,
   intl: PropTypes.shape({
     formatMessage: PropTypes.func.isRequired,
   }),
   initialValues: PropTypes.object,
+  isLoading: PropTypes.bool,
+  onChangeAffiliation: PropTypes.func,
   onToggle: PropTypes.func,
   accordionId: PropTypes.string.isRequired,
   permToDelete: PropTypes.string.isRequired,
   permToModify: PropTypes.string.isRequired,
   permToRead: PropTypes.string.isRequired,
   stripes: PropTypes.object.isRequired,
+  tenantId: PropTypes.string,
   // eslint-disable-next-line react/no-unused-prop-types
   formName: PropTypes.string.isRequired,
   permissionsField: PropTypes.string.isRequired,
@@ -279,8 +308,11 @@ PermissionsAccordion.propTypes = {
 };
 
 PermissionsAccordion.defaultProps = {
+  disabled: false,
   excludePermissionSets: false,
   initialValues: {},
+  isLoading: false,
+  onChangeAffiliation: noop,
 };
 
 export default stripesConnect(injectIntl(PermissionsAccordion));

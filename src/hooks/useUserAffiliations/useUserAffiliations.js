@@ -1,9 +1,11 @@
 import orderBy from 'lodash/orderBy';
+import { useMemo } from 'react';
 import { useQuery } from 'react-query';
 
 import {
   useNamespace,
   useOkapiKy,
+  useStripes,
 } from '@folio/stripes/core';
 
 import {
@@ -13,28 +15,24 @@ import {
   OKAPI_TENANT_HEADER,
 } from '../../constants';
 
-import useConsortium from '../useConsortium';
-
 const DEFAULT_DATA = [];
 
+const filterAffiliations = ({ assignedToCurrentUser = true, currentUserTenants = [] }) => (affiliations = []) => {
+  if (!assignedToCurrentUser) return affiliations;
+
+  const currentUserTenantsIds = currentUserTenants.map(({ id }) => id);
+
+  return affiliations.filter(({ tenantId }) => currentUserTenantsIds.includes(tenantId));
+};
+
 const useUserAffiliations = ({ userId } = {}, options = {}) => {
+  const stripes = useStripes();
   const ky = useOkapiKy();
   const [namespace] = useNamespace({ key: 'user-affiliations' });
 
-  const {
-    consortium,
-    isLoading: isConsortiumLoading,
-  } = useConsortium();
-
-  const api = ky.extend({
-    hooks: {
-      beforeRequest: [
-        request => {
-          request.headers.set(OKAPI_TENANT_HEADER, consortium.centralTenant);
-        },
-      ],
-    },
-  });
+  const consortium = stripes?.user?.user?.consortium;
+  const currentUserTenants = stripes?.user?.user?.tenants;
+  const { assignedToCurrentUser, ...queryOptions } = options;
 
   const searchParams = {
     userId,
@@ -42,19 +40,29 @@ const useUserAffiliations = ({ userId } = {}, options = {}) => {
   };
 
   const enabled = Boolean(
-    consortium?.centralTenant
+    consortium?.centralTenantId
     && consortium?.id
     && userId,
   );
 
   const {
     isFetching,
-    isLoading: isAffiliationsLoading,
+    isLoading,
     data = {},
     refetch,
   } = useQuery(
     [namespace, userId, consortium?.id],
     async () => {
+      const api = ky.extend({
+        hooks: {
+          beforeRequest: [
+            request => {
+              request.headers.set(OKAPI_TENANT_HEADER, consortium.centralTenantId);
+            },
+          ],
+        },
+      });
+
       const { userTenants, totalRecords } = await api.get(
         `${CONSORTIA_API}/${consortium.id}/${CONSORTIA_USER_TENANTS_API}`,
         { searchParams },
@@ -67,14 +75,16 @@ const useUserAffiliations = ({ userId } = {}, options = {}) => {
     },
     {
       enabled,
-      ...options,
+      ...queryOptions,
     },
   );
 
-  const isLoading = isAffiliationsLoading || isConsortiumLoading;
+  const affiliations = useMemo(() => (
+    filterAffiliations({ assignedToCurrentUser, currentUserTenants })(data.userTenants || DEFAULT_DATA)
+  ), [assignedToCurrentUser, currentUserTenants, data.userTenants]);
 
   return ({
-    affiliations: data.userTenants || DEFAULT_DATA,
+    affiliations,
     totalRecords: data.totalRecords,
     isFetching,
     isLoading,

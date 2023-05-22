@@ -28,8 +28,16 @@
 * Show success and Error toasts when Assign/unassign a users affiliations. Refs UIU-2852.
 * "ui-users.settings.customfields.view" permission insufficient to view custom fields on user settings. Refs UIU-2863.
 * Align affiliation assignment with stripes-core updates (switch active affiliation). Refs UIU-2855.
+* Create Jest/RTL test for UserEdit.js. Refs UIU-2426
 * Also support `circulation` `14.0`. Refs UIU-2858.
 * Import `@testing-library` deps from `jest-config-stripes`. Refs UIU-2866.
+* Also support `request-storage` `6.0`. Refs UIU-2875.
+* New permissions for adding Patron Info and Staff Info to loans. Fixes UIU-2865.
+* In Loan Details record, add buttons for adding patron info and staff info. Fixes UIU-2816.
+* In Loan Details record, display of patron info. Fixes UIU-2817.
+* In Loan Details record, display of staff info. Fixes UIU-2818.
+* Create tests for adding patron/staff info. Fixes UIU-2868.
+* Add/Edit a users permissions for associated affiliation(s). Refs UIU-2805.
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v9.0.0)

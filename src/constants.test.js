@@ -31,7 +31,7 @@ describe('Constants', () => {
     expect(Object.keys(loanActions).length).toEqual(4);
   });
   test('loanActionMutators', () => {
-    expect(Object.keys(loanActionMutators).length).toEqual(3);
+    expect(Object.keys(loanActionMutators).length).toEqual(5);
   });
   test('deliveryFulfillmentValues', () => {
     expect(Object.keys(deliveryFulfillmentValues).length).toEqual(2);

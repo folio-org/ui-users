@@ -127,12 +127,16 @@ jest.mock(
   })
 );
 
+jest.mock('../../components/IfConsortiumPermission', () => jest.fn().mockReturnValue(null));
+
 jest.mock(
   '../../../icons/app.png',
   () => {
     return () => <span>AppIcon</span>;
   }
 );
+
+jest.mock('../../components/IfConsortium', () => jest.fn(({ children }) => <>{children}</>));
 
 IfInterface.mockImplementation(({ children }) => children);
 

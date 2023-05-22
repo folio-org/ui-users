@@ -536,7 +536,7 @@
     "accounts.comment.error.enterComment": "Inserisci commento",
     "owners.noServicePoints": "Punti di distribuzione associati non autorizzati per gestore tariffa/multa condiviso",
     "anonymization.confirmation.header": "Anonimizzazione impedita",
-    "anonymization.confirmation.message": "{amount} prestito(i) ha tariffe/multe associate e non può essere anonimizzato.",
+    "anonymization.confirmation.message": " All loans for this user will be anonymized. The loans will no longer appear in the user’s closed loans. Anonymizing loans cannot be reversed.",
     "requests.preferences": "Preferenze richiesta",
     "requests.fulfillmentPreference": "Modalità di evasione della richiesta",
     "requests.defaultDeliveryAddress": "Indirizzo di consegna predefinito",

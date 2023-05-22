@@ -536,7 +536,7 @@
     "accounts.comment.error.enterComment": "Saisir un commentaire",
     "owners.noServicePoints": "Associated service points not allowed for Shared fee/fine owner",
     "anonymization.confirmation.header": "Anonymisation empêchée",
-    "anonymization.confirmation.message": "{amount} prêt(s) comporte(nt) des frais / amendes et ne peuve(nt) pas être anonymisé(s).",
+    "anonymization.confirmation.message": " All loans for this user will be anonymized. The loans will no longer appear in the user’s closed loans. Anonymizing loans cannot be reversed.",
     "requests.preferences": "Préférence des retraits/réservations",
     "requests.fulfillmentPreference": "Préférence de distribution",
     "requests.defaultDeliveryAddress": "Adresse de livraison par défaut",
