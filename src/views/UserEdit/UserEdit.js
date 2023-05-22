@@ -66,8 +66,6 @@ class UserEdit extends React.Component {
       getSponsors,
       getPreferredServicePoint,
       getUserServicePoints,
-      resources,
-      stripes,
       match,
     } = this.props;
 
@@ -100,9 +98,6 @@ class UserEdit extends React.Component {
 
     return {
       ...userFormValues,
-      permissions: {
-        [stripes.okapi.tenant]: resources.permissions?.records,
-      },
       preferredServicePoint: getPreferredServicePoint(),
       proxies: getProxies(),
       sponsors: getSponsors(),

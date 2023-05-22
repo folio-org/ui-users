@@ -144,6 +144,10 @@ class PermissionsModal extends React.Component {
     if (this.props.tenantId !== prevProps.tenantId) {
       await this.initPermissionsModal();
     }
+
+    if (this.props.assignedPermissions !== prevProps.assignedPermissions) {
+      this.setAssignedPermissionIds(this.props.assignedPermissions.map(({ id }) => id));
+    }
   }
 
   componentWillUnmount() {
