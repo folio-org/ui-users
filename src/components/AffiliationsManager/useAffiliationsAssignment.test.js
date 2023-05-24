@@ -1,22 +1,16 @@
 import { act, renderHook } from '@folio/jest-config-stripes/testing-library/react-hooks';
 
-import affiliations from '../../../test/jest/fixtures/affiliations';
+import affiliations from 'fixtures/affiliations';
 import useAffiliationsAssignment from './useAffiliationsAssignment';
 
 const userAffiliations = affiliations.slice(0, 3);
 const tenants = affiliations.map(({ tenantId, tenantName }) => ({ id: tenantId, name: tenantName }));
-const onUnassignedCheck = jest.fn();
 
 describe('useAffiliationsAssignment', () => {
-  beforeEach(() => {
-    onUnassignedCheck.mockClear();
-  });
-
   it('should mark initial user\'s affiliations as assigned', async () => {
     const { result } = renderHook(() => useAffiliationsAssignment({
       affiliations: userAffiliations,
       tenants,
-      onUnassignedCheck,
     }));
 
     expect(result.current.totalAssigned).toEqual(3);
@@ -32,7 +26,6 @@ describe('useAffiliationsAssignment', () => {
     const { result } = renderHook(() => useAffiliationsAssignment({
       affiliations: userAffiliations,
       tenants,
-      onUnassignedCheck,
     }));
 
     act(() => result.current.toggle({ id: affiliations[0].tenantId }));
@@ -52,7 +45,6 @@ describe('useAffiliationsAssignment', () => {
     const { result } = renderHook(() => useAffiliationsAssignment({
       affiliations: userAffiliations,
       tenants,
-      onUnassignedCheck,
     }));
 
     act(() => result.current.toggleAll());
@@ -68,18 +60,5 @@ describe('useAffiliationsAssignment', () => {
     expect(result.current.assignment).toEqual(
       affiliations.reduce((acc, { tenantId }) => ({ ...acc, [tenantId]: false }), {}),
     );
-  });
-
-  it('should check user\'s unassigned affiliations when toggle an affiliation', async () => {
-    const { result } = renderHook(() => useAffiliationsAssignment({
-      affiliations: userAffiliations,
-      tenants,
-      onUnassignedCheck,
-    }));
-
-    act(() => result.current.toggle({ id: affiliations[0].tenantId }));
-    act(() => result.current.toggleAll());
-
-    expect(onUnassignedCheck).toHaveBeenCalledTimes(2);
   });
 });
