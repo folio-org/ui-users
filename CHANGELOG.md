@@ -40,6 +40,7 @@
 * Add/Edit a users permissions for associated affiliation(s). Refs UIU-2805.
 * New permission(s) to view all Users settings in UI. Refs UIU-2784.
 * Unassigning banner should not be displayed at top of "Assign / Unassign affiliation" modal. Refs UIU-2876.
+* Add user access to all feefines-related entries in settings if user has "...all feefines-related entries" perm. Refs UIU-2881.
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v9.0.0)
