@@ -667,7 +667,7 @@
         "displayName": "Settings (Users): Can create, edit and remove patron blocks limits",
         "subPermissions": [
           "ui-users.settings.conditions.edit",
-          "ui-users.settings.conditions.view",
+          "ui-users.settings.limits.view",
           "patron-block-limits.item.post",
           "patron-block-limits.item.put",
           "patron-block-limits.item.delete"
