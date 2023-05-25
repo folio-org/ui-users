@@ -38,6 +38,8 @@
 * In Loan Details record, display of staff info. Fixes UIU-2818.
 * Create tests for adding patron/staff info. Fixes UIU-2868.
 * Add/Edit a users permissions for associated affiliation(s). Refs UIU-2805.
+* New permission(s) to view all Users settings in UI. Refs UIU-2784.
+* Unassigning banner should not be displayed at top of "Assign / Unassign affiliation" modal. Refs UIU-2876.
 * Do not publish CI artifacts (e.g. test coverage) to NPM.
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
