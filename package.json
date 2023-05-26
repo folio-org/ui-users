@@ -339,7 +339,9 @@
           "ui-users.settings.refunds.all",
           "ui-users.settings.comments.all",
           "ui-users.settings.transfers.all",
-          "ui-users.settings.transfertypes.all"
+          "ui-users.settings.transfertypes.all",
+          "ui-users.settings.manual-charges.all",
+          "ui-plugin-bursar-export.bursar-exports.all"
         ],
         "visible": true
       },
