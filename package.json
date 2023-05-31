@@ -619,6 +619,7 @@
         "permissionName": "ui-users.settings.conditions.view",
         "displayName": "Settings (Users): Can view patron blocks conditions",
         "subPermissions": [
+          "settings.users.enabled",
           "patron-block-conditions.collection.get",
           "patron-block-conditions.item.get"
         ],
