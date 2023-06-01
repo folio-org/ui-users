@@ -257,7 +257,7 @@ class UserEdit extends React.Component {
       .catch((e) => showErrorCallout(e, this.context.sendCallout));
   }
 
-  async updatePermissions(userId, permissionsMap) {
+  async updatePermissions(userId, permissionsMap = {}) {
     const CHUNK_SIZE = 5;
 
     const result = await chunk(Object.entries(permissionsMap), CHUNK_SIZE)
