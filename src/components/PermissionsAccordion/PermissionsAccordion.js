@@ -69,7 +69,7 @@ const PermissionsAccordion = (props) => {
     setIsUnassignButtonEnable(isAllowedPermissions || isActionsDisabled);
   }, [isAllowedPermissions, isActionsDisabled]);
 
-  const addPermissions = (permissions) => {
+  const changePermissions = (permissions) => {
     change(permissionsField, permissions);
   };
 
@@ -202,6 +202,7 @@ const PermissionsAccordion = (props) => {
           getAssignedPermissions={getAssignedPermissions}
           showPerms={!!props.stripes?.config?.showPerms}
           permToDelete={permToDelete}
+          changePermissions={changePermissions}
         />
         <IfPermission perm={permToModify}>
           <Button
@@ -229,7 +230,7 @@ const PermissionsAccordion = (props) => {
           <PermissionModal
             tenantId={tenantId}
             assignedPermissions={assignedPermissions}
-            addPermissions={addPermissions}
+            addPermissions={changePermissions}
             open={permissionModalOpen}
             excludePermissionSets={excludePermissionSets}
             visibleColumns={visibleColumns}
