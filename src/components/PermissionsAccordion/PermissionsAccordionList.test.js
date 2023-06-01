@@ -35,6 +35,7 @@ describe('PermissionsAccordionList', () => {
       showPerms: true,
       getAssignedPermissions: () => perms,
       permToDelete: 'canDelete',
+      changePermissions: jest.fn(),
     };
 
     render(<PermissionsAccordionList {...palProps} />);
@@ -54,6 +55,7 @@ describe('PermissionsAccordionList', () => {
       showPerms: true,
       getAssignedPermissions: () => shuffled,
       permToDelete: 'canDelete',
+      changePermissions: jest.fn(),
     };
 
     render(<PermissionsAccordionList {...palProps} />);
@@ -72,6 +74,7 @@ describe('PermissionsAccordionList', () => {
       showPerms: true,
       getAssignedPermissions: () => perms,
       permToDelete: 'canDelete',
+      changePermissions: jest.fn(),
     };
 
     render(<PermissionsAccordionList {...palProps} />);
