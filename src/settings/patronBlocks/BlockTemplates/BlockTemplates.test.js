@@ -1,11 +1,11 @@
 import React from 'react';
-import { screen } from '@testing-library/react';
+import { screen } from '@folio/jest-config-stripes/testing-library/dom';
+
 import renderWithRouter from 'helpers/renderWithRouter';
 import '__mock__';
 import '__mock__/stripesSmartComponent.mock';
 import '__mock__/stripesCore.mock';
-import userEvent from '@testing-library/user-event';
-import BlockTemplates from './BlockTemplates';
+import BlockTemplates, { validate } from './BlockTemplates';
 
 jest.unmock('@folio/stripes/components');
 
@@ -46,7 +46,7 @@ const mutator = {
 };
 
 describe('BlockTemplates component', () => {
-  it('Permissions must be displayed', async () => {
+  it('displays templates', async () => {
     const props = {
       resources,
       mutator,
@@ -56,24 +56,15 @@ describe('BlockTemplates component', () => {
     expect(screen.getByText('circ-admin')).toBeTruthy();
     expect(screen.getByText('circ-observer')).toBeTruthy();
   });
-  it('Check for  before save and validate functions', () => {
-    const props = {
-      resources,
-      mutator,
-    };
-    renderBlockTemplates(props);
-    userEvent.click(screen.getByText('actions'));
-    userEvent.click(screen.getByText('emptyActions'));
-    expect(renderBlockTemplates(props)).toBeTruthy();
+
+  it('validate returns an error object on invalid data', () => {
+    const errors = validate({});
+    expect(Object.keys(errors)).toContain('displayName');
   });
-  it('component must render with empty data', () => {
-    const props = {
-      resources : {},
-      mutator,
-    };
-    renderBlockTemplates(props);
-    userEvent.click(screen.getByText('actions'));
-    userEvent.click(screen.getByText('emptyActions'));
-    expect(renderBlockTemplates(props)).toBeTruthy();
+
+  it('validate returns an empty object on valid data', () => {
+    const errors = validate({ name: 'thunder-chicken' });
+    expect(typeof errors).toBe('object');
+    expect(Object.keys(errors).length).toBe(0);
   });
 });
