@@ -1,11 +1,14 @@
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook } from '@folio/jest-config-stripes/testing-library/react-hooks';
 import {
   QueryClient,
   QueryClientProvider,
 } from 'react-query';
 import orderBy from 'lodash/orderBy';
 
-import { useOkapiKy } from '@folio/stripes/core';
+import {
+  useOkapiKy,
+  useStripes,
+} from '@folio/stripes/core';
 
 import affiliations from '../../../test/jest/fixtures/affiliations';
 import consortia from '../../../test/jest/fixtures/consortia';
@@ -14,15 +17,14 @@ import {
   CONSORTIA_USER_TENANTS_API,
   MAX_RECORDS,
 } from '../../constants';
-import useConsortium from '../useConsortium';
 import useUserAffiliations from './useUserAffiliations';
 
 jest.mock('@folio/stripes/core', () => ({
   ...jest.requireActual('@folio/stripes/core'),
   useNamespace: jest.fn(() => ['test']),
   useOkapiKy: jest.fn(),
+  useStripes: jest.fn(),
 }));
-jest.mock('../useConsortium', () => jest.fn());
 
 const queryClient = new QueryClient();
 
@@ -40,8 +42,10 @@ const response = {
 
 const consortium = {
   ...consortia[0],
-  centralTenant: 'mobius',
+  centralTenantId: 'mobius',
 };
+
+const tenants = affiliations.map(({ tenantId, tenantName, isPrimary }) => ({ id: tenantId, name: tenantName, isPrimary }));
 
 describe('useUserAffiliations', () => {
   const mockGet = jest.fn(() => ({
@@ -60,8 +64,12 @@ describe('useUserAffiliations', () => {
 
   beforeEach(() => {
     mockGet.mockClear();
-    useConsortium.mockClear().mockReturnValue({ consortium });
     useOkapiKy.mockClear().mockReturnValue(kyMock);
+    useStripes.mockClear().mockReturnValue({
+      user: {
+        user: { consortium, tenants },
+      }
+    });
   });
 
   it('should fetch user\'s consortium affiliations by user\'s id when there is consortium', async () => {
@@ -79,10 +87,10 @@ describe('useUserAffiliations', () => {
   });
 
   it('should not fetch user\'s consortium affiliations by user\'s id when there is not consortium', async () => {
-    useConsortium.mockClear().mockReturnValue({ consortium: {} });
+    useStripes.mockClear().mockReturnValue({ a: 1 });
 
     const userId = 'usedId';
-    const { result, waitFor } = renderHook(() => useUserAffiliations({ userId }), { wrapper });
+    const { result, waitFor } = renderHook(() => useUserAffiliations({ userId }, { assignedToCurrentUser: false }), { wrapper });
 
     await waitFor(() => !result.current.isLoading);
 

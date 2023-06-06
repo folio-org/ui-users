@@ -1,10 +1,13 @@
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook } from '@folio/jest-config-stripes/testing-library/react-hooks';
 import {
   QueryClient,
   QueryClientProvider,
 } from 'react-query';
 
-import { useOkapiKy } from '@folio/stripes/core';
+import {
+  useOkapiKy,
+  useStripes,
+} from '@folio/stripes/core';
 
 import affiliations from '../../../test/jest/fixtures/affiliations';
 import consortia from '../../../test/jest/fixtures/consortia';
@@ -13,15 +16,14 @@ import {
   CONSORTIA_TENANTS_API,
   MAX_RECORDS,
 } from '../../constants';
-import useConsortium from '../useConsortium';
 import useConsortiumTenants from './useConsortiumTenants';
 
 jest.mock('@folio/stripes/core', () => ({
   ...jest.requireActual('@folio/stripes/core'),
   useNamespace: jest.fn(() => ['test']),
   useOkapiKy: jest.fn(),
+  useStripes: jest.fn(),
 }));
-jest.mock('../useConsortium', () => jest.fn());
 
 const queryClient = new QueryClient();
 
@@ -34,7 +36,7 @@ const wrapper = ({ children }) => (
 
 const consortium = {
   ...consortia[0],
-  centralTenant: 'mobius',
+  centralTenantId: 'mobius',
 };
 
 const response = {
@@ -59,8 +61,12 @@ describe('useConsortiumTenants', () => {
 
   beforeEach(() => {
     mockGet.mockClear();
-    useConsortium.mockClear().mockReturnValue({ consortium });
     useOkapiKy.mockClear().mockReturnValue(kyMock);
+    useStripes.mockClear().mockReturnValue({
+      user: {
+        user: { consortium },
+      }
+    });
   });
 
   it('should fetch consortium tenants', async () => {

@@ -52,6 +52,7 @@ import {
 } from '../../components/UserDetailSections';
 
 import HelperApp from '../../components/HelperApp';
+import IfConsortium from '../../components/IfConsortium';
 import {
   PatronBlockMessage
 } from '../../components/PatronBlock';
@@ -71,6 +72,7 @@ import ErrorPane from '../../components/ErrorPane';
 import ActionMenuEditButton from './components/ActionMenuEditButton';
 import ActionMenuDeleteButton from './components/ActionMenuDeleteButton';
 import LostItemsLink from '../../components/LostItemsLink';
+import IfConsortiumPermission from '../../components/IfConsortiumPermission';
 
 class UserDetail extends React.Component {
   static propTypes = {
@@ -698,8 +700,8 @@ class UserDetail extends React.Component {
                   onToggle={this.handleSectionToggle}
                 />
 
-                <IfInterface name="consortia">
-                  <IfPermission perm="consortia.user-tenants.collection.get">
+                <IfConsortium>
+                  <IfConsortiumPermission perm="consortia.user-tenants.collection.get">
                     <UserAffiliations
                       accordionId="affiliationsSection"
                       expanded={sections.affiliationsSection}
@@ -707,8 +709,8 @@ class UserDetail extends React.Component {
                       userId={user?.id}
                       userName={user?.username}
                     />
-                  </IfPermission>
-                </IfInterface>
+                  </IfConsortiumPermission>
+                </IfConsortium>
 
                 <IfInterface name="feesfines">
                   {hasPatronBlocksPermissions &&

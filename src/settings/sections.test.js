@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render } from '@folio/jest-config-stripes/testing-library/react';
 import { sortBy } from 'lodash';
 import { FormattedMessage } from 'react-intl';
 

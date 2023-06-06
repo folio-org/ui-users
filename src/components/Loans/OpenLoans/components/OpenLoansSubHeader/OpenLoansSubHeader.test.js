@@ -2,7 +2,7 @@ import okapiCurrentUser from 'fixtures/okapiCurrentUser';
 import {
   screen,
   fireEvent,
-} from '@testing-library/react';
+} from '@folio/jest-config-stripes/testing-library/react';
 
 import renderWithRouter from 'helpers/renderWithRouter';
 import loans from 'fixtures/openLoans';
@@ -127,7 +127,7 @@ describe('Given OpenLoansSubHeader', () => {
   it('should display visible columns in dropdown options', () => {
     renderOpenLoansSubHeader(props);
 
-    fireEvent.click(screen.getByRole('button', { name: 'Icon' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Icon (triangle-down)' }));
 
     dropdownOptions.forEach((option) => {
       expect(screen.getByText(option)).toBeDefined();
@@ -137,7 +137,7 @@ describe('Given OpenLoansSubHeader', () => {
   it('should have all visible columns checked', () => {
     renderOpenLoansSubHeader(props);
 
-    fireEvent.click(screen.getByRole('button', { name: 'Icon' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Icon (triangle-down)' }));
 
     dropdownOptions.forEach((option) => {
       expect(screen.getByRole('checkbox', { name: option })).toBeChecked();
@@ -148,7 +148,7 @@ describe('Given OpenLoansSubHeader', () => {
     it('should handle toggleColumn', () => {
       renderOpenLoansSubHeader(props);
 
-      fireEvent.click(screen.getByRole('button', { name: 'Icon' }));
+      fireEvent.click(screen.getByRole('button', { name: 'Icon (triangle-down)' }));
       fireEvent.click(screen.getByRole('checkbox', { name: 'Item title' }));
 
       expect(toggleColumn).toHaveBeenCalledWith('title');

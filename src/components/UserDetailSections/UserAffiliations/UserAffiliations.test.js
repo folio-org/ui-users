@@ -1,15 +1,15 @@
 import {
   screen,
   waitForElementToBeRemoved,
-} from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+} from '@folio/jest-config-stripes/testing-library/react';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import {
   QueryClient,
   QueryClientProvider,
 } from 'react-query';
 import renderWithRouter from 'helpers/renderWithRouter';
 
-import affiliations from '../../../../test/jest/fixtures/affiliations';
+import affiliations from 'fixtures/affiliations';
 import {
   useConsortiumTenants,
   useUserAffiliations,
@@ -27,6 +27,7 @@ jest.mock('../../../hooks', () => ({
   useUserAffiliations: jest.fn(),
   useUserAffiliationsMutation: jest.fn(),
 }));
+jest.mock('../../IfConsortiumPermission', () => jest.fn(({ children }) => children));
 
 jest.mock('./util', () => ({
   getResponseErrors: jest.fn(() => []),

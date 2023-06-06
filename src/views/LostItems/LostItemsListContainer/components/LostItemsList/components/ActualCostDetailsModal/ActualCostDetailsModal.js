@@ -77,21 +77,21 @@ const ActualCostDetailsModal = ({
           {
             actualCostRecord.status === LOST_ITEM_STATUSES.BILLED
               ? <FormattedMessage
-                id="ui-users.lostItems.modal.summaryMessageCharged"
-                values={{
-                  actualCostToBill: getActualCostToBillViewValue(actualCostToBill),
-                  patronName,
-                  instanceTitle,
-                  materialType,
-                }}
+                  id="ui-users.lostItems.modal.summaryMessageCharged"
+                  values={{
+                    actualCostToBill: getActualCostToBillViewValue(actualCostToBill),
+                    patronName,
+                    instanceTitle,
+                    materialType,
+                  }}
               />
               : <FormattedMessage
-                id="ui-users.lostItems.modal.summaryMessageNotCharged"
-                values={{
-                  patronName,
-                  instanceTitle,
-                  materialType,
-                }}
+                  id="ui-users.lostItems.modal.summaryMessageNotCharged"
+                  values={{
+                    patronName,
+                    instanceTitle,
+                    materialType,
+                  }}
               />
           }
         </Col>

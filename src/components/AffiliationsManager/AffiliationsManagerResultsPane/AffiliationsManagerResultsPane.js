@@ -4,7 +4,6 @@ import { FormattedMessage } from 'react-intl';
 
 import {
   Checkbox,
-  MessageBanner,
   MultiColumnList,
   Pane,
   PaneMenu,
@@ -56,7 +55,6 @@ const AffiliationsManagerResultsPane = ({
   assignment,
   changeSorting,
   contentData,
-  displayWarning,
   isAllAssigned,
   isFiltersVisible,
   isLoading,
@@ -99,12 +97,6 @@ const AffiliationsManagerResultsPane = ({
       paneSub={paneSub}
       firstMenu={firstMenu}
     >
-      <MessageBanner
-        show={displayWarning}
-        type="warning"
-      >
-        <FormattedMessage id="ui-users.affiliations.manager.modal.warning.unassigned" />
-      </MessageBanner>
       <MultiColumnList
         id="user-affiliations-list"
         columnIdPrefix="affiliations-manager"
@@ -126,7 +118,6 @@ AffiliationsManagerResultsPane.propTypes = {
   assignment: PropTypes.object.isRequired,
   changeSorting: PropTypes.func.isRequired,
   contentData: PropTypes.arrayOf(PropTypes.object).isRequired,
-  displayWarning: PropTypes.bool.isRequired,
   isAllAssigned: PropTypes.bool.isRequired,
   isFiltersVisible: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
