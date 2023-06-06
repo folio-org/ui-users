@@ -1,6 +1,6 @@
 
-import { screen, waitFor, cleanup } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { screen, waitFor, cleanup } from '@folio/jest-config-stripes/testing-library/react';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
 import '__mock__/stripesCore.mock';
 

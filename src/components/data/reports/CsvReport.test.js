@@ -1,5 +1,5 @@
 import options from '__mock__/csvReportData.mock';
-import { waitFor } from '@testing-library/react';
+import { waitFor } from '@folio/jest-config-stripes/testing-library/react';
 // eslint-disable-next-line no-unused-vars
 import moment from 'moment-timezone';
 import CsvReport from './CsvReport';

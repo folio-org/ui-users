@@ -1,4 +1,4 @@
-import { screen, within } from '@testing-library/react';
+import { screen, within } from '@folio/jest-config-stripes/testing-library/react';
 import user from 'fixtures/okapiCurrentUser';
 
 import renderWithRouter from 'helpers/renderWithRouter';

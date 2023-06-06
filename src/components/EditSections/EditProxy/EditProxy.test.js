@@ -1,6 +1,6 @@
 
 import user from 'fixtures/okapiCurrentUser';
-import { screen, cleanup } from '@testing-library/react';
+import { screen, cleanup } from '@folio/jest-config-stripes/testing-library/react';
 import { Form } from 'react-final-form';
 
 import renderWithRouter from 'helpers/renderWithRouter';

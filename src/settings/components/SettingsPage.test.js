@@ -3,7 +3,7 @@ import { Router } from 'react-router-dom';
 import {
   render,
   cleanup,
-} from '@testing-library/react';
+} from '@folio/jest-config-stripes/testing-library/react';
 import { createMemoryHistory } from 'history';
 import { FormattedMessage } from 'react-intl';
 

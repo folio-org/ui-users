@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '@folio/jest-config-stripes/testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import buildStripes from '__mock__/stripes.mock';
