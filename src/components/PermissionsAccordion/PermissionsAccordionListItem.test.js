@@ -1,6 +1,6 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen } from '@folio/jest-config-stripes/testing-library/react';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
 import '__mock__/reactFinalFormArrays.mock';
 import '__mock__/intl.mock';
@@ -22,6 +22,7 @@ describe('PermissionsAccordionListItem', () => {
       },
       permToDelete: 'arugula',
       fields: {},
+      changePermissions: jest.fn(),
     };
 
     render(<PermissionsAccordionListItem {...palProps} />);
@@ -38,6 +39,7 @@ describe('PermissionsAccordionListItem', () => {
         },
         permToDelete: 'permission',
         fields: {},
+        changePermissions: jest.fn(),
       };
 
       render(<PermissionsAccordionListItem {...palProps} />);
@@ -45,21 +47,24 @@ describe('PermissionsAccordionListItem', () => {
     });
 
     test('clicking button fires callback', async () => {
+      const item = {
+        id: 123,
+        permissionName: 'funky',
+      };
       const palProps = {
-        item: {
-          id: 123,
-          permissionName: 'funky',
-        },
+        item,
+        index: 0,
         permToDelete: 'permission',
         fields: {
-          remove: jest.fn()
+          value: [{}, item],
         },
+        changePermissions: jest.fn(),
       };
 
       render(<PermissionsAccordionListItem {...palProps} />);
       userEvent.click(screen.getByRole('button'));
 
-      expect(palProps.fields.remove).toHaveBeenCalled();
+      expect(palProps.changePermissions).toHaveBeenCalledWith([item]);
     });
 
     test('hides button without permission', async () => {
@@ -70,8 +75,9 @@ describe('PermissionsAccordionListItem', () => {
         },
         permToDelete: 'nope',
         fields: {
-          remove: jest.fn()
+          value: [],
         },
+        changePermissions: jest.fn(),
       };
 
       render(<PermissionsAccordionListItem {...palProps} />);

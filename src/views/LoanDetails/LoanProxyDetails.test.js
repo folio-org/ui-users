@@ -1,4 +1,4 @@
-import { screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@folio/jest-config-stripes/testing-library/react';
 import user from 'fixtures/okapiCurrentUser';
 
 import renderWithRouter from 'helpers/renderWithRouter';

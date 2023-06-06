@@ -9,7 +9,7 @@ import { stripesConnect } from '@folio/stripes/core';
 import BlockTemplateDetails from './BlockTemplateDetails';
 import BlockTemplateForm from './BlockTemplateForm';
 
-function validate(values) {
+export function validate(values) {
   const errors = {};
   if (!values.name) {
     errors.displayName = (

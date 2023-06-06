@@ -1,4 +1,4 @@
-import { fireEvent, screen } from '@testing-library/react';
+import { fireEvent, screen } from '@folio/jest-config-stripes/testing-library/react';
 
 import renderWithRouter from 'helpers/renderWithRouter';
 import PatronBlockModalWithOverrideModal from './PatronBlockModalWithOverrideModal';

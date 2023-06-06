@@ -3,9 +3,9 @@ import React from 'react';
 import {
   screen,
   cleanup,
-} from '@testing-library/react';
-import { within } from '@testing-library/dom';
-import userEvent from '@testing-library/user-event';
+} from '@folio/jest-config-stripes/testing-library/react';
+import { within } from '@folio/jest-config-stripes/testing-library/dom';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
 import renderWithRouter from 'helpers/renderWithRouter';
 import PatronBlockForm from './PatronBlockForm';

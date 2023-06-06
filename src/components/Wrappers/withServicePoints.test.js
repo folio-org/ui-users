@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen } from '@folio/jest-config-stripes/testing-library/react';
 import PropTypes from 'prop-types';
 import '__mock__/currencyData.mock';
 import okapiCurrentUser from 'fixtures/okapiCurrentUser';

@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { render } from '@folio/jest-config-stripes/testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { NoteEditPage } from '@folio/stripes/smart-components';
 import NoteEditRoute from './NoteEditPage';

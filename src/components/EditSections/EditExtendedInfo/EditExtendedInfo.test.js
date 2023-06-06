@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen } from '@folio/jest-config-stripes/testing-library/react';
 import { Form } from 'react-final-form';
 import PropTypes from 'prop-types';
 

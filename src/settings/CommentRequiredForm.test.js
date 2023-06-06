@@ -1,7 +1,7 @@
 import React from 'react';
-import userEvent from '@testing-library/user-event';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
-import { screen } from '@testing-library/react';
+import { screen } from '@folio/jest-config-stripes/testing-library/react';
 import { Form } from 'react-final-form';
 
 import renderWithRouter from 'helpers/renderWithRouter';

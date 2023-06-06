@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '@folio/jest-config-stripes/testing-library/react';
 
 import '__mock__/stripesCore.mock';
 import '__mock__/stripesSmartComponent.mock';
@@ -66,6 +66,20 @@ const mutatorSuccess = {
     DELETE: jest.fn(),
     cancel: jest.fn(),
   },
+  patronInfo: {
+    POST: jest.fn(),
+    // eslint-disable-next-line prefer-promise-reject-errors
+    PUT: () => new Promise((resolve, _) => { resolve(); }),
+    DELETE: jest.fn(),
+    cancel: jest.fn(),
+  },
+  staffInfo: {
+    POST: jest.fn(),
+    // eslint-disable-next-line prefer-promise-reject-errors
+    PUT: () => new Promise((resolve, _) => { resolve(); }),
+    DELETE: jest.fn(),
+    cancel: jest.fn(),
+  },
   feefineshistory: {
     POST: jest.fn(),
     PUT: jest.fn(),
@@ -102,6 +116,18 @@ const mutator = {
   markAsMissing: {
     POST: () => mockErrorRespose(),
     PUT: jest.fn(),
+    DELETE: jest.fn(),
+    cancel: jest.fn(),
+  },
+  patronInfo: {
+    POST: jest.fn(),
+    PUT: () => mockErrorRespose(),
+    DELETE: jest.fn(),
+    cancel: jest.fn(),
+  },
+  staffInfo: {
+    POST: jest.fn(),
+    PUT: () => mockErrorRespose(),
     DELETE: jest.fn(),
     cancel: jest.fn(),
   },
@@ -308,6 +334,40 @@ describe('Modal Content', () => {
     };
     renderModalContent(props);
     expect(screen.getByText('ui-users.loans.markAsMissingDialogBody')).toBeDefined();
+
+    fireEvent.change(document.querySelector('[data-test-additional-info-textarea="true"]'), { target: {
+      value: 'test'
+    } });
+
+    fireEvent.click(document.querySelector('[data-test-dialog-confirm-button="true"]'));
+  });
+
+  it('Adds patron information', async () => {
+    const actionName = 'claimedReturned';
+    const props = {
+      ...commonProps,
+      loan: loan(actionName),
+      loanAction: 'patronInfo',
+    };
+    renderModalContent(props);
+    expect(screen.getByText('ui-users.loans.patronInfoDialogBody')).toBeDefined();
+
+    fireEvent.change(document.querySelector('[data-test-additional-info-textarea="true"]'), { target: {
+      value: 'test'
+    } });
+
+    fireEvent.click(document.querySelector('[data-test-dialog-confirm-button="true"]'));
+  });
+
+  it('Adds staff information', async () => {
+    const actionName = 'claimedReturned';
+    const props = {
+      ...commonProps,
+      loan: loan(actionName),
+      loanAction: 'staffInfo',
+    };
+    renderModalContent(props);
+    expect(screen.getByText('ui-users.loans.staffInfoDialogBody')).toBeDefined();
 
     fireEvent.change(document.querySelector('[data-test-additional-info-textarea="true"]'), { target: {
       value: 'test'
