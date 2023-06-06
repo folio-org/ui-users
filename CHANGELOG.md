@@ -43,6 +43,7 @@
 * Add user access to all feefines-related entries in settings if user has "...all feefines-related entries" perm. Refs UIU-2881.
 * Do not publish CI artifacts (e.g. test coverage) to NPM.
 * Make Limit menu visible if user has "ui-users.settings.limits.all" permission. Refs UIU-2880.
+* In loan history, older staff notes should NOT be marked as "SUPERSEDED". Fixes UIU-2891.
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v9.0.0)
