@@ -74,6 +74,7 @@ describe('ProxyEditItem', () => {
   beforeEach(() => {
     jest.clearAllTimers();
   });
+
   it('Component should render ', () => {
     renderProxyEditItem(props);
     expect(screen.getByRole('combobox', { name: /ui-users.proxy.requestForSponsor/i })).toBeInTheDocument();
@@ -81,6 +82,7 @@ describe('ProxyEditItem', () => {
     expect(screen.getByRole('combobox', { name: /ui-users.proxy.notificationsTo/i })).toBeInTheDocument();
     expect(screen.getByRole('textbox', { name: /ui-users.expirationDate/i })).toBeInTheDocument();
   });
+
   it('updateStatus to be called', () => {
     renderProxyEditItem(props);
     const expirationDate = screen.getByRole('textbox', { name: /ui-users.expirationDate/i });
@@ -90,6 +92,7 @@ describe('ProxyEditItem', () => {
     expect(screen.getByRole('textbox', { name: /ui-users.expirationDate/i })).toHaveDisplayValue('2023-11-30');
     expect(changeMock).toBeCalled();
   });
+
   it('updateStatus to be called when props data is updated', () => {
     renderProxyEditItem(props);
     renderProxyEditItem({
@@ -109,9 +112,10 @@ describe('ProxyEditItem', () => {
     }, { rerender: true });
     expect(changeMock).toBeCalled();
   });
+
   it('onDelete to be called ', async () => {
     renderProxyEditItem(props);
-    const button = screen.getByRole('button', { name: /Icon Delete/i });
+    const button = screen.getByRole('button', { name: 'Icon (trash) Delete' });
     userEvent.click(button);
     expect(deleteMock).toBeCalled();
   });

@@ -57,7 +57,7 @@ describe('BlockTemplateForm', () => {
   it('should disable the save button when pristine or submitting', () => {
     const saveButton = screen.getByRole('button', { name: 'ui-users.saveAndClose' });
     expect(saveButton).toBeDisabled();
-    const templateInformationButton = screen.getByRole('button', { name: 'Icon ui-users.manualBlockTemplates.templateInformation' });
+    const templateInformationButton = screen.getByRole('button', { name: 'Icon (caret-up) ui-users.manualBlockTemplates.templateInformation' });
     userEvent.click(templateInformationButton);
   });
   it('should call onCancel when "Cancel" button is clicked', () => {
