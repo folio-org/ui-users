@@ -9114,7 +9114,7 @@ postcss-calc@^8.2.4:
     postcss-selector-parser "^6.0.9"
     postcss-value-parser "^4.2.0"
 
-"postcss-color-function@github:folio-org/postcss-color-function":
+postcss-color-function@folio-org/postcss-color-function:
   version "4.1.0"
   resolved "https://codeload.github.com/folio-org/postcss-color-function/tar.gz/c128aad740ae740fb571c4b6493f467dd51efe85"
   dependencies:
