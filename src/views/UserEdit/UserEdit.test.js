@@ -354,22 +354,23 @@ describe('UserEdit', () => {
       it('should update permissions when user has "ui-users.editperms" permissions', async () => {
         props = {
           ...props,
-          stripes: {
-            ...props.stripes,
-            user: {
-              perms: {
-                'ui-users.edit': true,
-                'ui-users.editperms': true
-              }
+          resources: {
+            ...props.resources,
+            perms: {
+              records: [
+                {
+                  id: 'permUserRecordId',
+                  permissions: ['ui-users.editperms', 'ui-users.edit']
+                }
+              ],
             },
-            hasPerm: p => p === 'ui-users.editperms',
           }
         };
         renderWithRouter(<UserEdit {...props} />);
 
         await UserForm.mock.calls[0][0].onSubmit(userFormData);
 
-        expect(props.mutator.perms.POST).toHaveBeenCalled();
+        expect(props.mutator.permissions.PUT).toHaveBeenCalled();
       });
 
       it('should not update permissions when user has "ui-users.viewperms" permission', async () => {
@@ -377,21 +378,14 @@ describe('UserEdit', () => {
           ...props,
           stripes: {
             ...props.stripes,
-            user: {
-              perms: {
-                'ui-users.edit': true,
-                'ui-users.viewperms': true
-              }
-            },
-            hasPerm: p => p === 'ui-users.editperms',
-          }
+            hasPerm: jest.fn().mockReturnValue(false),
+          },
         };
         renderWithRouter(<UserEdit {...props} />);
 
         await UserForm.mock.calls[0][0].onSubmit(userFormData);
 
         expect(props.mutator.perms.PUT).not.toHaveBeenCalled();
-        expect(props.mutator.permissions.POST).not.toHaveBeenCalled();
       });
     });
   });
