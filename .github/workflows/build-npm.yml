@@ -38,7 +38,7 @@ jobs:
           fetch-depth: 0
 
       - name: Use composite action for yarn based steps
-        uses: actions/build-npm-action@v0.1
+        uses: ankitasen-ubmainz/build-npm-action@v0.1
 
       - name: Generate Module descriptor
         if: ${{ env.PUBLISH_MOD_DESCRIPTOR == 'true' }}
