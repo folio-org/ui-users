@@ -350,8 +350,8 @@ describe('UserEdit', () => {
       expect(props.updateServicePoints).toHaveBeenCalled();
     });
 
-    describe('when user has user profile edit and also permissions to assign or uassign user permissions', () => {
-      it('should update permissions', async () => {
+    describe('when user has user profile edit', () => {
+      it('should update permissions when user has "ui-users.editperms" permissions', async () => {
         props = {
           ...props,
           stripes: {
@@ -371,10 +371,8 @@ describe('UserEdit', () => {
 
         expect(props.mutator.perms.POST).toHaveBeenCalled();
       });
-    });
 
-    describe('when user has user profile edit and also permissions to view permissions assigned to user', () => {
-      it('should not update permissions', async () => {
+      it('should not update permissions when user has "ui-users.viewperms" permission', async () => {
         props = {
           ...props,
           stripes: {
@@ -393,6 +391,7 @@ describe('UserEdit', () => {
         await UserForm.mock.calls[0][0].onSubmit(userFormData);
 
         expect(props.mutator.perms.PUT).not.toHaveBeenCalled();
+        expect(props.mutator.permissions.POST).not.toHaveBeenCalled();
       });
     });
   });
