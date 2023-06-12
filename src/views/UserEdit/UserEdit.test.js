@@ -371,7 +371,9 @@ describe('UserEdit', () => {
 
         expect(props.mutator.perms.POST).toHaveBeenCalled();
       });
+    });
 
+    describe('when user has user profile edit and also permissions to view permissions assigned to user', () => {
       it('should not update permissions', async () => {
         props = {
           ...props,

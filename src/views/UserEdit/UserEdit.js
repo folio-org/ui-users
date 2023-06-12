@@ -203,7 +203,6 @@ class UserEdit extends React.Component {
       stripes,
     } = this.props;
 
-    console.log('update ');
     const user = cloneDeep(userFormData);
     const prevUser = resources?.selUser?.records?.[0] ?? {};
 
@@ -225,7 +224,6 @@ class UserEdit extends React.Component {
     }
 
     if (stripes.hasPerm('ui-users.editperms')) {
-      console.log("[update method] stripes.hasPerm('ui-users.editperms') ", stripes.hasPerm('ui-users.editperms'));
       this.updatePermissions(user.id, permissions);
     }
 
@@ -262,7 +260,6 @@ class UserEdit extends React.Component {
   }
 
   async updatePermissions(userId, permissionsMap = {}) {
-    console.log('[updatePermissions method] ');
     const CHUNK_SIZE = 5;
 
     const result = await chunk(Object.entries(permissionsMap), CHUNK_SIZE)
@@ -279,7 +276,6 @@ class UserEdit extends React.Component {
   }
 
   updateUserTenantPermissions = async (userId, permissions, tenant) => {
-    console.log('[updateUserTenantPermissions method] permissions ', permissions);
     const { stripes } = this.props;
 
     // the perms parameter is an array of permission objects, but the permissions API
