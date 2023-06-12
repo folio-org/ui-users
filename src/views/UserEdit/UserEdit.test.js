@@ -94,6 +94,7 @@ describe('UserEdit', () => {
       },
       perms: {
         POST: jest.fn().mockResolvedValue({ data: {} }),
+        PUT: jest.fn().mockResolvedValue({ data: {} }),
       },
       permissions: {
         POST: jest.fn().mockResolvedValue({ data: {} }),
@@ -357,6 +358,7 @@ describe('UserEdit', () => {
             ...props.stripes,
             user: {
               perms: {
+                'ui-users.edit': true,
                 'ui-users.editperms': true
               }
             },
@@ -368,6 +370,27 @@ describe('UserEdit', () => {
         await UserForm.mock.calls[0][0].onSubmit(userFormData);
 
         expect(props.mutator.perms.POST).toHaveBeenCalled();
+      });
+
+      it('should not update permissions', async () => {
+        props = {
+          ...props,
+          stripes: {
+            ...props.stripes,
+            user: {
+              perms: {
+                'ui-users.edit': true,
+                'ui-users.viewperms': true
+              }
+            },
+            hasPerm: p => p === 'ui-users.editperms',
+          }
+        };
+        renderWithRouter(<UserEdit {...props} />);
+
+        await UserForm.mock.calls[0][0].onSubmit(userFormData);
+
+        expect(props.mutator.perms.PUT).not.toHaveBeenCalled();
       });
     });
   });
