@@ -328,6 +328,7 @@ describe('UserEdit', () => {
     expect(container.querySelector('#clickable-cancel')).toBeInTheDocument();
     expect(container.querySelector('#clickable-save')).toBeInTheDocument();
   });
+
   it('should cancel form', async () => {
     const { container } = renderWithRouter(<UserEdit {...props} />);
     const submitButton = container.querySelector('#clickable-cancel');
@@ -346,6 +347,28 @@ describe('UserEdit', () => {
       expect(props.updateProxies).toHaveBeenCalled();
       expect(props.updateSponsors).toHaveBeenCalled();
       expect(props.updateServicePoints).toHaveBeenCalled();
+    });
+
+    describe('when user has user profile edit and also permissions to assign or uassign user permissions', () => {
+      it('should update permissions', async () => {
+        props = {
+          ...props,
+          stripes: {
+            ...props.stripes,
+            user: {
+              perms: {
+                'ui-users.editperms': true
+              }
+            },
+            hasPerm: p => p === 'ui-users.editperms',
+          }
+        };
+        renderWithRouter(<UserEdit {...props} />);
+
+        await UserForm.mock.calls[0][0].onSubmit(userFormData);
+
+        expect(props.mutator.perms.POST).toHaveBeenCalled();
+      });
     });
   });
 });

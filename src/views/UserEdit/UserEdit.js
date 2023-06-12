@@ -223,7 +223,7 @@ class UserEdit extends React.Component {
       updateSponsors(sponsors || []);
     }
 
-    if (stripes.hasPerm('perms.permissions.item.put,perms.permissions.item.post')) {
+    if (stripes.hasPerm('ui-users.editperms')) {
       this.updatePermissions(user.id, permissions);
     }
 
