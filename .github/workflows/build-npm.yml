@@ -37,46 +37,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup kernel for react native, increase watchers
-        run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
-      - name: Use Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.NODEJS_VERSION }}
-          check-latest: true
-          always-auth: true
-
-      - name: Set yarn config
-        run: yarn config set @folio:registry $FOLIO_NPM_REGISTRY
-
-      - name: Set FOLIO NPM snapshot version
-        run: |
-          git clone https://github.com/folio-org/folio-tools.git
-          npm --no-git-tag-version version `folio-tools/github-actions-scripts/folioci_npmver.sh`
-          rm -rf folio-tools
-        env:
-          JOB_ID: ${{ github.run_number }}
-
-      - name: Run yarn install
-        run: yarn install --ignore-scripts --frozen-lockfile
-
-      - name: Run yarn list
-        run: yarn list --pattern @folio
-
-      - name: Run yarn lint
-        run: yarn lint
-        continue-on-error: true
-
-      - name: Get number of CPU cores
-        id: cpu-cores
-        uses: SimenB/github-actions-cpu-cores@v1
-
-      - name: Run yarn test
-        run: xvfb-run --server-args="-screen 0 1024x768x24" yarn test $YARN_TEST_OPTIONS  --max-workers ${{ steps.cpu-cores.outputs.count }}
-
-      - name: Run yarn formatjs-compile
-        if : ${{ env.COMPILE_TRANSLATION_FILES == 'true' }}
-        run: yarn formatjs-compile
+      - name: Use composite action for yarn based steps
+        uses: actions/build-npm-action@v0.1
 
       - name: Generate Module descriptor
         if: ${{ env.PUBLISH_MOD_DESCRIPTOR == 'true' }}
