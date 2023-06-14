@@ -1,9 +1,7 @@
 // withMarkAsMissing.js is the model for this
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-
 import LoanActionDialog from '../LoanActionDialog';
-
 import { loanActionMutators } from '../../constants';
 
 const withAddInfo = WrappedComponent => class withAddInfoComponent extends React.Component {
