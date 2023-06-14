@@ -63,7 +63,7 @@ function formatLoanAction(la, loanActionsWithUser) {
   const isFirst = (actionsOfThisType[0].metadata.updatedDate === la.metadata.updatedDate);
 
   const translationTag = (
-    ((la.action === 'patronInfo') && !isFirst) ?
+    ((la.action === 'patronInfoAdded') && !isFirst) ?
       loanActionMap[la.action] + '.superseded' :
       loanActionMap[la.action] ??
       loanActionMap.unknownAction
