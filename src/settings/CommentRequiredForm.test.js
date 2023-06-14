@@ -41,7 +41,7 @@ describe('CommentRequiredForm', () => {
       pristine: false,
       submitting: false,
       intl: {
-        formatMessage: jest.fn()
+        formatMessage: ({ id }) => <span>{id}</span>
       }
     };
     renderCommentRequiredForm(props);
@@ -54,7 +54,7 @@ describe('CommentRequiredForm', () => {
       pristine: false,
       submitting: false,
       intl: {
-        formatMessage: jest.fn()
+        formatMessage: ({ id }) => <span>{id}</span>
       }
     };
     renderCommentRequiredForm(props);
