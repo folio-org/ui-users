@@ -15,7 +15,7 @@ export default {
   'checkedInReturnedByPatron': 'ui-users.data.loanActionMap.checkedInReturnedByPatron',
   'checkedInFoundByLibrary': 'ui-users.data.loanActionMap.checkedInFoundByLibrary',
   'itemAgedToLost': 'ui-users.data.loanActionMap.itemAgedToLost',
-  'patronInfo': 'ui-users.data.loanActionMap.patronInfo',
-  'staffInfo': 'ui-users.data.loanActionMap.staffInfo',
+  'patronInfoAdded': 'ui-users.data.loanActionMap.patronInfo',
+  'staffInfoAdded': 'ui-users.data.loanActionMap.staffInfo',
   'unknownAction': 'ui-users.data.loanActionMap.unknownAction',
 };
