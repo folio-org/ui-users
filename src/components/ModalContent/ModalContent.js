@@ -49,15 +49,15 @@ class ModalContent extends React.Component {
     patronInfo: {
       type: 'okapi',
       fetch: false,
-      PUT: {
-        path: 'circulation/loans/!{loan.id}',
+      POST: {
+        path: 'circulation/loans/!{loan.id}/add-info',
       },
     },
     staffInfo: {
       type: 'okapi',
       fetch: false,
-      PUT: {
-        path: 'circulation/loans/!{loan.id}',
+      POST: {
+        path: 'circulation/loans/!{loan.id}/add-info',
       },
     },
     cancel: {
@@ -88,10 +88,10 @@ class ModalContent extends React.Component {
         POST: PropTypes.func.isRequired,
       }).isRequired,
       patronInfo: PropTypes.shape({
-        PUT: PropTypes.func.isRequired,
+        POST: PropTypes.func.isRequired,
       }).isRequired,
       staffInfo: PropTypes.shape({
-        PUT: PropTypes.func.isRequired,
+        POST: PropTypes.func.isRequired,
       }).isRequired,
       cancel: PropTypes.shape({
         POST: PropTypes.func.isRequired,
@@ -142,7 +142,6 @@ class ModalContent extends React.Component {
     const { additionalInfo } = this.state;
 
     const {
-      loan,
       loanAction,
       stripes: {
         user: {
@@ -159,9 +158,9 @@ class ModalContent extends React.Component {
     } = this.props;
 
     const isInfo = (loanAction === 'patronInfo' || loanAction === 'staffInfo');
-    const mutatorFunction = this.props.mutator[loanAction][isInfo ? 'PUT' : 'POST'];
+    const mutatorFunction = this.props.mutator[loanAction].POST;
     const requestData = isInfo ?
-      { ...loan, action: loanAction, actionComment: additionalInfo } :
+      { action: loanAction === 'patronInfo' ? 'patronInfoAdded' : 'staffInfoAdded', actionComment: additionalInfo } :
       { comment: additionalInfo };
 
     if (loanAction === loanActionMutators.CLAIMED_RETURNED) {
