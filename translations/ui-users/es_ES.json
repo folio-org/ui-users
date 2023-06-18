@@ -999,7 +999,7 @@
     "lostItems.list.columnName.action.patronDetails": "Patron details",
     "lostItems.list.columnName.action.loanDetails": "Loan details",
     "lostItems.list.columnName.action.itemDetails": "Item details",
-    "lostItems.list.filters": "Search & filter",
+    "lostItems.list.filters": "Buscar & Filtrar",
     "lostItems.list.searchResults": "Lost items requiring actual cost",
     "lostItems.list.filters.lossType": "Loss type",
     "lostItems.list.filters.lossType.agedToLost": "Aged to lost",
