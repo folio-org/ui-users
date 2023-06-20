@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen } from '@folio/jest-config-stripes/testing-library/react';
 import accounts from 'fixtures/account';
 import loans from 'fixtures/openLoans';
 import renderWithRouter from 'helpers/renderWithRouter';

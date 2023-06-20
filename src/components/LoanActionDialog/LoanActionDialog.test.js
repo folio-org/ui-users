@@ -1,8 +1,8 @@
-import { screen } from '@testing-library/react';
+import { screen } from '@folio/jest-config-stripes/testing-library/react';
 import PropTypes from 'prop-types';
 import '__mock__/stripesComponents.mock';
 import loan from 'fixtures/openLoan';
-import userEvent from '@testing-library/user-event';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
 import renderWithRouter from 'helpers/renderWithRouter';
 import LoanActionDialog from './LoanActionDialog';

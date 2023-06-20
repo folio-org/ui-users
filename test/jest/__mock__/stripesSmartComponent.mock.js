@@ -56,6 +56,7 @@ jest.mock('@folio/stripes/smart-components', () => {
     ViewCustomFieldsRecord: () => <div>ViewCustomFieldsRecord</div>,
     ViewMetaData: () => <div>ViewMetaData</div>,
     EntryManager: (props) => {
+      // console.log(props);
       const actions = () => {
         const data = {
           childOf: '',
@@ -64,23 +65,27 @@ jest.mock('@folio/stripes/smart-components', () => {
           deprecated: '',
           subPermissions: [{ permissionName: 'circ-observer-sub' }]
         };
-        props.onBeforeSave(data);
-        const values = {
-          displayName: 'Circ-admin',
-        };
+        if(props.onBeforeSave){
+          props.onBeforeSave(data);
+        }
+        const values = { };
         props.validate(values);
       };
       const emptyActions = () => {
         const data = { };
+        if(props.onBeforeSave){
         props.onBeforeSave(data);
-        const values = { };
+      }
+        const values = { 
+          name: 'test1'
+        };
         props.validate(values);
       };
       const component =
         <div data-testid="entry-manager">
           <div>
             { props.entryList.map((data, index) => <div key={index}>{data.permissionName}</div>)}
-            <button data-testid="entry-manager-actions" onClick={actions} type="submit">actions</button>
+            <button data-testid="entry-manager-actions" onClick={actions} type="button">actions</button>
             <button data-testid="entry-manager-emptyActions" onClick={emptyActions} type="submit">emptyActions</button>
           </div>
         </div>;

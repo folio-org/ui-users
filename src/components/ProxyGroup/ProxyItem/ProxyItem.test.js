@@ -1,4 +1,4 @@
-import { screen, within } from '@testing-library/react';
+import { screen, within } from '@folio/jest-config-stripes/testing-library/react';
 import user from 'fixtures/okapiCurrentUser';
 
 import renderWithRouter from 'helpers/renderWithRouter';
@@ -33,7 +33,7 @@ describe('Render ProxyItem component', () => {
 
     // expiration date should match record.proxy
     const expirationDate = screen.getByTestId('expirationDate');
-    expect(within(expirationDate).queryByText('11/23/2021')).toBeTruthy();
+    expect(within(expirationDate).queryByText(props.record.proxy.expirationDate)).toBeTruthy();
   });
 
   it('without expiration date', () => {

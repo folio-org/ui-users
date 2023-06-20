@@ -28,4 +28,16 @@ export const getPatronName = (actualCostRecord) => {
   return patronName;
 };
 
-export default getPatronName;
+export const isBilledRecord = (recordId, billedRecords) => billedRecords.some(record => record.id === recordId);
+
+export const isCancelledRecord = (recordId, cancelledRecords) => cancelledRecords.some(id => id === recordId);
+
+export const getRecordStatus = (recordId, billedRecords, cancelledRecords) => {
+  const isBilled = isBilledRecord(recordId, billedRecords);
+  const isCancelled = isCancelledRecord(recordId, cancelledRecords);
+
+  return {
+    isBilled,
+    isCancelled,
+  };
+};

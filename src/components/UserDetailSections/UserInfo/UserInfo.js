@@ -1,11 +1,10 @@
 import { get } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, FormattedDate } from 'react-intl';
 import {
   Row,
   Col,
-  FormattedUTCDate,
   KeyValue,
   Accordion,
   Headline,
@@ -110,7 +109,7 @@ class UserInfo extends React.Component {
               <Col xs={3}>
                 <KeyValue
                   label={<FormattedMessage id="ui-users.information.expirationDate" />}
-                  value={user.expirationDate ? <FormattedUTCDate value={user.expirationDate} /> : '-'}
+                  value={user.expirationDate ? <FormattedDate value={user.expirationDate} /> : '-'}
                 />
               </Col>
               <Col xs={3}>

@@ -6,6 +6,7 @@ import {
 
 export const DEFAULT_VALUE = '';
 export const PAGE_AMOUNT = 100;
+export const ACTUAL_COST_RECORD_NAME = 'actualCostRecords';
 
 export const ACTUAL_COST_RECORD_FIELD_NAME = {
   LOSS_TYPE: 'lossType',
@@ -22,6 +23,7 @@ export const ACTUAL_COST_RECORD_FIELD_NAME = {
   PERMANENT_ITEM_LOCATION: 'permanentItemLocation',
   FEE_FINE_TYPE: 'feeFineType',
   FEE_FINE_OWNER: 'feeFineOwner',
+  FEE_FINE_ACCOUNT_ID: 'feeFineId',
   LOAN_ID: 'loanId',
   LOAN_TYPE: 'loanType',
   INSTANCE_ID: 'instanceId',
@@ -29,6 +31,8 @@ export const ACTUAL_COST_RECORD_FIELD_NAME = {
   ITEM: 'item',
   ITEM_ID: 'itemId',
   HOLDINGS_RECORD_ID: 'holdingsRecordId',
+  STATUS: 'status',
+  BILLED_AMOUNT: 'billedAmount',
 };
 
 export const ACTUAL_COST_RECORD_FIELD_PATH = {
@@ -45,6 +49,7 @@ export const ACTUAL_COST_RECORD_FIELD_PATH = {
   [ACTUAL_COST_RECORD_FIELD_NAME.PERMANENT_ITEM_LOCATION]: 'item.permanentLocation',
   [ACTUAL_COST_RECORD_FIELD_NAME.FEE_FINE_TYPE]: 'feeFine.type',
   [ACTUAL_COST_RECORD_FIELD_NAME.FEE_FINE_OWNER]: 'feeFine.owner',
+  [ACTUAL_COST_RECORD_FIELD_NAME.FEE_FINE_ACCOUNT_ID]: 'feeFine.accountId',
   [ACTUAL_COST_RECORD_FIELD_NAME.LOAN_ID]: 'loan.id',
   [ACTUAL_COST_RECORD_FIELD_NAME.LOAN_TYPE]: 'item.loanType',
   [ACTUAL_COST_RECORD_FIELD_NAME.INSTANCE_ID]: 'instance.id',
@@ -52,6 +57,15 @@ export const ACTUAL_COST_RECORD_FIELD_PATH = {
   [ACTUAL_COST_RECORD_FIELD_NAME.ITEM_ID]: 'item.id',
   [ACTUAL_COST_RECORD_FIELD_NAME.ITEM]: 'item',
   [ACTUAL_COST_RECORD_FIELD_NAME.HOLDINGS_RECORD_ID]: 'item.holdingsRecordId',
+  [ACTUAL_COST_RECORD_FIELD_NAME.STATUS]: 'status',
+  [ACTUAL_COST_RECORD_FIELD_NAME.BILLED_AMOUNT]: 'feeFine.billedAmount',
+};
+
+export const LOST_ITEM_STATUSES = {
+  OPEN: 'Open',
+  BILLED: 'Billed',
+  CANCELLED: 'Cancelled',
+  EXPIRED: 'Expired',
 };
 
 export const SEARCH_FIELDS = [
@@ -60,9 +74,23 @@ export const SEARCH_FIELDS = [
   ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.USER_LAST_NAME],
 ];
 
-export const ITEM_STATUSES_TRANSLATIONS_KEYS = {
+export const ITEM_LOSS_TYPES_TRANSLATIONS_KEYS = {
   [itemStatuses.AGED_TO_LOST]: 'ui-users.lostItems.list.filters.lossType.agedToLost',
   [itemStatuses.DECLARED_LOST]: 'ui-users.lostItems.list.filters.lossType.declaredLost',
+};
+
+export const LOST_ITEM_STATUS_FILTER_TRANSLATIONS_KEYS = {
+  [LOST_ITEM_STATUSES.OPEN]: 'ui-users.lostItems.list.filters.status.open',
+  [LOST_ITEM_STATUSES.BILLED]: 'ui-users.lostItems.list.filters.status.billed',
+  [LOST_ITEM_STATUSES.CANCELLED]: 'ui-users.lostItems.list.filters.status.cancelled',
+  [LOST_ITEM_STATUSES.EXPIRED]: 'ui-users.lostItems.list.filters.status.expired',
+};
+
+export const LOST_ITEM_STATUS_TRANSLATIONS_KEYS = {
+  [LOST_ITEM_STATUSES.OPEN]: 'ui-users.lostItems.recordStatus.open',
+  [LOST_ITEM_STATUSES.BILLED]: 'ui-users.lostItems.recordStatus.billed',
+  [LOST_ITEM_STATUSES.CANCELLED]: 'ui-users.lostItems.recordStatus.cancelled',
+  [LOST_ITEM_STATUSES.EXPIRED]: 'ui-users.lostItems.recordStatus.expired',
 };
 
 export const ACTUAL_COST_TYPES = {
@@ -71,6 +99,10 @@ export const ACTUAL_COST_TYPES = {
 };
 
 export const ACTUAL_COST_MODAL_DEFAULT = {
+  isOpen: false,
+};
+
+export const ACTUAL_COST_DETAILS_MODAL_DEFAULT = {
   isOpen: false,
 };
 
@@ -124,6 +156,17 @@ export const ACTUAL_COST_PROP_TYPES = PropTypes.shape({
 export const BILL_AND_DO_NOT_BILL_ACTUAL_COST_PROP_TYPES = {
   actualCostRecord: ACTUAL_COST_RECORD_PROP_TYPES,
   setActualCostModal: PropTypes.func.isRequired,
+  actualCost: PropTypes.shape({
+    actualCostRecord: PropTypes.object.isRequired,
+    additionalInfo: ADDITIONAL_INFO_PROP_TYPES,
+  }).isRequired,
+  setActualCost: PropTypes.func.isRequired,
+  disabled: PropTypes.bool.isRequired,
+};
+
+export const ACTUAL_COST_DETAILS_PROP_TYPES = {
+  actualCostRecord: ACTUAL_COST_RECORD_PROP_TYPES,
+  setActualCostDetailsModal: PropTypes.func.isRequired,
   actualCost: PropTypes.shape({
     actualCostRecord: PropTypes.object.isRequired,
     additionalInfo: ADDITIONAL_INFO_PROP_TYPES,

@@ -13,17 +13,33 @@ import {
   ItemDetailsLink,
   LoanDetailsLink,
   PatronDetailsLink,
+  FeeFineDetailsLink,
+  ActualCostDetails,
 } from './components';
-
-import { ACTUAL_COST_PROP_TYPES } from '../../../../../constants';
+import {
+  ACTUAL_COST_PROP_TYPES,
+  LOST_ITEM_STATUSES,
+} from '../../../../../constants';
+import { getRecordStatus } from '../../util';
 
 const RenderActions = ({
   actualCostRecord,
   setActualCostModal,
+  setActualCostDetailsModal,
   actualCost,
   setActualCost,
-  isBillButtonDisabled,
+  billedRecords,
+  cancelledRecords,
 }) => {
+  const isOpenStatus = actualCostRecord.status === LOST_ITEM_STATUSES.OPEN;
+  const isExpiredStatus = actualCostRecord.status === LOST_ITEM_STATUSES.EXPIRED;
+  const {
+    isBilled,
+    isCancelled,
+  } = getRecordStatus(actualCostRecord.id, billedRecords, cancelledRecords);
+  const isBillButtonDisabled = !isOpenStatus || isBilled || isCancelled;
+  const isActualCostDetailsButtonDisabled = isExpiredStatus || isOpenStatus;
+
   return (
     <Dropdown
       data-testid="lostItemsListActionsDropdown"
@@ -55,6 +71,18 @@ const RenderActions = ({
         <PatronDetailsLink actualCostRecord={actualCostRecord} />
         <LoanDetailsLink actualCostRecord={actualCostRecord} />
         <ItemDetailsLink actualCostRecord={actualCostRecord} />
+        <FeeFineDetailsLink
+          actualCostRecord={actualCostRecord}
+          isBilled={isBilled}
+          billedRecords={billedRecords}
+        />
+        <ActualCostDetails
+          actualCostRecord={actualCostRecord}
+          actualCost={actualCost}
+          setActualCost={setActualCost}
+          setActualCostDetailsModal={setActualCostDetailsModal}
+          disabled={isActualCostDetailsButtonDisabled}
+        />
       </DropdownMenu>
     </Dropdown>
   );
@@ -62,7 +90,10 @@ const RenderActions = ({
 
 RenderActions.propTypes = {
   setActualCostModal: PropTypes.func.isRequired,
+  setActualCostDetailsModal: PropTypes.func.isRequired,
   actualCostRecord: PropTypes.shape({
+    status: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
     user: PropTypes.shape({
       id: PropTypes.string.isRequired,
       firstName: PropTypes.string.isRequired,
@@ -88,7 +119,11 @@ RenderActions.propTypes = {
   }).isRequired,
   actualCost: ACTUAL_COST_PROP_TYPES,
   setActualCost: PropTypes.func.isRequired,
-  isBillButtonDisabled: PropTypes.bool.isRequired,
+  billedRecords: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string,
+    billedAmount: PropTypes.string,
+  })).isRequired,
+  cancelledRecords: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default RenderActions;

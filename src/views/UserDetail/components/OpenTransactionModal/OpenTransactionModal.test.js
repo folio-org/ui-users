@@ -1,8 +1,8 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { act, render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { StripesContext } from '@folio/stripes-core/src/StripesContext';
+import { act, render, screen } from '@folio/jest-config-stripes/testing-library/react';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
+import { StripesContext } from '@folio/stripes/core';
 
 import '__mock__';
 import OpenTransactionModal from './OpenTransactionModal';

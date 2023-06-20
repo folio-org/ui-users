@@ -4,8 +4,8 @@ import { Form } from 'react-final-form';
 import {
   screen,
   cleanup,
-} from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+} from '@folio/jest-config-stripes/testing-library/react';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import renderWithRouter from 'helpers/renderWithRouter';
 import DepartmentsNameEdit from './DepartmentsNameEdit';
 import '__mock__/stripesSmartComponent.mock';

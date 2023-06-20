@@ -21,6 +21,10 @@ import {
   CollapseFilterPaneButton,
 } from '@folio/stripes/smart-components';
 
+import {
+  OKAPI_TENANT_HEADER,
+  OKAPI_TOKEN_HEADER,
+} from '../../../../constants';
 import SearchForm from '../SearchForm';
 import PermissionsList from '../PermissionsList';
 import { getInitialFiltersState } from '../../helpers';
@@ -55,6 +59,8 @@ class PermissionsModal extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
       okapi: PropTypes.shape({
+        tenant: PropTypes.string,
+        token: PropTypes.string,
         translations: PropTypes.object,
       }).isRequired,
     }).isRequired,
@@ -100,6 +106,7 @@ class PermissionsModal extends React.Component {
     addPermissions: PropTypes.func.isRequired,
     visibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
     excludePermissionSets: PropTypes.bool,
+    tenantId: PropTypes.string,
   };
 
   static defaultProps = {
@@ -128,7 +135,29 @@ class PermissionsModal extends React.Component {
   }
 
   async componentDidMount() {
+    this._isMounted = true;
+
+    await this.initPermissionsModal();
+  }
+
+  async componentDidUpdate(prevProps) {
+    if (this.props.tenantId !== prevProps.tenantId) {
+      await this.initPermissionsModal();
+    }
+
+    if (this.props.assignedPermissions !== prevProps.assignedPermissions) {
+      this.setAssignedPermissionIds(this.props.assignedPermissions.map(({ id }) => id));
+    }
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
+  initPermissionsModal = async () => {
     const {
+      stripes: { okapi },
+      tenantId,
       mutator: {
         availablePermissions: {
           GET,
@@ -137,10 +166,13 @@ class PermissionsModal extends React.Component {
       }
     } = this.props;
 
-    this._isMounted = true;
-
     await reset();
-    const permissions = await GET();
+    const permissions = await GET({
+      headers: {
+        [OKAPI_TENANT_HEADER]: tenantId || okapi.tenant,
+        [OKAPI_TOKEN_HEADER]: okapi.token,
+      }
+    });
 
     // don't set state if the component has unmounted,
     // which it may have since this function is async
@@ -151,10 +183,6 @@ class PermissionsModal extends React.Component {
         assignedPermissionIds: this.props.assignedPermissions.map(({ id }) => id)
       });
     }
-  }
-
-  componentWillUnmount() {
-    this._isMounted = false;
   }
 
   // Search for permissions
@@ -179,6 +207,11 @@ class PermissionsModal extends React.Component {
   // and a set of permissions, return a subset of permissions for which the query
   // appears in the *translated* display name (if found in Okapi translations).
   getMatchedTranslations = (query, permissions) => {
+    // Given a label like "Settings (Remote storage): Can create, edit, delete remote storage settings"
+    // to match the value of a query that looks like "Settings (Remote Storage): ..."
+    // the query needs to be formatted with escaped special characters
+    // i.e., the characters like '(' needs to be treated literally, rather than as a regex special character.
+    const escapedQuery = query.toLowerCase().replace(/([()[\]{}.+*\\^$|-])/g, '\\$1');
     const translations = this.props.stripes.okapi.translations;
 
     // Translations are received from Stripes as an object with properties of the form
@@ -194,9 +227,9 @@ class PermissionsModal extends React.Component {
       // multi-value arrays correspond to translations with substitutions, html, etc.,
       // but those are not relevent here.
       if (typeof label === 'string') {
-        return /\.permission\./.test(key) && label.toLowerCase().match(query.toLowerCase());
+        return /\.permission\./.test(key) && label.toLowerCase().match(escapedQuery);
       } else if (Array.isArray(label) && label.length === 1) {
-        return /\.permission\./.test(key) && label[0].value.toLowerCase().match(query.toLowerCase());
+        return /\.permission\./.test(key) && label[0].value.toLowerCase().match(escapedQuery);
       }
       return false;
     });

@@ -45,6 +45,8 @@ import CashDrawerReconciliationReportPDF from '../../components/data/reports/cas
 import CashDrawerReconciliationReportCSV from '../../components/data/reports/cashDrawerReconciliationReportCSV';
 import FinancialTransactionsReport from '../../components/data/reports/FinancialTransactionsReport';
 import Filters from './Filters';
+import LostItemsLink from '../../components/LostItemsLink';
+
 import css from './UserSearch.css';
 
 const VISIBLE_COLUMNS_STORAGE_KEY = 'users-visible-columns';
@@ -285,17 +287,7 @@ class UserSearch extends React.Component {
               </FormattedMessage>
             </PaneMenu>
           </IfPermission>
-          <IfPermission perm="ui-users.lost-items.requiring-actual-cost">
-            <Button
-              id="requiring-actual-cost"
-              to="/users/lost-items"
-              buttonStyle="dropdownItem"
-            >
-              <Icon icon="edit">
-                <FormattedMessage id="ui-users.actionMenu.lostItems" />
-              </Icon>
-            </Button>
-          </IfPermission>
+          <LostItemsLink />
         </MenuSection>
         <MenuSection
           label={intl.formatMessage({ id: 'ui-users.reports' })}

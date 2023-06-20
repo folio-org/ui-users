@@ -47,10 +47,12 @@ import {
   UserLoans,
   UserRequests,
   UserAccounts,
+  UserAffiliations,
   UserServicePoints,
 } from '../../components/UserDetailSections';
 
 import HelperApp from '../../components/HelperApp';
+import IfConsortium from '../../components/IfConsortium';
 import {
   PatronBlockMessage
 } from '../../components/PatronBlock';
@@ -69,6 +71,8 @@ import ExportFeesFinesReportButton from './components';
 import ErrorPane from '../../components/ErrorPane';
 import ActionMenuEditButton from './components/ActionMenuEditButton';
 import ActionMenuDeleteButton from './components/ActionMenuDeleteButton';
+import LostItemsLink from '../../components/LostItemsLink';
+import IfConsortiumPermission from '../../components/IfConsortiumPermission';
 
 class UserDetail extends React.Component {
   static propTypes = {
@@ -183,6 +187,7 @@ class UserDetail extends React.Component {
       showDeleteUserModal: false,
       sections: {
         userInformationSection: true,
+        affiliationsSection: false,
         extendedInfoSection: false,
         contactInfoSection: false,
         proxySection: false,
@@ -461,6 +466,7 @@ class UserDetail extends React.Component {
             goToEdit={this.goToEdit}
             editButton={this.editButton}
           />
+          <LostItemsLink />
           <IfInterface name="feesfines">
             <ExportFeesFinesReportButton
               feesFinesReportData={feesFinesReportData}
@@ -590,7 +596,6 @@ class UserDetail extends React.Component {
     const addressTypes = (resources.addressTypes || {}).records || [];
     const addresses = getFormAddressList(get(user, 'personal.addresses', []));
     const addressesList = this.getAddressesList(addresses, addressTypes);
-    const permissions = (resources.permissions || {}).records || [];
     const settings = (resources.settings || {}).records || [];
     const sponsors = this.props.getSponsors();
     const proxies = this.props.getProxies();
@@ -694,6 +699,19 @@ class UserDetail extends React.Component {
                   expanded={sections.userInformationSection}
                   onToggle={this.handleSectionToggle}
                 />
+
+                <IfConsortium>
+                  <IfConsortiumPermission perm="consortia.user-tenants.collection.get">
+                    <UserAffiliations
+                      accordionId="affiliationsSection"
+                      expanded={sections.affiliationsSection}
+                      onToggle={this.handleSectionToggle}
+                      userId={user?.id}
+                      userName={user?.username}
+                    />
+                  </IfConsortiumPermission>
+                </IfConsortium>
+
                 <IfInterface name="feesfines">
                   {hasPatronBlocksPermissions &&
                     <PatronBlock
@@ -798,7 +816,6 @@ class UserDetail extends React.Component {
                     <UserPermissions
                       expanded={sections.permissionsSection}
                       onToggle={this.handleSectionToggle}
-                      userPermissions={permissions}
                       accordionId="permissionsSection"
                       {...this.props}
                     />

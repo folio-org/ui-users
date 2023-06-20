@@ -168,8 +168,8 @@ const withServicePoints = WrappedComponent => class WithServicePointsComponent e
         record = { userId: this.props.match.params.id };
       }
 
-      record.servicePointsIds = servicePoints.map(sp => sp.id);
-      record.defaultServicePointId = (!servicePoints.length || preferredServicePoint === '-') ? null : preferredServicePoint;
+      record.servicePointsIds = (servicePoints ?? []).map(sp => sp.id);
+      record.defaultServicePointId = (!(servicePoints ?? []).length || preferredServicePoint === '-') ? null : preferredServicePoint;
 
       mutator(record).then(() => {
         this.props.mutator.servicePointsUsers.reset();

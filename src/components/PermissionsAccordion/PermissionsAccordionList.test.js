@@ -1,6 +1,6 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import { within } from '@testing-library/dom';
+import { render, screen } from '@folio/jest-config-stripes/testing-library/react';
+import { within } from '@folio/jest-config-stripes/testing-library/dom';
 
 import '__mock__/reactFinalFormArrays.mock';
 import '__mock__/intl.mock';
@@ -35,6 +35,7 @@ describe('PermissionsAccordionList', () => {
       showPerms: true,
       getAssignedPermissions: () => perms,
       permToDelete: 'canDelete',
+      changePermissions: jest.fn(),
     };
 
     render(<PermissionsAccordionList {...palProps} />);
@@ -54,6 +55,7 @@ describe('PermissionsAccordionList', () => {
       showPerms: true,
       getAssignedPermissions: () => shuffled,
       permToDelete: 'canDelete',
+      changePermissions: jest.fn(),
     };
 
     render(<PermissionsAccordionList {...palProps} />);
@@ -72,6 +74,7 @@ describe('PermissionsAccordionList', () => {
       showPerms: true,
       getAssignedPermissions: () => perms,
       permToDelete: 'canDelete',
+      changePermissions: jest.fn(),
     };
 
     render(<PermissionsAccordionList {...palProps} />);

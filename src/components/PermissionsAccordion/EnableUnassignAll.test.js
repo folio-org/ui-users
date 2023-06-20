@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '@folio/jest-config-stripes/testing-library/react';
 import { Form, Field } from 'react-final-form';
 
 import '__mock__/reactFinalFormListeners.mock';

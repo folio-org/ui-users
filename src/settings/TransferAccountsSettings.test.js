@@ -1,6 +1,8 @@
 import React from 'react';
 
-import { screen } from '@testing-library/react';
+import { screen } from '@folio/jest-config-stripes/testing-library/react';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
+import { ControlledVocab } from '@folio/stripes/smart-components';
 
 import '__mock__/stripesCore.mock';
 import '__mock__/stripesSmartComponent.mock';
@@ -11,25 +13,56 @@ import TransferAccountsSettings from './TransferAccountsSettings';
 
 jest.unmock('@folio/stripes/components');
 
-const renderTransferAccountsSettings = (props) => renderWithRouter(<TransferAccountsSettings {...props} />);
+jest.mock('@folio/stripes/smart-components', () => ({
+  ...jest.requireActual('@folio/stripes/smart-components'),
+  ControlledVocab: jest.fn(props => (
+    <div>
+      <input
+        data-testid="ownerId-input"
+        value={props.ownerId}
+        onChange={props.onChange}
+      />
+      <button
+        type="button"
+        data-testid="preCreateHook-button"
+        onClick={() => props.preCreateHook({})}
+      >
+        Pre-create Hook
+      </button>
+    </div>
+  )),
+}));
 
-describe('Transfer accounts settings', () => {
-  it('renders', () => {
-    const props = {
-      resources: {},
-      match: { path: '/settings/users/departments' },
-      location: { pathname: '/settings/users/departments' },
-      mutators: {},
-      okapi: {
-        url: 'https://folio-testing-okapi.dev.folio.org',
-        tenant: 'diku',
-        okapiReady: true,
-        authFailure: [],
-        bindings: {},
-      },
-    };
-    renderTransferAccountsSettings(props);
+const defaultProps = {
+  intl: {
+    formatMessage: jest.fn(),
+  },
+  mutator: {
+    owners: {
+      reset: jest.fn(),
+      GET: jest.fn().mockResolvedValue([]),
+    },
+  },
+};
 
-    expect(screen.getByTestId('controlled-vocab')).toBeTruthy();
+const renderTransferAccountsSettings = () => renderWithRouter(<TransferAccountsSettings {...defaultProps} />);
+
+describe('TransferAccountsSettings', () => {
+  beforeEach(() => {
+    renderTransferAccountsSettings();
+  });
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+  it('should call onChangeOwner when ownerId input value changes', async () => {
+    const ownerIdInput = screen.getByTestId('ownerId-input');
+    expect(ownerIdInput).toHaveValue('');
+    userEvent.type(ownerIdInput, 'testing purpose');
+    expect(ownerIdInput).toHaveValue('testing purpose');
+  });
+  it('should call preCreateHook when preCreateHook button is clicked', async () => {
+    const preCreateHookButton = screen.getByTestId('preCreateHook-button');
+    userEvent.click(preCreateHookButton);
+    expect(ControlledVocab).toHaveBeenCalledTimes(2);
   });
 });

@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "9.0.0",
+  "version": "10.0.0",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -32,6 +32,7 @@
       }
     ],
     "okapiInterfaces": {
+      "add-info": "0.1",
       "users": "15.0 16.0",
       "configuration": "2.0",
       "permissions": "5.5",
@@ -42,12 +43,13 @@
     "optionalOkapiInterfaces": {
       "actual-cost-record-storage": "0.4",
       "automated-patron-blocks": "0.1",
-      "circulation": "9.0 10.0 11.0 12.0 13.0",
-      "feesfines": "16.1 17.0",
+      "circulation": "9.0 10.0 11.0 12.0 13.0 14.0",
+      "consortia": "1.0",
+      "feesfines": "16.1 17.0 18.0",
       "loan-policy-storage": "1.0 2.0",
       "loan-storage": "4.0 5.0 6.0 7.0",
       "notes": "2.0 3.0",
-      "request-storage": "2.5 3.0 4.0 5.0",
+      "request-storage": "2.5 3.0 4.0 5.0 6.0",
       "servint": "2.0"
     },
     "permissionSets": [
@@ -104,6 +106,28 @@
         "description": "Delete user when user does not have any open transactions",
         "subPermissions": [
           "users-bl.item.delete"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.consortia.affiliations.view",
+        "displayName": "Users: View affiliations",
+        "description": "View a list of affiliations assigned to an user",
+        "subPermissions": [
+          "consortia.consortium.collection.get",
+          "consortia.user-tenants.collection.get"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.consortia.affiliations.edit",
+        "displayName": "Users: Assign and unassign affiliations",
+        "description": "Assign and unassign affiliations",
+        "subPermissions": [
+          "ui-users.consortia.affiliations.view",
+          "consortia.tenants.collection.get",
+          "consortia.user-tenants.item.post",
+          "consortia.user-tenants.item.delete"
         ],
         "visible": true
       },
@@ -179,43 +203,68 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.settings.permsets",
-        "displayName": "Settings (Users): Can create, edit and remove permission sets",
+        "permissionName": "ui-users.settings.permsets.view",
+        "displayName": "Settings (Users): Can view permission sets",
         "description": "",
         "subPermissions": [
           "perms.permissions.get",
+          "settings.users.enabled"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.permsets.all",
+        "displayName": "Settings (Users): Can create, edit and remove permission sets",
+        "description": "",
+        "subPermissions": [
+          "ui-users.settings.permsets.view",
           "perms.permissions.item.put",
           "perms.permissions.item.post",
           "perms.permissions.item.delete",
-          "settings.users.enabled",
           "perms.users.assign.immutable",
           "perms.users.assign.mutable"
         ],
         "visible": true
       },
       {
-        "permissionName": "ui-users.settings.usergroups",
-        "displayName": "Settings (Users): Can create, edit and remove patron groups",
+        "permissionName": "ui-users.settings.usergroups.view",
+        "displayName": "Settings (Users): Can view patron groups",
         "subPermissions": [
           "usergroups.collection.get",
-          "usergroups.item.delete",
           "usergroups.item.get",
-          "usergroups.item.post",
-          "usergroups.item.put",
           "settings.users.enabled"
         ],
         "visible": true
       },
       {
-        "permissionName": "ui-users.settings.addresstypes",
-        "displayName": "Settings (Users): Can create, edit and remove address types",
+        "permissionName": "ui-users.settings.usergroups.all",
+        "displayName": "Settings (Users): Can create, edit and remove patron groups",
+        "subPermissions": [
+          "ui-users.settings.usergroups.view",
+          "usergroups.item.delete",
+          "usergroups.item.post",
+          "usergroups.item.put"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.addresstypes.view",
+        "displayName": "Settings (Users): Can view address types",
         "subPermissions": [
           "addresstypes.collection.get",
           "addresstypes.item.get",
+          "settings.users.enabled"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.addresstypes.all",
+        "displayName": "Settings (Users): Can create, edit and remove address types",
+        "subPermissions": [
+          "ui-users.settings.addresstypes.view",
           "addresstypes.item.post",
           "addresstypes.item.put",
-          "addresstypes.item.delete",
-          "settings.users.enabled"
+          "addresstypes.item.delete"
         ],
         "visible": true
       },
@@ -243,15 +292,40 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.settings.comments",
-        "displayName": "Settings (Users): Can create, edit and remove comments",
+        "permissionName": "ui-users.settings.comments.view",
+        "displayName": "Settings (Users): Can view comments",
         "subPermissions": [
           "comments.collection.get",
-          "comments.item.delete",
           "comments.item.get",
           "comments.item.post",
-          "comments.item.put",
           "settings.users.enabled"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.comments.all",
+        "displayName": "Settings (Users): Can create, edit and remove comments",
+        "subPermissions": [
+          "ui-users.settings.comments.view",
+          "comments.item.delete",
+          "comments.item.post",
+          "comments.item.put"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.feefines.view",
+        "displayName": "Settings (Users): Can view feefines-related entries",
+        "subPermissions": [
+          "settings.users.enabled",
+          "ui-users.settings.owners.view",
+          "ui-users.settings.manual-charges.view",
+          "ui-users.settings.waives.view",
+          "ui-users.settings.payments.view",
+          "ui-users.settings.refunds.view",
+          "ui-users.settings.comments.view",
+          "ui-users.settings.transfers.view",
+          "ui-users.settings.transfertypes.view"
         ],
         "visible": true
       },
@@ -260,31 +334,41 @@
         "displayName": "Settings (Users): Can create, edit and remove all feefines-related entries",
         "subPermissions": [
           "settings.users.enabled",
-          "ui-users.settings.owners",
+          "ui-users.settings.owners.all",
           "ui-users.settings.feefines",
-          "ui-users.settings.waives",
-          "ui-users.settings.payments",
-          "ui-users.settings.refunds",
-          "ui-users.settings.comments",
-          "ui-users.settings.transfers",
-          "ui-users.settings.transfertypes"
+          "ui-users.settings.waives.all",
+          "ui-users.settings.payments.all",
+          "ui-users.settings.refunds.all",
+          "ui-users.settings.comments.all",
+          "ui-users.settings.transfers.all",
+          "ui-users.settings.transfertypes.all",
+          "ui-users.settings.manual-charges.all",
+          "ui-plugin-bursar-export.bursar-exports.all"
         ],
         "visible": true
       },
       {
-        "permissionName": "ui-users.settings.feefines",
-        "displayName": "Settings (Users): Can create, edit and remove feefines",
+        "permissionName": "ui-users.settings.manual-charges.view",
+        "displayName": "Settings (Users): Can view manual charges",
         "subPermissions": [
           "feefines.collection.get",
-          "feefines.item.delete",
           "feefines.item.get",
-          "feefines.item.post",
-          "feefines.item.put",
-          "feefine-reports.refund.post",
           "inventory-storage.service-points.collection.get",
           "owners.collection.get",
           "templates.collection.get",
           "settings.users.enabled"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.manual-charges.all",
+        "displayName": "Settings (Users): Can create, edit and remove manual charges",
+        "subPermissions": [
+          "ui-users.settings.manual-charges.view",
+          "feefines.item.delete",
+          "feefines.item.post",
+          "feefines.item.put",
+          "feefine-reports.refund.post"
         ],
         "visible": true
       },
@@ -294,6 +378,7 @@
         "subPermissions": [
           "settings.users.enabled",
           "configuration.entries.collection.get",
+          "user-settings.custom-fields.collection.get",
           "user-settings.custom-fields.item.option.stats.get"
         ],
         "visible": true
@@ -322,57 +407,89 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.settings.owners",
-        "displayName": "Settings (Users): Can create, edit and remove owners",
+        "permissionName": "ui-users.settings.owners.view",
+        "displayName": "Settings (Users): Can view owners",
         "subPermissions": [
           "inventory-storage.service-points.collection.get",
           "owners.collection.get",
-          "owners.item.delete",
           "owners.item.get",
-          "owners.item.post",
-          "owners.item.put",
           "settings.users.enabled"
         ],
         "visible": true
       },
       {
-        "permissionName": "ui-users.settings.payments",
-        "displayName": "Settings (Users): Can create, edit and remove payments",
+        "permissionName": "ui-users.settings.owners.all",
+        "displayName": "Settings (Users): Can create, edit and remove owners",
+        "subPermissions": [
+          "ui-users.settings.owners.view",
+          "owners.item.delete",
+          "owners.item.post",
+          "owners.item.put"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.payments.view",
+        "displayName": "Settings (Users): Can view payments",
         "subPermissions": [
           "owners.collection.get",
           "payments.collection.get",
-          "payments.item.delete",
           "payments.item.get",
+          "settings.users.enabled"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.payments.all",
+        "displayName": "Settings (Users): Can create, edit and remove payments",
+        "subPermissions": [
+          "ui-users.settings.payments.view",
+          "payments.item.delete",
           "payments.item.post",
           "payments.item.put",
-          "settings.users.enabled",
           "users.collection.get"
         ],
         "visible": true
       },
       {
-        "permissionName": "ui-users.settings.refunds",
-        "displayName": "Settings (Users): Can create, edit and remove refunds",
+        "permissionName": "ui-users.settings.refunds.view",
+        "displayName": "Settings (Users): Can view refunds",
         "subPermissions": [
           "refunds.collection.get",
-          "refunds.item.delete",
           "refunds.item.get",
-          "refunds.item.post",
-          "refunds.item.put",
           "settings.users.enabled"
         ],
         "visible": true
       },
       {
-        "permissionName": "ui-users.settings.waives",
-        "displayName": "Settings (Users): Can create, edit and remove waives",
+        "permissionName": "ui-users.settings.refunds.all",
+        "displayName": "Settings (Users): Can create, edit and remove refunds",
+        "subPermissions": [
+          "ui-users.settings.refunds.view",
+          "refunds.item.delete",
+          "refunds.item.post",
+          "refunds.item.put"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.waives.view",
+        "displayName": "Settings (Users): Can view waives",
         "subPermissions": [
           "waives.collection.get",
-          "waives.item.delete",
           "waives.item.get",
-          "waives.item.post",
-          "waives.item.put",
           "settings.users.enabled"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.waives.all",
+        "displayName": "Settings (Users): Can create, edit and remove waives",
+        "subPermissions": [
+          "ui-users.settings.waives.view",
+          "waives.item.delete",
+          "waives.item.post",
+          "waives.item.put"
         ],
         "visible": true
       },
@@ -408,29 +525,45 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.settings.transfers",
-        "displayName": "Settings (Users): Can create, edit and remove transfer accounts ",
+        "permissionName": "ui-users.settings.transfers.view",
+        "displayName": "Settings (Users): Can view accounts ",
         "subPermissions": [
           "owners.collection.get",
           "transfers.collection.get",
-          "transfers.item.delete",
           "transfers.item.get",
-          "transfers.item.post",
-          "transfers.item.put",
           "settings.users.enabled"
         ],
         "visible": true
       },
       {
-        "permissionName": "ui-users.settings.transfertypes",
-        "displayName": "Settings (Users): Can create, edit and remove transfer criteria",
+        "permissionName": "ui-users.settings.transfers.all",
+        "displayName": "Settings (Users): Can create, edit and remove transfer accounts ",
+        "subPermissions": [
+          "ui-users.settings.transfers.view",
+          "transfers.item.delete",
+          "transfers.item.post",
+          "transfers.item.put"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.transfertypes.view",
+        "displayName": "Settings (Users): Can view transfer criteria",
         "subPermissions": [
           "transfer-criterias.collection.get",
-          "transfer-criterias.item.delete",
           "transfer-criterias.item.get",
-          "transfer-criterias.item.post",
-          "transfer-criterias.item.put",
           "settings.users.enabled"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.transfertypes.all",
+        "displayName": "Settings (Users): Can create, edit and remove transfer criteria",
+        "subPermissions": [
+          "ui-users.settings.transfertypes.view",
+          "transfer-criterias.item.delete",
+          "transfer-criterias.item.post",
+          "transfer-criterias.item.put"
         ],
         "visible": true
       },
@@ -485,21 +618,38 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.settings.conditions",
+        "permissionName": "ui-users.settings.conditions.view",
+        "displayName": "Settings (Users): Can view patron blocks conditions",
+        "subPermissions": [
+          "settings.users.enabled",
+          "patron-block-conditions.collection.get",
+          "patron-block-conditions.item.get"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.conditions.edit",
         "displayName": "Settings (Users): Can view and edit patron blocks conditions",
         "subPermissions": [
-          "patron-block-conditions.collection.get",
-          "patron-block-conditions.item.get",
+          "ui-users.settings.conditions.view",
           "patron-block-conditions.item.put"
         ],
         "visible": true
       },
       {
-        "permissionName": "ui-users.settings.patron-block-templates",
-        "displayName": "Settings (Users): Can create, edit and remove patron blocks templates",
+        "permissionName": "ui-users.settings.patron-block-templates.view",
+        "displayName": "Settings (Users): Can view patron blocks templates",
         "subPermissions": [
           "manual-block-templates.collection.get",
-          "manual-block-templates.item.get",
+          "manual-block-templates.item.get"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.patron-block-templates.all",
+        "displayName": "Settings (Users): Can create, edit and remove patron blocks templates",
+        "subPermissions": [
+          "ui-users.settings.patron-block-templates.view",
           "manual-block-templates.item.post",
           "manual-block-templates.item.put",
           "manual-block-templates.item.delete"
@@ -507,12 +657,22 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.settings.limits",
-        "displayName": "Settings (Users): Can create, edit and remove patron blocks limits",
+        "permissionName": "ui-users.settings.limits.view",
+        "displayName": "Settings (Users): Can view patron blocks limits",
         "subPermissions": [
-          "ui-users.settings.conditions",
+          "ui-users.settings.conditions.view",
           "patron-block-limits.collection.get",
           "patron-block-limits.item.get",
+          "usergroups.collection.get"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.limits.all",
+        "displayName": "Settings (Users): Can create, edit and remove patron blocks limits",
+        "subPermissions": [
+          "ui-users.settings.conditions.edit",
+          "ui-users.settings.limits.view",
           "patron-block-limits.item.post",
           "patron-block-limits.item.put",
           "patron-block-limits.item.delete"
@@ -582,6 +742,22 @@
         "description": "Also includes backend permissions to perform loans renew through override",
         "subPermissions": [
           "circulation.override-renewal-block"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.loans.add-patron-info",
+        "displayName": "Users: User loans: add patron information",
+        "subPermissions": [
+          "circulation.loans.item.put"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.loans.add-staff-info",
+        "displayName": "Users: User loans: add staff information",
+        "subPermissions": [
+          "circulation.loans.item.put"
         ],
         "visible": true
       },
@@ -858,6 +1034,22 @@
         "displayName": "Settings (Users): Manage number generator options",
         "subPermissions": [
           "settings.users.enabled"
+        ]
+      },
+      {
+        "permissionName": "ui-users.settings.view",
+        "displayName": "Settings (Users): View all settings",
+        "subPermissions": [
+          "settings.users.enabled",
+          "ui-users.settings.permsets.view",
+          "ui-users.settings.usergroups.view",
+          "ui-users.settings.addresstypes.view",
+          "ui-users.settings.departments.view",
+          "ui-users.settings.customfields.view",
+          "ui-users.settings.feefines.view",
+          "ui-users.settings.conditions.view",
+          "ui-users.settings.limits.view",
+          "ui-users.settings.patron-block-templates.view"
         ],
         "visible": true
       }
@@ -873,41 +1065,31 @@
     "formatjs-compile": "formatjs compile-folder --ast --format simple ./translations/ui-users ./translations/ui-users/compiled"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.0",
+    "@babel/core": "^7.21.4",
     "@babel/eslint-parser": "^7.15.0",
     "@babel/plugin-proposal-class-properties": "^7.13.0",
     "@babel/plugin-proposal-decorators": "^7.13.5",
-    "@babel/plugin-transform-runtime": "^7.13.10",
-    "@babel/preset-env": "^7.0.0",
+    "@babel/plugin-transform-runtime": "^7.21.4",
+    "@babel/preset-env": "^7.21.4",
     "@babel/preset-react": "^7.9.0",
     "@folio/eslint-config-stripes": "^6.0.0",
+    "@folio/jest-config-stripes": "^1.0.0",
     "@folio/service-interaction": "^1.0.0",
     "@folio/stripes": "^8.0.0",
     "@folio/stripes-cli": "^2.4.0",
-    "@folio/stripes-components": "^11.0.0",
-    "@folio/stripes-core": "^9.0.0",
-    "@folio/stripes-final-form": "^7.0.0",
-    "@formatjs/cli": "^4.2.20",
-    "@jest/globals": "^26.6.2",
-    "@testing-library/dom": "^7.26.3",
-    "@testing-library/jest-dom": "^5.11.9",
-    "@testing-library/react": "^11.2.5",
-    "@testing-library/user-event": "^12.1.10",
-    "babel-jest": "^26.6.3",
-    "babel-plugin-module-resolver": "^4.1.0",
+    "@formatjs/cli": "^6.0.4",
     "core-js": "^3.6.4",
     "eslint": "^7.32.0",
     "eslint-import-resolver-alias": "^1.1.2",
     "history": "^5.0.0",
     "identity-obj-proxy": "^3.0.0",
-    "jest": "^26.6.3",
-    "jest-canvas-mock": "^2.3.0",
-    "jest-junit": "^12.0.0",
     "moment": "^2.24.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-intl": "^5.8.0",
+    "react-query": "^3.39.0",
     "react-redux": "^8.0.5",
+    "react-router": "^5",
     "react-router-dom": "^5.2.0",
     "redux": "^4.0.0",
     "regenerator-runtime": "^0.13.9"
@@ -918,14 +1100,14 @@
     "jspdf": "^2.3.1",
     "jspdf-autotable": "^3.5.14",
     "lodash": "^4.17.4",
-    "moment-timezone": "^0.5.14",
+    "moment-timezone": "^0.5.43",
     "prop-types": "^15.5.10",
     "query-string": "^5.0.0",
     "react-final-form": "^6.3.0",
     "react-final-form-arrays": "^3.1.0",
     "react-final-form-listeners": "^1.0.3",
     "react-router-prop-types": "^1.0.4",
-    "uuid": "^8.3.2"
+    "uuid": "^9.0.0"
   },
   "peerDependencies": {
     "@folio/service-interaction": "^1.0.0",
@@ -933,6 +1115,7 @@
     "moment": "^2.24.0",
     "react": "^17.0.2",
     "react-intl": "^5.8.0",
+    "react-query": "^3.39.0",
     "react-redux": "^8.0.5",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0"

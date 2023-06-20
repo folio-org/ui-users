@@ -6,23 +6,32 @@ import {
   List,
   Accordion,
   Badge,
-  Headline
+  Headline,
+  Loading
 } from '@folio/stripes/components';
 
+import AffiliationsSelect from '../AffiliationsSelect/AffiliationsSelect';
+import IfConsortium from '../IfConsortium';
+import IfConsortiumPermission from '../IfConsortiumPermission';
 import PermissionLabel from '../PermissionLabel';
 import { getPermissionLabelString } from '../data/converters/permission';
+import { affiliationsShape } from '../../shapes';
 
 class RenderPermissions extends React.Component {
   static propTypes = {
     accordionId: PropTypes.string,
+    affiliations: affiliationsShape,
     expanded: PropTypes.bool,
     heading: PropTypes.node.isRequired,
     intl: PropTypes.shape({
       formatMessage: PropTypes.func.isRequired,
     }),
+    isLoading: PropTypes.bool,
     listedPermissions: PropTypes.arrayOf(PropTypes.object),
+    onChangeAffiliation: PropTypes.func,
     onToggle: PropTypes.func,
     permToRead: PropTypes.string.isRequired,
+    selectedAffiliation: PropTypes.string,
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired,
       config: PropTypes.shape({
@@ -31,6 +40,11 @@ class RenderPermissions extends React.Component {
       }).isRequired,
     }).isRequired,
   };
+
+  static defaultProps = {
+    onChangeAffiliation: _.noop,
+    isLoading: false,
+  }
 
   renderList() {
     const {
@@ -62,12 +76,16 @@ class RenderPermissions extends React.Component {
 
   render() {
     const {
+      affiliations,
       accordionId,
       expanded,
+      isLoading,
+      onChangeAffiliation,
       onToggle,
       listedPermissions,
       stripes,
       permToRead,
+      selectedAffiliation,
       heading,
     } = this.props;
 
@@ -80,9 +98,22 @@ class RenderPermissions extends React.Component {
         onToggle={onToggle}
         label={<Headline size="large" tag="h3">{heading}</Headline>}
         displayWhenClosed={
-          <Badge>{listedPermissions.length}</Badge>
+          isLoading ? <Loading /> : <Badge>{listedPermissions.length}</Badge>
         }
       >
+        <IfConsortium>
+          <IfConsortiumPermission perm="consortia.user-tenants.collection.get">
+            {Boolean(affiliations) && (
+              <AffiliationsSelect
+                affiliations={affiliations}
+                onChange={onChangeAffiliation}
+                isLoading={isLoading}
+                value={selectedAffiliation}
+              />
+            )}
+          </IfConsortiumPermission>
+        </IfConsortium>
+
         {this.renderList()}
       </Accordion>
     );

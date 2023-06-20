@@ -34,11 +34,13 @@ export const loanActions = {
 
 // The names of the mutators which can executed on a given loan.
 // Currently used in:
-// "withMarkAsMissing", "withClaimReturned" and "withDeclareLost"
+// "withMarkAsMissing", "withClaimReturned", "withDeclareLost", "withAddInfo"
 export const loanActionMutators = {
   CLAIMED_RETURNED: 'claimReturned',
   DECLARE_LOST: 'declareLost',
   MARK_AS_MISSING: 'markAsMissing',
+  ADD_PATRON_INFO: 'patronInfo',
+  ADD_STAFF_INFO: 'staffInfo',
 };
 
 export const deliveryFulfillmentValues = {
@@ -310,5 +312,25 @@ export const SHARED_OWNER = 'Shared';
 export const MIN_ALLOWED_DATE = '1900-01-01';
 
 export const STATUS_CODES = {
-  unprocessableEntity: 422,
+  UNPROCESSABLE_ENTITY: 422,
 };
+
+export const SORT_DIRECTIONS = {
+  asc: {
+    name: 'asc',
+    fullName: 'ascending',
+  },
+  desc: {
+    name: 'desc',
+    fullName: 'descending',
+  },
+};
+
+export const OKAPI_TENANT_HEADER = 'X-Okapi-Tenant';
+export const OKAPI_TOKEN_HEADER = 'X-Okapi-Token';
+
+export const CONFIGURATIONS_API = 'configurations';
+export const CONFIGURATIONS_ENTRIES_API = `${CONFIGURATIONS_API}/entries`;
+export const CONSORTIA_API = 'consortia';
+export const CONSORTIA_TENANTS_API = 'tenants';
+export const CONSORTIA_USER_TENANTS_API = 'user-tenants';

@@ -145,7 +145,11 @@ jest.mock('@folio/stripes/core', () => {
     Pluggable: jest.fn(({ children }) => [children]),
     connect: stripesConnect,
     stripesConnect,
-    useStripes: () => STRIPES,
+    useCallout: jest.fn(() => ({ sendCallout: jest.fn() })),
+    useStripes: jest.fn(() => STRIPES),
+    useOkapiKy: jest.fn(() => {}),
+    useNamespace: jest.fn(() => ['@folio/users']),
+    withOkapiKy: jest.fn((Component) => (props) => <Component {...props} />),
     withStripes:
       // eslint-disable-next-line react/prop-types
       (Component) => ({ stripes, ...rest }) => {

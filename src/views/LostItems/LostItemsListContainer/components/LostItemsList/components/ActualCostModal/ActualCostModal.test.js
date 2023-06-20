@@ -3,7 +3,7 @@ import {
   render,
   screen,
   fireEvent,
-} from '@testing-library/react';
+} from '@folio/jest-config-stripes/testing-library/react';
 import {
   TextField,
   TextArea,
@@ -54,7 +54,7 @@ const initialProps = {
   },
   setActualCost: jest.fn(),
 };
-const messageIds = {
+const labelIds = {
   actualCostToBill: 'ui-users.lostItems.modal.actualCostToBill',
   additionalInformationForStaff: 'ui-users.lostItems.modal.additionalInformationForStaff',
   additionalInformationForPatron: 'ui-users.lostItems.modal.additionalInformationForPatron',
@@ -84,7 +84,7 @@ describe('ActualCostModal', () => {
     });
 
     it('should have correct title', () => {
-      expect(screen.getByText(messageIds.billTitle)).toBeVisible();
+      expect(screen.getByText(labelIds.billTitle)).toBeVisible();
     });
 
     it('should render fee fine owner name', () => {
@@ -96,7 +96,7 @@ describe('ActualCostModal', () => {
     });
 
     it('should render "actualCostToBill" field', () => {
-      expect(screen.getByText(messageIds.actualCostToBill)).toBeVisible();
+      expect(screen.getByText(labelIds.actualCostToBill)).toBeVisible();
     });
 
     it('should render "actualCostToBill" field with correct props', () => {
@@ -109,7 +109,7 @@ describe('ActualCostModal', () => {
     });
 
     it('should render "additionalInformationForStaff" textarea', () => {
-      expect(screen.getByText(messageIds.additionalInformationForStaff)).toBeVisible();
+      expect(screen.getByText(labelIds.additionalInformationForStaff)).toBeVisible();
     });
 
     it('should render "additionalInformationForStaff" textarea with correct props', () => {
@@ -121,7 +121,7 @@ describe('ActualCostModal', () => {
     });
 
     it('should render "additionalInformationForPatron" textarea', () => {
-      expect(screen.getByText(messageIds.additionalInformationForPatron)).toBeVisible();
+      expect(screen.getByText(labelIds.additionalInformationForPatron)).toBeVisible();
     });
 
     it('should render "additionalInformationForPatron" textarea with correct props', () => {
@@ -134,7 +134,7 @@ describe('ActualCostModal', () => {
 
     describe('footer', () => {
       it('should render "Continue" button label', () => {
-        expect(screen.getByText(messageIds.continueButton)).toBeVisible();
+        expect(screen.getByText(labelIds.continueButton)).toBeVisible();
       });
 
       it('should trigger "setActualCostModal" and "setActualCostConfirmModal" with correct data', () => {
@@ -149,7 +149,7 @@ describe('ActualCostModal', () => {
       });
 
       it('should render "Cancel" button label', () => {
-        expect(screen.getByText(messageIds.cancelButton)).toBeVisible();
+        expect(screen.getByText(labelIds.cancelButton)).toBeVisible();
       });
 
       it('should trigger "setActualCostModal" and "setActualCost" with correct data', () => {
@@ -181,7 +181,7 @@ describe('ActualCostModal', () => {
     });
 
     it('should have correct title', () => {
-      expect(screen.getByText(messageIds.doNotBillTitle)).toBeVisible();
+      expect(screen.getByText(labelIds.doNotBillTitle)).toBeVisible();
     });
 
     it('should render "do not bill" value', () => {
@@ -191,7 +191,7 @@ describe('ActualCostModal', () => {
     });
 
     it('should not render additional patron information', () => {
-      expect(screen.queryByText(messageIds.additionalInformationForPatron)).not.toBeInTheDocument();
+      expect(screen.queryByText(labelIds.additionalInformationForPatron)).not.toBeInTheDocument();
     });
   });
 });

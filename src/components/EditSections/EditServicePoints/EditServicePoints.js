@@ -4,7 +4,7 @@ import {
   injectIntl,
 } from 'react-intl';
 import PropTypes from 'prop-types';
-import { uniqBy } from 'lodash';
+import { uniqBy, isEmpty } from 'lodash';
 import { Field } from 'react-final-form';
 import { FieldArray } from 'react-final-form-arrays';
 import { OnChange } from 'react-final-form-listeners';
@@ -201,7 +201,10 @@ class EditServicePoints extends React.Component {
             {this.renderAddServicePointModal()}
           </Accordion>
           <OnChange name="servicePoints">
-            {userServicePoints => this.setState({ userServicePoints })}
+            {(servicePoints) => {
+              const userServicePoints = isEmpty(servicePoints) ? [] : servicePoints;
+              this.setState({ userServicePoints });
+            }}
           </OnChange>
         </IfInterface>
       </IfPermission>

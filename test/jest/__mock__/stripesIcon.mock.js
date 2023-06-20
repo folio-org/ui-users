@@ -1,5 +1,5 @@
 import React from 'react';
 
 jest.mock('@folio/stripes-components/lib/Icon', () => {
-  return () => <span>Icon</span>;
+  return ({ icon, id }) => <span id={id ?? 'foo'}>Icon ({icon})</span>;
 });

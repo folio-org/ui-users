@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { FormattedMessage } from 'react-intl';
 
 import {
+  chunk,
   cloneDeep,
   find,
   omit,
@@ -13,14 +14,20 @@ import {
 } from 'lodash';
 
 import { LoadingView } from '@folio/stripes/components';
-import { CalloutContext } from '@folio/stripes/core';
+import {
+  CalloutContext,
+  withOkapiKy,
+} from '@folio/stripes/core';
 
 import { getRecordObject } from '../../components/util';
 
 import UserForm from './UserForm';
 import { toUserAddresses, getFormAddressList } from '../../components/data/converters/address';
 import contactTypes from '../../components/data/static/contactTypes';
-import { deliveryFulfillmentValues } from '../../constants';
+import {
+  OKAPI_TENANT_HEADER,
+  deliveryFulfillmentValues,
+} from '../../constants';
 import { resourcesLoaded, showErrorCallout } from './UserEditHelpers';
 
 class UserEdit extends React.Component {
@@ -30,6 +37,7 @@ class UserEdit extends React.Component {
     history: PropTypes.object,
     location: PropTypes.object,
     match: PropTypes.object,
+    okapiKy: PropTypes.object.isRequired,
     updateProxies: PropTypes.func,
     updateSponsors: PropTypes.func,
     updateServicePoints: PropTypes.func,
@@ -58,7 +66,6 @@ class UserEdit extends React.Component {
       getSponsors,
       getPreferredServicePoint,
       getUserServicePoints,
-      resources,
       match,
     } = this.props;
 
@@ -82,10 +89,6 @@ class UserEdit extends React.Component {
 
     const user = this.getUser();
     const userFormValues = cloneDeep(user);
-    const formRecordValues = getRecordObject(
-      resources,
-      'permissions',
-    );
 
     if (!userFormValues.personal) {
       userFormValues.personal = {};
@@ -95,7 +98,6 @@ class UserEdit extends React.Component {
 
     return {
       ...userFormValues,
-      ...formRecordValues,
       preferredServicePoint: getPreferredServicePoint(),
       proxies: getProxies(),
       sponsors: getSponsors(),
@@ -222,11 +224,11 @@ class UserEdit extends React.Component {
       updateSponsors(sponsors || []);
     }
 
-    if (permissions) {
+    if (stripes.hasPerm('ui-users.editperms')) {
       this.updatePermissions(user.id, permissions);
     }
 
-    if (servicePoints && stripes.hasPerm('inventory-storage.service-points-users.item.post,inventory-storage.service-points-users.item.put')) {
+    if (stripes.hasPerm('inventory-storage.service-points-users.item.post,inventory-storage.service-points-users.item.put')) {
       updateServicePoints(servicePoints, preferredServicePoint);
     }
 
@@ -258,7 +260,76 @@ class UserEdit extends React.Component {
       .catch((e) => showErrorCallout(e, this.context.sendCallout));
   }
 
-  async updatePermissions(userId, perms) {
+  async updatePermissions(userId, permissionsMap = {}) {
+    const CHUNK_SIZE = 5;
+
+    const result = await chunk(Object.entries(permissionsMap), CHUNK_SIZE)
+      .reduce(async (prevPromise, itemsChunk) => {
+        const prev = await prevPromise;
+        const curr = await Promise.all(itemsChunk.map(([tenant, permissions]) => (
+          this.updateUserTenantPermissions(userId, permissions, tenant)
+        )));
+
+        return prev.concat(curr);
+      }, Promise.resolve([]));
+
+    return result;
+  }
+
+  updateUserTenantPermissions = async (userId, permissions, tenant) => {
+    const { stripes } = this.props;
+
+    // the perms parameter is an array of permission objects, but the permissions API
+    // wants an array of permission names.
+    const permissionNames = (permissions ?? []).map(p => p.permissionName);
+    const isCurrentTenant = tenant === stripes.okapi.tenant;
+
+    if (isCurrentTenant) return this.updateCurrentTenantPermissions(userId, permissionNames);
+
+    const recordService = this.getTenantPermUserRecordService(tenant);
+    const permUserRecord = await recordService.getByUserId(userId);
+
+    if (permUserRecord) {
+      return recordService.update({
+        ...omit(permUserRecord, 'metadata'),
+        permissions: permissionNames,
+      }).catch((e) => showErrorCallout(e, this.context.sendCallout));
+    } else {
+      const record = await recordService.create({ userId });
+
+      return recordService.update({
+        ...omit(record, 'metadata'),
+        permissions: permissionNames,
+      }).catch((e) => showErrorCallout(e, this.context.sendCallout));
+    }
+  }
+
+  getTenantPermUserRecordService = (tenant) => {
+    const { okapiKy } = this.props;
+
+    const ky = okapiKy.extend({
+      hooks: {
+        beforeRequest: [
+          request => {
+            request.headers.set(OKAPI_TENANT_HEADER, tenant);
+          },
+        ],
+      }
+    });
+
+    const searchParams = {
+      full: true,
+      indexField: 'userId',
+    };
+
+    return {
+      getByUserId: (userId) => ky.get(`perms/users/${userId}`, { searchParams }).json(),
+      create: (json) => ky.post('perms/users', { json }).json(),
+      update: (json) => ky.put(`perms/users/${json.id}`, { json }).json(),
+    };
+  }
+
+  async updateCurrentTenantPermissions(userId, permissionNames) {
     const {
       permissions: permissionsMutator,
       perms: permUserMutator,
@@ -266,9 +337,6 @@ class UserEdit extends React.Component {
     } = this.props.mutator;
 
     const { perms: permUserRecords } = this.props.resources;
-    // the perms parameter is an array of permission objects, but the permissions API
-    // wants an array of permission names.
-    const permissionNames = Object.values(perms).map(p => p.permissionName);
 
     // If the user record has never had any associated permissions, a user permissions
     // record may not exist. The PUT operation will fail if that's the case; thus,
@@ -347,4 +415,4 @@ class UserEdit extends React.Component {
   }
 }
 
-export default UserEdit;
+export default withOkapiKy(UserEdit);

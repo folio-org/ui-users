@@ -1,0 +1,12 @@
+.columns {
+  column-count: 2;
+}
+
+.primary {
+  font-weight: bold;
+}
+
+.errorsList {
+  margin-top: 16px;
+  padding-left: 24px;
+}

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
-import { screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { screen, waitFor } from '@folio/jest-config-stripes/testing-library/react';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import PropTypes from 'prop-types';
 
 import renderWithRouter from 'helpers/renderWithRouter';
