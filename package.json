@@ -748,7 +748,7 @@
         "permissionName": "ui-users.loans.add-patron-info",
         "displayName": "Users: User loans: add patron information",
         "subPermissions": [
-          "circulation.loans.item.put"
+          "circulation.loans.add-info.post"
         ],
         "visible": true
       },
@@ -756,7 +756,7 @@
         "permissionName": "ui-users.loans.add-staff-info",
         "displayName": "Users: User loans: add staff information",
         "subPermissions": [
-          "circulation.loans.item.put"
+          "circulation.loans.add-info.post"
         ],
         "visible": true
       },
