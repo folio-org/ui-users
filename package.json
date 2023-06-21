@@ -109,28 +109,6 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.consortia.affiliations.view",
-        "displayName": "Users: View affiliations",
-        "description": "View a list of affiliations assigned to an user",
-        "subPermissions": [
-          "consortia.consortium.collection.get",
-          "consortia.user-tenants.collection.get"
-        ],
-        "visible": true
-      },
-      {
-        "permissionName": "ui-users.consortia.affiliations.edit",
-        "displayName": "Users: Assign and unassign affiliations",
-        "description": "Assign and unassign affiliations",
-        "subPermissions": [
-          "ui-users.consortia.affiliations.view",
-          "consortia.tenants.collection.get",
-          "consortia.user-tenants.item.post",
-          "consortia.user-tenants.item.delete"
-        ],
-        "visible": true
-      },
-      {
         "permissionName": "ui-users.opentransactions",
         "displayName": "Users: Can check open transactions",
         "description": "Check if user does have any open transactions",
