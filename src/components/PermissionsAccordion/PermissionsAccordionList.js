@@ -18,7 +18,7 @@ const PermissionsAccordionList = ({ fields, showPerms, getAssignedPermissions, c
   const assignedPermissions = getAssignedPermissions();
 
   const itemFormatter = (_fieldName, index) => {
-    if (fields.value[index]) {
+    if (fields?.value[index]) {
       return <PermissionsAccordionListItem
         key={index}
         item={fields.value[index]}
