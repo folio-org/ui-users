@@ -1,5 +1,5 @@
-import userEvent from '@testing-library/user-event';
-import { screen, waitFor, fireEvent } from '@testing-library/react';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
+import { screen, waitFor, fireEvent } from '@folio/jest-config-stripes/testing-library/react';
 
 import okapiCurrentUser from 'fixtures/okapiCurrentUser';
 import renderWithRouter from 'helpers/renderWithRouter';

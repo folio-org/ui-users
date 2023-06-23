@@ -15,7 +15,7 @@ import {
 import PermissionLabel from '../PermissionLabel';
 import css from './PermissionsAccordion.css';
 
-const PermissionsAccordionListItem = ({ item, index, fields, showPerms, permToDelete }) => {
+const PermissionsAccordionListItem = ({ item, index, fields, showPerms, permToDelete, changePermissions }) => {
   return (
     <li
       key={item.id}
@@ -30,7 +30,9 @@ const PermissionsAccordionListItem = ({ item, index, fields, showPerms, permToDe
               align="end"
               type="button"
               id={`clickable-remove-permission-${item.permissionName}`}
-              onClick={() => fields.remove(index)}
+              onClick={() => {
+                changePermissions(fields.value.filter((_, idx) => idx !== index));
+              }}
               aria-label={`${aria}: ${item.permissionName}`}
             >
               <Icon
@@ -52,6 +54,7 @@ PermissionsAccordionListItem.propTypes = {
   fields: PropTypes.object,
   showPerms: PropTypes.bool,
   permToDelete: PropTypes.string,
+  changePermissions: PropTypes.func.isRequired,
 };
 
 export default PermissionsAccordionListItem;

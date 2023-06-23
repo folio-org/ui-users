@@ -1,6 +1,6 @@
 # Change history for ui-users
 
-## 9.1.0 IN PROGRESS
+## 10.0.0 IN PROGRESS
 
 * Add STATUS FILTER to LOST ITEMS REQUIRING ACTUAL COST processing page. Refs UIU-2748.
 * Correctly handle removing all permissions from given user. Fixes UIU-2822.
@@ -23,6 +23,31 @@
 * View affiliation associated permissions. Refs UIU-2800.
 * Confirmation modal for manual anonymization. Refs UIU-1631.
 * Fixed bug with certain accordions not closing in edit view. Refs UIU-2811.
+* Users: Implement search by middle name. Refs UIU-2860.
+* Notify patron checkbox not checked correctly when fee/fine owner has default notice. Refs UIU-2823.
+* Show success and Error toasts when Assign/unassign a users affiliations. Refs UIU-2852.
+* "ui-users.settings.customfields.view" permission insufficient to view custom fields on user settings. Refs UIU-2863.
+* Align affiliation assignment with stripes-core updates (switch active affiliation). Refs UIU-2855.
+* Create Jest/RTL test for UserEdit.js. Refs UIU-2426
+* Also support `circulation` `14.0`. Refs UIU-2858.
+* Import `@testing-library` deps from `jest-config-stripes`. Refs UIU-2866.
+* Also support `request-storage` `6.0`. Refs UIU-2875.
+* New permissions for adding Patron Info and Staff Info to loans. Fixes UIU-2865.
+* In Loan Details record, add buttons for adding patron info and staff info. Fixes UIU-2816.
+* In Loan Details record, display of patron info. Fixes UIU-2817.
+* In Loan Details record, display of staff info. Fixes UIU-2818.
+* Create tests for adding patron/staff info. Fixes UIU-2868.
+* Add/Edit a users permissions for associated affiliation(s). Refs UIU-2805.
+* New permission(s) to view all Users settings in UI. Refs UIU-2784.
+* Unassigning banner should not be displayed at top of "Assign / Unassign affiliation" modal. Refs UIU-2876.
+* Add user access to all feefines-related entries in settings if user has "...all feefines-related entries" perm. Refs UIU-2881.
+* Do not publish CI artifacts (e.g. test coverage) to NPM.
+* Make Limit menu visible if user has "ui-users.settings.limits.all" permission. Refs UIU-2880.
+* In loan history, older staff notes should NOT be marked as "SUPERSEDED". Fixes UIU-2891.
+* Users with view-only access to user permissions and access to edit user records get error message when saving a user record. Refs UIU-2885.
+* Use new WSAPI for adding patron/staff notes to loans. Fixes UIU-2893. **Note.** The new requirement of the `add-info` interface is a breaking change.
+* Modify add-patron/staff-info permission to use new subpermission. Fixes UIU-2895.
+* Move view/assign affiliation permissions from `ui-users` to `ui-consortia-settings`. Refs UIU-2897.
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v9.0.0)

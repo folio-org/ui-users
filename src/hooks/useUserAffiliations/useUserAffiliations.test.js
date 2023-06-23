@@ -1,11 +1,14 @@
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook } from '@folio/jest-config-stripes/testing-library/react-hooks';
 import {
   QueryClient,
   QueryClientProvider,
 } from 'react-query';
 import orderBy from 'lodash/orderBy';
 
-import { useOkapiKy } from '@folio/stripes/core';
+import {
+  useOkapiKy,
+  useStripes,
+} from '@folio/stripes/core';
 
 import affiliations from '../../../test/jest/fixtures/affiliations';
 import consortia from '../../../test/jest/fixtures/consortia';
@@ -14,13 +17,14 @@ import {
   CONSORTIA_USER_TENANTS_API,
   MAX_RECORDS,
 } from '../../constants';
-import useConsortium from '../useConsortium';
 import useUserAffiliations from './useUserAffiliations';
 
-jest.mock('../useConsortium', () => jest.fn(() => ({
-  consortium: null,
-  isLoading: false,
-})));
+jest.mock('@folio/stripes/core', () => ({
+  ...jest.requireActual('@folio/stripes/core'),
+  useNamespace: jest.fn(() => ['test']),
+  useOkapiKy: jest.fn(),
+  useStripes: jest.fn(),
+}));
 
 const queryClient = new QueryClient();
 
@@ -31,21 +35,41 @@ const wrapper = ({ children }) => (
   </QueryClientProvider>
 );
 
-const [consortium] = consortia;
 const response = {
   userTenants: affiliations,
   totalRecords: affiliations.length,
 };
 
+const consortium = {
+  ...consortia[0],
+  centralTenantId: 'mobius',
+};
+
+const tenants = affiliations.map(({ tenantId, tenantName, isPrimary }) => ({ id: tenantId, name: tenantName, isPrimary }));
+
 describe('useUserAffiliations', () => {
   const mockGet = jest.fn(() => ({
     json: () => Promise.resolve(response),
   }));
+  const setHeaderMock = jest.fn();
+  const kyMock = {
+    extend: jest.fn(({ hooks: { beforeRequest } }) => {
+      beforeRequest.forEach(handler => handler({ headers: { set: setHeaderMock } }));
+
+      return {
+        get: mockGet,
+      };
+    }),
+  };
 
   beforeEach(() => {
     mockGet.mockClear();
-    useConsortium.mockClear().mockReturnValue({ consortium, isLoading: false });
-    useOkapiKy.mockClear().mockReturnValue({ get: mockGet });
+    useOkapiKy.mockClear().mockReturnValue(kyMock);
+    useStripes.mockClear().mockReturnValue({
+      user: {
+        user: { consortium, tenants },
+      }
+    });
   });
 
   it('should fetch user\'s consortium affiliations by user\'s id when there is consortium', async () => {
@@ -63,18 +87,13 @@ describe('useUserAffiliations', () => {
   });
 
   it('should not fetch user\'s consortium affiliations by user\'s id when there is not consortium', async () => {
-    const getMock = jest.fn(() => ({
-      json: () => Promise.resolve({}),
-    }));
-
-    useOkapiKy.mockClear().mockReturnValue({ get: getMock });
-    useConsortium.mockReturnValue({ isLoading: false, consortium: undefined });
+    useStripes.mockClear().mockReturnValue({ a: 1 });
 
     const userId = 'usedId';
-    const { result, waitFor } = renderHook(() => useUserAffiliations({ userId }), { wrapper });
+    const { result, waitFor } = renderHook(() => useUserAffiliations({ userId }, { assignedToCurrentUser: false }), { wrapper });
 
     await waitFor(() => !result.current.isLoading);
 
-    expect(getMock.mock.calls.length).toBe(0);
+    expect(mockGet.mock.calls.length).toBe(0);
   });
 });

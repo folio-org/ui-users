@@ -1,51 +1,96 @@
-import { screen } from '@testing-library/dom';
-import renderWithRouter from 'helpers/renderWithRouter';
+import { screen } from '@folio/jest-config-stripes/testing-library/dom';
+import { within } from '@folio/jest-config-stripes/testing-library/react';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
-import userEvent from '@testing-library/user-event';
+import renderWithRouter from 'helpers/renderWithRouter';
 import BlockTemplateDetails from './BlockTemplateDetails';
 
 jest.unmock('@folio/stripes/components');
 
 const renderBlockTemplateDetails = (props) => renderWithRouter(<BlockTemplateDetails {...props} />);
 
-const props = { initialValues: { metadata: { id: 'mock-match-params-id', createdDate: '2021-11-22T03:38:19.279+00:00' }, renewals: 'true', name: 'blockTemplate Test', code: 'components' } };
+const propsBlocked = {
+  initialValues: {
+    metadata: {
+      id: 'mock-match-params-id',
+      createdDate: '2021-11-22T03:38:19.279+00:00'
+    },
+    name: 'blockTemplate Test',
+    code: 'code',
+    blockTemplate: {
+      borrowing: true,
+      renewals: true,
+      requests: true,
+    }
+  }
+};
 
-const props1 = { initialValues: { metadata: { id: 'mock-match-params-id' }, name: 'blockTemplate Test', code: 'components' } };
+const propsUnblocked = {
+  initialValues: {
+    metadata: {
+      id: 'mock-match-params-id',
+      createdDate: '2021-11-22T03:38:19.279+00:00'
+    },
+    renewals: 'true',
+    name: 'blockTemplate Test',
+    code: 'code',
+    blockTemplate: {
+      borrowing: false,
+      renewals: false,
+      requests: false,
+    }
+  }
+};
 
-describe('Render BlockTemplateDetails component with', () => {
-  it('Check for Template Information Accordian for created date', () => {
-    renderBlockTemplateDetails(props);
+describe('BlockTemplateDetails', () => {
+  it('check for template and block details', () => {
+    renderBlockTemplateDetails(propsBlocked);
+
     expect(screen.getByText('ViewMetaData')).toBeInTheDocument();
-  });
-
-  it('Check for Template Information Accordian if date not present', () => {
-    renderBlockTemplateDetails(props1);
-    expect(screen.queryByText('ViewMetaData')).not.toBeInTheDocument();
-  });
-
-  it('Render BlockTemplate Name', () => {
-    renderBlockTemplateDetails(props);
     expect(screen.getByText('blockTemplate Test')).toBeInTheDocument();
+    expect(screen.getByText('code')).toBeInTheDocument();
   });
 
-  it('Render BlockTemplate Code', () => {
-    renderBlockTemplateDetails(props);
-    expect(screen.getByText('components')).toBeInTheDocument();
-  });
-
-  it('Component must be rendered', () => {
-    renderBlockTemplateDetails(props);
-    expect(renderBlockTemplateDetails(props)).toBeTruthy();
-  });
-
-  it('Expand Button for template information', () => {
-    renderBlockTemplateDetails(props);
+  it('toggle template accordion', () => {
+    renderBlockTemplateDetails(propsBlocked);
     userEvent.click(document.querySelector('[id="accordion-toggle-button-templateInformation"]'));
-    expect(renderBlockTemplateDetails(props)).toBeTruthy();
+
+    // template accordion is closed; with 'expanded' has length 0
+    const tcontainer = document.querySelector('[id=templateInformation]');
+    const taccordion = tcontainer.getElementsByClassName('content-wrap');
+    const taccordionOpen = tcontainer.getElementsByClassName('content-wrap expanded');
+    expect(taccordion.length).toBe(1);
+    expect(taccordionOpen.length).toBe(0);
+
+    // block accordion is open; with 'expanded' has length 1
+    const bcontainer = document.querySelector('[id=blockInformation]');
+    const baccordion = bcontainer.getElementsByClassName('content-wrap expanded');
+    expect(baccordion.length).toBe(1);
   });
 
-  it('Component must be rendered', () => {
-    renderBlockTemplateDetails(props);
-    expect(renderBlockTemplateDetails(props)).toBeTruthy();
+  it('shows blocked actions', () => {
+    renderBlockTemplateDetails(propsBlocked);
+
+    const borrow = document.querySelector('[id=block-template-borrowing]');
+    expect(within(borrow).getByText('Icon (select-all)')).toBeInTheDocument();
+
+    const renew = document.querySelector('[id=block-template-renewals]');
+    expect(within(renew).getByText('Icon (select-all)')).toBeInTheDocument();
+
+    const request = document.querySelector('[id=block-template-requests]');
+    expect(within(request).getByText('Icon (select-all)')).toBeInTheDocument();
+  });
+
+  it('shows unblocked actions', () => {
+    renderBlockTemplateDetails(propsUnblocked);
+
+    const borrow = document.querySelector('[id=block-template-borrowing]');
+    expect(within(borrow).getByText('Icon (deselect-all)')).toBeInTheDocument();
+
+    const renew = document.querySelector('[id=block-template-renewals]');
+    expect(within(renew).getByText('Icon (deselect-all)')).toBeInTheDocument();
+
+    const request = document.querySelector('[id=block-template-requests]');
+    expect(within(request).getByText('Icon (deselect-all)')).toBeInTheDocument();
   });
 });

@@ -6,7 +6,7 @@ import {
   useState,
 } from 'react';
 
-const useAffiliationsAssignment = ({ affiliations, tenants, onUnassignedCheck }) => {
+const useAffiliationsAssignment = ({ affiliations, tenants }) => {
   const [assignment, setAssignment] = useState({});
 
   useEffect(() => {
@@ -29,19 +29,13 @@ const useAffiliationsAssignment = ({ affiliations, tenants, onUnassignedCheck })
     Object.values(assignment).filter(Boolean).length
   ), [assignment]);
 
-  const checkUnassigned = useCallback((_assignment) => {
-    onUnassignedCheck(affiliations.some(({ tenantId }) => !_assignment[tenantId]));
-  }, [affiliations, onUnassignedCheck]);
-
   const toggle = useCallback(({ id }) => {
     setAssignment(prev => {
       const newAssignment = { ...prev, [id]: !prev[id] };
 
-      checkUnassigned(newAssignment);
-
       return newAssignment;
     });
-  }, [checkUnassigned]);
+  }, []);
 
   const toggleAll = useCallback(() => {
     setAssignment(prev => {
@@ -51,11 +45,9 @@ const useAffiliationsAssignment = ({ affiliations, tenants, onUnassignedCheck })
         return acc;
       }, {});
 
-      checkUnassigned(newAssignment);
-
       return newAssignment;
     });
-  }, [checkUnassigned, isAllAssigned]);
+  }, [isAllAssigned]);
 
   return {
     assignment,

@@ -484,7 +484,7 @@ class ChargeFeeFine extends React.Component {
     const initialOwnerId = ownerId !== '0' ? ownerId : servicePointOwnerId;
     const selectedFeeFine = feefines.find(f => f.id === feeFineTypeId);
     const currentOwnerFeeFineTypes = feefines.filter(f => f.ownerId === initialOwnerId || f.ownerId === resources.activeRecord.shared);
-    const selectedOwner = owners.find(o => (o.id === initialOwnerId || o.id === resources.activeRecord.shared));
+    const selectedOwner = owners.find(o => o.id === initialOwnerId) ?? owners.find(o => o.id === resources.activeRecord.shared);
 
     const initialChargeValues = {
       ownerId: initialOwnerId,

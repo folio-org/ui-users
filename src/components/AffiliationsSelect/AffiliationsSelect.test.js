@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, within } from '@folio/jest-config-stripes/testing-library/react';
 
 import '__mock__/matchMedia.mock';
 
@@ -27,9 +27,15 @@ describe('AffiliationsSelect', () => {
   it('should render affiliation select with provided options', () => {
     renderAffiliationsSelect();
 
-    expect(screen.getByRole('combobox')).toHaveValue(affiliations[2].tenantId);
+    expect(
+      within(document.getElementById('test-affiliations-select'))
+        .getByText(affiliations[2].tenantName)
+    ).toBeInTheDocument();
     affiliations.forEach(({ tenantName, isPrimary }) => {
-      expect(screen.getByText(isPrimary ? `${tenantName} ui-users.affiliations.primary.label` : tenantName)).toBeInTheDocument();
+      expect(
+        within(document.getElementById('sl-test-affiliations-select'))
+          .getByText(isPrimary ? `${tenantName} ui-users.affiliations.primary.label` : tenantName),
+      ).toBeInTheDocument();
     });
   });
 });

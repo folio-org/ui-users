@@ -16,7 +16,7 @@ class ExportFeesFinesReportButton extends React.Component {
   static propTypes = {
     feesFinesReportData: PropTypes.shape({
       patronGroup: PropTypes.string.isRequired,
-      servicePoints: PropTypes.arrayOf(PropTypes.object).isRequired,
+      servicePoints: PropTypes.arrayOf(PropTypes.object),
       feeFineActions:  PropTypes.arrayOf(PropTypes.object).isRequired,
       accounts: PropTypes.arrayOf(PropTypes.object).isRequired,
       loans: PropTypes.arrayOf(PropTypes.object).isRequired,

@@ -8,7 +8,6 @@ import {
   useCallback,
   useMemo,
   useReducer,
-  useState,
 } from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -42,7 +41,6 @@ import css from '../AffiliationsManager.css';
 const INITIAL_FILTERS = {};
 
 const AffiliationManagerModal = ({ onClose, onSubmit, userId }) => {
-  const [isDisplayWarning, setDisplayWarning] = useState(false);
   const [isFiltersVisible, toggleFilters] = useToggle(true);
   const [filters, dispatch] = useReducer(filtersReducer, INITIAL_FILTERS);
 
@@ -55,7 +53,7 @@ const AffiliationManagerModal = ({ onClose, onSubmit, userId }) => {
   const {
     affiliations,
     isLoading: isUsersAffiliationsLoading,
-  } = useUserAffiliations({ userId });
+  } = useUserAffiliations({ userId }, { assignedToCurrentUser: false });
 
   const {
     tenants,
@@ -71,7 +69,6 @@ const AffiliationManagerModal = ({ onClose, onSubmit, userId }) => {
   } = useAffiliationsAssignment({
     affiliations,
     tenants,
-    onUnassignedCheck: setDisplayWarning,
   });
 
   const isLoading = isConsortiumTenantsLoading || isUsersAffiliationsLoading;
@@ -149,7 +146,6 @@ const AffiliationManagerModal = ({ onClose, onSubmit, userId }) => {
         <AffiliationsManagerResultsPane
           assignment={assignment}
           contentData={contentData}
-          displayWarning={isDisplayWarning}
           isAllAssigned={isAllAssigned}
           isFiltersVisible={isFiltersVisible}
           isLoading={isLoading}

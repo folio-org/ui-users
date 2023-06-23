@@ -52,6 +52,7 @@ import {
 } from '../../components/UserDetailSections';
 
 import HelperApp from '../../components/HelperApp';
+import IfConsortium from '../../components/IfConsortium';
 import {
   PatronBlockMessage
 } from '../../components/PatronBlock';
@@ -71,6 +72,7 @@ import ErrorPane from '../../components/ErrorPane';
 import ActionMenuEditButton from './components/ActionMenuEditButton';
 import ActionMenuDeleteButton from './components/ActionMenuDeleteButton';
 import LostItemsLink from '../../components/LostItemsLink';
+import IfConsortiumPermission from '../../components/IfConsortiumPermission';
 
 class UserDetail extends React.Component {
   static propTypes = {
@@ -136,7 +138,7 @@ class UserDetail extends React.Component {
     }).isRequired,
     okapi: PropTypes.shape({
       currentUser: PropTypes.shape({
-        servicePoints: PropTypes.arrayOf(PropTypes.object).isRequired,
+        servicePoints: PropTypes.arrayOf(PropTypes.object),
       }).isRequired,
     }).isRequired,
     onClose: PropTypes.func,
@@ -698,16 +700,17 @@ class UserDetail extends React.Component {
                   onToggle={this.handleSectionToggle}
                 />
 
-                <IfInterface name="consortia">
-                  <IfPermission perm="consortia.user-tenants.collection.get">
+                <IfConsortium>
+                  <IfConsortiumPermission perm="consortia.user-tenants.collection.get">
                     <UserAffiliations
                       accordionId="affiliationsSection"
                       expanded={sections.affiliationsSection}
                       onToggle={this.handleSectionToggle}
                       userId={user?.id}
+                      userName={user?.username}
                     />
-                  </IfPermission>
-                </IfInterface>
+                  </IfConsortiumPermission>
+                </IfConsortium>
 
                 <IfInterface name="feesfines">
                   {hasPatronBlocksPermissions &&

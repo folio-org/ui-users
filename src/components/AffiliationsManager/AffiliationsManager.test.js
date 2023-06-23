@@ -1,12 +1,10 @@
-import userEvent from '@testing-library/user-event';
-import { render, screen } from '@testing-library/react';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
+import { render, screen } from '@folio/jest-config-stripes/testing-library/react';
 
 import '__mock__/currencyData.mock';
 
-import affiliations from '../../../test/jest/fixtures/affiliations';
-import consortia from '../../../test/jest/fixtures/consortia';
+import affiliations from 'fixtures/affiliations';
 import {
-  useConsortium,
   useConsortiumTenants,
   useUserAffiliations,
 } from '../../hooks';
@@ -17,7 +15,6 @@ jest.unmock('@folio/stripes/util');
 
 jest.mock('../../hooks', () => ({
   ...jest.requireActual('../../hooks'),
-  useConsortium: jest.fn(),
   useConsortiumTenants: jest.fn(),
   useUserAffiliations: jest.fn(),
 }));
@@ -36,9 +33,6 @@ const renderAffiliationsManager = (props = {}) => render(
 
 describe('AffiliationsManager', () => {
   beforeEach(() => {
-    useConsortium
-      .mockClear()
-      .mockReturnValue({ consortium: consortia[0], isLoading: false });
     useConsortiumTenants
       .mockClear()
       .mockReturnValue({

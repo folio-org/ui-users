@@ -1,14 +1,18 @@
-import chunk from 'lodash/chunk';
+import { chunk, uniqBy } from 'lodash';
 import { useCallback } from 'react';
 import { useMutation } from 'react-query';
 
-import { useOkapiKy } from '@folio/stripes/core';
+import {
+  useOkapiKy,
+  useStripes,
+} from '@folio/stripes/core';
 
 import {
   CONSORTIA_API,
   CONSORTIA_USER_TENANTS_API,
+  OKAPI_TENANT_HEADER,
 } from '../../constants';
-import useConsortium from '../useConsortium';
+import { getResponseErrors } from '../../components/UserDetailSections/UserAffiliations/util';
 
 const CHUNK_SIZE = 5;
 
@@ -26,26 +30,29 @@ const batchRequest = async (arr, handler) => (
 );
 
 const useUserAffiliationsMutation = () => {
+  const stripes = useStripes();
   const ky = useOkapiKy();
 
-  const {
-    consortium,
-    isLoading: isConsortiumLoading,
-  } = useConsortium();
+  const consortium = stripes?.user?.user?.consortium;
 
   const {
     mutateAsync: assignAffiliation,
     isLoading: isAssigningLoading,
   } = useMutation({
     mutationFn: ({ tenantId, userId }) => {
-      const json = {
-        tenantId,
-        userId,
-      };
+      const api = ky.extend({
+        hooks: {
+          beforeRequest: [
+            request => {
+              request.headers.set(OKAPI_TENANT_HEADER, consortium.centralTenantId);
+            },
+          ],
+        },
+      });
 
-      return ky.post(
+      return api.post(
         `${CONSORTIA_API}/${consortium.id}/${CONSORTIA_USER_TENANTS_API}`,
-        { json },
+        { json: { tenantId, userId } },
       );
     },
   });
@@ -55,26 +62,47 @@ const useUserAffiliationsMutation = () => {
     isLoading: isUnassigningLoading,
   } = useMutation({
     mutationFn: ({ tenantId, userId }) => {
-      const searchParams = {
-        tenantId,
-        userId
-      };
+      const api = ky.extend({
+        hooks: {
+          beforeRequest: [
+            request => {
+              request.headers.set(OKAPI_TENANT_HEADER, consortium.centralTenantId);
+            },
+          ],
+        },
+      });
 
-      return ky.delete(
+      return api.delete(
         `${CONSORTIA_API}/${consortium.id}/${CONSORTIA_USER_TENANTS_API}`,
-        { searchParams },
+        { searchParams: { tenantId, userId } },
       );
     },
   });
 
   const handleAssignment = useCallback(async ({ added, removed }) => {
-    return Promise.allSettled([
+    const batchResponses = await Promise.allSettled([
       batchRequest(added, assignAffiliation),
       batchRequest(removed, unassignAffiliation),
     ]);
+
+    const errors = await getResponseErrors(batchResponses);
+    const uniqueErrorMessages = uniqBy(errors, 'message');
+    if (uniqueErrorMessages.length) {
+      return {
+        errors: uniqueErrorMessages,
+        success: false,
+        responses: batchResponses,
+      };
+    }
+
+    return {
+      errors: [],
+      success: true,
+      responses: batchResponses,
+    };
   }, [assignAffiliation, unassignAffiliation]);
 
-  const isLoading = isConsortiumLoading || isAssigningLoading || isUnassigningLoading;
+  const isLoading = isAssigningLoading || isUnassigningLoading;
 
   return {
     assignAffiliation,

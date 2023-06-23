@@ -1,6 +1,6 @@
 import React from 'react';
-import { screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { screen } from '@folio/jest-config-stripes/testing-library/react';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import { createMemoryHistory } from 'history';
 import '__mock__/stripesCore.mock';
 import renderWithRouter from 'helpers/renderWithRouter';
@@ -179,13 +179,20 @@ describe('Account Details', () => {
 
   it('Test for buttons in DropDownMenu', () => {
     renderAccountDetails({ account: accountWithAdditionalDetails });
-    userEvent.click(screen.getByRole('button', { name: 'Icon' }));
-    userEvent.click(document.getElementById('payAccountActionsHistory'));
-    userEvent.click(document.getElementById('waiveAccountActionsHistory'));
-    userEvent.click(document.getElementById('refundAccountActionsHistory'));
-    userEvent.click(document.getElementById('transferAccountActionsHistory'));
-    userEvent.click(document.getElementById('errorAccountActionsHistory'));
-    expect(renderAccountDetails({ account: accountWithAdditionalDetails })).toBeTruthy();
+
+    expect(document.getElementById('payAccountActionsHistory')).not.toBeVisible();
+    expect(document.getElementById('waiveAccountActionsHistory')).not.toBeVisible();
+    expect(document.getElementById('refundAccountActionsHistory')).not.toBeVisible();
+    expect(document.getElementById('transferAccountActionsHistory')).not.toBeVisible();
+    expect(document.getElementById('errorAccountActionsHistory')).not.toBeVisible();
+
+    userEvent.click(screen.getByRole('button', { name: 'Icon (triangle-down)' }));
+
+    expect(document.getElementById('payAccountActionsHistory')).toBeVisible();
+    expect(document.getElementById('waiveAccountActionsHistory')).toBeVisible();
+    expect(document.getElementById('refundAccountActionsHistory')).toBeVisible();
+    expect(document.getElementById('transferAccountActionsHistory')).toBeVisible();
+    expect(document.getElementById('errorAccountActionsHistory')).toBeVisible();
   });
 
   it('FeeFineReport should be called when exportAccountActionsHistoryReport is clicked', () => {

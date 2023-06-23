@@ -33,13 +33,9 @@ import {
 } from '../../components/EditSections';
 import { getFullName } from '../../components/util';
 import RequestFeeFineBlockButtons from '../../components/RequestFeeFineBlockButtons';
-import PermissionsAccordion from '../../components/PermissionsAccordion';
-import {
-  statusFilterConfig,
-  permissionTypeFilterConfig,
-} from '../../components/PermissionsAccordion/helpers/filtersConfig';
 import { addressTypesShape } from '../../shapes';
 import getProxySponsorWarning from '../../components/util/getProxySponsorWarning';
+import TenantsPermissionsAccordion from './TenantsPermissionsAccordion';
 
 import css from './UserForm.css';
 
@@ -392,26 +388,9 @@ class UserForm extends React.Component {
                         proxies={initialValues.proxies}
                         fullName={fullName}
                       />
-                      <PermissionsAccordion
-                        initialValues={initialValues}
-                        filtersConfig={[
-                          permissionTypeFilterConfig,
-                          statusFilterConfig,
-                        ]}
-                        visibleColumns={[
-                          'selected',
-                          'permissionName',
-                          'type',
-                          'status',
-                        ]}
-                        accordionId="permissions"
-                        headlineContent={<FormattedMessage id="ui-users.permissions.userPermissions" />}
-                        permToRead="perms.users.get"
-                        permToDelete="perms.users.item.delete"
-                        permToModify="perms.users.item.put"
-                        formName="userForm"
-                        permissionsField="permissions"
+                      <TenantsPermissionsAccordion
                         form={form}
+                        initialValues={initialValues}
                         setButtonRef={this.setButtonRef}
                       />
                       <EditServicePoints
