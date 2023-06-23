@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -6,14 +7,19 @@ import okapiCurrentUser from 'fixtures/okapiCurrentUser';
 import renderWithRouter from 'helpers/renderWithRouter';
 import LoanDetails from './LoanDetails';
 
+jest.useFakeTimers('legacy');
 jest.mock('react-intl', () => ({
   ...jest.requireActual('react-intl'),
   formatMessage: jest.fn().mockImplementation(() => 'Format'),
-  formatTime: jest.fn().mockImplementation(() => new Date()),
+  formatTime: jest
+    .fn()
+    .mockImplementation(() => 'Fri Jun 17 2022 11:27:28 GMT+0100'),
 }));
 const mockAccounts = jest.fn().mockImplementation(() => {
   return true;
 });
+jest.spyOn(console, 'warn').mockImplementation(() => {});
+jest.spyOn(console, 'error').mockImplementation(() => {});
 jest.mock('../../components/util', () => ({
   ...jest.requireActual('../../components/util'),
   accountsMatchStatus: (item1, item2) => mockAccounts(item1, item2),
@@ -22,18 +28,16 @@ jest.mock('@folio/stripes/components', () => ({
   ...jest.requireActual('@folio/stripes/components'),
   Modal: jest
     .fn()
-    .mockImplementation(
-      (dismissible, closeOnBackgroundClick, onClose) => {
-        return (
-          <>
-            <div>Dismiss Modal </div>
-            <button type="button" id="clickable-cancel" onClick={onClose}>
-              Close Modal
-            </button>
-          </>
-        );
-      }
-    ),
+    .mockImplementation((dismissible, closeOnBackgroundClick, onClose) => {
+      return (
+        <>
+          <div>Dismiss Modal </div>
+          <button type="button" id="clickable-cancel" onClick={onClose}>
+            Close Modal
+          </button>
+        </>
+      );
+    }),
 }));
 jest.mock('@folio/stripes/smart-components', () => ({
   ChangeDueDateDialog: jest
@@ -105,9 +109,7 @@ const STRIPES = {
   withOkapi: true,
 };
 
-const mockGet = jest.fn(
-  () => new Promise((resolve, _) => resolve([{}]))
-);
+const mockGet = jest.fn(() => new Promise((resolve, _) => resolve([{}])));
 const mockPost = jest.fn(
   (record) => new Promise((resolve, _) => resolve(record))
 );
@@ -116,6 +118,7 @@ const declareLostMock = jest.fn();
 const renewMock = jest.fn();
 const claimReturnedMock = jest.fn();
 const markAsMissingMock = jest.fn();
+
 jest.mock(
   '../../components/PatronBlock/PatronBlockModalWithOverrideModal',
   () => {
@@ -181,7 +184,15 @@ const propsData = {
       reset: mockReset,
     },
   },
-  loanActionsWithUser: [{}],
+  loanActionsWithUser: [
+    {
+      action: 'User Call',
+      filter: 'itemAgedToLost',
+      metadata: {
+        updatedDate: '2023-05-01'
+      }
+    }
+  ],
   loanAccountActions: [{}],
   resources: {
     activeRecord: {
@@ -252,7 +263,6 @@ const propsData = {
   markAsMissing: markAsMissingMock,
 };
 
-
 const renderLoanProxyDetails = (props1) => renderWithRouter(<LoanDetails {...props1} />);
 
 describe('Render LoanProxyDetails component', () => {
@@ -267,7 +277,21 @@ describe('Render LoanProxyDetails component', () => {
     });
     expect(screen.getAllByText('ui-users.loan404')).toBeTruthy();
   });
-    
+  it('When props ID and proxy ID are same', () => {
+    mockGetLodash.mockReset();
+    mockGetLodash.mockImplementation(() => {
+      return 'Lost and paid';
+    });
+
+    const { getByText } = renderLoanProxyDetails({
+      ...propsData,
+      loanIsMissing: false,
+    });
+    userEvent.click(getByText('stripes-smart-components.cddd.changeDueDate'));
+    userEvent.click(getByText('ui-users.renew'));
+    userEvent.click(getByText('ui-users.loans.claimReturned'));
+    expect(screen.getAllByText('ui-users.loans.claimReturned')).toBeTruthy();
+  });
   it('When props ID and proxy ID are same with data', () => {
     mockGetLodash.mockReset();
     mockGetLodash.mockImplementation(() => {
@@ -279,27 +303,26 @@ describe('Render LoanProxyDetails component', () => {
     });
     expect(screen.getAllByText('ui-users.loans.claimReturned')).toBeTruthy();
   });
-  it('When props ID and proxy ID are same with claims', async () => {
+  it('When props ID and proxy ID are same with claims', () => {
     mockGetLodash.mockReset();
     mockGetLodash.mockImplementation((item, item2) => {
       return item2.includes('contributors') ? undefined : 'Claimed returned';
     });
-    const { getByText, getAllByText } =
-      renderLoanProxyDetails(propsData);
+    const { getByText, getAllByText } = renderLoanProxyDetails(propsData);
 
-    await userEvent.click(getAllByText('ui-users.loans.declareLost')[0]);
-    await userEvent.click(getAllByText('ui-users.loans.declareLost')[1]);
-    await userEvent.click(screen.queryAllByRole('button')[0]);
-    await userEvent.click(screen.queryAllByRole('button')[5]);
-    await userEvent.click(screen.queryAllByRole('button')[11]);
-    await userEvent.click(getByText('ui-users.loans.markAsMissing'));
-    await userEvent.click(getByText('Cancel Form'));
-    await userEvent.click(getByText('Reset Form'));
-    await userEvent.click(getByText('Submit Form'));
-    await userEvent.click(getByText('Close Button'));
+    userEvent.click(getAllByText('ui-users.loans.declareLost')[0]);
+    userEvent.click(getAllByText('ui-users.loans.declareLost')[1]);
+    userEvent.click(screen.queryAllByRole('button')[0]);
+    userEvent.click(screen.queryAllByRole('button')[5]);
+    userEvent.click(screen.queryAllByRole('button')[11]);
+    userEvent.click(getByText('ui-users.loans.markAsMissing'));
+    userEvent.click(getByText('Cancel Form'));
+    userEvent.click(getByText('Reset Form'));
+    userEvent.click(getByText('Submit Form'));
+    userEvent.click(getByText('Close Button'));
     expect(screen.getAllByText('ui-users.loans.markAsMissing')).toBeTruthy();
   });
-  it('Fee Fine Else Condition More than 1 loanAccountActions with Amount 0', async () => {
+  it('Fee Fine Else Condition More than 1 loanAccountActions with Amount 0', () => {
     mockGetLodash.mockReset();
     mockGetLodash.mockImplementation(() => {
       return 'Claimed returned';
@@ -316,11 +339,11 @@ describe('Render LoanProxyDetails component', () => {
       ],
     };
     renderLoanProxyDetails(updatedPropsData);
-    await userEvent.click(screen.queryAllByRole('button')[5]);
-    await userEvent.click(screen.queryAllByRole('button')[9]);
+    userEvent.click(screen.queryAllByRole('button')[5]);
+    userEvent.click(screen.queryAllByRole('button')[9]);
     expect(screen.getAllByText('ui-users.loans.markAsMissing')).toBeTruthy();
   });
-  it('Fee Fine Else Condition More than 1 loanAccountActions', async () => {
+  it('Fee Fine Else Condition More than 1 loanAccountActions', () => {
     mockGetLodash.mockReset();
     mockGetLodash.mockImplementation(() => {
       return 'Claimed returned';
@@ -334,11 +357,11 @@ describe('Render LoanProxyDetails component', () => {
       loanAccountActions: [{}, {}],
     };
     renderLoanProxyDetails(updatedPropsData);
-    await userEvent.click(screen.queryAllByRole('button')[5]);
-    await userEvent.click(screen.queryAllByRole('button')[9]);
+    userEvent.click(screen.queryAllByRole('button')[5]);
+    userEvent.click(screen.queryAllByRole('button')[9]);
     expect(screen.getAllByText('ui-users.loans.markAsMissing')).toBeTruthy();
   });
-  it('Fee Fine Else Condition More than 1 loanAccountActions with open item', async () => {
+  it('Fee Fine Else Condition More than 1 loanAccountActions with open item', () => {
     mockGetLodash.mockReset();
     mockGetLodash.mockImplementation(() => {
       return 'Claimed returned';
@@ -350,10 +373,10 @@ describe('Render LoanProxyDetails component', () => {
     const updatedPropsData = { ...propsData, loanAccountActions: [{}, {}] };
     renderLoanProxyDetails(updatedPropsData);
 
-    await userEvent.click(screen.queryAllByRole('button')[5]);
+    userEvent.click(screen.queryAllByRole('button')[5]);
     expect(screen.getAllByText('ui-users.loans.markAsMissing')).toBeTruthy();
   });
-  it('Fee Fine Else Condition More than 1 loanAccountActions with new loan', async () => {
+  it('Fee Fine Else Condition More than 1 loanAccountActions with new loan', () => {
     mockGetLodash.mockReset();
     mockGetLodash.mockImplementation(() => {
       return 'Claimed returned';
@@ -371,7 +394,7 @@ describe('Render LoanProxyDetails component', () => {
       ...updatedPropsData,
       loan: { ...updatedPropsData.loan, item: { status: { name: 'new' } } },
     };
-    await userEvent.click(screen.queryAllByRole('button')[5]);
+    userEvent.click(screen.queryAllByRole('button')[5]);
     expect(screen.getAllByText('ui-users.loans.markAsMissing')).toBeTruthy();
   });
   it('Component is loading with out policies', () => {
@@ -415,6 +438,8 @@ describe('Render LoanProxyDetails component', () => {
   it('Component is loading with declared lost', () => {
     mockGetLodash.mockReset();
     mockGetLodash.mockImplementation((item) => {
+      // item2[1] == 'contributors' ? undefined :
+
       return item.filter ? item.filter : 'Declared lost';
     });
     mockAccounts.mockReset();
@@ -425,13 +450,19 @@ describe('Render LoanProxyDetails component', () => {
       ...propsData,
       isLoading: false,
       loanActionsWithUser: [
-        { action: 'Declared lost', filter: 'declaredLost' },
+        {
+          action: 'Declared lost',
+          filter: 'declaredLost',
+          metadata: {
+            updatedDate: '2023-05-01'
+          }
+        },
       ],
     };
     renderLoanProxyDetails(updatedPropsData);
     expect(screen.getAllByText('ui-users.loans.details.borrower')).toBeTruthy();
   });
-  it('Component is loading with age', async () => {
+  it('Component is loading with age', () => {
     mockGetLodash.mockReset();
     mockGetLodash.mockImplementation((item) => {
       return item.filter ? item.filter : 'Aged to lost';
@@ -445,12 +476,19 @@ describe('Render LoanProxyDetails component', () => {
     const updatedPropsData = {
       ...propsData,
       isLoading: false,
-      loanActionsWithUser: [{ action: 'User Call', filter: 'itemAgedToLost' }],
+      loanActionsWithUser: [
+        {
+          action: 'User Call',
+          filter: 'itemAgedToLost',
+          metadata: {
+            updatedDate: '2023-05-01'
+          }
+        }
+      ],
     };
-    const { getAllByText } =
-      renderLoanProxyDetails(updatedPropsData);
-    await userEvent.click(getAllByText('Close Modal')[0]);
-    await userEvent.click(screen.getAllByRole('button')[1]);
+    const { getAllByText } = renderLoanProxyDetails(updatedPropsData);
+    userEvent.click(getAllByText('Close Modal')[0]);
+    userEvent.click(screen.getAllByRole('button')[1]);
     expect(screen.getAllByText('Close Modal')).toBeTruthy();
   });
 });
