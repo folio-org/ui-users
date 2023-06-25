@@ -1045,8 +1045,6 @@
     "lostItems.list.columnName.action.feeFineDetails": "费用/罚款详情",
     "affiliations.section.label": "附属关系",
     "affiliations.section.empty": "未找到隶属关系",
-    "permission.consortia.affiliations.view": "用户：查看隶属关系",
-    "permission.consortia.affiliations.edit": "用户：分配和取消分配隶属关系",
     "lostItems.list.columnName.action.actualCostDetails": "实际费用详情",
     "lostItems.modal.summaryMessageCharged": "<strong> {actualCostToBill} </strong> 费用/罚款<strong>向{patronName} </strong>收取<strong> {instanceTitle} ( {materialType} ) </strong> 。",
     "lostItems.modal.summaryMessageNotCharged": "对于<strong> {instanceTitle} ( {materialType} ) </strong> ， <strong> </strong>向<strong> {patronName} </strong>收取费用/罚款。",
