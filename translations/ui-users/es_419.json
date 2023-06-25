@@ -1045,8 +1045,6 @@
     "lostItems.list.columnName.action.feeFineDetails": "Detalles de la tasa/multa",
     "affiliations.section.label": "Afiliaciones",
     "affiliations.section.empty": "No se han encontrado afiliaciones",
-    "permission.consortia.affiliations.view": "Usuarios: Ver afiliaciones",
-    "permission.consortia.affiliations.edit": "Usuarios: Asignar y desasignar afiliaciones",
     "lostItems.list.columnName.action.actualCostDetails": "Detalles del coste real",
     "lostItems.modal.summaryMessageCharged": "Se ha <strong>cobrado</strong> una tasa/multa de <strong>{actualCostToBill}</strong> a <strong>{patronName}</strong> por <strong>{instanceTitle}({materialType})</strong>.",
     "lostItems.modal.summaryMessageNotCharged": "<strong>No se ha cobrado</strong> una tasa/multa a <strong>{patronName}</strong> por <strong>{instanceTitle}</strong>({materialType}).",
