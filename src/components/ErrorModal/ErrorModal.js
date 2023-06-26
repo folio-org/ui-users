@@ -44,9 +44,9 @@ const ErrorModal = (props) => {
 ErrorModal.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
-  label: PropTypes.string,
-  message: PropTypes.string,
-  confirmButtonText: PropTypes.string,
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+  message: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+  confirmButtonText: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   id: PropTypes.string,
 };
 

@@ -47,6 +47,7 @@
 * Users with view-only access to user permissions and access to edit user records get error message when saving a user record. Refs UIU-2885.
 * Use new WSAPI for adding patron/staff notes to loans. Fixes UIU-2893. **Note.** The new requirement of the `add-info` interface is a breaking change.
 * Modify add-patron/staff-info permission to use new subpermission. Fixes UIU-2895.
+* Move view/assign affiliation permissions from `ui-users` to `ui-consortia-settings`. Refs UIU-2897.
 * Handle sparse data in "Overdue loans report". Fixes UIU-2901.
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)

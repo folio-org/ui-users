@@ -39,16 +39,12 @@ function BlockTemplateForm(props) {
   const addFirstMenu = () => {
     return (
       <PaneMenu>
-        <FormattedMessage id="ui-users.manualBlockTemplates.closeManualBlockDialog">
-          {(ariaLabel) => (
-            <PaneHeaderIconButton
-              id="clickable-close-block-template"
-              onClick={props.onCancel}
-              icon="times"
-              aria-label={ariaLabel}
-            />
-          )}
-        </FormattedMessage>
+        <PaneHeaderIconButton
+          id="clickable-close-block-template"
+          onClick={props.onCancel}
+          icon="times"
+          aria-label={props.intl.formatMessage({ id: 'ui-users.manualBlockTemplates.closeManualBlockDialog' })}
+        />
       </PaneMenu>
     );
   };
@@ -123,16 +119,11 @@ function BlockTemplateForm(props) {
 
   const renderPaneTitle = () => {
     const currentTemplate = initialValues || {};
-
     if (currentTemplate.id) {
       return (
-        <FormattedMessage id="ui-users.edit">
-          {(editLabel) => (
-            <span data-test-block-template-edit>
-              {`${editLabel}: ${currentTemplate.name}`}
-            </span>
-          )}
-        </FormattedMessage>
+        <span data-test-block-template-edit>
+          {`${props.intl.formatMessage({ id: 'ui-users.edit' })}: ${currentTemplate.name}`}
+        </span>
       );
     }
 

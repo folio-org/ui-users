@@ -45,7 +45,7 @@ const Setting = ({
 );
 
 Setting.propTypes = {
-  label: PropTypes.element,
+  label: PropTypes.string,
   name: PropTypes.string,
   intl: PropTypes.object,
 };
@@ -88,22 +88,22 @@ class CommentRequiredForm extends React.Component {
           <Setting
             {...this.props}
             name="paid"
-            label={<FormattedMessage id="ui-users.comment.paid" />}
+            label={this.props.intl.formatMessage({ id: 'ui-users.comment.paid' })}
           />
           <Setting
             {...this.props}
             name="waived"
-            label={<FormattedMessage id="ui-users.comment.waived" />}
+            label={this.props.intl.formatMessage({ id: 'ui-users.comment.waived' })}
           />
           <Setting
             {...this.props}
             name="refunded"
-            label={<FormattedMessage id="ui-users.comment.refunded" />}
+            label={this.props.intl.formatMessage({ id: 'ui-users.comment.refunded' })}
           />
           <Setting
             {...this.props}
             name="transferredManually"
-            label={<FormattedMessage id="ui-users.comment.transferred" />}
+            label={this.props.intl.formatMessage({ id: 'ui-users.comment.transferred' })}
           />
         </Pane>
       </form>
@@ -115,6 +115,7 @@ CommentRequiredForm.propTypes = {
   handleSubmit: PropTypes.func,
   pristine: PropTypes.bool,
   submitting: PropTypes.bool,
+  intl: PropTypes.object,
 };
 
 export default stripesFinalForm({
