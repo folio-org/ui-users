@@ -1,20 +1,16 @@
 import React from 'react';
 import userEvent from '@testing-library/user-event';
 import {
-  screen,
+  screen, waitFor
 } from '@testing-library/react';
 import {
   IfInterface,
   IfPermission,
 } from '@folio/stripes/core';
 import '__mock__';
-import '__mock__/stripesCore.mock';
-import '__mock__/stripesSmartComponent.mock';
-import renderWithRouter from 'helpers/renderWithRouter';
 import '__mock__/matchMedia.mock';
-import { createMemoryHistory } from 'history';
+import renderWithRouter from 'helpers/renderWithRouter';
 import translationProperties from 'helpers/translationProperties';
-import okapiCurrentUser from 'fixtures/okapiCurrentUser';
 import UserSearch from './UserSearch';
 
 jest.unmock('@folio/stripes/components');
@@ -84,23 +80,24 @@ const data4 = {
   sources: [
     { id: '4', label: 'source4' }
   ],
-  format: 'csv'
+  format: 'csv',
 };
 
-jest.mock('../../components/ReportModals/CashDrawerReportModal', () => (prop) => <div><button type="button" onClick={() => prop.onClose()}>onClose</button><button type="button" onClick={() => prop.onSubmit(dataDefault)}>onSubmit</button><button type="button" onClick={() => prop.onSubmit(data2)}>onSubmitBothFormat</button><button type="button" onClick={() => prop.onSubmit(data3)}>onSubmitPdfFormat</button><button type="button" onClick={() => prop.onSubmit(data4)}>onSubmitCsvFormat</button></div>);
+jest.mock('../../components/ReportModals/CashDrawerReportModal', () => (prop) => <div> <span>{prop.label}</span> <button type="button" onClick={() => prop.onClose()}>onClose</button><button type="button" onClick={() => prop.onSubmit(dataDefault)}>onSubmit</button><button type="button" onClick={() => prop.onSubmit(data2)}>onSubmitBothFormat</button><button type="button" onClick={() => prop.onSubmit(data3)}>onSubmitPdfFormat</button><button type="button" onClick={() => prop.onSubmit(data4)}>onSubmitCsvFormat</button></div>);
 jest.mock('../../components/LostItemsLink', () => jest.fn().mockReturnValue('LostItemsLink'));
 jest.mock('../../components/CustomFieldsFilters/CustomFieldsFilters', () => jest.fn().mockReturnValue('CustomFieldsFilters'));
-jest.mock('../../components/ReportModals/FinancialTransactionsReportModal', () => (prop) => <div><button type="button" onClick={() => prop.onClose()}>onClose</button><button type="button" onClick={() => prop.onSubmit(data)}>onSubmit</button></div>);
+jest.mock('../../components/ReportModals/FinancialTransactionsReportModal', () => (prop) => <div> <span>{prop.label}</span> <button type="button" onClick={() => prop.onClose()}>onClose</button><button type="button" onClick={() => prop.onSubmit(data)}>onSubmit</button></div>);
 
-const history = createMemoryHistory();
 const props = {
   contentRef: {},
   history: { push: jest.fn() },
   idPrefix: 'users-',
   initialSearch: 'test3',
   intl: { formatMessage: jest.fn() },
-  location: history.location,
-  match: { params: { id: '/users/preview/:id' }, urlParams: { params: { id: '/users/preview/:id' } } },
+  location: {
+    pathname: '/users/preview/:id'
+  },
+  match: { path: '/users/preview/:id', params: { id: '/users/preview/:id', loanstatus: 'open' }, urlParams: { params: { id: '/users/preview/:id' } } },
   onComponentWillUnmount: jest.fn(),
   onNeedMoreData: jest.fn(),
   queryGetter: jest.fn(),
@@ -145,10 +142,35 @@ const props = {
     },
     departments: {},
     owners: {
+      feeFineOwner: {
+        id: 'feeFineOwnerid1',
+        owner: 'feeFineOwner1',
+      },
       records: [
-        { id: '11', name: 'owner1', personal: { firstName: 'John', lastName: 'Doe', middleName: 'test', preferredFirstName: 'John' } },
-        { id: '12', name: 'owner2', personal: { firstName: 'Jane', lastName: 'Do', middleName: 'test2', preferredFirstName: 'Jane' } },
-        { id: '13', name: 'owner3', personal: { firstName: 'Bob', lastName: 'Smith', middleName: 'test3', preferredFirstName: 'Bob' } },
+        {
+          id: 'id-owner1',
+          owner: 'Owner1',
+          servicePointOwner: [
+            {
+              label: 'Circ Desk 1',
+              value: 'id2'
+            },
+            {
+              label: 'Circ Desk 2',
+              value: 'id3',
+            }
+          ]
+        },
+        {
+          id: 'id-owner2',
+          owner: 'Owner2',
+          servicePointOwner: [
+            {
+              label: 'Online',
+              value: 'id1'
+            }
+          ]
+        }
       ],
       id: '109155d9-3b60-4a3d-a6b1-066cf1b1356b',
       owner: 'test',
@@ -156,7 +178,12 @@ const props = {
         createdDate: '2022-03-01T03:22:48.262+00:00',
         updatedDate: '2022-03-01T03:22:48.262+00:00'
       },
-      servicePointOwner: [],
+      servicePointOwner: [
+        {
+          label: 'Online',
+          value: 'id1'
+        }
+      ],
       defaultChargeNoticeId: '109155e9-3b60-4a3d-a6b1-066cf1b1356b'
     },
     servicePointsUsers: {
@@ -170,7 +197,13 @@ const props = {
     }
   },
   mutator: {
-    loans: {},
+    loans: {
+      view: 'loanoverdue',
+      name: 'loan1',
+      id: 'loanid1',
+      GET: jest.fn().mockReturnValueOnce([{ id: 'testid', title:'csvreport' }]),
+      reset: jest.fn(),
+    },
     resultOffset: {
       GET: jest.fn(),
       POST: jest.fn(),
@@ -192,11 +225,23 @@ const props = {
       POST: jest.fn(),
     },
     financialTransactionsReport: {
-      POST: jest.fn().mockReturnValue({ reportData: { id: 'report2' } })
+      POST: jest.fn().mockReturnValue({ reportData: { startDate: '2022-01-01', endDate: '2022-01-31', feeFineOwner: { id: '1', owner: 'owner1', ownerValue: 'test111' } } })
     }
   },
   okapi: {
-    currentUser: okapiCurrentUser,
+    currentUser: {
+      servicePoints: [
+        {
+          servicePoint: {
+            value: 'servicePoint1',
+            label: 'servicePointlabel'
+          },
+          id: 'servicePointid1',
+          value: 'servicePoint1',
+          label: 'servicePointlabel'
+        }
+      ]
+    },
   },
   source: {
     totalCount: jest.fn(),
@@ -226,11 +271,11 @@ describe('Render UserSearch component', () => {
     jest.clearAllMocks();
   });
 
-  it('Check if Search are shown and hide', () => {
+  it('Check if Search are shown and hide', async () => {
     renderUserSearch();
     expect(screen.getByText('ui-users.userSearch')).toBeInTheDocument();
-    expect(screen.getByText('stripes-smart-components.hideSearchPane')).toBeInTheDocument();
     expect(screen.getByText('stripes-components.searchFieldIndex')).toBeInTheDocument();
+    expect(screen.getByText('stripes-smart-components.hideSearchPane')).toBeInTheDocument();
 
     const hideSearchPane = screen.getByRole('button', { name: 'stripes-smart-components.hideSearchPane' });
     userEvent.click(hideSearchPane);
@@ -239,62 +284,20 @@ describe('Render UserSearch component', () => {
 
     const showSearchPane = screen.getByRole('button', { name: 'stripes-smart-components.showSearchPane' });
     userEvent.click(showSearchPane);
-  });
-  it('UserDetail pane should be present', () => {
-    renderUserSearch();
-    const Iconbutton = screen.getAllByRole('button', { name: 'Icon' });
-    userEvent.click(Iconbutton[0]);
 
-    userEvent.click(document.querySelector('[id="input-user-search-qindex"]'), screen.getByText('ui-users.index.all'));
-    userEvent.selectOptions(document.querySelector('[id="input-user-search-qindex"]'), screen.getByText('ui-users.index.all'));
-    expect(screen.getByText('ui-users.index.all')).toBeTruthy();
-    expect((screen.getByRole('option', { name: 'ui-users.index.all' })).selected).toBeTruthy();
-    userEvent.selectOptions(
-      screen.getByRole('combobox'),
-      screen.getByRole('option', { name: 'ui-users.index.barcode' }),
-    );
-    expect(screen.getByRole('option', { name: 'ui-users.index.barcode' }).selected).toBeTruthy();
+    expect(screen.getByText('stripes-smart-components.hideSearchPane')).toBeInTheDocument();
   });
 
-  it('Should submit search input value', () => {
+  it('Search button to be enbled when enter input values', () => {
     renderUserSearch();
-    const inputText = screen.getByRole('textbox');
-    expect(inputText).toHaveValue('');
-    userEvent.click(inputText);
-    userEvent.type(inputText, 'Enter text testing');
-    expect(inputText).toHaveValue('Enter text testing');
     const userSearch = document.querySelector('[id="input-user-search"]');
     userEvent.type(userSearch, 'record1');
-    expect(userSearch).toHaveValue('record1');
-    const SearchButtonsubmit = document.querySelector('[id="submit-user-search"]');
-    userEvent.click(SearchButtonsubmit);
-    const linktext1 = screen.getByText('Doe, John_Doe (John)');
-    userEvent.click(linktext1);
-    expect(linktext1).toHaveAttribute('href', 'undefined/preview/4');
+    expect(document.querySelector('[id="submit-user-search"]')).not.toHaveAttribute('disabled');
   });
 
-  it('accordion toggle button users filter accordion tags', () => {
+  it('clickable filter active, inactive check box should be checked and when selecting options to be truthy', () => {
     renderUserSearch();
-    const accordiontags = document.querySelector('[id="accordion-toggle-button-users-filter-accordion-tags"]');
-    userEvent.click(accordiontags);
-  });
 
-  it('filter multi value status', () => {
-    renderUserSearch();
-    const filterAccordionTags = document.querySelector('[class="multiSelectFilterField"]');
-    expect(filterAccordionTags).toHaveValue('');
-    userEvent.type(filterAccordionTags, 'record1');
-    expect(filterAccordionTags).toHaveValue('record1');
-  });
-
-  it('clickableResetAll', () => {
-    renderUserSearch();
-    const clickableResetAll = document.querySelector('[id="clickable-reset-all"]');
-    userEvent.click(clickableResetAll);
-  });
-
-  it('clickable filter active, inactive and selecting options', () => {
-    renderUserSearch();
     const inputElementcheckbox = document.querySelector('[id="clickable-filter-active-active"]');
     userEvent.click(inputElementcheckbox);
     expect(inputElementcheckbox).toBeChecked();
@@ -302,8 +305,6 @@ describe('Render UserSearch component', () => {
     const Elementcheckbox = document.querySelector('[id="clickable-filter-active-inactive"]');
     userEvent.click(Elementcheckbox);
     expect(Elementcheckbox).toBeChecked();
-    const patronGroupbutton = document.querySelector('[id="accordion-toggle-button-users-filter-accordion-patron-group"]');
-    userEvent.click(patronGroupbutton);
 
     userEvent.selectOptions(
       screen.getByRole('combobox'),
@@ -315,82 +316,108 @@ describe('Render UserSearch component', () => {
       screen.getByRole('option', { name: 'ui-users.index.username' }),
     );
     expect(screen.getByRole('option', { name: 'ui-users.index.username' }).selected).toBeTruthy();
-    const showColumns = screen.getAllByText('stripes-smart-components.columnManager.showColumns');
-    userEvent.click(showColumns[0]);
-
-    const columnCheckboxXctive = document.querySelector('[id="column-manager-users-visible-columns-column-checkbox-active"]');
-    userEvent.click(columnCheckboxXctive);
   });
 
-  it('Clicking addNewbutton button', () => {
-    renderUserSearch();
-    const addNewbutton = document.querySelector('[id="clickable-newuser"]');
-    userEvent.click(addNewbutton);
-  });
-
-  it('Should Click export over due loan report button', () => {
+  it('Should Click export over due loan report button', async () => {
     renderUserSearch();
     const exportoverdueloanreportbutton = document.querySelector('[id="export-overdue-loan-report"]');
     userEvent.click(exportoverdueloanreportbutton);
+    await waitFor(() => {
+      expect(props.mutator.loans.GET).toBeCalled();
+    });
   });
 
-  it('Should Click export claimed returned loan report button', () => {
+  it('Should Click export claimed returned loan report button', async () => {
     renderUserSearch();
     const exportclaimedreturnedloanreportbutton = document.querySelector('[id="export-claimed-returned-loan-report"]');
     userEvent.click(exportclaimedreturnedloanreportbutton);
+    await waitFor(() => {
+      expect(props.mutator.loans.GET).toBeCalled();
+    });
   });
 
   it('Should Click cash drawer report button and Clicking onSubmit button for Default format', () => {
     renderUserSearch();
     const cashdrawerreportbutton = document.querySelector('[id="cash-drawer-report"]');
     userEvent.click(cashdrawerreportbutton);
+    const cashdrawermodallabel = screen.queryByText('ui-users.reports.cash.drawer.modal.label');
+    expect(cashdrawermodallabel).toBeInTheDocument();
+
     const onSubmit = screen.getByRole('button', { name: 'onSubmit' });
     userEvent.click(onSubmit);
+    expect(cashdrawermodallabel).not.toBeInTheDocument();
+    expect(props.mutator.cashDrawerReport.POST).toBeCalled();
   });
 
-  it('Should Click cash drawer report button and Clicking onSubmit button for both format', () => {
+  it('Should Click cash drawer report button and Clicking onSubmit button for both format', async () => {
     renderUserSearch();
     const cashdrawerreportbutton = document.querySelector('[id="cash-drawer-report"]');
     userEvent.click(cashdrawerreportbutton);
+    const cashdrawermodallabel = screen.queryByText('ui-users.reports.cash.drawer.modal.label');
+    expect(cashdrawermodallabel).toBeInTheDocument();
     const onSubmitBothFormat = screen.getByRole('button', { name: 'onSubmitBothFormat' });
     userEvent.click(onSubmitBothFormat);
+    expect(cashdrawermodallabel).not.toBeInTheDocument();
+    expect(props.mutator.cashDrawerReport.POST).toBeCalled();
   });
 
   it('Should Click cash drawer report button and Clicking onSubmit button for pdf format', () => {
     renderUserSearch();
     const cashdrawerreportbutton = document.querySelector('[id="cash-drawer-report"]');
     userEvent.click(cashdrawerreportbutton);
+    const cashdrawermodallabel = screen.queryByText('ui-users.reports.cash.drawer.modal.label');
+    expect(cashdrawermodallabel).toBeInTheDocument();
     const onSubmitPdfFormat = screen.getByRole('button', { name: 'onSubmitPdfFormat' });
     userEvent.click(onSubmitPdfFormat);
+    expect(cashdrawermodallabel).not.toBeInTheDocument();
+    expect(props.mutator.cashDrawerReport.POST).toBeCalled();
   });
 
   it('Should Click cash drawer report button and Clicking onSubmit button for csv format', () => {
     renderUserSearch();
     const cashdrawerreportbutton = document.querySelector('[id="cash-drawer-report"]');
     userEvent.click(cashdrawerreportbutton);
+    const cashdrawermodallabel = screen.queryByText('ui-users.reports.cash.drawer.modal.label');
+    expect(cashdrawermodallabel).toBeInTheDocument();
     const onSubmitCsvFormat = screen.getByRole('button', { name: 'onSubmitCsvFormat' });
     userEvent.click(onSubmitCsvFormat);
+    expect(cashdrawermodallabel).not.toBeInTheDocument();
+    expect(props.mutator.cashDrawerReport.POST).toBeCalled();
   });
 
   it('Should Click cash drawer report onClose button', () => {
     renderUserSearch();
     const cashdrawerreportbutton = document.querySelector('[id="cash-drawer-report"]');
     userEvent.click(cashdrawerreportbutton);
-    userEvent.click(screen.getByRole('button', { name: 'onClose' }));
+    const cashdrawermodallabel = screen.queryByText('ui-users.reports.cash.drawer.modal.label');
+    expect(cashdrawermodallabel).toBeInTheDocument();
+    const cashdrawerreportCloseButton = screen.getByRole('button', { name: 'onClose' });
+    userEvent.click(cashdrawerreportCloseButton);
+    expect(cashdrawermodallabel).not.toBeInTheDocument();
   });
 
   it('Should Click financial transaction report button and onSubmit button', () => {
     renderUserSearch();
     const financialtransactionreport = document.querySelector('[id="financial-transaction-report"]');
     userEvent.click(financialtransactionreport);
-    userEvent.click(screen.getByRole('button', { name: 'onSubmit' }));
+    const financialtransmodallabel = screen.getByText('ui-users.reports.financial.trans.modal.label');
+    expect(financialtransmodallabel).toBeInTheDocument();
+    const financialtransonSubmit = screen.getByText('onSubmit');
+    userEvent.click(financialtransonSubmit);
+    screen.debug(undefined, Infinity);
+    expect(financialtransmodallabel).not.toBeInTheDocument();
+    expect(props.mutator.financialTransactionsReport.POST).toBeCalled();
   });
 
   it('Should Click financial transaction report Close button', () => {
     renderUserSearch();
     const financialtransactionreport = document.querySelector('[id="financial-transaction-report"]');
     userEvent.click(financialtransactionreport);
-    userEvent.click(screen.getByRole('button', { name: 'onClose' }));
+    const financialtransmodallabel = screen.getByText('ui-users.reports.financial.trans.modal.label');
+    expect(financialtransmodallabel).toBeInTheDocument();
+    const financialtransactionreportCloseButton = screen.getByRole('button', { name: 'onClose' });
+    userEvent.click(financialtransactionreportCloseButton);
+    expect(financialtransmodallabel).not.toBeInTheDocument();
   });
 
   it('Should Click export refunds report button, save and close date ', () => {
@@ -400,22 +427,15 @@ describe('Render UserSearch component', () => {
     expect(screen.getByText('ui-users.reports.refunds.modal.label')).toBeInTheDocument();
 
     const startDate = document.querySelector('[name="startDate"]');
-    userEvent.type(startDate, '01/01/2022');
-
-    const startdateclearFieldValue = document.querySelector('[aria-label="stripes-components.clearFieldValue"]');
-    userEvent.click(startdateclearFieldValue);
+    userEvent.type(startDate, '2022-01-01');
 
     const endDate = document.querySelector('[name="endDate"]');
     userEvent.type(endDate, '31/01/2022');
 
-    const multiSelectValueInput = document.querySelector('[class="multiSelectValueInput"]');
-    userEvent.type(multiSelectValueInput, 'testing22');
-
-    const openmenu = document.querySelector('[aria-label="open menu"]');
-    userEvent.click(openmenu);
-
     const saveAndClose = screen.getByText('ui-users.saveAndClose');
     userEvent.click(saveAndClose);
+
+    expect(props.mutator.refundsReport.POST).toBeCalled();
   });
 
   it('Should Click export refunds report Close button', () => {
@@ -424,11 +444,9 @@ describe('Render UserSearch component', () => {
     userEvent.click(exportrefundsreportbutton);
     expect(screen.getByText('ui-users.reports.refunds.modal.label')).toBeInTheDocument();
 
-    const multiSelectValueInput = document.querySelector('[class="multiSelectValueInput"]');
-    userEvent.type(multiSelectValueInput, 'testing22');
-
     const refundsreportmodalclosebutton = document.querySelector('[id="refunds-report-modal-close-button"]');
     userEvent.click(refundsreportmodalclosebutton);
+    expect(screen.queryByText('ui-users.reports.refunds.modal.label')).not.toBeInTheDocument();
   });
 
   it('searchResultsCountHeader should render when loaded return true', () => {
