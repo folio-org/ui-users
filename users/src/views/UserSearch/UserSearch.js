@@ -26,6 +26,9 @@ import {
   SRStatus,
   MenuSection,
 } from '@folio/stripes/components';
+import { DemoComponent } from '@folio/users-components';
+
+console.log(DemoComponent)
 
 import {
   SearchAndSortQuery,
@@ -719,6 +722,7 @@ class UserSearch extends React.Component {
     return (
       <HasCommand commands={this.shortcuts}>
         <div data-test-user-instances ref={contentRef}>
+          <DemoComponent />
           <SearchAndSortQuery
             querySetter={querySetter}
             queryGetter={queryGetter}
