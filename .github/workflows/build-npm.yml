@@ -23,6 +23,9 @@ on:
       - 'users/**'
 jobs:
   build-npm:
+    defaults:
+      run:
+        working-directory: ./users
     env:
       YARN_TEST_OPTIONS: '--ci --coverage --colors'
       SQ_ROOT_DIR: './src'
@@ -53,10 +56,10 @@ jobs:
           always-auth: true
 
       - name: Set yarn config
+        working-directory: .
         run: yarn config set @folio:registry $FOLIO_NPM_REGISTRY
 
       - name: Set FOLIO NPM snapshot version
-        working-directory: ./users
         run: |
           git clone https://github.com/folio-org/folio-tools.git
           npm --no-git-tag-version version `folio-tools/github-actions-scripts/folioci_npmver.sh`
@@ -65,13 +68,13 @@ jobs:
           JOB_ID: ${{ github.run_number }}
 
       - name: Run yarn install
+        working-directory: .
         run: yarn install --ignore-scripts --frozen-lockfile
 
       - name: Run yarn list
         run: yarn list --pattern @folio
 
       - name: Run yarn lint
-        working-directory: ./users
         run: yarn lint
         continue-on-error: true
 
@@ -80,26 +83,21 @@ jobs:
         uses: SimenB/github-actions-cpu-cores@v1
 
       - name: Run yarn test
-        working-directory: ./users
         run: xvfb-run --server-args="-screen 0 1024x768x24" yarn test $YARN_TEST_OPTIONS  --max-workers ${{ steps.cpu-cores.outputs.count }}
 
       - name: Run yarn formatjs-compile
-        working-directory: ./users
         if : ${{ env.COMPILE_TRANSLATION_FILES == 'true' }}
         run: yarn formatjs-compile
 
       - name: Generate Module descriptor
-        working-directory: ./users
         if: ${{ env.PUBLISH_MOD_DESCRIPTOR == 'true' }}
         run: yarn build-mod-descriptor
 
       - name: debug mod descriptor
-        working-directory: ./users
         if: ${{ env.PUBLISH_MOD_DESCRIPTOR == 'true' }}
         run: cat module-descriptor.json
 
       - name: Upload event file
-        working-directory: ./users
         uses: actions/upload-artifact@v3
         with:
           name: Event File
@@ -108,7 +106,6 @@ jobs:
 
       - name: Upload Jest results
         if: always()
-        working-directory: ./users
         uses: actions/upload-artifact@v3
         with:
           name: jest-test-results
@@ -116,7 +113,6 @@ jobs:
           retention-days: 30
 
       - name: Publish Jest coverage report
-        working-directory: ./users
         uses: actions/upload-artifact@v2
         if: always()
         with:
@@ -125,15 +121,12 @@ jobs:
           retention-days: 30
 
       - name: Set default branch as env variable
-        working-directory: ./users
         run: echo "DEFAULT_BRANCH=${{ github.event.repository.default_branch }}" >> $GITHUB_ENV
 
       - name: Fetch branches for SonarCloud
-        working-directory: ./users
         run: git fetch --no-tags ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY} +refs/heads/${{ env.DEFAULT_BRANCH }}:refs/remotes/origin/${{ env.DEFAULT_BRANCH }}
 
       - name: Run SonarCloud scan
-        working-directory: ./users
         uses: sonarsource/sonarcloud-github-action@v1.8
         with:
           args: >
@@ -149,7 +142,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Set up NPM environment for publishing
-        working-directory: ./users
         if: ${{ github.ref == 'refs/heads/master' || github.ref  == 'refs/heads/main' }}
         uses: actions/setup-node@v3
         with:
@@ -158,7 +150,6 @@ jobs:
           always-auth: true
 
       - name: Set _auth in .npmrc
-        working-directory: ./users
         run: |
           npm config set @folio:registry $FOLIO_NPM_REGISTRY
           npm config set $FOLIO_NPM_REGISTRY_AUTH:_auth $NODE_AUTH_TOKEN
@@ -166,7 +157,6 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Exclude some CI-generated artifacts in package
-        working-directory: ./users
         run: |
           echo "artifacts" >> .npmignore
           echo ".github" >> .npmignore
@@ -174,14 +164,12 @@ jobs:
           cat .npmignore
 
       - name: Publish NPM
-        working-directory: ./users
         if: ${{ github.ref == 'refs/heads/master' || github.ref  == 'refs/heads/main' }}
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Read module descriptor
-        working-directory: ./users
         if: ${{ env.PUBLISH_MOD_DESCRIPTOR == 'true' && github.ref == 'refs/heads/master' || github.ref  == 'refs/heads/main' }}
         id: moduleDescriptor
         uses: juliangruber/read-file-action@v1
@@ -189,7 +177,6 @@ jobs:
           path: ./module-descriptor.json
 
       - name: Publish module descriptor
-        working-directory: ./users
         if: ${{ env.PUBLISH_MOD_DESCRIPTOR == 'true' && github.ref == 'refs/heads/master' || github.ref  == 'refs/heads/main' }}
         id: modDescriptorPost
         uses: fjogeleit/http-request-action@master
