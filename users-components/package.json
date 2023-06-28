@@ -14,8 +14,7 @@
   "scripts": {
     "lint": "eslint .",
     "test": "yarn run test:jest",
-    "test:jest": "jest",
-    "formatjs-compile": "formatjs compile-folder --ast --format simple ./translations/ui-users ./translations/ui-users/compiled"
+    "test:jest": "jest"
   },
   "devDependencies": {
     "@babel/core": "^7.21.4",

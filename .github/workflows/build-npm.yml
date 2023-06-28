@@ -22,7 +22,7 @@ jobs:
         working-directory: ./users
     env:
       YARN_TEST_OPTIONS: '--ci --coverage --colors'
-      SQ_ROOT_DIR: './src'
+      SQ_ROOT_DIR: './users/src'
       PUBLISH_MOD_DESCRIPTOR: 'true'
       COMPILE_TRANSLATION_FILES: 'true'
       FOLIO_NPM_REGISTRY: 'https://repository.folio.org/repository/npm-folioci/'

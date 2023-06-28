@@ -22,7 +22,7 @@ jobs:
         working-directory: ./users-components
     env:
       YARN_TEST_OPTIONS: '--ci --coverage --colors'
-      SQ_ROOT_DIR: './src'
+      SQ_ROOT_DIR: './users-components/src'
       PUBLISH_MOD_DESCRIPTOR: 'true'
       COMPILE_TRANSLATION_FILES: 'true'
       FOLIO_NPM_REGISTRY: 'https://repository.folio.org/repository/npm-folioci/'
@@ -78,10 +78,6 @@ jobs:
 
       - name: Run yarn test
         run: xvfb-run --server-args="-screen 0 1024x768x24" yarn test $YARN_TEST_OPTIONS  --max-workers ${{ steps.cpu-cores.outputs.count }}
-
-      - name: Run yarn formatjs-compile
-        if : ${{ env.COMPILE_TRANSLATION_FILES == 'true' }}
-        run: yarn formatjs-compile
 
       - name: Generate Module descriptor
         if: ${{ env.PUBLISH_MOD_DESCRIPTOR == 'true' }}
