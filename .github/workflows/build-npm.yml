@@ -14,7 +14,13 @@
 
 
 name: buildNPM Snapshot
-on: [push, pull_request]
+on:
+  push:
+    paths:
+      - 'users/**'
+  pull_request:
+    paths:
+      - 'users/**'
 jobs:
   build-npm:
     env:
@@ -62,6 +68,9 @@ jobs:
 
       - name: Run yarn list
         run: yarn list --pattern @folio
+
+      - name: Change directory
+        run: cd ./users
 
       - name: Run yarn lint
         run: yarn lint
