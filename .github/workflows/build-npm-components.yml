@@ -79,14 +79,6 @@ jobs:
       - name: Run yarn test
         run: xvfb-run --server-args="-screen 0 1024x768x24" yarn test $YARN_TEST_OPTIONS  --max-workers ${{ steps.cpu-cores.outputs.count }}
 
-      - name: Generate Module descriptor
-        if: ${{ env.PUBLISH_MOD_DESCRIPTOR == 'true' }}
-        run: yarn build-mod-descriptor
-
-      - name: debug mod descriptor
-        if: ${{ env.PUBLISH_MOD_DESCRIPTOR == 'true' }}
-        run: cat module-descriptor.json
-
       - name: Upload event file
         uses: actions/upload-artifact@v3
         with:
