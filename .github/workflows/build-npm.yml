@@ -72,7 +72,6 @@ jobs:
         env:
           JOB_ID: ${{ github.run_number }}
 
-
       - name: Run yarn lint
         run: yarn lint
         continue-on-error: true
