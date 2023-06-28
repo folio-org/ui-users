@@ -14,13 +14,7 @@
 
 
 name: buildNPM Snapshot (users-components)
-on:
-  push:
-    paths:
-      - 'users-components/**'
-  pull_request:
-    paths:
-      - 'users-components/**'
+on: [push, pull_request]
 jobs:
   build-npm:
     defaults:

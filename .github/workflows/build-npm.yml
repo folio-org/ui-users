@@ -14,13 +14,7 @@
 
 
 name: buildNPM Snapshot (users)
-on:
-  push:
-    paths:
-      - 'users/**'
-  pull_request:
-    paths:
-      - 'users/**'
+on: [push, pull_request]
 jobs:
   build-npm:
     defaults:
