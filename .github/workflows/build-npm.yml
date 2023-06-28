@@ -13,7 +13,7 @@
 
 
 
-name: buildNPM Snapshot
+name: buildNPM Snapshot (users)
 on:
   push:
     paths:
