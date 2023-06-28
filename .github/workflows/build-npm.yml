@@ -55,14 +55,6 @@ jobs:
       - name: Set yarn config
         run: yarn config set @folio:registry $FOLIO_NPM_REGISTRY
 
-      - name: Set FOLIO NPM snapshot version
-        run: |
-          git clone https://github.com/folio-org/folio-tools.git
-          npm --no-git-tag-version version `folio-tools/github-actions-scripts/folioci_npmver.sh`
-          rm -rf folio-tools
-        env:
-          JOB_ID: ${{ github.run_number }}
-
       - name: Run yarn install
         run: yarn install --ignore-scripts --frozen-lockfile
 
@@ -71,6 +63,15 @@ jobs:
 
       - name: Change directory
         run: cd ./users
+
+      - name: Set FOLIO NPM snapshot version
+        run: |
+          git clone https://github.com/folio-org/folio-tools.git
+          npm --no-git-tag-version version `folio-tools/github-actions-scripts/folioci_npmver.sh`
+          rm -rf folio-tools
+        env:
+          JOB_ID: ${{ github.run_number }}
+
 
       - name: Run yarn lint
         run: yarn lint
