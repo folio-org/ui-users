@@ -274,7 +274,6 @@
         "subPermissions": [
           "comments.collection.get",
           "comments.item.get",
-          "comments.item.post",
           "settings.users.enabled"
         ],
         "visible": true

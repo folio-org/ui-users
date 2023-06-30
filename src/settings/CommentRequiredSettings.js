@@ -39,6 +39,9 @@ class CommentRequiredSettings extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }),
+    stripes: PropTypes.shape({
+      hasPerm: PropTypes.func.isRequired
+    }).isRequired,
   };
 
   componentDidMount() {
@@ -93,6 +96,7 @@ class CommentRequiredSettings extends React.Component {
       refunded: (settings.refunded && settings.refunded !== 'false' ? 'true' : 'false'),
       transferredManually: (settings.transferredManually && settings.transferredManually !== 'false' ? 'true' : 'false'),
     };
+    const viewOnly = !this.props.stripes.hasPerm('comments.item.put');
 
     return (
       <div className={css.fullWidth}>
@@ -100,6 +104,7 @@ class CommentRequiredSettings extends React.Component {
           {...this.props}
           initialValues={initialValues}
           onSubmit={(values) => { this.onSave(values); }}
+          viewOnly={viewOnly}
         />
         <Callout ref={(ref) => { this.callout = ref; }} />
       </div>

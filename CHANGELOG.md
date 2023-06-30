@@ -49,6 +49,7 @@
 * Modify add-patron/staff-info permission to use new subpermission. Fixes UIU-2895.
 * Move view/assign affiliation permissions from `ui-users` to `ui-consortia-settings`. Refs UIU-2897.
 * Handle sparse data in "Overdue loans report". Fixes UIU-2901.
+* User settings > Comment required: Disable editing for users with "Setting (Users): View all settings" permission. Refs UIU-2905.
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v9.0.0)
