@@ -335,7 +335,7 @@
           "templates.collection.get",
           "settings.users.enabled"
         ],
-        "visible": true
+        "visible": false
       },
       {
         "permissionName": "ui-users.settings.manual-charges.all",
@@ -440,7 +440,7 @@
       },
       {
         "permissionName": "ui-users.settings.refunds.all",
-        "displayName": "Settings (Users): Can create, edit and remove refunds",
+        "displayName": "Settings (Users): Can create, edit and remove refunds reasons",
         "subPermissions": [
           "ui-users.settings.refunds.view",
           "refunds.item.delete",
