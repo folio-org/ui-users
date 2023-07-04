@@ -294,7 +294,6 @@
         "permissionName": "ui-users.settings.feefines.view",
         "displayName": "Settings (Users): Can view feefines-related entries",
         "subPermissions": [
-          "settings.users.enabled",
           "ui-users.settings.owners.view",
           "ui-users.settings.manual-charges.view",
           "ui-users.settings.waives.view",
@@ -617,6 +616,7 @@
         "permissionName": "ui-users.settings.patron-block-templates.view",
         "displayName": "Settings (Users): Can view patron blocks templates",
         "subPermissions": [
+          "settings.users.enabled",
           "manual-block-templates.collection.get",
           "manual-block-templates.item.get"
         ],
@@ -1007,19 +1007,36 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.settings.view",
-        "displayName": "Settings (Users): View all settings",
+        "permissionName": "ui-users.settings.general.view",
+        "displayName": "Settings (Users): Can view general entries",
+        "description": "Permission to view all general entries of settings",
         "subPermissions": [
-          "settings.users.enabled",
-          "ui-users.settings.permsets.view",
-          "ui-users.settings.usergroups.view",
           "ui-users.settings.addresstypes.view",
-          "ui-users.settings.departments.view",
           "ui-users.settings.customfields.view",
-          "ui-users.settings.feefines.view",
+          "ui-users.settings.usergroups.view",
+          "ui-users.settings.permsets.view",
+          "ui-users.settings.departments.view"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.patron-blocks.view",
+        "displayName": "Settings (Users): Can view all patron blocks entries",
+        "description": "Permission to view conditions, limits and templated in patron block section of settings",
+        "subPermissions": [
           "ui-users.settings.conditions.view",
           "ui-users.settings.limits.view",
           "ui-users.settings.patron-block-templates.view"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.view",
+        "displayName": "Settings (Users): View all settings",
+        "subPermissions": [
+          "ui-users.settings.general.view",
+          "ui-users.settings.feefines.view",
+          "ui-users.settings.patron-blocks.view"
         ],
         "visible": true
       }

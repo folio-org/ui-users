@@ -51,6 +51,7 @@
 * Handle sparse data in "Overdue loans report". Fixes UIU-2901.
 * Update translations text for permission.settings.manual-charges.all. Fixes UIU-2908.
 * Rename user setting permissions disaplay name and update their visibility. Refs UIU-2907.
+* Cleanup User Settings permissions – Part 1. Refs UIU-2906
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v9.0.0)
