@@ -38,6 +38,7 @@ class PaymentSettings extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
+      hasPerm: PropTypes.func.isRequired,
     }).isRequired,
     intl: PropTypes.object.isRequired,
     mutator: PropTypes.shape({
@@ -74,12 +75,13 @@ class PaymentSettings extends React.Component {
   }
 
   render() {
-    const { intl: { formatMessage } } = this.props;
+    const { intl: { formatMessage }, stripes } = this.props;
     const {
       ownerId,
       owners
     } = this.state;
     const label = formatMessage({ id: 'ui-users.payments.singular' });
+    const editable = stripes.hasPerm('payments.item.post, payments.item.put');
 
     const preCreateHook = (item) => {
       item.ownerId = ownerId;
@@ -92,6 +94,7 @@ class PaymentSettings extends React.Component {
         baseUrl="payments"
         columnMapping={columnMapping}
         hiddenFields={['numberOfObjects']}
+        editable={editable}
         id="settings-payments"
         itemTemplate={{ allowedRefundMethod: false }}
         label={formatMessage({ id: 'ui-users.payments.label' })}

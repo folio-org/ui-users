@@ -53,6 +53,7 @@ class OwnerSettings extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
+      hasPerm: PropTypes.func.isRequired,
     }).isRequired,
     resources: PropTypes.object,
     intl: PropTypes.object.isRequired,
@@ -103,10 +104,11 @@ class OwnerSettings extends React.Component {
   render() {
     const {
       intl: { formatMessage },
-      resources
+      resources,
+      stripes,
     } = this.props;
     const label = formatMessage({ id: 'ui-users.owners.singular' });
-
+    const editable = stripes.hasPerm('owners.item.post, owners.item.put');
     const rows = _.get(resources, ['owners', 'records'], []);
     const servicePoints = _.get(resources, ['ownerServicePoints', 'records', 0, 'servicepoints'], []);
     const serviceOwners = [];
@@ -154,6 +156,7 @@ class OwnerSettings extends React.Component {
         {...this.props}
         baseUrl="owners"
         columnMapping={columnMapping(formatMessage)}
+        editable={editable}
         fieldComponents={fieldComponents}
         formatter={formatter}
         hiddenFields={['lastUpdated', 'numberOfObjects']}

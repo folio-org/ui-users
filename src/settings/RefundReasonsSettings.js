@@ -27,6 +27,7 @@ class RefundReasonsSettings extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
+      hasPerm: PropTypes.func.isRequired,
     }).isRequired,
     intl: PropTypes.object.isRequired,
   };
@@ -37,8 +38,9 @@ class RefundReasonsSettings extends React.Component {
   }
 
   render() {
-    const { intl } = this.props;
+    const { intl, stripes } = this.props;
     const label = intl.formatMessage({ id: 'ui-users.refunds.singular' });
+    const editable = stripes.hasPerm('refunds.item.post, refunds.item.put');
 
     return (
       <this.connectedControlledVocab
@@ -55,6 +57,7 @@ class RefundReasonsSettings extends React.Component {
         hiddenFields={['numberOfObjects']}
         id="settings-refunds"
         sortby="nameReason"
+        editable={editable}
       />
     );
   }
