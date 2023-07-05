@@ -94,6 +94,7 @@ describe('UserEdit', () => {
       },
       perms: {
         POST: jest.fn().mockResolvedValue({ data: {} }),
+        PUT: jest.fn().mockResolvedValue({ data: {} }),
       },
       permissions: {
         POST: jest.fn().mockResolvedValue({ data: {} }),
@@ -328,6 +329,7 @@ describe('UserEdit', () => {
     expect(container.querySelector('#clickable-cancel')).toBeInTheDocument();
     expect(container.querySelector('#clickable-save')).toBeInTheDocument();
   });
+
   it('should cancel form', async () => {
     const { container } = renderWithRouter(<UserEdit {...props} />);
     const submitButton = container.querySelector('#clickable-cancel');
@@ -346,6 +348,45 @@ describe('UserEdit', () => {
       expect(props.updateProxies).toHaveBeenCalled();
       expect(props.updateSponsors).toHaveBeenCalled();
       expect(props.updateServicePoints).toHaveBeenCalled();
+    });
+
+    describe('when user has user profile edit', () => {
+      it('should update permissions when user has "ui-users.editperms" permissions', async () => {
+        props = {
+          ...props,
+          resources: {
+            ...props.resources,
+            perms: {
+              records: [
+                {
+                  id: 'permUserRecordId',
+                  permissions: ['ui-users.editperms', 'ui-users.edit']
+                }
+              ],
+            },
+          }
+        };
+        renderWithRouter(<UserEdit {...props} />);
+
+        await UserForm.mock.calls[0][0].onSubmit(userFormData);
+
+        expect(props.mutator.permissions.PUT).toHaveBeenCalled();
+      });
+
+      it('should not update permissions when user has "ui-users.viewperms" permission', async () => {
+        props = {
+          ...props,
+          stripes: {
+            ...props.stripes,
+            hasPerm: jest.fn().mockReturnValue(false),
+          },
+        };
+        renderWithRouter(<UserEdit {...props} />);
+
+        await UserForm.mock.calls[0][0].onSubmit(userFormData);
+
+        expect(props.mutator.perms.PUT).not.toHaveBeenCalled();
+      });
     });
   });
 });

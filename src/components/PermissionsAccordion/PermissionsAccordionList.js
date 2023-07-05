@@ -12,13 +12,13 @@ import {
 import PermissionsAccordionListItem from './PermissionsAccordionListItem';
 import { getPermissionLabelString } from '../data/converters/permission';
 
-const PermissionsAccordionList = ({ fields, showPerms, getAssignedPermissions, permToDelete }) => {
+const PermissionsAccordionList = ({ fields, showPerms, getAssignedPermissions, changePermissions, permToDelete }) => {
   const { formatMessage } = useIntl();
 
   const assignedPermissions = getAssignedPermissions();
 
   const itemFormatter = (_fieldName, index) => {
-    if (fields.value[index]) {
+    if (fields?.value[index]) {
       return <PermissionsAccordionListItem
         key={index}
         item={fields.value[index]}
@@ -26,6 +26,7 @@ const PermissionsAccordionList = ({ fields, showPerms, getAssignedPermissions, p
         fields={fields}
         showPerms={showPerms}
         permToDelete={permToDelete}
+        changePermissions={changePermissions}
       />;
     }
 
@@ -52,6 +53,7 @@ PermissionsAccordionList.propTypes = {
   fields: PropTypes.object,
   showPerms: PropTypes.bool,
   getAssignedPermissions: PropTypes.func,
+  changePermissions: PropTypes.func.isRequired,
   permToDelete: PropTypes.string,
 };
 

@@ -44,10 +44,10 @@ class Limits extends Component {
     }).isRequired,
     mutator: PropTypes.shape({
       patronBlockLimits: PropTypes.shape({
-        GET: PropTypes.func.isRequired,
-        POST: PropTypes.func.isRequired,
-        PUT: PropTypes.func.isRequired,
-        DELETE: PropTypes.func.isRequired,
+        GET: PropTypes.func,
+        POST: PropTypes.func,
+        PUT: PropTypes.func,
+        DELETE: PropTypes.func,
       }).isRequired,
       patronBlockLimitId: PropTypes.object.isRequired,
     }).isRequired,

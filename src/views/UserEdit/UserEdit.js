@@ -37,7 +37,7 @@ class UserEdit extends React.Component {
     history: PropTypes.object,
     location: PropTypes.object,
     match: PropTypes.object,
-    okapiKy: PropTypes.object.isRequired,
+    okapiKy: PropTypes.func.isRequired,
     updateProxies: PropTypes.func,
     updateSponsors: PropTypes.func,
     updateServicePoints: PropTypes.func,
@@ -223,7 +223,9 @@ class UserEdit extends React.Component {
       updateSponsors(sponsors || []);
     }
 
-    this.updatePermissions(user.id, permissions);
+    if (stripes.hasPerm('ui-users.editperms')) {
+      this.updatePermissions(user.id, permissions);
+    }
 
     if (stripes.hasPerm('inventory-storage.service-points-users.item.post,inventory-storage.service-points-users.item.put')) {
       updateServicePoints(servicePoints, preferredServicePoint);
@@ -257,7 +259,7 @@ class UserEdit extends React.Component {
       .catch((e) => showErrorCallout(e, this.context.sendCallout));
   }
 
-  async updatePermissions(userId, permissionsMap) {
+  async updatePermissions(userId, permissionsMap = {}) {
     const CHUNK_SIZE = 5;
 
     const result = await chunk(Object.entries(permissionsMap), CHUNK_SIZE)
