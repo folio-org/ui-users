@@ -40,7 +40,7 @@ class RefundReasonsSettings extends React.Component {
   render() {
     const { intl, stripes } = this.props;
     const label = intl.formatMessage({ id: 'ui-users.refunds.singular' });
-    const editable = stripes.hasPerm('refunds.item.post, refunds.item.put');
+    const editable = stripes.hasPerm('ui-users.settings.refunds.all');
 
     return (
       <this.connectedControlledVocab

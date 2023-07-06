@@ -81,7 +81,7 @@ class PaymentSettings extends React.Component {
       owners
     } = this.state;
     const label = formatMessage({ id: 'ui-users.payments.singular' });
-    const editable = stripes.hasPerm('payments.item.post, payments.item.put');
+    const editable = stripes.hasPerm('ui-users.settings.payments.all');
 
     const preCreateHook = (item) => {
       item.ownerId = ownerId;

@@ -44,7 +44,7 @@ class WaiveSettings extends React.Component {
     } = this.props;
 
     const label = intl.formatMessage({ id: 'ui-users.waives.singular' });
-    const editable = stripes.hasPerm('waives.item.post, waives.item.put');
+    const editable = stripes.hasPerm('ui-users.settings.waives.all');
 
     return (
       <this.connectedControlledVocab
