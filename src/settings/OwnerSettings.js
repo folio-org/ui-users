@@ -107,7 +107,7 @@ class OwnerSettings extends React.Component {
       resources,
       stripes,
     } = this.props;
-    console.log('permissions ', stripes);
+
     const label = formatMessage({ id: 'ui-users.owners.singular' });
     const editable = stripes.hasPerm('ui-users.settings.owners.all');
     const rows = _.get(resources, ['owners', 'records'], []);
