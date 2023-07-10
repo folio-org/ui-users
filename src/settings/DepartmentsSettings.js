@@ -7,6 +7,9 @@ import {
 import { NoValue } from '@folio/stripes/components';
 import { ControlledVocab } from '@folio/stripes/smart-components';
 import { useStripes } from '@folio/stripes/core';
+import { getSourceSuppressor } from '@folio/stripes/util';
+
+import { RECORD_SOURCE } from '../constants';
 
 
 const validate = (item, index, items) => {
@@ -30,6 +33,8 @@ const validate = (item, index, items) => {
 
   return errors;
 };
+
+const suppress = getSourceSuppressor(RECORD_SOURCE.CONSORTIUM);
 
 const DepartmentsSettings = () => {
   const { formatMessage } = useIntl();
@@ -61,8 +66,8 @@ const DepartmentsSettings = () => {
       }}
       validate={validate}
       actionSuppressor={{
-        delete: item => !hasDeletePerm || item.usageNumber,
-        edit: () => !hasEditPerm,
+        delete: item => !hasDeletePerm || item.usageNumber || suppress(item),
+        edit: (item) => !hasEditPerm || suppress(item),
       }}
     />
   );
