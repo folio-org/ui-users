@@ -54,6 +54,7 @@
 * Cleanup User Settings permissions – Part 1. Refs UIU-2906
 * Prevent editing of shared settings from outside "Consortium manager". Refs UIU-2914.
 * User settings > Fee/fine section: Disable editing for users with "Setting (Users): View all settings" permission. Refs UIU-2904.
+* Add info about reminder fees to loan details screen. Refs UIU-2591.
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v9.0.0)

@@ -37,6 +37,7 @@ import PatronBlockModalWithOverrideModal from '../../components/PatronBlock/Patr
 import {
   getFullName,
   nav,
+  getLoanLastReminderNumber,
   getOpenRequestsPath,
   getRenewalPatronBlocksFromPatronBlocks,
   accountsMatchStatus,
@@ -202,7 +203,7 @@ class LoanDetails extends React.Component {
   }
 
   viewFeeFine() {
-    const { stripes, loanAccountActions } = this.props;
+    const { stripes, loanAccountActions, loan } = this.props;
     const total = loanAccountActions.reduce((acc, { amount }) => (acc + parseFloat(amount)), 0);
     const suspendedAction = loanAccountActions.filter(a => a?.paymentStatus?.name === refundClaimReturned.PAYMENT_STATUS) || [];
     const suspendedMessage = (suspendedAction.length > 0) ? <FormattedMessage id="ui-users.accounts.suspended" /> : '';
@@ -223,7 +224,14 @@ class LoanDetails extends React.Component {
       :
       value;
 
-    return <>{ valueDisplay }<br />{ suspendedMessage }</>;
+    return (
+      <>
+        {valueDisplay}
+        {getLoanLastReminderNumber(loan)}
+        <br />
+        {suspendedMessage}
+      </>
+    );
   }
 
   feefinedetails = (e) => {
