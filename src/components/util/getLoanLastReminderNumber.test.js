@@ -3,8 +3,7 @@ import getLoanLastReminderNumber from './getLoanLastReminderNumber';
 
 describe('getLoanLastReminderNumber', () => {
   it('should return null if lastReminderNumber is not present', () => {
-    const loan = {};
-    const result = getLoanLastReminderNumber(loan);
+    const result = getLoanLastReminderNumber({});
     expect(result).toBeNull();
   });
 
