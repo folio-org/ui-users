@@ -184,15 +184,7 @@ const propsData = {
       reset: mockReset,
     },
   },
-  loanActionsWithUser: [
-    {
-      action: 'User Call',
-      filter: 'itemAgedToLost',
-      metadata: {
-        updatedDate: '2023-05-01'
-      }
-    }
-  ],
+  loanActionsWithUser: [{}],
   loanAccountActions: [{}],
   resources: {
     activeRecord: {
@@ -450,13 +442,7 @@ describe('Render LoanProxyDetails component', () => {
       ...propsData,
       isLoading: false,
       loanActionsWithUser: [
-        {
-          action: 'Declared lost',
-          filter: 'declaredLost',
-          metadata: {
-            updatedDate: '2023-05-01'
-          }
-        },
+        { action: 'Declared lost', filter: 'declaredLost' },
       ],
     };
     renderLoanProxyDetails(updatedPropsData);
@@ -476,15 +462,7 @@ describe('Render LoanProxyDetails component', () => {
     const updatedPropsData = {
       ...propsData,
       isLoading: false,
-      loanActionsWithUser: [
-        {
-          action: 'User Call',
-          filter: 'itemAgedToLost',
-          metadata: {
-            updatedDate: '2023-05-01'
-          }
-        }
-      ],
+      loanActionsWithUser: [{ action: 'User Call', filter: 'itemAgedToLost' }],
     };
     const { getAllByText } = renderLoanProxyDetails(updatedPropsData);
     userEvent.click(getAllByText('Close Modal')[0]);
