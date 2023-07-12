@@ -1107,5 +1107,8 @@
   },
   "optionalDependencies": {
     "@folio/plugin-find-user": "^6.0.0"
+  },
+  "resolutions": {
+    "word-wrap" : "npm:@aashutoshrathi/word-wrap@^1.2.6"
   }
 }
