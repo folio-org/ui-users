@@ -101,8 +101,8 @@ const props = {
   visibleColumns: [{
     status: true,
     title: 'Contributors'
-  }],
-  possibleColumns: [],
+  }, { title: 'feefineIncurred', status: true }],
+  possibleColumns: ['feefineIncurred', 'Contributors'],
   resources: {
     activeRecord: { user: 'ab579dc3-219b-4f5b-8068-ab1c7a55c402' },
     loanAccount: { records: [] },
@@ -169,5 +169,34 @@ describe('OpenLoansWithStatic Data component', () => {
     userEvent.click(document.querySelector('[id="columnsDropdown"]'));
     userEvent.click(document.querySelector('[id="ui-users.loans.columns.contributors"]'));
     expect(mockToggleColumn).toHaveBeenCalled();
+  });
+
+  it('should show fees with reminder for given loan', async () => {
+    const resources = {
+      loanAccount: {
+        records: [{
+          loanId: '40f5e9d9-38ac-458e-ade7-7795bd821652',
+          amount: '50',
+          paymentStatus: { name: 'Payment Name' },
+        }],
+      },
+    };
+
+    const { container } = renderOpenLoansWithStaticData({
+      ...props,
+      resources,
+      loans: [{
+        ...loans[0],
+        id: '40f5e9d9-38ac-458e-ade7-7795bd821652',
+        reminders: {
+          lastFeeBilled: {
+            number: 2
+          }
+        }
+      }],
+    });
+
+    expect(container).toHaveTextContent('50.00');
+    expect(container).toHaveTextContent('ui-users.loans.lastReminderNumber');
   });
 });

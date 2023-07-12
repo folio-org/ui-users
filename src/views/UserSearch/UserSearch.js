@@ -250,7 +250,11 @@ class UserSearch extends React.Component {
       } catch (error) {
         if (error.message === 'noItemsFound') {
           reportError = true;
-          this.context.sendCallout({ type: 'error', message: <FormattedMessage id="ui-users.reports.noItemsFound" /> });
+          this.context.sendCallout({ type: 'error', timeout: 0, message: <FormattedMessage id="ui-users.reports.noItemsFound" /> });
+        } else {
+          reportError = true;
+          this.context.sendCallout({ type: 'error', timeout: 0, message: error.message });
+          console.error(error); // eslint-disable-line no-console
         }
       }
       if (this._mounted || reportError === true) {

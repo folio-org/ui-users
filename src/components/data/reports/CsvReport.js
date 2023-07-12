@@ -83,7 +83,7 @@ class CsvReport {
         ...r,
         borrower: {
           ...r.borrower,
-          name: `${r.borrower.lastName}, ${r.borrower.firstName} ${r.borrower.middleName || ''}`,
+          name: `${r.borrower?.lastName}, ${r.borrower?.firstName} ${r.borrower?.middleName || ''}`,
         },
         borrowerId: r.userId,
         loanId: r.id,
