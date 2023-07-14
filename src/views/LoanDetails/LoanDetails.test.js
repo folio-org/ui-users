@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-
+// eslint-disable-next-line import/no-extraneous-dependencies
 import okapiOpenLoan from 'fixtures/openLoan';
 import okapiCurrentUser from 'fixtures/okapiCurrentUser';
 import renderWithRouter from 'helpers/renderWithRouter';
@@ -436,14 +436,12 @@ describe('Render LoanProxyDetails component', () => {
     expect(screen.getAllByText('Close Modal')).toBeTruthy();
   });
   it('Component is loading with declared lost', () => {
-    mockGetLodash.mockReset();
-    mockGetLodash.mockImplementation((item) => {
-      // item2[1] == 'contributors' ? undefined :
-
-      return item.filter ? item.filter : 'Declared lost';
-    });
-    mockAccounts.mockReset();
-    mockAccounts.mockImplementation(() => {
+      mockGetLodash.mockReset();
+      mockGetLodash.mockImplementation((item) => {
+        return item.filter ? item.filter : 'Declared lost';
+      });
+      mockAccounts.mockReset();
+      mockAccounts.mockImplementation(() => {
       return false;
     });
     const updatedPropsData = {
