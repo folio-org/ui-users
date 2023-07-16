@@ -1115,5 +1115,9 @@
     "permission.settings.usergroups.view": "Configuración (Usuarios): Puede ver los grupos de usuarios",
     "permission.settings.usergroups.all": "Configuración (Usuarios): Puede crear, editar y eliminar grupos de usuarios",
     "permission.settings.waives.view": "Configuración (Usuarios): Puede ver las renuncias",
-    "permission.settings.waives.all": "Configuración (Usuarios): Puede crear, editar y eliminar renuncias"
+    "permission.settings.waives.all": "Configuración (Usuarios): Puede crear, editar y eliminar renuncias",
+    "permission.settings.general.view": "Configuración (Usuarios): Puede ver las entradas generales",
+    "permission.settings.patron-blocks.view": "Configuración (Usuarios): Puede ver todas las entradas de bloqueos de usuarios",
+    "permission.settings.feefines.view": "Configuración (Usuarios): Puede ver las entradas relacionadas con las multas",
+    "loans.lastReminderNumber": "{contar, número} {contar, plural, una {tarifa de recordatorio} otras {tarifas de recordatorio}} facturadas"
 }
