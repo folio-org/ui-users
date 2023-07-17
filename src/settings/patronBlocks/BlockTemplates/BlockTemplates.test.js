@@ -51,6 +51,9 @@ describe('BlockTemplates component', () => {
       resources,
       mutator,
       intl: {},
+      stripes: {
+        hasPerm: jest.fn(() => true),
+      }
     };
     renderBlockTemplates(props);
     expect(screen.getByText('circ-admin')).toBeTruthy();

@@ -57,6 +57,7 @@
 * Add info about reminder fees to loan details screen. Refs UIU-2591.
 * Add info about reminder fees to loan history. Refs UIU-2590.
 * Replace `word-wrap` (unmaintained) with `@aashutoshrathi/word-wrap`, a fork, to mitigate CVE-2023-26115.
+* Restrict edit of Patron Block Templates in settings based on permissions check. UIU-2913.
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v9.0.0)

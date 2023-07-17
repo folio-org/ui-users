@@ -24,7 +24,10 @@ function BlockTemplates(props) {
     intl: { formatMessage },
     mutator,
     resources: { manualBlockTemplates },
+    stripes,
   } = props;
+
+  const editable = stripes.hasPerm('ui-users.settings.patron-block-templates.all');
 
   return (
     <EntryManager
@@ -47,6 +50,7 @@ function BlockTemplates(props) {
         post: 'manual-block-templates.item.post',
         delete: 'manual-block-templates.item.delete',
       }}
+      editable={editable}
     />
   );
 }
@@ -78,6 +82,9 @@ BlockTemplates.propTypes = {
       DELETE: PropTypes.func,
     }).isRequired,
   }).isRequired,
+  stripes: PropTypes.shape({
+    hasPerm: PropTypes.func,
+  }),
 };
 
 export default injectIntl(stripesConnect(BlockTemplates));
