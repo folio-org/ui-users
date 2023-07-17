@@ -51,12 +51,14 @@
 * Handle sparse data in "Overdue loans report". Fixes UIU-2901.
 * Update translations text for permission.settings.manual-charges.all. Fixes UIU-2908.
 * Rename user setting permissions disaplay name and update their visibility. Refs UIU-2907.
+* Convert primary search listing to use prev/next pagination vs load-more pagination. Refs UIU-2870.
 * Cleanup User Settings permissions – Part 1. Refs UIU-2906
 * Prevent editing of shared settings from outside "Consortium manager". Refs UIU-2914.
 * User settings > Fee/fine section: Disable editing for users with "Setting (Users): View all settings" permission. Refs UIU-2904.
 * Add info about reminder fees to loan details screen. Refs UIU-2591.
 * Add info about reminder fees to loan history. Refs UIU-2590.
 * Replace `word-wrap` (unmaintained) with `@aashutoshrathi/word-wrap`, a fork, to mitigate CVE-2023-26115.
+* Convert primary search listing to use prev/next pagination vs load-more pagination. Refs UIU-2870.
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v9.0.0)

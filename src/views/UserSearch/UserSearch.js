@@ -25,6 +25,7 @@ import {
   SearchField,
   SRStatus,
   MenuSection,
+  MCLPagingTypes,
 } from '@folio/stripes/components';
 
 import {
@@ -845,10 +846,9 @@ class UserSearch extends React.Component {
                             isEmptyMessage={resultsStatusMessage}
                             isSelected={this.isSelected}
                             autosize
-                            virtualize
                             hasMargin
                             pageAmount={100}
-                            pagingType="click"
+                            pagingType={MCLPagingTypes.PREV_NEXT}
                           />
                         </Pane>
                       )}
