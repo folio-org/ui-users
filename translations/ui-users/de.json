@@ -33,7 +33,7 @@
     "loans.details.location": "Standort",
     "loans.details.requestQueue": "Bestandsanfrage-Warteliste",
     "loans.details.claimedReturned": "angeblich zurückgegeben",
-    "loans.details.loanPolicy": "Ausleihparameter",
+    "loans.details.loanPolicy": "Ausleih-parameter",
     "loans.details.lost": "Verloren",
     "loans.details.borrower": "Benutzer/-in",
     "loans.details.renewalCount": "Anzahl Verlängerungen",
@@ -1115,5 +1115,9 @@
     "permission.settings.usergroups.view": "Settings (Users): Can view patron groups",
     "permission.settings.usergroups.all": "Settings (Users): Can create, edit and remove patron groups",
     "permission.settings.waives.view": "Einstellungen (Personen): Kann Verzichtserklärungen einsehen",
-    "permission.settings.waives.all": "Einstellungen (Benutzer): Kann Verzichtserklärungen erstellen, bearbeiten und entfernen"
+    "permission.settings.waives.all": "Einstellungen (Benutzer): Kann Verzichtserklärungen erstellen, bearbeiten und entfernen",
+    "permission.settings.general.view": "Settings (Users): Can view general entries",
+    "permission.settings.patron-blocks.view": "Settings (Users): Can view all patron blocks entries",
+    "permission.settings.feefines.view": "Settings (Users): Can view feefines-related entries",
+    "loans.lastReminderNumber": "{count, number} {count, plural, one {reminder fee} other {reminder fees}} billed"
 }
