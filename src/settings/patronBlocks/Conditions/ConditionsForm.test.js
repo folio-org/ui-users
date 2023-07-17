@@ -34,6 +34,7 @@ const propData = {
     getState: getStateMock,
   },
   handleSubmit: handleSubmitMock,
+  areConditionsEditable: true,
 };
 
 
