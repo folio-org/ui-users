@@ -37,7 +37,6 @@ const propData = {
   areConditionsEditable: true,
 };
 
-
 const renderConditionsForm = async (props) => renderWithRouter(<ConditionsForm {...props} />);
 
 describe('Conditions Form Component', () => {
@@ -55,5 +54,31 @@ describe('Conditions Form Component', () => {
   it('handle Submit in conditions form', async () => {
     userEvent.click(screen.getByText('stripes-core.button.save'));
     expect(handleSubmitMock).toHaveBeenCalledTimes(0);
+  });
+});
+
+describe('When areConditionsEnable prop is false', () => {
+  beforeEach(async () => {
+    const alteredPropData = {
+      ...propData,
+      areConditionsEditable: false,
+    };
+    await waitFor(() => renderConditionsForm(alteredPropData));
+  });
+
+  it('component must be rendered', async () => {
+    expect(screen.getByText('Maximum number of items charged out')).toBeInTheDocument();
+  });
+
+  it('should render checkboxes as read only', () => {
+    const checkboxes = screen.getAllByRole('checkbox');
+
+    checkboxes.forEach(cb => {
+      expect(cb).toBeDisabled();
+    });
+  });
+
+  it('should render block message as disabled text area', () => {
+    expect(screen.getByRole('textbox')).toBeDisabled();
   });
 });

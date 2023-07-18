@@ -143,7 +143,7 @@ class ConditionsForm extends Component {
                 type="checkbox"
                 component={Checkbox}
                 label={<FormattedMessage id="ui-users.settings.block.borrowing" />}
-                readOnly={!areConditionsEditable}
+                disabled={!areConditionsEditable}
               />
             </Col>
           </Row>
@@ -156,7 +156,7 @@ class ConditionsForm extends Component {
                 type="checkbox"
                 component={Checkbox}
                 label={<FormattedMessage id="ui-users.settings.block.renew" />}
-                readOnly={!areConditionsEditable}
+                disabled={!areConditionsEditable}
               />
             </Col>
           </Row>
@@ -169,7 +169,7 @@ class ConditionsForm extends Component {
                 type="checkbox"
                 component={Checkbox}
                 label={<FormattedMessage id="ui-users.settings.block.request" />}
-                readOnly={!areConditionsEditable}
+                disabled={!areConditionsEditable}
               />
             </Col>
           </Row>
