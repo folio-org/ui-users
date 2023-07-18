@@ -66,6 +66,7 @@ class UserSearchContainer extends React.Component {
       type: 'okapi',
       records: 'users',
       resultOffset: '%{resultOffset}',
+      resultDensity: 'sparse',
       perRequest: 100,
       path: 'users',
       GET: {
