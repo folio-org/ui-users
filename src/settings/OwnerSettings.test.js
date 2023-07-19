@@ -198,4 +198,26 @@ describe('Owner settings', () => {
       });
     });
   });
+
+  describe('when user do not have permissions to edit owner settings', () => {
+    beforeEach(() => {
+      const alteredPropData = {
+        ...propData,
+        stripes: {
+          ...propData.stripes,
+          hasPerm: jest.fn(() => false),
+        }
+      };
+
+      renderOwnerSettings(alteredPropData);
+    });
+
+    it('should not render New button', () => {
+      expect(document.querySelector('[id="clickable-add-settings-owners"]')).toBeNull();
+    });
+
+    it('should not render Actions columnin list', () => {
+      expect(screen.queryByText('stripes-smart-components.actions')).toBeNull();
+    });
+  });
 });

@@ -32,6 +32,9 @@ class Conditions extends Component {
         PUT: PropTypes.func.isRequired,
       }).isRequired,
     }).isRequired,
+    stripes: PropTypes.shape({
+      hasPerm: PropTypes.func.isRequired
+    }).isRequired,
   };
 
   callout = React.createRef();
@@ -74,6 +77,9 @@ class Conditions extends Component {
   }
 
   render() {
+    const { stripes } = this.props;
+    const areConditionsEditable = stripes.hasPerm('ui-users.settings.conditions.edit');
+
     if (!this.shouldRenderCondition()) {
       return null;
     }
@@ -92,6 +98,7 @@ class Conditions extends Component {
             label={name}
             initialValues={this.getInitialValues()}
             onSubmit={this.onSubmit}
+            areConditionsEditable={areConditionsEditable}
           />
           <Callout ref={this.callout} />
         </div>
