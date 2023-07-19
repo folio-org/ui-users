@@ -78,6 +78,7 @@ class LimitsForm extends Component {
     pristine: PropTypes.bool.isRequired,
     submitting: PropTypes.bool.isRequired,
     handleSubmit: PropTypes.func.isRequired,
+    canEditConditions: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -85,7 +86,7 @@ class LimitsForm extends Component {
   }
 
   renderConditions = () => {
-    const { patronBlockConditions } = this.props;
+    const { patronBlockConditions, canEditConditions } = this.props;
 
     return (
       map(patronBlockConditions, ({ name: condition, id }) => {
@@ -111,6 +112,7 @@ class LimitsForm extends Component {
                   type="number"
                   name={id}
                   validate={id === feeFineBalanceId ? feeFineLimitsValidation : limitsValidation}
+                  disabled={!canEditConditions}
                 />
               </Col>
             </Row>
