@@ -62,4 +62,41 @@ describe('CommentRequiredForm', () => {
     userEvent.click(document.querySelector('[id="clickable-save-comment"]'));
     expect(screen.getAllByText('ui-users.comment.waived')[0]).toBeInTheDocument();
   });
+
+  describe('when viewOnly prop is true', () => {
+    it('should render comment required component form', () => {
+      const props = {
+        handleSubmit: handleSubmitMock,
+        onSubmit: onSubmitMock,
+        pristine: false,
+        submitting: false,
+        intl: {
+          formatMessage: ({ id }) => <span>{id}</span>
+        },
+        viewOnly: true
+      };
+      renderCommentRequiredForm(props);
+      expect(screen.getByText('ui-users.comment.title'));
+    });
+
+    it('should have all settings as disabled', () => {
+      const props = {
+        handleSubmit: handleSubmitMock,
+        onSubmit: onSubmitMock,
+        pristine: false,
+        submitting: false,
+        intl: {
+          formatMessage: ({ id }) => <span>{id}</span>
+        },
+        viewOnly: true
+      };
+      renderCommentRequiredForm(props);
+
+      const settings = screen.getAllByRole('combobox');
+
+      settings.forEach(setting => {
+        expect(setting).toBeDisabled();
+      });
+    });
+  });
 });
