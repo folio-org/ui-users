@@ -96,7 +96,7 @@ class CommentRequiredSettings extends React.Component {
       refunded: (settings.refunded && settings.refunded !== 'false' ? 'true' : 'false'),
       transferredManually: (settings.transferredManually && settings.transferredManually !== 'false' ? 'true' : 'false'),
     };
-    const viewOnly = !this.props.stripes.hasPerm('comments.item.put');
+    const viewOnly = !this.props.stripes.hasPerm('ui-users.settings.comments.all');
 
     return (
       <div className={css.fullWidth}>
