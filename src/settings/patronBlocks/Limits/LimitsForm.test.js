@@ -60,11 +60,12 @@ const propData = {
     getState: getStateMock,
   },
   handleSubmit: handleSubmitMock,
+  canEditConditions: true,
 };
 
 const renderLimitsForm = async (props) => renderWithRouter(<LimitsForm {...props} />);
 
-describe('Conditions Form Component', () => {
+describe('Limits Form Component', () => {
   beforeEach(async () => {
     await waitFor(() => renderLimitsForm(propData));
   });
@@ -78,5 +79,27 @@ describe('Conditions Form Component', () => {
   it('handle Submit in conditions form', async () => {
     userEvent.click(screen.getByText('stripes-core.button.save'));
     expect(handleSubmitMock).toHaveBeenCalledTimes(0);
+  });
+});
+
+describe('When canEditConditions prop is false', () => {
+  beforeEach(async () => {
+    const alteredPropData = {
+      ...propData,
+      canEditConditions: false,
+    };
+    await waitFor(() => renderLimitsForm(alteredPropData));
+  });
+
+  it('component must be rendered', async () => {
+    expect(screen.getByText('Maximum number of items charged out')).toBeInTheDocument();
+  });
+
+  it('should disable conditions on each limit', () => {
+    const fields = screen.getAllByRole('spinbutton');
+
+    fields.forEach(fld => {
+      expect(fld).toBeDisabled();
+    });
   });
 });
