@@ -29,6 +29,9 @@ const props = {
       ],
       hasLoaded: true,
     }
+  },
+  stripes: {
+    hasPerm: jest.fn(() => true),
   }
 };
 
