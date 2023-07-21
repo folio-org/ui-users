@@ -35,18 +35,32 @@ const props = {
   }
 };
 
-const renderCommentRequiredSettings = () => renderWithRouter(<CommentRequiredSettings {...props} />);
+const renderCommentRequiredSettings = (props) => renderWithRouter(<CommentRequiredSettings {...props} />);
 describe('CommentRequiredSettings', () => {
   it('Component should render correctly', () => {
-    renderCommentRequiredSettings();
+    renderCommentRequiredSettings(props);
     expect(screen.getByText('ui-users.comment.title')).toBeInTheDocument();
   });
   it('PUT function to called on clicking save button', async () => {
-    renderCommentRequiredSettings();
+    renderCommentRequiredSettings(props);
     userEvent.selectOptions(screen.getByRole('combobox', { name: 'ui-users.comment.transferred' }), 'ui-users.no');
     userEvent.click(screen.getByRole('button', { name: 'ui-users.comment.save' }));
     await waitFor(() => {
       expect(mockPUT).toHaveBeenCalled();
     });
+  });
+  it('should render component propperly when GET call do not respond with any records', () => {
+    const alteredProps = {
+      ...props,
+      resources: {
+        ...props.resources,
+        commentRequired: {
+          ...props.resources.commentRequired,
+          records: []
+        }
+      }
+    }
+    renderCommentRequiredSettings(props);
+    expect(screen.getByText('ui-users.comment.title')).toBeInTheDocument();
   });
 });
