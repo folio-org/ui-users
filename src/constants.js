@@ -119,6 +119,7 @@ export const reportColumns = [
   'loanPolicyId',
   'loanId',
   'feeFine',
+  'feeFineExplanation',
   'item.title',
   'item.materialType.name',
   'item.status.name',
