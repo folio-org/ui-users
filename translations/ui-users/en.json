@@ -843,6 +843,8 @@
   "reports.item.holdingsRecordId": "Holdings ID",
   "reports.itemId": "Item ID",
   "reports.feeFine": "Fee/Fine",
+  "reports.feeFineExplanation": "Fee/Fine explanation",
+  "reports.includesReminderFees": "Includes reminder fee(s)",
   "reports.inProgress": "Export in progress",
   "reports.feeFine.patronName": "Patron name",
   "reports.feeFine.patronBarcode": "Patron barcode",
