@@ -6,13 +6,14 @@ import CommentRequiredSettings from './CommentRequiredSettings';
 
 jest.unmock('@folio/stripes/components');
 const mockPUT = jest.fn();
+const mockPOST = jest.fn();
 const props = {
   mutator: {
     record: {
       update: jest.fn()
     },
     commentRequired: {
-      POST: jest.fn(),
+      POST: mockPOST,
       PUT: mockPUT,
       GET: jest.fn().mockResolvedValue([{ id: 1 }])
     }
@@ -49,9 +50,16 @@ describe('CommentRequiredSettings', () => {
       expect(mockPUT).toHaveBeenCalled();
     });
   });
-  it('should render component propperly when GET call do not respond with any records', () => {
+  it('should render component properly when GET call do not respond with any records', () => {
     const alteredProps = {
       ...props,
+      mutator: {
+        ...props.mutator,
+        commentRequired: {
+          ...props.mutator.commentRequired,
+          GET: jest.fn().mockResolvedValue([])
+        }
+      },
       resources: {
         ...props.resources,
         commentRequired: {
@@ -60,7 +68,30 @@ describe('CommentRequiredSettings', () => {
         }
       }
     }
-    renderCommentRequiredSettings(props);
+    renderCommentRequiredSettings(alteredProps);
     expect(screen.getByText('ui-users.comment.title')).toBeInTheDocument();
+  });
+  it('should make POST call when length of records is 0', async () => {
+    const alteredProps = {
+      ...props,
+      mutator: {
+        ...props.mutator,
+        commentRequired: {
+          ...props.mutator.commentRequired,
+          GET: jest.fn().mockResolvedValue([])
+        }
+      },
+      resources: {
+        ...props.resources,
+        commentRequired: {
+          ...props.resources.commentRequired,
+          records: []
+        }
+      }
+    }
+    renderCommentRequiredSettings(alteredProps);
+    await waitFor(() => {
+      expect(mockPOST).toHaveBeenCalled();
+    });
   });
 });
