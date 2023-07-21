@@ -11,6 +11,7 @@ class PatronGroupsSettings extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
+      hasPerm: PropTypes.func.isRequired,
     }).isRequired,
 
     intl: PropTypes.object.isRequired,
@@ -42,7 +43,8 @@ class PatronGroupsSettings extends React.Component {
   });
 
   render() {
-    const { intl } = this.props;
+    const { intl, stripes } = this.props;
+    const canEditPatronGroups = stripes.hasPerm('ui-users.settings.usergroups.all');
 
     return (
       <this.connectedControlledVocab
@@ -66,6 +68,7 @@ class PatronGroupsSettings extends React.Component {
         nameKey="group"
         id="patrongroups"
         sortby="group"
+        editable={canEditPatronGroups}
       />
     );
   }

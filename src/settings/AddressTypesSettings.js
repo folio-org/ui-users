@@ -11,6 +11,7 @@ class AddressTypesSettings extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
+      hasPerm: PropTypes.func.isRequired,
     }).isRequired,
     intl: PropTypes.object.isRequired,
   };
@@ -25,6 +26,8 @@ class AddressTypesSettings extends React.Component {
       stripes,
       intl,
     } = this.props;
+
+    const canEditAdressTypes = stripes.hasPerm('ui-users.settings.addresstypes.all');
 
     return (
       <this.connectedControlledVocab
@@ -42,6 +45,7 @@ class AddressTypesSettings extends React.Component {
         nameKey="addressType"
         id="addresstypes"
         sortby="addressType"
+        editable={canEditAdressTypes}
       />
     );
   }
