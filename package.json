@@ -270,18 +270,17 @@
       },
       {
         "permissionName": "ui-users.settings.comments.view",
-        "displayName": "Settings (Users): Can view comments",
+        "displayName": "Settings (Users): Can view if comment required",
         "subPermissions": [
           "comments.collection.get",
           "comments.item.get",
-          "comments.item.post",
           "settings.users.enabled"
         ],
-        "visible": true
+        "visible": false
       },
       {
         "permissionName": "ui-users.settings.comments.all",
-        "displayName": "Settings (Users): Can create, edit and remove comments",
+        "displayName": "Settings (Users): Can edit if comment required",
         "subPermissions": [
           "ui-users.settings.comments.view",
           "comments.item.delete",
@@ -294,7 +293,6 @@
         "permissionName": "ui-users.settings.feefines.view",
         "displayName": "Settings (Users): Can view feefines-related entries",
         "subPermissions": [
-          "settings.users.enabled",
           "ui-users.settings.owners.view",
           "ui-users.settings.manual-charges.view",
           "ui-users.settings.waives.view",
@@ -335,7 +333,7 @@
           "templates.collection.get",
           "settings.users.enabled"
         ],
-        "visible": true
+        "visible": false
       },
       {
         "permissionName": "ui-users.settings.manual-charges.all",
@@ -392,7 +390,7 @@
           "owners.item.get",
           "settings.users.enabled"
         ],
-        "visible": true
+        "visible": false
       },
       {
         "permissionName": "ui-users.settings.owners.all",
@@ -407,18 +405,18 @@
       },
       {
         "permissionName": "ui-users.settings.payments.view",
-        "displayName": "Settings (Users): Can view payments",
+        "displayName": "Settings (Users): Can view payment methods",
         "subPermissions": [
           "owners.collection.get",
           "payments.collection.get",
           "payments.item.get",
           "settings.users.enabled"
         ],
-        "visible": true
+        "visible": false
       },
       {
         "permissionName": "ui-users.settings.payments.all",
-        "displayName": "Settings (Users): Can create, edit and remove payments",
+        "displayName": "Settings (Users): Can create, edit and remove payment methods",
         "subPermissions": [
           "ui-users.settings.payments.view",
           "payments.item.delete",
@@ -430,17 +428,17 @@
       },
       {
         "permissionName": "ui-users.settings.refunds.view",
-        "displayName": "Settings (Users): Can view refunds",
+        "displayName": "Settings (Users): Can view refund reasons",
         "subPermissions": [
           "refunds.collection.get",
           "refunds.item.get",
           "settings.users.enabled"
         ],
-        "visible": true
+        "visible": false
       },
       {
         "permissionName": "ui-users.settings.refunds.all",
-        "displayName": "Settings (Users): Can create, edit and remove refunds",
+        "displayName": "Settings (Users): Can create, edit and remove refunds reasons",
         "subPermissions": [
           "ui-users.settings.refunds.view",
           "refunds.item.delete",
@@ -451,17 +449,17 @@
       },
       {
         "permissionName": "ui-users.settings.waives.view",
-        "displayName": "Settings (Users): Can view waives",
+        "displayName": "Settings (Users): Can view waive reasons",
         "subPermissions": [
           "waives.collection.get",
           "waives.item.get",
           "settings.users.enabled"
         ],
-        "visible": true
+        "visible": false
       },
       {
         "permissionName": "ui-users.settings.waives.all",
-        "displayName": "Settings (Users): Can create, edit and remove waives",
+        "displayName": "Settings (Users): Can create, edit and remove waive reasons",
         "subPermissions": [
           "ui-users.settings.waives.view",
           "waives.item.delete",
@@ -503,14 +501,14 @@
       },
       {
         "permissionName": "ui-users.settings.transfers.view",
-        "displayName": "Settings (Users): Can view accounts ",
+        "displayName": "Settings (Users): Can view transfer accounts",
         "subPermissions": [
           "owners.collection.get",
           "transfers.collection.get",
           "transfers.item.get",
           "settings.users.enabled"
         ],
-        "visible": true
+        "visible": false
       },
       {
         "permissionName": "ui-users.settings.transfers.all",
@@ -531,7 +529,7 @@
           "transfer-criterias.item.get",
           "settings.users.enabled"
         ],
-        "visible": true
+        "visible": false
       },
       {
         "permissionName": "ui-users.settings.transfertypes.all",
@@ -602,7 +600,7 @@
           "patron-block-conditions.collection.get",
           "patron-block-conditions.item.get"
         ],
-        "visible": true
+        "visible": false
       },
       {
         "permissionName": "ui-users.settings.conditions.edit",
@@ -617,10 +615,11 @@
         "permissionName": "ui-users.settings.patron-block-templates.view",
         "displayName": "Settings (Users): Can view patron blocks templates",
         "subPermissions": [
+          "settings.users.enabled",
           "manual-block-templates.collection.get",
           "manual-block-templates.item.get"
         ],
-        "visible": true
+        "visible": false
       },
       {
         "permissionName": "ui-users.settings.patron-block-templates.all",
@@ -642,7 +641,7 @@
           "patron-block-limits.item.get",
           "usergroups.collection.get"
         ],
-        "visible": true
+        "visible": false
       },
       {
         "permissionName": "ui-users.settings.limits.all",
@@ -893,13 +892,13 @@
       },
       {
         "permissionName": "ui-users.settings.departments.view",
-        "displayName": "Settings (Users): View departments",
+        "displayName": "Settings (Users): Can view departments",
         "subPermissions": [
           "settings.users.enabled",
           "departments.collection.get",
           "departments.item.get"
         ],
-        "visible": true
+        "visible": false
       },
       {
         "permissionName": "ui-users.settings.departments.edit",
@@ -930,7 +929,7 @@
       },
       {
         "permissionName": "ui-users.settings.departments.create.edit.view",
-        "displayName": "Settings (Users): Create, edit, and view departments",
+        "displayName": "Settings (Users): Can create, edit, and view departments",
         "subPermissions": [
           "ui-users.settings.departments.create",
           "ui-users.settings.departments.edit",
@@ -940,7 +939,7 @@
       },
       {
         "permissionName": "ui-users.settings.departments.all",
-        "displayName": "Settings (Users): Create, edit, view, and delete departments",
+        "displayName": "Settings (Users): Can create, edit, view, and delete departments",
         "subPermissions": [
           "ui-users.settings.departments.create",
           "ui-users.settings.departments.edit",
@@ -1007,19 +1006,36 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.settings.view",
-        "displayName": "Settings (Users): View all settings",
+        "permissionName": "ui-users.settings.general.view",
+        "displayName": "Settings (Users): Can view general entries",
+        "description": "Permission to view all general entries of settings",
         "subPermissions": [
-          "settings.users.enabled",
-          "ui-users.settings.permsets.view",
-          "ui-users.settings.usergroups.view",
           "ui-users.settings.addresstypes.view",
-          "ui-users.settings.departments.view",
           "ui-users.settings.customfields.view",
-          "ui-users.settings.feefines.view",
+          "ui-users.settings.usergroups.view",
+          "ui-users.settings.permsets.view",
+          "ui-users.settings.departments.view"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.patron-blocks.view",
+        "displayName": "Settings (Users): Can view all patron blocks entries",
+        "description": "Permission to view conditions, limits and templated in patron block section of settings",
+        "subPermissions": [
           "ui-users.settings.conditions.view",
           "ui-users.settings.limits.view",
           "ui-users.settings.patron-block-templates.view"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.view",
+        "displayName": "Settings (Users): View all settings",
+        "subPermissions": [
+          "ui-users.settings.general.view",
+          "ui-users.settings.feefines.view",
+          "ui-users.settings.patron-blocks.view"
         ],
         "visible": true
       }
@@ -1090,5 +1106,8 @@
   },
   "optionalDependencies": {
     "@folio/plugin-find-user": "^6.0.0"
+  },
+  "resolutions": {
+    "word-wrap" : "npm:@aashutoshrathi/word-wrap@^1.2.6"
   }
 }

@@ -1115,5 +1115,9 @@
     "permission.settings.usergroups.view": "设置（用户）：可以查看读者组",
     "permission.settings.usergroups.all": "设置（用户）：可以创建、编辑和移除读者组",
     "permission.settings.waives.view": "设置（用户）：可以查看豁免",
-    "permission.settings.waives.all": "设置（用户）：可以创建、编辑和移除豁免"
+    "permission.settings.waives.all": "设置（用户）：可以创建、编辑和移除豁免",
+    "permission.settings.general.view": "Settings (Users): Can view general entries",
+    "permission.settings.patron-blocks.view": "Settings (Users): Can view all patron blocks entries",
+    "permission.settings.feefines.view": "Settings (Users): Can view feefines-related entries",
+    "loans.lastReminderNumber": "{count, number} {count, plural, one {reminder fee} other {reminder fees}} billed"
 }

@@ -13,6 +13,9 @@ import {
 import { stripesShape } from '@folio/stripes/core';
 import { NoValue } from '@folio/stripes/components';
 
+import {
+  getLoanLastReminderNumber,
+} from '../../../../util';
 import OpenLoans from '../../OpenLoans';
 import Modals from '../Modals/Modals';
 import OpenLoansSubHeader from '../OpenLoansSubHeader/OpenLoansSubHeader';
@@ -184,6 +187,7 @@ class OpenLoansWithStaticData extends React.Component {
     const { resources } = this.props;
     const accounts = get(resources, ['loanAccount', 'records'], []);
     const accountsLoan = accounts.filter(a => a.loanId === loan.id) || [];
+
     const suspendedStatus = accountsLoan.filter(a => a?.paymentStatus?.name === refundClaimReturned.PAYMENT_STATUS) || [];
     let amount = 0;
 
@@ -198,7 +202,10 @@ class OpenLoansWithStaticData extends React.Component {
     return (suspendedStatus.length > 0) ?
       <FormattedMessage id="ui-users.loans.details.accounts.suspended" values={{ amount }} />
       :
-      amount;
+      <>
+        {amount}
+        {getLoanLastReminderNumber(loan)}
+      </>;
   };
 
   getContributorslist = (loan) => {
