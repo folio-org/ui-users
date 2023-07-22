@@ -247,6 +247,7 @@
   "permissions.isSponsorOf": "Proxies (these people can borrow on behalf of {name})",
   "permissions.proxy.sponsor": "Proxy/sponsor",
   "permissions.assignedPermissions": "Assigned permissions",
+  "permissions.assignedUsers": "Assigned users",
   "permissions.untitledPermissionSet": "Untitled permission set",
   "permissions.closePermissionSetDialog": "Close permission set dialog",
   "permissions.createPermissionSet": "Create permission set",

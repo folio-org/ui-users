@@ -1081,6 +1081,7 @@
     "regenerator-runtime": "^0.13.9"
   },
   "dependencies": {
+    "@folio/stripes-acq-components": "^4.0.200000469",
     "final-form-set-field-data": "^1.0.2",
     "hashcode": "^1.0.3",
     "jspdf": "^2.3.1",
@@ -1109,6 +1110,6 @@
     "@folio/plugin-find-user": "^6.0.0"
   },
   "resolutions": {
-    "word-wrap" : "npm:@aashutoshrathi/word-wrap@^1.2.6"
+    "word-wrap": "npm:@aashutoshrathi/word-wrap@^1.2.6"
   }
 }
