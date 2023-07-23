@@ -46,7 +46,8 @@ class CommentRequiredSettings extends React.Component {
 
   componentDidMount() {
     const {
-      mutator: { commentRequired }
+      mutator: { commentRequired },
+      stripes,
     } = this.props;
 
     commentRequired.GET().then(records => {
@@ -56,7 +57,7 @@ class CommentRequiredSettings extends React.Component {
         transferredManually: false,
         refunded: false
       };
-      if (records.length === 0) {
+      if (records.length === 0 && stripes.hasPerm('comments.item.post')) {
         commentRequired.POST(settings);
       }
     });

@@ -6,13 +6,14 @@ import CommentRequiredSettings from './CommentRequiredSettings';
 
 jest.unmock('@folio/stripes/components');
 const mockPUT = jest.fn();
+const mockPOST = jest.fn();
 const props = {
   mutator: {
     record: {
       update: jest.fn()
     },
     commentRequired: {
-      POST: jest.fn(),
+      POST: mockPOST,
       PUT: mockPUT,
       GET: jest.fn().mockResolvedValue([{ id: 1 }])
     }
@@ -29,21 +30,68 @@ const props = {
       ],
       hasLoaded: true,
     }
+  },
+  stripes: {
+    hasPerm: jest.fn(() => true),
   }
 };
 
-const renderCommentRequiredSettings = () => renderWithRouter(<CommentRequiredSettings {...props} />);
+const renderCommentRequiredSettings = (props) => renderWithRouter(<CommentRequiredSettings {...props} />);
 describe('CommentRequiredSettings', () => {
   it('Component should render correctly', () => {
-    renderCommentRequiredSettings();
+    renderCommentRequiredSettings(props);
     expect(screen.getByText('ui-users.comment.title')).toBeInTheDocument();
   });
   it('PUT function to called on clicking save button', async () => {
-    renderCommentRequiredSettings();
+    renderCommentRequiredSettings(props);
     userEvent.selectOptions(screen.getByRole('combobox', { name: 'ui-users.comment.transferred' }), 'ui-users.no');
     userEvent.click(screen.getByRole('button', { name: 'ui-users.comment.save' }));
     await waitFor(() => {
       expect(mockPUT).toHaveBeenCalled();
+    });
+  });
+  it('should render component properly when GET call do not respond with any records', () => {
+    const alteredProps = {
+      ...props,
+      mutator: {
+        ...props.mutator,
+        commentRequired: {
+          ...props.mutator.commentRequired,
+          GET: jest.fn().mockResolvedValue([])
+        }
+      },
+      resources: {
+        ...props.resources,
+        commentRequired: {
+          ...props.resources.commentRequired,
+          records: []
+        }
+      }
+    }
+    renderCommentRequiredSettings(alteredProps);
+    expect(screen.getByText('ui-users.comment.title')).toBeInTheDocument();
+  });
+  it('should make POST call when length of records is 0', async () => {
+    const alteredProps = {
+      ...props,
+      mutator: {
+        ...props.mutator,
+        commentRequired: {
+          ...props.mutator.commentRequired,
+          GET: jest.fn().mockResolvedValue([])
+        }
+      },
+      resources: {
+        ...props.resources,
+        commentRequired: {
+          ...props.resources.commentRequired,
+          records: []
+        }
+      }
+    }
+    renderCommentRequiredSettings(alteredProps);
+    await waitFor(() => {
+      expect(mockPOST).toHaveBeenCalled();
     });
   });
 });
