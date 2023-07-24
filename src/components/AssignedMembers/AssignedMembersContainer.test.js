@@ -65,7 +65,7 @@ describe('AssignedMembersContainer', () => {
     expect(screen.getByText('AssignedMembersList')).toBeInTheDocument();
   });
 
-  it('should render AssignedMembersList', async () => {
+  it('should toggle accordion button', async () => {
     useGetUsers.mockReturnValue({
       users: mockUsers,
       isLoading: false,

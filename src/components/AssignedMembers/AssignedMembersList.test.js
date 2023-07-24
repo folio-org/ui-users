@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { render, screen } from '@folio/jest-config-stripes/testing-library/react';
+
 import AssignedMembersList from './AssignedMembersList';
 
 jest.unmock('@folio/stripes/components');

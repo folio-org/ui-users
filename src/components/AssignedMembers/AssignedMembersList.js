@@ -6,6 +6,7 @@ import {
   Col,
   MultiColumnList,
 } from '@folio/stripes/components';
+
 import { COLUMN_MAPPING, COLUMN_WIDTH, VISIBLE_COLUMNS } from './constants';
 
 const AssignedMembersList = ({ users }) => {
