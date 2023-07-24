@@ -1119,5 +1119,7 @@
     "permission.settings.general.view": "Configuración (Usuarios): Puede ver las entradas generales",
     "permission.settings.patron-blocks.view": "Configuración (Usuarios): Puede ver todas las entradas de bloqueos de usuarios",
     "permission.settings.feefines.view": "Configuración (Usuarios): Puede ver las entradas relacionadas con las multas",
-    "loans.lastReminderNumber": "{count, number} {count, plural, one {tarifa de recordatorio} other {tarifas de recordatorio}} facturadas"
+    "loans.lastReminderNumber": "{count, number} {count, plural, one {tarifa de recordatorio} other {tarifas de recordatorio}} facturadas",
+    "reports.feeFineExplanation": "Fee/Fine explanation",
+    "reports.includesReminderFees": "Includes reminder fee(s)"
 }
