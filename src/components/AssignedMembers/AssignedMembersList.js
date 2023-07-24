@@ -9,29 +9,21 @@ import {
 
 import { COLUMN_MAPPING, COLUMN_WIDTH, VISIBLE_COLUMNS } from './constants';
 
-const AssignedMembersList = ({ users }) => {
-  const resultFormatter = {
-    fullName: item => item.fullName,
-    patronGroup: item => item.patronGroup,
-  };
-
-  return (
-    <Row
-      start="xs"
-      data-test-assignedUsers
-    >
-      <Col xs={12}>
-        <MultiColumnList
-          contentData={users}
-          formatter={resultFormatter}
-          visibleColumns={VISIBLE_COLUMNS}
-          columnMapping={COLUMN_MAPPING}
-          columnWidths={COLUMN_WIDTH}
-        />
-      </Col>
-    </Row>
-  );
-};
+const AssignedMembersList = ({ users }) => (
+  <Row
+    start="xs"
+    data-test-assigned-users
+  >
+    <Col xs={12}>
+      <MultiColumnList
+        contentData={users}
+        visibleColumns={VISIBLE_COLUMNS}
+        columnMapping={COLUMN_MAPPING}
+        columnWidths={COLUMN_WIDTH}
+      />
+    </Col>
+  </Row>
+);
 
 AssignedMembersList.propTypes = {
   users: PropTypes.arrayOf(PropTypes.object),

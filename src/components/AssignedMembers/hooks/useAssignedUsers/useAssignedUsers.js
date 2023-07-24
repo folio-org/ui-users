@@ -4,23 +4,13 @@ import {
   useNamespace,
   useOkapiKy,
 } from '@folio/stripes/core';
-import { batchRequest } from '@folio/stripes-acq-components';
 
-const buildQueryByIds = (itemsChunk) => {
-  const query = itemsChunk
-    .map(chunkId => `id==${chunkId}`)
-    .join(' or ');
-
-  return query || '';
-};
+import { MAX_RECORDS } from '../../../../constants';
+import { GROUPS_API, PERMISSIONS_API, USERS_API } from '../../constants';
+import { batchRequest, buildQueryByIds } from './utils';
 
 const useAssignedUsers = ({ grantedToIds = [], tenantId }, options = {}) => {
   const ky = useOkapiKy();
-  const api = ky.extend({
-    hooks: {
-      beforeRequest: [(req) => req.headers.set('X-Okapi-Tenant', tenantId)]
-    }
-  });
   const [namespace] = useNamespace({ key: 'get-assigned-users' });
   const {
     isLoading,
@@ -29,8 +19,8 @@ const useAssignedUsers = ({ grantedToIds = [], tenantId }, options = {}) => {
     [namespace, grantedToIds, tenantId],
     async ({ signal }) => {
       const permissionUsersResponse = await batchRequest(
-        ({ params: searchParams }) => api
-          .get('perms/users', { searchParams, signal })
+        ({ params: searchParams }) => ky
+          .get(PERMISSIONS_API, { searchParams, signal })
           .json()
           .then(({ permissionUsers }) => permissionUsers),
         grantedToIds,
@@ -40,28 +30,22 @@ const useAssignedUsers = ({ grantedToIds = [], tenantId }, options = {}) => {
       const userIds = permissionUsersResponse.flatMap(({ userId }) => userId);
 
       const usersResponse = await batchRequest(
-        ({ params: searchParams }) => api
-          .get('users', { searchParams, signal })
+        ({ params: searchParams }) => ky
+          .get(USERS_API, { searchParams, signal })
           .json()
           .then(({ users }) => users),
         userIds,
         buildQueryByIds,
       );
 
-      const usersData = usersResponse.flat();
+      const patronGroups = await ky
+        .get(GROUPS_API, { searchParams: {
+          limit: MAX_RECORDS,
+        } })
+        .json()
+        .then(({ usergroups }) => usergroups);
 
-      const patronGroupIds = usersData.map(({ patronGroup }) => patronGroup);
-
-      const patronGroups = await batchRequest(
-        ({ params: searchParams }) => api
-          .get('groups', { searchParams, signal })
-          .json()
-          .then(({ usergroups }) => usergroups),
-        patronGroupIds,
-        buildQueryByIds,
-      );
-
-      const patronGroupsById = patronGroups.flat().reduce((acc, group) => {
+      const patronGroupsById = patronGroups.reduce((acc, group) => {
         acc[group.id] = group.group;
         return acc;
       }, {});

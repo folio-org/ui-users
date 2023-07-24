@@ -3,7 +3,7 @@ import { render, screen, waitFor } from '@folio/jest-config-stripes/testing-libr
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
 import AssignedMembersContainer from './AssignedMembersContainer';
-import useGetUsers from './hooks/useAssignedUsers/useAssignedUsers';
+import useAssignedUsers from './hooks/useAssignedUsers';
 import AssignedMembersList from './AssignedMembersList';
 
 jest.unmock('@folio/stripes/components');
@@ -34,14 +34,16 @@ const renderComponent = (props = {}) => render(<AssignedMembersContainer {...pro
 describe('AssignedMembersContainer', () => {
   const onToggle = jest.fn();
   const props = {
-    grantedToIds: ['1', '2'],
+    permissionSet: {
+      grantedTo: ['1', '2'],
+    },
     expanded: true,
     onToggle,
   };
 
   beforeEach(() => {
     AssignedMembersList.mockClear();
-    useGetUsers.mockClear().mockReturnValue({
+    useAssignedUsers.mockClear().mockReturnValue({
       users: [],
       isLoading: true,
     });
@@ -54,7 +56,7 @@ describe('AssignedMembersContainer', () => {
   });
 
   it('should render AssignedMembersList', async () => {
-    useGetUsers.mockReturnValue({
+    useAssignedUsers.mockReturnValue({
       users: mockUsers,
       isLoading: false,
     });
@@ -66,7 +68,7 @@ describe('AssignedMembersContainer', () => {
   });
 
   it('should toggle accordion button', async () => {
-    useGetUsers.mockReturnValue({
+    useAssignedUsers.mockReturnValue({
       users: mockUsers,
       isLoading: false,
     });

@@ -11,3 +11,7 @@ export const COLUMN_WIDTH = {
   fullName: '50%',
   patronGroup: '50%',
 };
+
+export const USERS_API = 'users';
+export const GROUPS_API = 'groups';
+export const PERMISSIONS_API = 'perms/users';

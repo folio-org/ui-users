@@ -10,14 +10,14 @@ import {
   Accordion,
 } from '@folio/stripes/components';
 
-import useGetUsers from './hooks/useAssignedUsers/useAssignedUsers';
+import useAssignedUsers from './hooks/useAssignedUsers';
 import AssignedMembersList from './AssignedMembersList';
 
-const AssignedMembersContainer = ({ grantedToIds, expanded, onToggle }) => {
+const AssignedMembersContainer = ({ permissionsSet, expanded, onToggle }) => {
   const stripes = useStripes();
   const tenantId = stripes.okapi.tenant;
 
-  const { users, isLoading } = useGetUsers({ grantedToIds, tenantId });
+  const { users, isLoading } = useAssignedUsers({ grantedToIds: permissionsSet.grantedTo, tenantId });
 
   if (isLoading) {
     return <Loading />;
@@ -39,14 +39,16 @@ const AssignedMembersContainer = ({ grantedToIds, expanded, onToggle }) => {
 };
 
 AssignedMembersContainer.propTypes = {
-  grantedToIds: PropTypes.arrayOf(PropTypes.string),
   expanded: PropTypes.bool,
   onToggle: PropTypes.func.isRequired,
+  permissionsSet: PropTypes.shape({
+    grantedTo: PropTypes.arrayOf(PropTypes.string),
+  }),
 };
 
 AssignedMembersContainer.defaultProps = {
-  grantedToIds: [],
   expanded: true,
+  permissionsSet: { grantedTo: [] },
 };
 
 export default AssignedMembersContainer;

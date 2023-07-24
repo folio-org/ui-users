@@ -5,31 +5,13 @@ import {
 } from 'react-query';
 
 import { useOkapiKy } from '@folio/stripes/core';
-import { batchRequest } from '@folio/stripes-acq-components';
 
+import { GROUPS_API, PERMISSIONS_API, USERS_API } from '../../constants';
+import { batchRequest } from './utils';
 import useAssignedUsers from './useAssignedUsers';
-
 
 const mockGrantedToIds = ['userId1', 'userId2'];
 const mockTenantId = 'tenantId';
-const mockData = {
-  data: [{
-    id: '1',
-    patronGroup: 'pg1',
-    personal: {
-      firstName: 'firstName1',
-      lastName: 'lastName1',
-    }
-  }, {
-    id: '2',
-    patronGroup: 'pg2',
-    personal: {
-      firstName: 'firstName2',
-      lastName: 'lastName2',
-    }
-  }],
-  isLoading: false,
-};
 
 jest.mock('@folio/stripes/core', () => ({
   ...jest.requireActual('@folio/stripes/core'),
@@ -37,11 +19,20 @@ jest.mock('@folio/stripes/core', () => ({
   useOkapiKy: jest.fn(),
 }));
 
-jest.mock('@folio/stripes-acq-components', () => ({
-  batchRequest: jest.fn(() => mockData),
+jest.mock('./utils', () => ({
+  batchRequest: jest.fn(),
+  buildQueryByIds: jest.fn(),
 }));
 
 const queryClient = new QueryClient();
+
+const kyResponseMap = {
+  [USERS_API]: { users: [
+    { id: '1', patronGroup: 'pg1', personal: { firstName: 'firstName1', lastName: 'lastName1' } },
+    { id: '2', patronGroup: 'pg2', personal: { firstName: 'firstName2', lastName: 'lastName2' } }] },
+  [GROUPS_API]: { usergroups: [{ id: 'pg1', group: 'group1' }, { id: 'pg2', group: 'group2' }] },
+  [PERMISSIONS_API]: { permissionUsers: [{ userId: '1' }, { userId: '2' }] },
+};
 
 // eslint-disable-next-line react/prop-types
 const wrapper = ({ children }) => (
@@ -51,62 +42,25 @@ const wrapper = ({ children }) => (
 );
 
 describe('useAssignedUsers', () => {
-  const mockGet = jest.fn(() => ({
-    json: () => mockData,
+  const kyMock = jest.fn(() => ({
+    get: (path) => ({
+      json: () => Promise.resolve(kyResponseMap[path]),
+    })
   }));
-  const setHeaderMock = jest.fn();
-  const kyMock = {
-    extend: jest.fn(({ hooks: { beforeRequest } }) => {
-      beforeRequest.forEach(handler => handler({ headers: { set: setHeaderMock } }));
-
-      return {
-        get: mockGet,
-      };
-    }),
-  };
 
   beforeEach(() => {
-    mockGet.mockClear();
-    useOkapiKy.mockClear().mockReturnValue(kyMock);
-  });
-
-  it('should call useOkapiKy with the correct headers', () => {
-    const grantedToIds = [1, 2, 3];
-    const tenantId = 'tenant-123';
-    renderHook(() => useAssignedUsers({ grantedToIds, tenantId }));
-
-    expect(useOkapiKy).toHaveBeenCalled();
-    expect(kyMock.extend).toHaveBeenCalledWith({
-      hooks: {
-        beforeRequest: [expect.any(Function)],
-      },
-    });
-
-    const [beforeRequestHook] = kyMock.extend.mock.calls[0][0].hooks.beforeRequest;
-    const requestHeaders = {
-      set: jest.fn(),
-    };
-    const requestMock = {
-      headers: requestHeaders,
-    };
-
-    beforeRequestHook(requestMock);
-
-    expect(requestHeaders.set).toHaveBeenCalledWith('X-Okapi-Tenant', tenantId);
+    kyMock.mockClear();
+    useOkapiKy.mockImplementation(kyMock);
   });
 
   it('should fetch assigned users', async () => {
     batchRequest.mockClear()
-      .mockImplementationOnce(() => mockGrantedToIds)
-      .mockImplementationOnce(() => mockData.data)
-      .mockReturnValueOnce([{ userId: '1' }, { userId: '2' }])
-      .mockReturnValueOnce([{ id: '1', patronGroup: 'pg1', personal: { firstName: 'firstName1', lastName: 'lastName1' } }, { id: '2', patronGroup: 'pg2', personal: { firstName: 'firstName2', lastName: 'lastName2' } }])
-      .mockReturnValueOnce([{ id: 'pg1', group: 'group1' }, { id: 'pg2', group: 'group2' }]);
+      .mockResolvedValueOnce(kyResponseMap[PERMISSIONS_API].permissionUsers)
+      .mockResolvedValueOnce(kyResponseMap[USERS_API].users);
 
     const { result, waitFor } = renderHook(() => useAssignedUsers({ grantedToIds: mockGrantedToIds, tenantId: mockTenantId }), { wrapper });
 
     await waitFor(() => !result.current.isLoading);
-    console.log('result', result.current);
     expect(result.current.users).toHaveLength(2);
   });
 
