@@ -16,7 +16,7 @@ const useAssignedUsers = ({ grantedToIds = [], tenantId }, options = {}) => {
     isLoading,
     data = [],
   } = useQuery(
-    [namespace, grantedToIds, tenantId],
+    [namespace, tenantId],
     async ({ signal }) => {
       const permissionUsersResponse = await batchRequest(
         ({ params: searchParams }) => ky

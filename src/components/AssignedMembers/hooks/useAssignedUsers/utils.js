@@ -3,8 +3,7 @@ import {
   flatten,
 } from 'lodash';
 import { MAX_RECORDS } from '../../../../constants';
-
-const CHUNK_SIZE = 15;
+import { CHUNK_SIZE } from '../../constants';
 
 export const buildQueryByIds = (itemsChunk) => {
   const query = itemsChunk

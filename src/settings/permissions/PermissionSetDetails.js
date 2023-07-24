@@ -16,7 +16,6 @@ import { ViewMetaData } from '@folio/stripes/smart-components';
 import RenderPermissions from '../../components/RenderPermissions';
 import AssignedMembersContainer from '../../components/AssignedMembers';
 
-
 class PermissionSetDetails extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({

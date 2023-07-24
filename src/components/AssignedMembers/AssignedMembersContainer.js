@@ -19,10 +19,6 @@ const AssignedMembersContainer = ({ permissionsSet, expanded, onToggle }) => {
 
   const { users, isLoading } = useAssignedUsers({ grantedToIds: permissionsSet.grantedTo, tenantId });
 
-  if (isLoading) {
-    return <Loading />;
-  }
-
   return (
     <Accordion
       open={expanded}

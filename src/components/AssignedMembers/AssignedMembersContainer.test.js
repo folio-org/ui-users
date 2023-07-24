@@ -9,6 +9,14 @@ import AssignedMembersList from './AssignedMembersList';
 jest.unmock('@folio/stripes/components');
 jest.unmock('@folio/stripes/util');
 
+jest.mock('@folio/stripes/components', () => ({
+  ...jest.requireActual('@folio/stripes/components'),
+  Loading: jest.fn(() => <div>Loading</div>),
+}));
+
+jest.mock('./hooks/useAssignedUsers/useAssignedUsers', () => jest.fn());
+jest.mock('./AssignedMembersList', () => jest.fn(() => <div>AssignedMembersList</div>));
+
 const mockUsers = [
   {
     fullName: 'John Doe',
@@ -19,16 +27,6 @@ const mockUsers = [
     patronGroup: 'Staff',
   },
 ];
-
-jest.mock('@folio/stripes/components', () => ({
-  ...jest.requireActual('@folio/stripes/components'),
-  Loading: jest.fn(() => <div>Loading</div>),
-}));
-
-jest.mock('./hooks/useAssignedUsers/useAssignedUsers', () => jest.fn());
-jest.mock('./AssignedMembersList', () => jest.fn(() => <div>AssignedMembersList</div>));
-
-
 const renderComponent = (props = {}) => render(<AssignedMembersContainer {...props} />);
 
 describe('AssignedMembersContainer', () => {
@@ -85,4 +83,3 @@ describe('AssignedMembersContainer', () => {
     expect(onToggle).toHaveBeenCalled();
   });
 });
-
