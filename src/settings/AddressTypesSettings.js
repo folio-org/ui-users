@@ -27,7 +27,9 @@ class AddressTypesSettings extends React.Component {
       intl,
     } = this.props;
 
-    const canEditAdressTypes = stripes.hasPerm('ui-users.settings.addresstypes.all');
+    const hasEditPerm = stripes.hasPerm('addresstypes.item.put');
+    const hasDeletePerm = stripes.hasPerm('addresstypes.item.delete');
+    const hasCreatePerm = stripes.hasPerm('addresstypes.item.post');
 
     return (
       <this.connectedControlledVocab
@@ -45,7 +47,11 @@ class AddressTypesSettings extends React.Component {
         nameKey="addressType"
         id="addresstypes"
         sortby="addressType"
-        editable={canEditAdressTypes}
+        canCreate={hasCreatePerm}
+        actionSuppressor={{
+          delete: item => !hasDeletePerm,
+          edit: (item) => !hasEditPerm,
+        }}
       />
     );
   }
