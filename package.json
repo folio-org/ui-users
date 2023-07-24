@@ -274,7 +274,6 @@
         "subPermissions": [
           "comments.collection.get",
           "comments.item.get",
-          "comments.item.post",
           "settings.users.enabled"
         ],
         "visible": false
@@ -285,8 +284,8 @@
         "subPermissions": [
           "ui-users.settings.comments.view",
           "comments.item.delete",
-          "comments.item.post",
-          "comments.item.put"
+          "comments.item.put",
+          "comments.item.post"
         ],
         "visible": true
       },

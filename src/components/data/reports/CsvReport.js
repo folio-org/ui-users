@@ -88,6 +88,7 @@ class CsvReport {
         borrowerId: r.userId,
         loanId: r.id,
         feeFine: get(r, 'feesAndFines.amountRemainingToPay'),
+        feeFineExplanation: r?.reminders?.lastFeeBilled?.number ? this.formatMessage({ id: 'ui-users.reports.includesReminderFees' }) : '',
         item: {
           ...r.item,
           contributors: get(r, 'item.contributors', [])
