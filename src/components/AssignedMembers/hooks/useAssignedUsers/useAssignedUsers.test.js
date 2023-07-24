@@ -53,6 +53,13 @@ describe('useAssignedUsers', () => {
     useOkapiKy.mockImplementation(kyMock);
   });
 
+  it('should return empty assigned users', async () => {
+    const { result, waitFor } = renderHook(() => useAssignedUsers({ grantedToIds: [], tenantId: mockTenantId }), { wrapper });
+
+    await waitFor(() => !result.current.isLoading);
+    expect(result.current.users).toHaveLength(0);
+  });
+
   it('should fetch assigned users', async () => {
     batchRequest.mockClear()
       .mockResolvedValueOnce(kyResponseMap[PERMISSIONS_API].permissionUsers)
@@ -62,12 +69,5 @@ describe('useAssignedUsers', () => {
 
     await waitFor(() => !result.current.isLoading);
     expect(result.current.users).toHaveLength(2);
-  });
-
-  it('should return empty assigned users', async () => {
-    const { result, waitFor } = renderHook(() => useAssignedUsers({ grantedToIds: [], tenantId: mockTenantId }), { wrapper });
-
-    await waitFor(() => !result.current.isLoading);
-    expect(result.current.users).toHaveLength(0);
   });
 });
