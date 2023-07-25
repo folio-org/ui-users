@@ -42,10 +42,17 @@ const wrapper = ({ children }) => (
 );
 
 describe('useAssignedUsers', () => {
+  const setHeaderMock = jest.fn();
   const kyMock = jest.fn(() => ({
-    get: (path) => ({
-      json: () => Promise.resolve(kyResponseMap[path]),
-    })
+    extend: jest.fn(({ hooks: { beforeRequest } }) => {
+      beforeRequest.forEach(handler => handler({ headers: { set: setHeaderMock } }));
+
+      return {
+        get: (path) => ({
+          json: () => Promise.resolve(kyResponseMap[path]),
+        })
+      };
+    }),
   }));
 
   beforeEach(() => {
@@ -54,7 +61,11 @@ describe('useAssignedUsers', () => {
   });
 
   it('should return empty assigned users', async () => {
-    const { result, waitFor } = renderHook(() => useAssignedUsers({ grantedToIds: [], permissionSetId: mockTenantId }), { wrapper });
+    const { result, waitFor } = renderHook(() => useAssignedUsers({
+      grantedToIds: [],
+      permissionSetId: mockTenantId,
+      tenantId: mockTenantId,
+    }), { wrapper });
 
     await waitFor(() => !result.current.isLoading);
     expect(result.current.users).toHaveLength(0);
@@ -65,7 +76,11 @@ describe('useAssignedUsers', () => {
       .mockResolvedValueOnce(kyResponseMap[PERMISSIONS_API].permissionUsers)
       .mockResolvedValueOnce(kyResponseMap[USERS_API].users);
 
-    const { result, waitFor } = renderHook(() => useAssignedUsers({ grantedToIds: mockGrantedToIds, permissionSetId: mockTenantId }), { wrapper });
+    const { result, waitFor } = renderHook(() => useAssignedUsers({
+      grantedToIds: mockGrantedToIds,
+      permissionSetId: mockTenantId,
+      tenantId: mockTenantId,
+    }), { wrapper });
 
     await waitFor(() => !result.current.isLoading);
     expect(result.current.users).toHaveLength(2);

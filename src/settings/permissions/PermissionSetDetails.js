@@ -20,6 +20,9 @@ class PermissionSetDetails extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
+      okapi: PropTypes.shape({
+        tenant: PropTypes.string.isRequired,
+      }).isRequired,
     }).isRequired,
     initialValues: PropTypes.object,
   };
@@ -57,7 +60,7 @@ class PermissionSetDetails extends React.Component {
   }
 
   render() {
-    const { initialValues: selectedSet } = this.props;
+    const { initialValues: selectedSet, stripes } = this.props;
     const { sections } = this.state;
     const untitledPermissionSetMessage = <FormattedMessage id="ui-users.permissions.untitledPermissionSet" />;
 
@@ -122,6 +125,7 @@ class PermissionSetDetails extends React.Component {
           onToggle={this.handleSectionToggle}
           expanded={sections.assignedUsers}
           permissionsSet={selectedSet}
+          tenantId={stripes.okapi.tenant}
         />
       </div>
     );

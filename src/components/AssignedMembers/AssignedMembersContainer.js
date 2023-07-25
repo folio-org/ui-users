@@ -12,9 +12,9 @@ import {
 import useAssignedUsers from './hooks/useAssignedUsers';
 import AssignedMembersList from './AssignedMembersList';
 
-const AssignedMembersContainer = ({ permissionsSet, expanded, onToggle }) => {
+const AssignedMembersContainer = ({ permissionsSet, expanded, onToggle, tenantId }) => {
   const { grantedTo, id: permissionSetId } = permissionsSet;
-  const { users, isLoading } = useAssignedUsers({ grantedToIds: grantedTo, permissionSetId });
+  const { users, isLoading } = useAssignedUsers({ grantedToIds: grantedTo, permissionSetId, tenantId });
 
   return (
     <Accordion
@@ -38,6 +38,7 @@ AssignedMembersContainer.propTypes = {
     grantedTo: PropTypes.arrayOf(PropTypes.string),
     id: PropTypes.string,
   }),
+  tenantId: PropTypes.string.isRequired,
 };
 
 AssignedMembersContainer.defaultProps = {

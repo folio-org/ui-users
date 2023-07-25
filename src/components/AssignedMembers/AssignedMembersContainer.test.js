@@ -38,6 +38,7 @@ describe('AssignedMembersContainer', () => {
     expanded: true,
     onToggle,
     permissionSetId: 'permissionSetId',
+    tenantId: 'tenantId',
   };
 
   beforeEach(() => {
