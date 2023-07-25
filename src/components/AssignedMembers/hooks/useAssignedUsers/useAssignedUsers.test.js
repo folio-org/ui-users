@@ -54,7 +54,7 @@ describe('useAssignedUsers', () => {
   });
 
   it('should return empty assigned users', async () => {
-    const { result, waitFor } = renderHook(() => useAssignedUsers({ grantedToIds: [], tenantId: mockTenantId }), { wrapper });
+    const { result, waitFor } = renderHook(() => useAssignedUsers({ grantedToIds: [], permissionSetId: mockTenantId }), { wrapper });
 
     await waitFor(() => !result.current.isLoading);
     expect(result.current.users).toHaveLength(0);
@@ -65,7 +65,7 @@ describe('useAssignedUsers', () => {
       .mockResolvedValueOnce(kyResponseMap[PERMISSIONS_API].permissionUsers)
       .mockResolvedValueOnce(kyResponseMap[USERS_API].users);
 
-    const { result, waitFor } = renderHook(() => useAssignedUsers({ grantedToIds: mockGrantedToIds, tenantId: mockTenantId }), { wrapper });
+    const { result, waitFor } = renderHook(() => useAssignedUsers({ grantedToIds: mockGrantedToIds, permissionSetId: mockTenantId }), { wrapper });
 
     await waitFor(() => !result.current.isLoading);
     expect(result.current.users).toHaveLength(2);

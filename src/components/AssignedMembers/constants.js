@@ -3,8 +3,8 @@ import { FormattedMessage } from 'react-intl';
 export const VISIBLE_COLUMNS = ['fullName', 'patronGroup'];
 
 export const COLUMN_MAPPING = {
-  fullName: <FormattedMessage id="ui-acquisition-units.unit.membership.name" />,
-  patronGroup: <FormattedMessage id="ui-acquisition-units.unit.membership.patronGroup" />,
+  fullName: <FormattedMessage id="ui-users.permissions.assignedUsers.name" />,
+  patronGroup: <FormattedMessage id="ui-users.permissions.assignedUsers.patronGroup" />,
 };
 
 export const COLUMN_WIDTH = {

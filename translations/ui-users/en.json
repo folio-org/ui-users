@@ -248,6 +248,8 @@
   "permissions.proxy.sponsor": "Proxy/sponsor",
   "permissions.assignedPermissions": "Assigned permissions",
   "permissions.assignedUsers": "Assigned users",
+  "permissions.assignedUsers.name": "Name",
+  "permissions.assignedUsers.patronGroup": "Patron group",
   "permissions.untitledPermissionSet": "Untitled permission set",
   "permissions.closePermissionSetDialog": "Close permission set dialog",
   "permissions.createPermissionSet": "Create permission set",

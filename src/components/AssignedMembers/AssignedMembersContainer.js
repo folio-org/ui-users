@@ -14,10 +14,8 @@ import useAssignedUsers from './hooks/useAssignedUsers';
 import AssignedMembersList from './AssignedMembersList';
 
 const AssignedMembersContainer = ({ permissionsSet, expanded, onToggle }) => {
-  const stripes = useStripes();
-  const tenantId = stripes.okapi.tenant;
-
-  const { users, isLoading } = useAssignedUsers({ grantedToIds: permissionsSet.grantedTo, tenantId });
+  const { grantedTo, id: permissionSetId } = permissionsSet;
+  const { users, isLoading } = useAssignedUsers({ grantedToIds: grantedTo, permissionSetId });
 
   return (
     <Accordion
@@ -39,6 +37,7 @@ AssignedMembersContainer.propTypes = {
   onToggle: PropTypes.func.isRequired,
   permissionsSet: PropTypes.shape({
     grantedTo: PropTypes.arrayOf(PropTypes.string),
+    id: PropTypes.string,
   }),
 };
 

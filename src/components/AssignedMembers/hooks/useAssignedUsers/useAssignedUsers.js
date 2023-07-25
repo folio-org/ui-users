@@ -9,14 +9,14 @@ import { MAX_RECORDS } from '../../../../constants';
 import { GROUPS_API, PERMISSIONS_API, USERS_API } from '../../constants';
 import { batchRequest, buildQueryByIds } from './utils';
 
-const useAssignedUsers = ({ grantedToIds = [], tenantId }, options = {}) => {
+const useAssignedUsers = ({ grantedToIds = [], permissionSetId }, options = {}) => {
   const ky = useOkapiKy();
   const [namespace] = useNamespace({ key: 'get-assigned-users' });
   const {
     isLoading,
     data = [],
   } = useQuery(
-    [namespace, tenantId],
+    [namespace, permissionSetId],
     async ({ signal }) => {
       const permissionUsersResponse = await batchRequest(
         ({ params: searchParams }) => ky
@@ -56,7 +56,7 @@ const useAssignedUsers = ({ grantedToIds = [], tenantId }, options = {}) => {
       }));
     },
     {
-      enabled: Boolean(grantedToIds.length && tenantId),
+      enabled: Boolean(grantedToIds.length && permissionSetId),
       keepPreviousData: true,
       ...options,
     },
