@@ -30,6 +30,10 @@ describe('Patron group settings', () => {
         authFailure: [],
         bindings: {},
       },
+      stripes: {
+        connect: jest.fn(c => c),
+        hasPerm: jest.fn(() => true),
+      }
     };
     renderPatronGroupsSettings(props);
 
@@ -53,7 +57,10 @@ describe('Patron group settings', () => {
       };
 
       renderPatronGroupsSettings({
-        stripes: { connect: jest.fn(c => c) }
+        stripes: {
+          connect: jest.fn(c => c),
+          hasPerm: jest.fn(() => true),
+        }
       });
 
       const { actionSuppressor } = ControlledVocab.mock.calls[0][0];
