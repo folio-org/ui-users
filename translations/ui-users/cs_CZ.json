@@ -1119,5 +1119,7 @@
     "permission.settings.general.view": "Nastavení (Uživatelé): Může zobrazit obecné položky",
     "permission.settings.patron-blocks.view": "Nastavení (Uživatelé): Může zobrazit všechny položky blokace čtenářů",
     "permission.settings.feefines.view": "Nastavení (Uživatelé): Může zobrazit položky týkající se poplatků/pokut",
-    "loans.lastReminderNumber": "{count, number} {count, plural, one {poplatek za připomenutí} other {poplatky za připomenutí}}"
+    "loans.lastReminderNumber": "{count, number} {count, plural, one {poplatek za připomenutí} other {poplatky za připomenutí}}",
+    "reports.feeFineExplanation": "Fee/Fine explanation",
+    "reports.includesReminderFees": "Includes reminder fee(s)"
 }
