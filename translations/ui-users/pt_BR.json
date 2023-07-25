@@ -1119,5 +1119,7 @@
     "permission.settings.general.view": "Configurações (Usuários): Pode visualizar entradas gerais",
     "permission.settings.patron-blocks.view": "Configurações (Usuários): Pode visualizar todos os registros de bloqueios de usuários",
     "permission.settings.feefines.view": "Configurações (Usuários): Pode visualizar entradas relacionadas a multas",
-    "loans.lastReminderNumber": "{count, number} {count, plural, one { taxa de lembrete } other { taxas de lembrete }} cobradas"
+    "loans.lastReminderNumber": "{count, number} {count, plural, one { taxa de lembrete } other { taxas de lembrete }} cobradas",
+    "reports.feeFineExplanation": "Explicação da taxa/multa",
+    "reports.includesReminderFees": "Inclui taxa(s) de lembrete"
 }

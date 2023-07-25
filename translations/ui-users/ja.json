@@ -1119,5 +1119,7 @@
     "permission.settings.general.view": "Settings (Users): Can view general entries",
     "permission.settings.patron-blocks.view": "Settings (Users): Can view all patron blocks entries",
     "permission.settings.feefines.view": "Settings (Users): Can view feefines-related entries",
-    "loans.lastReminderNumber": "{count, number} {count, plural, one {reminder fee} other {reminder fees}} billed"
+    "loans.lastReminderNumber": "{count, number} {count, plural, one {reminder fee} other {reminder fees}} billed",
+    "reports.feeFineExplanation": "Fee/Fine explanation",
+    "reports.includesReminderFees": "Includes reminder fee(s)"
 }
