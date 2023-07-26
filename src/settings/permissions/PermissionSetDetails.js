@@ -14,6 +14,7 @@ import {
 import { ViewMetaData } from '@folio/stripes/smart-components';
 
 import RenderPermissions from '../../components/RenderPermissions';
+import AssignedMembersContainer from '../../components/AssignedMembers';
 
 class PermissionSetDetails extends React.Component {
   static propTypes = {
@@ -21,6 +22,7 @@ class PermissionSetDetails extends React.Component {
       connect: PropTypes.func.isRequired,
     }).isRequired,
     initialValues: PropTypes.object,
+    tenantId: PropTypes.string,
   };
 
   constructor(props) {
@@ -31,7 +33,8 @@ class PermissionSetDetails extends React.Component {
     this.state = {
       sections: {
         generalInformation: true,
-        assignedPermissions: true,
+        assignedPermissions: false,
+        assignedUsers: true,
       },
     };
 
@@ -55,7 +58,7 @@ class PermissionSetDetails extends React.Component {
   }
 
   render() {
-    const { initialValues: selectedSet } = this.props;
+    const { initialValues: selectedSet, tenantId } = this.props;
     const { sections } = this.state;
     const untitledPermissionSetMessage = <FormattedMessage id="ui-users.permissions.untitledPermissionSet" />;
 
@@ -115,6 +118,12 @@ class PermissionSetDetails extends React.Component {
           permToDelete="perms.permissions.item.delete"
           permToModify="perms.permissions.item.put"
           {...this.props}
+        />
+        <AssignedMembersContainer
+          onToggle={this.handleSectionToggle}
+          expanded={sections.assignedUsers}
+          permissionsSet={selectedSet}
+          tenantId={tenantId}
         />
       </div>
     );

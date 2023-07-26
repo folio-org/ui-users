@@ -9,6 +9,8 @@ import AddressTypesSettings from './AddressTypesSettings';
 import CustomFieldsSettingsPane from './CustomFieldsSettings';
 import DepartmentsSettings from './DepartmentsSettings';
 
+jest.mock('./permissions/PermissionSets', () => jest.fn(() => <div>PermissionSets</div>));
+
 const settingsGeneral = [
   {
     route: 'perms',
