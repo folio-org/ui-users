@@ -17,6 +17,11 @@ jest.mock('@folio/stripes/core', () => ({
   ...jest.requireActual('@folio/stripes/core'),
   useNamespace: jest.fn(() => ['test']),
   useOkapiKy: jest.fn(),
+  useStripes: jest.fn(() => ({
+    okapi: {
+      tenant: mockTenantId,
+    },
+  })),
 }));
 
 jest.mock('./utils', () => ({

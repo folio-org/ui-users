@@ -3,6 +3,7 @@ import { useQuery } from 'react-query';
 import {
   useNamespace,
   useOkapiKy,
+  useStripes,
 } from '@folio/stripes/core';
 
 import { MAX_RECORDS } from '../../../../constants';
@@ -10,10 +11,13 @@ import { GROUPS_API, PERMISSIONS_API, USERS_API } from '../../constants';
 import { batchRequest, buildQueryByIds } from './utils';
 
 const useAssignedUsers = ({ grantedToIds = [], permissionSetId, tenantId }, options = {}) => {
+  const stripes = useStripes();
+  const defaultTenantId = stripes.okapi?.tenant;
+
   const ky = useOkapiKy();
   const api = ky.extend({
     hooks: {
-      beforeRequest: [(req) => req.headers.set('X-Okapi-Tenant', tenantId)]
+      beforeRequest: [(req) => req.headers.set('X-Okapi-Tenant', tenantId || defaultTenantId)]
     }
   });
 

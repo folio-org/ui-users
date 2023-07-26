@@ -38,7 +38,7 @@ AssignedMembersContainer.propTypes = {
     grantedTo: PropTypes.arrayOf(PropTypes.string),
     id: PropTypes.string,
   }),
-  tenantId: PropTypes.string.isRequired,
+  tenantId: PropTypes.string,
 };
 
 AssignedMembersContainer.defaultProps = {

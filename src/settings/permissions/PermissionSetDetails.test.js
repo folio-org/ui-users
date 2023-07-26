@@ -68,6 +68,7 @@ const props = {
   },
   intl: {},
   stripes: STRIPES,
+  tenantId: 'diku',
 };
 
 describe('PermissionSetDetails component', () => {
