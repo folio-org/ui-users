@@ -44,6 +44,7 @@ class ChargeNotice extends React.Component {
     templateAction: PropTypes.arrayOf(PropTypes.object),
     templates: PropTypes.arrayOf(PropTypes.object),
     form: PropTypes.object,
+    hasEditOwnerPerm: PropTypes.bool,
   };
 
   constructor(props) {
@@ -84,6 +85,7 @@ class ChargeNotice extends React.Component {
       owner,
       templates,
       handleSubmit,
+      hasEditOwnerPerm,
     } = this.props;
 
     const buttonLabel = (edit) ? <FormattedMessage id="ui-users.comment.save" /> : <FormattedMessage id="ui-users.edit" />;
@@ -122,7 +124,12 @@ class ChargeNotice extends React.Component {
             />
           </Col>
           <Col xs={4}>
-            <Button id="charge-notice-primary" onClick={buttonAction}>{buttonLabel}</Button>
+            <Button
+              id="charge-notice-primary"
+              onClick={buttonAction}
+              disabled={!hasEditOwnerPerm}
+            >{buttonLabel}
+            </Button>
             {edit &&
               <Button id="charge-notice-cancel" onClick={this.onCancel}><FormattedMessage id="ui-users.cancel" /></Button>
             }

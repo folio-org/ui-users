@@ -14,6 +14,7 @@ const props = {
   templates: [{ id: '1', name: 'template1' }, { id: '2', name: 'template2' }],
   form: { initialize: jest.fn() },
   onSubmit: jest.fn(),
+  hasEditOwnerPerm: true,
 };
 
 const renderChargeNotice = () => renderWithRouter(<ChargeNotice {...props} />);
