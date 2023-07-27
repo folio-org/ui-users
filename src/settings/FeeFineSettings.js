@@ -351,8 +351,8 @@ class FeeFineSettings extends React.Component {
         shouldReinitialize
         canCreate={hasCreatePerm}
         actionSuppressor={{
-          delete: item => !hasDeletePerm,
-          edit: (item) => !hasEditPerm,
+          delete: () => !hasDeletePerm,
+          edit: () => !hasEditPerm,
         }}
       />
     );

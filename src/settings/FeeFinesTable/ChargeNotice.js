@@ -126,6 +126,7 @@ class ChargeNotice extends React.Component {
           <Col xs={4}>
             <Button
               id="charge-notice-primary"
+              data-testid="chargeNotice"
               onClick={buttonAction}
               disabled={!hasEditOwnerPerm}
             >{buttonLabel}
