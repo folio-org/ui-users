@@ -37,6 +37,7 @@ class TransferAccountsSettings extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
+      hasPerm: PropTypes.func.isRequired,
     }).isRequired,
     intl: PropTypes.object.isRequired,
     mutator: PropTypes.shape({
@@ -73,7 +74,7 @@ class TransferAccountsSettings extends React.Component {
   }
 
   render() {
-    const { intl: { formatMessage } } = this.props;
+    const { intl: { formatMessage }, stripes } = this.props;
     const {
       ownerId,
       owners
@@ -84,6 +85,10 @@ class TransferAccountsSettings extends React.Component {
       item.ownerId = ownerId;
       return item;
     };
+
+    const hasCreatePerm = stripes.hasPerm('transfers.item.post');
+    const hasEditPerm = stripes.hasPerm('transfers.item.put');
+    const hasDeletePerm = stripes.hasPerm('transfers.item.delete');
 
     return (
       <this.connectedControlledVocab
@@ -103,6 +108,11 @@ class TransferAccountsSettings extends React.Component {
         sortby="accountName"
         validate={(item, index, items) => validate(item, index, items, 'accountName', label)}
         visibleFields={['accountName', 'desc']}
+        canCreate={hasCreatePerm}
+        actionSuppressor={{
+          edit: _=> !hasEditPerm,
+          delete: _=> !hasDeletePerm,
+        }}
       />
     );
   }
