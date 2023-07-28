@@ -203,7 +203,7 @@ const propData = {
 
 const renderFeeFineSettings = async (props) => renderWithRouter(<FeeFineSettings {...props} />);
 
-describe('Payment settings', () => {
+describe('FeeFine settings', () => {
   beforeEach(async () => {
     await waitFor(() => renderFeeFineSettings(propData));
   });
