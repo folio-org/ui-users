@@ -110,8 +110,8 @@ class TransferAccountsSettings extends React.Component {
         visibleFields={['accountName', 'desc']}
         canCreate={hasCreatePerm}
         actionSuppressor={{
-          edit: _=> !hasEditPerm,
-          delete: _=> !hasDeletePerm,
+          edit: _ => !hasEditPerm,
+          delete: _ => !hasDeletePerm,
         }}
       />
     );
