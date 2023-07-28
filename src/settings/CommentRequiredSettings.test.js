@@ -7,7 +7,7 @@ import CommentRequiredSettings from './CommentRequiredSettings';
 jest.unmock('@folio/stripes/components');
 const mockPUT = jest.fn();
 const mockPOST = jest.fn();
-const props = {
+const defaultProps = {
   mutator: {
     record: {
       update: jest.fn()
@@ -39,11 +39,11 @@ const props = {
 const renderCommentRequiredSettings = (props) => renderWithRouter(<CommentRequiredSettings {...props} />);
 describe('CommentRequiredSettings', () => {
   it('Component should render correctly', () => {
-    renderCommentRequiredSettings(props);
+    renderCommentRequiredSettings(defaultProps);
     expect(screen.getByText('ui-users.comment.title')).toBeInTheDocument();
   });
   it('PUT function to called on clicking save button', async () => {
-    renderCommentRequiredSettings(props);
+    renderCommentRequiredSettings(defaultProps);
     userEvent.selectOptions(screen.getByRole('combobox', { name: 'ui-users.comment.transferred' }), 'ui-users.no');
     userEvent.click(screen.getByRole('button', { name: 'ui-users.comment.save' }));
     await waitFor(() => {
@@ -52,43 +52,43 @@ describe('CommentRequiredSettings', () => {
   });
   it('should render component properly when GET call do not respond with any records', () => {
     const alteredProps = {
-      ...props,
+      ...defaultProps,
       mutator: {
-        ...props.mutator,
+        ...defaultProps.mutator,
         commentRequired: {
-          ...props.mutator.commentRequired,
+          ...defaultProps.mutator.commentRequired,
           GET: jest.fn().mockResolvedValue([])
         }
       },
       resources: {
-        ...props.resources,
+        ...defaultProps.resources,
         commentRequired: {
-          ...props.resources.commentRequired,
+          ...defaultProps.resources.commentRequired,
           records: []
         }
       }
-    }
+    };
     renderCommentRequiredSettings(alteredProps);
     expect(screen.getByText('ui-users.comment.title')).toBeInTheDocument();
   });
   it('should make POST call when length of records is 0', async () => {
     const alteredProps = {
-      ...props,
+      ...defaultProps,
       mutator: {
-        ...props.mutator,
+        ...defaultProps.mutator,
         commentRequired: {
-          ...props.mutator.commentRequired,
+          ...defaultProps.mutator.commentRequired,
           GET: jest.fn().mockResolvedValue([])
         }
       },
       resources: {
-        ...props.resources,
+        ...defaultProps.resources,
         commentRequired: {
-          ...props.resources.commentRequired,
+          ...defaultProps.resources.commentRequired,
           records: []
         }
       }
-    }
+    };
     renderCommentRequiredSettings(alteredProps);
     await waitFor(() => {
       expect(mockPOST).toHaveBeenCalled();
