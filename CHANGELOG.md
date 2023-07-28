@@ -64,6 +64,7 @@
 * User settings > Comment required: Disable editing for users with "Setting (Users): View all settings" permission. Refs UIU-2905.
 * Display assigned users accordion on Permission set. Refs UIU-2872.
 * Add support for `request-storage` version `6.0` for `<UserRequests>`. Refs UIU-2920.
+* Clean up setting.transfertypes permissions. Refs UIU-2919.
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v9.0.0)
