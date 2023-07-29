@@ -1120,6 +1120,9 @@
     "permission.settings.patron-blocks.view": "Configuración (Usuarios): Puede ver todas las entradas de bloqueos de usuarios",
     "permission.settings.feefines.view": "Configuración (Usuarios): Puede ver las entradas relacionadas con las multas",
     "loans.lastReminderNumber": "{count, number} {count, plural, one {tarifa de recordatorio} other {tarifas de recordatorio}} facturadas",
-    "reports.feeFineExplanation": "Fee/Fine explanation",
-    "reports.includesReminderFees": "Includes reminder fee(s)"
+    "reports.feeFineExplanation": "Explicación de la tasa/multa",
+    "reports.includesReminderFees": "Incluye tasa(s) de recordatorio",
+    "permissions.assignedUsers": "Usuarios asignados",
+    "permissions.assignedUsers.name": "Nombre",
+    "permissions.assignedUsers.patronGroup": "Grupo de patrocinadores"
 }
