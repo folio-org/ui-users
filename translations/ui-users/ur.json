@@ -1121,5 +1121,8 @@
     "permission.settings.feefines.view": "Settings (Users): Can view feefines-related entries",
     "loans.lastReminderNumber": "{count, number} {count, plural, one {reminder fee} other {reminder fees}} billed",
     "reports.feeFineExplanation": "Fee/Fine explanation",
-    "reports.includesReminderFees": "Includes reminder fee(s)"
+    "reports.includesReminderFees": "Includes reminder fee(s)",
+    "permissions.assignedUsers": "Assigned users",
+    "permissions.assignedUsers.name": "Name",
+    "permissions.assignedUsers.patronGroup": "Patron group"
 }

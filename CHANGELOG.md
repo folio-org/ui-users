@@ -63,7 +63,10 @@
 * Add permissions check to edit Limits in user settings. Refs. UIU-2912.
 * User settings > Comment required: Disable editing for users with "Setting (Users): View all settings" permission. Refs UIU-2905.
 * Display assigned users accordion on Permission set. Refs UIU-2872.
+* Add support for `request-storage` version `6.0` for `<UserRequests>`. Refs UIU-2920.
 * Add permisison checks to restrict edit on Manual charges settings page. Ref. UIU-2903.
+* Clean up setting.transfertypes permissions. Refs UIU-2919.
+* Add permission check to restrict edit of transfer account page on user settings. Refs UIU-2910.
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v9.0.0)
