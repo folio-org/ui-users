@@ -12,7 +12,7 @@ import {
   NoValue,
 } from '@folio/stripes/components';
 import { ControlledVocab } from '@folio/stripes/smart-components';
-import { stripesConnect, withStripes } from '@folio/stripes/core';
+import { IfPermission, stripesConnect, withStripes } from '@folio/stripes/core';
 
 import { validate } from '../components/util';
 import {
@@ -317,13 +317,15 @@ class FeeFineSettings extends React.Component {
           onSubmit={this.onUpdateOwner}
           hasEditOwnerPerm={hasEditOwnerPerm}
         />
-        <CopyModal
-          {...this.props}
-          openModal={this.state.showCopyDialog}
-          onCopyFeeFines={this.onCopyFeeFines}
-          onCloseModal={this.hideCopyDialog}
-          ownerList={filterOwners}
-        />
+        <IfPermission perm="feefines.item.post feefines.item.put">
+          <CopyModal
+            {...this.props}
+            openModal={this.state.showCopyDialog}
+            onCopyFeeFines={this.onCopyFeeFines}
+            onCloseModal={this.hideCopyDialog}
+            ownerList={filterOwners}
+          />
+        </IfPermission>
       </div>;
 
     return (
