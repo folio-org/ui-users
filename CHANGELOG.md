@@ -63,6 +63,7 @@
 * Add permissions check to edit Limits in user settings. Refs. UIU-2912.
 * User settings > Comment required: Disable editing for users with "Setting (Users): View all settings" permission. Refs UIU-2905.
 * Display assigned users accordion on Permission set. Refs UIU-2872.
+* Assign/unassign users from Permission set. Refs UIU-2873.
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v9.0.0)

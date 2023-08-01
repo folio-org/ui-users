@@ -2,9 +2,9 @@ import React from 'react';
 import { render, screen, waitFor } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
-import AssignedMembersContainer from './AssignedMembersContainer';
+import AssignedUsersContainer from './AssignedUsersContainer';
+import AssignedUsersList from './AssignedUsersList';
 import useAssignedUsers from './hooks/useAssignedUsers';
-import AssignedMembersList from './AssignedMembersList';
 
 jest.unmock('@folio/stripes/components');
 jest.unmock('@folio/stripes/util');
@@ -15,7 +15,7 @@ jest.mock('@folio/stripes/components', () => ({
 }));
 
 jest.mock('./hooks/useAssignedUsers/useAssignedUsers', () => jest.fn());
-jest.mock('./AssignedMembersList', () => jest.fn(() => <div>AssignedMembersList</div>));
+jest.mock('./AssignedUsersList', () => jest.fn(() => <div>AssignedUsersList</div>));
 
 const mockUsers = [
   {
@@ -27,9 +27,9 @@ const mockUsers = [
     patronGroup: 'Staff',
   },
 ];
-const renderComponent = (props = {}) => render(<AssignedMembersContainer {...props} />);
+const renderComponent = (props = {}) => render(<AssignedUsersContainer {...props} />);
 
-describe('AssignedMembersContainer', () => {
+describe('AssignedUsersContainer', () => {
   const onToggle = jest.fn();
   const props = {
     permissionSet: {
@@ -42,7 +42,7 @@ describe('AssignedMembersContainer', () => {
   };
 
   beforeEach(() => {
-    AssignedMembersList.mockClear();
+    AssignedUsersList.mockClear();
     useAssignedUsers.mockClear().mockReturnValue({
       users: [],
       isLoading: true,
@@ -55,7 +55,7 @@ describe('AssignedMembersContainer', () => {
     expect(screen.getByText('Loading')).toBeInTheDocument();
   });
 
-  it('should render AssignedMembersList', async () => {
+  it('should render AssignedUsersList', async () => {
     useAssignedUsers.mockReturnValue({
       users: mockUsers,
       isLoading: false,
@@ -64,7 +64,7 @@ describe('AssignedMembersContainer', () => {
     renderComponent(props);
 
     await waitFor(() => expect(screen.queryByText('Loading')).toBeNull());
-    expect(screen.getByText('AssignedMembersList')).toBeInTheDocument();
+    expect(screen.getByText('AssignedUsersList')).toBeInTheDocument();
   });
 
   it('should toggle accordion button', async () => {
@@ -81,7 +81,7 @@ describe('AssignedMembersContainer', () => {
     const accordionButton = screen.getByText('ui-users.permissions.assignedUsers');
     userEvent.click(accordionButton);
 
-    await waitFor(() => expect(screen.getByText('AssignedMembersList')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText('AssignedUsersList')).toBeInTheDocument());
     expect(onToggle).toHaveBeenCalled();
   });
 });
