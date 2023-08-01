@@ -317,7 +317,7 @@ class FeeFineSettings extends React.Component {
           onSubmit={this.onUpdateOwner}
           hasEditOwnerPerm={hasEditOwnerPerm}
         />
-        <IfPermission perm="feefines.item.post feefines.item.put">
+        <IfPermission perm="feefines.item.post,feefines.item.put">
           <CopyModal
             {...this.props}
             openModal={this.state.showCopyDialog}
