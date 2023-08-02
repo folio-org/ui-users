@@ -29,7 +29,12 @@ jest.mock('./hooks', () => ({
 jest.mock('./utils', () => ({
   findObjectDifferences: jest.fn(),
 }));
-jest.mock('./AssignedUsersList', () => jest.fn(() => <div>AssignedUsersList</div>));
+jest.mock('./AssignedUsersList', () => jest.fn(({ assignUsers }) => (
+  <div>
+    <button onClick={assignUsers} type="button">Assign/Unassign</button>
+    <h2>AssignedUsersList</h2>
+  </div>
+)));
 
 const mockUsers = [
   {
@@ -63,7 +68,7 @@ describe('AssignedUsersContainer', () => {
     });
     useAssignedUsersMutation.mockClear().mockReturnValue({
       assignUsers: jest.fn(),
-      removeUsers: jest.fn(),
+      unassignUsers: jest.fn(),
     });
     findObjectDifferences.mockClear().mockReturnValue({
       added: [],
@@ -113,5 +118,51 @@ describe('AssignedUsersContainer', () => {
 
     await waitFor(() => expect(screen.getByText('AssignedUsersList')).toBeInTheDocument());
     expect(onToggle).toHaveBeenCalled();
+  });
+});
+
+describe('handle mutations', () => {
+  const onToggle = jest.fn();
+  const props = {
+    permissionSet: {
+      grantedTo: ['1', '2'],
+    },
+    expanded: true,
+    onToggle,
+    permissionSetId: 'permissionSetId',
+    tenantId: 'tenantId',
+  };
+
+  it('should call assignUsers and unassignUsers mutations', async () => {
+    const mockAssignUsers = jest.fn();
+    const mockRefetch = jest.fn();
+
+    useAssignedUsersMutation.mockClear().mockReturnValue({
+      assignUsers: jest.fn(),
+      unassignUsers: jest.fn(),
+    });
+    useAssignedUsers.mockReturnValue({
+      users: mockUsers,
+      isLoading: false,
+      refetch: mockRefetch,
+    });
+    findObjectDifferences.mockClear().mockReturnValue({
+      added: [{ id: '1' }],
+      removed: [{ id: '2' }],
+    });
+
+    const renderComponentWithAssignUsers = (containerProps = {}, assignUsersProps = {}) => render(
+      <AssignedUsersContainer {...containerProps}>
+        <AssignedUsersList {...assignUsersProps} />
+      </AssignedUsersContainer>
+    );
+
+    renderComponentWithAssignUsers(props, { users: mockUsers, assignUsers: mockAssignUsers });
+
+    await waitFor(() => expect(screen.queryByText('Loading')).toBeNull());
+    expect(screen.getByText('AssignedUsersList')).toBeInTheDocument();
+
+    userEvent.click(screen.getByText('Assign/Unassign'));
+    await waitFor(() => expect(mockRefetch).toBeCalled());
   });
 });
