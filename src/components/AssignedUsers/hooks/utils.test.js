@@ -1,6 +1,9 @@
 import { renderHook } from '@folio/jest-config-stripes/testing-library/react-hooks';
 
-import { buildQueryByIds, batchRequest } from './utils';
+import {
+  buildQueryByIds,
+  batchRequest
+} from './utils';
 
 describe('buildQueryByIds', () => {
   it('should create query with id', async () => {

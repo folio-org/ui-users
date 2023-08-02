@@ -1,5 +1,4 @@
 /* eslint-disable no-prototype-builtins */
-
 import { keyBy } from 'lodash';
 
 // eslint-disable-next-line import/prefer-default-export

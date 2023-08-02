@@ -1,10 +1,17 @@
 import React from 'react';
-import { render, screen, waitFor } from '@folio/jest-config-stripes/testing-library/react';
+import {
+  render,
+  screen,
+  waitFor
+} from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
 import AssignedUsersContainer from './AssignedUsersContainer';
 import AssignedUsersList from './AssignedUsersList';
-import useAssignedUsers from './hooks/useAssignedUsers';
+import {
+  useAssignedUsers,
+  useAssignedUsersMutation
+} from './hooks';
 
 jest.unmock('@folio/stripes/components');
 jest.unmock('@folio/stripes/util');
@@ -14,7 +21,10 @@ jest.mock('@folio/stripes/components', () => ({
   Loading: jest.fn(() => <div>Loading</div>),
 }));
 
-jest.mock('./hooks/useAssignedUsers/useAssignedUsers', () => jest.fn());
+jest.mock('./hooks', () => ({
+  useAssignedUsers: jest.fn(),
+  useAssignedUsersMutation: jest.fn(),
+}));
 jest.mock('./AssignedUsersList', () => jest.fn(() => <div>AssignedUsersList</div>));
 
 const mockUsers = [
@@ -46,6 +56,10 @@ describe('AssignedUsersContainer', () => {
     useAssignedUsers.mockClear().mockReturnValue({
       users: [],
       isLoading: true,
+    });
+    useAssignedUsersMutation.mockClear().mockReturnValue({
+      assignUsers: jest.fn(),
+      removeUsers: jest.fn(),
     });
   });
 

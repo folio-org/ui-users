@@ -49,12 +49,12 @@ const useAssignedUsersMutation = ({ tenantId, permissionName, setGrantedToIds },
   } = useMutation({ mutationFn: assignMutationFn, ...options });
 
   const {
-    mutateAsync: removeUsers,
+    mutateAsync: unassignUsers,
   } = useMutation({ mutationFn: removeMutationFn, ...options });
 
   return ({
     assignUsers,
-    removeUsers,
+    unassignUsers,
   });
 };
 

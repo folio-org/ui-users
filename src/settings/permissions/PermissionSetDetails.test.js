@@ -5,7 +5,7 @@ import PermissionSetDetails from './PermissionSetDetails';
 
 jest.unmock('@folio/stripes/components');
 
-jest.mock('../../components/AssignedMembers/AssignedMembersContainer', () => jest.fn(() => <div>AssignedMembersContainer</div>));
+jest.mock('../../components/AssignedUsers/AssignedUsersContainer', () => jest.fn(() => <div>AssignedUsersContainer</div>));
 
 const renderPermissionSetDetails = (props) => renderWithRouter(<PermissionSetDetails {...props} />);
 const STRIPES = {

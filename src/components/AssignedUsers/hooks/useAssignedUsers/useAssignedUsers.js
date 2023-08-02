@@ -7,8 +7,15 @@ import {
 } from '@folio/stripes/core';
 
 import { MAX_RECORDS } from '../../../../constants';
-import { GROUPS_API, PERMISSIONS_API, USERS_API } from '../../constants';
-import { batchRequest, buildQueryByIds } from '../utils';
+import {
+  GROUPS_API,
+  PERMISSIONS_API,
+  USERS_API
+} from '../../constants';
+import {
+  batchRequest,
+  buildQueryByIds
+} from '../utils';
 
 const useAssignedUsers = ({ grantedToIds = [], permissionSetId, tenantId }, options = {}) => {
   const stripes = useStripes();

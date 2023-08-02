@@ -24,7 +24,7 @@ jest.mock('@folio/stripes/core', () => ({
   })),
 }));
 
-jest.mock('./utils', () => ({
+jest.mock('../utils', () => ({
   batchRequest: jest.fn(),
   buildQueryByIds: jest.fn(),
 }));

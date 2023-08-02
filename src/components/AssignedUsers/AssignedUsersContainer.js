@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, useIntl } from 'react-intl';
+import {
+  FormattedMessage,
+  useIntl
+} from 'react-intl';
 
 import {
   Headline,
@@ -10,8 +13,10 @@ import {
 } from '@folio/stripes/components';
 import { useCallout } from '@folio/stripes/core';
 
-import useAssignedUsers from './hooks/useAssignedUsers';
-import useAssignedUsersMutation from './hooks/useAssignedUsersMutation';
+import {
+  useAssignedUsers,
+  useAssignedUsersMutation
+} from './hooks';
 import AssignedUsersList from './AssignedUsersList';
 import { findObjectDifferences } from './utils';
 
@@ -23,6 +28,7 @@ const AssignedUsersContainer = ({ permissionsSet, expanded, onToggle, tenantId }
   const [grantedToIds, setGrantedToIds] = useState(grantedTo);
 
   const { users, isLoading, refetch } = useAssignedUsers({ grantedToIds, permissionSetId, tenantId });
+  const { assignUsers, unassignUsers } = useAssignedUsersMutation({ permissionSetId, tenantId, permissionName, setGrantedToIds });
 
   const handleMutationSuccess = () => {
     refetch();
@@ -50,14 +56,12 @@ const AssignedUsersContainer = ({ permissionsSet, expanded, onToggle, tenantId }
     });
   };
 
-  const { assignUsers, removeUsers } = useAssignedUsersMutation({ permissionSetId, tenantId, permissionName, setGrantedToIds });
-
   const handleAssignUsers = async (selectedUsers) => {
     const { added, removed } = findObjectDifferences(users, selectedUsers);
 
     if (added.length) await assignUsers(added, { onError: handleMutationError });
 
-    if (removed.length) await removeUsers(removed, { onError: handleMutationError });
+    if (removed.length) await unassignUsers(removed, { onError: handleMutationError });
 
     if (removed.length || added.length) {
       handleMutationSuccess();
