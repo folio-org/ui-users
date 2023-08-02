@@ -3,6 +3,8 @@ import React from 'react';
 import { screen, waitFor } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
+import { IfPermission } from '@folio/stripes/core';
+
 import renderWithRouter from 'helpers/renderWithRouter';
 import { buildResources } from 'helpers/buildResources';
 import FeeFineSettings from './FeeFineSettings';
@@ -200,11 +202,11 @@ const propData = {
   },
 };
 
-
 const renderFeeFineSettings = async (props) => renderWithRouter(<FeeFineSettings {...props} />);
 
 describe('FeeFine settings', () => {
   beforeEach(async () => {
+    IfPermission.mockImplementation(({ children }) => children);
     await waitFor(() => renderFeeFineSettings(propData));
   });
   it('component must be rendered', async () => {
