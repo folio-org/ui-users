@@ -4,34 +4,23 @@ import {
   screen
 } from '@folio/jest-config-stripes/testing-library/react';
 
-import AssignedUsersList from './AssignedUsersList';
+import AssignUsers from './AssignUsers';
 
 jest.unmock('@folio/stripes/components');
 jest.unmock('@folio/stripes/util');
 
-jest.mock('./AssignUsers', () => jest.fn(() => <div>AssignUsers</div>));
+const stripes = {
+  config: {},
+  hasPerm: jest.fn().mockReturnValue(true),
+};
 
-const mockUsers = [
-  {
-    fullName: 'John Doe',
-    patronGroup: 'Staff',
-  },
-  {
-    fullName: 'James Smith',
-    patronGroup: 'Staff',
-  },
-];
-
-
-const renderComponent = (props) => render(<AssignedUsersList {...props} />);
+const renderComponent = (props) => render(<AssignUsers {...props} />);
 
 describe('AssignedUsersList', () => {
   it('should render the component', async () => {
     const assignUsers = jest.fn();
-    renderComponent({ users: mockUsers, assignUsers });
-    expect(screen.getByText(mockUsers[0].fullName)).toBeInTheDocument();
-    expect(screen.getByText(mockUsers[1].fullName)).toBeInTheDocument();
-    expect(screen.getByText('AssignUsers')).toBeInTheDocument();
+    renderComponent({ assignUsers, stripes, selectedUsers: [{ id: '1' }, { id: '2' }] });
+    expect(screen.getByText('ui-users.permissions.assignUsers.actions.assign.notAvailable')).toBeInTheDocument();
   });
 });
 
