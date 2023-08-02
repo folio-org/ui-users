@@ -74,7 +74,7 @@ describe('useAssignedUsersMutation', () => {
   });
 
   it('should call assignUser, unassignUsers mutations', async () => {
-    const { result } = renderHook(() => useAssignedUsersMutation(defaultProps, {}), { wrapper });
+    const { result } = renderHook(() => useAssignedUsersMutation({ ...defaultProps, tenantId: '' }, {}), { wrapper });
 
     await result.current.assignUsers(['1', '2']);
     await result.current.unassignUsers(['1']);
