@@ -17,6 +17,9 @@ import {
   Checkbox,
   Select,
 } from '@folio/stripes/components';
+import {
+  getHeaderWithCredentials,
+} from '@folio/stripes/util';
 
 import { calculateSelectedAmount } from '../accountFunctions';
 import {
@@ -206,9 +209,7 @@ class ActionModal extends React.Component {
       {
         method: 'POST',
         headers: {
-          'X-Okapi-Tenant': okapi.tenant,
-          'X-Okapi-Token': okapi.token,
-          'Content-Type': 'application/json',
+          ...getHeaderWithCredentials(okapi)
         },
         body: JSON.stringify({ amount })
       });

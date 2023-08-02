@@ -67,6 +67,7 @@
 * Add permisison checks to restrict edit on Manual charges settings page. Ref. UIU-2903.
 * Clean up setting.transfertypes permissions. Refs UIU-2919.
 * Add permission check to restrict edit of transfer account page on user settings. Refs UIU-2910.
+* Leverage cookie-based authentication in all API requests. Refs UIU-2746.
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v9.0.0)
