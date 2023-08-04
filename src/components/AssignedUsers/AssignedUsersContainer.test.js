@@ -12,7 +12,7 @@ import {
   useAssignedUsers,
   useAssignedUsersMutation
 } from './hooks';
-import { findObjectDifferences } from './utils';
+import { getUpdatedUsersList } from './utils';
 
 jest.unmock('@folio/stripes/components');
 jest.unmock('@folio/stripes/util');
@@ -27,7 +27,7 @@ jest.mock('./hooks', () => ({
   useAssignedUsersMutation: jest.fn(),
 }));
 jest.mock('./utils', () => ({
-  findObjectDifferences: jest.fn(),
+  getUpdatedUsersList: jest.fn(),
 }));
 jest.mock('./AssignedUsersList', () => jest.fn(({ assignUsers }) => (
   <div>
@@ -71,7 +71,7 @@ describe('AssignedUsersContainer', () => {
       unassignUsers: jest.fn(),
       isLoading: false,
     });
-    findObjectDifferences.mockClear().mockReturnValue({
+    getUpdatedUsersList.mockClear().mockReturnValue({
       added: [],
       removed: [],
     });
@@ -88,7 +88,7 @@ describe('AssignedUsersContainer', () => {
       users: mockUsers,
       isLoading: false,
     });
-    findObjectDifferences.mockClear().mockReturnValue({
+    getUpdatedUsersList.mockClear().mockReturnValue({
       added: [{ id: '1' }],
       removed: [],
     });
@@ -104,7 +104,7 @@ describe('AssignedUsersContainer', () => {
       users: mockUsers,
       isLoading: false,
     });
-    findObjectDifferences.mockClear().mockReturnValue({
+    getUpdatedUsersList.mockClear().mockReturnValue({
       added: [{ id: '1' }],
       removed: [{ id: '2' }],
     });
@@ -156,7 +156,7 @@ describe('handle mutations', () => {
       refetch: mockRefetch,
     });
 
-    findObjectDifferences.mockClear().mockReturnValue(input);
+    getUpdatedUsersList.mockClear().mockReturnValue(input);
 
     const renderComponentWithAssignUsers = (containerProps = {}, assignUsersProps = {}) => render(
       <AssignedUsersContainer {...containerProps}>

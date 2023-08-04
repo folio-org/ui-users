@@ -18,7 +18,7 @@ import {
   useAssignedUsersMutation
 } from './hooks';
 import AssignedUsersList from './AssignedUsersList';
-import { findObjectDifferences } from './utils';
+import { getUpdatedUsersList } from './utils';
 
 const AssignedUsersContainer = ({ permissionsSet, expanded, onToggle, tenantId }) => {
   const callout = useCallout();
@@ -57,7 +57,7 @@ const AssignedUsersContainer = ({ permissionsSet, expanded, onToggle, tenantId }
   };
 
   const handleAssignUsers = async (selectedUsers) => {
-    const { added, removed } = findObjectDifferences(users, selectedUsers);
+    const { added, removed } = getUpdatedUsersList(users, selectedUsers);
 
     if (added.length) await assignUsers(added, { onError: handleMutationError });
 
