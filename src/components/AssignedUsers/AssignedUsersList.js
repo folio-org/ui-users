@@ -15,7 +15,7 @@ import {
 } from './constants';
 import AssignMembers from './AssignUsers';
 
-const AssignedUsersList = ({ users, assignUsers }) => (
+const AssignedUsersList = ({ users, assignUsers, isFetching }) => (
   <>
     <Row end="xs">
       <Col xs={12}>
@@ -35,6 +35,7 @@ const AssignedUsersList = ({ users, assignUsers }) => (
           visibleColumns={VISIBLE_COLUMNS}
           columnMapping={COLUMN_MAPPING}
           columnWidths={COLUMN_WIDTH}
+          loading={isFetching}
         />
       </Col>
     </Row>
@@ -44,10 +45,12 @@ const AssignedUsersList = ({ users, assignUsers }) => (
 AssignedUsersList.propTypes = {
   users: PropTypes.arrayOf(PropTypes.object),
   assignUsers: PropTypes.func.isRequired,
+  isFetching: PropTypes.bool,
 };
 
 AssignedUsersList.defaultProps = {
   users: [],
+  isFetching: false,
 };
 
 export default AssignedUsersList;

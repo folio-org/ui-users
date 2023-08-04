@@ -46,13 +46,16 @@ const useAssignedUsersMutation = ({ tenantId, permissionName, setGrantedToIds },
 
   const {
     mutateAsync: assignUsers,
+    isLoading: isAssigning,
   } = useMutation({ mutationFn: assignMutationFn, ...options });
 
   const {
     mutateAsync: unassignUsers,
+    isLoading: isUnassigning,
   } = useMutation({ mutationFn: removeMutationFn, ...options });
 
   return ({
+    isLoading: isAssigning || isUnassigning,
     assignUsers,
     unassignUsers,
   });

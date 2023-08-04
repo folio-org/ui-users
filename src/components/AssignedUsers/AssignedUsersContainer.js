@@ -27,8 +27,8 @@ const AssignedUsersContainer = ({ permissionsSet, expanded, onToggle, tenantId }
   const { grantedTo, id: permissionSetId, permissionName } = permissionsSet;
   const [grantedToIds, setGrantedToIds] = useState(grantedTo);
 
-  const { users, isLoading, refetch } = useAssignedUsers({ grantedToIds, permissionSetId, tenantId });
-  const { assignUsers, unassignUsers } = useAssignedUsersMutation({ permissionSetId, tenantId, permissionName, setGrantedToIds });
+  const { users, isLoading, isFetching, refetch } = useAssignedUsers({ grantedToIds, permissionSetId, tenantId });
+  const { assignUsers, unassignUsers, isLoading: isMutationLoading } = useAssignedUsersMutation({ permissionSetId, tenantId, permissionName, setGrantedToIds });
 
   const handleMutationSuccess = () => {
     refetch();
@@ -78,7 +78,15 @@ const AssignedUsersContainer = ({ permissionsSet, expanded, onToggle, tenantId }
         isLoading ? <Loading /> : <Badge>{users.length}</Badge>
       }
     >
-      { isLoading ? <Loading /> : <AssignedUsersList assignUsers={handleAssignUsers} users={users} /> }
+      { isLoading ?
+        <Loading />
+        : (
+          <AssignedUsersList
+            isFetching={isFetching || isMutationLoading}
+            assignUsers={handleAssignUsers}
+            users={users}
+          />
+        )}
     </Accordion>
   );
 };

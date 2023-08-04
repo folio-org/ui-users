@@ -33,6 +33,7 @@ const useAssignedUsers = ({ grantedToIds = [], permissionSetId, tenantId }, opti
     isLoading,
     data = [],
     refetch,
+    isFetching,
   } = useQuery(
     [namespace, permissionSetId],
     async ({ signal }) => {
@@ -86,6 +87,7 @@ const useAssignedUsers = ({ grantedToIds = [], permissionSetId, tenantId }, opti
   return ({
     refetch,
     isLoading,
+    isFetching,
     users: data,
   });
 };

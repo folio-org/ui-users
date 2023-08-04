@@ -69,6 +69,7 @@ describe('AssignedUsersContainer', () => {
     useAssignedUsersMutation.mockClear().mockReturnValue({
       assignUsers: jest.fn(),
       unassignUsers: jest.fn(),
+      isLoading: false,
     });
     findObjectDifferences.mockClear().mockReturnValue({
       added: [],
@@ -147,6 +148,7 @@ describe('handle mutations', () => {
     useAssignedUsersMutation.mockClear().mockReturnValue({
       assignUsers: jest.fn(),
       unassignUsers: jest.fn(),
+      isLoading: false,
     });
     useAssignedUsers.mockReturnValue({
       users: mockUsers,
