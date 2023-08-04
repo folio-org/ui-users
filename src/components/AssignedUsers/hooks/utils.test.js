@@ -1,6 +1,10 @@
 import { renderHook } from '@folio/jest-config-stripes/testing-library/react-hooks';
 
-import { buildQueryByIds, batchRequest } from './utils';
+import {
+  buildQueryByIds,
+  batchRequest,
+  buildQueryByUserIds,
+} from './utils';
 
 describe('buildQueryByIds', () => {
   it('should create query with id', async () => {
@@ -28,6 +32,7 @@ describe('batchRequest', () => {
   it('should not call API if no query item passed', () => {
     batchRequest(kyMock, []);
 
+    expect(buildQueryByUserIds([])).toBe('');
     expect(kyMock).not.toHaveBeenCalled();
   });
 

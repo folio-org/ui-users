@@ -7,8 +7,15 @@ import {
 } from '@folio/stripes/core';
 
 import { MAX_RECORDS } from '../../../../constants';
-import { GROUPS_API, PERMISSIONS_API, USERS_API } from '../../constants';
-import { batchRequest, buildQueryByIds } from './utils';
+import {
+  GROUPS_API,
+  PERMISSIONS_API,
+  USERS_API
+} from '../../constants';
+import {
+  batchRequest,
+  buildQueryByIds
+} from '../utils';
 
 const useAssignedUsers = ({ grantedToIds = [], permissionSetId, tenantId }, options = {}) => {
   const stripes = useStripes();
@@ -25,6 +32,8 @@ const useAssignedUsers = ({ grantedToIds = [], permissionSetId, tenantId }, opti
   const {
     isLoading,
     data = [],
+    refetch,
+    isFetching,
   } = useQuery(
     [namespace, permissionSetId],
     async ({ signal }) => {
@@ -60,9 +69,12 @@ const useAssignedUsers = ({ grantedToIds = [], permissionSetId, tenantId }, opti
         return acc;
       }, {});
 
-      return usersResponse.map(({ personal, patronGroup }) => ({
-        fullName: `${personal.firstName} ${personal.lastName}`,
-        patronGroup: patronGroupsById[patronGroup],
+      return usersResponse.map(({ personal, patronGroup, ...rest }) => ({
+        ...rest,
+        personal,
+        patronGroup,
+        fullName: [personal.firstName, personal.lastName].filter(Boolean).join(' '),
+        groupName: patronGroupsById[patronGroup],
       }));
     },
     {
@@ -73,7 +85,9 @@ const useAssignedUsers = ({ grantedToIds = [], permissionSetId, tenantId }, opti
   );
 
   return ({
+    refetch,
     isLoading,
+    isFetching,
     users: data,
   });
 };

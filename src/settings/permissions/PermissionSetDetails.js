@@ -14,7 +14,7 @@ import {
 import { ViewMetaData } from '@folio/stripes/smart-components';
 
 import RenderPermissions from '../../components/RenderPermissions';
-import AssignedMembersContainer from '../../components/AssignedMembers';
+import AssignedUsers from '../../components/AssignedUsers';
 
 class PermissionSetDetails extends React.Component {
   static propTypes = {
@@ -119,7 +119,7 @@ class PermissionSetDetails extends React.Component {
           permToModify="perms.permissions.item.put"
           {...this.props}
         />
-        <AssignedMembersContainer
+        <AssignedUsers
           onToggle={this.handleSectionToggle}
           expanded={sections.assignedUsers}
           permissionsSet={selectedSet}

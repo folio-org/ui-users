@@ -7,7 +7,7 @@ import {
 import { useOkapiKy } from '@folio/stripes/core';
 
 import { GROUPS_API, PERMISSIONS_API, USERS_API } from '../../constants';
-import { batchRequest } from './utils';
+import { batchRequest } from '../utils';
 import useAssignedUsers from './useAssignedUsers';
 
 const mockGrantedToIds = ['userId1', 'userId2'];
@@ -24,7 +24,7 @@ jest.mock('@folio/stripes/core', () => ({
   })),
 }));
 
-jest.mock('./utils', () => ({
+jest.mock('../utils', () => ({
   batchRequest: jest.fn(),
   buildQueryByIds: jest.fn(),
 }));

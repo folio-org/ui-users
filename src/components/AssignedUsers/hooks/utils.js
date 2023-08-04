@@ -2,12 +2,24 @@ import {
   chunk,
   flatten,
 } from 'lodash';
-import { MAX_RECORDS } from '../../../../constants';
-import { CHUNK_SIZE } from '../../constants';
+
+import { MAX_RECORDS } from '../../../constants';
+import {
+  CHUNK_SIZE,
+  PERMISSIONS_API
+} from '../constants';
 
 export const buildQueryByIds = (itemsChunk) => {
   const query = itemsChunk
     .map(chunkId => `id==${chunkId}`)
+    .join(' or ');
+
+  return query || '';
+};
+
+export const buildQueryByUserIds = (itemsChunk) => {
+  const query = itemsChunk
+    .map(userId => `userId==${userId}`)
     .join(' or ');
 
   return query || '';
@@ -32,4 +44,16 @@ export const batchRequest = (requestFn, items, buildQuery = buildQueryByIds, _pa
 
   return Promise.all(requests)
     .then((responses) => flatten(responses));
+};
+
+export const fetchUsersByUsersIds = async (ky, usersIds) => {
+  const permissionUsersResponse = await batchRequest(
+    ({ params: searchParams }) => ky
+      .get(PERMISSIONS_API, { searchParams })
+      .json()
+      .then(({ permissionUsers }) => permissionUsers),
+    usersIds,
+    buildQueryByUserIds,
+  );
+  return permissionUsersResponse;
 };
