@@ -133,7 +133,14 @@ describe('handle mutations', () => {
     tenantId: 'tenantId',
   };
 
-  it('should call assignUsers and unassignUsers mutations', async () => {
+  const testCases = [
+    ['added', { added: [{ id: '1' }], removed: [] }],
+    ['removed', { added: [], removed: [{ id: '2' }] }],
+    ['added and removed', { added: [{ id: '1' }], removed: [{ id: '2' }] }],
+    ['no changes', { added: [], removed: [] }],
+  ];
+
+  it.each(testCases)('handles %s case', async (scenario, input) => {
     const mockAssignUsers = jest.fn();
     const mockRefetch = jest.fn();
 
@@ -146,10 +153,8 @@ describe('handle mutations', () => {
       isLoading: false,
       refetch: mockRefetch,
     });
-    findObjectDifferences.mockClear().mockReturnValue({
-      added: [{ id: '1' }],
-      removed: [{ id: '2' }],
-    });
+
+    findObjectDifferences.mockClear().mockReturnValue(input);
 
     const renderComponentWithAssignUsers = (containerProps = {}, assignUsersProps = {}) => render(
       <AssignedUsersContainer {...containerProps}>
@@ -163,6 +168,6 @@ describe('handle mutations', () => {
     expect(screen.getByText('AssignedUsersList')).toBeInTheDocument();
 
     userEvent.click(screen.getByText('Assign/Unassign'));
-    await waitFor(() => expect(mockRefetch).toBeCalled());
+    await waitFor(() => expect(mockRefetch).toBeCalledTimes(scenario === 'no changes' ? 0 : 1));
   });
 });
