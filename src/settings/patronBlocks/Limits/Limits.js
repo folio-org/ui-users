@@ -44,10 +44,10 @@ class Limits extends Component {
     }).isRequired,
     mutator: PropTypes.shape({
       patronBlockLimits: PropTypes.shape({
-        GET: PropTypes.func.isRequired,
-        POST: PropTypes.func.isRequired,
-        PUT: PropTypes.func.isRequired,
-        DELETE: PropTypes.func.isRequired,
+        GET: PropTypes.func,
+        POST: PropTypes.func,
+        PUT: PropTypes.func,
+        DELETE: PropTypes.func,
       }).isRequired,
       patronBlockLimitId: PropTypes.object.isRequired,
     }).isRequired,
@@ -59,6 +59,9 @@ class Limits extends Component {
     ).isRequired,
     patronGroupId: PropTypes.string.isRequired,
     patronGroup: PropTypes.string.isRequired,
+    stripes: PropTypes.shape({
+      hasPerm: PropTypes.func,
+    }).isRequired,
   }
 
   constructor(props) {
@@ -234,8 +237,10 @@ class Limits extends Component {
       patronGroup,
       patronGroupId,
       patronBlockConditions,
+      stripes,
     } = this.props;
 
+    const canEditConditions = stripes.hasPerm('ui-users.settings.limits.all');
     if (!this._isMounted) return null;
 
     return (
@@ -250,6 +255,7 @@ class Limits extends Component {
             patronBlockConditions={patronBlockConditions}
             initialValues={this.getInitialValues()}
             onSubmit={this.onSubmit}
+            canEditConditions={canEditConditions}
           />
 
           <Callout ref={this.callout} />

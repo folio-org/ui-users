@@ -1,0 +1,9 @@
+.AssignUsersWrapper {
+  & [class^="searchControl"] {
+    display: inline-block;
+
+    & > button {
+      margin-bottom: 0;
+    }
+  }
+}

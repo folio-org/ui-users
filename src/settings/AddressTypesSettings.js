@@ -11,6 +11,7 @@ class AddressTypesSettings extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
+      hasPerm: PropTypes.func.isRequired,
     }).isRequired,
     intl: PropTypes.object.isRequired,
   };
@@ -25,6 +26,10 @@ class AddressTypesSettings extends React.Component {
       stripes,
       intl,
     } = this.props;
+
+    const hasEditPerm = stripes.hasPerm('addresstypes.item.put');
+    const hasDeletePerm = stripes.hasPerm('addresstypes.item.delete');
+    const hasCreatePerm = stripes.hasPerm('addresstypes.item.post');
 
     return (
       <this.connectedControlledVocab
@@ -42,6 +47,11 @@ class AddressTypesSettings extends React.Component {
         nameKey="addressType"
         id="addresstypes"
         sortby="addressType"
+        canCreate={hasCreatePerm}
+        actionSuppressor={{
+          delete: item => !hasDeletePerm,
+          edit: (item) => !hasEditPerm,
+        }}
       />
     );
   }

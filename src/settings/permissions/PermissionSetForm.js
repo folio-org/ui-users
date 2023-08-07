@@ -46,6 +46,7 @@ class PermissionSetForm extends React.Component {
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
     form: PropTypes.object,
+    tenantId: PropTypes.string,
   };
 
   constructor(props) {
@@ -189,6 +190,7 @@ class PermissionSetForm extends React.Component {
       initialValues,
       handleSubmit,
       form,
+      tenantId,
     } = this.props;
 
     const selectedSet = initialValues || {};
@@ -301,6 +303,7 @@ class PermissionSetForm extends React.Component {
               formName="permissionSetForm"
               permissionsField="subPermissions"
               form={form}
+              tenantId={tenantId}
             />
           </Pane>
         </Paneset>

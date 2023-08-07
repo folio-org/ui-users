@@ -12,7 +12,7 @@ import {
   NoValue,
 } from '@folio/stripes/components';
 import { ControlledVocab } from '@folio/stripes/smart-components';
-import { stripesConnect, withStripes } from '@folio/stripes/core';
+import { IfPermission, stripesConnect, withStripes } from '@folio/stripes/core';
 
 import { validate } from '../components/util';
 import {
@@ -72,6 +72,7 @@ class FeeFineSettings extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
+      hasPerm: PropTypes.func.isRequired,
     }).isRequired,
     resources: PropTypes.object,
     mutator: PropTypes.shape({
@@ -253,10 +254,14 @@ class FeeFineSettings extends React.Component {
   }
 
   render() {
-    const { intl: { formatMessage } } = this.props;
+    const { intl: { formatMessage }, stripes } = this.props;
     const { owners, templates, ownerId } = this.state;
     const filterOwners = this.getOwners();
     const label = formatMessage({ id: 'ui-users.feefines.singular' });
+    const hasEditPerm = stripes.hasPerm('feefines.item.put');
+    const hasDeletePerm = stripes.hasPerm('feefines.item.delete');
+    const hasCreatePerm = stripes.hasPerm('feefines.item.post');
+    const hasEditOwnerPerm = stripes.hasPerm('owners.item.put');
 
     let templateCharge = templates.filter(t => t.category === 'FeeFineCharge') || [];
     templateCharge = [{}, ...templateCharge.map((t) => ({ value: t.id, label: t.name }))];
@@ -310,14 +315,17 @@ class FeeFineSettings extends React.Component {
           templateCharge={templateCharge}
           templateAction={templateAction}
           onSubmit={this.onUpdateOwner}
+          hasEditOwnerPerm={hasEditOwnerPerm}
         />
-        <CopyModal
-          {...this.props}
-          openModal={this.state.showCopyDialog}
-          onCopyFeeFines={this.onCopyFeeFines}
-          onCloseModal={this.hideCopyDialog}
-          ownerList={filterOwners}
-        />
+        <IfPermission perm="feefines.item.post,feefines.item.put">
+          <CopyModal
+            {...this.props}
+            openModal={this.state.showCopyDialog}
+            onCopyFeeFines={this.onCopyFeeFines}
+            onCloseModal={this.hideCopyDialog}
+            ownerList={filterOwners}
+          />
+        </IfPermission>
       </div>;
 
     return (
@@ -343,6 +351,11 @@ class FeeFineSettings extends React.Component {
         visibleFields={['feeFineType', 'defaultAmount', 'chargeNoticeId', 'actionNoticeId']}
         formType="final-form"
         shouldReinitialize
+        canCreate={hasCreatePerm}
+        actionSuppressor={{
+          delete: () => !hasDeletePerm,
+          edit: () => !hasEditPerm,
+        }}
       />
     );
   }

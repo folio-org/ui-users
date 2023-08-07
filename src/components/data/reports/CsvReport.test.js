@@ -45,6 +45,7 @@ const records = [
   { label: '', value: 'loanPolicyId' },
   { label: '', value: 'loanId' },
   { label: '', value: 'feeFine' },
+  { label: '', value: 'feeFineExplanation' },
   { label: '', value: 'item.title' },
   { label: '', value: 'item.materialType.name' },
   { label: '', value: 'item.status.name' },

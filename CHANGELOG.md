@@ -46,6 +46,29 @@
 * In loan history, older staff notes should NOT be marked as "SUPERSEDED". Fixes UIU-2891.
 * Users with view-only access to user permissions and access to edit user records get error message when saving a user record. Refs UIU-2885.
 * Use new WSAPI for adding patron/staff notes to loans. Fixes UIU-2893. **Note.** The new requirement of the `add-info` interface is a breaking change.
+* Modify add-patron/staff-info permission to use new subpermission. Fixes UIU-2895.
+* Move view/assign affiliation permissions from `ui-users` to `ui-consortia-settings`. Refs UIU-2897.
+* Handle sparse data in "Overdue loans report". Fixes UIU-2901.
+* Update translations text for permission.settings.manual-charges.all. Fixes UIU-2908.
+* Rename user setting permissions disaplay name and update their visibility. Refs UIU-2907.
+* Convert primary search listing to use prev/next pagination vs load-more pagination. Refs UIU-2870.
+* Cleanup User Settings permissions – Part 1. Refs UIU-2906
+* Prevent editing of shared settings from outside "Consortium manager". Refs UIU-2914.
+* User settings > Fee/fine section: Disable editing for users with "Setting (Users): View all settings" permission. Refs UIU-2904.
+* Add info about reminder fees to loan details screen. Refs UIU-2591.
+* Add info about reminder fees to loan history. Refs UIU-2590.
+* Replace `word-wrap` (unmaintained) with `@aashutoshrathi/word-wrap`, a fork, to mitigate CVE-2023-26115.
+* Convert primary search listing to use prev/next pagination vs load-more pagination. Refs UIU-2870.
+* Add permisson check to edit Patron block conditions in user settings. Refs UIU-2911.
+* Add permissions check to edit Limits in user settings. Refs. UIU-2912.
+* User settings > Comment required: Disable editing for users with "Setting (Users): View all settings" permission. Refs UIU-2905.
+* Display assigned users accordion on Permission set. Refs UIU-2872.
+* Add support for `request-storage` version `6.0` for `<UserRequests>`. Refs UIU-2920.
+* Add permisison checks to restrict edit on Manual charges settings page. Ref. UIU-2903.
+* Clean up setting.transfertypes permissions. Refs UIU-2919.
+* Add permission check to restrict edit of transfer account page on user settings. Refs UIU-2910.
+* Leverage cookie-based authentication in all API requests. Refs UIU-2746.
+* Assign/unassign users from Permission set. Refs UIU-2873.
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v9.0.0)
@@ -79,6 +102,8 @@
 * Fix problem with additional information comment that can't be added after a page reload. Refs UIU-2794.
 * Allow proxy/sponsor lists to be emptied completely. Refs UIU-2804.
 * Show an error if the proxy record is corrupt, instead of an NPE. Refs UIU-2803.
+* Create Jest/RTL test for LoanDetails.js. Refs UIU-2428.
+* Add permission checks to address types, patron groups pages to restrict edit. Refs. UIU-2902.
 
 ## [8.2.0](https://github.com/folio-org/ui-users/tree/v8.2.0) (2022-10-24)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v8.2.0)

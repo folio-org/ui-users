@@ -56,6 +56,7 @@ class ConditionsForm extends Component {
       getState: PropTypes.func.isRequired,
     }),
     handleSubmit: PropTypes.func.isRequired,
+    areConditionsEditable: PropTypes.bool.isRequired,
   };
 
   getValueFromState = () => {
@@ -118,6 +119,7 @@ class ConditionsForm extends Component {
     const {
       label,
       handleSubmit,
+      areConditionsEditable,
     } = this.props;
 
     return (
@@ -141,6 +143,7 @@ class ConditionsForm extends Component {
                 type="checkbox"
                 component={Checkbox}
                 label={<FormattedMessage id="ui-users.settings.block.borrowing" />}
+                disabled={!areConditionsEditable}
               />
             </Col>
           </Row>
@@ -153,6 +156,7 @@ class ConditionsForm extends Component {
                 type="checkbox"
                 component={Checkbox}
                 label={<FormattedMessage id="ui-users.settings.block.renew" />}
+                disabled={!areConditionsEditable}
               />
             </Col>
           </Row>
@@ -165,6 +169,7 @@ class ConditionsForm extends Component {
                 type="checkbox"
                 component={Checkbox}
                 label={<FormattedMessage id="ui-users.settings.block.request" />}
+                disabled={!areConditionsEditable}
               />
             </Col>
           </Row>
@@ -180,6 +185,7 @@ class ConditionsForm extends Component {
                 value={this.props.initialValues.message}
                 label={<FormattedMessage id="ui-users.settings.block.message" />}
                 required={this.isTextAreaRequired()}
+                disabled={!areConditionsEditable}
               />
             </Col>
           </Row>

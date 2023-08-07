@@ -3,8 +3,9 @@ import { fireEvent } from '@folio/jest-config-stripes/testing-library/react';
 import renderWithRouter from 'helpers/renderWithRouter';
 import PermissionSetDetails from './PermissionSetDetails';
 
-
 jest.unmock('@folio/stripes/components');
+
+jest.mock('../../components/AssignedUsers/AssignedUsersContainer', () => jest.fn(() => <div>AssignedUsersContainer</div>));
 
 const renderPermissionSetDetails = (props) => renderWithRouter(<PermissionSetDetails {...props} />);
 const STRIPES = {
@@ -67,6 +68,7 @@ const props = {
   },
   intl: {},
   stripes: STRIPES,
+  tenantId: 'diku',
 };
 
 describe('PermissionSetDetails component', () => {

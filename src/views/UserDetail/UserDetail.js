@@ -138,7 +138,7 @@ class UserDetail extends React.Component {
     }).isRequired,
     okapi: PropTypes.shape({
       currentUser: PropTypes.shape({
-        servicePoints: PropTypes.arrayOf(PropTypes.object).isRequired,
+        servicePoints: PropTypes.arrayOf(PropTypes.object),
       }).isRequired,
     }).isRequired,
     onClose: PropTypes.func,
@@ -798,7 +798,7 @@ class UserDetail extends React.Component {
                 </IfPermission>
 
                 <IfPermission perm="ui-users.requests.all">
-                  <IfInterface name="request-storage" version="2.5 3.0 4.0 5.0">
+                  <IfInterface name="request-storage" version="2.5 3.0 4.0 5.0 6.0">
                     <IfInterface name="circulation">
                       <UserRequests
                         expanded={sections.requestsSection}

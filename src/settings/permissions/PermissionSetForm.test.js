@@ -31,6 +31,7 @@ const renderPermissionSetForm = initialValues => {
         onSubmit={handleSubmit}
         initialValues={initialValues}
         onRemove={onRemove}
+        tenantId="mobius"
       />
     </Router>
   );

@@ -27,6 +27,7 @@ class WaiveSettings extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
+      hasPerm: PropTypes.func.isRequired,
     }).isRequired,
     intl: PropTypes.object.isRequired,
   };
@@ -43,6 +44,7 @@ class WaiveSettings extends React.Component {
     } = this.props;
 
     const label = intl.formatMessage({ id: 'ui-users.waives.singular' });
+    const editable = stripes.hasPerm('ui-users.settings.waives.all');
 
     return (
       <this.connectedControlledVocab
@@ -59,6 +61,7 @@ class WaiveSettings extends React.Component {
         hiddenFields={['numberOfObjects']}
         id="settings-waives"
         sortby="nameReason"
+        editable={editable}
       />
     );
   }

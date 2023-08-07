@@ -23,6 +23,7 @@ const Setting = ({
   name,
   label,
   intl,
+  viewOnly,
 }) => (
   <div id={name}>
     <Row>
@@ -38,6 +39,7 @@ const Setting = ({
             { value: true, label: intl.formatMessage({ id: 'ui-users.yes' }) },
             { value: false, label: intl.formatMessage({ id: 'ui-users.no' }) }
           ]}
+          disabled={viewOnly}
         />
       </Col>
     </Row>
@@ -45,9 +47,10 @@ const Setting = ({
 );
 
 Setting.propTypes = {
-  label: PropTypes.element,
+  label: PropTypes.string,
   name: PropTypes.string,
   intl: PropTypes.object,
+  viewOnly: PropTypes.bool,
 };
 
 class CommentRequiredForm extends React.Component {
@@ -56,6 +59,7 @@ class CommentRequiredForm extends React.Component {
       pristine,
       submitting,
       handleSubmit,
+      viewOnly
     } = this.props;
 
     const footer = (
@@ -88,22 +92,26 @@ class CommentRequiredForm extends React.Component {
           <Setting
             {...this.props}
             name="paid"
-            label={<FormattedMessage id="ui-users.comment.paid" />}
+            label={this.props.intl.formatMessage({ id: 'ui-users.comment.paid' })}
+            disabled={viewOnly}
           />
           <Setting
             {...this.props}
             name="waived"
-            label={<FormattedMessage id="ui-users.comment.waived" />}
+            label={this.props.intl.formatMessage({ id: 'ui-users.comment.waived' })}
+            disabled={viewOnly}
           />
           <Setting
             {...this.props}
             name="refunded"
-            label={<FormattedMessage id="ui-users.comment.refunded" />}
+            label={this.props.intl.formatMessage({ id: 'ui-users.comment.refunded' })}
+            disabled={viewOnly}
           />
           <Setting
             {...this.props}
             name="transferredManually"
-            label={<FormattedMessage id="ui-users.comment.transferred" />}
+            label={this.props.intl.formatMessage({ id: 'ui-users.comment.transferred' })}
+            disabled={viewOnly}
           />
         </Pane>
       </form>
@@ -115,6 +123,8 @@ CommentRequiredForm.propTypes = {
   handleSubmit: PropTypes.func,
   pristine: PropTypes.bool,
   submitting: PropTypes.bool,
+  intl: PropTypes.object,
+  viewOnly: PropTypes.bool,
 };
 
 export default stripesFinalForm({

@@ -6,11 +6,17 @@ import {
 } from 'react-intl';
 import { ControlledVocab } from '@folio/stripes/smart-components';
 import { withStripes } from '@folio/stripes/core';
+import { getSourceSuppressor } from '@folio/stripes/util';
+
+import { RECORD_SOURCE } from '../constants';
+
+const suppress = getSourceSuppressor(RECORD_SOURCE.CONSORTIUM);
 
 class PatronGroupsSettings extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
+      hasPerm: PropTypes.func.isRequired,
     }).isRequired,
 
     intl: PropTypes.object.isRequired,
@@ -42,7 +48,10 @@ class PatronGroupsSettings extends React.Component {
   });
 
   render() {
-    const { intl } = this.props;
+    const { intl, stripes } = this.props;
+    const hasEditPerm = stripes.hasPerm('usergroups.item.put');
+    const hasDeletePerm = stripes.hasPerm('usergroups.item.delete');
+    const hasCreatePerm = stripes.hasPerm('usergroups.item.post');
 
     return (
       <this.connectedControlledVocab
@@ -66,6 +75,11 @@ class PatronGroupsSettings extends React.Component {
         nameKey="group"
         id="patrongroups"
         sortby="group"
+        canCreate={hasCreatePerm}
+        actionSuppressor={{
+          delete: item => !hasDeletePerm || suppress(item),
+          edit: (item) => !hasEditPerm || suppress(item),
+        }}
       />
     );
   }
