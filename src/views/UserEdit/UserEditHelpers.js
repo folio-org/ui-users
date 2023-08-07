@@ -29,15 +29,19 @@ export function resourcesLoaded(obj, exceptions = []) {
  * @param {function} sendCallout function reference, likely this.context.sendCallout
  */
 export function showErrorCallout(res, sendCallout) {
+  console.error(res); // eslint-disable-line no-console
   res.text()
     .then(body => {
+      const isUserExists = body?.includes('username already exists');
+      const messageId = isUserExists ? 'ui-users.errors.usernameUnavailable' : 'ui-users.errors.permissionChangeFailed';
+
       sendCallout({
         type: 'error',
         timeout: 0,
         message: (
           <div>
-            <div><strong><FormattedMessage id="ui-users.errors.permissionChangeFailed" /></strong></div>
-            <div>{body}</div>
+            <div><strong><FormattedMessage id={messageId} /></strong></div>
+            <div>{!isUserExists && body}</div>
           </div>
         )
       });

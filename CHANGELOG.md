@@ -69,6 +69,7 @@
 * Add permission check to restrict edit of transfer account page on user settings. Refs UIU-2910.
 * Leverage cookie-based authentication in all API requests. Refs UIU-2746.
 * Assign/unassign users from Permission set. Refs UIU-2873.
+* ECS - Check username uniqueness when editing. Refs UIU-2889.
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v9.0.0)
