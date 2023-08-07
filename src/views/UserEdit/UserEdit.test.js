@@ -79,7 +79,9 @@ describe('UserEdit', () => {
     history: {
       push: jest.fn(),
     },
-    location: {},
+    location: {
+      search: '?filters=active.active'
+    },
     match: { params: { id: 'userId' } },
     updateProxies: jest.fn(),
     updateSponsors: jest.fn(),
