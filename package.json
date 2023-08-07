@@ -1045,7 +1045,7 @@
     "@babel/preset-react": "^7.9.0",
     "@folio/eslint-config-stripes": "^6.0.0",
     "@folio/jest-config-stripes": "^1.0.0",
-    "@folio/service-interaction": "^1.0.0",
+    "@folio/service-interaction": "^2.0.0",
     "@folio/stripes": "^8.0.0",
     "@folio/stripes-cli": "^2.4.0",
     "@formatjs/cli": "^6.0.4",
@@ -1081,7 +1081,7 @@
     "uuid": "^9.0.0"
   },
   "peerDependencies": {
-    "@folio/service-interaction": "^1.0.0",
+    "@folio/service-interaction": "^2.0.0",
     "@folio/stripes": "^8.0.0",
     "moment": "^2.24.0",
     "react": "^17.0.2",
