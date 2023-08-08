@@ -35,7 +35,7 @@ const useAssignedUsers = ({ grantedToIds = [], permissionSetId, tenantId }, opti
     refetch,
     isFetching,
   } = useQuery(
-    [namespace, permissionSetId],
+    [namespace, permissionSetId, grantedToIds],
     async ({ signal }) => {
       const permissionUsersResponse = await batchRequest(
         ({ params: searchParams }) => api
