@@ -400,7 +400,7 @@ class UserEdit extends React.Component {
         onSubmit={onSubmit}
         onCancel={() => {
           history.push({
-            pathname: params.id ? `/users/preview/${params.id}` : '/users',
+            pathname: params.id ? `/users/preview/${params.id}${location.search}` : '/users',
             state: location.state,
           });
         }}

@@ -48,6 +48,7 @@ jest.mock('../../components/EditSections', () => ({
   EditProxy: jest.fn(() => null),
   EditServicePoints: jest.fn(() => null),
 }));
+
 describe('UserEdit', () => {
   let props = {
     stripes: {
@@ -79,7 +80,9 @@ describe('UserEdit', () => {
     history: {
       push: jest.fn(),
     },
-    location: {},
+    location: {
+      search: '?filters=active.active'
+    },
     match: { params: { id: 'userId' } },
     updateProxies: jest.fn(),
     updateSponsors: jest.fn(),
@@ -387,6 +390,107 @@ describe('UserEdit', () => {
 
         expect(props.mutator.perms.PUT).not.toHaveBeenCalled();
       });
+    });
+  });
+
+  describe('Cancel user form', () => {
+    beforeEach(() => {
+      jest.unmock('./UserForm');
+    });
+
+    const defaultProps = {
+      stripes: {
+        hasPerm: jest.fn().mockReturnValue(true),
+        okapi: {
+          tenant: 'tenantId',
+        },
+      },
+      resources: {
+        selUser: {
+          records: [{ id: 'userId' }],
+        },
+        patronGroups: {
+          records: [],
+        },
+        perms: {
+          records: [{ id: 'permUserRecordId' }],
+        },
+        addressTypes: {
+          records: [],
+        },
+        servicePoints: {
+          records: [],
+        },
+        departments: {
+          records: [],
+        },
+      },
+      history: {
+        push: jest.fn(),
+      },
+      location: {
+        pathname: '/users/userId/edit',
+        search: '?filters=active.active',
+        state: undefined,
+      },
+      match: { params: { id: 'userId' } },
+      updateProxies: jest.fn(),
+      updateSponsors: jest.fn(),
+      updateServicePoints: jest.fn(),
+      getUserServicePoints: jest.fn(),
+      getPreferredServicePoint: jest.fn(),
+      mutator: {
+        records: {
+          POST: jest
+            .fn()
+            .mockResolvedValue(jest.fn().mockResolvedValue({ result: [] })),
+        },
+        perms: {
+          POST: jest.fn().mockResolvedValue({ data: {} }),
+          PUT: jest.fn().mockResolvedValue({ data: {} }),
+        },
+        permissions: {
+          POST: jest.fn().mockResolvedValue({ data: {} }),
+          PUT: jest.fn().mockResolvedValue({ data: {} }),
+        },
+        requestPreferences: {
+          POST: jest.fn().mockResolvedValue({ data: {} }),
+          PUT: jest.fn().mockResolvedValue({ data: {} }),
+        },
+        selUser: {
+          PUT: jest.fn().mockResolvedValue({ data: {} }),
+        },
+        permUserId: '2',
+      },
+      getProxies: jest.fn(),
+      getSponsors: jest.fn(),
+      okapiKy: {
+        extend: jest.fn(() => props.okapiKy),
+        get: jest.fn(() => ({ json: () => Promise.resolve() })),
+        post: jest.fn(() => ({ json: () => Promise.resolve({}) })),
+        put: jest.fn(() => ({ json: () => Promise.resolve({}) })),
+      },
+    };
+
+    it('should call history.push on cancelling user edit form', () => {
+      const { container } = renderWithRouter(<UserEdit {...defaultProps} />);
+      const cancelButton = container.querySelector('#clickable-cancel');
+      userEvent.click(cancelButton);
+      expect(defaultProps.history.push).toHaveBeenCalled();
+    });
+
+    it('should call history.push on cancelling new user form', () => {
+      const alteredProps = {
+        ...defaultProps,
+        match: {
+          ...props.match,
+          params:{}
+        }
+      };
+      const { container } = renderWithRouter(<UserEdit {...alteredProps} />);
+      const cancelButton = container.querySelector('#clickable-cancel');
+      userEvent.click(cancelButton);
+      expect(alteredProps.history.push).toHaveBeenCalled();
     });
   });
 });
