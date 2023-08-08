@@ -48,22 +48,45 @@ describe('resourcesLoaded', () => {
 });
 
 describe('showErrorCallout', () => {
-  it('calls the callout', async () => {
-    const res = {
-      text: jest.fn().mockReturnValue(Promise.resolve('')),
+  let res = {
+    text: jest.fn().mockReturnValue(Promise.resolve('')),
+    headers: {
+      get: jest.fn().mockReturnValue('text/html'),
+    }
+  };
+  const sendCallout = jest.fn();
+
+  it('calls the callout with generic error', async () => {
+    await showErrorCallout({}, sendCallout);
+
+    expect(sendCallout).toHaveBeenCalled();
+
+    const callArgs = sendCallout.mock.calls[0][0];
+    const callArgsJSON = JSON.stringify(callArgs, null, 2);
+
+    expect(callArgsJSON).toContain('"id": "ui-users.errors.generic"');
+  });
+
+  it('calls the error callout with username exist as text', async () => {
+    res = {
+      ...res,
+      text: jest.fn().mockReturnValue(Promise.resolve('username already exists')),
     };
-    const sendCallout = jest.fn();
 
     await showErrorCallout(res, sendCallout);
 
-    expect(sendCallout).toHaveBeenCalled();
+    expect(sendCallout).toHaveBeenCalledWith(expect.objectContaining({
+      type: 'error',
+    }));
   });
 
-  it('calls the error callout with username exist', async () => {
-    const res = {
-      text: jest.fn().mockReturnValue(Promise.resolve('username already exists')),
+  it('calls the error callout with username exist as json', async () => {
+    res = {
+      headers: {
+        get: jest.fn().mockReturnValue('application/json'),
+      },
+      json: jest.fn().mockReturnValue(Promise.resolve({ errors: [{ message: 'username already exists' }, { message: 'username already exists with duplicate' }] })),
     };
-    const sendCallout = jest.fn();
 
     await showErrorCallout(res, sendCallout);
 
