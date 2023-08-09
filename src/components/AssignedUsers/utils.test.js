@@ -13,6 +13,7 @@ describe('getUpdatedUsersList', () => {
 
   it.each(cases)('should return empty data', ({ prevUsers, newUsers }) => {
     const result = getUpdatedUsersList(prevUsers, newUsers);
+
     expect(result).toEqual({ added: [], removed: [] });
   });
 

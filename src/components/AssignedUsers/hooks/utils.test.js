@@ -25,9 +25,8 @@ describe('batchRequest', () => {
   const kyMock = jest.fn(() => ({
     get: () => ({
       json: () => Promise.resolve(['id1']),
-    })
+    }),
   }));
-
 
   it('should not call API if no query item passed', () => {
     batchRequest(kyMock, []);
