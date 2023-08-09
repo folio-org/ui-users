@@ -1122,7 +1122,12 @@
     "loans.lastReminderNumber": "{count, number} {count, plural, one {poplatek za připomenutí} other {poplatky za připomenutí}}",
     "reports.feeFineExplanation": "Vysvětlení poplatku/pokuty",
     "reports.includesReminderFees": "Zahrnuje poplatek za připomenutí",
-    "permissions.assignedUsers": "Assigned users",
-    "permissions.assignedUsers.name": "Name",
-    "permissions.assignedUsers.patronGroup": "Patron group"
+    "permissions.assignedUsers": "Přiřazení uživatelé",
+    "permissions.assignedUsers.name": "Jméno",
+    "permissions.assignedUsers.patronGroup": "Kategorie čtenáře",
+    "permissions.assignUsers.actions.assign": "Přiřadit/Zrušit",
+    "permissions.assignUsers.actions.assign.notAvailable": "Přiřazení uživatelů není k dispozici",
+    "permissions.assignUsers.actions.message.success": "Přiřazení uživatele sady oprávnění bylo úspěšně aktualizováno",
+    "permissions.assignUsers.actions.message.error": "Změna přiřazení uživatele sady oprávnění nebyla úspěšná. {error}",
+    "permissions.assignUsers.actions.message.permission.error": "Nemáte požadovaná oprávnění."
 }
