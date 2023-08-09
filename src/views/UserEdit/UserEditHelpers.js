@@ -34,7 +34,7 @@ export async function showErrorCallout(res, sendCallout) {
     const contentType = res.headers.get('content-type');
     let errorMessage = '';
 
-    if (contentType && contentType.includes('application/json')) {
+    if (contentType?.includes('application/json')) {
       const json = await res.json();
       errorMessage = json?.errors?.map(e => e.message)?.join(', ');
     } else {
