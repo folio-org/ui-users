@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   FormattedMessage,
-  useIntl
+  useIntl,
 } from 'react-intl';
 
 import {
@@ -15,7 +15,7 @@ import { useCallout } from '@folio/stripes/core';
 
 import {
   useAssignedUsers,
-  useAssignedUsersMutation
+  useAssignedUsersMutation,
 } from './hooks';
 import AssignedUsersList from './AssignedUsersList';
 import { getUpdatedUsersList } from './utils';
@@ -28,7 +28,12 @@ const AssignedUsersContainer = ({ permissionsSet, expanded, onToggle, tenantId }
   const [grantedToIds, setGrantedToIds] = useState(grantedTo);
 
   const { users, isLoading, isFetching, refetch } = useAssignedUsers({ grantedToIds, permissionSetId, tenantId });
-  const { assignUsers, unassignUsers, isLoading: isMutationLoading } = useAssignedUsersMutation({ permissionSetId, tenantId, permissionName, setGrantedToIds });
+  const { assignUsers, unassignUsers, isLoading: isMutationLoading } = useAssignedUsersMutation({
+    permissionSetId,
+    tenantId,
+    permissionName,
+    setGrantedToIds,
+  });
 
   const handleMutationSuccess = () => {
     refetch();
@@ -78,7 +83,7 @@ const AssignedUsersContainer = ({ permissionsSet, expanded, onToggle, tenantId }
         isLoading ? <Loading /> : <Badge>{users.length}</Badge>
       }
     >
-      { isLoading ?
+      {isLoading ?
         <Loading />
         : (
           <AssignedUsersList

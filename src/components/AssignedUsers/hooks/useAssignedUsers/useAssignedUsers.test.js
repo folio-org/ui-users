@@ -55,7 +55,7 @@ describe('useAssignedUsers', () => {
       return {
         get: (path) => ({
           json: () => Promise.resolve(kyResponseMap[path]),
-        })
+        }),
       };
     }),
   }));
