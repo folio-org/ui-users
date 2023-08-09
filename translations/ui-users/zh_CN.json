@@ -1124,5 +1124,10 @@
     "reports.includesReminderFees": "包括提醒费",
     "permissions.assignedUsers": "已分配用户",
     "permissions.assignedUsers.name": "名称",
-    "permissions.assignedUsers.patronGroup": "读者组"
+    "permissions.assignedUsers.patronGroup": "读者组",
+    "permissions.assignUsers.actions.assign": "Assign/unassign",
+    "permissions.assignUsers.actions.assign.notAvailable": "Assign users is not available",
+    "permissions.assignUsers.actions.message.success": "Permissions set user assignment updated successfully",
+    "permissions.assignUsers.actions.message.error": "Permissions set user assignment change not successful. {error}",
+    "permissions.assignUsers.actions.message.permission.error": "You do not have required permissions."
 }
