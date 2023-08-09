@@ -11,8 +11,6 @@ import {
 
 import useAssignedUsersMutation from './useAssignedUsersMutation';
 
-
-
 jest.mock('@folio/stripes/core', () => ({
   ...jest.requireActual('@folio/stripes/core'),
   useNamespace: jest.fn(() => ['test']),

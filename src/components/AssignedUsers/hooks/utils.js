@@ -3,10 +3,10 @@ import {
   flatten,
 } from 'lodash';
 
-import { MAX_RECORDS } from '../../../constants';
 import {
   CHUNK_SIZE,
-  PERMISSIONS_API
+  MAX_RECORDS,
+  PERMISSIONS_API,
 } from '../constants';
 
 export const buildQueryByIds = (itemsChunk) => {
@@ -55,5 +55,6 @@ export const fetchUsersByUsersIds = async (ky, usersIds) => {
     usersIds,
     buildQueryByUserIds,
   );
+
   return permissionUsersResponse;
 };

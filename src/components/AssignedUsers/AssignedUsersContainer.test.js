@@ -2,7 +2,7 @@ import React from 'react';
 import {
   render,
   screen,
-  waitFor
+  waitFor,
 } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
@@ -10,12 +10,19 @@ import AssignedUsersContainer from './AssignedUsersContainer';
 import AssignedUsersList from './AssignedUsersList';
 import {
   useAssignedUsers,
-  useAssignedUsersMutation
+  useAssignedUsersMutation,
 } from './hooks';
 import { getUpdatedUsersList } from './utils';
 
 jest.unmock('@folio/stripes/components');
 jest.unmock('@folio/stripes/util');
+
+jest.mock('@folio/stripes/core', () => ({
+  ...jest.requireActual('@folio/stripes/core'),
+  useCallout: jest.fn(() => ({
+    sendCallout: jest.fn(),
+  })),
+}));
 
 jest.mock('@folio/stripes/components', () => ({
   ...jest.requireActual('@folio/stripes/components'),
@@ -115,6 +122,7 @@ describe('AssignedUsersContainer', () => {
     expect(screen.getByText(mockUsers.length)).toBeInTheDocument();
 
     const accordionButton = screen.getByText('ui-users.permissions.assignedUsers');
+
     userEvent.click(accordionButton);
 
     await waitFor(() => expect(screen.getByText('AssignedUsersList')).toBeInTheDocument());
@@ -161,7 +169,7 @@ describe('handle mutations', () => {
     const renderComponentWithAssignUsers = (containerProps = {}, assignUsersProps = {}) => render(
       <AssignedUsersContainer {...containerProps}>
         <AssignedUsersList {...assignUsersProps} />
-      </AssignedUsersContainer>
+      </AssignedUsersContainer>,
     );
 
     renderComponentWithAssignUsers(props, { users: mockUsers, assignUsers: mockAssignUsers });

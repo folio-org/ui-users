@@ -11,7 +11,7 @@ import {
 import {
   COLUMN_MAPPING,
   COLUMN_WIDTH,
-  VISIBLE_COLUMNS
+  VISIBLE_COLUMNS,
 } from './constants';
 import AssignMembers from './AssignUsers';
 

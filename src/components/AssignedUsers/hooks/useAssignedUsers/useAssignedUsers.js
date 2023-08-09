@@ -6,15 +6,15 @@ import {
   useStripes,
 } from '@folio/stripes/core';
 
-import { MAX_RECORDS } from '../../../../constants';
 import {
   GROUPS_API,
+  MAX_RECORDS,
   PERMISSIONS_API,
-  USERS_API
+  USERS_API,
 } from '../../constants';
 import {
   batchRequest,
-  buildQueryByIds
+  buildQueryByIds,
 } from '../utils';
 
 const useAssignedUsers = ({ grantedToIds = [], permissionSetId, tenantId }, options = {}) => {
@@ -24,8 +24,8 @@ const useAssignedUsers = ({ grantedToIds = [], permissionSetId, tenantId }, opti
   const ky = useOkapiKy();
   const api = ky.extend({
     hooks: {
-      beforeRequest: [(req) => req.headers.set('X-Okapi-Tenant', tenantId || defaultTenantId)]
-    }
+      beforeRequest: [(req) => req.headers.set('X-Okapi-Tenant', tenantId || defaultTenantId)],
+    },
   });
 
   const [namespace] = useNamespace({ key: 'get-assigned-users' });
@@ -66,6 +66,7 @@ const useAssignedUsers = ({ grantedToIds = [], permissionSetId, tenantId }, opti
 
       const patronGroupsById = patronGroups.reduce((acc, group) => {
         acc[group.id] = group.group;
+
         return acc;
       }, {});
 
