@@ -172,7 +172,7 @@ class UserEdit extends React.Component {
       })
       .then(() => {
         history.push(`/users/preview/${user.id}${search}`);
-      });
+      }).catch((e) => showErrorCallout(e, this.context.sendCallout));
   }
 
   formatCustomFieldsPayload(customFields) {

@@ -28,18 +28,35 @@ export function resourcesLoaded(obj, exceptions = []) {
  * @param {object} res HTTP response object from a rejected Promise
  * @param {function} sendCallout function reference, likely this.context.sendCallout
  */
-export function showErrorCallout(res, sendCallout) {
-  res.text()
-    .then(body => {
-      sendCallout({
-        type: 'error',
-        timeout: 0,
-        message: (
-          <div>
-            <div><strong><FormattedMessage id="ui-users.errors.permissionChangeFailed" /></strong></div>
-            <div>{body}</div>
-          </div>
-        )
-      });
+export async function showErrorCallout(res, sendCallout) {
+  const calloutOptions = { type: 'error', timeout: 0 };
+  try {
+    const contentType = res.headers.get('content-type');
+    let errorMessage = '';
+
+    if (contentType?.includes('application/json')) {
+      const json = await res.json();
+      errorMessage = json?.errors?.map(e => e.message)?.join(', ');
+    } else {
+      errorMessage = await res.text();
+    }
+
+    const isUserExists = errorMessage?.includes('username already exists');
+    const messageId = isUserExists ? 'ui-users.errors.usernameUnavailable' : 'ui-users.errors.permissionChangeFailed';
+
+    sendCallout({
+      ...calloutOptions,
+      message: (
+        <div>
+          <div><strong><FormattedMessage id={messageId} /></strong></div>
+          <div>{!isUserExists && errorMessage}</div>
+        </div>
+      )
     });
+  } catch (error) {
+    sendCallout({
+      ...calloutOptions,
+      message: <div><strong><FormattedMessage id="ui-users.errors.generic" /></strong></div>,
+    });
+  }
 }
