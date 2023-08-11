@@ -9,7 +9,7 @@ import {
   useStripes,
 } from '@folio/stripes/core';
 
-import useAssignedUsersMutation from './useAssignedUsersMutation';
+import usePermissionSet from './usePermissionSet';
 
 jest.mock('@folio/stripes/core', () => ({
   ...jest.requireActual('@folio/stripes/core'),
@@ -26,21 +26,19 @@ const wrapper = ({ children }) => (
   </QueryClientProvider>
 );
 
-const userRecords = [
-  {
-    id: '1',
-    userId: '1',
-    permissions: ['perm1', 'perm2'],
-  },
-];
+const mockPermissionSet = {
+  id: '1',
+  displayName: 'test',
+  grantedTo: ['1', '2'],
+};
 
-describe('useAssignedUsersMutation', () => {
+describe('usePermissionSet', () => {
   const tenantId = 'diku';
-  const permissionName = 'user.assign-permissions';
+  const permissionSetId = '1';
 
   const defaultProps = {
+    permissionSetId,
     tenantId,
-    permissionName,
   };
 
   const setHeaderMock = jest.fn();
@@ -49,9 +47,7 @@ describe('useAssignedUsersMutation', () => {
       beforeRequest.forEach(handler => handler({ headers: { set: setHeaderMock } }));
 
       return {
-        delete: jest.fn(() => 'ok'),
-        get: () => ({ json: () => Promise.resolve({ permissionUsers: userRecords }) }),
-        put: () => ({ json: () => Promise.all(['ok']) }),
+        get: () => ({ json: () => Promise.resolve(mockPermissionSet) }),
       };
     }),
   }));
@@ -62,17 +58,9 @@ describe('useAssignedUsersMutation', () => {
     useOkapiKy.mockImplementation(kyMock);
   });
 
-  it('should have assignUser, unassignUsers mutations', async () => {
-    const { result } = renderHook(() => useAssignedUsersMutation(defaultProps, {}), { wrapper });
+  it('should return permissionSet data', async () => {
+    const { result } = renderHook(() => usePermissionSet(defaultProps, {}), { wrapper });
 
-    expect(result.current).toHaveProperty('assignUsers');
-    expect(result.current).toHaveProperty('unassignUsers');
-  });
-
-  it('should call assignUser, unassignUsers mutations', async () => {
-    const { result } = renderHook(() => useAssignedUsersMutation({ ...defaultProps, tenantId: '' }, {}), { wrapper });
-
-    await result.current.assignUsers(['1', '2']);
-    await result.current.unassignUsers(['1']);
+    expect(result.current).toHaveProperty('grantedTo');
   });
 });

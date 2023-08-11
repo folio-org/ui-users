@@ -8,15 +8,15 @@ import {
 import { PERMISSIONS_API } from '../../constants';
 import { fetchUsersByUsersIds } from '../utils';
 
-const useAssignedUsersMutation = ({ tenantId, permissionName, setGrantedToIds }, options = {}) => {
+const useAssignedUsersMutation = ({ tenantId, permissionName }, options = {}) => {
   const stripes = useStripes();
   const defaultTenantId = stripes.okapi?.tenant;
 
   const ky = useOkapiKy();
   const api = ky.extend({
     hooks: {
-      beforeRequest: [(req) => req.headers.set('X-Okapi-Tenant', tenantId || defaultTenantId)]
-    }
+      beforeRequest: [(req) => req.headers.set('X-Okapi-Tenant', tenantId || defaultTenantId)],
+    },
   });
 
   const assignMutationFn = async (users = []) => {
@@ -29,19 +29,17 @@ const useAssignedUsersMutation = ({ tenantId, permissionName, setGrantedToIds },
       return api.put(`${PERMISSIONS_API}/${id}`, body);
     });
 
-    return Promise.all(query).then(() => {
-      setGrantedToIds(prevState => [...prevState, ...permissionUsersResponse.map(({ id }) => id)]);
-    });
+    return Promise.all(query);
   };
 
   const removeMutationFn = async (users = []) => {
     const userIds = users.map(({ id }) => id);
     const permissionUsersResponse = await fetchUsersByUsersIds(api, userIds);
-    const query = permissionUsersResponse.map(({ id }) => api.delete(`${PERMISSIONS_API}/${id}/permissions/${permissionName}`));
-
-    return Promise.all(query).then(() => {
-      setGrantedToIds(prevState => prevState.filter(permsId => !permissionUsersResponse.map(({ id }) => id).includes(permsId)));
+    const query = permissionUsersResponse.map(({ id }) => {
+      return api.delete(`${PERMISSIONS_API}/${id}/permissions/${permissionName}`);
     });
+
+    return Promise.all(query);
   };
 
   const {

@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   FormattedMessage,
@@ -11,28 +10,39 @@ import {
   Loading,
   Accordion,
 } from '@folio/stripes/components';
-import { useCallout } from '@folio/stripes/core';
+import {
+  IfPermission,
+  useCallout,
+} from '@folio/stripes/core';
 
 import {
   useAssignedUsers,
+  usePermissionSet,
   useAssignedUsersMutation,
 } from './hooks';
+import AssignUsers from './AssignUsers';
 import AssignedUsersList from './AssignedUsersList';
 import { getUpdatedUsersList } from './utils';
 
-const AssignedUsersContainer = ({ permissionsSet, expanded, onToggle, tenantId }) => {
+const AssignedUsersContainer = ({ permissionSetId, expanded, onToggle, tenantId }) => {
   const callout = useCallout();
   const intl = useIntl();
 
-  const { grantedTo, id: permissionSetId, permissionName } = permissionsSet;
-  const [grantedToIds, setGrantedToIds] = useState(grantedTo);
+  const { permissionSet, isLoading: isPermissionSetLoading, refetch } = usePermissionSet({
+    permissionSetId,
+    tenantId
+  });
+  const { grantedTo, permissionName } = permissionSet;
 
-  const { users, isLoading, isFetching, refetch } = useAssignedUsers({ grantedToIds, permissionSetId, tenantId });
+  const { users, isLoading, isFetching } = useAssignedUsers({
+    tenantId,
+    permissionSetId,
+    grantedToIds: grantedTo,
+  });
   const { assignUsers, unassignUsers, isLoading: isMutationLoading } = useAssignedUsersMutation({
     permissionSetId,
     tenantId,
     permissionName,
-    setGrantedToIds,
   });
 
   const handleMutationSuccess = () => {
@@ -73,6 +83,8 @@ const AssignedUsersContainer = ({ permissionsSet, expanded, onToggle, tenantId }
     }
   };
 
+  const isPermissionsLoading = isPermissionSetLoading || isLoading;
+
   return (
     <Accordion
       open={expanded}
@@ -80,15 +92,23 @@ const AssignedUsersContainer = ({ permissionsSet, expanded, onToggle, tenantId }
       onToggle={onToggle}
       label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.permissions.assignedUsers" /></Headline>}
       displayWhenClosed={
-        isLoading ? <Loading /> : <Badge>{users.length}</Badge>
+        isPermissionsLoading ? <Loading /> : <Badge>{users.length}</Badge>
+      }
+      displayWhenOpen={
+        <IfPermission perm="perms.users.item.post">
+          <AssignUsers
+            assignUsers={handleAssignUsers}
+            selectedUsers={users}
+            tenantId={tenantId}
+          />
+        </IfPermission>
       }
     >
-      {isLoading ?
+      {isPermissionsLoading ?
         <Loading />
         : (
           <AssignedUsersList
             isFetching={isFetching || isMutationLoading}
-            assignUsers={handleAssignUsers}
             users={users}
           />
         )}
@@ -99,17 +119,12 @@ const AssignedUsersContainer = ({ permissionsSet, expanded, onToggle, tenantId }
 AssignedUsersContainer.propTypes = {
   expanded: PropTypes.bool,
   onToggle: PropTypes.func.isRequired,
-  permissionsSet: PropTypes.shape({
-    grantedTo: PropTypes.arrayOf(PropTypes.string),
-    id: PropTypes.string,
-    permissionName: PropTypes.string,
-  }),
+  permissionSetId: PropTypes.string.isRequired,
   tenantId: PropTypes.string,
 };
 
 AssignedUsersContainer.defaultProps = {
   expanded: true,
-  permissionsSet: { grantedTo: [] },
 };
 
 export default AssignedUsersContainer;
