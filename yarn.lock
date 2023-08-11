@@ -1450,10 +1450,10 @@
     jest-location-mock "^1.0.9"
     jsdom "^21.1.0"
 
-"@folio/plugin-find-user@^6.0.0":
-  version "6.5.100000209"
-  resolved "https://repository.folio.org/repository/npm-folioci/@folio/plugin-find-user/-/plugin-find-user-6.5.100000209.tgz#5dcc1519633d51e60d13b17d425efd1a4358f900"
-  integrity sha512-j/0vm+W/OJKGLy0ULymGZsma2FOjLVhmTHvtnBicv7j2F0MzZmd+gwCPMu26dNZVOgzUBRW8ZaOsMt/jD8AHMw==
+"@folio/plugin-find-user@^7.0.0":
+  version "7.0.100000260"
+  resolved "https://repository.folio.org/repository/npm-folioci/@folio/plugin-find-user/-/plugin-find-user-7.0.100000260.tgz#2474131860350491f00c23f67fe50eca14bd7ea7"
+  integrity sha512-/Oc7F/mwej3UxSBRdiWjRdjntdyoDEwCzVF3gqYaa0CAg6pcR+VguwSuD+zL9uekaK/PgrPcb5bKP31OSd13mA==
   dependencies:
     classnames "^2.2.5"
     dom-helpers "^3.4.0"
