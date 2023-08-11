@@ -59,8 +59,10 @@ describe('usePermissionSet', () => {
   });
 
   it('should return permissionSet data', async () => {
-    const { result } = renderHook(() => usePermissionSet(defaultProps, {}), { wrapper });
+    const { result, waitFor } = renderHook(() => usePermissionSet(defaultProps, {}), { wrapper });
 
-    expect(result.current).toHaveProperty('grantedTo');
+    await waitFor(() => !result.current.isLoading);
+    expect(result.current.permissionSet).toHaveProperty('grantedTo');
+    expect(result.current.permissionSet.grantedTo).toEqual(mockPermissionSet.grantedTo);
   });
 });

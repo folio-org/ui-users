@@ -172,6 +172,15 @@ describe('handle mutations', () => {
     const mockAssignUsers = jest.fn();
     const mockRefetch = jest.fn();
 
+    usePermissionSet.mockClear().mockReturnValue({
+      permissionSet: {
+        id: '1',
+        name: 'permissionSetName',
+        grantedTo: ['1', '2'],
+      },
+      isLoading: false,
+      refetch: mockRefetch,
+    });
     useAssignedUsersMutation.mockClear().mockReturnValue({
       assignUsers: jest.fn(),
       unassignUsers: jest.fn(),
@@ -180,7 +189,6 @@ describe('handle mutations', () => {
     useAssignedUsers.mockReturnValue({
       users: mockUsers,
       isLoading: false,
-      refetch: mockRefetch,
     });
 
     getUpdatedUsersList.mockClear().mockReturnValue(input);
