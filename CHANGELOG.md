@@ -73,6 +73,7 @@
 * ECS - Check username uniqueness when editing. Refs UIU-2889.
 * Update Node.js to v18 in GitHub Actions. Refs. UIU-2927.
 * Add PULL_REQUEST_TEMPLATE.md file to the repository. Refs. UIU-2918.
+* Adjust `loans.staffInfoDialogBody` translation. Refs. UIU-2922.
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v9.0.0)

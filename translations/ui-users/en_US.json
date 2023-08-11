@@ -1079,7 +1079,7 @@
     "loans.newPatronInfo": "New patron info",
     "loans.newStaffInfo": "New staff info",
     "loans.patronInfoDialogBody": "Add new patron information for <strong>{title} ({materialType})</strong> (Barcode: {barcode}). This will supersede any patron information added previously.",
-    "loans.staffInfoDialogBody": "Add new staff information for <strong>{title} ({materialType})</strong> (Barcode: {barcode}). This will supersede any staff information added previously.",
+    "loans.staffInfoDialogBody": "Add new staff information for <strong>{title} ({materialType})</strong> (Barcode: {barcode}).",
     "loans.addInfo.patron": "Add new patron information",
     "loans.addInfo.staff": "Add new staff information",
     "permission.loans.add-patron-info": "Users: User loans: add patron information",
