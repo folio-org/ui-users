@@ -72,8 +72,8 @@ describe('useAssignedUsers', () => {
       permissionSetId: mockTenantId,
       tenantId: mockTenantId,
     }), { wrapper });
-    console.log(result.current);
-    await waitFor(() => !result.current.isLoading, { timeout: 5000 });
+
+    await waitFor(() => !result.current.isLoading);
     expect(result.current.users).toHaveLength(0);
   });
 
