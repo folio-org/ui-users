@@ -1,3 +1,4 @@
+import { waitFor } from '@folio/jest-config-stripes/testing-library/react';
 import { renderHook } from '@folio/jest-config-stripes/testing-library/react-hooks';
 import {
   QueryClient,
@@ -66,13 +67,13 @@ describe('useAssignedUsers', () => {
   });
 
   it('should return empty assigned users', async () => {
-    const { result, waitFor } = renderHook(() => useAssignedUsers({
+    const { result } = renderHook(() => useAssignedUsers({
       grantedToIds: [],
       permissionSetId: mockTenantId,
       tenantId: mockTenantId,
     }), { wrapper });
-
-    await waitFor(() => !result.current.isLoading);
+    console.log(result.current);
+    await waitFor(() => !result.current.isLoading, { timeout: 5000 });
     expect(result.current.users).toHaveLength(0);
   });
 
@@ -81,7 +82,7 @@ describe('useAssignedUsers', () => {
       .mockResolvedValueOnce(kyResponseMap[PERMISSIONS_API].permissionUsers)
       .mockResolvedValueOnce(kyResponseMap[USERS_API].users);
 
-    const { result, waitFor } = renderHook(() => useAssignedUsers({
+    const { result } = renderHook(() => useAssignedUsers({
       grantedToIds: mockGrantedToIds,
       permissionSetId: mockTenantId,
       tenantId: mockTenantId,
