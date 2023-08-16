@@ -77,7 +77,7 @@ describe('BulkRenewedLoansList', () => {
   });
   test('onCancel Click', async () => {
     renderBulkRenewalDialog();
-    userEvent.click(screen.getByText('stripes-core.button.close'));
+    await userEvent.click(screen.getByText('stripes-core.button.close'));
     expect(onCloseMock).toHaveBeenCalled();
   });
   test('successRenewals', async () => {

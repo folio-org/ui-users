@@ -1,4 +1,4 @@
-import { act, renderHook } from '@folio/jest-config-stripes/testing-library/react-hooks';
+import { act, renderHook } from '@folio/jest-config-stripes/testing-library/react';
 
 import affiliations from 'fixtures/affiliations';
 import useAffiliationsAssignment from './useAffiliationsAssignment';

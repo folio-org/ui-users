@@ -68,8 +68,8 @@ describe('PasswordControl component', () => {
       expect(screen.getByText('ui-users.extended.folioPassword')).toBeInTheDocument();
     });
 
-    it('Checking togglePassword functionality', () => {
-      userEvent.click(screen.getByText('ui-users.show'));
+    it('Checking togglePassword functionality', async () => {
+      await userEvent.click(screen.getByText('ui-users.show'));
 
       expect(screen.getByText('ui-users.hide')).toBeInTheDocument();
     });

@@ -71,9 +71,9 @@ describe('Render Edit contact Information component', () => {
     renderEditContactInfo(props);
     expect(screen.getByText('AddressEditList')).toBeInTheDocument();
   });
-  it('Must be rendered', () => {
+  it('Must be rendered', async () => {
     renderEditContactInfo(props);
-    userEvent.type(document.querySelector('[id="adduser_email"]'), 'Test@gmail.com');
+    await userEvent.type(document.querySelector('[id="adduser_email"]'), 'Test@gmail.com');
     expect(document.querySelector('[id="adduser_email"]').value).toBe('Test@gmail.com');
   });
 });

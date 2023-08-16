@@ -161,36 +161,36 @@ describe('ViewFeesFines', () => {
     expect(screen.getByText('ui-users.accounts.history.columns.title')).toBeInTheDocument();
     expect(screen.getByText('ui-users.accounts.history.columns.due')).toBeInTheDocument();
   });
-  it('onChangeActions to be called checkBox checked', () => {
+  it('onChangeActions to be called checkBox checked', async () => {
     renderViewFeesFines(defaultProps);
     const checkBox = screen.getAllByRole('checkbox', { name: '' });
-    userEvent.click(checkBox[0]);
+    await userEvent.click(checkBox[0]);
     expect(mockOnChangeActions).toHaveBeenCalledTimes(1);
-    userEvent.click(checkBox[1]);
+    await userEvent.click(checkBox[1]);
     expect(mockOnChangeActions).toHaveBeenCalledTimes(2);
   });
-  it('OnChangeActions to be called with different parmeter when DropDownMenu Buttons are clicked', () => {
+  it('OnChangeActions to be called with different parmeter when DropDownMenu Buttons are clicked', async () => {
     renderViewFeesFines(defaultProps);
     const checkBox = screen.getAllByRole('checkbox', { name: '' });
     userEvent.click(checkBox[1]);
-    userEvent.click(screen.queryByText(/ui-users.accounts.history.button.pay/i));
+    await userEvent.click(screen.queryByText(/ui-users.accounts.history.button.pay/i));
     expect(mockOnChangeActions).toHaveBeenCalledWith({ pay: true }, accountsData);
-    userEvent.click(screen.queryByText(/ui-users.accounts.history.button.waive/i));
+    await userEvent.click(screen.queryByText(/ui-users.accounts.history.button.waive/i));
     expect(mockOnChangeActions).toHaveBeenCalledWith({ waiveModal: true }, accountsData);
-    userEvent.click(screen.queryByText(/ui-users.accounts.history.button.refund/i));
+    await userEvent.click(screen.queryByText(/ui-users.accounts.history.button.refund/i));
     expect(mockOnChangeActions).toHaveBeenCalledWith({ refundModal: true }, accountsData);
-    userEvent.click(screen.queryByText(/ui-users.accounts.history.button.transfer/i));
+    await userEvent.click(screen.queryByText(/ui-users.accounts.history.button.transfer/i));
     expect(mockOnChangeActions).toHaveBeenCalledWith({ transferModal: true }, accountsData);
-    userEvent.click(screen.queryByText(/ui-users.accounts.button.error/i));
+    await userEvent.click(screen.queryByText(/ui-users.accounts.button.error/i));
     expect(mockOnChangeActions).toHaveBeenCalledWith({ cancellation: true }, accountsData);
-    userEvent.click(screen.queryByText(/ui-users.accounts.history.button.loanDetails/i));
+    await userEvent.click(screen.queryByText(/ui-users.accounts.history.button.loanDetails/i));
     expect(nav.onClickViewLoanActionsHistory).toBeCalled();
   });
-  it('onClickViewLoanActionsHistory to be called when loanDetails clicked from DropDownMenu', () => {
+  it('onClickViewLoanActionsHistory to be called when loanDetails clicked from DropDownMenu', async () => {
     renderViewFeesFines(defaultProps);
     const checkBox = screen.getAllByRole('checkbox', { name: '' });
     userEvent.click(checkBox[1]);
-    userEvent.click(screen.queryByText(/ui-users.accounts.history.button.loanDetails/i));
+    await userEvent.click(screen.queryByText(/ui-users.accounts.history.button.loanDetails/i));
     expect(nav.onClickViewLoanActionsHistory).toBeCalled();
   });
   it('Rows should render in Descending Order of created date value and on clicking createdDate header sort order to be reversed', async () => {
@@ -205,27 +205,27 @@ describe('ViewFeesFines', () => {
       expect(within(rows[2]).getByText('2024-01-06T04:52:19.214+00:00')).toBeInTheDocument();
     });
   });
-  it('calculateSortParams should be called on clicking column headers', () => {
+  it('calculateSortParams should be called on clicking column headers', async () => {
     renderViewFeesFines({ ...defaultProps, accounts : accountsDataProps });
-    userEvent.click(screen.getByRole('button', { name: 'ui-users.accounts.history.columns.updated' }));
+    await userEvent.click(screen.getByRole('button', { name: 'ui-users.accounts.history.columns.updated' }));
     expect(spyFn).toBeCalledTimes(1);
-    userEvent.click(screen.getByRole('button', { name: 'ui-users.accounts.history.columns.type' }));
+    await userEvent.click(screen.getByRole('button', { name: 'ui-users.accounts.history.columns.type' }));
     expect(spyFn).toBeCalledTimes(2);
-    userEvent.click(screen.getByRole('button', { name: 'ui-users.accounts.history.columns.amount' }));
+    await userEvent.click(screen.getByRole('button', { name: 'ui-users.accounts.history.columns.amount' }));
     expect(spyFn).toBeCalledTimes(3);
-    userEvent.click(screen.getByRole('button', { name: 'ui-users.accounts.history.columns.remaining' }));
+    await userEvent.click(screen.getByRole('button', { name: 'ui-users.accounts.history.columns.remaining' }));
     expect(spyFn).toBeCalledTimes(4);
-    userEvent.click(screen.getByRole('button', { name: 'ui-users.accounts.history.columns.status' }));
+    await userEvent.click(screen.getByRole('button', { name: 'ui-users.accounts.history.columns.status' }));
     expect(spyFn).toBeCalledTimes(5);
-    userEvent.click(screen.getByRole('button', { name: 'ui-users.accounts.history.columns.owner' }));
+    await userEvent.click(screen.getByRole('button', { name: 'ui-users.accounts.history.columns.owner' }));
     expect(spyFn).toBeCalledTimes(6);
-    userEvent.click(screen.getByRole('button', { name: 'ui-users.accounts.history.columns.title' }));
+    await userEvent.click(screen.getByRole('button', { name: 'ui-users.accounts.history.columns.title' }));
     expect(spyFn).toBeCalledTimes(7);
-    userEvent.click(screen.getByRole('button', { name: 'ui-users.accounts.history.columns.barcode' }));
+    await userEvent.click(screen.getByRole('button', { name: 'ui-users.accounts.history.columns.barcode' }));
     expect(spyFn).toBeCalledTimes(8);
-    userEvent.click(screen.getByRole('button', { name: 'ui-users.accounts.history.columns.due' }));
+    await userEvent.click(screen.getByRole('button', { name: 'ui-users.accounts.history.columns.due' }));
     expect(spyFn).toBeCalledTimes(9);
-    userEvent.click(screen.getByRole('button', { name: 'ui-users.accounts.history.columns.returned' }));
+    await userEvent.click(screen.getByRole('button', { name: 'ui-users.accounts.history.columns.returned' }));
     expect(spyFn).toBeCalledTimes(10);
   });
 });

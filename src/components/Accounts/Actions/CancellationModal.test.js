@@ -105,16 +105,16 @@ describe('CancellationModal component', () => {
   it('Check if modal Renders', () => {
     expect(screen.getByText('ui-users.accounts.cancellation.field.confirmcancelled')).toBeInTheDocument();
   });
-  it('Onclose modal check', () => {
-    userEvent.click(document.querySelector('[id="error-modal-close-button"]'));
+  it('Onclose modal check', async () => {
+    await userEvent.click(document.querySelector('[id="error-modal-close-button"]'));
     expect(onCloseMock).toHaveBeenCalled();
   });
-  it('Comment check', () => {
-    userEvent.type(document.querySelector('[name="comment"]'), 'TestComment');
+  it('Comment check', async () => {
+    await userEvent.type(document.querySelector('[name="comment"]'), 'TestComment');
     expect(screen.getByText('TestComment')).toBeInTheDocument();
   });
-  it('Notify Patron check', () => {
-    userEvent.click(document.querySelector('[name="notify"]'));
+  it('Notify Patron check', async () => {
+    await userEvent.click(document.querySelector('[name="notify"]'));
     expect(screen.getByText('ui-users.accounts.field.infoPatron')).toBeInTheDocument();
   });
   it('Empty accounts data check', () => {

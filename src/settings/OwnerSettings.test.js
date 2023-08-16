@@ -166,10 +166,10 @@ describe('Owner settings', () => {
     expect(screen.getByText('ui-users.owners.columns.asp')).toBeTruthy();
   });
 
-  it('Delete functionality in component', () => {
+  it('Delete functionality in component', async () => {
     renderOwnerSettings(propData);
-    userEvent.click(document.querySelector('[id="clickable-delete-settings-owners-1"]'));
-    userEvent.click(document.querySelector('[id="clickable-delete-controlled-vocab-entry-confirmation-cancel"]'));
+    await userEvent.click(document.querySelector('[id="clickable-delete-settings-owners-1"]'));
+    await userEvent.click(document.querySelector('[id="clickable-delete-controlled-vocab-entry-confirmation-cancel"]'));
     expect(document.querySelector('[data-test-confirmation-modal-message="true"]')).toBeTruthy();
   });
 

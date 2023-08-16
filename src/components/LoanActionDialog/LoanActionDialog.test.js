@@ -47,14 +47,15 @@ describe('Render LoanActionDialog component', () => {
     renderLoanActionDialog(props());
     expect(screen.getByText('Test Modal Label')).toBeInTheDocument();
   });
-  it('Check if handle Error is called', () => {
+  it('Check if handle Error is called', async () => {
     renderLoanActionDialog(props());
-    userEvent.click(screen.getByText('handleError'));
+    await userEvent.click(screen.getByText('handleError'));
     expect(screen.getByText('ui-users.feefines.errors.notBilledTitle')).toBeInTheDocument();
   });
-  it('Check if Close error clears the error', () => {
+  it('Check if Close error clears the error', async () => {
     renderLoanActionDialog(props());
-    userEvent.click(screen.getByText('handleError'));
-    userEvent.click(screen.getByText('ui-users.blocks.closeButton'));
+    await userEvent.click(screen.getByText('handleError'));
+    await userEvent.click(screen.getByText('ui-users.blocks.closeButton'));
+    expect(screen.queryByText('ui-users.feefines.errors.notBilledTitle')).toBeNull();
   });
 });

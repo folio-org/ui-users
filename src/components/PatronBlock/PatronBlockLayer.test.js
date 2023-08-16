@@ -198,12 +198,12 @@ describe('Patron Block layer', () => {
     it('should render the component', () => {
       expect(screen.getByText('Patron Block Form')).toBeInTheDocument();
     });
-    it('on Cancel click', () => {
-      userEvent.click(screen.getByTestId('cancel'));
+    it('on Cancel click', async () => {
+      await userEvent.click(screen.getByTestId('cancel'));
       expect(historyMock).toHaveBeenCalled();
     });
-    it('on Submit click', () => {
-      userEvent.click(screen.getByTestId('submit'));
+    it('on Submit click', async () => {
+      await userEvent.click(screen.getByTestId('submit'));
       expect(updateMock).toHaveBeenCalled();
     });
     it('on Delete click', () => {
@@ -214,8 +214,8 @@ describe('Patron Block layer', () => {
       userEvent.click(screen.getByTestId('delete'));
       userEvent.click(document.querySelector('[id="clickable-patron-block-confirmation-modal-confirm"]'));
     });
-    it('on Submit click without patronblock id', () => {
-      userEvent.click(screen.getByTestId('submit'));
+    it('on Submit click without patronblock id', async () => {
+      await userEvent.click(screen.getByTestId('submit'));
       expect(updateMock).toHaveBeenCalled();
     });
   });

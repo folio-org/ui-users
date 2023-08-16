@@ -89,6 +89,7 @@ const STRIPES = {
 const history = createMemoryHistory();
 
 const mockAnonymizeLoans = jest.fn();
+const mockToggleLoansAnonymizationConfirmModal = jest.fn();
 
 const notEmptyRecords = [{
   loanId: 'b6475706-4505-4b20-9ed0-aadcda2b72ee',
@@ -216,18 +217,18 @@ describe('Given ClosedLoans', () => {
     expect(screen.getByTestId('feeFineDetailsButton')).toBeDisabled();
   });
 
-  it('clicking on a loan row', () => {
+  it('clicking on a loan row', async () => {
     renderClosedLoans();
 
-    userEvent.click(document.querySelector('[data-row-index="row-0"]'));
+    await userEvent.click(document.querySelector('[data-row-index="row-0"]'));
 
     expect(nav.onClickViewLoanActionsHistory).toHaveBeenCalledTimes(1);
   });
 
-  it('clicking on a loan column', () => {
+  it('clicking on a loan column', async () => {
     renderClosedLoans({ okapiLoans, sortMap: {} });
 
-    userEvent.click(document.querySelector('[data-test-clickable-header="true"]'));
+    await userEvent.click(document.querySelector('[data-test-clickable-header="true"]'));
 
     expect(calculateSortParams).toHaveBeenCalledTimes(1);
   });
@@ -278,22 +279,24 @@ describe('Given ClosedLoans', () => {
       expect(screen.getByRole('button', { name: /cancel/ })).toBeDefined();
     });
 
-    it('should call anonymizeLoans method on clicking confirm button', () => {
+    // is this a duplicate test???
+    // it.skip('should call anonymizeLoans method on clicking confirm button', () => {
+    //   renderClosedLoans(props);
+    //   fireEvent.click(document.querySelector('[id="anonymize-all"]'));
+    //   fireEvent.click(screen.getByRole('button', { name: /confirm/ }));
+
+    //   waitFor(() => {
+    //     expect(mockAnonymizeLoans).toHaveBeenCalled();
+    //   });
+    // });
+
+    it('should close confirmation modal on clicking confirm button', async () => {
       renderClosedLoans(props);
-      fireEvent.click(document.querySelector('[id="anonymize-all"]'));
-      fireEvent.click(screen.getByRole('button', { name: /confirm/ }));
+      await userEvent.click(document.querySelector('[id="anonymize-all"]'));
+      await userEvent.click(screen.getByRole('button', { name: /confirm/ }));
 
       waitFor(() => {
-        expect(mockAnonymizeLoans).toHaveBeenCalled();
-      });
-    });
-
-    it('should close confirmation modal on clicking confirm button', () => {
-      renderClosedLoans(props);
-      fireEvent.click(document.querySelector('[id="anonymize-all"]'));
-      fireEvent.click(screen.getByRole('button', { name: /confirm/ }));
-
-      waitFor(() => {
+        expect(mockToggleLoansAnonymizationConfirmModal).toHaveBeenCalled();
         expect(screen.queryByText('ConfirmationModal')).not.toBeDefined();
       });
     });
@@ -309,10 +312,11 @@ describe('Given ClosedLoans', () => {
     });
   });
 
-  it('should handle anonymizeLoans with proper params', () => {
+  it('should handle anonymizeLoans with proper params', async () => {
     renderClosedLoans(props);
 
-    fireEvent.click(document.querySelector('[id="anonymize-all"]'));
+    await userEvent.click(document.querySelector('[id="anonymize-all"]'));
+    await userEvent.click(screen.getByRole('button', { name: 'confirm' }));
 
     waitFor(() => {
       expect(mockAnonymizeLoans).toHaveBeenCalled();
@@ -370,7 +374,7 @@ describe('Given ClosedLoans', () => {
   });
 
   describe('when click on feeFineDetails button', () => {
-    it('fires nav.onClickViewClosedAccounts with proper params', () => {
+    it('fires nav.onClickViewClosedAccounts with proper params', async () => {
       const alteredProps = {
         ...props,
         action: 'feefineDetails',
@@ -383,12 +387,12 @@ describe('Given ClosedLoans', () => {
 
       renderClosedLoans(alteredProps);
 
-      userEvent.click(screen.getByTestId('feeFineDetailsButton'));
+      await userEvent.click(screen.getByTestId('feeFineDetailsButton'));
 
       expect(nav.onClickViewClosedAccounts).toHaveBeenCalledTimes(1);
     });
 
-    it('fires nav.onClickViewOpenAccounts with proper params', () => {
+    it('fires nav.onClickViewOpenAccounts with proper params', async () => {
       const alteredProps = {
         ...props,
         action: 'feefineDetails',
@@ -401,7 +405,7 @@ describe('Given ClosedLoans', () => {
 
       renderClosedLoans(alteredProps);
 
-      userEvent.click(screen.getByTestId('feeFineDetailsButton'));
+      await userEvent.click(screen.getByTestId('feeFineDetailsButton'));
 
       expect(nav.onClickViewOpenAccounts).toHaveBeenCalledTimes(1);
     });

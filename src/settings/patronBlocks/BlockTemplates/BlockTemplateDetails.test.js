@@ -51,9 +51,9 @@ describe('BlockTemplateDetails', () => {
     expect(screen.getByText('code')).toBeInTheDocument();
   });
 
-  it('toggle template accordion', () => {
+  it('toggle template accordion', async () => {
     renderBlockTemplateDetails(propsBlocked);
-    userEvent.click(document.querySelector('[id="accordion-toggle-button-templateInformation"]'));
+    await userEvent.click(document.querySelector('[id="accordion-toggle-button-templateInformation"]'));
 
     // template accordion is closed; with 'expanded' has length 0
     const tcontainer = document.querySelector('[id=templateInformation]');

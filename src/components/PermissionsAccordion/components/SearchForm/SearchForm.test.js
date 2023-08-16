@@ -111,13 +111,13 @@ describe('Search Form Component', () => {
   it('Check if component  renders', () => {
     expect(screen.getByText('permissionsss')).toBeInTheDocument();
   });
-  it('Check if search works', () => {
-    userEvent.type(document.querySelector('[data-test-search-field="true"]'), 'permissions');
-    userEvent.click(document.querySelector('[data-test-submit-button="true"]'));
+  it('Check if search works', async () => {
+    await userEvent.type(document.querySelector('[data-test-search-field="true"]'), 'permissions');
+    await userEvent.click(document.querySelector('[data-test-submit-button="true"]'));
     expect(mockFunc).toHaveBeenCalled();
   });
-  it('Check if reset all works', () => {
-    userEvent.click(document.querySelector('[data-test-reset-all-button="true"]'));
+  it('Check if reset all works', async () => {
+    await userEvent.click(document.querySelector('[data-test-reset-all-button="true"]'));
     expect(mockFunc).toHaveBeenCalled();
   });
 });

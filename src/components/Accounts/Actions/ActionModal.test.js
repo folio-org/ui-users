@@ -162,12 +162,12 @@ describe('ActionModal component', () => {
       await waitFor(() => renderActionModal(propData(accountsDataSingle, 'payment', data)));
       await act(async () => userEvent.clear(document.querySelector('[id="amount"]')));
       await act(async () => userEvent.type(document.querySelector('[id="amount"]'), '2.00'));
-      userEvent.click(screen.getByText('ui-users.cancel'));
+      await userEvent.click(screen.getByText('ui-users.cancel'));
       await waitFor(() => expect(screen.getByText('ui-users.accounts.payment.field.transactionInfo')).toBeTruthy());
     });
     it('transfer', async () => {
       await waitFor(() => renderActionModal(propData(accountsData, 'transfer')));
-      userEvent.selectOptions(document.querySelector('[id="ownerId"]'), screen.getByText('test1'));
+      await userEvent.selectOptions(document.querySelector('[id="ownerId"]'), screen.getByText('test1'));
       expect(screen.getByText('ui-users.accounts.payment.field.ownerDesk*')).toBeTruthy();
     });
     it('multiple payments', async () => {

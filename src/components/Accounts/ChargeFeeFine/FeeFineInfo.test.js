@@ -56,19 +56,19 @@ describe('FeeFineInfo', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
-  it('should call onChangeOwner when owner value is changed', () => {
+  it('should call onChangeOwner when owner value is changed', async () => {
     const ownerSelect = screen.getByLabelText(/ui-users.charge.owner.label/i);
-    userEvent.selectOptions(ownerSelect, '2');
+    await userEvent.selectOptions(ownerSelect, '2');
     expect(onChangeOwnerMock).toHaveBeenCalledWith('2');
   });
-  it('should call onChangeFeeFine when fee/fine value is changed', () => {
+  it('should call onChangeFeeFine when fee/fine value is changed', async () => {
     const feeFineSelect = screen.getByLabelText(/ui-users.charge.feefine.label/i);
-    userEvent.selectOptions(feeFineSelect, '2');
+    await userEvent.selectOptions(feeFineSelect, '2');
     expect(onChangeFeeFineMock).toHaveBeenCalledTimes(1);
   });
-  it('should update amount value on blur', () => {
+  it('should update amount value on blur', async () => {
     const amountInput = screen.getByLabelText(/ui-users.charge.amount.label/i);
-    userEvent.type(amountInput, '10');
+    await userEvent.type(amountInput, '10');
     userEvent.tab();
     expect(amountInput).toHaveValue(10);
   });

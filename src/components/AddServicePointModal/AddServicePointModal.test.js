@@ -55,18 +55,18 @@ describe('AddServicePointModal Component', () => {
       expect(screen.getByText('Circ Desk 2')).toBeInTheDocument();
       expect(screen.getByText('Circ Desk 1')).toBeInTheDocument();
     });
-    it('Checking Save and Cancel Operation', () => {
-      userEvent.click(screen.getByText('ui-users.saveAndClose'));
+    it('Checking Save and Cancel Operation', async () => {
+      await userEvent.click(screen.getByText('ui-users.saveAndClose'));
       expect(onSaveMock).toHaveBeenCalled();
-      userEvent.click(screen.getByText('stripes-core.button.cancel'));
+      await userEvent.click(screen.getByText('stripes-core.button.cancel'));
       expect(onCancelMock).toHaveBeenCalled();
     });
-    it('Checking single service point toggle', () => {
-      userEvent.click(document.querySelector('[data-test-sp-modal-checkbox="3a40852d-49fd-4df2-a1f9-6e2641a6e91f"]'));
+    it('Checking single service point toggle', async () => {
+      await userEvent.click(document.querySelector('[data-test-sp-modal-checkbox="3a40852d-49fd-4df2-a1f9-6e2641a6e91f"]'));
       expect(document.querySelector('[data-test-sp-modal-checkbox="3a40852d-49fd-4df2-a1f9-6e2641a6e91f"]')).toBeChecked();
     });
-    it('Checking if all service points are selected', () => {
-      userEvent.click(document.querySelector('[data-test-sp-modal-checkbox="select-all"]'));
+    it('Checking if all service points are selected', async () => {
+      await userEvent.click(document.querySelector('[data-test-sp-modal-checkbox="select-all"]'));
       expect(document.querySelector('[data-test-sp-modal-checkbox="3a40852d-49fd-4df2-a1f9-6e2641a6e91f"]')).toBeChecked();
       expect(document.querySelector('[data-test-sp-modal-checkbox="c4c90014-c8c9-4ade-8f24-b5e313319f4b"]')).toBeChecked();
     });

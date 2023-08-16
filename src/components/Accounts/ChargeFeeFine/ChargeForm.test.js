@@ -150,14 +150,14 @@ describe('ChargeForm component', () => {
 
   it('Onchange owner', async () => {
     renderChargeForm(propData);
-    userEvent.selectOptions(document.querySelector('[name="ownerId"]'), screen.getByText('test'));
+    await userEvent.selectOptions(document.querySelector('[name="ownerId"]'), screen.getByText('test'));
     expect(onChangeOwnerMock).toHaveBeenCalled();
   });
 
-  it('If there is a defaultChargeNoticeId', () => {
+  it('If there is a defaultChargeNoticeId', async () => {
     /* The notify patron block must be enable */
     renderChargeForm(propData);
-    userEvent.click(document.querySelector('[name="notify"]'));
+    await userEvent.click(document.querySelector('[name="notify"]'));
     expect(screen.getByText('ui-users.accounts.notifyPatron')).toBeInTheDocument();
   });
 

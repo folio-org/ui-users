@@ -146,28 +146,28 @@ describe('OpenLoansWithStatic Data component', () => {
     expect(screen.getByText('stripes-smart-components.cddd.changeDueDate')).toBeInTheDocument();
     expect(screen.getByText('stripes-components.exportToCsv')).toBeInTheDocument();
   });
-  it('Bulk Claim modal must be rendered', () => {
+  it('Bulk Claim modal must be rendered', async () => {
     renderOpenLoansWithStaticData(props);
-    userEvent.click(screen.getByText('ui-users.loans.claimReturned'));
-    userEvent.click(screen.getByText('ui-users.cancel'));
+    await userEvent.click(screen.getByText('ui-users.loans.claimReturned'));
+    await userEvent.click(screen.getByText('ui-users.cancel'));
     expect(screen.getByText('ui-users.bulkClaimReturned.summary')).toBeInTheDocument();
     expect(screen.getByText('testPolicy')).toBeInTheDocument();
     expect(screen.getByText('453987605438')).toBeInTheDocument();
   });
-  it('Change Due Date modal must be rendered', () => {
+  it('Change Due Date modal must be rendered', async () => {
     renderOpenLoansWithStaticData(props);
-    userEvent.click(screen.getByText('stripes-smart-components.cddd.changeDueDate'));
+    await userEvent.click(screen.getByText('stripes-smart-components.cddd.changeDueDate'));
     expect(showChangeDueDateDialogMock).toHaveBeenCalled();
   });
-  it('To Csv must be rendered', () => {
+  it('To Csv must be rendered', async () => {
     renderOpenLoansWithStaticData(props);
-    userEvent.click(screen.getByText('stripes-components.exportToCsv'));
+    await userEvent.click(screen.getByText('stripes-components.exportToCsv'));
     expect(toCsvMock).toHaveBeenCalled();
   });
-  it('Column visibility filter check', () => {
+  it('Column visibility filter check', async () => {
     renderOpenLoansWithStaticData(props);
-    userEvent.click(document.querySelector('[id="columnsDropdown"]'));
-    userEvent.click(document.querySelector('[id="ui-users.loans.columns.contributors"]'));
+    await userEvent.click(document.querySelector('[id="columnsDropdown"]'));
+    await userEvent.click(document.querySelector('[id="ui-users.loans.columns.contributors"]'));
     expect(mockToggleColumn).toHaveBeenCalled();
   });
 

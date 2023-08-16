@@ -1,4 +1,4 @@
-import { renderHook } from '@folio/jest-config-stripes/testing-library/react-hooks';
+import { renderHook, waitFor } from '@folio/jest-config-stripes/testing-library/react';
 import {
   QueryClient,
   QueryClientProvider,
@@ -70,7 +70,7 @@ describe('useConsortiumTenants', () => {
   });
 
   it('should fetch consortium tenants', async () => {
-    const { result, waitFor } = renderHook(() => useConsortiumTenants(), { wrapper });
+    const { result } = renderHook(() => useConsortiumTenants(), { wrapper });
 
     await waitFor(() => !result.current.isLoading);
 

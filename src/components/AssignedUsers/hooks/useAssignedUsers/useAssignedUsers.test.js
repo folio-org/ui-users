@@ -1,4 +1,4 @@
-import { renderHook } from '@folio/jest-config-stripes/testing-library/react-hooks';
+import { renderHook, waitFor } from '@folio/jest-config-stripes/testing-library/react';
 import {
   QueryClient,
   QueryClientProvider,
@@ -66,7 +66,7 @@ describe('useAssignedUsers', () => {
   });
 
   it('should return empty assigned users', async () => {
-    const { result, waitFor } = renderHook(() => useAssignedUsers({
+    const { result } = renderHook(() => useAssignedUsers({
       grantedToIds: [],
       permissionSetId: mockTenantId,
       tenantId: mockTenantId,
@@ -81,7 +81,7 @@ describe('useAssignedUsers', () => {
       .mockResolvedValueOnce(kyResponseMap[PERMISSIONS_API].permissionUsers)
       .mockResolvedValueOnce(kyResponseMap[USERS_API].users);
 
-    const { result, waitFor } = renderHook(() => useAssignedUsers({
+    const { result } = renderHook(() => useAssignedUsers({
       grantedToIds: mockGrantedToIds,
       permissionSetId: mockTenantId,
       tenantId: mockTenantId,

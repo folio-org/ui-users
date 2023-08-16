@@ -73,7 +73,7 @@ describe('BulkOverrideDialog', () => {
   });
   test('onCancel Click', async () => {
     renderBulkOverrideDialog();
-    userEvent.click(screen.getByText('ui-users.cancel'));
+    await userEvent.click(screen.getByText('ui-users.cancel'));
     expect(onCloseMock).toHaveBeenCalled();
   });
   test('failed renewals override', async () => {

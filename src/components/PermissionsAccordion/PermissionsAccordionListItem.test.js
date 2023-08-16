@@ -62,7 +62,7 @@ describe('PermissionsAccordionListItem', () => {
       };
 
       render(<PermissionsAccordionListItem {...palProps} />);
-      userEvent.click(screen.getByRole('button'));
+      await userEvent.click(screen.getByRole('button'));
 
       expect(palProps.changePermissions).toHaveBeenCalledWith([item]);
     });

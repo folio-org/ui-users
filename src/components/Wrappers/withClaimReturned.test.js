@@ -85,16 +85,16 @@ describe('withClaimReturned', () => {
     userEvent.click(screen.getByTestId('enable'));
     expect(screen.getByText('Claim Returned Component')).toBeInTheDocument();
   });
-  test('Test Declare Lost button functionality', () => {
+  test('Test Declare Lost button functionality', async () => {
     renderWithClaimReturned(props);
-    userEvent.click(screen.getByTestId('enable'));
-    userEvent.click(screen.getByTestId('validate-dialog'));
+    await userEvent.click(screen.getByTestId('enable'));
+    await userEvent.click(screen.getByTestId('validate-dialog'));
     expect(screen.getByText('Validate')).toBeInTheDocument();
   });
-  test('Test Declare Lost button functionality', () => {
+  test('Test Declare Lost button functionality', async () => {
     renderWithClaimReturned(props);
-    userEvent.click(screen.getByTestId('enable'));
-    userEvent.click(screen.getByTestId('close-dialog'));
+    await userEvent.click(screen.getByTestId('enable'));
+    await userEvent.click(screen.getByTestId('close-dialog'));
     expect(screen.queryByTestId('close-dialog')).not.toBeInTheDocument();
   });
 });

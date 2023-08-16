@@ -203,10 +203,10 @@ describe('PermissionsAccordion', () => {
           });
 
           const unassignAllButton = await screen.findByRole('button', { name: 'ui-users.permissions.unassignAllPermissions' });
-          userEvent.click(unassignAllButton);
+          await userEvent.click(unassignAllButton);
 
           const confirmButton = await screen.findByRole('button', { name: 'ui-users.yes' });
-          userEvent.click(confirmButton);
+          await userEvent.click(confirmButton);
 
           expect(changeFormMock).toHaveBeenCalled();
         });

@@ -82,11 +82,11 @@ const propData = (labelData) => {
 
 describe('Warning Modal component', () => {
   afterEach(cleanup);
-  it('If payFeeFine modal Renders', () => {
+  it('If payFeeFine modal Renders', async () => {
     renderWarningModal(propData('ui-users.accounts.actions.payFeeFine'));
     expect(screen.getByText('ui-users.accounts.actions.payFeeFine')).toBeInTheDocument();
-    userEvent.click(screen.getAllByRole('checkbox')[1]);
-    userEvent.click(document.querySelector('[id="warning-checkbox"]'), { target: { checked: true } });
+    await userEvent.click(screen.getAllByRole('checkbox')[1]);
+    await userEvent.click(document.querySelector('[id="warning-checkbox"]'), { target: { checked: true } });
     userEvent.click(document.querySelector('[id="warningTransferContinue"]'));
     expect(screen.getByText('Test Feefine type 1')).toBeInTheDocument();
     expect(screen.getByText('Test Feefine type')).toBeInTheDocument();

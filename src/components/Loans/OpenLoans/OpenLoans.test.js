@@ -63,21 +63,21 @@ describe('OpenLoans', () => {
     expect(screen.queryByText('itemStatus')).toBeInTheDocument();
   });
 
-  test('clicking on a loan row', () => {
+  test('clicking on a loan row', async () => {
     renderOpenLoans({ loans });
-    userEvent.click(document.querySelector('[data-row-index="row-0"]'));
+    await userEvent.click(document.querySelector('[data-row-index="row-0"]'));
     expect(nav.onClickViewLoanActionsHistory).toHaveBeenCalledTimes(1);
   });
 
-  test('sorting by clicking on a loan column', () => {
+  test('sorting by clicking on a loan column', async () => {
     renderOpenLoans({ loans });
-    userEvent.click(document.querySelector('[data-test-clickable-header="true"]'));
+    await userEvent.click(document.querySelector('[data-test-clickable-header="true"]'));
     expect(calculateSortParams).toHaveBeenCalledTimes(1);
   });
 
-  test('clicking on a loan column when sort map is empty', () => {
+  test('clicking on a loan column when sort map is empty', async () => {
     renderOpenLoans({ loans, sortMap: {} });
-    userEvent.click(document.querySelector('[data-test-clickable-header="true"]'));
+    await userEvent.click(document.querySelector('[data-test-clickable-header="true"]'));
     expect(calculateSortParams).toHaveBeenCalledTimes(0);
   });
 });

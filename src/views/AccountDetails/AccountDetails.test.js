@@ -177,7 +177,7 @@ describe('Account Details', () => {
     expect(screen.getByTestId('loan-details')).toHaveTextContent(/ui-users.details.label.loanAnonymized$/);
   });
 
-  it('Test for buttons in DropDownMenu', () => {
+  it('Test for buttons in DropDownMenu', async () => {
     renderAccountDetails({ account: accountWithAdditionalDetails });
 
     expect(document.getElementById('payAccountActionsHistory')).not.toBeVisible();
@@ -186,7 +186,7 @@ describe('Account Details', () => {
     expect(document.getElementById('transferAccountActionsHistory')).not.toBeVisible();
     expect(document.getElementById('errorAccountActionsHistory')).not.toBeVisible();
 
-    userEvent.click(screen.getByRole('button', { name: 'Icon (triangle-down)' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Icon (triangle-down)' }));
 
     expect(document.getElementById('payAccountActionsHistory')).toBeVisible();
     expect(document.getElementById('waiveAccountActionsHistory')).toBeVisible();
@@ -195,30 +195,30 @@ describe('Account Details', () => {
     expect(document.getElementById('errorAccountActionsHistory')).toBeVisible();
   });
 
-  it('FeeFineReport should be called when exportAccountActionsHistoryReport is clicked', () => {
+  it('FeeFineReport should be called when exportAccountActionsHistoryReport is clicked', async () => {
     renderAccountDetails({ account: accountWithAdditionalDetails });
-    userEvent.click(document.getElementById('exportAccountActionsHistoryReport'));
+    await userEvent.click(document.getElementById('exportAccountActionsHistoryReport'));
     expect(spyOnFeeFineReport).toBeCalled();
   });
 
-  it('calculateSortParams should be called when clicking column headers', () => {
+  it('calculateSortParams should be called when clicking column headers', async () => {
     renderAccountDetails({ account: accountWithAdditionalDetails });
-    userEvent.click(screen.getByRole('button', { name: 'ui-users.details.columns.date' }));
+    await userEvent.click(screen.getByRole('button', { name: 'ui-users.details.columns.date' }));
     expect(spyOnCalculateSortParams).toBeCalledTimes(1);
-    userEvent.click(screen.getByRole('button', { name: 'ui-users.details.columns.action' }));
+    await userEvent.click(screen.getByRole('button', { name: 'ui-users.details.columns.action' }));
     expect(spyOnCalculateSortParams).toBeCalledTimes(2);
-    userEvent.click(screen.getByRole('button', { name: 'ui-users.details.columns.amount' }));
+    await userEvent.click(screen.getByRole('button', { name: 'ui-users.details.columns.amount' }));
     expect(spyOnCalculateSortParams).toBeCalledTimes(3);
-    userEvent.click(screen.getByRole('button', { name: 'ui-users.details.columns.balance' }));
+    await userEvent.click(screen.getByRole('button', { name: 'ui-users.details.columns.balance' }));
     expect(spyOnCalculateSortParams).toBeCalledTimes(4);
-    userEvent.click(screen.getByRole('button', { name: 'ui-users.details.columns.transactioninfo' }));
+    await userEvent.click(screen.getByRole('button', { name: 'ui-users.details.columns.transactioninfo' }));
     expect(spyOnCalculateSortParams).toBeCalledTimes(5);
-    userEvent.click(screen.getByRole('button', { name: 'ui-users.details.columns.source' }));
+    await userEvent.click(screen.getByRole('button', { name: 'ui-users.details.columns.source' }));
     expect(spyOnCalculateSortParams).toBeCalledTimes(6);
   });
-  it('GET method should be called when the handleEdit button is clicked', () => {
+  it('GET method should be called when the handleEdit button is clicked', async () => {
     renderAccountDetails({ account: accountWithAdditionalDetails });
-    userEvent.click(screen.getByRole('button', { name: 'handleEdit' }));
+    await userEvent.click(screen.getByRole('button', { name: 'handleEdit' }));
     expect(mockGET).toBeCalled();
   });
 });
