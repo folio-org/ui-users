@@ -79,7 +79,7 @@ const useAssignedUsers = ({ grantedToIds = [], permissionSetId, tenantId }, opti
       }));
     },
     {
-      enabled: Boolean(permissionSetId),
+      enabled: Boolean(grantedToIds.length && permissionSetId),
       keepPreviousData: true,
       ...options,
     },

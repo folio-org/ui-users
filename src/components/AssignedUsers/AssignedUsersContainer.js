@@ -109,7 +109,7 @@ const AssignedUsersContainer = ({ permissionSetId, expanded, onToggle, tenantId 
         : (
           <AssignedUsersList
             isFetching={isFetching || isMutationLoading}
-            users={users}
+            users={grantedTo.length ? users : []}
           />
         )}
     </Accordion>
