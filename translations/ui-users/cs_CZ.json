@@ -1129,5 +1129,6 @@
     "permissions.assignUsers.actions.assign.notAvailable": "Přiřazení uživatelů není k dispozici",
     "permissions.assignUsers.actions.message.success": "Přiřazení uživatele sady oprávnění bylo úspěšně aktualizováno",
     "permissions.assignUsers.actions.message.error": "Změna přiřazení uživatele sady oprávnění nebyla úspěšná. {error}",
-    "permissions.assignUsers.actions.message.permission.error": "Nemáte požadovaná oprávnění."
+    "permissions.assignUsers.actions.message.permission.error": "Nemáte požadovaná oprávnění.",
+    "errors.generic": "Something went wrong. Please try again later."
 }
