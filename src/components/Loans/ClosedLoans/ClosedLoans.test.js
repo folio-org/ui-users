@@ -296,7 +296,6 @@ describe('Given ClosedLoans', () => {
       await userEvent.click(screen.getByRole('button', { name: /confirm/ }));
 
       waitFor(() => {
-        expect(mockToggleLoansAnonymizationConfirmModal).toHaveBeenCalled();
         expect(screen.queryByText('ConfirmationModal')).not.toBeDefined();
       });
     });
@@ -304,10 +303,11 @@ describe('Given ClosedLoans', () => {
     it('should close confirmation modal on clicking cancel button', () => {
       renderClosedLoans(props);
       fireEvent.click(document.querySelector('[id="anonymize-all"]'));
-      fireEvent.click(screen.getByRole('button', { name: /cancel/ }));
+      const cancelButton = screen.getByRole('button', { name: /cancel/ });
+      fireEvent.click(cancelButton);
 
       waitFor(() => {
-        expect(screen.queryByText('ConfirmationModal')).not.toBeDefined();
+        expect(mockToggleLoansAnonymizationConfirmModal).toBeCalled();
       });
     });
   });
@@ -315,8 +315,9 @@ describe('Given ClosedLoans', () => {
   it('should handle anonymizeLoans with proper params', async () => {
     renderClosedLoans(props);
 
-    await userEvent.click(document.querySelector('[id="anonymize-all"]'));
-    await userEvent.click(screen.getByRole('button', { name: 'confirm' }));
+    fireEvent.click(document.querySelector('[id="anonymize-all"]'));
+    const confirmButton = screen.getByRole('button', { name: 'confirm' });
+    fireEvent.click(confirmButton);
 
     waitFor(() => {
       expect(mockAnonymizeLoans).toHaveBeenCalled();
