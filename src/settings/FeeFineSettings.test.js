@@ -209,36 +209,53 @@ describe('FeeFine settings', () => {
     IfPermission.mockImplementation(({ children }) => children);
     await waitFor(() => renderFeeFineSettings(propData));
   });
+
   it('component must be rendered', async () => {
     expect(screen.getAllByText('ui-users.feefines.title')[0]).toBeTruthy();
   });
+
   it('Onchange owner', async () => {
     userEvent.selectOptions(document.querySelector('[id="select-owner"]'), screen.getByText('test2'));
     userEvent.selectOptions(document.querySelector('[id="select-owner"]'), screen.getByText(SHARED_OWNER));
     expect(screen.getByText('test2')).toBeTruthy();
   });
-  it.skip('OnChange payment', async () => {
+
+  it('Create manual charge', async () => {
+    await userEvent.click(document.querySelector('[id="clickable-add-settings-feefines"]'));
+
+    expect(screen.getByRole('grid', { id: 'editList-settings-feefines' })).toBeDefined();
+
+    await userEvent.type(document.querySelector('[name="items[0].feeFineType"]'), 'feefinetype');
+    await userEvent.type(document.querySelector('[name="items[0].defaultAmount"]'), '1.0');
+    await userEvent.click(document.querySelector('[id="clickable-save-settings-feefines-0"]'));
+
+    waitFor(() => {
+      expect(document.querySelectorAll('.editListRow').length).toEqual(1);
+    });
+  });
+  // TODO add tests for validation checks when create manual charge
+
+  it('OnChange payment', async () => {
+    expect(screen.getByText('Shared')).toBeDefined();
+
     await userEvent.click(document.querySelector('[id="charge-notice-primary"]'));
     await userEvent.selectOptions(document.querySelector('[name="defaultChargeNoticeId"]'), screen.getByText('Charge test'));
     await userEvent.selectOptions(document.querySelector('[name="defaultActionNoticeId"]'), screen.getByText('charge Action Test'));
-    userEvent.click(document.querySelector('[id="charge-notice-primary"]'));
-    userEvent.selectOptions(document.querySelector('[id="select-owner"]'), screen.getByText('test1'));
-    userEvent.selectOptions(document.querySelector('[name="ownerId"]'), screen.getAllByText('test2')[1]);
-    userEvent.click(screen.getByText('ui-users.feefines.modal.submit'));
+    await userEvent.click(document.querySelector('[id="charge-notice-primary"]'));
+
+    expect(screen.getByText('Charge test')).toBeDefined();
+    expect(screen.getByText('charge Action Test')).toBeDefined();
+
+    await userEvent.selectOptions(document.querySelector('[id="select-owner"]'), screen.getByText('test2'));
+    expect(screen.getByText('test2')).toBeDefined();
+
+    await userEvent.selectOptions(document.querySelector('[id="select-owner"]'), screen.getByText('test1'));
+    expect(screen.getByText('test1')).toBeDefined();
+
+    expect(screen.getByText('ui-users.feefines.modal.title')).toBeInTheDocument();
+
+    await userEvent.selectOptions(document.querySelector('[name="ownerId"]'), screen.getAllByText('test2')[1]);
+
     expect(screen.getAllByText('test2')[1]).toBeTruthy();
-  });
-  it.skip('Create payment', async () => {
-    userEvent.click(document.querySelector('[id="clickable-add-settings-feefines"]'));
-    userEvent.type(document.querySelector('[name="items[0].defaultAmount"]'), '1.0');
-    // missing field validation
-    userEvent.click(document.querySelector('[id="clickable-save-settings-feefines-0"]'));
-    userEvent.type(document.querySelector('[name="items[0].feeFineType"]'), 'feefinetype');
-    // NAN validation
-    userEvent.type(document.querySelector('[name="items[0].defaultAmount"]'), 'abc');
-    userEvent.click(document.querySelector('[id="clickable-save-settings-feefines-0"]'));
-    // less than zero validation
-    userEvent.type(document.querySelector('[name="items[0].defaultAmount"]'), '-1');
-    userEvent.click(document.querySelector('[id="clickable-save-settings-feefines-0"]'));
-    expect(screen.getByText('stripes-core.button.save')).toBeTruthy();
   });
 });
