@@ -87,7 +87,11 @@ describe('useAssignedUsers', () => {
       tenantId: mockTenantId,
     }), { wrapper });
 
-    await waitFor(() => !result.current.isLoading);
+    await waitFor(() => {
+      if (result.current.isLoading) {
+        throw new Error('Kaboom');
+      }
+    });
     expect(result.current.users).toHaveLength(2);
   });
 });

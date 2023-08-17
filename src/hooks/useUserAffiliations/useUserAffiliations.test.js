@@ -76,7 +76,11 @@ describe('useUserAffiliations', () => {
     const userId = 'usedId';
     const { result } = renderHook(() => useUserAffiliations({ userId }), { wrapper });
 
-    await waitFor(() => !result.current.isLoading);
+    await waitFor(() => {
+      if (result.current.isLoading) {
+        throw new Error('Kaboom');
+      }
+    });
 
     expect(mockGet.mock.calls.length).toBe(1);
     expect(mockGet).toHaveBeenCalledWith(
