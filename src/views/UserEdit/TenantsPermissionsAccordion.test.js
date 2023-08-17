@@ -86,7 +86,7 @@ describe('TenantsPermissionsAccordion', () => {
     expect(screen.getByText('stripes-components.selection.controlLabel')).toBeInTheDocument();
   });
 
-  it.skip('should set permissions values for selected tenant in the form', async () => {
+  it('should set permissions values for selected tenant in the form', async () => {
     renderPermissionsAccordion();
 
     mockUserTenantPermsHookOpts.onSuccess({ permissionNames: ['user.item.get'] });
