@@ -180,22 +180,21 @@ describe('Owner settings', () => {
   // click the "save" button
   // wait for the "save" button to disappear
   it('Create and edit functionality', async () => {
-    await act(async () => {
-      renderOwnerSettings(propData);
+    renderOwnerSettings(propData);
 
-      await userEvent.click(document.querySelector('[id="clickable-add-settings-owners"]'));
-      await waitFor(() => {
-        expect(screen.getByText('stripes-core.button.save')).toBeInTheDocument();
-        expect(document.querySelector('[name="items[0].owner"]')).toBeInTheDocument();
-      });
+    const newButton = screen.getByRole('button', { name: 'stripes-core.button.new' });
+    await userEvent.click(newButton);
+    await waitFor(() => {
+      expect(screen.getByText('stripes-core.button.save')).toBeInTheDocument();
+      expect(document.querySelector('[name="items[0].owner"]')).toBeInTheDocument();
+    });
 
-      await userEvent.type(document.querySelector('[name="items[0].owner"]'), 'tesst');
-      await userEvent.click(document.querySelector('[id="multiselect-option-list-owner-service-point"] li:first-child'));
-      await userEvent.click(screen.getByText('stripes-core.button.save'));
+    await userEvent.type(document.querySelector('[name="items[0].owner"]'), 'tesst');
+    await userEvent.click(document.querySelector('[id="multiselect-option-list-owner-service-point"] li:first-child'));
+    await userEvent.click(screen.getByText('stripes-core.button.save'));
 
-      await waitFor(() => {
-        expect(screen.queryByText('stripes-core.button.save')).not.toBeInTheDocument();
-      });
+    await waitFor(() => {
+      expect(screen.queryByText('stripes-core.button.save')).not.toBeInTheDocument();
     });
   });
 
