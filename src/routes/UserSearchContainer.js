@@ -23,6 +23,8 @@ import { buildFilterConfig } from './utils';
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
 
+export const NOT_SHADOW_USER_CQL = `((cql.allRecords=1 NOT type ="") or type<>"${USER_TYPES.SHADOW}")`;
+
 const searchFields = [
   'username="%{query}*"',
   'personal.firstName="%{query}*"',
@@ -37,10 +39,8 @@ const searchFields = [
 ];
 const compileQuery = template(`(${searchFields.join(' or ')})`, { interpolate: /%{([\s\S]+?)}/g });
 
-const notShadowUsersCql = `((cql.allRecords=1 NOT type ="") or type<>"${USER_TYPES.SHADOW}")`;
-
-function buildQuery(queryParams, pathComponents, resourceData, logger, props) {
-  const customFilterConfig = buildFilterConfig(queryParams.filters)
+export function buildQuery(queryParams, pathComponents, resourceData, logger, props) {
+  const customFilterConfig = buildFilterConfig(queryParams.filters);
 
   const mainQuery = makeQueryFunction(
     'cql.allRecords=1',
@@ -60,7 +60,7 @@ function buildQuery(queryParams, pathComponents, resourceData, logger, props) {
     2,
   )(queryParams, pathComponents, resourceData, logger, props);
 
-  return mainQuery && `${notShadowUsersCql} and ${mainQuery}`;
+  return mainQuery && `${NOT_SHADOW_USER_CQL} and ${mainQuery}`;
 }
 
 class UserSearchContainer extends React.Component {
