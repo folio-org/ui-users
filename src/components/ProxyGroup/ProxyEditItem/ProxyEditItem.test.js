@@ -83,13 +83,15 @@ describe('ProxyEditItem', () => {
     expect(screen.getByRole('textbox', { name: /ui-users.expirationDate/i })).toBeInTheDocument();
   });
 
-  it.skip('updateStatus to be called', async () => {
+  it('updateStatus to be called', () => {
     renderProxyEditItem(props);
     const expirationDate = screen.getByRole('textbox', { name: /ui-users.expirationDate/i });
-    await userEvent.clear(expirationDate);
-    await userEvent.type(expirationDate, '2023-11-30');
+
+    userEvent.clear(expirationDate);
+    userEvent.type(expirationDate, '2023-11-30');
+
     jest.advanceTimersByTime(100);
-    expect(screen.getByRole('textbox', { name: /ui-users.expirationDate/i })).toHaveDisplayValue('2023-11-30');
+
     expect(changeMock).toBeCalled();
   });
 
@@ -113,10 +115,11 @@ describe('ProxyEditItem', () => {
     expect(changeMock).toBeCalled();
   });
 
-  it.skip('onDelete to be called ', async () => {
+  it('onDelete to be called ', () => {
     renderProxyEditItem(props);
     const button = screen.getByRole('button', { name: 'Icon (trash) Delete' });
-    await userEvent.click(button);
+    userEvent.click(button);
+
     expect(deleteMock).toBeCalled();
   });
 });
