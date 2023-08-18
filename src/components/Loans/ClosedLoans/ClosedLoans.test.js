@@ -89,7 +89,6 @@ const STRIPES = {
 const history = createMemoryHistory();
 
 const mockAnonymizeLoans = jest.fn();
-const mockToggleLoansAnonymizationConfirmModal = jest.fn();
 
 const notEmptyRecords = [{
   loanId: 'b6475706-4505-4b20-9ed0-aadcda2b72ee',
@@ -296,7 +295,7 @@ describe('Given ClosedLoans', () => {
       await userEvent.click(screen.getByRole('button', { name: /confirm/ }));
 
       waitFor(() => {
-        expect(screen.queryByText('ConfirmationModal')).not.toBeDefined();
+        expect(screen.queryByText('ConfirmationModal')).toBe(null);
       });
     });
 
@@ -307,7 +306,7 @@ describe('Given ClosedLoans', () => {
       fireEvent.click(cancelButton);
 
       waitFor(() => {
-        expect(mockToggleLoansAnonymizationConfirmModal).toBeCalled();
+        expect(screen.queryByText('ConfirmationModal')).toBe(null);
       });
     });
   });
