@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen } from '@folio/jest-config-stripes/testing-library/react';
+import { screen, fireEvent } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import { Form } from 'react-final-form';
 import renderWithRouter from '../../../../test/jest/helpers/renderWithRouter';
@@ -118,7 +118,7 @@ describe('ProxyEditItem', () => {
   it('onDelete to be called ', () => {
     renderProxyEditItem(props);
     const button = screen.getByRole('button', { name: 'Icon (trash) Delete' });
-    userEvent.click(button);
+    fireEvent.click(button);
 
     expect(deleteMock).toBeCalled();
   });
