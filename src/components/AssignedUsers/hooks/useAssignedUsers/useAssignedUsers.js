@@ -17,7 +17,9 @@ import {
   buildQueryByIds,
 } from '../utils';
 
-const useAssignedUsers = ({ grantedToIds = [], permissionSetId, tenantId }, options = {}) => {
+const DEFAULT_DATA = [];
+
+const useAssignedUsers = ({ grantedToIds = DEFAULT_DATA, permissionSetId, tenantId }, options = {}) => {
   const stripes = useStripes();
   const defaultTenantId = stripes.okapi?.tenant;
 
@@ -31,7 +33,7 @@ const useAssignedUsers = ({ grantedToIds = [], permissionSetId, tenantId }, opti
   const [namespace] = useNamespace({ key: 'get-assigned-users' });
   const {
     isLoading,
-    data = [],
+    data = DEFAULT_DATA,
     refetch,
     isFetching,
   } = useQuery(
@@ -85,11 +87,13 @@ const useAssignedUsers = ({ grantedToIds = [], permissionSetId, tenantId }, opti
     },
   );
 
+  const users = !grantedToIds.length ? DEFAULT_DATA : data;
+
   return ({
     refetch,
     isLoading,
     isFetching,
-    users: data,
+    users,
   });
 };
 
