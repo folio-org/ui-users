@@ -109,6 +109,26 @@ describe('AssignedUsersContainer', () => {
     expect(screen.getByText('Loading')).toBeInTheDocument();
   });
 
+  it('should render empty list', async () => {
+    usePermissionSet.mockClear().mockReturnValue({
+      permissionSet: {
+        id: '1',
+        name: 'permissionSetName',
+        displayName: 'permissionSetDisplayName',
+        grantedTo: [],
+      },
+      isLoading: false,
+    });
+    useAssignedUsers.mockClear().mockReturnValue({
+      users: [],
+      isLoading: false,
+    });
+    renderComponent(props);
+
+    await waitFor(() => expect(screen.queryByText('Loading')).toBeNull());
+    expect(screen.getByText('AssignedUsersList')).toBeInTheDocument();
+  });
+
   it('should render AssignedUsersList', async () => {
     useAssignedUsers.mockReturnValue({
       users: mockUsers,
