@@ -27,9 +27,9 @@ describe('Item Lookup component', () => {
     expect(screen.getByText('ui-users.charge.itemLookup.modalLabel')).toBeInTheDocument();
   });
 
-  it('Onclose modal check', () => {
+  it('Onclose modal check', async () => {
     renderItemLookup(propData);
-    userEvent.click(screen.getByText('ui-users.charge.itemLookup.cancel'));
+    await userEvent.click(screen.getByText('ui-users.charge.itemLookup.cancel'));
     expect(onCloseMock).toHaveBeenCalled();
   });
 
@@ -38,10 +38,10 @@ describe('Item Lookup component', () => {
     expect(screen.getByRole('button', { name: /confirm/ })).toBeDisabled();
   });
 
-  it('Checking Confirm button click after selecting row', () => {
+  it('Checking Confirm button click after selecting row', async () => {
     renderItemLookup(propData);
-    userEvent.click(document.querySelector('[data-row-inner="0"]'));
-    userEvent.click(screen.getByText('ui-users.charge.itemLookup.confirm'));
+    await userEvent.click(document.querySelector('[data-row-inner="0"]'));
+    await userEvent.click(screen.getByText('ui-users.charge.itemLookup.confirm'));
     expect(onChangeItemMock).toHaveBeenCalled();
   });
 });

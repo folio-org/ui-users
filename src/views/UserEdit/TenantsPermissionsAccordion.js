@@ -45,9 +45,11 @@ const TenantsPermissionsAccordion = ({
   const isPermissionsPresent = Boolean(get(getState().values, permissionsField));
 
   useEffect(() => {
+    const unregisterHandlers = unregisterHandlersRef.current;
+
     return () => {
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      unregisterHandlersRef.current.forEach((unregister) => unregister());
+      // Unregister fields that were registered for a specific tenant after the form was initialized.
+      unregisterHandlers.forEach((unregister) => unregister());
     };
   }, []);
 

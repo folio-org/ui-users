@@ -76,7 +76,7 @@ describe('Conditions', () => {
     expect(screen.getByText('Maximum number of items charged out')).toBeInTheDocument();
   });
   it('handle Submit in conditions form', async () => {
-    userEvent.type(document.querySelector('[data-test-block-message="true"]'), 'Testing');
+    await userEvent.type(document.querySelector('[data-test-block-message="true"]'), 'Testing');
     expect(screen.getByText('Testing')).toBeInTheDocument();
     act(() => {
       userEvent.click(screen.getByText('stripes-core.button.save'));

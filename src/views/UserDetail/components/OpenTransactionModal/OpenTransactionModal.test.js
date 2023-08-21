@@ -73,7 +73,7 @@ describe('render OpenTransactionModal', () => {
     expect(heading).toBeVisible();
 
     const cancel = screen.getByRole('button', { name: 'ui-users.okay' });
-    userEvent.click(cancel);
+    await userEvent.click(cancel);
 
     expect(onCloseModal).toHaveBeenCalled();
   });

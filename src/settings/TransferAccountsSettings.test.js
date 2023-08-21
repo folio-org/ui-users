@@ -61,12 +61,12 @@ describe('TransferAccountsSettings', () => {
   it('should call onChangeOwner when ownerId input value changes', async () => {
     const ownerIdInput = screen.getByTestId('ownerId-input');
     expect(ownerIdInput).toHaveValue('');
-    userEvent.type(ownerIdInput, 'testing purpose');
+    await userEvent.type(ownerIdInput, 'testing purpose');
     expect(ownerIdInput).toHaveValue('testing purpose');
   });
   it('should call preCreateHook when preCreateHook button is clicked', async () => {
     const preCreateHookButton = screen.getByTestId('preCreateHook-button');
-    userEvent.click(preCreateHookButton);
+    await userEvent.click(preCreateHookButton);
     expect(ControlledVocab).toHaveBeenCalledTimes(2);
   });
   describe('Action suppression', () => {

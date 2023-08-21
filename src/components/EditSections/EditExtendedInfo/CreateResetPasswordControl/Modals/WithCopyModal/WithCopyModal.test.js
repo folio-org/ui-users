@@ -40,9 +40,9 @@ describe('With Copy Modal component', () => {
     expect(screen.getByText('Hello from your Mock App')).toBeInTheDocument();
     expect(screen.getByText('ModalHeader')).toBeInTheDocument();
   });
-  it('Checking copy Function', () => {
+  it('Checking copy Function', async () => {
     document.execCommand = jest.fn();
-    userEvent.click(screen.getByText('ui-users.extended.copyLink'));
+    await userEvent.click(screen.getByText('ui-users.extended.copyLink'));
     expect(screen.getByText('ui-users.extended.copyLink')).toBeDefined();
   });
 });

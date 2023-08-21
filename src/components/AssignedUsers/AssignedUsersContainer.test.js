@@ -162,7 +162,7 @@ describe('AssignedUsersContainer', () => {
 
     const accordionButton = screen.getByText('ui-users.permissions.assignedUsers');
 
-    userEvent.click(accordionButton);
+    await userEvent.click(accordionButton);
 
     await waitFor(() => expect(screen.getByText('AssignedUsersList')).toBeInTheDocument());
     expect(onToggle).toHaveBeenCalled();

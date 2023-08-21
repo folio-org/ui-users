@@ -25,6 +25,8 @@ jest.mock('../../hooks', () => ({
   useUserTenantPermissions: jest.fn(),
 }));
 
+const unregisterFieldMock = jest.fn();
+
 const defaultProps = {
   form: {
     getFieldState: () => ({
@@ -36,7 +38,7 @@ const defaultProps = {
       values: {},
     })),
     change: jest.fn(),
-    registerField: jest.fn(),
+    registerField: jest.fn().mockReturnValue(unregisterFieldMock),
   },
   initialValues: {
     id: 'userId',

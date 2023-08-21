@@ -1,4 +1,4 @@
-import { renderHook } from '@folio/jest-config-stripes/testing-library/react-hooks';
+import { renderHook, waitFor } from '@folio/jest-config-stripes/testing-library/react';
 import {
   QueryClient,
   QueryClientProvider,
@@ -59,9 +59,13 @@ describe('usePermissionSet', () => {
   });
 
   it('should return permissionSet data', async () => {
-    const { result, waitFor } = renderHook(() => usePermissionSet(defaultProps, {}), { wrapper });
+    const { result } = renderHook(() => usePermissionSet(defaultProps, {}), { wrapper });
 
-    await waitFor(() => !result.current.isLoading);
+    await waitFor(() => {
+      if (result.current.isLoading) {
+        throw new Error('Kaboom');
+      }
+    });
     expect(result.current.permissionSet).toHaveProperty('grantedTo');
     expect(result.current.permissionSet.grantedTo).toEqual(mockPermissionSet.grantedTo);
   });

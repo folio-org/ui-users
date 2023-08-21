@@ -84,7 +84,7 @@ describe('BulkOverrideDialog', () => {
   });
   test('onCancel Click', async () => {
     renderBulkOverrideInfo();
-    userEvent.click(screen.getByText('ui-users.cancel'));
+    await userEvent.click(screen.getByText('ui-users.cancel'));
     expect(onCloseMock).toHaveBeenCalled();
   });
   test('failed renewals override', async () => {
@@ -94,13 +94,13 @@ describe('BulkOverrideDialog', () => {
   test('Additional info', async () => {
     renderBulkOverrideInfo({ failedRenewals: openLoans });
     userEvent.click(document.querySelector('[type="checkbox"]'));
-    userEvent.type(document.querySelector('[id="data-test-additional-info"]'), 'TestData');
+    await userEvent.type(document.querySelector('[id="data-test-additional-info"]'), 'TestData');
     expect(screen.getByText('testTestData')).toBeInTheDocument();
   });
   test('Override Check', async () => {
     renderBulkOverrideInfo({ failedRenewals: openLoans });
-    userEvent.click(document.querySelector('[type="checkbox"]'));
-    userEvent.click(screen.getByText('ui-users.button.override'));
+    await userEvent.click(document.querySelector('[type="checkbox"]'));
+    await userEvent.click(screen.getByText('ui-users.button.override'));
     expect(postMock).toHaveBeenCalled();
   });
 });

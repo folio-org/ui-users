@@ -27,10 +27,10 @@ describe('CheckboxColumn component', () => {
     renderCheckboxColumn(propData);
     expect(document.querySelector('[data-permission-name="testPermissionName"]')).toBeInTheDocument();
   });
-  it('If CheckboxColumn can be checked', () => {
+  it('If CheckboxColumn can be checked', async () => {
     renderCheckboxColumn(propData);
-    userEvent.click(document.querySelector('[data-test-select-item="true"]'));
-    userEvent.click(document.querySelector('[name="selected-testCheckBox"]'));
+    await userEvent.click(document.querySelector('[data-test-select-item="true"]'));
+    await userEvent.click(document.querySelector('[name="selected-testCheckBox"]'));
     expect(mockFunc).toHaveBeenCalled();
   });
 });

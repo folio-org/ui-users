@@ -85,7 +85,7 @@ describe('BulkRenewedInfo', () => {
   });
   test('onCancel Click', async () => {
     renderBulkRenewInfo();
-    userEvent.click(screen.getByText('stripes-core.button.close'));
+    await userEvent.click(screen.getByText('stripes-core.button.close'));
     expect(onCancelMock).toHaveBeenCalled();
   });
 });

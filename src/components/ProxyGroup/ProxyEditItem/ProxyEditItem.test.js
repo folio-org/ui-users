@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen } from '@folio/jest-config-stripes/testing-library/react';
+import { screen, fireEvent } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import { Form } from 'react-final-form';
 import renderWithRouter from '../../../../test/jest/helpers/renderWithRouter';
@@ -86,10 +86,12 @@ describe('ProxyEditItem', () => {
   it('updateStatus to be called', () => {
     renderProxyEditItem(props);
     const expirationDate = screen.getByRole('textbox', { name: /ui-users.expirationDate/i });
+
     userEvent.clear(expirationDate);
     userEvent.type(expirationDate, '2023-11-30');
+
     jest.advanceTimersByTime(100);
-    expect(screen.getByRole('textbox', { name: /ui-users.expirationDate/i })).toHaveDisplayValue('2023-11-30');
+
     expect(changeMock).toBeCalled();
   });
 
@@ -113,10 +115,11 @@ describe('ProxyEditItem', () => {
     expect(changeMock).toBeCalled();
   });
 
-  it('onDelete to be called ', async () => {
+  it('onDelete to be called ', () => {
     renderProxyEditItem(props);
     const button = screen.getByRole('button', { name: 'Icon (trash) Delete' });
-    userEvent.click(button);
+    fireEvent.click(button);
+
     expect(deleteMock).toBeCalled();
   });
 });

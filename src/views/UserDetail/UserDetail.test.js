@@ -283,9 +283,9 @@ describe('UserDetail', () => {
     });
 
     describe('click checkDelete button', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         renderUserDetail(stripes);
-        userEvent.click(screen.getByRole('button', { name: 'ui-users.details.checkDelete' }));
+        await userEvent.click(screen.getByRole('button', { name: 'ui-users.details.checkDelete' }));
       });
 
       test('should call doFetchOpenTransactions', async () => {

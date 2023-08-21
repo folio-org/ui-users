@@ -79,7 +79,7 @@ describe('render ActionMenuEditOption', () => {
       };
 
       render(<ActionMenuEditButton {...props} />);
-      userEvent.click(screen.getByText('ui-users.edit'));
+      await userEvent.click(screen.getByText('ui-users.edit'));
 
       expect(props.onToggle).toHaveBeenCalled();
       expect(props.goToEdit).toHaveBeenCalled();

@@ -58,8 +58,8 @@ describe('render ProxyPermissions component', () => {
   it('Component must be rendered', () => {
     expect(screen.getByText('ui-users.settings.patronBlocks')).toBeInTheDocument();
   });
-  it('Clicking the patron row should redirect via history.push', () => {
-    userEvent.click(document.querySelector('[data-row-inner="0"]'));
+  it('Clicking the patron row should redirect via history.push', async () => {
+    await userEvent.click(document.querySelector('[data-row-inner="0"]'));
     expect(mockRedirect).toHaveBeenCalled();
   });
   /* Need to fix the bug UIU-2538 for the sorting to work so that this test case can be uncommented */

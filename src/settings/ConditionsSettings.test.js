@@ -54,8 +54,9 @@ describe('ConditionsSettings', () => {
         match: { path: '/settings/users/setad' },
         location: { pathname: '/settings/users/setad' },
       };
+      const { getByRole, getByText } = renderConditionsSettings(nonNullProps);
+
       await act(async () => {
-        const { getByRole, getByText } = renderConditionsSettings(nonNullProps);
         expect(getByRole('region')).not.toBeNull();
         expect(getByText(/ui-users.settings.conditions/i)).toBeInTheDocument();
         expect(getByText(/Condition 1/i)).toBeInTheDocument();

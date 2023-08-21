@@ -31,18 +31,18 @@ describe('ChargeNotice', () => {
     expect(getByText('template1')).toBeInTheDocument();
     expect(getByText('template2')).toBeInTheDocument();
   });
-  it('set edit state when button is clicked and click cancel button', () => {
+  it('set edit state when button is clicked and click cancel button', async () => {
     const { getByText } = renderChargeNotice(cNprops);
     const editButton = getByText('ui-users.edit');
-    userEvent.click(editButton);
+    await userEvent.click(editButton);
     const cancelButton = getByText('ui-users.cancel');
     expect(cancelButton).toBeInTheDocument();
     userEvent.click(cancelButton);
   });
-  it('set edit state when button is clicked and click save button', () => {
+  it('set edit state when button is clicked and click save button', async () => {
     const { getByText } = renderChargeNotice(cNprops);
     const editButton = getByText('ui-users.edit');
-    userEvent.click(editButton);
+    await userEvent.click(editButton);
     const saveButton = getByText('ui-users.comment.save');
     expect(saveButton).toBeInTheDocument();
     userEvent.click(saveButton);

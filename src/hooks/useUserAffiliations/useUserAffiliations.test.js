@@ -1,4 +1,4 @@
-import { renderHook } from '@folio/jest-config-stripes/testing-library/react-hooks';
+import { renderHook, waitFor } from '@folio/jest-config-stripes/testing-library/react';
 import {
   QueryClient,
   QueryClientProvider,
@@ -74,9 +74,13 @@ describe('useUserAffiliations', () => {
 
   it('should fetch user\'s consortium affiliations by user\'s id when there is consortium', async () => {
     const userId = 'usedId';
-    const { result, waitFor } = renderHook(() => useUserAffiliations({ userId }), { wrapper });
+    const { result } = renderHook(() => useUserAffiliations({ userId }), { wrapper });
 
-    await waitFor(() => !result.current.isLoading);
+    await waitFor(() => {
+      if (result.current.isLoading) {
+        throw new Error('Kaboom');
+      }
+    });
 
     expect(mockGet.mock.calls.length).toBe(1);
     expect(mockGet).toHaveBeenCalledWith(
@@ -90,7 +94,7 @@ describe('useUserAffiliations', () => {
     useStripes.mockClear().mockReturnValue({ a: 1 });
 
     const userId = 'usedId';
-    const { result, waitFor } = renderHook(() => useUserAffiliations({ userId }, { assignedToCurrentUser: false }), { wrapper });
+    const { result } = renderHook(() => useUserAffiliations({ userId }, { assignedToCurrentUser: false }), { wrapper });
 
     await waitFor(() => !result.current.isLoading);
 

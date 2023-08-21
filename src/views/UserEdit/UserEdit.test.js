@@ -472,14 +472,14 @@ describe('UserEdit', () => {
       },
     };
 
-    it('should call history.push on cancelling user edit form', () => {
+    it('should call history.push on cancelling user edit form', async () => {
       const { container } = renderWithRouter(<UserEdit {...defaultProps} />);
       const cancelButton = container.querySelector('#clickable-cancel');
-      userEvent.click(cancelButton);
+      await userEvent.click(cancelButton);
       expect(defaultProps.history.push).toHaveBeenCalled();
     });
 
-    it('should call history.push on cancelling new user form', () => {
+    it('should call history.push on cancelling new user form', async () => {
       const alteredProps = {
         ...defaultProps,
         match: {
@@ -489,7 +489,7 @@ describe('UserEdit', () => {
       };
       const { container } = renderWithRouter(<UserEdit {...alteredProps} />);
       const cancelButton = container.querySelector('#clickable-cancel');
-      userEvent.click(cancelButton);
+      await userEvent.click(cancelButton);
       expect(alteredProps.history.push).toHaveBeenCalled();
     });
   });

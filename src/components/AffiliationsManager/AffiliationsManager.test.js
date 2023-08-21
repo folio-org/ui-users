@@ -55,13 +55,13 @@ describe('AffiliationsManager', () => {
     });
 
     it('should close modal when \'Cancel\' button was clicked', async () => {
-      userEvent.click(await screen.findByText('ui-users.cancel'));
+      await userEvent.click(await screen.findByText('ui-users.cancel'));
 
       expect(screen.queryByText('ui-users.affiliations.manager.modal.title')).not.toBeInTheDocument();
     });
 
     it('should handle affiliations assignment when \'Save & close\' button was clicked', async () => {
-      userEvent.click(await screen.findByText('ui-users.saveAndClose'));
+      await userEvent.click(await screen.findByText('ui-users.saveAndClose'));
 
       expect(defaultProps.onUpdateAffiliations).toHaveBeenCalled();
     });
@@ -70,8 +70,8 @@ describe('AffiliationsManager', () => {
       it('should filter results by search query', async () => {
         expect(await screen.findAllByRole('row')).toHaveLength(affiliations.length + 1);
 
-        userEvent.type(await screen.findByLabelText('ui-users.affiliations.manager.modal.aria.search'), affiliations[0].tenantName);
-        userEvent.click(await screen.findByText('ui-users.search'));
+        await userEvent.type(await screen.findByLabelText('ui-users.affiliations.manager.modal.aria.search'), affiliations[0].tenantName);
+        await userEvent.click(await screen.findByText('ui-users.search'));
 
         expect(await screen.findAllByRole('row')).toHaveLength(2);
       });
@@ -81,30 +81,30 @@ describe('AffiliationsManager', () => {
 
         const assignmentCheckboxes = await screen.findAllByLabelText('ui-users.affiliations.manager.modal.aria.assign');
 
-        userEvent.click(assignmentCheckboxes[0]);
-        userEvent.click(assignmentCheckboxes[1]);
-        userEvent.click(assignmentCheckboxes[2]);
-        userEvent.click(await screen.findByText('ui-users.affiliations.manager.filter.assignment.assigned'));
+        await userEvent.click(assignmentCheckboxes[0]);
+        await userEvent.click(assignmentCheckboxes[1]);
+        await userEvent.click(assignmentCheckboxes[2]);
+        await userEvent.click(await screen.findByText('ui-users.affiliations.manager.filter.assignment.assigned'));
 
         expect(await screen.findAllByRole('row')).toHaveLength((affiliations.length - 3) + 1);
 
-        userEvent.click(await screen.findByLabelText(/Clear selected filters for/));
+        await userEvent.click(await screen.findByLabelText(/Clear selected filters for/));
 
         expect(await screen.findAllByRole('row')).toHaveLength(affiliations.length + 1);
       });
 
       it('should reset search and filters when \'Reset all\' button was clicked', async () => {
-        userEvent.click(await screen.findByLabelText('ui-users.affiliations.manager.modal.aria.assignAll'));
-        userEvent.click(await screen.findByText('ui-users.affiliations.manager.filter.assignment.unassigned'));
+        await userEvent.click(await screen.findByLabelText('ui-users.affiliations.manager.modal.aria.assignAll'));
+        await userEvent.click(await screen.findByText('ui-users.affiliations.manager.filter.assignment.unassigned'));
 
         expect(await screen.findAllByRole('row')).toHaveLength(affiliations.length + 1);
 
-        userEvent.type(await screen.findByLabelText('ui-users.affiliations.manager.modal.aria.search'), 'Columbia');
-        userEvent.click(await screen.findByText('ui-users.search'));
+        await userEvent.type(await screen.findByLabelText('ui-users.affiliations.manager.modal.aria.search'), 'Columbia');
+        await userEvent.click(await screen.findByText('ui-users.search'));
 
         expect(await screen.findAllByRole('row')).toHaveLength(2);
 
-        userEvent.click(await screen.findByTestId('reset-all-affiliations-filters'));
+        await userEvent.click(await screen.findByTestId('reset-all-affiliations-filters'));
 
         expect(await screen.findAllByRole('row')).toHaveLength(affiliations.length + 1);
       });

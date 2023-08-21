@@ -64,12 +64,12 @@ describe('render DeleteUserModal', () => {
     expect(screen.getByRole('button', { name: 'ui-users.no' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'ui-users.yes' })).toBeInTheDocument();
   });
-  test('clicking yes button should call deleteUser', () => {
-    userEvent.click(screen.getByRole('button', { name: 'ui-users.yes' }));
+  test('clicking yes button should call deleteUser', async () => {
+    await userEvent.click(screen.getByRole('button', { name: 'ui-users.yes' }));
     expect(deleteUser).toHaveBeenCalled();
   });
-  test('clicking no button should call onCloseModal', () => {
-    userEvent.click(screen.getByRole('button', { name: 'ui-users.no' }));
+  test('clicking no button should call onCloseModal', async () => {
+    await userEvent.click(screen.getByRole('button', { name: 'ui-users.no' }));
     expect(onCloseModal).toHaveBeenCalled();
   });
 });

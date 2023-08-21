@@ -59,15 +59,15 @@ describe('Copy Modal component', () => {
     expect(screen.getByText('ui-users.feefines.modal.title')).toBeInTheDocument();
   });
 
-  it('On Submit modal', () => {
-    userEvent.selectOptions(screen.getByRole('combobox'), ['test-2']);
-    userEvent.click(document.querySelector('[id="yes"]'));
-    userEvent.click(screen.getByText('ui-users.feefines.modal.submit'));
+  it('On Submit modal', async () => {
+    await userEvent.selectOptions(screen.getByRole('combobox'), ['test-2']);
+    await userEvent.click(document.querySelector('[id="yes"]'));
+    await userEvent.click(screen.getByText('ui-users.feefines.modal.submit'));
     expect(mockFunc).toHaveBeenCalled();
   });
 
-  it('On cancel modal', () => {
-    userEvent.click(screen.getByText('ui-users.feefines.modal.cancel'));
+  it('On cancel modal', async () => {
+    await userEvent.click(screen.getByText('ui-users.feefines.modal.cancel'));
     expect(onCloseMock).toHaveBeenCalled();
   });
 });

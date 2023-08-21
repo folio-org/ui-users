@@ -1,5 +1,4 @@
-import { waitFor } from '@folio/jest-config-stripes/testing-library/react';
-import { renderHook } from '@folio/jest-config-stripes/testing-library/react-hooks';
+import { renderHook, waitFor } from '@folio/jest-config-stripes/testing-library/react';
 import {
   QueryClient,
   QueryClientProvider,
@@ -88,7 +87,11 @@ describe('useAssignedUsers', () => {
       tenantId: mockTenantId,
     }), { wrapper });
 
-    await waitFor(() => !result.current.isLoading);
+    await waitFor(() => {
+      if (result.current.isLoading) {
+        throw new Error('Kaboom');
+      }
+    });
     expect(result.current.users).toHaveLength(2);
   });
 });

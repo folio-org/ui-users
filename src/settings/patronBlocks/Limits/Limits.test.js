@@ -134,11 +134,11 @@ describe('Limits', () => {
     expect(screen.getByText('Mock Limits Form')).toBeInTheDocument();
   });
   it('Save limit conditions', async () => {
-    userEvent.click(screen.getByText('save'));
+    await userEvent.click(screen.getByText('save'));
     expect(mockPost).toHaveBeenCalled();
   });
   it('Update limit conditions', async () => {
-    userEvent.click(screen.getByText('update'));
+    await userEvent.click(screen.getByText('update'));
     expect(mockPut).toHaveBeenCalled();
   });
 });
