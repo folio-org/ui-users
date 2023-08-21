@@ -339,3 +339,9 @@ export const CONSORTIA_USER_TENANTS_API = 'user-tenants';
 export const RECORD_SOURCE = {
   CONSORTIUM: 'consortium',
 };
+
+export const USER_TYPES = {
+  PATRON: 'patron',
+  SHADOW: 'shadow',
+  STAFF: 'staff',
+};

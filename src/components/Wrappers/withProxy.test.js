@@ -119,44 +119,44 @@ describe('withProxy', () => {
     expect(screen.queryByTestId('sponsor-0')).not.toBeInTheDocument();
   });
 
-  test('remove proxies', () => {
+  test('remove proxies', async () => {
     renderWithProxy({ updatedProxies: [] });
-    userEvent.click(screen.queryByTestId('update-proxies'));
+    await userEvent.click(screen.queryByTestId('update-proxies'));
 
     expect(mutator.proxiesFor.DELETE).toHaveBeenCalled();
   });
 
-  test('remove sponsors', () => {
+  test('remove sponsors', async () => {
     renderWithProxy({ updatedSponsors: [] });
-    userEvent.click(screen.queryByTestId('update-sponsors'));
+    await userEvent.click(screen.queryByTestId('update-sponsors'));
 
     expect(mutator.proxiesFor.DELETE).toHaveBeenCalled();
   });
 
-  test('update sponsors', () => {
+  test('update sponsors', async () => {
     renderWithProxy({ updatedSponsors: [{ user: {}, proxy: { id: 1 } }] });
-    userEvent.click(screen.queryByTestId('update-sponsors'));
+    await userEvent.click(screen.queryByTestId('update-sponsors'));
 
     expect(mutator.proxiesFor.PUT).toHaveBeenCalled();
   });
 
-  test('update proxies', () => {
+  test('update proxies', async () => {
     renderWithProxy({ updatedProxies: [{ user: {}, proxy: { id: 1 } }] });
-    userEvent.click(screen.queryByTestId('update-proxies'));
+    await userEvent.click(screen.queryByTestId('update-proxies'));
 
     expect(mutator.proxiesFor.PUT).toHaveBeenCalled();
   });
 
-  test('add sponsors', () => {
+  test('add sponsors', async () => {
     renderWithProxy({ updatedSponsors: [{ user: {}, proxy: {} }] });
-    userEvent.click(screen.queryByTestId('update-sponsors'));
+    await userEvent.click(screen.queryByTestId('update-sponsors'));
 
     expect(mutator.proxiesFor.POST).toHaveBeenCalled();
   });
 
-  test('add proxies', () => {
+  test('add proxies', async () => {
     renderWithProxy({ updatedProxies: [{ user: {}, proxy: {} }] });
-    userEvent.click(screen.queryByTestId('update-proxies'));
+    await userEvent.click(screen.queryByTestId('update-proxies'));
 
     expect(mutator.proxiesFor.POST).toHaveBeenCalled();
   });

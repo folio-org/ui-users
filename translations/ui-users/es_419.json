@@ -1124,5 +1124,11 @@
     "reports.includesReminderFees": "Incluye tasa(s) de recordatorio",
     "permissions.assignedUsers": "Usuarios asignados",
     "permissions.assignedUsers.name": "Nombre",
-    "permissions.assignedUsers.patronGroup": "Grupo de patrocinadores"
+    "permissions.assignedUsers.patronGroup": "Grupo de patrocinadores",
+    "permissions.assignUsers.actions.assign": "Asignar/desasignar",
+    "permissions.assignUsers.actions.assign.notAvailable": "Asignar usuarios no está disponible",
+    "permissions.assignUsers.actions.message.success": "Se ha actualizado correctamente la asignación de usuarios del conjunto de permisos",
+    "permissions.assignUsers.actions.message.error": "El cambio de asignación de usuario de Permissions Set no se ha realizado correctamente. {error}",
+    "permissions.assignUsers.actions.message.permission.error": "No dispone de los permisos necesarios.",
+    "errors.generic": "Algo salió mal. Por favor, inténtelo de nuevo más tarde."
 }

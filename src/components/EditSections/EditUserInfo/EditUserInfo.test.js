@@ -106,21 +106,21 @@ describe('Render Edit User Information component', () => {
     renderEditUserInfo(props);
     expect(screen.getByText('ui-users.information.recalculate.will.reactivate.user')).toBeInTheDocument();
   });
-  it('Change expiration date', () => {
+  it('Change expiration date', async () => {
     renderEditUserInfo(props);
-    userEvent.click(screen.getByText('ui-users.information.recalculate.expirationDate'));
+    await userEvent.click(screen.getByText('ui-users.information.recalculate.expirationDate'));
     expect(changeMock).toHaveBeenCalled();
   });
-  it('Confirm click must change form values', () => {
+  it('Confirm click must change form values', async () => {
     renderEditUserInfo(props);
-    userEvent.type(document.querySelector('[id="adduser_lastname"]'), 'Sivavel');
-    userEvent.click(screen.getByText('ui-users.information.recalculate.modal.button'));
+    await userEvent.type(document.querySelector('[id="adduser_lastname"]'), 'Sivavel');
+    await userEvent.click(screen.getByText('ui-users.information.recalculate.modal.button'));
     expect(changeMock).toHaveBeenCalled();
   });
-  it('Cancel click must not show modal', () => {
+  it('Cancel click must not show modal', async () => {
     renderEditUserInfo(props);
-    userEvent.click(screen.getByText('ui-users.information.recalculate.expirationDate'));
-    userEvent.click(screen.getByText('ui-users.cancel'));
+    await userEvent.click(screen.getByText('ui-users.information.recalculate.expirationDate'));
+    await userEvent.click(screen.getByText('ui-users.cancel'));
     expect(screen.getByText('ui-users.information.recalculate.expirationDate'));
   });
 });

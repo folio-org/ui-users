@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { act, screen, waitFor } from '@folio/jest-config-stripes/testing-library/react';
+import { screen, waitFor } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
 import renderWithRouter from 'helpers/renderWithRouter';
@@ -166,10 +166,10 @@ describe('Owner settings', () => {
     expect(screen.getByText('ui-users.owners.columns.asp')).toBeTruthy();
   });
 
-  it('Delete functionality in component', () => {
+  it('Delete functionality in component', async () => {
     renderOwnerSettings(propData);
-    userEvent.click(document.querySelector('[id="clickable-delete-settings-owners-1"]'));
-    userEvent.click(document.querySelector('[id="clickable-delete-controlled-vocab-entry-confirmation-cancel"]'));
+    await userEvent.click(document.querySelector('[id="clickable-delete-settings-owners-1"]'));
+    await userEvent.click(document.querySelector('[id="clickable-delete-controlled-vocab-entry-confirmation-cancel"]'));
     expect(document.querySelector('[data-test-confirmation-modal-message="true"]')).toBeTruthy();
   });
 
@@ -180,22 +180,21 @@ describe('Owner settings', () => {
   // click the "save" button
   // wait for the "save" button to disappear
   it('Create and edit functionality', async () => {
-    await act(async () => {
-      renderOwnerSettings(propData);
+    renderOwnerSettings(propData);
 
-      await userEvent.click(document.querySelector('[id="clickable-add-settings-owners"]'));
-      await waitFor(() => {
-        expect(screen.getByText('stripes-core.button.save')).toBeInTheDocument();
-        expect(document.querySelector('[name="items[0].owner"]')).toBeInTheDocument();
-      });
+    const newButton = screen.getByRole('button', { name: 'stripes-core.button.new' });
+    await userEvent.click(newButton);
+    await waitFor(() => {
+      expect(screen.getByText('stripes-core.button.save')).toBeInTheDocument();
+      expect(document.querySelector('[name="items[0].owner"]')).toBeInTheDocument();
+    });
 
-      await userEvent.type(document.querySelector('[name="items[0].owner"]'), 'tesst');
-      await userEvent.click(document.querySelector('[id="multiselect-option-list-owner-service-point"] li:first-child'));
-      await userEvent.click(screen.getByText('stripes-core.button.save'));
+    await userEvent.type(document.querySelector('[name="items[0].owner"]'), 'tesst');
+    await userEvent.click(document.querySelector('[id="multiselect-option-list-owner-service-point"] li:first-child'));
+    await userEvent.click(screen.getByText('stripes-core.button.save'));
 
-      await waitFor(() => {
-        expect(screen.queryByText('stripes-core.button.save')).not.toBeInTheDocument();
-      });
+    await waitFor(() => {
+      expect(screen.queryByText('stripes-core.button.save')).not.toBeInTheDocument();
     });
   });
 

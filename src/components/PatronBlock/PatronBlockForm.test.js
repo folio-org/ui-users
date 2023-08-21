@@ -98,24 +98,24 @@ describe('Patron Block Form', () => {
     expect(screen.getByText('ui-users.blocks.form.button.create')).toBeInTheDocument();
   });
 
-  it('Toggle button must work', () => {
-    userEvent.click(document.querySelector('[id=accordion-toggle-button-blockInformationSection]'));
+  it('Toggle button must work', async () => {
+    await userEvent.click(document.querySelector('[id=accordion-toggle-button-blockInformationSection]'));
     expect(screen.getByText('ui-users.blocks.form.label.information')).toBeInTheDocument();
   });
 
-  it('Expand button must work', () => {
-    userEvent.click(document.querySelector('[data-test-expand-button="true"]'));
+  it('Expand button must work', async () => {
+    await userEvent.click(document.querySelector('[data-test-expand-button="true"]'));
     expect(screen.getByText('ui-users.blocks.form.label.block')).toBeInTheDocument();
   });
 
-  it('Change template must work', () => {
+  it('Change template must work', async () => {
     // click to open the Selection, then click a specific option.
     // after clicking, the way stripes-components renders a <Selection>
     // with a selected element, the selected element will be present twice.
-    userEvent.click(screen.getByText('ui-users.blocks.form.label.template'));
+    await userEvent.click(screen.getByText('ui-users.blocks.form.label.template'));
 
     const list = screen.getByRole('listbox');
-    userEvent.click(within(list).getByText('name2', { exact: false }));
+    await userEvent.click(within(list).getByText('name2', { exact: false }));
 
     expect(screen.getAllByText('name2 (testCode2)').length).toEqual(2);
   });

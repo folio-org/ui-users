@@ -30,9 +30,9 @@ describe('Render Helper App', () => {
     renderHelperApp(props);
     expect(screen.getByText('stripes-smart-components.tags')).toBeInTheDocument();
   });
-  it('Check if Tags are added', () => {
+  it('Check if Tags are added', async () => {
     renderHelperApp(props);
-    userEvent.type(document.querySelector('[id="multiselect-input-input-tag"]'), 'TestingTag');
+    await userEvent.type(document.querySelector('[id="multiselect-input-input-tag"]'), 'TestingTag');
     expect(screen.getByText('TestingTag')).toBeInTheDocument();
   });
 });

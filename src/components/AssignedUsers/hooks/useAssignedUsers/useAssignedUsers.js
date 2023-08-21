@@ -6,36 +6,38 @@ import {
   useStripes,
 } from '@folio/stripes/core';
 
-import { MAX_RECORDS } from '../../../../constants';
 import {
   GROUPS_API,
+  MAX_RECORDS,
   PERMISSIONS_API,
-  USERS_API
+  USERS_API,
 } from '../../constants';
 import {
   batchRequest,
-  buildQueryByIds
+  buildQueryByIds,
 } from '../utils';
 
-const useAssignedUsers = ({ grantedToIds = [], permissionSetId, tenantId }, options = {}) => {
+const DEFAULT_DATA = [];
+
+const useAssignedUsers = ({ grantedToIds = DEFAULT_DATA, permissionSetId, tenantId }, options = {}) => {
   const stripes = useStripes();
   const defaultTenantId = stripes.okapi?.tenant;
 
   const ky = useOkapiKy();
   const api = ky.extend({
     hooks: {
-      beforeRequest: [(req) => req.headers.set('X-Okapi-Tenant', tenantId || defaultTenantId)]
-    }
+      beforeRequest: [(req) => req.headers.set('X-Okapi-Tenant', tenantId || defaultTenantId)],
+    },
   });
 
   const [namespace] = useNamespace({ key: 'get-assigned-users' });
   const {
     isLoading,
-    data = [],
+    data = DEFAULT_DATA,
     refetch,
     isFetching,
   } = useQuery(
-    [namespace, permissionSetId],
+    [namespace, permissionSetId, ...grantedToIds],
     async ({ signal }) => {
       const permissionUsersResponse = await batchRequest(
         ({ params: searchParams }) => api
@@ -66,6 +68,7 @@ const useAssignedUsers = ({ grantedToIds = [], permissionSetId, tenantId }, opti
 
       const patronGroupsById = patronGroups.reduce((acc, group) => {
         acc[group.id] = group.group;
+
         return acc;
       }, {});
 
@@ -73,7 +76,7 @@ const useAssignedUsers = ({ grantedToIds = [], permissionSetId, tenantId }, opti
         ...rest,
         personal,
         patronGroup,
-        fullName: [personal.firstName, personal.lastName].filter(Boolean).join(' '),
+        fullName: [personal?.lastName, personal?.firstName].filter(Boolean).join(', '),
         groupName: patronGroupsById[patronGroup],
       }));
     },
@@ -84,11 +87,13 @@ const useAssignedUsers = ({ grantedToIds = [], permissionSetId, tenantId }, opti
     },
   );
 
+  const users = !grantedToIds.length ? DEFAULT_DATA : data;
+
   return ({
     refetch,
     isLoading,
     isFetching,
-    users: data,
+    users,
   });
 };
 

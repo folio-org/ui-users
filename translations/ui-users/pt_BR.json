@@ -1079,7 +1079,7 @@
     "loans.newPatronInfo": "Novas informações do usuário",
     "loans.newStaffInfo": "Nova informação da equipe",
     "loans.patronInfoDialogBody": "Adicione novas informações de usuário para <strong> {title} ( {materialType} ) </strong> (código de barras: {barcode} ). Isso substituirá qualquer informação do usuário adicionada anteriormente.",
-    "loans.staffInfoDialogBody": "Adicione novas informações de equipe para <strong> {title} ( {materialType} ) </strong> (código de barras: {barcode} ). Isso substituirá qualquer informação da equipe adicionada anteriormente.",
+    "loans.staffInfoDialogBody": "Adicione novas informações de equipe para <strong> {title} ({materialType}) </strong> (código de barras: {barcode}).",
     "loans.addInfo.patron": "Adicionar novas informações do usuário",
     "loans.addInfo.staff": "Adicionar novas informações da equipe",
     "permission.loans.add-patron-info": "Usuários: Empréstimos de usuários: adicionar informações do usuário",
@@ -1124,5 +1124,11 @@
     "reports.includesReminderFees": "Inclui taxa(s) de lembrete",
     "permissions.assignedUsers": "Usuários atribuídos",
     "permissions.assignedUsers.name": "Nome",
-    "permissions.assignedUsers.patronGroup": "Grupo de usuários"
+    "permissions.assignedUsers.patronGroup": "Grupo de usuários",
+    "permissions.assignUsers.actions.assign": "Atribuir/desatribuir",
+    "permissions.assignUsers.actions.assign.notAvailable": "Atribuir usuários não está disponível",
+    "permissions.assignUsers.actions.message.success": "A atribuição do usuário no conjunto de permissões foi atualizada com sucesso",
+    "permissions.assignUsers.actions.message.error": "A atribuição do usuário no conjunto de permissões não foi bem-sucedida. {error}",
+    "permissions.assignUsers.actions.message.permission.error": "Você não tem as permissões necessárias.",
+    "errors.generic": "Algo deu errado. Por favor, tente novamente mais tarde."
 }

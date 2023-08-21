@@ -1,4 +1,4 @@
-import { renderHook } from '@folio/jest-config-stripes/testing-library/react-hooks';
+import { renderHook, waitFor } from '@folio/jest-config-stripes/testing-library/react';
 import {
   QueryClient,
   QueryClientProvider,
@@ -48,7 +48,7 @@ describe('useUserTenantPermissions', () => {
       userId: 'userId',
       tenantId: 'tenantId',
     };
-    const { result, waitFor } = renderHook(() => useUserTenantPermissions(options), { wrapper });
+    const { result } = renderHook(() => useUserTenantPermissions(options), { wrapper });
 
     await waitFor(() => !result.current.isLoading);
 

@@ -39,20 +39,20 @@ describe('Render UserAddresses component', () => {
     expect(document.querySelector('[name="zipCode"]').value).toBe('1');
     expect(document.querySelector('[name="stateRegion"]').value).toBe('State');
   });
-  it('Checking edit', () => {
+  it('Checking edit', async () => {
     renderUserAddresses(props);
-    userEvent.type(document.querySelector('[name="zipCode"]'), '1235');
+    await userEvent.type(document.querySelector('[name="zipCode"]'), '1235');
     expect(document.querySelector('[name="zipCode"]').value).toBe('11235');
   });
-  it('Checking edit save', () => {
+  it('Checking edit save', async () => {
     renderUserAddresses(props);
     userEvent.type(document.querySelector('[name="zipCode"]'), '1235');
-    userEvent.click(screen.getByText('Save'));
+    await userEvent.click(screen.getByText('Save'));
     expect(updateMock).toHaveBeenCalled();
   });
-  it('Checking Delete', () => {
+  it('Checking Delete', async () => {
     renderUserAddresses(props);
-    userEvent.click(screen.getByText('Remove this address'));
+    await userEvent.click(screen.getByText('Remove this address'));
     expect(updateMock).toHaveBeenCalled();
   });
   it('empty address', () => {

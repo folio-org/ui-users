@@ -131,7 +131,7 @@ const mutatorFailed = {
 
 
 describe('BulkClaimReturnedModal component', () => {
-  it('Checking BulkClaimReturnedModal Modal checked Loan data', () => {
+  it('Checking BulkClaimReturnedModal Modal checked Loan data', async () => {
     const props = {
       requestCounts: {
         '1b6d3338-186e-4e35-9e75-1b886b0da53e' : 10,
@@ -149,13 +149,13 @@ describe('BulkClaimReturnedModal component', () => {
     expect(renderBulkClaimReturnedModal(props)).toBeTruthy();
 
     // Checking Confirmation dialog
-    userEvent.type(document.querySelector('[data-test-bulk-claim-returned-additional-info="true"]'), 'test');
-    userEvent.click(document.querySelector('[data-test-bulk-cr-confirm-button="true"]'));
+    await userEvent.type(document.querySelector('[data-test-bulk-claim-returned-additional-info="true"]'), 'test');
+    await userEvent.click(document.querySelector('[data-test-bulk-cr-confirm-button="true"]'));
 
     // checking loan data
     expect(screen.getByText('PR6056.I4588 B749 2016')).toBeTruthy();
   });
-  it('Checking BulkClaimReturnedModal Modal for uncheckedLoans data', () => {
+  it('Checking BulkClaimReturnedModal Modal for uncheckedLoans data', async () => {
     const props = {
       requestCounts: {},
       stripes: STRIPES,
@@ -172,8 +172,8 @@ describe('BulkClaimReturnedModal component', () => {
 
     // Additional information confirmation box must be displayed
     expect(screen.getByText('ui-users.additionalInfo.label')).toBeTruthy();
-    userEvent.type(document.querySelector('[data-test-bulk-claim-returned-additional-info="true"]'), 'test');
-    userEvent.click(document.querySelector('[data-test-bulk-cr-confirm-button="true"]'));
+    await userEvent.type(document.querySelector('[data-test-bulk-claim-returned-additional-info="true"]'), 'test');
+    await userEvent.click(document.querySelector('[data-test-bulk-cr-confirm-button="true"]'));
 
     // Only checked loans must be provided
     expect(screen.getByText('453987605438')).toBeTruthy();

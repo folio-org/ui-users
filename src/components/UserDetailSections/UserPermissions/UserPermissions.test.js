@@ -69,14 +69,14 @@ describe('UserPermissions component', () => {
   });
 
   describe('Consortia', () => {
-    it('should update permissions list after selecting another affiliation', () => {
+    it('should update permissions list after selecting another affiliation', async () => {
       IfConsortiumPermission.mockImplementation(({ children }) => children);
       renderUserPermissions();
 
       expect(screen.getByText('ui-agreements.permission.agreements.edit')).toBeInTheDocument();
       expect(screen.getByText('ui-agreements.permission.agreements.delete')).toBeInTheDocument();
 
-      userEvent.click(screen.getByText(affiliations[1].tenantName));
+      await userEvent.click(screen.getByText(affiliations[1].tenantName));
 
       expect(screen.queryByText('ui-agreements.permission.agreements.edit')).not.toBeInTheDocument();
       expect(screen.queryByText('ui-agreements.permission.agreements.delete')).not.toBeInTheDocument();

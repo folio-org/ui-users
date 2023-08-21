@@ -173,7 +173,7 @@ class UserEdit extends React.Component {
       })
       .then(() => {
         history.push(`/users/preview/${user.id}${search}`);
-      });
+      }).catch((e) => showErrorCallout(e, this.context.sendCallout));
   }
 
   formatCustomFieldsPayload(customFields) {
@@ -401,7 +401,7 @@ class UserEdit extends React.Component {
         onSubmit={onSubmit}
         onCancel={() => {
           history.push({
-            pathname: params.id ? `/users/preview/${params.id}` : '/users',
+            pathname: params.id ? `/users/preview/${params.id}${location.search}` : '/users',
             state: location.state,
           });
         }}

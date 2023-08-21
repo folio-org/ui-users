@@ -47,8 +47,8 @@ describe('Conditions Form Component', () => {
     expect(screen.getByText('Maximum number of items charged out')).toBeInTheDocument();
   });
   it('Checkbox selection', async () => {
-    userEvent.click(document.querySelector('[id="blockRenewals"]'));
-    userEvent.type(document.querySelector('[data-test-block-message="true"]'), 'Testing');
+    await userEvent.click(document.querySelector('[id="blockRenewals"]'));
+    await userEvent.type(document.querySelector('[data-test-block-message="true"]'), 'Testing');
     expect(screen.getByText('Testing')).toBeInTheDocument();
   });
   it('handle Submit in conditions form', async () => {

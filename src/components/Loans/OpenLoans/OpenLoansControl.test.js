@@ -233,45 +233,45 @@ describe('OpenLoans Control', () => {
   test('Component Must be Rendered', () => {
     expect(screen.getByText('Open Loans Control')).toBeInTheDocument();
   });
-  test('Checking if Build Records method is working', () => {
-    userEvent.click(screen.getByText('Build Records'));
-    userEvent.click(screen.getByText('FeeFineCount'));
+  test('Checking if Build Records method is working', async () => {
+    await userEvent.click(screen.getByText('Build Records'));
+    await userEvent.click(screen.getByText('FeeFineCount'));
     expect(screen.getByText('Loans Length 0')).toBeInTheDocument();
   });
-  test('Checking if Build Records method is working', () => {
-    userEvent.click(screen.getByText('toggleColumn'));
-    userEvent.click(screen.getByText('toggleAll'));
-    userEvent.click(screen.getByText('toggleItem'));
-    userEvent.click(screen.getByText('getLoanPolicy'));
+  test('Checking if Build Records method is working', async () => {
+    await userEvent.click(screen.getByText('toggleColumn'));
+    await userEvent.click(screen.getByText('toggleAll'));
+    await userEvent.click(screen.getByText('toggleItem'));
+    await userEvent.click(screen.getByText('getLoanPolicy'));
     expect(screen.getByText('3 day'));
   });
-  test('Loan policy check and toggle columns', () => {
-    userEvent.click(screen.getByText('toggleColumn'));
-    userEvent.click(screen.getByText('toggleAll'));
-    userEvent.click(screen.getByText('toggleItem'));
-    userEvent.click(screen.getByText('getLoanPolicy'));
+  test('Loan policy check and toggle columns', async () => {
+    await userEvent.click(screen.getByText('toggleColumn'));
+    await userEvent.click(screen.getByText('toggleAll'));
+    await userEvent.click(screen.getByText('toggleItem'));
+    await userEvent.click(screen.getByText('getLoanPolicy'));
     expect(screen.getByText('3 day'));
   });
-  test('declare Lost Check with duedate dialogs', () => {
-    userEvent.click(screen.getByText('hideChangeDueDateDialog'));
-    userEvent.click(screen.getByText('showChangeDueDateDialog'));
-    userEvent.click(screen.getByText('onClosePatronBlockedModal'));
-    userEvent.click(screen.getByText('openPatronBlockedModal'));
-    userEvent.click(screen.getByText('handleOptionsChange'));
+  test('declare Lost Check with duedate dialogs', async () => {
+    await userEvent.click(screen.getByText('hideChangeDueDateDialog'));
+    await userEvent.click(screen.getByText('showChangeDueDateDialog'));
+    await userEvent.click(screen.getByText('onClosePatronBlockedModal'));
+    await userEvent.click(screen.getByText('openPatronBlockedModal'));
+    await userEvent.click(screen.getByText('handleOptionsChange'));
     expect(declareLostMock).toHaveBeenCalled();
   });
-  test('claim Returned Check with renew', () => {
-    userEvent.click(screen.getByText('renew'));
-    userEvent.click(screen.getByText('handleOptionsChange1'));
+  test('claim Returned Check with renew', async () => {
+    await userEvent.click(screen.getByText('renew'));
+    await userEvent.click(screen.getByText('handleOptionsChange1'));
     expect(claimReturnedMock).toHaveBeenCalled();
   });
-  test('Mark as Missing Check with feefineDetails', () => {
-    userEvent.click(screen.getByText('feefineDetails'));
-    userEvent.click(screen.getByText('handleOptionsChange2'));
+  test('Mark as Missing Check with feefineDetails', async () => {
+    await userEvent.click(screen.getByText('feefineDetails'));
+    await userEvent.click(screen.getByText('handleOptionsChange2'));
     expect(markAsMissingMock).toHaveBeenCalled();
   });
-  test('Renew Selected check', () => {
-    userEvent.click(screen.getByText('RenewSelected'));
+  test('Renew Selected check', async () => {
+    await userEvent.click(screen.getByText('RenewSelected'));
     expect(renewMock).toHaveBeenCalled();
   });
 });

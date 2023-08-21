@@ -1,4 +1,4 @@
-import { renderHook } from '@folio/jest-config-stripes/testing-library/react-hooks';
+import { renderHook } from '@folio/jest-config-stripes/testing-library/react';
 import {
   QueryClient,
   QueryClientProvider,
@@ -10,8 +10,6 @@ import {
 } from '@folio/stripes/core';
 
 import useAssignedUsersMutation from './useAssignedUsersMutation';
-
-
 
 jest.mock('@folio/stripes/core', () => ({
   ...jest.requireActual('@folio/stripes/core'),
@@ -37,14 +35,12 @@ const userRecords = [
 ];
 
 describe('useAssignedUsersMutation', () => {
-  const setGrantedToIds = jest.fn();
   const tenantId = 'diku';
   const permissionName = 'user.assign-permissions';
 
   const defaultProps = {
     tenantId,
     permissionName,
-    setGrantedToIds,
   };
 
   const setHeaderMock = jest.fn();
@@ -78,7 +74,5 @@ describe('useAssignedUsersMutation', () => {
 
     await result.current.assignUsers(['1', '2']);
     await result.current.unassignUsers(['1']);
-
-    expect(setGrantedToIds).toHaveBeenCalledTimes(2);
   });
 });

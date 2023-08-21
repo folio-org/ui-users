@@ -74,7 +74,7 @@ describe('render ActionMenuDeleteButton', () => {
       };
 
       render(<ActionMenuDeleteButton {...props} />);
-      userEvent.click(screen.getByText('ui-users.details.checkDelete'));
+      await userEvent.click(screen.getByText('ui-users.details.checkDelete'));
 
       expect(props.onToggle).toHaveBeenCalled();
       expect(props.handleDeleteClick).toHaveBeenCalled();

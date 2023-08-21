@@ -60,31 +60,31 @@ describe('BlockTemplateForm', () => {
     const templateInformationButton = screen.getByRole('button', { name: 'Icon (caret-up) ui-users.manualBlockTemplates.templateInformation' });
     userEvent.click(templateInformationButton);
   });
-  it('should call onCancel when "Cancel" button is clicked', () => {
+  it('should call onCancel when "Cancel" button is clicked', async () => {
     const cancelButton = screen.getByRole('button', { name: 'ui-users.cancel' });
-    userEvent.click(cancelButton);
+    await userEvent.click(cancelButton);
     expect(props.onCancel).toHaveBeenCalled();
   });
-  it('name input field is required', () => {
+  it('name input field is required', async () => {
     const nameInput = screen.getByLabelText(/ui-users.manualBlockTemplates.templateName */i);
     expect(nameInput).toHaveValue('Test Block Template');
-    userEvent.type(nameInput, ' Enter Something');
+    await userEvent.type(nameInput, ' Enter Something');
     expect(nameInput).toHaveValue('Test Block Template Enter Something');
     const ConfirmationButton = screen.getByRole('button', { name: 'Confirmation' });
-    userEvent.click(ConfirmationButton);
+    await userEvent.click(ConfirmationButton);
     const saveButton = screen.getByRole('button', { name: 'ui-users.saveAndClose' });
     expect(saveButton).toBeEnabled();
     userEvent.click(saveButton);
   });
-  it('description input field is required', () => {
+  it('description input field is required', async () => {
     const descriptionInput = screen.getByLabelText(/ui-users.description/i);
     expect(descriptionInput).toHaveValue('');
-    userEvent.type(descriptionInput, 'description new value');
+    await userEvent.type(descriptionInput, 'description new value');
     expect(descriptionInput).toHaveValue('description new value');
     const CancellationButton = screen.getByRole('button', { name: 'Cancellation' });
     userEvent.click(CancellationButton);
   });
-  it('should render action checkboxes for borrowing, renewals, and requests', () => {
+  it('should render action checkboxes for borrowing, renewals, and requests', async () => {
     const borrowingCheckbox = screen.getByRole('checkbox', {
       name: 'ui-users.blocks.columns.borrowing',
     });
@@ -102,7 +102,7 @@ describe('BlockTemplateForm', () => {
     });
     expect(requestsCheckbox).toBeInTheDocument();
     expect(requestsCheckbox).not.toBeChecked();
-    userEvent.click(requestsCheckbox);
+    await userEvent.click(requestsCheckbox);
     expect(requestsCheckbox).toBeChecked();
     const allButton = screen.getByRole('button', { name: 'stripes-components.collapseAll' });
     userEvent.click(allButton);

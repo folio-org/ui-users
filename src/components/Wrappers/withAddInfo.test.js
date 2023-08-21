@@ -38,9 +38,9 @@ describe('withAddInfo', () => {
   });
 
   describe('opening add info dialog', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       renderWithAddInfo();
-      userEvent.click(screen.getByTestId('open-dialog'));
+      await userEvent.click(screen.getByTestId('open-dialog'));
     });
 
     test('open add info dialog', () => {
@@ -48,8 +48,8 @@ describe('withAddInfo', () => {
     });
 
     describe('closing add info dialog', () => {
-      beforeEach(() => {
-        userEvent.click(screen.getByTestId('close-dialog'));
+      beforeEach(async () => {
+        await userEvent.click(screen.getByTestId('close-dialog'));
       });
 
       test('close add info dialog', () => {

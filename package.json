@@ -7,9 +7,6 @@
     "registry": "https://repository.folio.org/repository/npm-folio/"
   },
   "license": "Apache-2.0",
-  "engines": {
-    "node": ">=14.0.0"
-  },
   "main": "src/index.js",
   "stripes": {
     "actsAs": [
@@ -1043,11 +1040,11 @@
     "@babel/plugin-transform-runtime": "^7.21.4",
     "@babel/preset-env": "^7.21.4",
     "@babel/preset-react": "^7.9.0",
-    "@folio/eslint-config-stripes": "^6.0.0",
-    "@folio/jest-config-stripes": "^1.0.0",
+    "@folio/eslint-config-stripes": "^7.0.0",
+    "@folio/jest-config-stripes": "^2.0.0",
     "@folio/service-interaction": "^2.0.0",
-    "@folio/stripes": "^8.0.0",
-    "@folio/stripes-cli": "^2.4.0",
+    "@folio/stripes": "^9.0.0",
+    "@folio/stripes-cli": "^3.0.0",
     "@formatjs/cli": "^6.0.4",
     "core-js": "^3.6.4",
     "eslint": "^7.32.0",
@@ -1055,8 +1052,8 @@
     "history": "^5.0.0",
     "identity-obj-proxy": "^3.0.0",
     "moment": "^2.24.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-intl": "^5.8.0",
     "react-query": "^3.39.0",
     "react-redux": "^8.0.5",
@@ -1082,9 +1079,10 @@
   },
   "peerDependencies": {
     "@folio/service-interaction": "^2.0.0",
-    "@folio/stripes": "^8.0.0",
+    "@folio/stripes": "^9.0.0",
     "moment": "^2.24.0",
-    "react": "^17.0.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-intl": "^5.8.0",
     "react-query": "^3.39.0",
     "react-redux": "^8.0.5",
@@ -1092,7 +1090,7 @@
     "react-router-dom": "^5.2.0"
   },
   "optionalDependencies": {
-    "@folio/plugin-find-user": "^6.0.0"
+    "@folio/plugin-find-user": "^7.0.0"
   },
   "resolutions": {
     "word-wrap": "npm:@aashutoshrathi/word-wrap@^1.2.6"

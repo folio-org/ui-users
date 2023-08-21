@@ -52,24 +52,24 @@ describe('withDeclareLost', () => {
     userEvent.click(screen.getByTestId('enable'));
     expect(screen.getByTestId('declareLost')).toBeInTheDocument();
   });
-  test('Test Declare Lost button functionality', () => {
+  test('Test Declare Lost button functionality', async () => {
     renderWithDeclareLost();
-    userEvent.click(screen.getByTestId('enable'));
-    userEvent.click(screen.getByTestId('declareLost'));
+    await userEvent.click(screen.getByTestId('enable'));
+    await userEvent.click(screen.getByTestId('declareLost'));
     expect(screen.getByTestId('close-dialog')).toBeInTheDocument();
   });
-  test('Close Dialog Functionality', () => {
+  test('Close Dialog Functionality', async () => {
     renderWithDeclareLost();
-    userEvent.click(screen.getByTestId('enable'));
-    userEvent.click(screen.getByTestId('declareLost'));
-    userEvent.click(screen.getByTestId('close-dialog'));
+    await userEvent.click(screen.getByTestId('enable'));
+    await userEvent.click(screen.getByTestId('declareLost'));
+    await userEvent.click(screen.getByTestId('close-dialog'));
     expect(screen.queryByTestId('close-dialog')).not.toBeInTheDocument();
   });
-  test('Disable Dialog Functionality', () => {
+  test('Disable Dialog Functionality', async () => {
     renderWithDeclareLost();
-    userEvent.click(screen.getByTestId('enable'));
-    userEvent.click(screen.getByTestId('declareLost'));
-    userEvent.click(screen.getByTestId('disable-dialog'));
+    await userEvent.click(screen.getByTestId('enable'));
+    await userEvent.click(screen.getByTestId('declareLost'));
+    await userEvent.click(screen.getByTestId('disable-dialog'));
     expect(screen.queryByTestId('declareLost')).not.toBeInTheDocument();
   });
 });

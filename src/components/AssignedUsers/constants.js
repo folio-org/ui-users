@@ -1,6 +1,7 @@
 import { FormattedMessage } from 'react-intl';
 
 export const VISIBLE_COLUMNS = ['fullName', 'groupName'];
+export const MAX_RECORDS = 1000;
 
 export const COLUMN_MAPPING = {
   fullName: <FormattedMessage id="ui-users.permissions.assignedUsers.name" />,

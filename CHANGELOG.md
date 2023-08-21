@@ -69,6 +69,13 @@
 * Add permission check to restrict edit of transfer account page on user settings. Refs UIU-2910.
 * Leverage cookie-based authentication in all API requests. Refs UIU-2746.
 * Assign/unassign users from Permission set. Refs UIU-2873.
+* Add serach filters to path while navigating back to user preview screen, when cancelling user edit. Refs. UIU-2928
+* ECS - Check username uniqueness when editing. Refs UIU-2889.
+* Update Node.js to v18 in GitHub Actions. Refs. UIU-2927.
+* Add PULL_REQUEST_TEMPLATE.md file to the repository. Refs. UIU-2918.
+* Adjust `loans.staffInfoDialogBody` translation. Refs. UIU-2922.
+* *BREAKING* Upgrade React to v18. Refs-UIU-2912.
+* ECS - Do not display shadow users in search results. Refs UIU-2933.
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v9.0.0)

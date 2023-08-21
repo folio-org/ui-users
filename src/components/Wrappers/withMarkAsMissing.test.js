@@ -38,9 +38,9 @@ describe('withMarkAsMissing', () => {
   });
 
   describe('opening mark as missing dialog', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       renderWithMarkAsMissing();
-      userEvent.click(screen.getByTestId('open-dialog'));
+      await userEvent.click(screen.getByTestId('open-dialog'));
     });
 
     test('open mark as missing dialog', () => {
@@ -48,8 +48,8 @@ describe('withMarkAsMissing', () => {
     });
 
     describe('closing mark as missing dialog', () => {
-      beforeEach(() => {
-        userEvent.click(screen.getByTestId('close-dialog'));
+      beforeEach(async () => {
+        await userEvent.click(screen.getByTestId('close-dialog'));
       });
 
       test('close mark as missing dialog', () => {

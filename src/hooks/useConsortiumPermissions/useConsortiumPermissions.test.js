@@ -1,4 +1,4 @@
-import { renderHook } from '@folio/jest-config-stripes/testing-library/react-hooks';
+import { renderHook, waitFor } from '@folio/jest-config-stripes/testing-library/react';
 import {
   QueryClient,
   QueryClientProvider,
@@ -71,7 +71,7 @@ describe('useConsortiumPermissions', () => {
   });
 
   it('should fetch consortium permissions', async () => {
-    const { result, waitFor } = renderHook(() => useConsortiumPermissions(), { wrapper });
+    const { result } = renderHook(() => useConsortiumPermissions(), { wrapper });
 
     await waitFor(() => !result.current.isLoading);
 
@@ -92,7 +92,7 @@ describe('useConsortiumPermissions', () => {
   });
 
   it('should return consortia permissions', async () => {
-    const { result, waitFor } = renderHook(() => useConsortiumPermissions(), { wrapper });
+    const { result } = renderHook(() => useConsortiumPermissions(), { wrapper });
 
     await waitFor(() => !result.current.isLoading);
 

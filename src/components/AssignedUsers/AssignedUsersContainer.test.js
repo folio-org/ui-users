@@ -1,8 +1,7 @@
-import React from 'react';
 import {
   render,
   screen,
-  waitFor
+  waitFor,
 } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
@@ -10,12 +9,21 @@ import AssignedUsersContainer from './AssignedUsersContainer';
 import AssignedUsersList from './AssignedUsersList';
 import {
   useAssignedUsers,
-  useAssignedUsersMutation
+  useAssignedUsersMutation,
+  usePermissionSet,
 } from './hooks';
 import { getUpdatedUsersList } from './utils';
 
 jest.unmock('@folio/stripes/components');
 jest.unmock('@folio/stripes/util');
+
+jest.mock('@folio/stripes/core', () => ({
+  ...jest.requireActual('@folio/stripes/core'),
+  useCallout: jest.fn(() => ({
+    sendCallout: jest.fn(),
+  })),
+  IfPermission: props => <>{props.children}</>,
+}));
 
 jest.mock('@folio/stripes/components', () => ({
   ...jest.requireActual('@folio/stripes/components'),
@@ -25,13 +33,22 @@ jest.mock('@folio/stripes/components', () => ({
 jest.mock('./hooks', () => ({
   useAssignedUsers: jest.fn(),
   useAssignedUsersMutation: jest.fn(),
+  usePermissionSet: jest.fn(() => ({
+    permissionSet: {},
+    isLoading: true,
+  })),
 }));
 jest.mock('./utils', () => ({
   getUpdatedUsersList: jest.fn(),
 }));
-jest.mock('./AssignedUsersList', () => jest.fn(({ assignUsers }) => (
+
+jest.mock('./AssignUsers', () => jest.fn(({ assignUsers }) => (
   <div>
     <button onClick={assignUsers} type="button">Assign/Unassign</button>
+  </div>
+)));
+jest.mock('./AssignedUsersList', () => jest.fn(() => (
+  <div>
     <h2>AssignedUsersList</h2>
   </div>
 )));
@@ -62,6 +79,15 @@ describe('AssignedUsersContainer', () => {
 
   beforeEach(() => {
     AssignedUsersList.mockClear();
+    usePermissionSet.mockClear().mockReturnValue({
+      permissionSet: {
+        id: '1',
+        name: 'permissionSetName',
+        displayName: 'permissionSetDisplayName',
+        grantedTo: ['1', '2'],
+      },
+      isLoading: false,
+    });
     useAssignedUsers.mockClear().mockReturnValue({
       users: [],
       isLoading: true,
@@ -81,6 +107,26 @@ describe('AssignedUsersContainer', () => {
     renderComponent(props);
 
     expect(screen.getByText('Loading')).toBeInTheDocument();
+  });
+
+  it('should render empty list', async () => {
+    usePermissionSet.mockClear().mockReturnValue({
+      permissionSet: {
+        id: '1',
+        name: 'permissionSetName',
+        displayName: 'permissionSetDisplayName',
+        grantedTo: [],
+      },
+      isLoading: false,
+    });
+    useAssignedUsers.mockClear().mockReturnValue({
+      users: [],
+      isLoading: false,
+    });
+    renderComponent(props);
+
+    await waitFor(() => expect(screen.queryByText('Loading')).toBeNull());
+    expect(screen.getByText('AssignedUsersList')).toBeInTheDocument();
   });
 
   it('should render AssignedUsersList', async () => {
@@ -115,7 +161,8 @@ describe('AssignedUsersContainer', () => {
     expect(screen.getByText(mockUsers.length)).toBeInTheDocument();
 
     const accordionButton = screen.getByText('ui-users.permissions.assignedUsers');
-    userEvent.click(accordionButton);
+
+    await userEvent.click(accordionButton);
 
     await waitFor(() => expect(screen.getByText('AssignedUsersList')).toBeInTheDocument());
     expect(onToggle).toHaveBeenCalled();
@@ -145,6 +192,15 @@ describe('handle mutations', () => {
     const mockAssignUsers = jest.fn();
     const mockRefetch = jest.fn();
 
+    usePermissionSet.mockClear().mockReturnValue({
+      permissionSet: {
+        id: '1',
+        name: 'permissionSetName',
+        grantedTo: ['1', '2'],
+      },
+      isLoading: false,
+      refetch: mockRefetch,
+    });
     useAssignedUsersMutation.mockClear().mockReturnValue({
       assignUsers: jest.fn(),
       unassignUsers: jest.fn(),
@@ -153,7 +209,6 @@ describe('handle mutations', () => {
     useAssignedUsers.mockReturnValue({
       users: mockUsers,
       isLoading: false,
-      refetch: mockRefetch,
     });
 
     getUpdatedUsersList.mockClear().mockReturnValue(input);
@@ -161,7 +216,7 @@ describe('handle mutations', () => {
     const renderComponentWithAssignUsers = (containerProps = {}, assignUsersProps = {}) => render(
       <AssignedUsersContainer {...containerProps}>
         <AssignedUsersList {...assignUsersProps} />
-      </AssignedUsersContainer>
+      </AssignedUsersContainer>,
     );
 
     renderComponentWithAssignUsers(props, { users: mockUsers, assignUsers: mockAssignUsers });

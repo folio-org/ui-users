@@ -92,22 +92,22 @@ describe('request preference point', () => {
     }, { rerender: true });
     expect(setFieldValueMock).toBeCalled();
   });
-  it('defaultPickupServicePoint value should be changed', () => {
+  it('defaultPickupServicePoint value should be changed', async () => {
     renderRequestPreferencesEdit(props);
     const dropDown = screen.getByRole('combobox', { name: /ui-users.requests.defaultPickupServicePoint/i });
-    userEvent.selectOptions(dropDown, '1');
+    await userEvent.selectOptions(dropDown, '1');
     expect(dropDown).toHaveDisplayValue('Service point 1');
   });
-  it('defaultDeliveryAddress value should be changed', () => {
+  it('defaultDeliveryAddress value should be changed', async () => {
     renderRequestPreferencesEdit(props);
     const dropDown = screen.getByRole('combobox', { name: /ui-users.requests.defaultDeliveryAddress/i });
-    userEvent.selectOptions(dropDown, 'addressType1');
+    await userEvent.selectOptions(dropDown, 'addressType1');
     expect(dropDown).toHaveDisplayValue('Address 1');
   });
-  it('Requests delivery checkbox should be checked', () => {
+  it('Requests delivery checkbox should be checked', async () => {
     renderRequestPreferencesEdit(props);
     const checkbox = screen.getByRole('checkbox', { name: /ui-users.requests.delivery/i });
-    userEvent.click(checkbox);
+    await userEvent.click(checkbox);
     expect(checkbox).toBeChecked();
   });
 });

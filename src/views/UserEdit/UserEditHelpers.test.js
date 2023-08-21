@@ -1,7 +1,7 @@
 import { resourcesLoaded, showErrorCallout } from './UserEditHelpers';
 
 describe('resourcesLoaded', () => {
-  test('loaded, no exceptions', async () => {
+  it('loaded, no exceptions', async () => {
     const res = {
       foo: { isPending: false },
       bar: { isPending: false },
@@ -10,7 +10,7 @@ describe('resourcesLoaded', () => {
     expect(resourcesLoaded(res)).toBe(true);
   });
 
-  test('loaded, with exceptions', async () => {
+  it('loaded, with exceptions', async () => {
     const res = {
       foo: { isPending: false },
       bar: { isPending: true },
@@ -19,7 +19,7 @@ describe('resourcesLoaded', () => {
     expect(resourcesLoaded(res, ['bar'])).toBe(true);
   });
 
-  test('loaded (not an object)', async () => {
+  it('loaded (not an object)', async () => {
     const res = {
       foo: { isPending: false },
       bar: () => { },
@@ -28,7 +28,7 @@ describe('resourcesLoaded', () => {
     expect(resourcesLoaded(res)).toBe(true);
   });
 
-  test('unloaded (null)', async () => {
+  it('unloaded (null)', async () => {
     const res = {
       foo: { isPending: false },
       bar: null,
@@ -37,7 +37,7 @@ describe('resourcesLoaded', () => {
     expect(resourcesLoaded(res)).toBe(false);
   });
 
-  test('unloaded (pending)', async () => {
+  it('unloaded (pending)', async () => {
     const res = {
       foo: { isPending: false },
       bar: { isPending: true },
@@ -48,14 +48,50 @@ describe('resourcesLoaded', () => {
 });
 
 describe('showErrorCallout', () => {
-  it('calls the callout', async () => {
-    const res = {
-      text: jest.fn().mockReturnValue(Promise.resolve()),
+  let res = {
+    text: jest.fn().mockReturnValue(Promise.resolve('')),
+    headers: {
+      get: jest.fn().mockReturnValue('text/html'),
+    }
+  };
+  const sendCallout = jest.fn();
+
+  it('calls the callout with generic error', async () => {
+    await showErrorCallout({}, sendCallout);
+
+    expect(sendCallout).toHaveBeenCalled();
+
+    const callArgs = sendCallout.mock.calls[0][0];
+    const callArgsJSON = JSON.stringify(callArgs, null, 2);
+
+    expect(callArgsJSON).toContain('"id": "ui-users.errors.generic"');
+  });
+
+  it('calls the error callout with username exist as text', async () => {
+    res = {
+      ...res,
+      text: jest.fn().mockReturnValue(Promise.resolve('username already exists')),
     };
-    const sendCallout = jest.fn();
 
     await showErrorCallout(res, sendCallout);
 
-    expect(sendCallout).toHaveBeenCalled();
+    expect(sendCallout).toHaveBeenCalledWith(expect.objectContaining({
+      type: 'error',
+    }));
+  });
+
+  it('calls the error callout with username exist as json', async () => {
+    res = {
+      headers: {
+        get: jest.fn().mockReturnValue('application/json'),
+      },
+      json: jest.fn().mockReturnValue(Promise.resolve({ errors: [{ message: 'username already exists' }, { message: 'username already exists with duplicate' }] })),
+    };
+
+    await showErrorCallout(res, sendCallout);
+
+    expect(sendCallout).toHaveBeenCalledWith(expect.objectContaining({
+      type: 'error',
+    }));
   });
 });

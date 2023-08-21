@@ -73,7 +73,7 @@ describe('Limits Form Component', () => {
     expect(screen.getByText('Maximum number of items charged out')).toBeInTheDocument();
   });
   it('Editing/Adding items', async () => {
-    userEvent.type(document.querySelector('[id="72b67965-5b73-4840-bc0b-be8f3f6e047e"]'), '1');
+    await userEvent.type(document.querySelector('[id="72b67965-5b73-4840-bc0b-be8f3f6e047e"]'), '1');
     expect(document.querySelector('[id="72b67965-5b73-4840-bc0b-be8f3f6e047e"]').value).toBe('1');
   });
   it('handle Submit in conditions form', async () => {
