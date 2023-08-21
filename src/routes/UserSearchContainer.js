@@ -14,11 +14,16 @@ import {
 
 import filterConfig from './filterConfig';
 import { UserSearch } from '../views';
-import { MAX_RECORDS } from '../constants';
+import {
+  MAX_RECORDS,
+  USER_TYPES,
+} from '../constants';
 import { buildFilterConfig } from './utils';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
+
+export const NOT_SHADOW_USER_CQL = `((cql.allRecords=1 NOT type ="") or type<>"${USER_TYPES.SHADOW}")`;
 
 const searchFields = [
   'username="%{query}*"',
@@ -34,10 +39,10 @@ const searchFields = [
 ];
 const compileQuery = template(`(${searchFields.join(' or ')})`, { interpolate: /%{([\s\S]+?)}/g });
 
-function buildQuery(queryParams, pathComponents, resourceData, logger, props) {
+export function buildQuery(queryParams, pathComponents, resourceData, logger, props) {
   const customFilterConfig = buildFilterConfig(queryParams.filters);
 
-  return makeQueryFunction(
+  const mainQuery = makeQueryFunction(
     'cql.allRecords=1',
     // TODO: Refactor/remove this after work on FOLIO-2066 and RMB-385 is done
     (parsedQuery, _, localProps) => localProps.query.query.trim().replace('*', '').split(/\s+/)
@@ -54,6 +59,8 @@ function buildQuery(queryParams, pathComponents, resourceData, logger, props) {
     [...filterConfig, ...customFilterConfig],
     2,
   )(queryParams, pathComponents, resourceData, logger, props);
+
+  return mainQuery && `${NOT_SHADOW_USER_CQL} and ${mainQuery}`;
 }
 
 class UserSearchContainer extends React.Component {

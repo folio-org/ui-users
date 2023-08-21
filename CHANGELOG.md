@@ -75,6 +75,7 @@
 * Add PULL_REQUEST_TEMPLATE.md file to the repository. Refs. UIU-2918.
 * Adjust `loans.staffInfoDialogBody` translation. Refs. UIU-2922.
 * *BREAKING* Upgrade React to v18. Refs-UIU-2912.
+* ECS - Do not display shadow users in search results. Refs UIU-2933.
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v9.0.0)
