@@ -22,6 +22,10 @@ import {
 
 import asyncValidateField from '../../validators/asyncValidateField';
 import validateMinDate from '../../validators/validateMinDate';
+import {
+  USER_TYPES,
+  checkIfConsortiumEnabled,
+} from './constants';
 
 import css from './EditUserInfo.css';
 
@@ -111,9 +115,11 @@ class EditUserInfo extends React.Component {
       onToggle,
       accordionId,
       intl,
+      stripes,
       uniquenessValidator,
     } = this.props;
 
+    const isConsortium = checkIfConsortiumEnabled(stripes);
     const { barcode } = initialValues;
 
     const isUserExpired = () => {
@@ -163,6 +169,30 @@ class EditUserInfo extends React.Component {
         label: intl.formatMessage({ id: 'ui-users.inactive' })
       }
     ];
+
+    const isShadowUser = initialValues.type === USER_TYPES.shadow;
+    const userTypeOptions = [
+      {
+        value: '',
+        label: intl.formatMessage({ id: 'ui-users.information.selectUserType' }),
+        visible: !isShadowUser,
+      },
+      {
+        value: USER_TYPES.staff,
+        label: intl.formatMessage({ id: 'ui-users.information.userType.staff' }),
+        visible: !isShadowUser,
+      },
+      {
+        value: USER_TYPES.patron,
+        label: intl.formatMessage({ id: 'ui-users.information.userType.patron' }),
+        visible: !isShadowUser,
+      },
+      {
+        value: USER_TYPES.shadow,
+        label: intl.formatMessage({ id: 'ui-users.information.userType.shadow' }),
+        visible: isShadowUser,
+      }
+    ].filter(o => o.visible);
 
     const offset = this.getPatronGroupOffset();
     const group = _.get(this.props.patronGroups.find(i => i.id === this.state.selectedPatronGroup), 'group', '');
@@ -314,6 +344,19 @@ class EditUserInfo extends React.Component {
                 component={TextField}
                 validate={asyncValidateField('barcode', barcode, uniquenessValidator)}
                 fullWidth
+              />
+            </Col>
+            <Col xs={12} md={3}>
+              <Field
+                label={<FormattedMessage id="ui-users.information.userType" />}
+                name="type"
+                id="userType"
+                component={Select}
+                fullWidth
+                disabled={isShadowUser || isStatusFieldDisabled()}
+                dataOptions={userTypeOptions}
+                aria-required={isConsortium}
+                required={isConsortium}
               />
             </Col>
           </Row>
