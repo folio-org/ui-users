@@ -338,7 +338,7 @@
     "status": "Stav",
     "accounts.header": "Detaily poplatku/pokuty - {userName} ({patronGroup})",
     "owners.error": "Chyba",
-    "owners.warning": "Upozornění: Pokuty při překročení termínu vrácení/poplatky za ztracené jednotky nebudou bez pultu služeb vybírány",
+    "owners.warning": "Varování: Pokuty při překročení termínu vrácení/poplatky za ztracené jednotky nebudou bez pultu služeb vybírány",
     "feefines.singular": "Typ poplatku/pokuty",
     "blocks.columns.type": "Typ",
     "blocks.columns.desc": "Zobrazit popis",
@@ -1079,7 +1079,7 @@
     "loans.newPatronInfo": "Nové informace pro čtenáře",
     "loans.newStaffInfo": "Nové informace pro zaměstnance",
     "loans.patronInfoDialogBody": "Přidat nové informace pro čtenáře pro <strong>{title} ({materialType})</strong> (Čárový kód: {barcode}). Tím se nahradí všechny dříve přidané informace pro čtenáře.",
-    "loans.staffInfoDialogBody": "Přidat nové informace pro zaměstnance pro <strong>{title} ({materialType})</strong> (Čárový kód: {barcode}). Tím se nahradí všechny dříve přidané informace pro zaměstnance.",
+    "loans.staffInfoDialogBody": "Přidat nové informace pro zaměstnance pro <strong>{title} ({materialType})</strong> (Čárový kód: {barcode}).",
     "loans.addInfo.patron": "Přidat nové informace pro čtenáře",
     "loans.addInfo.staff": "Přidat nové informace pro zaměstnance",
     "permission.loans.add-patron-info": "Uživatelé: Uživatelské výpůjčky: přidat informace pro čtenáře",
@@ -1130,5 +1130,5 @@
     "permissions.assignUsers.actions.message.success": "Přiřazení uživatele sady oprávnění bylo úspěšně aktualizováno",
     "permissions.assignUsers.actions.message.error": "Změna přiřazení uživatele sady oprávnění nebyla úspěšná. {error}",
     "permissions.assignUsers.actions.message.permission.error": "Nemáte požadovaná oprávnění.",
-    "errors.generic": "Something went wrong. Please try again later."
+    "errors.generic": "Něco se pokazilo. Zkuste to prosím znovu později."
 }
