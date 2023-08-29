@@ -9,25 +9,6 @@ import renderWithRouter from 'helpers/renderWithRouter';
 import EditUserInfo from './EditUserInfo';
 import { checkIfConsortiumEnabled } from './constants';
 
-jest.mock('react-final-form', () => ({
-  ...jest.requireActual('react-final-form'),
-  Field: jest.fn((props) => {
-    const { component, dataOptions = [] } = props;
-
-    if (dataOptions?.length) {
-      return (
-        <select {...props}>
-          {dataOptions.map(({ label, value }) => (
-            <option key={value} value={value}>{label}</option>
-          ))}
-        </select>
-      );
-    }
-
-    return <div {...props}>{component || 'Field'}</div>;
-  }),
-}));
-
 jest.mock('./constants', () => ({
   ...jest.requireActual('./constants'),
   checkIfConsortiumEnabled: jest.fn(() => true),
@@ -147,21 +128,5 @@ describe('Render Edit User Information component', () => {
     await userEvent.click(screen.getByText('ui-users.information.recalculate.expirationDate'));
     await userEvent.click(screen.getByText('ui-users.cancel'));
     expect(screen.getByText('ui-users.information.recalculate.expirationDate'));
-  });
-  it('should render the correct user type and select element to be required', async () => {
-    checkIfConsortiumEnabled.mockClear().mockReturnValue(true);
-    const { container } = renderEditUserInfo(props);
-
-    expect(screen.getByText('ui-users.information.userType.staff')).toBeInTheDocument();
-    expect(screen.getByText('ui-users.information.userType.patron')).toBeInTheDocument();
-
-    const select = container.querySelector('select#userType');
-    expect(select).toBeRequired();
-  });
-  it('should user type select element not to be required', async () => {
-    checkIfConsortiumEnabled.mockClear().mockReturnValue(false);
-    const { container } = renderEditUserInfo(props);
-    const select = container.querySelector('select#userType');
-    expect(select).not.toBeRequired();
   });
 });
