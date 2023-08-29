@@ -6,11 +6,12 @@ import { Form } from 'react-final-form';
 import '__mock__/stripesComponents.mock';
 
 import renderWithRouter from 'helpers/renderWithRouter';
+import { checkIfConsortiumEnabled } from '../../util';
 import EditUserInfo from './EditUserInfo';
-import { checkIfConsortiumEnabled } from './constants';
 
-jest.mock('./constants', () => ({
-  ...jest.requireActual('./constants'),
+
+jest.mock('../../util', () => ({
+  ...jest.requireActual('../../util'),
   checkIfConsortiumEnabled: jest.fn(() => true),
 }));
 

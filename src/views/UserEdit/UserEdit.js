@@ -26,6 +26,7 @@ import { toUserAddresses, getFormAddressList } from '../../components/data/conve
 import contactTypes from '../../components/data/static/contactTypes';
 import {
   OKAPI_TENANT_HEADER,
+  USER_TYPES,
   deliveryFulfillmentValues,
 } from '../../constants';
 import { resourcesLoaded, showErrorCallout } from './UserEditHelpers';
@@ -83,6 +84,7 @@ class UserEdit extends React.Component {
         defaultDeliveryAddressTypeId: null,
       },
       username: '',
+      type: USER_TYPES.PATRON,
     };
 
     if (!match.params.id) return initialFormValues;

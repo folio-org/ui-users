@@ -177,3 +177,7 @@ export const getContributors = (account, instance) => {
 
   return contributors && contributors.map(({ name }) => name);
 };
+
+export const checkIfConsortiumEnabled = stripes => {
+  return stripes.hasInterface('consortia');
+};

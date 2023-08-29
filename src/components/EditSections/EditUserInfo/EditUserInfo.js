@@ -20,12 +20,10 @@ import {
   ModalFooter,
 } from '@folio/stripes/components';
 
+import { USER_TYPES } from '../../../constants';
+import { checkIfConsortiumEnabled } from '../../util';
 import asyncValidateField from '../../validators/asyncValidateField';
 import validateMinDate from '../../validators/validateMinDate';
-import {
-  USER_TYPES,
-  checkIfConsortiumEnabled,
-} from './constants';
 
 import css from './EditUserInfo.css';
 
@@ -173,22 +171,17 @@ class EditUserInfo extends React.Component {
     const isShadowUser = initialValues.type === USER_TYPES.shadow;
     const userTypeOptions = [
       {
-        value: '',
-        label: intl.formatMessage({ id: 'ui-users.information.selectUserType' }),
-        visible: !isShadowUser,
-      },
-      {
-        value: USER_TYPES.staff,
-        label: intl.formatMessage({ id: 'ui-users.information.userType.staff' }),
-        visible: !isShadowUser,
-      },
-      {
-        value: USER_TYPES.patron,
+        value: USER_TYPES.PATRON,
         label: intl.formatMessage({ id: 'ui-users.information.userType.patron' }),
         visible: !isShadowUser,
       },
       {
-        value: USER_TYPES.shadow,
+        value: USER_TYPES.STAFF,
+        label: intl.formatMessage({ id: 'ui-users.information.userType.staff' }),
+        visible: !isShadowUser,
+      },
+      {
+        value: USER_TYPES.SHADOW,
         label: intl.formatMessage({ id: 'ui-users.information.userType.shadow' }),
         visible: isShadowUser,
       }
@@ -354,6 +347,7 @@ class EditUserInfo extends React.Component {
                 id="userType"
                 component={Select}
                 fullWidth
+                defaultValue={initialValues.type}
                 disabled={isUserTypeFieldDisabled}
                 dataOptions={userTypeOptions}
                 aria-required={isConsortium}
