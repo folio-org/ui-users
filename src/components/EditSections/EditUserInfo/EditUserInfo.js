@@ -347,7 +347,7 @@ class EditUserInfo extends React.Component {
                 id="userType"
                 component={Select}
                 fullWidth
-                defaultValue={initialValues.type}
+                initialValue={initialValues.type}
                 disabled={isUserTypeFieldDisabled}
                 dataOptions={userTypeOptions}
                 aria-required={isConsortium}
