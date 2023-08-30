@@ -190,7 +190,6 @@ class EditUserInfo extends React.Component {
     const offset = this.getPatronGroupOffset();
     const group = _.get(this.props.patronGroups.find(i => i.id === this.state.selectedPatronGroup), 'group', '');
     const date = moment(this.calculateNewExpirationDate(true)).format('LL');
-    const isUserTypeFieldDisabled = isShadowUser || isStatusFieldDisabled();
 
     const modalFooter = (
       <ModalFooter>
@@ -347,8 +346,7 @@ class EditUserInfo extends React.Component {
                 id="userType"
                 component={Select}
                 fullWidth
-                initialValue={initialValues.type}
-                disabled={isUserTypeFieldDisabled}
+                disabled={isShadowUser}
                 dataOptions={userTypeOptions}
                 aria-required={isConsortium}
                 required={isConsortium}
