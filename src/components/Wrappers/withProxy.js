@@ -155,13 +155,15 @@ const withProxy = WrappedComponent => class WithProxyComponent extends React.Com
 
     getRecords(resourceName, idKey) {
       const { resources } = this.props;
-      const resourceForName = `${resourceName}For`;
-      const records = (resources[resourceName] || {}).records || [];
-      const recordsFor = (resources[resourceForName] || {}).records || [];
+      const resourceForName = `${resourceName}For`; // sponsorsFor
+      const records = (resources[resourceName] || {}).records || []; // sponsors records
+      const recordsFor = (resources[resourceForName] || {}).records || []; // sponsorsFor records
 
       if (!records.length) return records;
 
       const rMap = records.reduce((memo, record) => Object.assign(memo, { [record.id]: record }), {});
+
+      console.log('recordsFor ', recordsFor);
       return recordsFor.map(r => ({ proxy: r, user: rMap[r[idKey]] }));
     }
 
