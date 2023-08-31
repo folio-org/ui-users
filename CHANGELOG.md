@@ -77,6 +77,7 @@
 * *BREAKING* Upgrade React to v18. Refs-UIU-2912.
 * ECS - Do not display shadow users in search results. Refs UIU-2933.
 * User can't pay the fee/fine. Refs UIU-2930.
+* Sort proxies and sponsors by user display name. Refs UIU-2799.
 * Add dropdown to specify user type: Patron or Staff. Refs UIU-2936.
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)

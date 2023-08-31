@@ -1,12 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import _ from 'lodash';
+
 import { Headline } from '@folio/stripes/components';
 import css from './ProxyViewList.css';
 
 const ProxyViewList = ({ records, name, label, itemComponent, stripes }) => {
   const ComponentToRender = itemComponent;
-  const items = records.map((record, index) => (
+
+  // sort records by user display name
+  const sortedRecords = _.sortBy(records, record => `${record?.user?.personal?.lastName} ${record?.user?.personal?.firstName}`);
+
+  const items = sortedRecords.map((record, index) => (
     <ComponentToRender key={`item-${index}`} record={record} stripes={stripes} />
   ));
   const noSponsorsFound = <FormattedMessage id="ui-users.permissions.noSponsorsFound" />;
