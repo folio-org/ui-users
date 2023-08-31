@@ -6,13 +6,32 @@ import { Form } from 'react-final-form';
 import '__mock__/stripesComponents.mock';
 
 import renderWithRouter from 'helpers/renderWithRouter';
-import { checkIfConsortiumEnabled } from '../../util';
-import EditUserInfo from './EditUserInfo';
 
+import EditUserInfo from './EditUserInfo';
+import { isConsortiumEnabled } from '../../util';
+import { USER_TYPES } from '../../../constants';
+
+jest.mock('@folio/stripes/components', () => ({
+  ...jest.requireActual('@folio/stripes/components'),
+  Modal: jest.fn(({ children, label, footer, ...rest }) => {
+    return (
+      <div
+        {...rest}
+      >
+        <h1>{label}</h1>
+        {children}
+        {footer}
+      </div>
+    );
+  }),
+  ModalFooter: jest.fn((props) => (
+    <div>{props.children}</div>
+  )),
+}));
 
 jest.mock('../../util', () => ({
   ...jest.requireActual('../../util'),
-  checkIfConsortiumEnabled: jest.fn(() => true),
+  isConsortiumEnabled: jest.fn(() => true),
 }));
 
 const onSubmit = jest.fn();
@@ -106,7 +125,7 @@ const props = {
 
 describe('Render Edit User Information component', () => {
   beforeEach(() => {
-    checkIfConsortiumEnabled.mockClear().mockReturnValue(false);
+    isConsortiumEnabled.mockClear().mockReturnValue(false);
   });
 
   it('Must be rendered', () => {
@@ -129,5 +148,27 @@ describe('Render Edit User Information component', () => {
     await userEvent.click(screen.getByText('ui-users.information.recalculate.expirationDate'));
     await userEvent.click(screen.getByText('ui-users.cancel'));
     expect(screen.getByText('ui-users.information.recalculate.expirationDate'));
+  });
+
+  it.each`
+   type
+    ${USER_TYPES.PATRON}
+    ${USER_TYPES.SHADOW}
+  `('Should have user type $type', async ({ type }) => {
+    const isShadowUser = type === USER_TYPES.SHADOW;
+    isConsortiumEnabled.mockClear().mockReturnValue(isShadowUser);
+    renderEditUserInfo({ ...props, initialValues: { ...props.initialValues, type } });
+
+    const selectElement = screen.getByRole('combobox', { name: /ui-users.information.type/i });
+    expect(selectElement).toBeInTheDocument();
+
+    if (type !== USER_TYPES.SHADOW) {
+      expect(selectElement).toBeEnabled();
+    }
+
+    if (isShadowUser) {
+      expect(selectElement).toBeDisabled();
+    }
+    expect(screen.getByRole('option', { name: `ui-users.information.type.${type}` })).toHaveValue(type);
   });
 });
