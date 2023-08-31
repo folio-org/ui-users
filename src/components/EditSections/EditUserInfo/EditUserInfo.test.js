@@ -84,7 +84,8 @@ const props = {
   accordionId: 'editUserInfo',
   stripes: {
     connect: (Component) => Component,
-    timezone: 'USA/TestTimeZone'
+    timezone: 'USA/TestTimeZone',
+    hasInterface: () => true,
   },
   patronGroups: [{
     desc: 'Staff Member',
