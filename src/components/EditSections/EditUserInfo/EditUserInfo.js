@@ -21,7 +21,7 @@ import {
 } from '@folio/stripes/components';
 
 import { USER_TYPES } from '../../../constants';
-import { checkIfConsortiumEnabled } from '../../util';
+import { isConsortiumEnabled } from '../../util';
 import asyncValidateField from '../../validators/asyncValidateField';
 import validateMinDate from '../../validators/validateMinDate';
 
@@ -117,7 +117,7 @@ class EditUserInfo extends React.Component {
       uniquenessValidator,
     } = this.props;
 
-    const isConsortium = checkIfConsortiumEnabled(stripes);
+    const isConsortium = isConsortiumEnabled(stripes);
     const { barcode } = initialValues;
 
     const isUserExpired = () => {
@@ -168,21 +168,26 @@ class EditUserInfo extends React.Component {
       }
     ];
 
-    const isShadowUser = initialValues.type === USER_TYPES.shadow;
-    const userTypeOptions = [
+    const isShadowUser = initialValues.type === USER_TYPES.SHADOW;
+    const typeOptions = [
+      {
+        value: '',
+        label: intl.formatMessage({ id: 'ui-users.information.selectUserType' }),
+        visible: true,
+      },
       {
         value: USER_TYPES.PATRON,
-        label: intl.formatMessage({ id: 'ui-users.information.userType.patron' }),
+        label: intl.formatMessage({ id: 'ui-users.information.type.patron' }),
         visible: !isShadowUser,
       },
       {
         value: USER_TYPES.STAFF,
-        label: intl.formatMessage({ id: 'ui-users.information.userType.staff' }),
+        label: intl.formatMessage({ id: 'ui-users.information.type.staff' }),
         visible: !isShadowUser,
       },
       {
         value: USER_TYPES.SHADOW,
-        label: intl.formatMessage({ id: 'ui-users.information.userType.shadow' }),
+        label: intl.formatMessage({ id: 'ui-users.information.type.shadow' }),
         visible: isShadowUser,
       }
     ].filter(o => o.visible);
@@ -341,13 +346,13 @@ class EditUserInfo extends React.Component {
             </Col>
             <Col xs={12} md={3}>
               <Field
-                label={<FormattedMessage id="ui-users.information.userType" />}
+                label={<FormattedMessage id="ui-users.information.type" />}
                 name="type"
-                id="userType"
+                id="type"
                 component={Select}
                 fullWidth
                 disabled={isShadowUser}
-                dataOptions={userTypeOptions}
+                dataOptions={typeOptions}
                 aria-required={isConsortium}
                 required={isConsortium}
               />
