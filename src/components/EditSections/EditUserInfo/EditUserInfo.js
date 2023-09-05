@@ -118,6 +118,7 @@ class EditUserInfo extends React.Component {
     } = this.props;
 
     const isConsortium = isConsortiumEnabled(stripes);
+    const isEditMode = Boolean(initialValues.id);
     const { barcode } = initialValues;
 
     const isUserExpired = () => {
@@ -173,7 +174,7 @@ class EditUserInfo extends React.Component {
       {
         value: '',
         label: intl.formatMessage({ id: 'ui-users.information.selectUserType' }),
-        visible: true,
+        visible: !isEditMode,
       },
       {
         value: USER_TYPES.PATRON,

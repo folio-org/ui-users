@@ -139,10 +139,27 @@ describe('Render Edit User Information component', () => {
     expect(changeMock).toHaveBeenCalled();
   });
   it('Confirm click must change form values', async () => {
-    renderEditUserInfo(props);
+    renderEditUserInfo({ ...props, initialValues: { ...props.initialValues, id: null } });
     await userEvent.type(document.querySelector('[id="adduser_lastname"]'), 'Sivavel');
     await userEvent.click(screen.getByText('ui-users.information.recalculate.modal.button'));
     expect(changeMock).toHaveBeenCalled();
+    expect(screen.getByText('ui-users.information.selectUserType')).toBeInTheDocument();
+  });
+  it.each`
+    isEditMode
+    ${true}
+    ${false}
+  `('should show empty user type selection on isEditMode = $isEditMode', async ({ isEditMode }) => {
+    renderEditUserInfo({ ...props, initialValues: { ...props.initialValues, id: isEditMode } });
+    await userEvent.type(document.querySelector('[id="adduser_lastname"]'), 'Sivavel');
+    await userEvent.click(screen.getByText('ui-users.information.recalculate.modal.button'));
+    expect(changeMock).toHaveBeenCalled();
+
+    if (!isEditMode) {
+      expect(screen.getByText('ui-users.information.selectUserType')).toBeInTheDocument();
+    } else {
+      expect(screen.queryByText('ui-users.information.selectUserType')).not.toBeInTheDocument();
+    }
   });
   it('Cancel click must not show modal', async () => {
     renderEditUserInfo(props);
