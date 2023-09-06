@@ -119,6 +119,14 @@ class UserInfo extends React.Component {
                 />
               </Col>
             </Row>
+            <Row>
+              <Col xs={3}>
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.information.type" />}
+                  value={get(user, ['type'], '')}
+                />
+              </Col>
+            </Row>
           </Col>
 
           {hasProfilePicture === true &&
