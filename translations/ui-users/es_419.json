@@ -304,7 +304,7 @@
     "systemReturnDate": "Fecha de devolución del sistema",
     "item.barcode": "Código de barras",
     "item.contributors": "Nombres del colaborador",
-    "item.holdingsRecordId": "ID de registro de fondos",
+    "item.holdingsRecordId": "ID de existencias",
     "item.instanceId": "ID de la instancia",
     "item.status.name": "Estado del item",
     "item.title": "Título del item",
@@ -1130,5 +1130,10 @@
     "permissions.assignUsers.actions.message.success": "Se ha actualizado correctamente la asignación de usuarios del conjunto de permisos",
     "permissions.assignUsers.actions.message.error": "El cambio de asignación de usuario de Permissions Set no se ha realizado correctamente. {error}",
     "permissions.assignUsers.actions.message.permission.error": "No dispone de los permisos necesarios.",
-    "errors.generic": "Algo salió mal. Por favor, inténtelo de nuevo más tarde."
+    "errors.generic": "Algo salió mal. Por favor, inténtelo de nuevo más tarde.",
+    "information.selectUserType": "Select user type",
+    "information.type": "User type",
+    "information.type.patron": "Patron",
+    "information.type.staff": "Staff",
+    "information.type.shadow": "Shadow"
 }
