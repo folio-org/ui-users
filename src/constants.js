@@ -340,8 +340,10 @@ export const RECORD_SOURCE = {
   CONSORTIUM: 'consortium',
 };
 
+export const USER_TYPE_FIELD = 'type';
 export const USER_TYPES = {
   PATRON: 'patron',
   SHADOW: 'shadow',
   STAFF: 'staff',
+  SYSTEM: 'system',
 };
