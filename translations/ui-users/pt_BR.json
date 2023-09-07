@@ -1130,5 +1130,10 @@
     "permissions.assignUsers.actions.message.success": "A atribuição do usuário no conjunto de permissões foi atualizada com sucesso",
     "permissions.assignUsers.actions.message.error": "A atribuição do usuário no conjunto de permissões não foi bem-sucedida. {error}",
     "permissions.assignUsers.actions.message.permission.error": "Você não tem as permissões necessárias.",
-    "errors.generic": "Algo deu errado. Por favor, tente novamente mais tarde."
+    "errors.generic": "Algo deu errado. Por favor, tente novamente mais tarde.",
+    "information.selectUserType": "Selecione o tipo de usuário",
+    "information.type": "Tipo de usuário",
+    "information.type.patron": "Usuário",
+    "information.type.staff": "Equipe",
+    "information.type.shadow": "Sombra"
 }
