@@ -365,9 +365,15 @@ class EditUserInfo extends React.Component {
                 ) &&
                   <Col xs={12}>
                     <NumberGeneratorModalButton
+                      buttonLabel={<FormattedMessage id="ui-users.numberGenerator.generateUserBarcode" />}
                       callback={(generated) => change('barcode', generated)}
+                      fullWidth
                       id="userbarcode"
+                      generateButtonLabel={<FormattedMessage id="ui-users.numberGenerator.generateUserBarcode" />}
                       generator="users_patronBarcode"
+                      modalProps={{
+                        label: <FormattedMessage id="ui-users.numberGenerator.userBarcodeGenerator" />
+                      }}
                     />
                   </Col>
                 }

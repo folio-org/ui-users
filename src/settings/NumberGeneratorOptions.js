@@ -57,14 +57,6 @@ class NumberGeneratorOptions extends React.Component {
           <Col xs={12}>
             <Field
               component={RadioButton}
-              id="useGenerator"
-              name="barcodeGeneratorSetting"
-              label={<FormattedMessage id="ui-users.settings.numberGeneratorOptions.useGeneratorForBarcode" />}
-              type="radio"
-              value="useGenerator"
-            />
-            <Field
-              component={RadioButton}
               id="useTextField"
               name="barcodeGeneratorSetting"
               label={<FormattedMessage id="ui-users.settings.numberGeneratorOptions.useTextFieldForBarcode" />}
@@ -78,6 +70,14 @@ class NumberGeneratorOptions extends React.Component {
               label={<FormattedMessage id="ui-users.settings.numberGeneratorOptions.useBothForBarcode" />}
               type="radio"
               value="useBoth"
+            />
+            <Field
+              component={RadioButton}
+              id="useGenerator"
+              name="barcodeGeneratorSetting"
+              label={<FormattedMessage id="ui-users.settings.numberGeneratorOptions.useGeneratorForBarcode" />}
+              type="radio"
+              value="useGenerator"
             />
           </Col>
         </Row>

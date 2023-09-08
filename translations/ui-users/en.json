@@ -169,6 +169,8 @@
   "settings.numberGeneratorOptions.useGeneratorForBarcode": "Number generator on, fixed: the barcode can be filled using the generator only.",
   "settings.numberGeneratorOptions.useTextFieldForBarcode": "Number generator off: the barcode can be filled manually only.",
   "settings.numberGeneratorOptions.useBothForBarcode": "Number generator on, editable: the barcode can be filled using the generator and be edited, or filled manually.",
+  "numberGenerator.generateUserBarcode": "Generate user barcode",
+  "numberGenerator.userBarcodeGenerator": "User barcode generator",
   "manualBlockTemplates.templateInformation": "Template information",
   "manualBlockTemplates.templateName": "Template name",
   "manualBlockTemplates.blockCode": "Block code",
