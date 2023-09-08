@@ -22,6 +22,8 @@ import {
   ModalFooter,
 } from '@folio/stripes/components';
 
+import { USER_TYPES } from '../../../constants';
+import { isConsortiumEnabled } from '../../util';
 import asyncValidateField from '../../validators/asyncValidateField';
 import validateMinDate from '../../validators/validateMinDate';
 
@@ -127,6 +129,7 @@ class EditUserInfo extends React.Component {
       barcodeGeneratorSetting = numberGeneratorSettings?.barcodeGeneratorSetting ?? 'useTextField';
     }
 
+    const isConsortium = isConsortiumEnabled(stripes);
     const { barcode } = initialValues;
 
     const isUserExpired = () => {
@@ -176,6 +179,30 @@ class EditUserInfo extends React.Component {
         label: intl.formatMessage({ id: 'ui-users.inactive' })
       }
     ];
+
+    const isShadowUser = initialValues.type === USER_TYPES.SHADOW;
+    const typeOptions = [
+      {
+        value: '',
+        label: intl.formatMessage({ id: 'ui-users.information.selectUserType' }),
+        visible: true,
+      },
+      {
+        value: USER_TYPES.PATRON,
+        label: intl.formatMessage({ id: 'ui-users.information.type.patron' }),
+        visible: !isShadowUser,
+      },
+      {
+        value: USER_TYPES.STAFF,
+        label: intl.formatMessage({ id: 'ui-users.information.type.staff' }),
+        visible: !isShadowUser,
+      },
+      {
+        value: USER_TYPES.SHADOW,
+        label: intl.formatMessage({ id: 'ui-users.information.type.shadow' }),
+        visible: isShadowUser,
+      }
+    ].filter(o => o.visible);
 
     const offset = this.getPatronGroupOffset();
     const group = _.get(this.props.patronGroups.find(i => i.id === this.state.selectedPatronGroup), 'group', '');
@@ -345,6 +372,19 @@ class EditUserInfo extends React.Component {
                   </Col>
                 }
               </Row>
+            </Col>
+            <Col xs={12} md={3}>
+              <Field
+                label={<FormattedMessage id="ui-users.information.type" />}
+                name="type"
+                id="type"
+                component={Select}
+                fullWidth
+                disabled={isShadowUser}
+                dataOptions={typeOptions}
+                aria-required={isConsortium}
+                required={isConsortium}
+              />
             </Col>
           </Row>
         </Accordion>

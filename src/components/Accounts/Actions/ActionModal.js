@@ -208,9 +208,7 @@ class ActionModal extends React.Component {
     return fetch(`${okapi.url}/accounts/${accountId}/${checkAmount}`,
       {
         method: 'POST',
-        headers: {
-          ...getHeaderWithCredentials(okapi)
-        },
+        ...getHeaderWithCredentials(okapi),
         body: JSON.stringify({ amount })
       });
   };
