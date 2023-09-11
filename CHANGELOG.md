@@ -79,6 +79,7 @@
 * User can't pay the fee/fine. Refs UIU-2930.
 * Sort proxies and sponsors by user display name. Refs UIU-2799.
 * Add dropdown to specify user type: Patron or Staff. Refs UIU-2936.
+* Generate "Create request" url for users without barcode. Refs UIU-2869.
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v9.0.0)
