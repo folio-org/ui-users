@@ -304,7 +304,7 @@
     "systemReturnDate": "Fecha de devolución del sistema",
     "item.barcode": "Código de barras",
     "item.contributors": "Nombres del colaborador",
-    "item.holdingsRecordId": "ID de registro de fondos",
+    "item.holdingsRecordId": "ID de existencias",
     "item.instanceId": "ID de la instancia",
     "item.status.name": "Estado del item",
     "item.title": "Título del item",
@@ -1130,5 +1130,10 @@
     "permissions.assignUsers.actions.message.success": "Permissions set user assignment updated successfully",
     "permissions.assignUsers.actions.message.error": "Permissions set user assignment change not successful. {error}",
     "permissions.assignUsers.actions.message.permission.error": "You do not have required permissions.",
-    "errors.generic": "Something went wrong. Please try again later."
+    "errors.generic": "Something went wrong. Please try again later.",
+    "information.selectUserType": "Select user type",
+    "information.type": "User type",
+    "information.type.patron": "Patron",
+    "information.type.staff": "Staff",
+    "information.type.shadow": "Shadow"
 }
