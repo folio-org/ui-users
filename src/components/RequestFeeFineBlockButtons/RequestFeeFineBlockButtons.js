@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import queryString from 'query-string';
 import { withRouter } from 'react-router-dom';
 
 import {
@@ -9,6 +8,8 @@ import {
   Icon,
 } from '@folio/stripes/components';
 import { IfPermission } from '@folio/stripes/core';
+
+import { getRequestUrl } from '../util';
 
 class RequestFeeFineBlockButtons extends React.Component {
   static propTypes = {
@@ -25,9 +26,7 @@ class RequestFeeFineBlockButtons extends React.Component {
       userId,
       location,
     } = this.props;
-    const linkToCreateRequest = barcode ?
-      `/requests/?${queryString.stringify({ layer: 'create', userBarcode: barcode })}` :
-      `/requests/?${queryString.stringify({ layer: 'create' })}`;
+    const createRequestUrl = getRequestUrl(barcode, userId);
 
     return (
       <div data-test-actions-menu>
@@ -35,7 +34,7 @@ class RequestFeeFineBlockButtons extends React.Component {
           <Button
             buttonStyle="dropdownItem"
             data-test-actions-menu-create-request
-            to={linkToCreateRequest}
+            to={createRequestUrl}
             onClick={onToggle}
           >
             <Icon icon="plus-sign">

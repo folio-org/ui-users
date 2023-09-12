@@ -20,6 +20,7 @@ import {
   getOpenRequestStatusesFilterString,
   getCentralTenantId,
   isConsortiumEnabled,
+  getRequestUrl,
 } from './util';
 
 const STRIPES = {
@@ -400,5 +401,19 @@ describe('getCentralTenantId', () => {
   it('should return centralTenantId', () => {
     const data = getCentralTenantId(STRIPES);
     expect(data).toBe('test');
+  });
+});
+
+describe('getRequestUrl', () => {
+  it('should return url with user barcode', () => {
+    const userBarcode = 'userBarcode';
+
+    expect(getRequestUrl(userBarcode)).toBe(`/requests/?layer=create&userBarcode=${userBarcode}`);
+  });
+
+  it('should return url with user id', () => {
+    const userId = 'userId';
+
+    expect(getRequestUrl(undefined, userId)).toBe(`/requests/?layer=create&userId=${userId}`);
   });
 });
