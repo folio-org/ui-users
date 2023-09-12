@@ -155,21 +155,24 @@ describe('Render Edit User Information component', () => {
    type
     ${USER_TYPES.PATRON}
     ${USER_TYPES.SHADOW}
+    ${USER_TYPES.SYSTEM}
   `('Should have user type $type', async ({ type }) => {
     const isShadowUser = type === USER_TYPES.SHADOW;
+    const isSystemUser = type === USER_TYPES.SYSTEM;
+    const isUserTypeDisabled = isShadowUser || isSystemUser;
     isConsortiumEnabled.mockClear().mockReturnValue(isShadowUser);
     renderEditUserInfo({ ...props, initialValues: { ...props.initialValues, type } });
 
-    const selectElement = screen.getByRole('combobox', { name: /ui-users.information.type/i });
+    const selectElement = screen.getByRole('combobox', { name: /ui-users.information.userType/i });
     expect(selectElement).toBeInTheDocument();
 
-    if (type !== USER_TYPES.SHADOW) {
+    if (!isUserTypeDisabled) {
       expect(selectElement).toBeEnabled();
     }
 
-    if (isShadowUser) {
+    if (isUserTypeDisabled) {
       expect(selectElement).toBeDisabled();
     }
-    expect(screen.getByRole('option', { name: `ui-users.information.type.${type}` })).toHaveValue(type);
+    expect(screen.getByRole('option', { name: `ui-users.information.userType.${type}` })).toHaveValue(type);
   });
 });
