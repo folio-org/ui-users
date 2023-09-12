@@ -39,14 +39,15 @@ import {
 import RefundsReportModal from '../../components/ReportModals/RefundsReportModal';
 import CashDrawerReportModal from '../../components/ReportModals/CashDrawerReportModal';
 import FinancialTransactionsReportModal from '../../components/ReportModals/FinancialTransactionsReportModal';
-
 import CsvReport from '../../components/data/reports';
 import RefundsReport from '../../components/data/reports/RefundReport';
 import CashDrawerReconciliationReportPDF from '../../components/data/reports/cashDrawerReconciliationReportPDF';
 import CashDrawerReconciliationReportCSV from '../../components/data/reports/cashDrawerReconciliationReportCSV';
 import FinancialTransactionsReport from '../../components/data/reports/FinancialTransactionsReport';
-import Filters from './Filters';
 import LostItemsLink from '../../components/LostItemsLink';
+import { getCentralTenantId, isConsortiumEnabled } from '../../components/util';
+import { USER_TYPES } from '../../constants';
+import Filters from './Filters';
 
 import css from './UserSearch.css';
 
@@ -651,6 +652,7 @@ class UserSearch extends React.Component {
       onNeedMoreData,
       resources,
       contentRef,
+      stripes,
       mutator: { resultOffset, cashDrawerReportSources },
       stripes: { timezone },
       okapi: { currentUser },
@@ -717,6 +719,12 @@ class UserSearch extends React.Component {
       email: user => get(user, ['personal', 'email']),
     };
 
+    const { PATRON, SHADOW, STAFF, SYSTEM } = USER_TYPES;
+    const isCentralTenant = getCentralTenantId(stripes);
+    const isConsortium = isConsortiumEnabled(stripes);
+    const defaultSelectedUserTypes = isCentralTenant ? [STAFF, SHADOW, SYSTEM] : [STAFF, PATRON, SYSTEM];
+    const initialFilters = isConsortium ? { userType: defaultSelectedUserTypes } : {};
+
     return (
       <HasCommand commands={this.shortcuts}>
         <div data-test-user-instances ref={contentRef}>
@@ -726,6 +734,7 @@ class UserSearch extends React.Component {
             onComponentWillUnmount={onComponentWillUnmount}
             initialSearch={initialSearch}
             initialSearchState={{ query: '' }}
+            initialFilterState={initialFilters}
           >
             {
               ({

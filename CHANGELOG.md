@@ -80,6 +80,7 @@
 * Sort proxies and sponsors by user display name. Refs UIU-2799.
 * Add dropdown to specify user type: Patron or Staff. Refs UIU-2936.
 * *BREAKING* bump `react-intl` to `v6.4.4`. Refs UIU-2946.
+* ECS - Filter users by "User Type". Refs UIU-2943.
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v9.0.0)

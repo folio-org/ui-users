@@ -4,20 +4,21 @@ import {
   get,
   template,
 } from 'lodash';
-import { stripesConnect } from '@folio/stripes/core';
 
+import { stripesConnect } from '@folio/stripes/core';
 import {
   makeQueryFunction,
   StripesConnectedSource,
   buildUrl,
 } from '@folio/stripes/smart-components';
 
-import filterConfig from './filterConfig';
+import { isConsortiumEnabled } from '../components/util';
 import { UserSearch } from '../views';
 import {
   MAX_RECORDS,
   USER_TYPES,
 } from '../constants';
+import filterConfig from './filterConfig';
 import { buildFilterConfig } from './utils';
 
 const INITIAL_RESULT_COUNT = 30;
@@ -41,6 +42,7 @@ const compileQuery = template(`(${searchFields.join(' or ')})`, { interpolate: /
 
 export function buildQuery(queryParams, pathComponents, resourceData, logger, props) {
   const customFilterConfig = buildFilterConfig(queryParams.filters);
+  const isConsortium = isConsortiumEnabled(props.stripes);
 
   const mainQuery = makeQueryFunction(
     'cql.allRecords=1',
@@ -60,7 +62,13 @@ export function buildQuery(queryParams, pathComponents, resourceData, logger, pr
     2,
   )(queryParams, pathComponents, resourceData, logger, props);
 
-  return mainQuery && `${NOT_SHADOW_USER_CQL} and ${mainQuery}`;
+  let query = mainQuery && `${NOT_SHADOW_USER_CQL} and ${mainQuery}`;
+
+  if (isConsortium) {
+    query = mainQuery && `${mainQuery}`;
+  }
+
+  return query;
 }
 
 class UserSearchContainer extends React.Component {

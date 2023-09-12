@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { every } from 'lodash';
+import { every, get } from 'lodash';
 import { NoValue } from '@folio/stripes/components';
 
 import {
@@ -175,9 +175,13 @@ export function checkUserActive(user) {
 export const getContributors = (account, instance) => {
   const contributors = account?.contributors || instance?.contributors;
 
-  return contributors && contributors.map(({ name }) => name);
+  return contributors?.map(({ name }) => name);
 };
 
 export const isConsortiumEnabled = stripes => {
-  return stripes.hasInterface('consortia');
+  return stripes?.hasInterface('consortia');
+};
+
+export const getCentralTenantId = stripes => {
+  return get(stripes, ['user', 'user', 'consortium', 'centralTenantId'], '');
 };

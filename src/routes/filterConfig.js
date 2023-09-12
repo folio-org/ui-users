@@ -24,6 +24,12 @@ const filterConfig = [
     values: [],
     operator: '=',
   },
+  {
+    name: 'userType',
+    cql: 'type',
+    values: [],
+    operator: '=',
+  }
 ];
 
 export default filterConfig;
