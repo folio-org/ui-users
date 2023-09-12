@@ -20,6 +20,7 @@ import {
 import {
   getOpenRequestStatusesFilterString,
   getClosedRequestStatusesFilterString,
+  getRequestUrl,
 } from '../../util';
 
 /**
@@ -119,13 +120,10 @@ class UserRequests extends React.Component {
 
     const requestsLoaded = openRequestsCount >= 0 && closedRequestsCount >= 0;
     const displayWhenClosed = requestsLoaded ? (<Badge>{openRequestsCount}</Badge>) : (<Icon icon="spinner-ellipsis" width="10px" />);
+    const createRequestUrl = getRequestUrl(barcode, id);
     const displayWhenOpen = (
       <IfPermission perm="ui-requests.all">
-        <Button to={`/requests/?${queryString.stringify({
-          layer: 'create',
-          userBarcode: barcode,
-        })}`}
-        >
+        <Button to={createRequestUrl}>
           <FormattedMessage id="ui-users.requests.createRequest" />
         </Button>
       </IfPermission>
