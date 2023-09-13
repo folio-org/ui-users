@@ -18,6 +18,7 @@ import {
   retrieveNoteReferredEntityDataFromLocationState,
   getClosedRequestStatusesFilterString,
   getOpenRequestStatusesFilterString,
+  getRequestUrl,
 } from './util';
 
 describe('accountsMatchStatus', () => {
@@ -362,5 +363,19 @@ describe('getContributors', () => {
   it('getOpenRequestStatusesFilterString  ', () => {
     const data = getOpenRequestStatusesFilterString();
     expect(data).toStrictEqual('requestStatus.Open - Awaiting pickup,requestStatus.Open - Awaiting delivery,requestStatus.Open - In transit,requestStatus.Open - Not yet filled');
+  });
+});
+
+describe('getRequestUrl', () => {
+  it('should return url with user barcode', () => {
+    const userBarcode = 'userBarcode';
+
+    expect(getRequestUrl(userBarcode)).toBe(`/requests/?layer=create&userBarcode=${userBarcode}`);
+  });
+
+  it('should return url with user id', () => {
+    const userId = 'userId';
+
+    expect(getRequestUrl(undefined, userId)).toBe(`/requests/?layer=create&userId=${userId}`);
   });
 });

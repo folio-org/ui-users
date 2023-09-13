@@ -14,6 +14,7 @@ import {
 import { ViewMetaData } from '@folio/stripes/smart-components';
 import css from './UserInfo.css';
 import appIcon from '../../../../icons/app.png';
+import { USER_TYPE_FIELD } from '../../../constants';
 
 class UserInfo extends React.Component {
   static propTypes = {
@@ -116,6 +117,14 @@ class UserInfo extends React.Component {
                 <KeyValue
                   label={<FormattedMessage id="ui-users.information.barcode" />}
                   value={get(user, ['barcode'], '')}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={3}>
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.information.userType" />}
+                  value={get(user, [USER_TYPE_FIELD], '')}
                 />
               </Col>
             </Row>

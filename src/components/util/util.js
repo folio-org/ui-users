@@ -1,6 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { every } from 'lodash';
+import queryString from 'query-string';
 import { NoValue } from '@folio/stripes/components';
 
 import {
@@ -180,4 +181,16 @@ export const getContributors = (account, instance) => {
 
 export const isConsortiumEnabled = stripes => {
   return stripes.hasInterface('consortia');
+};
+
+export const getRequestUrl = (barcode, userId) => {
+  return barcode ?
+    `/requests/?${queryString.stringify({
+      layer: 'create',
+      userBarcode: barcode,
+    })}` :
+    `/requests/?${queryString.stringify({
+      layer: 'create',
+      userId,
+    })}`;
 };

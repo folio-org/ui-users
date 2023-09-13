@@ -22,7 +22,7 @@ import {
   ModalFooter,
 } from '@folio/stripes/components';
 
-import { USER_TYPES } from '../../../constants';
+import { USER_TYPES, USER_TYPE_FIELD } from '../../../constants';
 import { isConsortiumEnabled } from '../../util';
 import asyncValidateField from '../../validators/asyncValidateField';
 import validateMinDate from '../../validators/validateMinDate';
@@ -181,6 +181,9 @@ class EditUserInfo extends React.Component {
     ];
 
     const isShadowUser = initialValues.type === USER_TYPES.SHADOW;
+    const isSystemUser = initialValues.type === USER_TYPES.SYSTEM;
+    const isUserTypeDisabled = isShadowUser || isSystemUser;
+
     const typeOptions = [
       {
         value: '',
@@ -189,18 +192,23 @@ class EditUserInfo extends React.Component {
       },
       {
         value: USER_TYPES.PATRON,
-        label: intl.formatMessage({ id: 'ui-users.information.type.patron' }),
+        label: intl.formatMessage({ id: 'ui-users.information.userType.patron' }),
         visible: !isShadowUser,
       },
       {
         value: USER_TYPES.STAFF,
-        label: intl.formatMessage({ id: 'ui-users.information.type.staff' }),
+        label: intl.formatMessage({ id: 'ui-users.information.userType.staff' }),
         visible: !isShadowUser,
       },
       {
         value: USER_TYPES.SHADOW,
-        label: intl.formatMessage({ id: 'ui-users.information.type.shadow' }),
+        label: intl.formatMessage({ id: 'ui-users.information.userType.shadow' }),
         visible: isShadowUser,
+      },
+      {
+        value: USER_TYPES.SYSTEM,
+        label: intl.formatMessage({ id: 'ui-users.information.userType.system' }),
+        visible: isSystemUser,
       }
     ].filter(o => o.visible);
 
@@ -381,12 +389,12 @@ class EditUserInfo extends React.Component {
             </Col>
             <Col xs={12} md={3}>
               <Field
-                label={<FormattedMessage id="ui-users.information.type" />}
-                name="type"
-                id="type"
+                label={<FormattedMessage id="ui-users.information.userType" />}
+                name={USER_TYPE_FIELD}
+                id={USER_TYPE_FIELD}
                 component={Select}
                 fullWidth
-                disabled={isShadowUser}
+                disabled={isUserTypeDisabled}
                 dataOptions={typeOptions}
                 aria-required={isConsortium}
                 required={isConsortium}
