@@ -12,19 +12,13 @@ import {
   buildUrl,
 } from '@folio/stripes/smart-components';
 
-import { isConsortiumEnabled } from '../components/util';
 import { UserSearch } from '../views';
-import {
-  MAX_RECORDS,
-  USER_TYPES,
-} from '../constants';
+import { MAX_RECORDS } from '../constants';
 import filterConfig from './filterConfig';
 import { buildFilterConfig } from './utils';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
-
-export const NOT_SHADOW_USER_CQL = `((cql.allRecords=1 NOT type ="") or type<>"${USER_TYPES.SHADOW}")`;
 
 const searchFields = [
   'username="%{query}*"',
@@ -42,7 +36,6 @@ const compileQuery = template(`(${searchFields.join(' or ')})`, { interpolate: /
 
 export function buildQuery(queryParams, pathComponents, resourceData, logger, props) {
   const customFilterConfig = buildFilterConfig(queryParams.filters);
-  const isConsortium = isConsortiumEnabled(props.stripes);
 
   const mainQuery = makeQueryFunction(
     'cql.allRecords=1',
@@ -62,13 +55,7 @@ export function buildQuery(queryParams, pathComponents, resourceData, logger, pr
     2,
   )(queryParams, pathComponents, resourceData, logger, props);
 
-  let query = mainQuery && `${NOT_SHADOW_USER_CQL} and ${mainQuery}`;
-
-  if (isConsortium) {
-    query = mainQuery && `${mainQuery}`;
-  }
-
-  return query;
+  return mainQuery && `${mainQuery}`;
 }
 
 class UserSearchContainer extends React.Component {
