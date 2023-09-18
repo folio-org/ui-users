@@ -115,12 +115,16 @@ const AffiliationManagerModal = ({ onClose, onSubmit, userId }) => {
       orderBy(
         filtersConfig
           .reduce((filtered, config) => config.filter(filtered, activeFilters, assignment), tenants)
-          .filter(({ name }) => (searchQuery ? name.toLowerCase().includes(searchQuery.toLowerCase()) : true)),
+          .filter(({ name, isCentral, id }) => {
+            if (isCentral || !affiliationIds.includes(id)) return false;
+
+            return (searchQuery ? name.toLowerCase().includes(searchQuery.toLowerCase()) : true);
+          }),
         sorters[sortOrder],
         sortDirection.name,
       )
     );
-  }, [assignment, filters, sortDirection.name, sortOrder, sorters, tenants]);
+  }, [affiliationIds, assignment, filters, sortDirection.name, sortOrder, sorters, tenants]);
 
   return (
     <Modal

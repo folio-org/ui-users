@@ -13,8 +13,10 @@ const useAffiliationsAssignment = ({ affiliations, tenants }) => {
     setAssignment(() => {
       const affiliationsMap = keyBy(affiliations, 'tenantId');
 
-      return tenants.reduce((acc, { id }) => {
-        acc[id] = Boolean(affiliationsMap[id]);
+      return tenants.reduce((acc, { id, isCentral }) => {
+        if (!isCentral) {
+          acc[id] = Boolean(affiliationsMap[id]);
+        }
 
         return acc;
       }, {});

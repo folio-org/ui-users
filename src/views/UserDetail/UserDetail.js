@@ -50,29 +50,22 @@ import {
   UserAffiliations,
   UserServicePoints,
 } from '../../components/UserDetailSections';
-
 import HelperApp from '../../components/HelperApp';
 import IfConsortium from '../../components/IfConsortium';
-import {
-  PatronBlockMessage
-} from '../../components/PatronBlock';
-import {
-  getFormAddressList,
-} from '../../components/data/converters/address';
-import {
-  getFullName,
-} from '../../components/util';
+import { PatronBlockMessage } from '../../components/PatronBlock';
+import { getFormAddressList } from '../../components/data/converters/address';
+import { getFullName } from '../../components/util';
 import RequestFeeFineBlockButtons from '../../components/RequestFeeFineBlockButtons';
 import { departmentsShape } from '../../shapes';
-
+import ErrorPane from '../../components/ErrorPane';
+import LostItemsLink from '../../components/LostItemsLink';
+import IfConsortiumPermission from '../../components/IfConsortiumPermission';
+import { USER_TYPES } from '../../constants';
+import ActionMenuEditButton from './components/ActionMenuEditButton';
+import ActionMenuDeleteButton from './components/ActionMenuDeleteButton';
 import OpenTransactionModal from './components/OpenTransactionModal';
 import DeleteUserModal from './components/DeleteUserModal';
 import ExportFeesFinesReportButton from './components';
-import ErrorPane from '../../components/ErrorPane';
-import ActionMenuEditButton from './components/ActionMenuEditButton';
-import ActionMenuDeleteButton from './components/ActionMenuDeleteButton';
-import LostItemsLink from '../../components/LostItemsLink';
-import IfConsortiumPermission from '../../components/IfConsortiumPermission';
 
 class UserDetail extends React.Component {
   static propTypes = {
@@ -621,6 +614,7 @@ class UserDetail extends React.Component {
     const userDepartments = (user?.departments || [])
       .map(departmentId => departments.find(({ id }) => id === departmentId)?.name);
     const accounts = resources?.accounts;
+    const isAffiliationEnabled = user?.type !== USER_TYPES.PATRON;
 
     if (this.userNotFound()) {
       return (
@@ -702,13 +696,17 @@ class UserDetail extends React.Component {
 
                 <IfConsortium>
                   <IfConsortiumPermission perm="consortia.user-tenants.collection.get">
-                    <UserAffiliations
-                      accordionId="affiliationsSection"
-                      expanded={sections.affiliationsSection}
-                      onToggle={this.handleSectionToggle}
-                      userId={user?.id}
-                      userName={user?.username}
-                    />
+                    {
+                      isAffiliationEnabled && (
+                        <UserAffiliations
+                          accordionId="affiliationsSection"
+                          expanded={sections.affiliationsSection}
+                          onToggle={this.handleSectionToggle}
+                          userId={user?.id}
+                          userName={user?.username}
+                        />
+                      )
+                    }
                   </IfConsortiumPermission>
                 </IfConsortium>
 
