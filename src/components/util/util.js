@@ -185,7 +185,7 @@ export const isConsortiumEnabled = stripes => {
 };
 
 export const getCentralTenantId = stripes => {
-  return get(stripes, ['user', 'user', 'consortium', 'centralTenantId'], '');
+  return stripes?.user?.user?.consortium?.centralTenantId;
 };
 
 export const getRequestUrl = (barcode, userId) => {

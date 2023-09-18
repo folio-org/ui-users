@@ -37,7 +37,7 @@ const compileQuery = template(`(${searchFields.join(' or ')})`, { interpolate: /
 export function buildQuery(queryParams, pathComponents, resourceData, logger, props) {
   const customFilterConfig = buildFilterConfig(queryParams.filters);
 
-  const mainQuery = makeQueryFunction(
+  return makeQueryFunction(
     'cql.allRecords=1',
     // TODO: Refactor/remove this after work on FOLIO-2066 and RMB-385 is done
     (parsedQuery, _, localProps) => localProps.query.query.trim().replace('*', '').split(/\s+/)
@@ -54,8 +54,6 @@ export function buildQuery(queryParams, pathComponents, resourceData, logger, pr
     [...filterConfig, ...customFilterConfig],
     2,
   )(queryParams, pathComponents, resourceData, logger, props);
-
-  return mainQuery && `${mainQuery}`;
 }
 
 class UserSearchContainer extends React.Component {

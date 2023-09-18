@@ -21,6 +21,8 @@ import CustomFieldsFilters from '../../components/CustomFieldsFilters';
 import { isConsortiumEnabled } from '../../components/util';
 import { USER_TYPES, statusFilter } from '../../constants';
 
+const ACCORDION_ID_PREFIX = 'users_filter_accordion';
+
 class Filters extends React.Component {
   static propTypes = {
     activeFilters: PropTypes.object,
@@ -121,7 +123,7 @@ class Filters extends React.Component {
       <AccordionSet>
         <Accordion
           displayClearButton
-          id="users-filter-accordion-status"
+          id={`${ACCORDION_ID_PREFIX}_status`}
           header={FilterAccordionHeader}
           label={formatMessage({ id: 'ui-users.status' })}
           separator={false}
@@ -136,7 +138,7 @@ class Filters extends React.Component {
         </Accordion>
         <Accordion
           displayClearButton
-          id="users-filter-accordion-patron-group"
+          id={`${ACCORDION_ID_PREFIX}_patron_group`}
           header={FilterAccordionHeader}
           label={formatMessage({ id: 'ui-users.information.patronGroup' })}
           separator={false}
@@ -152,7 +154,7 @@ class Filters extends React.Component {
         {departmentsAreNotEmpty && (
           <Accordion
             displayClearButton
-            id="users-filter-accordion-departments"
+            id={`${ACCORDION_ID_PREFIX}_departments`}
             header={FilterAccordionHeader}
             label={formatMessage({ id: 'ui-users.departments' })}
             separator={false}
@@ -169,7 +171,7 @@ class Filters extends React.Component {
         )}
         <Accordion
           displayClearButton
-          id="users-filter-accordion-tags"
+          id={`${ACCORDION_ID_PREFIX}_tags`}
           header={FilterAccordionHeader}
           label={formatMessage({ id: 'ui-users.tags' })}
           separator={false}
@@ -187,7 +189,7 @@ class Filters extends React.Component {
           isConsortium && (
             <Accordion
               displayClearButton
-              id="users-filter-accordion-userTypes"
+              id={`${ACCORDION_ID_PREFIX}_userTypes`}
               header={FilterAccordionHeader}
               label={formatMessage({ id: 'ui-users.userType' })}
               separator={false}
