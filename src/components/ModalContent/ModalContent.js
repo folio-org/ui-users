@@ -290,6 +290,7 @@ class ModalContent extends React.Component {
               data-test-additional-info-textarea
               label={<FormattedMessage id="ui-users.additionalInfo.label" />}
               required
+              autoFocus
               onChange={this.handleAdditionalInfoChange}
             />
           </Col>
