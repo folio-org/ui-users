@@ -81,6 +81,7 @@
 * Add dropdown to specify user type: Patron or Staff. Refs UIU-2936.
 * *BREAKING* bump `react-intl` to `v6.4.4`. Refs UIU-2946.
 * Generate "Create request" url for users without barcode. Refs UIU-2869.
+* Add auto focus to textarea on staff and patron info modal. Fixes UIU-2932.
 * Assign/unassign a users affiliations adjustments. Refs UIU-2942.
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
