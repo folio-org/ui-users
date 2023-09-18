@@ -1132,8 +1132,9 @@
     "permissions.assignUsers.actions.message.permission.error": "您没有所需权限。",
     "errors.generic": "出了些问题。请稍后再试。",
     "information.selectUserType": "Select user type",
-    "information.type": "User type",
-    "information.type.patron": "Patron",
-    "information.type.staff": "Staff",
-    "information.type.shadow": "Shadow"
+    "information.userType": "User type",
+    "information.userType.patron": "Patron",
+    "information.userType.staff": "Staff",
+    "information.userType.shadow": "Shadow",
+    "information.userType.system": "System"
 }
