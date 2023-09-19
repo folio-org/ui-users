@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { every, get } from 'lodash';
+import { every } from 'lodash';
 import queryString from 'query-string';
 
 import { NoValue } from '@folio/stripes/components';

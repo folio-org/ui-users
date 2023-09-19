@@ -29,7 +29,7 @@ const STRIPES = {
   user: {
     user: {
       consortium: {
-        centralTenantId: 'test'
+        centralTenantId: 'centralTenantId'
       }
     }
   }
@@ -381,26 +381,26 @@ describe('getContributors', () => {
 });
 
 describe('isConsortiumEnabled', () => {
-  it('should return empty string', () => {
+  it('should return false', () => {
     const data = isConsortiumEnabled();
     expect(data).toBeFalsy();
   });
 
-  it('should return centralTenantId', () => {
+  it('should return true', () => {
     const data = isConsortiumEnabled(STRIPES);
     expect(data).toBe(true);
   });
 });
 
-describe('getCentralTenantId', () => {
-  it('should return empty string', () => {
-    const data = getCentralTenantId({});
-    expect(data).toBe('');
+describe('getCentralTenantId ', () => {
+  it('should return undefined if consortium object is absent', () => {
+    const data = getCentralTenantId({ ...STRIPES, user: { user: { } } });
+    expect(data).toBe(undefined);
   });
 
-  it('should return centralTenantId', () => {
+  it('should return centralTenantId if consortium object and id is present', () => {
     const data = getCentralTenantId(STRIPES);
-    expect(data).toBe('test');
+    expect(data).toBe(STRIPES.user.user.consortium.centralTenantId);
   });
 });
 
