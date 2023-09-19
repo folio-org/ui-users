@@ -4,26 +4,21 @@ import {
   get,
   template,
 } from 'lodash';
-import { stripesConnect } from '@folio/stripes/core';
 
+import { stripesConnect } from '@folio/stripes/core';
 import {
   makeQueryFunction,
   StripesConnectedSource,
   buildUrl,
 } from '@folio/stripes/smart-components';
 
-import filterConfig from './filterConfig';
 import { UserSearch } from '../views';
-import {
-  MAX_RECORDS,
-  USER_TYPES,
-} from '../constants';
+import { MAX_RECORDS } from '../constants';
+import filterConfig from './filterConfig';
 import { buildFilterConfig } from './utils';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
-
-export const NOT_SHADOW_USER_CQL = `((cql.allRecords=1 NOT type ="") or type<>"${USER_TYPES.SHADOW}")`;
 
 const searchFields = [
   'username="%{query}*"',
@@ -42,7 +37,7 @@ const compileQuery = template(`(${searchFields.join(' or ')})`, { interpolate: /
 export function buildQuery(queryParams, pathComponents, resourceData, logger, props) {
   const customFilterConfig = buildFilterConfig(queryParams.filters);
 
-  const mainQuery = makeQueryFunction(
+  return makeQueryFunction(
     'cql.allRecords=1',
     // TODO: Refactor/remove this after work on FOLIO-2066 and RMB-385 is done
     (parsedQuery, _, localProps) => localProps.query.query.trim().replace('*', '').split(/\s+/)
@@ -59,8 +54,6 @@ export function buildQuery(queryParams, pathComponents, resourceData, logger, pr
     [...filterConfig, ...customFilterConfig],
     2,
   )(queryParams, pathComponents, resourceData, logger, props);
-
-  return mainQuery && `${NOT_SHADOW_USER_CQL} and ${mainQuery}`;
 }
 
 class UserSearchContainer extends React.Component {

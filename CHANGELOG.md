@@ -82,6 +82,7 @@
 * *BREAKING* bump `react-intl` to `v6.4.4`. Refs UIU-2946.
 * Generate "Create request" url for users without barcode. Refs UIU-2869.
 * Add auto focus to textarea on staff and patron info modal. Fixes UIU-2932.
+* ECS - Filter users by "User Type". Refs UIU-2943.
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v9.0.0)

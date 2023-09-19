@@ -18,8 +18,22 @@ import {
   retrieveNoteReferredEntityDataFromLocationState,
   getClosedRequestStatusesFilterString,
   getOpenRequestStatusesFilterString,
+  getCentralTenantId,
+  isConsortiumEnabled,
   getRequestUrl,
 } from './util';
+
+const STRIPES = {
+  hasPerm: jest.fn().mockReturnValue(true),
+  hasInterface: jest.fn().mockReturnValue(true),
+  user: {
+    user: {
+      consortium: {
+        centralTenantId: 'centralTenantId'
+      }
+    }
+  }
+};
 
 describe('accountsMatchStatus', () => {
   it('returns true if all accounts match', () => {
@@ -363,6 +377,30 @@ describe('getContributors', () => {
   it('getOpenRequestStatusesFilterString  ', () => {
     const data = getOpenRequestStatusesFilterString();
     expect(data).toStrictEqual('requestStatus.Open - Awaiting pickup,requestStatus.Open - Awaiting delivery,requestStatus.Open - In transit,requestStatus.Open - Not yet filled');
+  });
+});
+
+describe('isConsortiumEnabled', () => {
+  it('should return false', () => {
+    const data = isConsortiumEnabled();
+    expect(data).toBeFalsy();
+  });
+
+  it('should return true', () => {
+    const data = isConsortiumEnabled(STRIPES);
+    expect(data).toBe(true);
+  });
+});
+
+describe('getCentralTenantId ', () => {
+  it('should return undefined if consortium object is absent', () => {
+    const data = getCentralTenantId({ ...STRIPES, user: { user: { } } });
+    expect(data).toBe(undefined);
+  });
+
+  it('should return centralTenantId if consortium object and id is present', () => {
+    const data = getCentralTenantId(STRIPES);
+    expect(data).toBe(STRIPES.user.user.consortium.centralTenantId);
   });
 });
 
