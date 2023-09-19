@@ -85,13 +85,13 @@ describe('Filters', () => {
     expect(screen.getByText('ui-users.departments')).toBeInTheDocument();
   });
 
-  it('Checking presence of user types filter', () => {
+  it('should display user-type filter for consortia tenants', () => {
     isConsortiumEnabled.mockReturnValue(true);
     renderFilters(initialProps);
     expect(screen.getByText('ui-users.userType')).toBeInTheDocument();
   });
 
-  it('Checking presence of user types filter', () => {
+  it('should hide user-types filter for non-consortia tenants', () => {
     isConsortiumEnabled.mockReturnValue(false);
     renderFilters(initialProps);
     expect(screen.queryByText('ui-users.userType')).not.toBeInTheDocument();
