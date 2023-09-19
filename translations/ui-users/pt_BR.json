@@ -1132,8 +1132,9 @@
     "permissions.assignUsers.actions.message.permission.error": "Você não tem as permissões necessárias.",
     "errors.generic": "Algo deu errado. Por favor, tente novamente mais tarde.",
     "information.selectUserType": "Selecione o tipo de usuário",
-    "information.type": "Tipo de usuário",
-    "information.type.patron": "Usuário",
-    "information.type.staff": "Equipe",
-    "information.type.shadow": "Sombra"
+    "information.userType": "Tipo de usuário",
+    "information.userType.patron": "Usuário",
+    "information.userType.staff": "Equipe",
+    "information.userType.shadow": "Sombra",
+    "information.userType.system": "Sistema"
 }
