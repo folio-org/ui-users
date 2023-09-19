@@ -402,6 +402,7 @@
   "bulkActions.tooltip": "Multiple loans can be processed at the same time. Please select loans first.",
   "loanNotRenewed": "Loan not renewed",
   "status": "Status",
+  "userType": "User type",
   "selectColumns": "Select Columns",
   "accounts.title.feeFine": "Fees/fines",
   "accounts.header": "Fee/fine details - {userName} ({patronGroup})",
