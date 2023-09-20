@@ -68,7 +68,7 @@ describe('AffiliationsManager', () => {
 
     describe('Filters', () => {
       it('should filter results by search query', async () => {
-        expect(await screen.findAllByRole('row')).toHaveLength(affiliations.length + 1);
+        expect(await screen.findAllByRole('row')).toHaveLength(affiliations.length);
 
         await userEvent.type(await screen.findByLabelText('ui-users.affiliations.manager.modal.aria.search'), affiliations[0].tenantName);
         await userEvent.click(await screen.findByText('ui-users.search'));
@@ -77,7 +77,7 @@ describe('AffiliationsManager', () => {
       });
 
       it('should filter results by assignment status', async () => {
-        expect(await screen.findAllByRole('row')).toHaveLength(affiliations.length + 1);
+        expect(await screen.findAllByRole('row')).toHaveLength(affiliations.length);
 
         const assignmentCheckboxes = await screen.findAllByLabelText('ui-users.affiliations.manager.modal.aria.assign');
 
@@ -97,7 +97,7 @@ describe('AffiliationsManager', () => {
         await userEvent.click(await screen.findByLabelText('ui-users.affiliations.manager.modal.aria.assignAll'));
         await userEvent.click(await screen.findByText('ui-users.affiliations.manager.filter.assignment.unassigned'));
 
-        expect(await screen.findAllByRole('row')).toHaveLength(affiliations.length + 1);
+        expect(await screen.findAllByRole('row')).toHaveLength(affiliations.length);
 
         await userEvent.type(await screen.findByLabelText('ui-users.affiliations.manager.modal.aria.search'), 'Columbia');
         await userEvent.click(await screen.findByText('ui-users.search'));
@@ -106,7 +106,7 @@ describe('AffiliationsManager', () => {
 
         await userEvent.click(await screen.findByTestId('reset-all-affiliations-filters'));
 
-        expect(await screen.findAllByRole('row')).toHaveLength(affiliations.length + 1);
+        expect(await screen.findAllByRole('row')).toHaveLength(affiliations.length);
       });
     });
   });
