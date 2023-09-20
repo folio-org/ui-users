@@ -1,7 +1,7 @@
 import { get } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, FormattedDate } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import {
   Row,
   Col,
@@ -9,6 +9,7 @@ import {
   Accordion,
   Headline,
   NoValue,
+  FormattedDate,
 } from '@folio/stripes/components';
 
 import { ViewMetaData } from '@folio/stripes/smart-components';

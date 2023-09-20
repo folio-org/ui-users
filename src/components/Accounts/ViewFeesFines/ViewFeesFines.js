@@ -3,9 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import {
-  FormattedDate,
   FormattedMessage,
-  FormattedTime,
 } from 'react-intl';
 
 import {
@@ -17,6 +15,8 @@ import {
   Row,
   Col,
   Icon,
+  FormattedDate,
+  FormattedTime,
 } from '@folio/stripes/components';
 
 import { itemStatuses } from '../../../constants';

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, FormattedDate, injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { isEmpty } from 'lodash';
 import moment from 'moment';
@@ -14,6 +14,7 @@ import {
   MultiColumnList,
   Spinner,
   TextArea,
+  FormattedDate,
 } from '@folio/stripes/components';
 
 import { getOpenRequestsPath } from '../../../../util';

@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   FormattedMessage,
-  FormattedTime,
 } from 'react-intl';
 import {
   defer,
@@ -18,6 +17,7 @@ import {
   Datepicker,
   LayoutHeader,
   Select,
+  FormattedTime,
 } from '@folio/stripes/components';
 
 import { getFullName } from '../../util';

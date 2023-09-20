@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
 import {
-  FormattedTime,
   FormattedMessage,
   injectIntl,
 } from 'react-intl';
@@ -10,6 +9,7 @@ import {
 import {
   Icon,
   MultiColumnList,
+  FormattedTime,
 } from '@folio/stripes/components';
 import { effectiveCallNumber } from '@folio/stripes/util';
 
