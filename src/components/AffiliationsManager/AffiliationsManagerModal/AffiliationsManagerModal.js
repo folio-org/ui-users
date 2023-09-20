@@ -73,7 +73,9 @@ const AffiliationManagerModal = ({ onClose, onSubmit, userId }) => {
 
   const isLoading = isConsortiumTenantsLoading || isUsersAffiliationsLoading;
 
-  const affiliationIds = useMemo(() => affiliations.map(({ tenantId }) => tenantId), [affiliations]);
+  const affiliationIds = useMemo(() => {
+    return affiliations.filter(({ isPrimary }) => !isPrimary).map(({ tenantId }) => tenantId);
+  }, [affiliations]);
 
   const handleOnSubmit = useCallback(async () => {
     const getAffiliationIds = (assigned) => (
