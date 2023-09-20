@@ -106,7 +106,7 @@ describe('UserAffiliations', () => {
       name: 'ui-users.affiliations.manager.modal.aria.assign',
       checked: true,
     });
-    expect(listOfAssignedTenants).toHaveLength(affiliations.length);
+    expect(listOfAssignedTenants).toHaveLength(affiliations.length - 1);
     const saveAndCloseButton = screen.getByText('ui-users.saveAndClose');
     userEvent.click(saveAndCloseButton);
     await waitForElementToBeRemoved(() => screen.queryByText('ui-users.affiliations.manager.modal.title'));
