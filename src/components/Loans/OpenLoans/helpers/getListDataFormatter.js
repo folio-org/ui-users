@@ -1,9 +1,9 @@
 import React from 'react';
 import { get } from 'lodash';
 import {
-  FormattedTime,
   FormattedDate,
-} from 'react-intl';
+  FormattedTime,
+} from '@folio/stripes/components';
 
 import { effectiveCallNumber } from '@folio/stripes/util';
 

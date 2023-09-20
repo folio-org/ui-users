@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   FormattedMessage,
-  FormattedTime,
   injectIntl,
 } from 'react-intl';
 import { compose } from 'redux';
@@ -29,6 +28,7 @@ import {
   LoadingView,
   Dropdown,
   DropdownMenu,
+  FormattedTime,
 } from '@folio/stripes/components';
 import { IfPermission, stripesConnect } from '@folio/stripes/core';
 import { effectiveCallNumber } from '@folio/stripes/util';
