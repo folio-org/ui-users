@@ -2,6 +2,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { every } from 'lodash';
 import queryString from 'query-string';
+
 import { NoValue } from '@folio/stripes/components';
 
 import {
@@ -176,11 +177,15 @@ export function checkUserActive(user) {
 export const getContributors = (account, instance) => {
   const contributors = account?.contributors || instance?.contributors;
 
-  return contributors && contributors.map(({ name }) => name);
+  return contributors?.map(({ name }) => name);
 };
 
 export const isConsortiumEnabled = stripes => {
-  return stripes.hasInterface('consortia');
+  return stripes?.hasInterface('consortia');
+};
+
+export const getCentralTenantId = stripes => {
+  return stripes?.user?.user?.consortium?.centralTenantId;
 };
 
 export const getRequestUrl = (barcode, userId) => {

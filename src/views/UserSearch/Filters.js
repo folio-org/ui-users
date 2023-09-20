@@ -4,24 +4,24 @@ import {
   FormattedMessage,
   injectIntl,
 } from 'react-intl';
-import {
-  get,
-} from 'lodash';
+import { get } from 'lodash';
 
 import {
   Accordion,
   AccordionSet,
   FilterAccordionHeader,
 } from '@folio/stripes/components';
-
+import { stripesConnect } from '@folio/stripes/core';
 import {
   CheckboxFilter,
   MultiSelectionFilter,
 } from '@folio/stripes/smart-components';
 
-import { statusFilter } from '../../constants';
-
 import CustomFieldsFilters from '../../components/CustomFieldsFilters';
+import { isConsortiumEnabled } from '../../components/util';
+import { USER_TYPES, statusFilter } from '../../constants';
+
+const ACCORDION_ID_PREFIX = 'users-filter-accordion';
 
 class Filters extends React.Component {
   static propTypes = {
@@ -34,6 +34,7 @@ class Filters extends React.Component {
     resultOffset: PropTypes.shape({
       replace: PropTypes.func.isRequired,
     }),
+    stripes: PropTypes.object.isRequired,
   };
 
   static defaultProps = {
@@ -85,21 +86,44 @@ class Filters extends React.Component {
       onChangeHandlers: { clearGroup },
       intl: { formatMessage },
       resources,
+      stripes,
     } = this.props;
     const {
       active = [],
       pg = [],
       tags = [],
       departments = [],
+      userType,
     } = activeFilters;
 
     const departmentsAreNotEmpty = !!resources.departments?.records?.length;
+
+    const isConsortium = isConsortiumEnabled(stripes);
+    const { PATRON, SHADOW, STAFF, SYSTEM } = USER_TYPES;
+    const userTypeOptions = [
+      {
+        value: PATRON,
+        label: formatMessage({ id: 'ui-users.information.userType.patron' }),
+      },
+      {
+        value: STAFF,
+        label: formatMessage({ id: 'ui-users.information.userType.staff' }),
+      },
+      {
+        value: SHADOW,
+        label: formatMessage({ id: 'ui-users.information.userType.shadow' }),
+      },
+      {
+        value: SYSTEM,
+        label: formatMessage({ id: 'ui-users.information.userType.system' }),
+      }
+    ];
 
     return (
       <AccordionSet>
         <Accordion
           displayClearButton
-          id="users-filter-accordion-status"
+          id={`${ACCORDION_ID_PREFIX}-status`}
           header={FilterAccordionHeader}
           label={formatMessage({ id: 'ui-users.status' })}
           separator={false}
@@ -114,7 +138,7 @@ class Filters extends React.Component {
         </Accordion>
         <Accordion
           displayClearButton
-          id="users-filter-accordion-patron-group"
+          id={`${ACCORDION_ID_PREFIX}-patron-group`}
           header={FilterAccordionHeader}
           label={formatMessage({ id: 'ui-users.information.patronGroup' })}
           separator={false}
@@ -130,7 +154,7 @@ class Filters extends React.Component {
         {departmentsAreNotEmpty && (
           <Accordion
             displayClearButton
-            id="users-filter-accordion-departments"
+            id={`${ACCORDION_ID_PREFIX}-departments`}
             header={FilterAccordionHeader}
             label={formatMessage({ id: 'ui-users.departments' })}
             separator={false}
@@ -147,7 +171,7 @@ class Filters extends React.Component {
         )}
         <Accordion
           displayClearButton
-          id="users-filter-accordion-tags"
+          id={`${ACCORDION_ID_PREFIX}-tags`}
           header={FilterAccordionHeader}
           label={formatMessage({ id: 'ui-users.tags' })}
           separator={false}
@@ -161,6 +185,25 @@ class Filters extends React.Component {
             aria-labelledby="users-filter-accordion-tags"
           />
         </Accordion>
+        {
+          isConsortium && (
+            <Accordion
+              displayClearButton
+              id={`${ACCORDION_ID_PREFIX}-user-types`}
+              header={FilterAccordionHeader}
+              label={formatMessage({ id: 'ui-users.userType' })}
+              separator={false}
+              onClearFilter={() => clearGroup('userType')}
+            >
+              <CheckboxFilter
+                dataOptions={userTypeOptions}
+                name="userType"
+                selectedValues={userType}
+                onChange={this.handleFilterChange}
+              />
+            </Accordion>
+          )
+        }
 
         <CustomFieldsFilters
           activeFilters={activeFilters}
@@ -172,4 +215,4 @@ class Filters extends React.Component {
   }
 }
 
-export default injectIntl(Filters);
+export default stripesConnect(injectIntl(Filters));
