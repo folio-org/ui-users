@@ -2,7 +2,6 @@ import _ from 'lodash';
 import React from 'react';
 import {
   FormattedMessage,
-  FormattedTime,
   injectIntl,
 } from 'react-intl';
 import PropTypes from 'prop-types';
@@ -16,6 +15,7 @@ import {
   IconButton,
   ExportCsv,
   ConfirmationModal,
+  FormattedTime,
 } from '@folio/stripes/components';
 import {
   IfPermission,

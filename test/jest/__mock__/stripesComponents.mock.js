@@ -54,6 +54,20 @@ jest.mock('@folio/stripes/components', () => ({
   ExpandAllButton: jest.fn(({ children }) => (
     <span>{children}</span>
   )),
+  FormattedTime: jest.fn(({ value, children }) => {
+    if (children) {
+      return children([value]);
+    }
+
+    return value;
+  }),
+  FormattedDate: jest.fn(({ value, children }) => {
+    if (children) {
+      return children([value]);
+    }
+
+    return value;
+  }),
   HasCommand: jest.fn(({ children }) => (
     <span>{children}</span>
   )),

@@ -49,6 +49,9 @@ jest.mock('./util', () => ({
 jest.mock('react-intl', () => ({
   ...jest.requireActual('react-intl'),
   FormattedMessage: jest.fn(({ id }) => id),
+}));
+jest.mock('@folio/stripes/components', () => ({
+  ...jest.requireActual('@folio/stripes/components'),
   FormattedTime: jest.fn(({ value }) => value),
   FormattedDate: jest.fn(({ value }) => value),
 }));

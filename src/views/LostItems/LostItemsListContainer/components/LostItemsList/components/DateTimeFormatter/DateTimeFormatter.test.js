@@ -2,7 +2,7 @@ import { render } from '@folio/jest-config-stripes/testing-library/react';
 import {
   FormattedDate,
   FormattedTime,
-} from 'react-intl';
+} from '@folio/stripes/components';
 
 import '../../../../../../../../test/jest/__mock__';
 
