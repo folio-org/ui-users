@@ -60,7 +60,7 @@ const AffiliationManagerModal = ({ onClose, onSubmit, userId }) => {
     isLoading: isConsortiumTenantsLoading,
   } = useConsortiumTenants();
 
-  const visibleAffiliations = useMemo(() => affiliations.filter(({ isPrimary }) => !isPrimary), [affiliations]);
+  const primaryAffiliation = useMemo(() => affiliations.find(({ isPrimary }) => isPrimary), [affiliations]);
 
   const {
     assignment,
@@ -69,15 +69,15 @@ const AffiliationManagerModal = ({ onClose, onSubmit, userId }) => {
     toggleAll,
     totalAssigned,
   } = useAffiliationsAssignment({
-    affiliations: visibleAffiliations,
+    affiliations,
     tenants,
   });
 
   const isLoading = isConsortiumTenantsLoading || isUsersAffiliationsLoading;
 
   const affiliationIds = useMemo(() => {
-    return visibleAffiliations.map(({ tenantId }) => tenantId);
-  }, [visibleAffiliations]);
+    return affiliations.map(({ tenantId }) => tenantId);
+  }, [affiliations]);
 
   const handleOnSubmit = useCallback(async () => {
     const getAffiliationIds = (assigned) => (
@@ -120,7 +120,7 @@ const AffiliationManagerModal = ({ onClose, onSubmit, userId }) => {
         filtersConfig
           .reduce((filtered, config) => config.filter(filtered, activeFilters, assignment), tenants)
           .filter(({ name, isCentral, id }) => {
-            if (isCentral || !affiliationIds.includes(id)) return false;
+            if (isCentral || primaryAffiliation.tenantId === id) return false;
 
             return (searchQuery ? name.toLowerCase().includes(searchQuery.toLowerCase()) : true);
           }),
@@ -128,7 +128,15 @@ const AffiliationManagerModal = ({ onClose, onSubmit, userId }) => {
         sortDirection.name,
       )
     );
-  }, [affiliationIds, assignment, filters, sortDirection.name, sortOrder, sorters, tenants]);
+  }, [
+    assignment,
+    filters,
+    primaryAffiliation.tenantId,
+    sortDirection.name,
+    sortOrder,
+    sorters,
+    tenants,
+  ]);
 
   return (
     <Modal
