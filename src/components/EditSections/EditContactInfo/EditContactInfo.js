@@ -25,6 +25,7 @@ const EditContactInfo = ({
   addressTypes,
   preferredContactTypeId,
   intl,
+  disabled,
 }) => {
   const contactTypeOptions = (contactTypes || []).map(g => {
     return (
@@ -64,6 +65,7 @@ const EditContactInfo = ({
             component={TextField}
             required
             fullWidth
+            disabled={disabled}
           />
         </Col>
         <Col xs={12} md={3}>
@@ -73,6 +75,7 @@ const EditContactInfo = ({
             id="adduser_phone"
             component={TextField}
             fullWidth
+            disabled={disabled}
           />
         </Col>
         <Col xs={12} md={3}>
@@ -82,6 +85,7 @@ const EditContactInfo = ({
             id="adduser_mobilePhone"
             component={TextField}
             fullWidth
+            disabled={disabled}
           />
         </Col>
         <Col xs={12} md={3}>
@@ -93,6 +97,7 @@ const EditContactInfo = ({
             fullWidth
             aria-required="true"
             required
+            disabled={disabled}
             defaultValue={selectedContactTypeId}
           >
             <FormattedMessage id="ui-users.contact.selectContactType">
@@ -108,6 +113,7 @@ const EditContactInfo = ({
         fieldComponents={addressFields}
         canDelete
         formType="final-form"
+        disabled={disabled}
       />
     </Accordion>
   );
@@ -120,6 +126,7 @@ EditContactInfo.propTypes = {
   addressTypes: PropTypes.arrayOf(PropTypes.object),
   preferredContactTypeId: PropTypes.string,
   intl: PropTypes.object.isRequired,
+  disabled: PropTypes.bool,
 };
 
 export default injectIntl(EditContactInfo);

@@ -3,6 +3,7 @@ import {
   FormattedMessage,
   useIntl,
 } from 'react-intl';
+import PropTypes from 'prop-types';
 import { Field } from 'react-final-form';
 import { FieldArray } from 'react-final-form-arrays';
 
@@ -15,7 +16,7 @@ import { departmentsShape } from '../../../../shapes';
 
 import css from './DepartmentsNameEdit.css';
 
-const DepartmentsNameEdit = ({ departments }) => {
+const DepartmentsNameEdit = ({ departments, disabled }) => {
   const { formatMessage } = useIntl();
   const defaultDepartment = {
     label: formatMessage({ id: 'ui-users.extended.department.default' }),
@@ -29,16 +30,18 @@ const DepartmentsNameEdit = ({ departments }) => {
   return (
     <div className={css.repeatableFieldRemoveItem}>
       <FieldArray
-        addLabel={<FormattedMessage id="ui-users.extended.department.add" />}
+        addLabel={!disabled && <FormattedMessage id="ui-users.extended.department.add" />}
         legend={<FormattedMessage id="ui-users.extended.department.name" />}
         id="department-name"
         component={RepeatableField}
         name="departments"
         onAdd={fields => fields.push()}
+        canRemove={!disabled}
         renderField={field => (
           <Field
             component={Select}
             name={field}
+            disabled={disabled}
             dataOptions={[defaultDepartment, ...formattedDepartments]}
           />
         )}
@@ -47,6 +50,9 @@ const DepartmentsNameEdit = ({ departments }) => {
   );
 };
 
-DepartmentsNameEdit.propTypes = { departments: departmentsShape };
+DepartmentsNameEdit.propTypes = {
+  departments: departmentsShape,
+  disabled: PropTypes.bool
+};
 
 export default DepartmentsNameEdit;

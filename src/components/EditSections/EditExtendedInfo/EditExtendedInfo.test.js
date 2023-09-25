@@ -120,4 +120,8 @@ describe('Render Extended User Information component', () => {
     renderEditExtendedInfo(props);
     expect(screen.getByText('test@test.ccom')).toBeInTheDocument();
   });
+  it('should fields to be disabled', () => {
+    renderEditExtendedInfo(props);
+    expect(screen.getByText(props.username)).toBeDisabled();
+  });
 });

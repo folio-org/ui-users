@@ -623,7 +623,7 @@ class UserDetail extends React.Component {
       .map(departmentId => departments.find(({ id }) => id === departmentId)?.name);
     const accounts = resources?.accounts;
 
-    const isShadowUser = user.type === USER_TYPES.SHADOW;
+    const isShadowUser = user?.type === USER_TYPES.SHADOW;
     const showPatronBlocksSection = hasPatronBlocksPermissions && !isShadowUser;
 
     if (this.userNotFound()) {
@@ -759,37 +759,33 @@ class UserDetail extends React.Component {
                 />
                 {
                   !isShadowUser && (
-                    <IfPermission perm="proxiesfor.collection.get">
-                      <ProxyPermissions
-                        user={user}
-                        accordionId="proxySection"
-                        onToggle={this.handleSectionToggle}
-                        proxies={proxies}
-                        sponsors={sponsors}
-                        expanded={sections.proxySection}
-                        {...this.props}
-                      />
-                    </IfPermission>
-                  )
-                }
-
-                <IfInterface name="feesfines">
-                  <IfPermission perm="ui-users.feesfines.view">
-                    <UserAccounts
-                      expanded={sections.accountsSection}
-                      onToggle={this.handleSectionToggle}
-                      accordionId="accountsSection"
-                      location={location}
-                      accounts={accounts}
-                      match={match}
-                      {...this.props}
-                    />
-                  </IfPermission>
-                </IfInterface>
-
-                {
-                  !isShadowUser && (
                     <>
+                      <IfPermission perm="proxiesfor.collection.get">
+                        <ProxyPermissions
+                          user={user}
+                          accordionId="proxySection"
+                          onToggle={this.handleSectionToggle}
+                          proxies={proxies}
+                          sponsors={sponsors}
+                          expanded={sections.proxySection}
+                          {...this.props}
+                        />
+                      </IfPermission>
+
+                      <IfInterface name="feesfines">
+                        <IfPermission perm="ui-users.feesfines.view">
+                          <UserAccounts
+                            expanded={sections.accountsSection}
+                            onToggle={this.handleSectionToggle}
+                            accordionId="accountsSection"
+                            location={location}
+                            accounts={accounts}
+                            match={match}
+                            {...this.props}
+                          />
+                        </IfPermission>
+                      </IfInterface>
+
                       <IfPermission perm="ui-users.loans.view">
                         <IfInterface name="loan-policy-storage">
                           { /* Check without version, so can support either of multiple versions.

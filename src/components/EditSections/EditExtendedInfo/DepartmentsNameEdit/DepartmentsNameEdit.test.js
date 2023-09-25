@@ -62,4 +62,8 @@ describe('Given DepartmentsNameEdit', () => {
     await userEvent.click(screen.getByText('ui-users.extended.department.add'));
     expect(screen.queryByPlaceholderText(/ui-users.extended.department.default/i));
   });
+
+  it('should not render add button with disabled prop is true', async () => {
+    expect(screen.queryByText('ui-users.extended.department.add')).not.toBeInTheDocument();
+  });
 });

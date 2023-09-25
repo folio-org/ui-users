@@ -76,4 +76,11 @@ describe('Render Edit contact Information component', () => {
     await userEvent.type(document.querySelector('[id="adduser_email"]'), 'Test@gmail.com');
     expect(document.querySelector('[id="adduser_email"]').value).toBe('Test@gmail.com');
   });
+  it('should render with disabled fields', () => {
+    renderEditContactInfo({ ...props, disabled: true });
+    expect(document.querySelector('[id="adduser_email"]')).toBeDisabled();
+    expect(document.querySelector('[id="adduser_phone"]')).toBeDisabled();
+    expect(document.querySelector('[id="adduser_mobilePhone"]')).toBeDisabled();
+    expect(document.querySelector('[id="adduser_preferredcontact"]')).toBeDisabled();
+  });
 });
