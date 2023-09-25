@@ -30,13 +30,14 @@ const DepartmentsNameEdit = ({ departments, disabled }) => {
   return (
     <div className={css.repeatableFieldRemoveItem}>
       <FieldArray
-        addLabel={!disabled && <FormattedMessage id="ui-users.extended.department.add" />}
+        addLabel={<FormattedMessage id="ui-users.extended.department.add" />}
         legend={<FormattedMessage id="ui-users.extended.department.name" />}
         id="department-name"
         component={RepeatableField}
         name="departments"
         onAdd={fields => fields.push()}
         canRemove={!disabled}
+        canAdd={!disabled}
         renderField={field => (
           <Field
             component={Select}

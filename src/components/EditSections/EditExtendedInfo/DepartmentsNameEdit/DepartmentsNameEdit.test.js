@@ -68,6 +68,6 @@ describe('Given DepartmentsNameEdit', () => {
 describe('Given DepartmentsNameEdit with disabled: true', () => {
   it('should not render add button', async () => {
     renderDepartmentsNameEdit({ ...props, disabled: true });
-    expect(screen.queryByText('ui-users.extended.department.add')).not.toBeInTheDocument();
+    expect(screen.getByRole('button')).toBeDisabled();
   });
 });
