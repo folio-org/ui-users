@@ -2,10 +2,10 @@ import { screen } from '@folio/jest-config-stripes/testing-library/react';
 import { Form } from 'react-final-form';
 import PropTypes from 'prop-types';
 
-import '__mock__/stripesComponents.mock';
-
 import renderWithRouter from 'helpers/renderWithRouter';
 import EditExtendedInfo from './EditExtendedInfo';
+
+jest.unmock('@folio/stripes/components');
 
 const onSubmit = jest.fn();
 
@@ -28,7 +28,8 @@ const renderEditExtendedInfo = (props) => {
       <EditExtendedInfo {...props} />
     </>
   );
-  renderWithRouter(
+
+  return renderWithRouter(
     <Form
       id="form-user"
       mutators={{
@@ -121,7 +122,7 @@ describe('Render Extended User Information component', () => {
     expect(screen.getByText('test@test.ccom')).toBeInTheDocument();
   });
   it('should fields to be disabled', () => {
-    renderEditExtendedInfo(props);
-    expect(screen.getByText(props.username)).toBeDisabled();
+    renderEditExtendedInfo({ ...props, disabled: true });
+    expect(screen.getAllByRole('textbox')[0]).toBeDisabled();
   });
 });

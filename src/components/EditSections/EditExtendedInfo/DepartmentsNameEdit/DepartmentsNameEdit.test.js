@@ -8,9 +8,10 @@ import {
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import renderWithRouter from 'helpers/renderWithRouter';
 import DepartmentsNameEdit from './DepartmentsNameEdit';
-import '__mock__/stripesSmartComponent.mock';
+// import '__mock__/stripesSmartComponent.mock';
 
 jest.unmock('@folio/stripes/components');
+jest.unmock('@folio/stripes/smart-components');
 
 const onSubmit = jest.fn();
 
@@ -62,8 +63,11 @@ describe('Given DepartmentsNameEdit', () => {
     await userEvent.click(screen.getByText('ui-users.extended.department.add'));
     expect(screen.queryByPlaceholderText(/ui-users.extended.department.default/i));
   });
+});
 
-  it('should not render add button with disabled prop is true', async () => {
+describe('Given DepartmentsNameEdit with disabled: true', () => {
+  it('should not render add button', async () => {
+    renderDepartmentsNameEdit({ ...props, disabled: true });
     expect(screen.queryByText('ui-users.extended.department.add')).not.toBeInTheDocument();
   });
 });
