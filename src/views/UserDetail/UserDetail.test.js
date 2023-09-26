@@ -321,4 +321,15 @@ describe('UserDetail', () => {
       expect(screen.getByText('LoadingPane')).toBeDefined();
     });
   });
+
+  describe('when user type is shadow', () => {
+    it('should not render Fee-fines Requests Loans Proxy-sponsor Patron blocks', () => {
+      renderUserDetail(stripes, { resources: { ...resources, selUser: { records: [{ ...resources.selUser.records[0], type: 'shadow' }] } } });
+      expect(screen.queryByText('ui-users.loans.title')).toBeNull();
+      expect(screen.queryByText('ui-users.requests.title')).toBeNull();
+      expect(screen.queryByText('ui-users.accounts.title')).toBeNull();
+      expect(screen.queryByText('ui-users.proxySponsor')).toBeNull();
+      expect(screen.queryByText('ui-users.patronBlocks')).toBeNull();
+    });
+  });
 });

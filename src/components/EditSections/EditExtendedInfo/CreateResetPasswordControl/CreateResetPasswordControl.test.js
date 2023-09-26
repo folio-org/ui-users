@@ -12,7 +12,7 @@ jest.unmock('@folio/stripes/smart-components');
 
 const renderCreateResetPasswordControl = (props) => renderWithRouter(<CreateResetPasswordControl {...props} />);
 
-const propData = (postMock) => {
+const propData = (postMock, disabled = false) => {
   return {
     email: 'testemail@email.com',
     name: 'sample',
@@ -22,6 +22,7 @@ const propData = (postMock) => {
         POST: postMock,
       }
     },
+    disabled,
   };
 };
 
@@ -41,6 +42,13 @@ describe('CreateResetPasswordControl component', () => {
     await waitFor(() => renderCreateResetPasswordControl(propData(mockFunc)));
     await waitFor(() => userEvent.click(screen.getByText('ui-users.extended.sendResetPassword')));
     await waitFor(() => expect(screen.getByText('ui-users.extended.copyLink')).toBeInTheDocument());
+  });
+  it('should link be disabled', () => {
+    const mockFunc = jest.fn(() => new Promise((resolve, _) => {
+      resolve({ ok: true, link: 'bl-users/password-reset/link' });
+    }));
+    renderCreateResetPasswordControl(propData(mockFunc, true));
+    expect(screen.getByText('ui-users.extended.sendResetPassword')).toBeDisabled();
   });
   /* Can be uncommented after the  createResetpasswordControl modal logic is reworked. Should add an assertion at the end after the results */
   // it('If it redirects after POST fails', async () => {

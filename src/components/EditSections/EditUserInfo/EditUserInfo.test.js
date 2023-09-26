@@ -175,4 +175,11 @@ describe('Render Edit User Information component', () => {
     }
     expect(screen.getByRole('option', { name: `ui-users.information.userType.${type}` })).toHaveValue(type);
   });
+
+  it('should have disabled fields with disabled prop is true', () => {
+    renderEditUserInfo({ ...props, disabled: true });
+
+    expect(screen.getByRole('textbox', { name: /lastName/ })).toBeDisabled();
+    expect(screen.getByRole('textbox', { name: /firstName/ })).toBeDisabled();
+  });
 });
