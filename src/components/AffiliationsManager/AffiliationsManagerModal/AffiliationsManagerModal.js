@@ -45,7 +45,7 @@ const AffiliationManagerModal = ({ onClose, onSubmit, userId }) => {
   const [isFiltersVisible, toggleFilters] = useToggle(true);
   const [filters, dispatch] = useReducer(filtersReducer, INITIAL_FILTERS);
   const stripes = useStripes();
-  const currentUserTenants = stripes.user?.user?.tenants;
+  const currentUserTenants = useMemo(() => stripes.user?.user?.tenants || [], [stripes]);
 
   const {
     sortOrder,

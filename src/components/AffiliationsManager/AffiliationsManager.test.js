@@ -1,9 +1,11 @@
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import { render, screen } from '@folio/jest-config-stripes/testing-library/react';
+import { useStripes } from '@folio/stripes/core';
 
 import '__mock__/currencyData.mock';
 
 import affiliations from 'fixtures/affiliations';
+
 import {
   useConsortiumTenants,
   useUserAffiliations,
@@ -12,6 +14,11 @@ import AffiliationsManager from './AffiliationsManager';
 
 jest.unmock('@folio/stripes/components');
 jest.unmock('@folio/stripes/util');
+
+jest.mock('@folio/stripes/core', () => ({
+  ...jest.requireActual('@folio/stripes/core'),
+  useStripes: jest.fn(),
+}));
 
 jest.mock('../../hooks', () => ({
   ...jest.requireActual('../../hooks'),
@@ -23,6 +30,12 @@ const defaultProps = {
   onUpdateAffiliations: jest.fn(),
   userId: 'userId',
 };
+
+const tenants = affiliations.map(i => ({
+  id: i.tenantId,
+  name: i.tenantName,
+  primary: i.isPrimary,
+}));
 
 const renderAffiliationsManager = (props = {}) => render(
   <AffiliationsManager
@@ -42,6 +55,7 @@ describe('AffiliationsManager', () => {
     useUserAffiliations
       .mockClear()
       .mockReturnValue({ isLoading: false, affiliations });
+    useStripes.mockClear().mockReturnValue({ user: { user: { tenants } } });
   });
 
   describe('Modal', () => {
