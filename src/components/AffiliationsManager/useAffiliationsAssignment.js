@@ -6,22 +6,22 @@ import {
   useState,
 } from 'react';
 
-const useAffiliationsAssignment = ({ affiliations, tenants }) => {
+const useAffiliationsAssignment = ({ affiliations, tenants, affiliationIds = [] }) => {
   const [assignment, setAssignment] = useState({});
 
   useEffect(() => {
     setAssignment(() => {
       const affiliationsMap = keyBy(affiliations, 'tenantId');
-
       return tenants.reduce((acc, { id, isCentral }) => {
-        if (!isCentral) {
+        const isValidAffiliation = !isCentral && affiliationIds.includes(id);
+        if (isValidAffiliation) {
           acc[id] = Boolean(affiliationsMap[id]);
         }
 
         return acc;
       }, {});
     });
-  }, [affiliations, tenants]);
+  }, [affiliationIds, affiliations, tenants]);
 
   const isAllAssigned = useMemo(() => (
     Object.values(assignment).every(value => Boolean(value))

@@ -15,6 +15,7 @@ import {
   Modal,
   Paneset,
 } from '@folio/stripes/components';
+import { useStripes } from '@folio/stripes/core';
 
 import {
   useConsortiumTenants,
@@ -43,6 +44,8 @@ const INITIAL_FILTERS = {};
 const AffiliationManagerModal = ({ onClose, onSubmit, userId }) => {
   const [isFiltersVisible, toggleFilters] = useToggle(true);
   const [filters, dispatch] = useReducer(filtersReducer, INITIAL_FILTERS);
+  const stripes = useStripes();
+  const currentUserTenants = stripes.user?.user?.tenants;
 
   const {
     sortOrder,
@@ -61,6 +64,9 @@ const AffiliationManagerModal = ({ onClose, onSubmit, userId }) => {
   } = useConsortiumTenants();
 
   const primaryAffiliation = useMemo(() => affiliations.find(({ isPrimary }) => isPrimary), [affiliations]);
+  const affiliationIds = useMemo(() => {
+    return currentUserTenants.map(({ id }) => id);
+  }, [currentUserTenants]);
 
   const {
     assignment,
@@ -71,13 +77,10 @@ const AffiliationManagerModal = ({ onClose, onSubmit, userId }) => {
   } = useAffiliationsAssignment({
     affiliations,
     tenants,
+    affiliationIds,
   });
 
   const isLoading = isConsortiumTenantsLoading || isUsersAffiliationsLoading;
-
-  const affiliationIds = useMemo(() => {
-    return affiliations.map(({ tenantId }) => tenantId);
-  }, [affiliations]);
 
   const handleOnSubmit = useCallback(async () => {
     const getAffiliationIds = (assigned) => (
@@ -120,7 +123,9 @@ const AffiliationManagerModal = ({ onClose, onSubmit, userId }) => {
         filtersConfig
           .reduce((filtered, config) => config.filter(filtered, activeFilters, assignment), tenants)
           .filter(({ name, isCentral, id }) => {
-            if (isCentral || primaryAffiliation.tenantId === id) return false;
+            const isNotValid = isCentral || primaryAffiliation?.tenantId === id || !affiliationIds.includes(id);
+
+            if (isNotValid) return false;
 
             return (searchQuery ? name.toLowerCase().includes(searchQuery.toLowerCase()) : true);
           }),
@@ -129,9 +134,10 @@ const AffiliationManagerModal = ({ onClose, onSubmit, userId }) => {
       )
     );
   }, [
+    affiliationIds,
     assignment,
     filters,
-    primaryAffiliation.tenantId,
+    primaryAffiliation,
     sortDirection.name,
     sortOrder,
     sorters,
