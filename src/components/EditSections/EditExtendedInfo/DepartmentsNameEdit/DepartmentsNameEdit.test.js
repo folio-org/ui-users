@@ -8,7 +8,6 @@ import {
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import renderWithRouter from 'helpers/renderWithRouter';
 import DepartmentsNameEdit from './DepartmentsNameEdit';
-// import '__mock__/stripesSmartComponent.mock';
 
 jest.unmock('@folio/stripes/components');
 jest.unmock('@folio/stripes/smart-components');
@@ -66,7 +65,7 @@ describe('Given DepartmentsNameEdit', () => {
 });
 
 describe('Given DepartmentsNameEdit with disabled: true', () => {
-  it('should not render add button', async () => {
+  it('should add button to be disabled', async () => {
     renderDepartmentsNameEdit({ ...props, disabled: true });
     expect(screen.getByRole('button')).toBeDisabled();
   });

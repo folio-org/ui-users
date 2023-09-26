@@ -178,7 +178,8 @@ describe('Render Edit User Information component', () => {
 
   it('should have disabled fields with disabled prop is true', () => {
     renderEditUserInfo({ ...props, disabled: true });
-    expect(document.querySelector('[id="adduser_lastname"]')).toBeDisabled();
-    expect(document.querySelector('[id="adduser_firstname"]')).toBeDisabled();
+
+    expect(screen.getByRole('textbox', { name: /lastName/ })).toBeDisabled();
+    expect(screen.getByRole('textbox', { name: /firstName/ })).toBeDisabled();
   });
 });

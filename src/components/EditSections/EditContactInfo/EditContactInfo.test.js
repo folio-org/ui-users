@@ -1,11 +1,12 @@
-import { screen } from '@folio/jest-config-stripes/testing-library/react';
-import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import { Form } from 'react-final-form';
 
-import '__mock__/stripesComponents.mock';
+import { screen } from '@folio/jest-config-stripes/testing-library/react';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
 import renderWithRouter from 'helpers/renderWithRouter';
 import EditContactInfo from './EditContactInfo';
+
+jest.unmock('@folio/stripes/components');
 
 const onSubmit = jest.fn();
 
@@ -28,7 +29,8 @@ const renderEditContactInfo = (props) => {
       <EditContactInfo {...props} />
     </>
   );
-  renderWithRouter(
+
+  return renderWithRouter(
     <Form
       id="form-user"
       mutators={{
@@ -71,15 +73,21 @@ describe('Render Edit contact Information component', () => {
     renderEditContactInfo(props);
     expect(screen.getByText('AddressEditList')).toBeInTheDocument();
   });
+
   it('Must be rendered', async () => {
     renderEditContactInfo(props);
-    await userEvent.type(document.querySelector('[id="adduser_email"]'), 'Test@gmail.com');
-    expect(document.querySelector('[id="adduser_email"]').value).toBe('Test@gmail.com');
+
+    const emailInput = screen.getByRole('textbox', { name: /email/i });
+
+    await userEvent.type(emailInput, 'Test@gmail.com');
+    expect(emailInput.value).toBe('Test@gmail.com');
   });
+
   it('should render with disabled fields', () => {
     renderEditContactInfo({ ...props, disabled: true });
-    expect(document.querySelector('[id="adduser_email"]')).toBeDisabled();
-    expect(document.querySelector('[id="adduser_phone"]')).toBeDisabled();
-    expect(document.querySelector('[id="adduser_mobilePhone"]')).toBeDisabled();
+
+    expect(screen.getByRole('textbox', { name: /email/i })).toBeDisabled();
+    expect(screen.getByRole('textbox', { name: /mobilePhone/i })).toBeDisabled();
+    expect(screen.getByLabelText('ui-users.contact.phone')).toBeDisabled();
   });
 });
