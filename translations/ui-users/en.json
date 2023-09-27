@@ -986,7 +986,7 @@
   "filters.status.active": "Active",
   "filters.status.inactive": "Inactive",
   "permission.accounts": "Fee/Fine History: Can create, edit and remove accounts",
-  "permission.create": "Users: Can create new user",
+  "permission.create": "Users: Can create and edit users",
   "permission.edit": "Users: Can edit user profile",
   "permission.editperms": "Users: Can assign and unassign permissions to users",
   "permission.editproxies": "Users: Can create, edit and remove proxies",
