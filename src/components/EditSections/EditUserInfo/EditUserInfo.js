@@ -43,6 +43,7 @@ class EditUserInfo extends React.Component {
       }),
     }).isRequired,
     form: PropTypes.object,
+    disabled: PropTypes.bool,
     uniquenessValidator: PropTypes.object,
   };
 
@@ -115,6 +116,7 @@ class EditUserInfo extends React.Component {
       intl,
       stripes,
       uniquenessValidator,
+      disabled,
     } = this.props;
 
     const isConsortium = isConsortiumEnabled(stripes);
@@ -170,7 +172,7 @@ class EditUserInfo extends React.Component {
 
     const isShadowUser = initialValues.type === USER_TYPES.SHADOW;
     const isSystemUser = initialValues.type === USER_TYPES.SYSTEM;
-    const isUserTypeDisabled = isShadowUser || isSystemUser;
+    const isUserTypeDisabled = isShadowUser || isSystemUser || disabled;
 
     const typeOptions = [
       {
@@ -242,6 +244,7 @@ class EditUserInfo extends React.Component {
                 required
                 fullWidth
                 autoFocus
+                disabled={disabled}
               />
             </Col>
             <Col xs={12} md={3}>
@@ -251,6 +254,7 @@ class EditUserInfo extends React.Component {
                 id="adduser_firstname"
                 component={TextField}
                 fullWidth
+                disabled={disabled}
               />
             </Col>
             <Col xs={12} md={3}>
@@ -260,6 +264,7 @@ class EditUserInfo extends React.Component {
                 id="adduser_middlename"
                 component={TextField}
                 fullWidth
+                disabled={disabled}
               />
             </Col>
             <Col xs={12} md={3}>
@@ -269,6 +274,7 @@ class EditUserInfo extends React.Component {
                 id="adduser_preferredname"
                 component={TextField}
                 fullWidth
+                disabled={disabled}
               />
             </Col>
           </Row>
@@ -286,6 +292,7 @@ class EditUserInfo extends React.Component {
                 defaultValue={initialValues.patronGroup}
                 aria-required="true"
                 required
+                disabled={disabled}
               />
               <OnChange name="patronGroup">
                 {(selectedPatronGroup) => {
@@ -304,7 +311,7 @@ class EditUserInfo extends React.Component {
                 id="useractive"
                 component={Select}
                 fullWidth
-                disabled={isStatusFieldDisabled()}
+                disabled={disabled || isStatusFieldDisabled()}
                 dataOptions={statusOptions}
                 defaultValue={initialValues.active}
                 format={(v) => (v ? v.toString() : 'false')}
@@ -331,6 +338,7 @@ class EditUserInfo extends React.Component {
                 name="expirationDate"
                 id="adduser_expirationdate"
                 parse={this.parseExpirationDate}
+                disabled={disabled}
                 validate={validateMinDate('ui-users.errors.personal.dateOfBirth')}
               />
               {checkShowRecalculateButton() && (
@@ -350,6 +358,7 @@ class EditUserInfo extends React.Component {
                 component={TextField}
                 validate={asyncValidateField('barcode', barcode, uniquenessValidator)}
                 fullWidth
+                disabled={disabled}
               />
             </Col>
             <Col xs={12} md={3}>
