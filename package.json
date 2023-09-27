@@ -116,7 +116,7 @@
       },
       {
         "permissionName": "ui-users.create",
-        "displayName": "Users: Can create new user",
+        "displayName": "Users: Can create and edit users",
         "description": "Some subperms can be deleted later when bl does updates and ModulePermissions can be used",
         "subPermissions": [
           "ui-users.edit",
