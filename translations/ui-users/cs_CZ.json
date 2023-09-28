@@ -1136,5 +1136,6 @@
     "information.userType.patron": "Čtenář",
     "information.userType.staff": "Zaměstnanci",
     "information.userType.shadow": "Stín",
-    "information.userType.system": "Systém"
+    "information.userType.system": "Systém",
+    "userType": "User type"
 }

@@ -1136,5 +1136,6 @@
     "information.userType.patron": "Patron",
     "information.userType.staff": "Personal",
     "information.userType.shadow": "Shadow",
-    "information.userType.system": "Sistema"
+    "information.userType.system": "Sistema",
+    "userType": "User type"
 }
