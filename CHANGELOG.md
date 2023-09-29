@@ -85,8 +85,8 @@
 * ECS - Filter users by "User Type". Refs UIU-2943.
 * Users App: Consume {{FormattedDate}} and {{FormattedTime}} via stripes-component. Refs UIU-1860.
 * ECS - Prevent editing of specific shadow user data. Refs UIU-2951.
+* Relabel "Users: Can create new user" to "Users: Can create and edit users". Refs UIU-2955.
 * Assign/unassign a users affiliations adjustments. Refs UIU-2942.
-
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v9.0.0)

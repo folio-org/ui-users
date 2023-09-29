@@ -592,7 +592,7 @@
     "settings.error.noMessage": "하나 이상의 차단 된 작업이 선택된 경우 표시 할 메시지는 필수 필드입니다.",
     "settings.error.noCheckbox": "메시지를 표시하려면 하나 이상의 차단된 작업을 선택해야 합니다.",
     "permission.accounts": "Fee/Fine History: Can create, edit and remove accounts",
-    "permission.create": "Users: Can create new user",
+    "permission.create": "Users: Can create and edit users",
     "permission.edit": "Users: Can edit user profile",
     "permission.editperms": "Users: Can assign and unassign permissions to users",
     "permission.editproxies": "Users: Can create, edit and remove proxies",
@@ -1136,5 +1136,6 @@
     "information.userType.patron": "Patron",
     "information.userType.staff": "Staff",
     "information.userType.shadow": "Shadow",
-    "information.userType.system": "System"
+    "information.userType.system": "System",
+    "userType": "User type"
 }

@@ -592,7 +592,7 @@
     "settings.error.noMessage": "Message to be displayed is a required field if one or more Blocked actions selected",
     "settings.error.noCheckbox": "One or more Blocked actions must be selected for Message to be displayed to be used",
     "permission.accounts": "Gebyr-/bødehistorik: Kan oprette, redigere og fjerne konti",
-    "permission.create": "Users: Can create new user",
+    "permission.create": "Users: Can create and edit users",
     "permission.edit": "Brugere: Kan redigere brugerprofil",
     "permission.editperms": "Brugere: Kan tildele og fjerne tildeling af brugerrettigheder til brugere",
     "permission.editproxies": "Brugere: Kan oprette, redigere og fjerne proxyer",
@@ -1136,5 +1136,6 @@
     "information.userType.patron": "Patron",
     "information.userType.staff": "Staff",
     "information.userType.shadow": "Shadow",
-    "information.userType.system": "System"
+    "information.userType.system": "System",
+    "userType": "User type"
 }
