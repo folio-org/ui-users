@@ -1132,8 +1132,10 @@
     "permissions.assignUsers.actions.message.permission.error": "You do not have required permissions.",
     "errors.generic": "Something went wrong. Please try again later.",
     "information.selectUserType": "Select user type",
-    "information.type": "User type",
-    "information.type.patron": "Patron",
-    "information.type.staff": "Staff",
-    "information.type.shadow": "Shadow"
+    "information.userType": "User type",
+    "information.userType.patron": "Patron",
+    "information.userType.staff": "Staff",
+    "information.userType.shadow": "Shadow",
+    "information.userType.system": "System",
+    "userType": "User type"
 }

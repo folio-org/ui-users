@@ -49,8 +49,6 @@ jest.mock('./util', () => ({
 jest.mock('react-intl', () => ({
   ...jest.requireActual('react-intl'),
   FormattedMessage: jest.fn(({ id }) => id),
-  FormattedTime: jest.fn(({ value }) => value),
-  FormattedDate: jest.fn(({ value }) => value),
 }));
 
 const initialProps = {

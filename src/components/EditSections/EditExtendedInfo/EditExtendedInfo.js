@@ -40,6 +40,7 @@ class EditExtendedInfo extends Component {
     change: PropTypes.func.isRequired,
     values: PropTypes.object,
     uniquenessValidator: PropTypes.object,
+    disabled: PropTypes.bool,
   };
 
   buildAccordionHeader = () => {
@@ -83,6 +84,7 @@ class EditExtendedInfo extends Component {
       departments,
       change,
       uniquenessValidator,
+      disabled,
     } = this.props;
 
     const accordionHeader = this.buildAccordionHeader();
@@ -110,6 +112,7 @@ class EditExtendedInfo extends Component {
               name="enrollmentDate"
               id="adduser_enrollmentdate"
               validate={validateMinDate('ui-users.errors.extended.dateEnrolled')}
+              disabled={disabled}
             />
           </Col>
           <Col
@@ -122,6 +125,7 @@ class EditExtendedInfo extends Component {
               id="adduser_externalsystemid"
               component={TextField}
               fullWidth
+              disabled={disabled}
             />
           </Col>
           <Col
@@ -136,6 +140,7 @@ class EditExtendedInfo extends Component {
               id="adduser_dateofbirth"
               timeZone="UTC"
               backendDateStandard="YYYY-MM-DD"
+              disabled={disabled}
               validate={validateMinDate('ui-users.errors.personal.dateOfBirth')}
             />
           </Col>
@@ -161,6 +166,7 @@ class EditExtendedInfo extends Component {
                 defaultDeliveryAddressTypeId={defaultDeliveryAddressTypeId}
                 deliveryAvailable={deliveryAvailable}
                 setFieldValue={change}
+                disabled={disabled}
               />
             </Row>
           </Col>
@@ -170,7 +176,7 @@ class EditExtendedInfo extends Component {
                 xs={12}
                 md={3}
               >
-                <DepartmentsNameEdit departments={departments} />
+                <DepartmentsNameEdit departments={departments} disabled={disabled} />
               </Col>
             )
             : null
@@ -188,6 +194,7 @@ class EditExtendedInfo extends Component {
               component={TextField}
               fullWidth
               validStylesEnabled
+              disabled={disabled}
               validate={asyncValidateField('username', username, uniquenessValidator)}
             />
           </Col>
@@ -199,6 +206,7 @@ class EditExtendedInfo extends Component {
                   email={userEmail}
                   name={userFirstName}
                   username={username}
+                  disabled={disabled}
                 />
               )
             }

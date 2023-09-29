@@ -3,6 +3,7 @@ import { fireEvent, render, screen } from '@folio/jest-config-stripes/testing-li
 import '../../../test/jest/__mock__/matchMedia.mock';
 
 import Filters from './Filters';
+import { isConsortiumEnabled } from '../../components/util';
 
 jest.unmock('@folio/stripes/components');
 jest.unmock('@folio/stripes/smart-components');
@@ -16,6 +17,9 @@ jest.mock('@folio/stripes/smart-components', () => {
     useCustomFields: jest.fn(() => [[customField]]),
   };
 });
+jest.mock('../../components/util', () => ({
+  isConsortiumEnabled: jest.fn(),
+}));
 
 const stateMock = jest.fn();
 const filterHandlers = {
@@ -42,6 +46,9 @@ const initialProps = {
   onChangeHandlers: filterHandlers,
   resultOffset: {
     replace: jest.fn(),
+  },
+  stripes: {
+    hasInterface: jest.fn(),
   },
 };
 
@@ -76,5 +83,17 @@ describe('Filters', () => {
   it('Checking presence of departments filter', () => {
     renderFilters(initialProps);
     expect(screen.getByText('ui-users.departments')).toBeInTheDocument();
+  });
+
+  it('should display user-type filter for consortia tenants', () => {
+    isConsortiumEnabled.mockReturnValue(true);
+    renderFilters(initialProps);
+    expect(screen.getByText('ui-users.userType')).toBeInTheDocument();
+  });
+
+  it('should hide user-types filter for non-consortia tenants', () => {
+    isConsortiumEnabled.mockReturnValue(false);
+    renderFilters(initialProps);
+    expect(screen.queryByText('ui-users.userType')).not.toBeInTheDocument();
   });
 });

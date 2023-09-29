@@ -1131,9 +1131,11 @@
     "permissions.assignUsers.actions.message.error": "权限集用户分配更改未成功。 {error}",
     "permissions.assignUsers.actions.message.permission.error": "您没有所需权限。",
     "errors.generic": "出了些问题。请稍后再试。",
-    "information.selectUserType": "Select user type",
-    "information.type": "User type",
-    "information.type.patron": "Patron",
-    "information.type.staff": "Staff",
-    "information.type.shadow": "Shadow"
+    "information.selectUserType": "选择用户类型",
+    "information.userType": "用户类型",
+    "information.userType.patron": "读者",
+    "information.userType.staff": "员工",
+    "information.userType.shadow": "影子用户",
+    "information.userType.system": "系统",
+    "userType": "用户类型"
 }

@@ -1,9 +1,17 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, FormattedTime, FormattedDate } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { Row, Col, KeyValue, LayoutHeader, NoValue } from '@folio/stripes/components';
+import {
+  Row,
+  Col,
+  KeyValue,
+  LayoutHeader,
+  NoValue,
+  FormattedTime,
+  FormattedDate,
+} from '@folio/stripes/components';
 
 import { getFullName } from '../../util';
 import css from './ProxyItem.css';

@@ -4,9 +4,12 @@ import {
 } from '@folio/jest-config-stripes/testing-library/react';
 import {
   FormattedMessage,
+} from 'react-intl';
+
+import {
   FormattedDate,
   FormattedTime,
-} from 'react-intl';
+} from '@folio/stripes/components';
 
 import RecordStatus, {
   getBilledAmount,

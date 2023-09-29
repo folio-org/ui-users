@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {
   FormattedDate,
   FormattedTime,
-} from 'react-intl';
+} from '@folio/stripes/components';
 
 const DateTimeFormatter = ({ value }) => {
   return (

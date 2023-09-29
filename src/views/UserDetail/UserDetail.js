@@ -64,6 +64,9 @@ import {
 } from '../../components/util';
 import RequestFeeFineBlockButtons from '../../components/RequestFeeFineBlockButtons';
 import { departmentsShape } from '../../shapes';
+import IfConsortiumPermission from '../../components/IfConsortiumPermission';
+import { USER_TYPES } from '../../constants';
+import LostItemsLink from '../../components/LostItemsLink';
 
 import OpenTransactionModal from './components/OpenTransactionModal';
 import DeleteUserModal from './components/DeleteUserModal';
@@ -71,8 +74,6 @@ import ExportFeesFinesReportButton from './components';
 import ErrorPane from '../../components/ErrorPane';
 import ActionMenuEditButton from './components/ActionMenuEditButton';
 import ActionMenuDeleteButton from './components/ActionMenuDeleteButton';
-import LostItemsLink from '../../components/LostItemsLink';
-import IfConsortiumPermission from '../../components/IfConsortiumPermission';
 
 class UserDetail extends React.Component {
   static propTypes = {
@@ -622,6 +623,9 @@ class UserDetail extends React.Component {
       .map(departmentId => departments.find(({ id }) => id === departmentId)?.name);
     const accounts = resources?.accounts;
 
+    const isShadowUser = user?.type === USER_TYPES.SHADOW;
+    const showPatronBlocksSection = hasPatronBlocksPermissions && !isShadowUser;
+
     if (this.userNotFound()) {
       return (
         <ErrorPane
@@ -713,7 +717,7 @@ class UserDetail extends React.Component {
                 </IfConsortium>
 
                 <IfInterface name="feesfines">
-                  {hasPatronBlocksPermissions &&
+                  {showPatronBlocksSection &&
                     <PatronBlock
                       accordionId="patronBlocksSection"
                       patronBlocks={patronBlocks}
@@ -753,63 +757,70 @@ class UserDetail extends React.Component {
                   customFieldsLabel={<FormattedMessage id="ui-users.custom.customFields" />}
                   noCustomFieldsFoundLabel={<FormattedMessage id="ui-users.custom.noCustomFieldsFound" />}
                 />
-                <IfPermission perm="proxiesfor.collection.get">
-                  <ProxyPermissions
-                    user={user}
-                    accordionId="proxySection"
-                    onToggle={this.handleSectionToggle}
-                    proxies={proxies}
-                    sponsors={sponsors}
-                    expanded={sections.proxySection}
-                    {...this.props}
-                  />
-                </IfPermission>
-                <IfInterface name="feesfines">
-                  <IfPermission perm="ui-users.feesfines.view">
-                    <UserAccounts
-                      expanded={sections.accountsSection}
-                      onToggle={this.handleSectionToggle}
-                      accordionId="accountsSection"
-                      location={location}
-                      accounts={accounts}
-                      match={match}
-                      {...this.props}
-                    />
-                  </IfPermission>
-                </IfInterface>
+                {
+                  !isShadowUser && (
+                    <>
+                      <IfPermission perm="proxiesfor.collection.get">
+                        <ProxyPermissions
+                          user={user}
+                          accordionId="proxySection"
+                          onToggle={this.handleSectionToggle}
+                          proxies={proxies}
+                          sponsors={sponsors}
+                          expanded={sections.proxySection}
+                          {...this.props}
+                        />
+                      </IfPermission>
 
-                <IfPermission perm="ui-users.loans.view">
-                  <IfInterface name="loan-policy-storage">
-                    { /* Check without version, so can support either of multiple versions.
-              Replace with specific check when facility for providing
-              multiple versions is available */ }
-                    <IfInterface name="circulation">
-                      <UserLoans
-                        onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
-                        onClickViewOpenLoans={this.onClickViewOpenLoans}
-                        onClickViewClosedLoans={this.onClickViewClosedLoans}
-                        expanded={sections.loansSection}
-                        onToggle={this.handleSectionToggle}
-                        accordionId="loansSection"
-                        {...this.props}
-                      />
-                    </IfInterface>
-                  </IfInterface>
-                </IfPermission>
+                      <IfInterface name="feesfines">
+                        <IfPermission perm="ui-users.feesfines.view">
+                          <UserAccounts
+                            expanded={sections.accountsSection}
+                            onToggle={this.handleSectionToggle}
+                            accordionId="accountsSection"
+                            location={location}
+                            accounts={accounts}
+                            match={match}
+                            {...this.props}
+                          />
+                        </IfPermission>
+                      </IfInterface>
 
-                <IfPermission perm="ui-users.requests.all">
-                  <IfInterface name="request-storage" version="2.5 3.0 4.0 5.0 6.0">
-                    <IfInterface name="circulation">
-                      <UserRequests
-                        expanded={sections.requestsSection}
-                        onToggle={this.handleSectionToggle}
-                        accordionId="requestsSection"
-                        user={user}
-                        {...this.props}
-                      />
-                    </IfInterface>
-                  </IfInterface>
-                </IfPermission>
+                      <IfPermission perm="ui-users.loans.view">
+                        <IfInterface name="loan-policy-storage">
+                          { /* Check without version, so can support either of multiple versions.
+                    Replace with specific check when facility for providing
+                    multiple versions is available */ }
+                          <IfInterface name="circulation">
+                            <UserLoans
+                              onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
+                              onClickViewOpenLoans={this.onClickViewOpenLoans}
+                              onClickViewClosedLoans={this.onClickViewClosedLoans}
+                              expanded={sections.loansSection}
+                              onToggle={this.handleSectionToggle}
+                              accordionId="loansSection"
+                              {...this.props}
+                            />
+                          </IfInterface>
+                        </IfInterface>
+                      </IfPermission>
+
+                      <IfPermission perm="ui-users.requests.all">
+                        <IfInterface name="request-storage" version="2.5 3.0 4.0 5.0 6.0">
+                          <IfInterface name="circulation">
+                            <UserRequests
+                              expanded={sections.requestsSection}
+                              onToggle={this.handleSectionToggle}
+                              accordionId="requestsSection"
+                              user={user}
+                              {...this.props}
+                            />
+                          </IfInterface>
+                        </IfInterface>
+                      </IfPermission>
+                    </>
+                  )
+                }
 
                 <IfPermission perm="perms.users.get">
                   <IfInterface name="permissions" version="5.0">

@@ -1131,9 +1131,11 @@
     "permissions.assignUsers.actions.message.error": "Změna přiřazení uživatele sady oprávnění nebyla úspěšná. {error}",
     "permissions.assignUsers.actions.message.permission.error": "Nemáte požadovaná oprávnění.",
     "errors.generic": "Něco se pokazilo. Zkuste to prosím znovu později.",
-    "information.selectUserType": "Select user type",
-    "information.type": "User type",
-    "information.type.patron": "Patron",
-    "information.type.staff": "Staff",
-    "information.type.shadow": "Shadow"
+    "information.selectUserType": "Vybrat typ uživatele",
+    "information.userType": "Typ uživatele",
+    "information.userType.patron": "Čtenář",
+    "information.userType.staff": "Zaměstnanci",
+    "information.userType.shadow": "Stín",
+    "information.userType.system": "Systém",
+    "userType": "User type"
 }

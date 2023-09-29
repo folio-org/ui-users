@@ -4,12 +4,12 @@ import get from 'lodash/get';
 
 import {
   FormattedMessage,
-  FormattedTime,
 } from 'react-intl';
 
 import {
   Icon,
   MultiColumnList,
+  FormattedTime,
 } from '@folio/stripes/components';
 import { effectiveCallNumber } from '@folio/stripes/util';
 

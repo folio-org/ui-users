@@ -39,14 +39,13 @@ import {
 import RefundsReportModal from '../../components/ReportModals/RefundsReportModal';
 import CashDrawerReportModal from '../../components/ReportModals/CashDrawerReportModal';
 import FinancialTransactionsReportModal from '../../components/ReportModals/FinancialTransactionsReportModal';
-
 import CsvReport from '../../components/data/reports';
 import RefundsReport from '../../components/data/reports/RefundReport';
 import CashDrawerReconciliationReportPDF from '../../components/data/reports/cashDrawerReconciliationReportPDF';
 import CashDrawerReconciliationReportCSV from '../../components/data/reports/cashDrawerReconciliationReportCSV';
 import FinancialTransactionsReport from '../../components/data/reports/FinancialTransactionsReport';
-import Filters from './Filters';
 import LostItemsLink from '../../components/LostItemsLink';
+import Filters from './Filters';
 
 import css from './UserSearch.css';
 

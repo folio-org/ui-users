@@ -35,6 +35,7 @@ class RequestPreferencesEdit extends Component {
     setFieldValue: PropTypes.func.isRequired,
     defaultDeliveryAddressTypeId: nullOrStringIsRequiredTypeValidator,
     intl: PropTypes.object.isRequired,
+    disabled: PropTypes.bool,
   }
 
   componentDidUpdate(prevProps) {
@@ -76,7 +77,7 @@ class RequestPreferencesEdit extends Component {
   }
 
   renderServicePointSelect() {
-    const { servicePoints, intl } = this.props;
+    const { servicePoints, intl, disabled } = this.props;
 
     const options = servicePoints.map(servicePoint => ({
       value: servicePoint.id,
@@ -92,6 +93,7 @@ class RequestPreferencesEdit extends Component {
         label={<FormattedMessage id="ui-users.requests.defaultPickupServicePoint" />}
         dataOptions={resultOptions}
         component={Select}
+        disabled={disabled}
         parse={this.defaultServicePointFieldParser}
       />
     );
@@ -174,6 +176,7 @@ class RequestPreferencesEdit extends Component {
   render() {
     const {
       deliveryAvailable,
+      disabled,
     } = this.props;
 
     return (
@@ -209,6 +212,7 @@ class RequestPreferencesEdit extends Component {
               label={<FormattedMessage id="ui-users.requests.delivery" />}
               component={Checkbox}
               type="checkbox"
+              disabled={disabled}
             />
           </Col>
         </Row>

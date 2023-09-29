@@ -38,6 +38,7 @@ import getProxySponsorWarning from '../../components/util/getProxySponsorWarning
 import TenantsPermissionsAccordion from './TenantsPermissionsAccordion';
 
 import css from './UserForm.css';
+import { USER_TYPES } from '../../constants';
 
 export function validate(values) {
   const errors = {};
@@ -296,6 +297,7 @@ class UserForm extends React.Component {
     const paneTitle = initialValues.id
       ? <FormattedMessage id="ui-users.edit" />
       : <FormattedMessage id="ui-users.crud.createUser" />;
+    const isShadowUser = initialValues?.type === USER_TYPES.SHADOW;
 
     return (
       <HasCommand commands={this.keyboardCommands}>
@@ -355,6 +357,7 @@ class UserForm extends React.Component {
                     form={form}
                     selectedPatronGroup={selectedPatronGroup}
                     uniquenessValidator={uniquenessValidator}
+                    disabled={isShadowUser}
                   />
                   <EditExtendedInfo
                     accordionId="extendedInfo"
@@ -366,11 +369,13 @@ class UserForm extends React.Component {
                     addressTypes={formData.addressTypes}
                     departments={formData.departments}
                     uniquenessValidator={uniquenessValidator}
+                    disabled={isShadowUser}
                   />
                   <EditContactInfo
                     accordionId="contactInfo"
                     addressTypes={formData.addressTypes}
                     preferredContactTypeId={initialValues.preferredContactTypeId}
+                    disabled={isShadowUser}
                   />
                   <EditCustomFieldsRecord
                     formName="userForm"
@@ -383,12 +388,16 @@ class UserForm extends React.Component {
                   />
                   {initialValues.id &&
                     <div>
-                      <EditProxy
-                        accordionId="proxy"
-                        sponsors={initialValues.sponsors}
-                        proxies={initialValues.proxies}
-                        fullName={fullName}
-                      />
+                      {
+                      !isShadowUser && (
+                        <EditProxy
+                          accordionId="proxy"
+                          sponsors={initialValues.sponsors}
+                          proxies={initialValues.proxies}
+                          fullName={fullName}
+                        />
+                      )
+                     }
                       <TenantsPermissionsAccordion
                         form={form}
                         initialValues={initialValues}

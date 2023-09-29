@@ -23,6 +23,7 @@ class CreateResetPasswordControl extends React.Component {
         POST: PropTypes.func.isRequired,
       }).isRequired,
     }).isRequired,
+    disabled: PropTypes.bool,
   };
 
   static manifest = Object.freeze({
@@ -111,6 +112,8 @@ class CreateResetPasswordControl extends React.Component {
   };
 
   render() {
+    const { disabled } = this.props;
+
     return (
       <Col
         xs={12}
@@ -123,6 +126,7 @@ class CreateResetPasswordControl extends React.Component {
           type="button"
           className={css.resetPasswordButton}
           onClick={this.handleLinkClick}
+          disabled={disabled}
         >
           <FormattedMessage id="ui-users.extended.sendResetPassword" />
         </button>
