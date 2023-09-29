@@ -65,8 +65,8 @@ const AffiliationManagerModal = ({ onClose, onSubmit, userId }) => {
 
   const primaryAffiliation = useMemo(() => affiliations.find(({ isPrimary }) => isPrimary), [affiliations]);
   const affiliationIds = useMemo(() => {
-    const excludePrimaryAffiliation = ({ isPrimary, id }) => {
-      return !isPrimary && id !== primaryAffiliation?.tenantId;
+    const excludePrimaryAffiliation = ({ id }) => {
+      return id !== primaryAffiliation?.tenantId;
     };
 
     return currentUserTenants.filter(excludePrimaryAffiliation).map(({ id }) => id);
