@@ -65,8 +65,12 @@ const AffiliationManagerModal = ({ onClose, onSubmit, userId }) => {
 
   const primaryAffiliation = useMemo(() => affiliations.find(({ isPrimary }) => isPrimary), [affiliations]);
   const affiliationIds = useMemo(() => {
-    return currentUserTenants.map(({ id }) => id);
-  }, [currentUserTenants]);
+    const excludePrimaryAffiliation = ({ isPrimary, id }) => {
+      return !isPrimary && id !== primaryAffiliation?.tenantId;
+    };
+
+    return currentUserTenants.filter(excludePrimaryAffiliation).map(({ id }) => id);
+  }, [currentUserTenants, primaryAffiliation]);
 
   const {
     assignment,
@@ -91,7 +95,6 @@ const AffiliationManagerModal = ({ onClose, onSubmit, userId }) => {
     );
 
     const buildResult = (tenantIds) => tenantIds.map(tenantId => ({ tenantId, userId }));
-
     const added = buildResult(difference(getAffiliationIds(true), affiliationIds));
     const removed = buildResult(intersection(getAffiliationIds(false), affiliationIds));
 
