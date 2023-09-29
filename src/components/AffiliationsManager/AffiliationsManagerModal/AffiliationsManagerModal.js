@@ -87,6 +87,10 @@ const AffiliationManagerModal = ({ onClose, onSubmit, userId }) => {
   const isLoading = isConsortiumTenantsLoading || isUsersAffiliationsLoading;
 
   const handleOnSubmit = useCallback(async () => {
+    const affiliationIdsToCompare = affiliations
+      .filter(({ isPrimary }) => !isPrimary)
+      .map(({ tenantId }) => tenantId);
+
     const getAffiliationIds = (assigned) => (
       Object
         .entries(assignment)
@@ -95,12 +99,12 @@ const AffiliationManagerModal = ({ onClose, onSubmit, userId }) => {
     );
 
     const buildResult = (tenantIds) => tenantIds.map(tenantId => ({ tenantId, userId }));
-    const added = buildResult(difference(getAffiliationIds(true), affiliationIds));
-    const removed = buildResult(intersection(getAffiliationIds(false), affiliationIds));
+    const added = buildResult(difference(getAffiliationIds(true), affiliationIdsToCompare));
+    const removed = buildResult(intersection(getAffiliationIds(false), affiliationIdsToCompare));
 
     await onSubmit({ added, removed });
     onClose();
-  }, [affiliationIds, assignment, onClose, onSubmit, userId]);
+  }, [affiliations, assignment, onClose, onSubmit, userId]);
 
   const modalFooter = (
     <AffiliationsManagerModalFooter
