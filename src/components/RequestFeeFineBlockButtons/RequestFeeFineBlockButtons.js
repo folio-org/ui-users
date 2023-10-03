@@ -17,6 +17,7 @@ class RequestFeeFineBlockButtons extends React.Component {
     onToggle: PropTypes.func,
     userId: PropTypes.string,
     location: PropTypes.object,
+    disabled: PropTypes.bool,
   };
 
   render() {
@@ -25,6 +26,7 @@ class RequestFeeFineBlockButtons extends React.Component {
       onToggle,
       userId,
       location,
+      disabled,
     } = this.props;
     const createRequestUrl = getRequestUrl(barcode, userId);
 
@@ -36,6 +38,7 @@ class RequestFeeFineBlockButtons extends React.Component {
             data-test-actions-menu-create-request
             to={createRequestUrl}
             onClick={onToggle}
+            disabled={disabled}
           >
             <Icon icon="plus-sign">
               <FormattedMessage id="ui-users.requests.createRequest" />
@@ -48,6 +51,7 @@ class RequestFeeFineBlockButtons extends React.Component {
             data-test-actions-menu-create-feesfines
             to={{ pathname: `/users/${userId}/charge` }}
             onClick={onToggle}
+            disabled={disabled}
           >
             <Icon icon="plus-sign">
               <FormattedMessage id="ui-users.accounts.chargeManual" />
@@ -59,6 +63,7 @@ class RequestFeeFineBlockButtons extends React.Component {
             buttonStyle="dropdownItem"
             data-test-actions-menu-create-patronblocks
             id="create-patron-block"
+            disabled={disabled}
             to={{
               pathname: `/users/${userId}/patronblocks/create`,
               search: location.search,
