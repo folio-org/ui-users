@@ -110,8 +110,14 @@ describe('AffiliationsManager', () => {
       it('should reset search and filters when \'Reset all\' button was clicked', async () => {
         await userEvent.click(await screen.findByLabelText('ui-users.affiliations.manager.modal.aria.assignAll'));
         await userEvent.click(await screen.findByText('ui-users.affiliations.manager.filter.assignment.unassigned'));
+
+        expect(await screen.findAllByRole('row')).toHaveLength(affiliations.length);
+
         await userEvent.type(await screen.findByLabelText('ui-users.affiliations.manager.modal.aria.search'), 'Columbia');
         await userEvent.click(await screen.findByText('ui-users.search'));
+
+        expect(await screen.findAllByRole('row')).toHaveLength(2);
+
         await userEvent.click(await screen.findByTestId('reset-all-affiliations-filters'));
 
         expect(await screen.findAllByRole('row')).toHaveLength(affiliations.length);
