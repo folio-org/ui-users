@@ -426,6 +426,7 @@ class UserDetail extends React.Component {
     const feeFineActions = get(resources, ['feefineactions', 'records'], []);
     const accounts = get(resources, ['accounts', 'records'], []);
     const loans = get(resources, ['loanRecords', 'records'], []);
+    const isShadowUser = user?.type === USER_TYPES.SHADOW;
 
     const feesFinesReportData = {
       user,
@@ -450,6 +451,7 @@ class UserDetail extends React.Component {
               barcode={barcode}
               onToggle={onToggle}
               userId={this.props.match.params.id}
+              disabled={isShadowUser}
             />
           </IfInterface>
           <ActionMenuEditButton
