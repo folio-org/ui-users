@@ -85,7 +85,7 @@ const useUserAffiliations = ({ userId } = {}, options = {}) => {
 
   return ({
     affiliations,
-    totalRecords: data.totalRecords,
+    totalRecords: data.totalRecords || 0,
     isFetching,
     isLoading,
     refetch,
