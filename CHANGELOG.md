@@ -88,6 +88,7 @@
 * Relabel "Users: Can create new user" to "Users: Can create and edit users". Refs UIU-2955.
 * Assign/unassign a users affiliations adjustments. Refs UIU-2942.
 * ECS - Prevent editing of specific shadow user data. Refs UIU-2951.
+* Fix bug with Edit form Expand/collapse all shortcuts not working. Refs UIU-2959.
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v9.0.0)
