@@ -20,6 +20,8 @@ import {
   AccordionSet,
   AccordionStatus,
   HasCommand,
+  expandAllSections,
+  collapseAllSections
 } from '@folio/stripes/components';
 import { EditCustomFieldsRecord } from '@folio/stripes/smart-components';
 import stripesFinalForm from '@folio/stripes/final-form';
@@ -132,17 +134,20 @@ class UserForm extends React.Component {
       },
       {
         name: 'expandAllSections',
-        handler: this.expandAllSections,
+        handler: this.handleExpandAll,
       },
       {
         name: 'collapseAllSections',
-        handler: this.collapseAllSections,
+        handler: this.handleCollapseAll,
       }
     ];
 
     this.buttonRefs = [];
     this.setButtonRef = el => this.buttonRefs.push(el);
   }
+
+  handleCollapseAll = (e) => collapseAllSections(e, this.accordionStatusRef);
+  handleExpandAll = (e) => expandAllSections(e, this.accordionStatusRef);
 
   handleCancel = () => {
     const {
