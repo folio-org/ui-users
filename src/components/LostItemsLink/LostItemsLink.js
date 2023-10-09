@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
@@ -13,8 +14,11 @@ import {
   LOST_ITEM_STATUSES,
 } from '../../views/LostItems/constants';
 
-const LostItemsLink = () => {
+import css from './LostItemsLink.css';
+
+const LostItemsLink = ({ disabled }) => {
   const history = useHistory();
+  const disabledButtonClassName = disabled ? css.disabledButton : '';
 
   return (
     <IfPermission perm="ui-users.lost-items.requiring-actual-cost">
@@ -28,7 +32,9 @@ const LostItemsLink = () => {
             search: history?.location?.search,
           },
         }}
+        disabled={disabled}
         buttonStyle="dropdownItem"
+        buttonClass={disabledButtonClassName}
       >
         <Icon icon="edit">
           <FormattedMessage id="ui-users.actionMenu.lostItems" />
@@ -36,6 +42,14 @@ const LostItemsLink = () => {
       </Button>
     </IfPermission>
   );
+};
+
+LostItemsLink.propTypes = {
+  disabled: PropTypes.bool,
+};
+
+LostItemsLink.defaultProps = {
+  disabled: false,
 };
 
 export default LostItemsLink;

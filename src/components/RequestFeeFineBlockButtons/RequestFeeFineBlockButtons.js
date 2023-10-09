@@ -11,6 +11,8 @@ import { IfPermission } from '@folio/stripes/core';
 
 import { getRequestUrl } from '../util';
 
+import css from './RequestFeeFineBlockButtons.css';
+
 class RequestFeeFineBlockButtons extends React.Component {
   static propTypes = {
     barcode: PropTypes.string,
@@ -29,6 +31,7 @@ class RequestFeeFineBlockButtons extends React.Component {
       disabled,
     } = this.props;
     const createRequestUrl = getRequestUrl(barcode, userId);
+    const disabledButtonClassName = disabled ? css.disabledButton : '';
 
     return (
       <div data-test-actions-menu>
@@ -39,6 +42,7 @@ class RequestFeeFineBlockButtons extends React.Component {
             to={createRequestUrl}
             onClick={onToggle}
             disabled={disabled}
+            buttonClass={disabledButtonClassName}
           >
             <Icon icon="plus-sign">
               <FormattedMessage id="ui-users.requests.createRequest" />
@@ -52,6 +56,7 @@ class RequestFeeFineBlockButtons extends React.Component {
             to={{ pathname: `/users/${userId}/charge` }}
             onClick={onToggle}
             disabled={disabled}
+            buttonClass={disabledButtonClassName}
           >
             <Icon icon="plus-sign">
               <FormattedMessage id="ui-users.accounts.chargeManual" />
@@ -69,6 +74,7 @@ class RequestFeeFineBlockButtons extends React.Component {
               search: location.search,
             }}
             onClick={onToggle}
+            buttonClass={disabledButtonClassName}
           >
             <Icon icon="plus-sign">
               <FormattedMessage id="ui-users.blocks.buttons.add" />

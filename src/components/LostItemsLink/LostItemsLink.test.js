@@ -23,15 +23,18 @@ const labelIds = {
   lostItems: 'ui-users.actionMenu.lostItems',
 };
 
+const renderLostItemsLink = ({ disabled = false }) => {
+  const history = createMemoryHistory();
+  render(
+    <Router history={history}>
+      <LostItemsLink disabled={disabled} />
+    </Router>
+  );
+};
+
 describe('LostItemsLink', () => {
   beforeEach(() => {
-    const history = createMemoryHistory();
-
-    render(
-      <Router history={history}>
-        <LostItemsLink />
-      </Router>
-    );
+    renderLostItemsLink();
   });
 
   it('should be rendered', () => {
@@ -60,5 +63,12 @@ describe('LostItemsLink', () => {
     };
 
     expect(Button).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
+  });
+
+  it('should be disabled', () => {
+    renderLostItemsLink({ disabled: true });
+    const lostItemsLink = screen.getByTestId(testIds.lostItemsLink);
+
+    expect(lostItemsLink).toBeDisabled();
   });
 });
