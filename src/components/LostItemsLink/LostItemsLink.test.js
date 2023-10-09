@@ -33,23 +33,23 @@ const renderLostItemsLink = ({ disabled = false }) => {
 };
 
 describe('LostItemsLink', () => {
-  beforeEach(() => {
-    renderLostItemsLink();
-  });
-
   it('should be rendered', () => {
+    renderLostItemsLink({ disabled: false });
     const lostItemsLink = screen.getByTestId(testIds.lostItemsLink);
 
     expect(lostItemsLink).toBeInTheDocument();
   });
 
   it('should have correct label', () => {
+    renderLostItemsLink({ disabled: false });
     const lostItemsLabel = screen.getByText(labelIds.lostItems);
 
     expect(lostItemsLabel).toBeInTheDocument();
   });
 
   it('should trigger "Button" with correct props', () => {
+    renderLostItemsLink({ disabled: false });
+
     const expectedProps = {
       buttonStyle: 'dropdownItem',
       to: {
@@ -65,9 +65,9 @@ describe('LostItemsLink', () => {
     expect(Button).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
   });
 
-  it('should be disabled', () => {
+  it('should button be disabled', () => {
     renderLostItemsLink({ disabled: true });
-    const lostItemsLink = screen.getByTestId(testIds.lostItemsLink);
+    const lostItemsLink = screen.getByRole('button');
 
     expect(lostItemsLink).toBeDisabled();
   });
