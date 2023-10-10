@@ -14,11 +14,8 @@ import {
   LOST_ITEM_STATUSES,
 } from '../../views/LostItems/constants';
 
-import css from './LostItemsLink.css';
-
 const LostItemsLink = ({ disabled }) => {
   const history = useHistory();
-  const disabledButtonClassName = disabled ? css.disabledButton : '';
 
   return (
     <IfPermission perm="ui-users.lost-items.requiring-actual-cost">
@@ -34,7 +31,6 @@ const LostItemsLink = ({ disabled }) => {
         }}
         disabled={disabled}
         buttonStyle="dropdownItem"
-        buttonClass={disabledButtonClassName}
       >
         <Icon icon="edit">
           <FormattedMessage id="ui-users.actionMenu.lostItems" />
