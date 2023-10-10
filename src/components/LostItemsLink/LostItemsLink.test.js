@@ -67,8 +67,8 @@ describe('LostItemsLink', () => {
 
   it('should button be disabled', () => {
     renderLostItemsLink({ disabled: true });
-    const lostItemsLink = screen.getByRole('button');
+    const lostItemsLink = screen.queryByRole('button');
 
-    expect(lostItemsLink).toBeDisabled();
+    expect(lostItemsLink).toBeNull();
   });
 });

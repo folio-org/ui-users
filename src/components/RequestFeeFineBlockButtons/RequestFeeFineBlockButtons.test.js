@@ -47,11 +47,9 @@ describe('RequestFeeFineBlockButtons', () => {
 
     it('should createRequest button to be disabled', () => {
       renderRequestFeeFineBlockButtons({ disabled: true });
-      const buttonElements = screen.getAllByRole('button');
+      const buttonElement = screen.queryByRole('button');
 
-      buttonElements.forEach((buttonElement) => {
-        expect(buttonElement).toBeDisabled();
-      });
+      expect(buttonElement).toBeNull();
     });
   });
 

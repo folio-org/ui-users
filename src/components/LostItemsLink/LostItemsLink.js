@@ -17,6 +17,10 @@ import {
 const LostItemsLink = ({ disabled }) => {
   const history = useHistory();
 
+  if (disabled) {
+    return null;
+  }
+
   return (
     <IfPermission perm="ui-users.lost-items.requiring-actual-cost">
       <Button
@@ -29,7 +33,6 @@ const LostItemsLink = ({ disabled }) => {
             search: history?.location?.search,
           },
         }}
-        disabled={disabled}
         buttonStyle="dropdownItem"
       >
         <Icon icon="edit">
