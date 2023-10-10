@@ -23,33 +23,30 @@ const labelIds = {
   lostItems: 'ui-users.actionMenu.lostItems',
 };
 
-const renderLostItemsLink = ({ disabled = false }) => {
-  const history = createMemoryHistory();
-  render(
-    <Router history={history}>
-      <LostItemsLink disabled={disabled} />
-    </Router>
-  );
-};
-
 describe('LostItemsLink', () => {
+  beforeEach(() => {
+    const history = createMemoryHistory();
+
+    render(
+      <Router history={history}>
+        <LostItemsLink />
+      </Router>
+    );
+  });
+
   it('should be rendered', () => {
-    renderLostItemsLink({ disabled: false });
     const lostItemsLink = screen.getByTestId(testIds.lostItemsLink);
 
     expect(lostItemsLink).toBeInTheDocument();
   });
 
   it('should have correct label', () => {
-    renderLostItemsLink({ disabled: false });
     const lostItemsLabel = screen.getByText(labelIds.lostItems);
 
     expect(lostItemsLabel).toBeInTheDocument();
   });
 
   it('should trigger "Button" with correct props', () => {
-    renderLostItemsLink({ disabled: false });
-
     const expectedProps = {
       buttonStyle: 'dropdownItem',
       to: {
@@ -63,12 +60,5 @@ describe('LostItemsLink', () => {
     };
 
     expect(Button).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
-  });
-
-  it('should button be disabled', () => {
-    renderLostItemsLink({ disabled: true });
-    const lostItemsLink = screen.queryByRole('button');
-
-    expect(lostItemsLink).toBeNull();
   });
 });

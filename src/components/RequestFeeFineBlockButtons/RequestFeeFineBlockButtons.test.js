@@ -44,13 +44,6 @@ describe('RequestFeeFineBlockButtons', () => {
       expect(screen.queryByText('ui-users.accounts.chargeManual')).toBeInTheDocument();
       expect(screen.queryByText('ui-users.blocks.buttons.add')).toBeInTheDocument();
     });
-
-    it('should createRequest button to be disabled', () => {
-      renderRequestFeeFineBlockButtons({ disabled: true });
-      const buttonElement = screen.queryByRole('button');
-
-      expect(buttonElement).toBeNull();
-    });
   });
 
   describe('without ui-requests.all permission', () => {

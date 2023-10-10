@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
@@ -14,12 +13,8 @@ import {
   LOST_ITEM_STATUSES,
 } from '../../views/LostItems/constants';
 
-const LostItemsLink = ({ disabled }) => {
+const LostItemsLink = () => {
   const history = useHistory();
-
-  if (disabled) {
-    return null;
-  }
 
   return (
     <IfPermission perm="ui-users.lost-items.requiring-actual-cost">
@@ -41,14 +36,6 @@ const LostItemsLink = ({ disabled }) => {
       </Button>
     </IfPermission>
   );
-};
-
-LostItemsLink.propTypes = {
-  disabled: PropTypes.bool,
-};
-
-LostItemsLink.defaultProps = {
-  disabled: false,
 };
 
 export default LostItemsLink;

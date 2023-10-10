@@ -17,7 +17,6 @@ class RequestFeeFineBlockButtons extends React.Component {
     onToggle: PropTypes.func,
     userId: PropTypes.string,
     location: PropTypes.object,
-    disabled: PropTypes.bool,
   };
 
   render() {
@@ -26,13 +25,8 @@ class RequestFeeFineBlockButtons extends React.Component {
       onToggle,
       userId,
       location,
-      disabled,
     } = this.props;
     const createRequestUrl = getRequestUrl(barcode, userId);
-
-    if (disabled) {
-      return null;
-    }
 
     return (
       <div data-test-actions-menu>
