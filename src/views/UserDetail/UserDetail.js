@@ -446,14 +446,16 @@ class UserDetail extends React.Component {
     if (showActionMenu) {
       return (
         <>
-          <IfInterface name="feesfines">
-            <RequestFeeFineBlockButtons
-              barcode={barcode}
-              onToggle={onToggle}
-              userId={this.props.match.params.id}
-              disabled={isShadowUser}
-            />
-          </IfInterface>
+          {!isShadowUser && (
+            <IfInterface name="feesfines">
+              <RequestFeeFineBlockButtons
+                barcode={barcode}
+                onToggle={onToggle}
+                userId={this.props.match.params.id}
+                disabled={isShadowUser}
+              />
+            </IfInterface>
+          )}
           <ActionMenuEditButton
             id={this.props.match.params.id}
             suppressList={this.props.resources.suppressEdit}
@@ -461,7 +463,7 @@ class UserDetail extends React.Component {
             goToEdit={this.goToEdit}
             editButton={this.editButton}
           />
-          <LostItemsLink />
+          {!isShadowUser && <LostItemsLink />}
           <IfInterface name="feesfines">
             <ExportFeesFinesReportButton
               feesFinesReportData={feesFinesReportData}
