@@ -3,7 +3,7 @@
 ## [11.0.0] IN PROGRESS
 
 ## [10.0.0](https://github.com/folio-org/ui-users/tree/v10.0.0) (2023-10-13)
-[Full Changelog](https://github.com/folio-org/ui-users/compare/v9.0.0...v10.0.0)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v9.0.3...v10.0.0)
 
 * Add STATUS FILTER to LOST ITEMS REQUIRING ACTUAL COST processing page. Refs UIU-2748.
 * Add "Status" column to LOST ITEMS REQUIRING ACTUAL COST processing page. Refs UIU-2772.
