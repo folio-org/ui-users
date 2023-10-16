@@ -27,6 +27,7 @@ import EnableUnassignAll from './EnableUnassignAll';
 import AffiliationsSelect from '../AffiliationsSelect';
 import IfConsortium from '../IfConsortium';
 import IfConsortiumPermission from '../IfConsortiumPermission';
+import { isAffiliationsEnabled } from '../util';
 
 const PermissionsAccordion = (props) => {
   const {
@@ -57,6 +58,7 @@ const PermissionsAccordion = (props) => {
 
   const isAllowedPermissions = !!getAssignedPermissions().length;
   const isActionsDisabled = disabled || isLoading;
+  const isAffiliationsVisible = isAffiliationsEnabled(props.initialValues) && affiliations?.length > 1;
 
   const [permissionModalOpen, setPermissionModalOpen] = useState(false);
   const [unassignModalOpen, setUnassignModalOpen] = useState(false);
@@ -186,7 +188,7 @@ const PermissionsAccordion = (props) => {
       >
         <IfConsortium>
           <IfConsortiumPermission perm="consortia.user-tenants.collection.get">
-            {affiliations?.length > 1 && (
+            {isAffiliationsVisible && (
               <AffiliationsSelect
                 affiliations={affiliations}
                 onChange={onChangeAffiliation}
