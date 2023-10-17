@@ -2,7 +2,9 @@ import { screen } from '@folio/jest-config-stripes/testing-library/react';
 import { Form } from 'react-final-form';
 import PropTypes from 'prop-types';
 
+import buildStripes from '__mock__/stripes.mock';
 import renderWithRouter from 'helpers/renderWithRouter';
+import { USER_TYPES } from '../../../constants';
 import EditExtendedInfo from './EditExtendedInfo';
 
 jest.unmock('@folio/stripes/components');
@@ -22,7 +24,7 @@ const arrayMutators = {
   update: jest.fn()
 };
 
-const renderEditExtendedInfo = (props) => {
+const renderEditExtendedInfo = (props, initialValues) => {
   const component = () => (
     <>
       <EditExtendedInfo {...props} />
@@ -35,6 +37,7 @@ const renderEditExtendedInfo = (props) => {
       mutators={{
         ...arrayMutators
       }}
+      initialValues={initialValues}
       onSubmit={onSubmit}
       render={component}
     />
@@ -67,6 +70,7 @@ const props = {
   }],
   values: {},
   uniquenessValidator: {},
+  stripes: buildStripes(),
 };
 const DepartmentsName = ({ departments }) => {
   return departments.map((dep) => {
@@ -124,5 +128,52 @@ describe('Render Extended User Information component', () => {
   it('should fields to be disabled', () => {
     renderEditExtendedInfo({ ...props, disabled: true });
     expect(screen.getAllByRole('textbox')[0]).toBeDisabled();
+  });
+
+  describe('Username field', () => {
+    it('should be required for users with the \'staff\' type in ECS mode', () => {
+      renderEditExtendedInfo(
+        {
+          ...props,
+          stripes: {
+            ...props.stripes,
+            hasInterface: () => true,
+          },
+        },
+        { type: USER_TYPES.STAFF }
+      );
+
+      expect(screen.getByRole('textbox', { name: 'ui-users.information.username' })).toBeRequired();
+    });
+
+    it('should NOT be required if user type is other than \'staff\' in ECS mode', () => {
+      renderEditExtendedInfo(
+        {
+          ...props,
+          stripes: {
+            ...props.stripes,
+            hasInterface: () => true,
+          },
+        },
+        { type: USER_TYPES.PATRON }
+      );
+
+      expect(screen.getByRole('textbox', { name: 'ui-users.information.username' })).not.toBeRequired();
+    });
+
+    it('should NOT be required in default mode (non ECS)', () => {
+      renderEditExtendedInfo(
+        {
+          ...props,
+          stripes: {
+            ...props.stripes,
+            hasInterface: (i) => i !== 'consortia',
+          },
+        },
+        { type: USER_TYPES.STAFF }
+      );
+
+      expect(screen.getByRole('textbox', { name: 'ui-users.information.username' })).not.toBeRequired();
+    });
   });
 });
