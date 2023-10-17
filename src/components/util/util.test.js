@@ -21,7 +21,9 @@ import {
   getCentralTenantId,
   isConsortiumEnabled,
   getRequestUrl,
+  isAffiliationsEnabled,
 } from './util';
+import { USER_TYPES } from '../../constants';
 
 const STRIPES = {
   hasPerm: jest.fn().mockReturnValue(true),
@@ -415,5 +417,21 @@ describe('getRequestUrl', () => {
     const userId = 'userId';
 
     expect(getRequestUrl(undefined, userId)).toBe(`/requests/?layer=create&userId=${userId}`);
+  });
+});
+
+describe('isAffiliationsEnabled', () => {
+  it('should return \'false\' if a user type is \'patron\'', () => {
+    expect(isAffiliationsEnabled({ type: USER_TYPES.PATRON })).toBeFalsy();
+  });
+
+  it('should return \'false\' if a user type is \'dbc\'', () => {
+    expect(isAffiliationsEnabled({ type: USER_TYPES.DCB })).toBeFalsy();
+  });
+
+  it('should return \'true\' if a user type is other than \'patron\' and \'dbc\'', () => {
+    expect(isAffiliationsEnabled({ type: USER_TYPES.SHADOW })).toBeTruthy();
+    expect(isAffiliationsEnabled({ type: USER_TYPES.STAFF })).toBeTruthy();
+    expect(isAffiliationsEnabled({ type: USER_TYPES.SYSTEM })).toBeTruthy();
   });
 });

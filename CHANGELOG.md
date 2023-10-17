@@ -1,6 +1,6 @@
 # Change history for ui-users
 
-## [10.0.1] IN PROGRESS
+## [10.1.0] IN PROGRESS
 
 * Don't display affiliations of users with types `patron` or `dbc`. Refs UIU-2967.
 
