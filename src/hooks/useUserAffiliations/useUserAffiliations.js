@@ -32,7 +32,11 @@ const useUserAffiliations = ({ userId } = {}, options = {}) => {
 
   const consortium = stripes?.user?.user?.consortium;
   const currentUserTenants = stripes?.user?.user?.tenants;
-  const { assignedToCurrentUser, ...queryOptions } = options;
+  const {
+    assignedToCurrentUser,
+    enabled: enabledOption = true,
+    ...queryOptions
+  } = options;
 
   const searchParams = {
     userId,
@@ -42,7 +46,8 @@ const useUserAffiliations = ({ userId } = {}, options = {}) => {
   const enabled = Boolean(
     consortium?.centralTenantId
     && consortium?.id
-    && userId,
+    && userId
+    && enabledOption,
   );
 
   const {
