@@ -1,5 +1,6 @@
 import '__mock__';
 import okapiUser from 'fixtures/okapiCurrentUser';
+import { USER_TYPES } from '../../constants';
 import {
   accountsMatchStatus,
   checkUserActive,
@@ -23,7 +24,6 @@ import {
   getRequestUrl,
   isAffiliationsEnabled,
 } from './util';
-import { USER_TYPES } from '../../constants';
 
 const STRIPES = {
   hasPerm: jest.fn().mockReturnValue(true),
