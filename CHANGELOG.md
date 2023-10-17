@@ -2,7 +2,7 @@
 
 ## [10.1.0] IN PROGRESS
 
-* Don't display affiliations of users with types `patron` or `dbc`. Refs UIU-2967.
+* Don't display affiliations of users with types `patron` or `dcb`. Refs UIU-2967.
 
 ## [10.0.0](https://github.com/folio-org/ui-users/tree/v10.0.0) (2023-10-13)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v9.0.3...v10.0.0)
