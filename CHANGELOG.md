@@ -2,6 +2,9 @@
 
 ## [10.1.0] IN PROGRESS
 
+## [10.0.1](https://github.com/folio-org/ui-users/tree/v10.0.1) (2023-10-18)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.0...v10.0.1)
+
 * Don't display affiliations of users with types `patron` or `dcb`. Refs UIU-2967.
 * Make the `username` field required for users with the `staff` type in ECS mode. Refs UIU-2970.
 
