@@ -1,6 +1,7 @@
 # Change history for ui-users
 
 ## [10.1.0] IN PROGRESS
+* Also support `feesfines` interface version `19.0`. Refs UIU-2960.
 
 ## [10.0.1](https://github.com/folio-org/ui-users/tree/v10.0.1) (2023-10-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.0...v10.0.1)
