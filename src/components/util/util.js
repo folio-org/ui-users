@@ -203,6 +203,7 @@ export const getRequestUrl = (barcode, userId) => {
 
 export const isPatronUser = (user) => user?.type === USER_TYPES.PATRON;
 export const isDcbUser = (user) => user?.type === USER_TYPES.DCB;
+export const isStaffUser = (user) => user?.type === USER_TYPES.STAFF;
 
 export const isAffiliationsEnabled = (user) => {
   return !isPatronUser(user) && !isDcbUser(user);

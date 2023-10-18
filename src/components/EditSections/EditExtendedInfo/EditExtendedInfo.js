@@ -12,7 +12,10 @@ import {
   Datepicker,
   Headline,
 } from '@folio/stripes/components';
-import { IfPermission } from '@folio/stripes/core';
+import {
+  IfPermission,
+  stripesShape,
+} from '@folio/stripes/core';
 
 import { withFormValues } from '../../Wrappers';
 import asyncValidateField from '../../validators/asyncValidateField';
@@ -21,6 +24,10 @@ import {
   addressTypesShape,
   departmentsShape,
 } from '../../../shapes';
+import {
+  isConsortiumEnabled,
+  isStaffUser,
+} from '../../util';
 
 import CreateResetPasswordControl from './CreateResetPasswordControl';
 import RequestPreferencesEdit from './RequestPreferencesEdit';
@@ -41,6 +48,7 @@ class EditExtendedInfo extends Component {
     values: PropTypes.object,
     uniquenessValidator: PropTypes.object,
     disabled: PropTypes.bool,
+    stripes: stripesShape,
   };
 
   buildAccordionHeader = () => {
@@ -85,6 +93,8 @@ class EditExtendedInfo extends Component {
       change,
       uniquenessValidator,
       disabled,
+      values,
+      stripes,
     } = this.props;
 
     const accordionHeader = this.buildAccordionHeader();
@@ -92,6 +102,7 @@ class EditExtendedInfo extends Component {
     const addresses = this.getAddresses();
     const defaultDeliveryAddressTypeId = this.getDefaultDeliveryAddressTypeId();
     const deliveryAvailable = this.isDeliveryAvailable();
+    const isUsernameFieldRequired = isConsortiumEnabled(stripes) && isStaffUser(values);
 
     return (
       <Accordion
@@ -195,6 +206,7 @@ class EditExtendedInfo extends Component {
               fullWidth
               validStylesEnabled
               disabled={disabled}
+              required={isUsernameFieldRequired}
               validate={asyncValidateField('username', username, uniquenessValidator)}
             />
           </Col>
