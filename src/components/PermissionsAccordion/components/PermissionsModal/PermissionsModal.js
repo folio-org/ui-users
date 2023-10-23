@@ -170,7 +170,7 @@ class PermissionsModal extends React.Component {
     const permissions = await GET({
       headers: {
         [OKAPI_TENANT_HEADER]: tenantId || okapi.tenant,
-        [OKAPI_TOKEN_HEADER]: okapi.token,
+        ...(okapi.token && { [OKAPI_TOKEN_HEADER]: okapi.token }),
       }
     });
 
