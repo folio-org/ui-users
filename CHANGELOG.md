@@ -2,6 +2,11 @@
 
 ## [10.1.0] IN PROGRESS
 
+## [10.0.2](https://github.com/folio-org/ui-users/tree/v10.0.2) (2023-10-23)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.1...v10.0.2)
+
+* Pass location.search parameter through history search. Refs UIU-2971.
+
 ## [10.0.1](https://github.com/folio-org/ui-users/tree/v10.0.1) (2023-10-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.0...v10.0.1)
 
