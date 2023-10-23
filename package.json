@@ -1056,6 +1056,7 @@
   },
   "dependencies": {
     "final-form-set-field-data": "^1.0.2",
+    "get-orientation": "^1.1.2",
     "hashcode": "^1.0.3",
     "jspdf": "^2.3.1",
     "jspdf-autotable": "^3.5.14",
@@ -1063,6 +1064,7 @@
     "moment-timezone": "^0.5.43",
     "prop-types": "^15.5.10",
     "query-string": "^5.0.0",
+    "react-easy-crop": "^5.0.2",
     "react-final-form": "^6.3.0",
     "react-final-form-arrays": "^3.1.0",
     "react-final-form-listeners": "^1.0.3",

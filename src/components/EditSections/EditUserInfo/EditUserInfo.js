@@ -24,6 +24,8 @@ import { USER_TYPES, USER_TYPE_FIELD } from '../../../constants';
 import { isConsortiumEnabled } from '../../util';
 import asyncValidateField from '../../validators/asyncValidateField';
 import validateMinDate from '../../validators/validateMinDate';
+import ProfilePicInfo from './components/ProfilePicInfo';
+import ProfilePicPOC1 from './components/ProfilePicPOC1/ProfilePicPOC1';
 
 import css from './EditUserInfo.css';
 
@@ -235,146 +237,153 @@ class EditUserInfo extends React.Component {
           { initialValues.metadata && <ViewMetaData metadata={initialValues.metadata} /> }
 
           <Row>
-            <Col xs={12} md={3}>
-              <Field
-                label={<FormattedMessage id="ui-users.information.lastName" />}
-                name="personal.lastName"
-                id="adduser_lastname"
-                component={TextField}
-                required
-                fullWidth
-                autoFocus
-                disabled={disabled}
-              />
+            <Col xs={10}>
+              <Row>
+                <Col xs={12} md={3}>
+                  <Field
+                    label={<FormattedMessage id="ui-users.information.lastName" />}
+                    name="personal.lastName"
+                    id="adduser_lastname"
+                    component={TextField}
+                    required
+                    fullWidth
+                    autoFocus
+                    disabled={disabled}
+                  />
+                </Col>
+                <Col xs={12} md={3}>
+                  <Field
+                    label={<FormattedMessage id="ui-users.information.firstName" />}
+                    name="personal.firstName"
+                    id="adduser_firstname"
+                    component={TextField}
+                    fullWidth
+                    disabled={disabled}
+                  />
+                </Col>
+                <Col xs={12} md={3}>
+                  <Field
+                    label={<FormattedMessage id="ui-users.information.middleName" />}
+                    name="personal.middleName"
+                    id="adduser_middlename"
+                    component={TextField}
+                    fullWidth
+                    disabled={disabled}
+                  />
+                </Col>
+                <Col xs={12} md={3}>
+                  <Field
+                    label={<FormattedMessage id="ui-users.information.preferredName" />}
+                    name="personal.preferredFirstName"
+                    id="adduser_preferredname"
+                    component={TextField}
+                    fullWidth
+                    disabled={disabled}
+                  />
+                </Col>
+              </Row>
+              <Row>
+                <Col xs={12} md={3}>
+                  <Field
+                    label={<FormattedMessage id="ui-users.information.patronGroup" />}
+                    name="patronGroup"
+                    id="adduser_group"
+                    component={Select}
+                    selectClass={css.patronGroup}
+                    fullWidth
+                    dataOptions={patronGroupOptions}
+                    defaultValue={initialValues.patronGroup}
+                    aria-required="true"
+                    required
+                    disabled={disabled}
+                  />
+                  <OnChange name="patronGroup">
+                    {(selectedPatronGroup) => {
+                      this.setState({ selectedPatronGroup }, () => {
+                        if (this.getPatronGroupOffset()) {
+                          this.showModal(true);
+                        }
+                      });
+                    }}
+                  </OnChange>
+                </Col>
+                <Col xs={12} md={3}>
+                  <Field
+                    label={<FormattedMessage id="ui-users.information.status" />}
+                    name="active"
+                    id="useractive"
+                    component={Select}
+                    fullWidth
+                    disabled={disabled || isStatusFieldDisabled()}
+                    dataOptions={statusOptions}
+                    defaultValue={initialValues.active}
+                    format={(v) => (v ? v.toString() : 'false')}
+                    aria-required="true"
+                    required
+                  />
+                  {isUserExpired() && (
+                  <span className={css.expiredMessage}>
+                    <FormattedMessage id="ui-users.errors.userExpired" />
+                  </span>
+                  )}
+                  {isUserExpired() && willUserExtend() && (
+                  <p className={css.expiredMessage} id="saving-will-reactivate-user">
+                    <FormattedMessage id="ui-users.information.recalculate.will.reactivate.user" />
+                  </p>
+                  )}
+                </Col>
+                <Col xs={12} md={3}>
+                  <Field
+                    component={Datepicker}
+                    label={<FormattedMessage id="ui-users.expirationDate" />}
+                    dateFormat="YYYY-MM-DD"
+                    defaultValue={initialValues.expirationDate}
+                    name="expirationDate"
+                    id="adduser_expirationdate"
+                    parse={this.parseExpirationDate}
+                    disabled={disabled}
+                    validate={validateMinDate('ui-users.errors.personal.dateOfBirth')}
+                  />
+                  {checkShowRecalculateButton() && (
+                  <Button
+                    id="recalculate-expirationDate-btn"
+                    onClick={() => this.setRecalculatedExpirationDate(false)}
+                  >
+                    <FormattedMessage id="ui-users.information.recalculate.expirationDate" />
+                  </Button>
+                  )}
+                </Col>
+                <Col xs={12} md={3}>
+                  <Field
+                    label={<FormattedMessage id="ui-users.information.barcode" />}
+                    name="barcode"
+                    id="adduser_barcode"
+                    component={TextField}
+                    validate={asyncValidateField('barcode', barcode, uniquenessValidator)}
+                    fullWidth
+                    disabled={disabled}
+                  />
+                </Col>
+                <Col xs={12} md={3}>
+                  <Field
+                    label={<FormattedMessage id="ui-users.information.userType" />}
+                    name={USER_TYPE_FIELD}
+                    id={USER_TYPE_FIELD}
+                    component={Select}
+                    fullWidth
+                    disabled={isUserTypeDisabled}
+                    dataOptions={typeOptions}
+                    aria-required={isConsortium}
+                    required={isConsortium}
+                  />
+                </Col>
+              </Row>
             </Col>
-            <Col xs={12} md={3}>
-              <Field
-                label={<FormattedMessage id="ui-users.information.firstName" />}
-                name="personal.firstName"
-                id="adduser_firstname"
-                component={TextField}
-                fullWidth
-                disabled={disabled}
-              />
-            </Col>
-            <Col xs={12} md={3}>
-              <Field
-                label={<FormattedMessage id="ui-users.information.middleName" />}
-                name="personal.middleName"
-                id="adduser_middlename"
-                component={TextField}
-                fullWidth
-                disabled={disabled}
-              />
-            </Col>
-            <Col xs={12} md={3}>
-              <Field
-                label={<FormattedMessage id="ui-users.information.preferredName" />}
-                name="personal.preferredFirstName"
-                id="adduser_preferredname"
-                component={TextField}
-                fullWidth
-                disabled={disabled}
-              />
-            </Col>
+            {/* <ProfilePicInfo /> */}
+            <ProfilePicPOC1 />
           </Row>
 
-          <Row>
-            <Col xs={12} md={3}>
-              <Field
-                label={<FormattedMessage id="ui-users.information.patronGroup" />}
-                name="patronGroup"
-                id="adduser_group"
-                component={Select}
-                selectClass={css.patronGroup}
-                fullWidth
-                dataOptions={patronGroupOptions}
-                defaultValue={initialValues.patronGroup}
-                aria-required="true"
-                required
-                disabled={disabled}
-              />
-              <OnChange name="patronGroup">
-                {(selectedPatronGroup) => {
-                  this.setState({ selectedPatronGroup }, () => {
-                    if (this.getPatronGroupOffset()) {
-                      this.showModal(true);
-                    }
-                  });
-                }}
-              </OnChange>
-            </Col>
-            <Col xs={12} md={3}>
-              <Field
-                label={<FormattedMessage id="ui-users.information.status" />}
-                name="active"
-                id="useractive"
-                component={Select}
-                fullWidth
-                disabled={disabled || isStatusFieldDisabled()}
-                dataOptions={statusOptions}
-                defaultValue={initialValues.active}
-                format={(v) => (v ? v.toString() : 'false')}
-                aria-required="true"
-                required
-              />
-              {isUserExpired() && (
-                <span className={css.expiredMessage}>
-                  <FormattedMessage id="ui-users.errors.userExpired" />
-                </span>
-              )}
-              {isUserExpired() && willUserExtend() && (
-                <p className={css.expiredMessage} id="saving-will-reactivate-user">
-                  <FormattedMessage id="ui-users.information.recalculate.will.reactivate.user" />
-                </p>
-              )}
-            </Col>
-            <Col xs={12} md={3}>
-              <Field
-                component={Datepicker}
-                label={<FormattedMessage id="ui-users.expirationDate" />}
-                dateFormat="YYYY-MM-DD"
-                defaultValue={initialValues.expirationDate}
-                name="expirationDate"
-                id="adduser_expirationdate"
-                parse={this.parseExpirationDate}
-                disabled={disabled}
-                validate={validateMinDate('ui-users.errors.personal.dateOfBirth')}
-              />
-              {checkShowRecalculateButton() && (
-                <Button
-                  id="recalculate-expirationDate-btn"
-                  onClick={() => this.setRecalculatedExpirationDate(false)}
-                >
-                  <FormattedMessage id="ui-users.information.recalculate.expirationDate" />
-                </Button>
-              )}
-            </Col>
-            <Col xs={12} md={3}>
-              <Field
-                label={<FormattedMessage id="ui-users.information.barcode" />}
-                name="barcode"
-                id="adduser_barcode"
-                component={TextField}
-                validate={asyncValidateField('barcode', barcode, uniquenessValidator)}
-                fullWidth
-                disabled={disabled}
-              />
-            </Col>
-            <Col xs={12} md={3}>
-              <Field
-                label={<FormattedMessage id="ui-users.information.userType" />}
-                name={USER_TYPE_FIELD}
-                id={USER_TYPE_FIELD}
-                component={Select}
-                fullWidth
-                disabled={isUserTypeDisabled}
-                dataOptions={typeOptions}
-                aria-required={isConsortium}
-                required={isConsortium}
-              />
-            </Col>
-          </Row>
+
         </Accordion>
         <Modal
           footer={modalFooter}
