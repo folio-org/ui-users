@@ -374,6 +374,7 @@ class UserForm extends React.Component {
                     departments={formData.departments}
                     uniquenessValidator={uniquenessValidator}
                     disabled={isShadowUser}
+                    stripes={stripes}
                   />
                   <EditContactInfo
                     accordionId="contactInfo"

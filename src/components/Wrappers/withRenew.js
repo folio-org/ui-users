@@ -51,8 +51,6 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
       additionalInfo: '',
       loans: [],
       // eslint-disable-next-line react/no-unused-state
-      errors: [],
-      // eslint-disable-next-line react/no-unused-state
       bulkRenewal: false,
       bulkRenewalDialogOpen: false,
       renewSuccess: [],
@@ -126,9 +124,8 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
 
           if (contentType && contentType.startsWith('application/json')) {
             resp.json()
-              .then((error) => {
-                const errors = this.handleErrors(error);
-                reject(this.getMessage(errors));
+              .then(({ errors }) => {
+                reject(errors);
               });
           } else {
             resp.text()
@@ -153,11 +150,13 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
         renewSuccess.push(
           await this.renewItem(loan, patron, bulkRenewal, index !== loansSize - 1, additionalInfo)
         );
-      } catch (error) {
+      } catch (errors) {
+        const errorMessage = this.getMessage(errors);
+
         renewFailure.push(loan);
         errorMsg[loan.id] = {
-          ...error,
-          ...isOverridePossible(this.state.errors),
+          ...errorMessage,
+          ...isOverridePossible(errors),
         };
       }
     }
@@ -190,13 +189,6 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
     );
 
     this.callout.sendCallout({ message });
-  };
-
-  handleErrors = (error) => {
-    const { errors } = error;
-    // eslint-disable-next-line react/no-unused-state
-    this.setState({ errors });
-    return errors;
   };
 
   getPolicyName = (errors) => {

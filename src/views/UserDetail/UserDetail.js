@@ -54,7 +54,10 @@ import HelperApp from '../../components/HelperApp';
 import IfConsortium from '../../components/IfConsortium';
 import { PatronBlockMessage } from '../../components/PatronBlock';
 import { getFormAddressList } from '../../components/data/converters/address';
-import { getFullName } from '../../components/util';
+import {
+  getFullName,
+  isAffiliationsEnabled,
+} from '../../components/util';
 import RequestFeeFineBlockButtons from '../../components/RequestFeeFineBlockButtons';
 import { departmentsShape } from '../../shapes';
 import ErrorPane from '../../components/ErrorPane';
@@ -446,14 +449,16 @@ class UserDetail extends React.Component {
     if (showActionMenu) {
       return (
         <>
-          <IfInterface name="feesfines">
-            <RequestFeeFineBlockButtons
-              barcode={barcode}
-              onToggle={onToggle}
-              userId={this.props.match.params.id}
-              disabled={isShadowUser}
-            />
-          </IfInterface>
+          {!isShadowUser && (
+            <IfInterface name="feesfines">
+              <RequestFeeFineBlockButtons
+                barcode={barcode}
+                onToggle={onToggle}
+                userId={this.props.match.params.id}
+                disabled={isShadowUser}
+              />
+            </IfInterface>
+          )}
           <ActionMenuEditButton
             id={this.props.match.params.id}
             suppressList={this.props.resources.suppressEdit}
@@ -461,7 +466,7 @@ class UserDetail extends React.Component {
             goToEdit={this.goToEdit}
             editButton={this.editButton}
           />
-          <LostItemsLink />
+          {!isShadowUser && <LostItemsLink />}
           <IfInterface name="feesfines">
             <ExportFeesFinesReportButton
               feesFinesReportData={feesFinesReportData}
@@ -616,7 +621,7 @@ class UserDetail extends React.Component {
     const userDepartments = (user?.departments || [])
       .map(departmentId => departments.find(({ id }) => id === departmentId)?.name);
     const accounts = resources?.accounts;
-    const isAffiliationEnabled = user?.type !== USER_TYPES.PATRON;
+    const isAffiliationsVisible = isAffiliationsEnabled(user);
 
     const isShadowUser = user?.type === USER_TYPES.SHADOW;
     const showPatronBlocksSection = hasPatronBlocksPermissions && !isShadowUser;
@@ -702,7 +707,7 @@ class UserDetail extends React.Component {
                 <IfConsortium>
                   <IfConsortiumPermission perm="consortia.user-tenants.collection.get">
                     {
-                      isAffiliationEnabled && (
+                      isAffiliationsVisible && (
                         <UserAffiliations
                           accordionId="affiliationsSection"
                           expanded={sections.affiliationsSection}

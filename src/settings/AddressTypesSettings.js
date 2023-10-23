@@ -49,8 +49,8 @@ class AddressTypesSettings extends React.Component {
         sortby="addressType"
         canCreate={hasCreatePerm}
         actionSuppressor={{
-          delete: item => !hasDeletePerm,
-          edit: (item) => !hasEditPerm,
+          delete: _ => !hasDeletePerm,
+          edit: _ => !hasEditPerm,
         }}
       />
     );

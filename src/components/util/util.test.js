@@ -1,5 +1,6 @@
 import '__mock__';
 import okapiUser from 'fixtures/okapiCurrentUser';
+import { USER_TYPES } from '../../constants';
 import {
   accountsMatchStatus,
   checkUserActive,
@@ -21,6 +22,7 @@ import {
   getCentralTenantId,
   isConsortiumEnabled,
   getRequestUrl,
+  isAffiliationsEnabled,
 } from './util';
 
 const STRIPES = {
@@ -415,5 +417,21 @@ describe('getRequestUrl', () => {
     const userId = 'userId';
 
     expect(getRequestUrl(undefined, userId)).toBe(`/requests/?layer=create&userId=${userId}`);
+  });
+});
+
+describe('isAffiliationsEnabled', () => {
+  it('should return \'false\' if a user type is \'patron\'', () => {
+    expect(isAffiliationsEnabled({ type: USER_TYPES.PATRON })).toBeFalsy();
+  });
+
+  it('should return \'false\' if a user type is \'dcb\'', () => {
+    expect(isAffiliationsEnabled({ type: USER_TYPES.DCB })).toBeFalsy();
+  });
+
+  it('should return \'true\' if a user type is other than \'patron\' and \'dcb\'', () => {
+    expect(isAffiliationsEnabled({ type: USER_TYPES.SHADOW })).toBeTruthy();
+    expect(isAffiliationsEnabled({ type: USER_TYPES.STAFF })).toBeTruthy();
+    expect(isAffiliationsEnabled({ type: USER_TYPES.SYSTEM })).toBeTruthy();
   });
 });

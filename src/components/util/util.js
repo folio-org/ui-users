@@ -6,6 +6,7 @@ import queryString from 'query-string';
 import { NoValue } from '@folio/stripes/components';
 
 import {
+  USER_TYPES,
   requestStatuses,
   sortTypes,
 } from '../../constants';
@@ -198,4 +199,12 @@ export const getRequestUrl = (barcode, userId) => {
       layer: 'create',
       userId,
     })}`;
+};
+
+export const isPatronUser = (user) => user?.type === USER_TYPES.PATRON;
+export const isDcbUser = (user) => user?.type === USER_TYPES.DCB;
+export const isStaffUser = (user) => user?.type === USER_TYPES.STAFF;
+
+export const isAffiliationsEnabled = (user) => {
+  return !isPatronUser(user) && !isDcbUser(user);
 };
