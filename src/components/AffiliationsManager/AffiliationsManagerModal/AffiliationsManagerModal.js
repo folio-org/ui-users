@@ -15,6 +15,7 @@ import {
   Modal,
   Paneset,
 } from '@folio/stripes/components';
+import { useStripes } from '@folio/stripes/core';
 
 import {
   useConsortiumTenants,
@@ -43,6 +44,8 @@ const INITIAL_FILTERS = {};
 const AffiliationManagerModal = ({ onClose, onSubmit, userId }) => {
   const [isFiltersVisible, toggleFilters] = useToggle(true);
   const [filters, dispatch] = useReducer(filtersReducer, INITIAL_FILTERS);
+  const stripes = useStripes();
+  const currentUserTenants = useMemo(() => stripes.user?.user?.tenants || [], [stripes]);
 
   const {
     sortOrder,
@@ -60,6 +63,15 @@ const AffiliationManagerModal = ({ onClose, onSubmit, userId }) => {
     isLoading: isConsortiumTenantsLoading,
   } = useConsortiumTenants();
 
+  const primaryAffiliation = useMemo(() => affiliations.find(({ isPrimary }) => isPrimary), [affiliations]);
+  const affiliationIds = useMemo(() => {
+    const excludePrimaryAffiliation = ({ id }) => {
+      return id !== primaryAffiliation?.tenantId;
+    };
+
+    return currentUserTenants.filter(excludePrimaryAffiliation).map(({ id }) => id);
+  }, [currentUserTenants, primaryAffiliation]);
+
   const {
     assignment,
     isAllAssigned,
@@ -69,13 +81,16 @@ const AffiliationManagerModal = ({ onClose, onSubmit, userId }) => {
   } = useAffiliationsAssignment({
     affiliations,
     tenants,
+    affiliationIds,
   });
 
   const isLoading = isConsortiumTenantsLoading || isUsersAffiliationsLoading;
 
-  const affiliationIds = useMemo(() => affiliations.map(({ tenantId }) => tenantId), [affiliations]);
-
   const handleOnSubmit = useCallback(async () => {
+    const affiliationIdsToCompare = affiliations
+      .filter(({ isPrimary }) => !isPrimary)
+      .map(({ tenantId }) => tenantId);
+
     const getAffiliationIds = (assigned) => (
       Object
         .entries(assignment)
@@ -84,13 +99,12 @@ const AffiliationManagerModal = ({ onClose, onSubmit, userId }) => {
     );
 
     const buildResult = (tenantIds) => tenantIds.map(tenantId => ({ tenantId, userId }));
-
-    const added = buildResult(difference(getAffiliationIds(true), affiliationIds));
-    const removed = buildResult(intersection(getAffiliationIds(false), affiliationIds));
+    const added = buildResult(difference(getAffiliationIds(true), affiliationIdsToCompare));
+    const removed = buildResult(intersection(getAffiliationIds(false), affiliationIdsToCompare));
 
     await onSubmit({ added, removed });
     onClose();
-  }, [affiliationIds, assignment, onClose, onSubmit, userId]);
+  }, [affiliations, assignment, onClose, onSubmit, userId]);
 
   const modalFooter = (
     <AffiliationsManagerModalFooter
@@ -115,12 +129,27 @@ const AffiliationManagerModal = ({ onClose, onSubmit, userId }) => {
       orderBy(
         filtersConfig
           .reduce((filtered, config) => config.filter(filtered, activeFilters, assignment), tenants)
-          .filter(({ name }) => (searchQuery ? name.toLowerCase().includes(searchQuery.toLowerCase()) : true)),
+          .filter(({ name, isCentral, id }) => {
+            const isNotValid = isCentral || primaryAffiliation?.tenantId === id || !affiliationIds.includes(id);
+
+            if (isNotValid) return false;
+
+            return (searchQuery ? name.toLowerCase().includes(searchQuery.toLowerCase()) : true);
+          }),
         sorters[sortOrder],
         sortDirection.name,
       )
     );
-  }, [assignment, filters, sortDirection.name, sortOrder, sorters, tenants]);
+  }, [
+    affiliationIds,
+    assignment,
+    filters,
+    primaryAffiliation,
+    sortDirection.name,
+    sortOrder,
+    sorters,
+    tenants,
+  ]);
 
   return (
     <Modal

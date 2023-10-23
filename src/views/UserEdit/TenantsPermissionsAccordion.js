@@ -18,6 +18,7 @@ import {
   statusFilterConfig,
   permissionTypeFilterConfig,
 } from '../../components/PermissionsAccordion/helpers/filtersConfig';
+import { isAffiliationsEnabled } from '../../components/util';
 import {
   useUserAffiliations,
   useUserTenantPermissions,
@@ -93,6 +94,7 @@ const TenantsPermissionsAccordion = ({
   } = useUserAffiliations(
     { userId },
     {
+      enabled: isAffiliationsEnabled(initialValues),
       onError: handleLoadAffiliationsError
     },
   );

@@ -50,30 +50,25 @@ import {
   UserAffiliations,
   UserServicePoints,
 } from '../../components/UserDetailSections';
-
 import HelperApp from '../../components/HelperApp';
 import IfConsortium from '../../components/IfConsortium';
-import {
-  PatronBlockMessage
-} from '../../components/PatronBlock';
-import {
-  getFormAddressList,
-} from '../../components/data/converters/address';
+import { PatronBlockMessage } from '../../components/PatronBlock';
+import { getFormAddressList } from '../../components/data/converters/address';
 import {
   getFullName,
+  isAffiliationsEnabled,
 } from '../../components/util';
 import RequestFeeFineBlockButtons from '../../components/RequestFeeFineBlockButtons';
 import { departmentsShape } from '../../shapes';
+import ErrorPane from '../../components/ErrorPane';
+import LostItemsLink from '../../components/LostItemsLink';
 import IfConsortiumPermission from '../../components/IfConsortiumPermission';
 import { USER_TYPES } from '../../constants';
-import LostItemsLink from '../../components/LostItemsLink';
-
+import ActionMenuEditButton from './components/ActionMenuEditButton';
+import ActionMenuDeleteButton from './components/ActionMenuDeleteButton';
 import OpenTransactionModal from './components/OpenTransactionModal';
 import DeleteUserModal from './components/DeleteUserModal';
 import ExportFeesFinesReportButton from './components';
-import ErrorPane from '../../components/ErrorPane';
-import ActionMenuEditButton from './components/ActionMenuEditButton';
-import ActionMenuDeleteButton from './components/ActionMenuDeleteButton';
 
 class UserDetail extends React.Component {
   static propTypes = {
@@ -434,6 +429,7 @@ class UserDetail extends React.Component {
     const feeFineActions = get(resources, ['feefineactions', 'records'], []);
     const accounts = get(resources, ['accounts', 'records'], []);
     const loans = get(resources, ['loanRecords', 'records'], []);
+    const isShadowUser = user?.type === USER_TYPES.SHADOW;
 
     const feesFinesReportData = {
       user,
@@ -453,13 +449,16 @@ class UserDetail extends React.Component {
     if (showActionMenu) {
       return (
         <>
-          <IfInterface name="feesfines">
-            <RequestFeeFineBlockButtons
-              barcode={barcode}
-              onToggle={onToggle}
-              userId={this.props.match.params.id}
-            />
-          </IfInterface>
+          {!isShadowUser && (
+            <IfInterface name="feesfines">
+              <RequestFeeFineBlockButtons
+                barcode={barcode}
+                onToggle={onToggle}
+                userId={this.props.match.params.id}
+                disabled={isShadowUser}
+              />
+            </IfInterface>
+          )}
           <ActionMenuEditButton
             id={this.props.match.params.id}
             suppressList={this.props.resources.suppressEdit}
@@ -467,7 +466,7 @@ class UserDetail extends React.Component {
             goToEdit={this.goToEdit}
             editButton={this.editButton}
           />
-          <LostItemsLink />
+          {!isShadowUser && <LostItemsLink />}
           <IfInterface name="feesfines">
             <ExportFeesFinesReportButton
               feesFinesReportData={feesFinesReportData}
@@ -622,6 +621,7 @@ class UserDetail extends React.Component {
     const userDepartments = (user?.departments || [])
       .map(departmentId => departments.find(({ id }) => id === departmentId)?.name);
     const accounts = resources?.accounts;
+    const isAffiliationsVisible = isAffiliationsEnabled(user);
 
     const isShadowUser = user?.type === USER_TYPES.SHADOW;
     const showPatronBlocksSection = hasPatronBlocksPermissions && !isShadowUser;
@@ -706,13 +706,17 @@ class UserDetail extends React.Component {
 
                 <IfConsortium>
                   <IfConsortiumPermission perm="consortia.user-tenants.collection.get">
-                    <UserAffiliations
-                      accordionId="affiliationsSection"
-                      expanded={sections.affiliationsSection}
-                      onToggle={this.handleSectionToggle}
-                      userId={user?.id}
-                      userName={user?.username}
-                    />
+                    {
+                      isAffiliationsVisible && (
+                        <UserAffiliations
+                          accordionId="affiliationsSection"
+                          expanded={sections.affiliationsSection}
+                          onToggle={this.handleSectionToggle}
+                          userId={user?.id}
+                          userName={user?.username}
+                        />
+                      )
+                    }
                   </IfConsortiumPermission>
                 </IfConsortium>
 

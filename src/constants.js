@@ -346,4 +346,5 @@ export const USER_TYPES = {
   SHADOW: 'shadow',
   STAFF: 'staff',
   SYSTEM: 'system',
+  DCB: 'dcb',
 };
