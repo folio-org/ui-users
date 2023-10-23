@@ -401,8 +401,9 @@ class UserEdit extends React.Component {
         onSubmit={onSubmit}
         onCancel={() => {
           history.push({
-            pathname: params.id ? `/users/preview/${params.id}${location.search}` : '/users',
+            pathname: params.id ? `/users/preview/${params.id}` : '/users',
             state: location.state,
+            search: location.search,
           });
         }}
         uniquenessValidator={this.props.mutator.uniquenessValidator}
