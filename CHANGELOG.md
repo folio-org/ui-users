@@ -1,5 +1,10 @@
 # Change history for ui-users
 
+## [10.0.4](https://github.com/folio-org/ui-users/tree/v10.0.4) (2023-11-10)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.3...v10.0.4)
+
+* Correctly handle optional `X-Okapi-token` request header. Refs UIU-2977.
+
 ## [10.0.3](https://github.com/folio-org/ui-users/tree/v10.0.3) (2023-10-23)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.1...v10.0.3)
 
