@@ -3,8 +3,12 @@
 ## [10.1.0] IN PROGRESS
 
 * Also support `feesfines` interface version `19.0`. Refs UIU-2960.
-* Pass `location.search` parameter through history search. Refs UIU-2971.
 * Correctly handle optional `X-Okapi-token` request header. Refs UIU-2977.
+
+## [10.0.3](https://github.com/folio-org/ui-users/tree/v10.0.3) (2023-10-23)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.1...v10.0.3)
+
+* Pass location.search parameter through history search. Refs UIU-2971.
 
 ## [10.0.1](https://github.com/folio-org/ui-users/tree/v10.0.1) (2023-10-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.0...v10.0.1)
