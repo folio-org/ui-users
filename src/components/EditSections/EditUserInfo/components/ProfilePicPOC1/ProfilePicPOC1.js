@@ -124,7 +124,7 @@ const ProfilePicPOC1 = () => {
               <Slider
                 value={zoom}
                 min="1"
-                max="3"
+                max="5"
                 step="0.1"
                 handleChange={(e) => setZoom(e.target.value)}
                 label="zoom"
