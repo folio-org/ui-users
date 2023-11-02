@@ -985,7 +985,8 @@
         "displayName": "Settings (Users): Manage number generator options",
         "subPermissions": [
           "settings.users.enabled"
-        ]
+        ],
+        "visible": true
       },
       {
         "permissionName": "ui-users.settings.general.view",
