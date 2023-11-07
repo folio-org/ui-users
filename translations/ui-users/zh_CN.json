@@ -592,7 +592,7 @@
     "settings.error.noMessage": "如果选择了一个或多个已冻结操作，则要显示的消息是必填字段",
     "settings.error.noCheckbox": "必须选择一个或多个已冻结操作，才能显示要使用的消息",
     "permission.accounts": "费用/罚款历史：可以创建、编辑和移除帐户",
-    "permission.create": "用户：可以创建新用户",
+    "permission.create": "用户：可以创建和编辑用户",
     "permission.edit": "用户：可以编辑用户配置文件",
     "permission.editperms": "用户：可以为用户分配和取消分配权限",
     "permission.editproxies": "用户：可以创建、编辑和移除代理",
