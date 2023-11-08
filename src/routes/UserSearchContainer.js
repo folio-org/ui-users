@@ -83,7 +83,7 @@ class UserSearchContainer extends React.Component {
       path: 'groups',
       params: {
         query: 'cql.allRecords=1 sortby group',
-        limit: '200',
+        limit: (q, p, r, l, props) => props?.stripes?.config?.maxUnpagedResourceCount || '200',
       },
       records: 'usergroups',
     },
