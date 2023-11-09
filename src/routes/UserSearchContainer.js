@@ -35,6 +35,15 @@ const searchFields = [
 ];
 const compileQuery = template(`(${searchFields.join(' or ')})`, { interpolate: /%{([\s\S]+?)}/g });
 
+/*
+  Some of the special characters that are allowed while creating a tag are  "", \, *, ?
+  These special characters cause CQL exceptions while searching the user records, which are
+  assigned with such tags.
+  This function "escapeSpecialCharactersInTagFilters" intends to escape the special characters
+  in filters of type "Tags"
+  Ref: https://issues.folio.org/browse/UIU-2995
+*/
+
 const escapeSpecialCharactersInTagFilters = (queryParams, resourceData) => {
   const newResourceData = cloneDeep(resourceData);
   let escapedFilters;
