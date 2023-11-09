@@ -6,6 +6,7 @@
 * Correctly handle optional `X-Okapi-token` request header. Refs UIU-2977.
 * Fix bug with Edit form Expand/collapse all shortcuts not working. Refs UIU-2959.
 * Update patron groups retrieval in user search to hold `maxUnpagedResourceCount`. Refs UIU-2973.
+* Update resourceData and queryParams in `UserSearchContainer.js` to escape special characters in tags filter. Refs. UIU-2995.
 * Lost item fees not suspended when item is claimed returned from the ellipses in action menu. Refs UIU-2993.
 
 ## [10.0.3](https://github.com/folio-org/ui-users/tree/v10.0.3) (2023-10-23)
