@@ -5,7 +5,7 @@
 * Also support `feesfines` interface version `19.0`. Refs UIU-2960.
 * Correctly handle optional `X-Okapi-token` request header. Refs UIU-2977.
 * Fix bug with Edit form Expand/collapse all shortcuts not working. Refs UIU-2959.
-* Update resourceData to escape special characters in filter tags before passing to makeQuery function. Refs. UIU-2731.
+* Update resourceData and queryParams in `UserSearchContainer.js` to escape special characters in tags filter. Refs. UIU-2731.
 
 ## [10.0.3](https://github.com/folio-org/ui-users/tree/v10.0.3) (2023-10-23)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.1...v10.0.3)
