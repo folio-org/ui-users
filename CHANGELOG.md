@@ -3,6 +3,10 @@
 ## [10.1.0] IN PROGRESS
 
 * Also support `feesfines` interface version `19.0`. Refs UIU-2960.
+
+## [10.0.4](https://github.com/folio-org/ui-users/tree/v10.0.4) (2023-11-10)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.3...v10.0.4)
+
 * Correctly handle optional `X-Okapi-token` request header. Refs UIU-2977.
 * Fix bug with Edit form Expand/collapse all shortcuts not working. Refs UIU-2959.
 * Update patron groups retrieval in user search to hold `maxUnpagedResourceCount`. Refs UIU-2973.
