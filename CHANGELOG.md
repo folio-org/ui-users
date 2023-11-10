@@ -1,5 +1,14 @@
 # Change history for ui-users
 
+## [10.0.4](https://github.com/folio-org/ui-users/tree/v10.0.4) (2023-11-10)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.3...v10.0.4)
+
+* Correctly handle optional `X-Okapi-token` request header. Refs UIU-2977.
+* Fix bug with Edit form Expand/collapse all shortcuts not working. Refs UIU-2959.
+* Update patron groups retrieval in user search to hold `maxUnpagedResourceCount`. Refs UIU-2973.
+* Update resourceData and queryParams in `UserSearchContainer.js` to escape special characters in tags filter. Refs. UIU-2995.
+* Lost item fees not suspended when item is claimed returned from the ellipses in action menu. Refs UIU-2993.
+
 ## [10.0.3](https://github.com/folio-org/ui-users/tree/v10.0.3) (2023-10-23)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.1...v10.0.3)
 
@@ -119,7 +128,6 @@
 
 * Fix problem with remaining amount (not shown correct value after filling the payment amount). Refs UIU-2812.
 * Correctly handle removing all permissions from given user. Fixes UIU-2822.
-
 
 ## [9.0.0](https://github.com/folio-org/ui-users/tree/v9.0.0) (2023-02-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v8.1.0...v9.0.0)
