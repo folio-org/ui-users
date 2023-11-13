@@ -43,7 +43,7 @@ import {
   accountsMatchStatus,
   checkUserActive,
 } from '../../components/util';
-import { itemStatuses, loanActions, refundClaimReturned } from '../../constants';
+import { itemStatuses, loanActions, refundClaimReturned, DCB_USER } from '../../constants';
 import {
   withRenew,
   withDeclareLost,
@@ -487,6 +487,7 @@ class LoanDetails extends React.Component {
     const patronBlocksForModal = getRenewalPatronBlocksFromPatronBlocks(patronBlocks);
     const isUserActive = user ? checkUserActive(user) : false;
     const borrower = user ? getFullName(user) : <FormattedMessage id="ui-users.user.unknown" />;
+    const isVirtualPatron = user?.personal?.lastName === DCB_USER.lastName;
 
     return (
       <div data-test-loan-actions-history>
@@ -507,7 +508,7 @@ class LoanDetails extends React.Component {
                 <IfPermission perm="ui-users.loans.renew">
                   <Button
                     data-test-renew-button
-                    disabled={buttonDisabled || isClaimedReturnedItem || !isUserActive}
+                    disabled={buttonDisabled || isClaimedReturnedItem || !isUserActive || isVirtualPatron}
                     buttonStyle="primary"
                     onClick={this.renew}
                   >
@@ -525,7 +526,7 @@ class LoanDetails extends React.Component {
                         <Button
                           buttonStyle="dropdownItem"
                           data-test-declare-lost-button
-                          disabled={buttonDisabled || isDeclaredLostItem}
+                          disabled={buttonDisabled || isDeclaredLostItem || isVirtualPatron}
                           onClick={() => declareLost(loan, itemRequestCount)}
                         >
                           <FormattedMessage id="ui-users.loans.declareLost" />
@@ -535,6 +536,7 @@ class LoanDetails extends React.Component {
                         <Button
                           buttonStyle="dropdownItem"
                           data-test-dropdown-content-mark-as-missing-button
+                          disabled={isVirtualPatron}
                           onClick={() => markAsMissing(loan, itemRequestCount)}
                         >
                           <FormattedMessage id="ui-users.loans.markAsMissing" />
@@ -544,16 +546,16 @@ class LoanDetails extends React.Component {
                   </Dropdown>
                 }
                 {!isClaimedReturnedItem &&
-                  <IfPermission perm="ui-users.loans.claim-item-returned">
-                    <Button
-                      data-test-claim-returned-button
-                      disabled={buttonDisabled}
-                      buttonStyle="primary"
-                      onClick={() => claimReturned(loan, itemRequestCount)}
-                    >
-                      <FormattedMessage id="ui-users.loans.claimReturned" />
-                    </Button>
-                  </IfPermission>
+                <IfPermission perm="ui-users.loans.claim-item-returned">
+                  <Button
+                    data-test-claim-returned-button
+                    disabled={buttonDisabled || isVirtualPatron}
+                    buttonStyle="primary"
+                    onClick={() => claimReturned(loan, itemRequestCount)}
+                  >
+                    <FormattedMessage id="ui-users.loans.claimReturned" />
+                  </Button>
+                </IfPermission>
                 }
                 <IfPermission perm="ui-users.loans.change-due-date">
                   <Button
@@ -562,7 +564,8 @@ class LoanDetails extends React.Component {
                       buttonDisabled ||
                       isDeclaredLostItem ||
                       isClaimedReturnedItem ||
-                      isAgedToLostItem
+                      isAgedToLostItem ||
+                      isVirtualPatron
                     }
                     buttonStyle="primary"
                     onClick={this.showChangeDueDateDialog}
@@ -573,7 +576,7 @@ class LoanDetails extends React.Component {
                 <IfPermission perm="ui-users.loans.declare-item-lost">
                   <Button
                     data-test-declare-lost-button
-                    disabled={declareLostInProgress || buttonDisabled || isDeclaredLostItem}
+                    disabled={declareLostInProgress || buttonDisabled || isDeclaredLostItem || isVirtualPatron}
                     buttonStyle="primary"
                     onClick={() => declareLost(loan, itemRequestCount)}
                   >
@@ -583,6 +586,7 @@ class LoanDetails extends React.Component {
                 <IfPermission perm="ui-users.loans.add-patron-info">
                   <Button
                     data-test-new-patron-info-button
+                    disabled={isVirtualPatron}
                     onClick={() => addInfo(loan, 'patron')}
                   >
                     <FormattedMessage id="ui-users.loans.newPatronInfo" />
@@ -591,6 +595,7 @@ class LoanDetails extends React.Component {
                 <IfPermission perm="ui-users.loans.add-staff-info">
                   <Button
                     data-test-new-staff-info-button
+                    disabled={isVirtualPatron}
                     onClick={() => addInfo(loan, 'staff')}
                   >
                     <FormattedMessage id="ui-users.loans.newStaffInfo" />

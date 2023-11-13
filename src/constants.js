@@ -348,3 +348,7 @@ export const USER_TYPES = {
   SYSTEM: 'system',
   DCB: 'dcb',
 };
+
+export const DCB_USER = {
+  lastName: 'DcbSystem'
+};
