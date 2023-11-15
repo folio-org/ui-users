@@ -43,7 +43,8 @@ import {
   accountsMatchStatus,
   checkUserActive,
 } from '../../components/util';
-import { itemStatuses, loanActions, refundClaimReturned, DCB_USER } from '../../constants';
+import { itemStatuses, loanActions, refundClaimReturned } from '../../constants';
+import { isAVirtualPatron } from '../../utils';
 import {
   withRenew,
   withDeclareLost,
@@ -487,7 +488,7 @@ class LoanDetails extends React.Component {
     const patronBlocksForModal = getRenewalPatronBlocksFromPatronBlocks(patronBlocks);
     const isUserActive = user ? checkUserActive(user) : false;
     const borrower = user ? getFullName(user) : <FormattedMessage id="ui-users.user.unknown" />;
-    const isVirtualPatron = user?.personal?.lastName === DCB_USER.lastName;
+    const isVirtualPatron = isAVirtualPatron(user?.personal?.lastName);
 
     return (
       <div data-test-loan-actions-history>

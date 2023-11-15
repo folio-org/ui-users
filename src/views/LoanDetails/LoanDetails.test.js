@@ -6,7 +6,7 @@ import okapiOpenLoan from 'fixtures/openLoan';
 import okapiCurrentUser from 'fixtures/okapiCurrentUser';
 import renderWithRouter from 'helpers/renderWithRouter';
 import LoanDetails from './LoanDetails';
-import { itemStatuses, DCB_USER } from '../../constants';
+import { DCB_USER } from '../../constants';
 
 jest.useFakeTimers('legacy');
 jest.mock('react-intl', () => ({
