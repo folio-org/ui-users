@@ -6,7 +6,6 @@ import okapiOpenLoan from 'fixtures/openLoan';
 import okapiCurrentUser from 'fixtures/okapiCurrentUser';
 import renderWithRouter from 'helpers/renderWithRouter';
 import LoanDetails from './LoanDetails';
-import { DCB_USER } from '../../constants';
 
 jest.useFakeTimers('legacy');
 jest.mock('react-intl', () => ({
@@ -498,9 +497,7 @@ describe('LoanDetails', () => {
       ...propsData,
       user: {
         ...propsData.user,
-        personal: {
-          lastName: DCB_USER.lastName
-        }
+        type: 'dcb',
       }
     };
 
