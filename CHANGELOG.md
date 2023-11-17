@@ -3,6 +3,7 @@
 ## [10.1.0] IN PROGRESS
 
 * Also support `feesfines` interface version `19.0`. Refs UIU-2960.
+* Can not edit shadow user account. Refs UIU-3000.
 
 ## [10.0.4](https://github.com/folio-org/ui-users/tree/v10.0.4) (2023-11-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.3...v10.0.4)
