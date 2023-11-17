@@ -291,8 +291,7 @@ class EditUserInfo extends React.Component {
                 dataOptions={patronGroupOptions}
                 defaultValue={initialValues.patronGroup}
                 aria-required="true"
-                required
-                disabled={disabled}
+                required={!disabled}
               />
               <OnChange name="patronGroup">
                 {(selectedPatronGroup) => {
