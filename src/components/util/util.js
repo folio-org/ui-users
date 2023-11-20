@@ -9,6 +9,8 @@ import {
   USER_TYPES,
   requestStatuses,
   sortTypes,
+  DCB_INSTANCE_ID,
+  DCB_HOLDINGS_RECORD_ID,
 } from '../../constants';
 
 /**
@@ -208,3 +210,5 @@ export const isStaffUser = (user) => user?.type === USER_TYPES.STAFF;
 export const isAffiliationsEnabled = (user) => {
   return !isPatronUser(user) && !isDcbUser(user);
 };
+
+export const isDCBItem = (item) => item.instanceId === DCB_INSTANCE_ID && item.holdingsRecordId === DCB_HOLDINGS_RECORD_ID;
