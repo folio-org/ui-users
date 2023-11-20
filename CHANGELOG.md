@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## [10.0.5] IN PROGRESS
+
+* Disable open loan actions for virtual patron. Refs UIU-2964.
+
 ## [10.0.4](https://github.com/folio-org/ui-users/tree/v10.0.4) (2023-11-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.3...v10.0.4)
 
