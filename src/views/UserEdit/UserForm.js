@@ -26,6 +26,7 @@ import {
 import { EditCustomFieldsRecord } from '@folio/stripes/smart-components';
 import stripesFinalForm from '@folio/stripes/final-form';
 
+import { USER_TYPES } from '../../constants';
 import {
   EditUserInfo,
   EditExtendedInfo,
@@ -40,10 +41,11 @@ import getProxySponsorWarning from '../../components/util/getProxySponsorWarning
 import TenantsPermissionsAccordion from './TenantsPermissionsAccordion';
 
 import css from './UserForm.css';
-import { USER_TYPES } from '../../constants';
 
 export function validate(values) {
+  const isShadowUser = values?.type === USER_TYPES.SHADOW;
   const errors = {};
+
   errors.personal = {};
 
   if (!values.personal || !values.personal.lastName) {
@@ -54,11 +56,11 @@ export function validate(values) {
     errors.username = <FormattedMessage id="ui-users.errors.missingRequiredUsername" />;
   }
 
-  if (!values.patronGroup) {
+  if (!isShadowUser && !values.patronGroup) {
     errors.patronGroup = <FormattedMessage id="ui-users.errors.missingRequiredPatronGroup" />;
   }
 
-  if (!values.personal || !values.personal.preferredContactTypeId) {
+  if (!isShadowUser && (!values.personal || !values.personal.preferredContactTypeId)) {
     if (errors.personal) errors.personal.preferredContactTypeId = <FormattedMessage id="ui-users.errors.missingRequiredContactType" />;
     else errors.personal = { preferredContactTypeId: <FormattedMessage id="ui-users.errors.missingRequiredContactType" /> };
   }
