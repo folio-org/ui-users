@@ -1,6 +1,7 @@
 # Change history for ui-users
 
-## [10.0.5] IN PROGRESS
+## [10.0.5](https://github.com/folio-org/ui-users/tree/v10.0.5) (2023-11-21)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.4...v10.0.5)
 
 * Disable validation for shadow user. Refs UIU-3000.
 
