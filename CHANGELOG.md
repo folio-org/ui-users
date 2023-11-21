@@ -3,6 +3,7 @@
 ## [10.0.5] IN PROGRESS
 
 * Disable open loan actions for virtual patron. Refs UIU-2964.
+* Hide all actionalble buttons on user details pane for DCB Virtual user. Refs UIU-2987.
 
 ## [10.0.4](https://github.com/folio-org/ui-users/tree/v10.0.4) (2023-11-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.3...v10.0.4)

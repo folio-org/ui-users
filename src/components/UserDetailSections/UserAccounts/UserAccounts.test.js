@@ -60,4 +60,39 @@ describe('Render UserAccounts component', () => {
     renderUserAccounts(props(false));
     expect(document.querySelector('[id="numOpenAccounts"]')).toBeNull();
   });
+  describe('when user is of type dcb', () => {
+    it('should not display "Create fee/fine" button', () => {
+      const alteredProps = {
+        accounts : {
+          records: [accounts],
+          isPending: false,
+        },
+        accordionId: 'UserAccounts',
+        expanded: true,
+        onToggle: onToggleMock,
+        location: {
+          search: '',
+          path: '/userAccounts'
+        },
+        match: {
+          params: {
+            id: ''
+          }
+        },
+        resources: {
+          ...resources,
+          selUser: {
+            records: [
+              {
+                personal: { lastName: 'DcbSystem' },
+                type: 'dcb'
+              }
+            ]
+          },
+        },
+      };
+      renderUserAccounts(alteredProps);
+      expect(screen.queryByText('Create fee/fine')).toBeNull();
+    });
+  });
 });

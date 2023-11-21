@@ -21,6 +21,7 @@ import {
   getOpenRequestStatusesFilterString,
   getClosedRequestStatusesFilterString,
   getRequestUrl,
+  isDcbUser,
 } from '../../util';
 
 /**
@@ -107,12 +108,10 @@ class UserRequests extends React.Component {
       expanded,
       onToggle,
       accordionId,
-      user: {
-        barcode,
-        id,
-      },
+      user,
       resources
     } = this.props;
+    const { barcode, id } = user;
     const openRequestsTotal = _.get(resources.openRequestsCount, ['records', '0', 'totalRecords'], 0);
     const closedRequestsTotal = _.get(resources.closedRequestsCount, ['records', '0', 'totalRecords'], 0);
     const openRequestsCount = (_.get(resources.openRequestsCount, ['isPending'], true)) ? -1 : openRequestsTotal;
@@ -142,7 +141,7 @@ class UserRequests extends React.Component {
         onToggle={onToggle}
         label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.requests.title" /></Headline>}
         displayWhenClosed={displayWhenClosed}
-        displayWhenOpen={displayWhenOpen}
+        displayWhenOpen={!isDcbUser(user) ? displayWhenOpen : null}
       >
         {requestsLoaded ?
           <List

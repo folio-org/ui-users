@@ -1,4 +1,4 @@
-import { screen } from '@folio/jest-config-stripes/testing-library/react';
+import { act, screen } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
 import renderWithRouter from 'helpers/renderWithRouter';
@@ -52,20 +52,36 @@ const props = {
 };
 
 describe('render ProxyPermissions component', () => {
-  beforeEach(() => {
-    renderPatronBlock(props);
-  });
   it('Component must be rendered', () => {
+    renderPatronBlock(props);
     expect(screen.getByText('ui-users.settings.patronBlocks')).toBeInTheDocument();
   });
   it('Clicking the patron row should redirect via history.push', async () => {
-    await userEvent.click(document.querySelector('[data-row-inner="0"]'));
+    renderPatronBlock(props);
+    await act(async () => userEvent.click(document.querySelector('[data-row-inner="0"]')));
     expect(mockRedirect).toHaveBeenCalled();
   });
-  /* Need to fix the bug UIU-2538 for the sorting to work so that this test case can be uncommented */
-
-  // it('checking for sort order', () => {
-  //   userEvent.click(document.querySelector('[id="clickable-list-column-blockedactions"]'));
-  //   expect(screen.getByText('Sample')).toBeInTheDocument();
-  // });
+  it('checking for sort order', () => {
+    userEvent.click(document.querySelector('[id="clickable-list-column-blockedactions"]'));
+    expect(screen.getByText('Sample')).toBeInTheDocument();
+  });
+  describe('when user is of type "dcb"', () => {
+    it('should not display "Create block" button', () => {
+      const alteredProps = {
+        ...props,
+        resources: {
+          selUser: {
+            records: [
+              {
+                personal: { lastName: 'DcbSystem' },
+                type: 'dcb'
+              }
+            ]
+          }
+        }
+      };
+      renderPatronBlock(alteredProps);
+      expect(screen.queryByText('Create block')).toBeNull();
+    });
+  });
 });
