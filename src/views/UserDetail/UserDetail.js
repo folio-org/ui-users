@@ -57,6 +57,7 @@ import { getFormAddressList } from '../../components/data/converters/address';
 import {
   getFullName,
   isAffiliationsEnabled,
+  isDcbUser,
 } from '../../components/util';
 import RequestFeeFineBlockButtons from '../../components/RequestFeeFineBlockButtons';
 import { departmentsShape } from '../../shapes';
@@ -430,6 +431,7 @@ class UserDetail extends React.Component {
     const accounts = get(resources, ['accounts', 'records'], []);
     const loans = get(resources, ['loanRecords', 'records'], []);
     const isShadowUser = user?.type === USER_TYPES.SHADOW;
+    const isVirtualPatron = isDcbUser(user);
 
     const feesFinesReportData = {
       user,
@@ -446,7 +448,7 @@ class UserDetail extends React.Component {
       || this.props.stripes.hasPerm('ui-requests.all')
       || this.props.stripes.hasPerm('ui-users.delete,ui-users.opentransactions');
 
-    if (showActionMenu) {
+    if (showActionMenu && !isVirtualPatron) {
       return (
         <>
           {!isShadowUser && (
@@ -624,6 +626,7 @@ class UserDetail extends React.Component {
     const isAffiliationsVisible = isAffiliationsEnabled(user);
 
     const isShadowUser = user?.type === USER_TYPES.SHADOW;
+    const isVirtualPatron = isDcbUser(user);
     const showPatronBlocksSection = hasPatronBlocksPermissions && !isShadowUser;
 
     if (this.userNotFound()) {
@@ -862,6 +865,7 @@ class UserDetail extends React.Component {
                       pathToNoteCreate="/users/notes/new"
                       pathToNoteDetails="/users/notes"
                       hideAssignButton
+                      hideNewButton={isVirtualPatron}
                     />
                   </IfPermission>
                 </IfInterface>
