@@ -168,6 +168,9 @@ class PatronBlock extends React.Component {
       location,
       resources,
     } = this.props;
+
+    const user = resources?.selUser?.records[0];
+    
     const {
       sortOrder,
       sortDirection,

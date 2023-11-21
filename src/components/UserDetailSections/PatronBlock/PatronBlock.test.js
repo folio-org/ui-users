@@ -62,6 +62,7 @@ describe('render ProxyPermissions component', () => {
     expect(mockRedirect).toHaveBeenCalled();
   });
   it('checking for sort order', () => {
+    renderPatronBlock(props);
     userEvent.click(document.querySelector('[id="clickable-list-column-blockedactions"]'));
     expect(screen.getByText('Sample')).toBeInTheDocument();
   });
