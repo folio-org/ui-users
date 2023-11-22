@@ -21,6 +21,8 @@ import {
   MultiSelection,
 } from '@folio/stripes/components';
 
+import { DATE_FORMAT } from '../../constants';
+
 import css from './ReportModal.css';
 
 const validate = ({ startDate, endDate }) => {
@@ -41,8 +43,6 @@ const RefundsReportModal = (props) => {
   const {
     valid,
   } = props.form.getState();
-
-  const parseDate = (date) => (date ? moment.tz(date, props.timezone).format('YYYY-MM-DD') : date);
 
   const feeFineOwners = props.owners.map(({ id, owner }) => ({
     value: id,
@@ -97,8 +97,8 @@ const RefundsReportModal = (props) => {
               label={<FormattedMessage id="ui-users.reports.refunds.modal.startDate" />}
               name="startDate"
               component={Datepicker}
+              backendDateStandard={DATE_FORMAT}
               autoFocus
-              parse={parseDate}
             />
           </Col>
           <Col
@@ -109,7 +109,7 @@ const RefundsReportModal = (props) => {
               label={<FormattedMessage id="ui-users.reports.refunds.modal.endDate" />}
               name="endDate"
               component={Datepicker}
-              parse={parseDate}
+              backendDateStandard={DATE_FORMAT}
             />
           </Col>
           <Col
@@ -137,7 +137,6 @@ RefundsReportModal.propTypes = {
   owners: PropTypes.arrayOf(PropTypes.object).isRequired,
   onClose: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  timezone: PropTypes.string.isRequired,
 };
 
 export default stripesFinalForm({
