@@ -6,6 +6,7 @@
 * Disable validation for shadow user. Refs UIU-3000.
 * Disable open loan actions for virtual patron. Refs UIU-2964.
 * Fix problem with Date field in User app reports does not populate when a first entry was cleared. Refs UIU-2991.
+* Hide all actionalble buttons on user details pane for DCB Virtual user. Refs UIU-2987.
 
 ## [10.0.4](https://github.com/folio-org/ui-users/tree/v10.0.4) (2023-11-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.3...v10.0.4)
