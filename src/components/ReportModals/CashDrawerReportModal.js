@@ -25,6 +25,7 @@ import {
 } from '@folio/stripes/components';
 
 import { DATE_FORMAT } from '../../constants';
+
 import css from './ReportModal.css';
 
 export const validate = (options) => {
@@ -57,7 +58,6 @@ const CashDrawerReportModal = (props) => {
     cashDrawerReportSources,
   } = props;
   const [sources, setSources] = useState([]);
-  const parseDate = (date) => (date ? moment.tz(date, props.timezone).format(DATE_FORMAT) : date);
   const servicePoints = props.servicePoints.map(({ id, name }) => ({
     value: id,
     label: name,
@@ -119,8 +119,8 @@ const CashDrawerReportModal = (props) => {
               name="startDate"
               required
               component={Datepicker}
+              backendDateStandard={DATE_FORMAT}
               autoFocus
-              parse={parseDate}
             />
           </Col>
           <Col xs={6}>
@@ -128,7 +128,7 @@ const CashDrawerReportModal = (props) => {
               label={<FormattedMessage id="ui-users.reports.refunds.modal.endDate" />}
               name="endDate"
               component={Datepicker}
-              parse={parseDate}
+              backendDateStandard={DATE_FORMAT}
             />
           </Col>
           <Col xs={12}>
@@ -189,7 +189,6 @@ CashDrawerReportModal.propTypes = {
   servicePoints: PropTypes.arrayOf(PropTypes.object).isRequired,
   onClose: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  timezone: PropTypes.string.isRequired,
   values: PropTypes.object.isRequired,
   cashDrawerReportSources: PropTypes.shape({
     POST: PropTypes.func.isRequired,

@@ -59,7 +59,6 @@ const propData = {
   label: 'TestLabelRefundsModal',
   intl: { formatMessage : jest.fn() },
   handleSubmit: jest.fn(),
-  timezone: 'America/New_York',
   onSubmit: jest.fn(),
 };
 
