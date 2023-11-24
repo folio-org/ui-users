@@ -1,6 +1,8 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import { USER_TYPES } from '../../constants';
+
 import { validate } from './UserForm';
 
 describe('UserForm', () => {
@@ -43,6 +45,11 @@ describe('UserForm', () => {
         expect(result.personal.preferredContactTypeId).toMatchObject(<FormattedMessage id="ui-users.errors.missingRequiredContactType" />);
       });
 
+      it('not requires personal.preferredContactTypeId for shadow user', () => {
+        const result = validate({ personal: {}, type: USER_TYPES.SHADOW });
+        expect(result.personal.preferredContactTypeId).not.toBeDefined();
+      });
+
       it('requires username when password is present', () => {
         const result = validate({ creds: { password: 'thunder-chicken' } });
         expect(result.username).toMatchObject(<FormattedMessage id="ui-users.errors.missingRequiredUsername" />);
@@ -51,6 +58,11 @@ describe('UserForm', () => {
       it('requires patronGroup', () => {
         const result = validate({ });
         expect(result.patronGroup).toMatchObject(<FormattedMessage id="ui-users.errors.missingRequiredPatronGroup" />);
+      });
+
+      it('not requires patronGroup for shadow user', () => {
+        const result = validate({ type: USER_TYPES.SHADOW });
+        expect(result.patronGroup).not.toBeDefined();
       });
 
       it('requires personal.addresses to have an addressType', () => {

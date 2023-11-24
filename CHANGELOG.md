@@ -1,9 +1,14 @@
 # Change history for ui-users
 
-## [10.0.5] IN PROGRESS
+## [10.0.6] IN PROGRESS
 
 * Disable open loan actions for virtual patron. Refs UIU-2964.
 * Hide all actionalble buttons on user details pane for DCB Virtual user. Refs UIU-2987.
+
+## [10.0.5](https://github.com/folio-org/ui-users/tree/v10.0.5) (2023-11-21)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.4...v10.0.5)
+
+* Disable validation for shadow user. Refs UIU-3000.
 
 ## [10.0.4](https://github.com/folio-org/ui-users/tree/v10.0.4) (2023-11-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.3...v10.0.4)
