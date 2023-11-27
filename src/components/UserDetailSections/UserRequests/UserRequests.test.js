@@ -126,4 +126,20 @@ describe('Render User Requests component', () => {
     renderUserRequests(props(false));
     expect(screen.getByText('List Component')).toBeInTheDocument();
   });
+
+  describe('when user is of type dcb', () => {
+    it('should not display "Create Request" button', () => {
+      const alteredProps = (perm) => {
+        return {
+          ...props(perm),
+          user: {
+            personal: { lastName: 'DcbSystem' },
+            type: 'dcb'
+          },
+        };
+      };
+      renderUserRequests(alteredProps(true));
+      expect(screen.queryByText('Create Request')).toBeNull();
+    });
+  });
 });

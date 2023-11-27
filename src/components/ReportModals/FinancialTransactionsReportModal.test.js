@@ -57,7 +57,6 @@ const renderFinancialTransactionsReportModal = ({
         open
         label={label}
         servicePoints={servicePoints}
-        timezone="America/New_York"
         onClose={onClose}
         onSubmit={handleSubmit}
         values={values}

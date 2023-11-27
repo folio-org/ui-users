@@ -21,6 +21,7 @@ import {
 } from '@folio/stripes/components';
 
 import { DATE_FORMAT } from '../../constants';
+
 import css from './ReportModal.css';
 
 export const validate = (options) => {
@@ -52,7 +53,6 @@ const FinancialTransactionsReportModal = (props) => {
     values: { feeFineOwner: ownerValue = '' },
     owners,
   } = props;
-  const parseDate = (date) => (date ? moment.tz(date, props.timezone).format(DATE_FORMAT) : date);
   const formattedOwners = owners.map(({ id, owner }) => ({
     value: id,
     label: owner,
@@ -112,8 +112,8 @@ const FinancialTransactionsReportModal = (props) => {
               name="startDate"
               required
               component={Datepicker}
+              backendDateStandard={DATE_FORMAT}
               autoFocus
-              parse={parseDate}
             />
           </Col>
           <Col xs={6}>
@@ -121,7 +121,7 @@ const FinancialTransactionsReportModal = (props) => {
               label={<FormattedMessage id="ui-users.reports.refunds.modal.endDate" />}
               name="endDate"
               component={Datepicker}
-              parse={parseDate}
+              backendDateStandard={DATE_FORMAT}
             />
           </Col>
           <Col xs={12}>
@@ -160,7 +160,6 @@ FinancialTransactionsReportModal.propTypes = {
   owners: PropTypes.arrayOf(PropTypes.object).isRequired,
   onClose: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  timezone: PropTypes.string.isRequired,
   values: PropTypes.object.isRequired,
 };
 

@@ -332,4 +332,11 @@ describe('UserDetail', () => {
       expect(screen.queryByText('ui-users.patronBlocks')).toBeNull();
     });
   });
+
+  describe('when user type is dcb', () => {
+    it('should not render action menu', () => {
+      renderUserDetail(stripes, { resources: { ...resources, selUser: { records: [{ ...resources.selUser.records[0], type: 'dcb', personal: { lastName: 'DcbSystem' } }] } } });
+      expect(screen.queryByText('Actions')).toBeNull();
+    });
+  });
 });
