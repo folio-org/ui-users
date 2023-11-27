@@ -299,15 +299,22 @@ class LoanDetails extends React.Component {
   showTitle(loan) {
     this.loan = loan;
     const title = `${get(this.loan, ['item', 'title'], '')}`;
+    const instaceId = `${get(this.loan, ['item', 'instanceId'], '')}`;
+    const holdingRecordId = `${get(this.loan, ['item', 'holdingRecordId'], '')}`;
+    const isVirtualItem = false;
+
     if (title) {
       const titleTodisplay = (title.length >= 77) ? `${title.substring(0, 77)}...` : title;
+      const formattedValue = `${titleTodisplay} (${get(this.loan, ['item', 'materialType', 'name'])})`;
       return <KeyValue
         label={<FormattedMessage id="ui-users.loans.columns.title" />}
-        value={(
-          <Link to={`/inventory/view/${get(this.loan, ['item', 'instanceId'], '')}`}>
-            {`${titleTodisplay} (${get(this.loan, ['item', 'materialType', 'name'])})`}
-          </Link>
-        )}
+        value={
+          isVirtualItem ?
+            { formattedValue } :
+            <Link to={`/inventory/view/${get(this.loan, ['item', 'instanceId'], '')}`}>
+              {formattedValue}
+            </Link>
+            }
       />;
     }
 
@@ -315,6 +322,27 @@ class LoanDetails extends React.Component {
       label={<FormattedMessage id="ui-users.loans.columns.title" />}
       value="-"
     />;
+  }
+
+  showBarcode(loan) {
+    this.loan = loan;
+    const instaceId = get(this.loan, ['item', 'instanceId'], '');
+    const holdingRecordId = get(this.loan, ['item', 'holdingRecordId'], '');
+    const itemId = get(this.loan, ['itemId'], '');
+    const itemBarcode = get(loan, ['item', 'barcode'], '')
+    const isVirtualItem = false;
+
+    if (isVirtualItem) {
+      return itemBarcode;
+    }
+
+    return (
+      <Link
+        to={`/inventory/view/${instaceId}/${holdingRecordId}/${itemId}}
+      >
+        {itemBarcode}
+      </Link>
+    );
   }
 
   renderChangeDueDateDialog() {
@@ -628,7 +656,7 @@ class LoanDetails extends React.Component {
               <Col xs={2}>
                 <KeyValue
                   label={<FormattedMessage id="ui-users.loans.columns.barcode" />}
-                  value={<Link to={`/inventory/view/${get(loan, ['item', 'instanceId'], '')}/${get(loan, ['item', 'holdingsRecordId'], '')}/${get(loan, ['itemId'], '')}`}>{get(loan, ['item', 'barcode'], '')}</Link>}
+                  value={this.showBarcode(loan)}
                 />
               </Col>
               <Col xs={2}>
