@@ -201,17 +201,26 @@ class ActionsDropdown extends React.Component {
   };
 
   render() {
-    const { intl: { formatMessage } } = this.props;
+    const { intl: { formatMessage }, user, loan } = this.props;
+
+    const isVirtualUser = isDcbUser(user);
+    const isVirtualItem = isDCBItem(loan?.item);
+
     return (
       <Dropdown
         data-testid="actions-dropdown-test-id"
-        renderTrigger={({ getTriggerProps }) => (
-          <IconButton
-            {...getTriggerProps()}
-            icon="ellipsis"
-            aria-label={formatMessage({ id: 'ui-users.action' })}
-          />
-        )}
+        renderTrigger={({ getTriggerProps }) => {
+          if (isVirtualItem && isVirtualUser) {
+            return null;
+          }
+          return (
+            <IconButton
+              {...getTriggerProps()}
+              icon="ellipsis"
+              aria-label={formatMessage({ id: 'ui-users.action' })}
+            />
+          );
+        }}
         renderMenu={this.renderMenu}
       />
     );
