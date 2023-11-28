@@ -43,6 +43,7 @@ import {
   accountsMatchStatus,
   checkUserActive,
   isDcbUser,
+  isDCBItem,
 } from '../../components/util';
 import { itemStatuses, loanActions, refundClaimReturned } from '../../constants';
 import {
@@ -298,39 +299,44 @@ class LoanDetails extends React.Component {
 
   showTitle(loan) {
     this.loan = loan;
-    const title = `${get(this.loan, ['item', 'title'], '')}`;
-    const instaceId = `${get(this.loan, ['item', 'instanceId'], '')}`;
-    const holdingRecordId = `${get(this.loan, ['item', 'holdingRecordId'], '')}`;
-    const isVirtualItem = false;
+    const title = get(this.loan, ['item', 'title'], '');
+    const instanceId = get(this.loan, ['item', 'instanceId'], '');
+    const holdingsRecordId = get(this.loan, ['item', 'holdingsRecordId'], '');
+    const isVirtualItem = isDCBItem({ instanceId, holdingsRecordId });
 
     if (title) {
       const titleTodisplay = (title.length >= 77) ? `${title.substring(0, 77)}...` : title;
       const formattedValue = `${titleTodisplay} (${get(this.loan, ['item', 'materialType', 'name'])})`;
-      return <KeyValue
-        label={<FormattedMessage id="ui-users.loans.columns.title" />}
-        value={
-          isVirtualItem ?
-            { formattedValue } :
-            <Link to={`/inventory/view/${get(this.loan, ['item', 'instanceId'], '')}`}>
-              {formattedValue}
-            </Link>
-            }
-      />;
+      return (
+        <KeyValue
+          data-testId="item-title"
+          label={<FormattedMessage id="ui-users.loans.columns.title" />}
+          value={
+            isVirtualItem ?
+              `${formattedValue}` :
+              <Link to={`/inventory/view/${instanceId}`}>
+                {formattedValue}
+              </Link>
+              }
+        />
+      );
     }
 
-    return <KeyValue
-      label={<FormattedMessage id="ui-users.loans.columns.title" />}
-      value="-"
-    />;
+    return (
+      <KeyValue
+        label={<FormattedMessage id="ui-users.loans.columns.title" />}
+        value="-"
+      />
+    );
   }
 
   showBarcode(loan) {
     this.loan = loan;
-    const instaceId = get(this.loan, ['item', 'instanceId'], '');
-    const holdingRecordId = get(this.loan, ['item', 'holdingRecordId'], '');
+    const instanceId = get(this.loan, ['item', 'instanceId'], '');
+    const holdingsRecordId = get(this.loan, ['item', 'holdingsRecordId'], '');
     const itemId = get(this.loan, ['itemId'], '');
-    const itemBarcode = get(loan, ['item', 'barcode'], '')
-    const isVirtualItem = false;
+    const itemBarcode = get(loan, ['item', 'barcode'], '');
+    const isVirtualItem = isDCBItem({ instanceId, holdingsRecordId });
 
     if (isVirtualItem) {
       return itemBarcode;
@@ -338,7 +344,7 @@ class LoanDetails extends React.Component {
 
     return (
       <Link
-        to={`/inventory/view/${instaceId}/${holdingRecordId}/${itemId}}
+        to={`/inventory/view/${instanceId}/${holdingsRecordId}/${itemId}`}
       >
         {itemBarcode}
       </Link>
@@ -655,6 +661,7 @@ class LoanDetails extends React.Component {
               </Col>
               <Col xs={2}>
                 <KeyValue
+                  data-testId="item-barcode"
                   label={<FormattedMessage id="ui-users.loans.columns.barcode" />}
                   value={this.showBarcode(loan)}
                 />
