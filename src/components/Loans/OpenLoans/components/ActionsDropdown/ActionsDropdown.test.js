@@ -11,7 +11,13 @@ import buildStripes from '__mock__/stripes.mock';
 
 import ActionsDropdown from './ActionsDropdown';
 
-import { itemStatuses } from '../../../../../constants';
+import {
+  itemStatuses,
+  DCB,
+  DCB_VIRTUAL_USER,
+  DCB_HOLDINGS_RECORD_ID,
+  DCB_INSTANCE_ID,
+} from '../../../../../constants';
 
 const mockHandleOptionsChange = jest.fn();
 
@@ -160,6 +166,56 @@ describe('ActoinsDropdown component', () => {
         fireEvent.click(screen.queryByText('ui-users.loans.feeFineDetails'));
 
         expect(mockHandleOptionsChange).toBeCalledWith({ loan: props.loan, action: 'feefineDetails' });
+      });
+    });
+
+    describe('when dcb lending role', () => {
+      it('render only item details button', () => {
+        const alteredProps = {
+          ...props,
+          user: {
+            ...okapiCurrentUser,
+            lastName: DCB_VIRTUAL_USER.personal.lastName,
+            type: DCB,
+          }
+        };
+        renderActionsDropdown(alteredProps);
+
+        expect(screen.queryByText('ui-users.itemDetails')).toBeInTheDocument();
+        expect(screen.queryByText('ui-users.renew')).toBeNull();
+        expect(screen.queryByText('ui-users.loans.claimReturned')).toBeNull();
+        expect(screen.queryByText('stripes-smart-components.cddd.changeDueDate')).toBeNull();
+        expect(screen.queryByText('ui-users.loans.declareLost')).toBeNull();
+        expect(screen.queryByText('ui-users.loans.details.loanPolicy')).toBeNull();
+        expect(screen.queryByText('ui-users.loans.newFeeFine')).toBeNull();
+        expect(screen.queryByText('ui-users.loans.feeFineDetails')).toBeNull();
+        expect(screen.queryByText('ui-users.loans.details.requestQueue')).toBeNull();
+      });
+    });
+
+    describe('when dcb borrowing role', () => {
+      it('render only item details button', () => {
+        const alteredProps = {
+          ...props,
+          loan: {
+            ...okapiOpenLoan,
+            item: {
+              instanceId: DCB_INSTANCE_ID,
+              holdingsRecordId: DCB_HOLDINGS_RECORD_ID,
+            },
+          }
+        };
+        renderActionsDropdown(alteredProps);
+
+        expect(screen.queryByText('ui-users.itemDetails')).toBeNull();
+        expect(screen.queryByText('ui-users.renew')).toBeInTheDocument();
+        expect(screen.queryByText('ui-users.loans.claimReturned')).toBeInTheDocument();
+        expect(screen.queryByText('stripes-smart-components.cddd.changeDueDate')).toBeInTheDocument();
+        expect(screen.queryByText('ui-users.loans.declareLost')).toBeInTheDocument();
+        expect(screen.queryByText('ui-users.loans.details.loanPolicy')).toBeInTheDocument();
+        expect(screen.queryByText('ui-users.loans.newFeeFine')).toBeInTheDocument();
+        expect(screen.queryByText('ui-users.loans.feeFineDetails')).toBeInTheDocument();
+        expect(screen.queryByText('ui-users.loans.details.requestQueue')).toBeInTheDocument();
       });
     });
   });

@@ -1,6 +1,10 @@
 import '__mock__';
 import okapiUser from 'fixtures/okapiCurrentUser';
-import { USER_TYPES } from '../../constants';
+import {
+  USER_TYPES,
+  DCB_INSTANCE_ID,
+  DCB_HOLDINGS_RECORD_ID,
+} from '../../constants';
 import {
   accountsMatchStatus,
   checkUserActive,
@@ -23,6 +27,7 @@ import {
   isConsortiumEnabled,
   getRequestUrl,
   isAffiliationsEnabled,
+  isDCBItem,
 } from './util';
 
 const STRIPES = {
@@ -433,5 +438,39 @@ describe('isAffiliationsEnabled', () => {
     expect(isAffiliationsEnabled({ type: USER_TYPES.SHADOW })).toBeTruthy();
     expect(isAffiliationsEnabled({ type: USER_TYPES.STAFF })).toBeTruthy();
     expect(isAffiliationsEnabled({ type: USER_TYPES.SYSTEM })).toBeTruthy();
+  });
+});
+
+describe('isDCBItem ', () => {
+  it('should return true when both item instance id and item holdings record id are DCB_INSTANCE_ID and DCB_HOLDINGS_RECORD_ID respectively', () => {
+    const item = {
+      instanceId: DCB_INSTANCE_ID,
+      holdingsRecordId: DCB_HOLDINGS_RECORD_ID,
+    };
+    expect(isDCBItem(item)).toBeTruthy();
+  });
+
+  it('should return false when item instance id is DCB_INSTANCE_ID and item holdings record id is not DCB_HOLDINGS_RECORD_ID', () => {
+    const item = {
+      instanceId: DCB_INSTANCE_ID,
+      holdingsRecordId: 'test',
+    };
+    expect(isDCBItem(item)).toBeFalsy();
+  });
+
+  it('should return false when item instance id is not DCB_INSTANCE_ID and item holdings record id is DCB_HOLDINGS_RECORD_ID', () => {
+    const item = {
+      instanceId: 'test',
+      holdingsRecordId: DCB_HOLDINGS_RECORD_ID,
+    };
+    expect(isDCBItem(item)).toBeFalsy();
+  });
+
+  it('should return false when item instance id is not DCB_INSTANCE_ID and item holdings record id is not DCB_HOLDINGS_RECORD_ID', () => {
+    const item = {
+      instanceId: 'test',
+      holdingsRecordId: 'test',
+    };
+    expect(isDCBItem(item)).toBeFalsy();
   });
 });
