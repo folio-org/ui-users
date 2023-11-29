@@ -7,6 +7,11 @@ import {
 import renderWithRouter from 'helpers/renderWithRouter';
 import loans from 'fixtures/openLoans';
 
+import {
+  DCB,
+  DCB_VIRTUAL_USER,
+} from '../../../../../constants';
+
 import OpenLoansSubHeader from './OpenLoansSubHeader';
 
 jest.unmock('@folio/stripes/components');
@@ -268,6 +273,65 @@ describe('Given OpenLoansSubHeader', () => {
       fireEvent.click(screen.getByRole('button', { name: 'stripes-smart-components.cddd.changeDueDate' }));
 
       expect(showChangeDueDateDialog).toHaveBeenCalled();
+    });
+  });
+
+  describe('when dcb virtual user', () => {
+    it('should hide "Renew" button', () => {
+      const alteredProps = {
+        ...props,
+        user: {
+          ...okapiCurrentUser,
+          lastName: DCB_VIRTUAL_USER.personal.lastName,
+          type: DCB,
+        }
+      };
+
+      renderOpenLoansSubHeader(alteredProps);
+
+      expect(screen.queryByRole('button', { name: 'ui-users.renew' })).toBeNull();
+    });
+    it('should hide "Claim returned" button', () => {
+      const alteredProps = {
+        ...props,
+        user: {
+          ...okapiCurrentUser,
+          lastName: DCB_VIRTUAL_USER.personal.lastName,
+          type: DCB,
+        }
+      };
+
+      renderOpenLoansSubHeader(alteredProps);
+
+      expect(screen.queryByRole('button', { name: 'ui-users.loans.claimReturned' })).toBeNull();
+    });
+    it('should hide "Change due date" button', () => {
+      const alteredProps = {
+        ...props,
+        user: {
+          ...okapiCurrentUser,
+          lastName: DCB_VIRTUAL_USER.personal.lastName,
+          type: DCB,
+        }
+      };
+
+      renderOpenLoansSubHeader(alteredProps);
+
+      expect(screen.queryByRole('button', { name: 'stripes-smart-components.cddd.changeDueDate' })).toBeNull();
+    });
+    it('should hide "Export to CSV button', () => {
+      const alteredProps = {
+        ...props,
+        user: {
+          ...okapiCurrentUser,
+          lastName: DCB_VIRTUAL_USER.personal.lastName,
+          type: DCB,
+        }
+      };
+
+      renderOpenLoansSubHeader(alteredProps);
+
+      expect(screen.queryByRole('button', { name: 'stripes-components.exportToCsv' })).toBeNull();
     });
   });
 });

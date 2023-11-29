@@ -18,6 +18,8 @@ import {
   getChargeFineToLoanPath,
   getOpenRequestsPath,
   checkUserActive,
+  isDcbUser,
+  isDCBItem,
 } from '../../../../util';
 
 import { itemStatuses } from '../../../../../constants';
@@ -54,20 +56,26 @@ class ActionsDropdown extends React.Component {
     const loanPolicyLink = `/settings/circulation/loan-policies/${loan.loanPolicyId}`;
     const buttonDisabled = !stripes.hasPerm('ui-users.feesfines.actions.all');
     const isUserActive = checkUserActive(user);
+    const isVirtualUser = isDcbUser(user);
+    const isVirtualItem = isDCBItem(loan?.item);
 
     return (
       <DropdownMenu data-role="menu">
         <IfPermission perm="inventory.items.item.get">
-          <Button
-            buttonStyle="dropdownItem"
-            to={itemDetailsLink}
-            disabled={!loan?.item}
-          >
-            <FormattedMessage id="ui-users.itemDetails" />
-          </Button>
+          {
+          !isVirtualItem && (
+            <Button
+              buttonStyle="dropdownItem"
+              to={itemDetailsLink}
+              disabled={!loan?.item}
+            >
+              <FormattedMessage id="ui-users.itemDetails" />
+            </Button>
+          )
+        }
         </IfPermission>
         <IfPermission perm="ui-users.loans.renew">
-          { isUserActive && itemStatusName !== itemStatuses.CLAIMED_RETURNED &&
+          { isUserActive && !isVirtualUser && itemStatusName !== itemStatuses.CLAIMED_RETURNED &&
             <Button
               buttonStyle="dropdownItem"
               data-test-dropdown-content-renew-button
@@ -81,7 +89,7 @@ class ActionsDropdown extends React.Component {
           }
         </IfPermission>
         <IfPermission perm="ui-users.loans.claim-item-returned">
-          { itemStatusName !== itemStatuses.CLAIMED_RETURNED &&
+          { itemStatusName !== itemStatuses.CLAIMED_RETURNED && !isVirtualUser &&
             <Button
               buttonStyle="dropdownItem"
               data-test-dropdown-content-claim-returned-button
@@ -98,6 +106,7 @@ class ActionsDropdown extends React.Component {
           { itemStatusName !== itemStatuses.DECLARED_LOST &&
             itemStatusName !== itemStatuses.CLAIMED_RETURNED &&
             itemStatusName !== itemStatuses.AGED_TO_LOST &&
+            !isVirtualUser &&
             <Button
               buttonStyle="dropdownItem"
               data-test-dropdown-content-change-due-date-button
@@ -111,7 +120,7 @@ class ActionsDropdown extends React.Component {
           }
         </IfPermission>
         <IfPermission perm="ui-users.loans.declare-item-lost">
-          { itemStatusName !== itemStatuses.DECLARED_LOST &&
+          { itemStatusName !== itemStatuses.DECLARED_LOST && !isVirtualUser &&
             <Button
               buttonStyle="dropdownItem"
               data-test-dropdown-content-declare-lost-button
@@ -125,7 +134,7 @@ class ActionsDropdown extends React.Component {
           }
         </IfPermission>
         <IfPermission perm="ui-users.loans.declare-claimed-returned-item-as-missing">
-          { itemStatusName === itemStatuses.CLAIMED_RETURNED &&
+          { itemStatusName === itemStatuses.CLAIMED_RETURNED && !isVirtualUser &&
           <Button
             buttonStyle="dropdownItem"
             data-test-dropdown-content-mark-as-missing-button
@@ -139,34 +148,46 @@ class ActionsDropdown extends React.Component {
         }
         </IfPermission>
         <IfPermission perm="circulation-storage.loan-policies.item.get">
-          <Button
-            buttonStyle="dropdownItem"
-            to={loanPolicyLink}
-          >
-            <FormattedMessage id="ui-users.loans.details.loanPolicy" />
-          </Button>
+          {
+            !isVirtualUser && (
+              <Button
+                buttonStyle="dropdownItem"
+                to={loanPolicyLink}
+              >
+                <FormattedMessage id="ui-users.loans.details.loanPolicy" />
+              </Button>
+            )
+          }
         </IfPermission>
         <IfPermission perm="ui-users.feesfines.actions.all">
-          <Button
-            buttonStyle="dropdownItem"
-            disabled={buttonDisabled}
-            to={getChargeFineToLoanPath(params.id, loan.id)}
-          >
-            <FormattedMessage id="ui-users.loans.newFeeFine" />
-          </Button>
+          {
+            !isVirtualUser && (
+              <Button
+                buttonStyle="dropdownItem"
+                disabled={buttonDisabled}
+                to={getChargeFineToLoanPath(params.id, loan.id)}
+              >
+                <FormattedMessage id="ui-users.loans.newFeeFine" />
+              </Button>
+            )
+          }
         </IfPermission>
         <IfPermission perm="ui-users.feesfines.view">
-          <Button
-            buttonStyle="dropdownItem"
-            disabled={disableFeeFineDetails}
-            onClick={() => {
-              handleOptionsChange({ loan, action: 'feefineDetails' });
-            }}
-          >
-            <FormattedMessage id="ui-users.loans.feeFineDetails" />
-          </Button>
+          {
+            !isVirtualUser && (
+              <Button
+                buttonStyle="dropdownItem"
+                disabled={disableFeeFineDetails}
+                onClick={() => {
+                  handleOptionsChange({ loan, action: 'feefineDetails' });
+                }}
+              >
+                <FormattedMessage id="ui-users.loans.feeFineDetails" />
+              </Button>
+            )
+          }
         </IfPermission>
-        {requestQueue && stripes.hasPerm('ui-requests.all') &&
+        {requestQueue && stripes.hasPerm('ui-requests.all') && !isVirtualUser &&
           <Button
             buttonStyle="dropdownItem"
             data-test-dropdown-content-request-queue
@@ -180,17 +201,26 @@ class ActionsDropdown extends React.Component {
   };
 
   render() {
-    const { intl: { formatMessage } } = this.props;
+    const { intl: { formatMessage }, user, loan } = this.props;
+    const isVirtualUser = isDcbUser(user);
+    const isVirtualItem = isDCBItem(loan?.item);
+
     return (
       <Dropdown
         data-testid="actions-dropdown-test-id"
-        renderTrigger={({ getTriggerProps }) => (
-          <IconButton
-            {...getTriggerProps()}
-            icon="ellipsis"
-            aria-label={formatMessage({ id: 'ui-users.action' })}
-          />
-        )}
+        renderTrigger={({ getTriggerProps }) => {
+          if (isVirtualItem && isVirtualUser) {
+            return null;
+          }
+
+          return (
+            <IconButton
+              {...getTriggerProps()}
+              icon="ellipsis"
+              aria-label={formatMessage({ id: 'ui-users.action' })}
+            />
+          );
+        }}
         renderMenu={this.renderMenu}
       />
     );

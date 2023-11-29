@@ -22,6 +22,7 @@ import {
   hasAnyLoanItemStatus,
   getRenewalPatronBlocksFromPatronBlocks,
   checkUserActive,
+  isDcbUser,
 } from '../../../../util';
 
 import css from './OpenLoansSubHeader.css';
@@ -121,6 +122,7 @@ const OpenLoansSubHeader = ({
   const onlyClaimedReturnedItemsSelected = hasEveryLoanItemStatus(checkedLoans, itemStatuses.CLAIMED_RETURNED);
   const onlyLostyItemsSelected = hasAnyLoanItemStatus(checkedLoans, lostItemStatuses);
   const isUserActive = checkUserActive(user);
+  const isVirtualUser = isDcbUser(user);
 
   return (
     <ActionsBar
@@ -158,45 +160,47 @@ const OpenLoansSubHeader = ({
         </span>
       }
       contentEnd={
-        <span>
-          <IfPermission perm="ui-users.loans.renew">
-            <Button
-              marginBottom0
-              id="renew-all"
-              disabled={noSelectedLoans || onlyClaimedReturnedItemsSelected || !isUserActive}
-              onClick={!isEmpty(countRenews)
-                ? openPatronBlockedModal
-                : () => renewSelected()
-              }
-            >
-              {intl.formatMessage({ id: 'ui-users.renew' })}
-            </Button>
-          </IfPermission>
-          <IfPermission perm="ui-users.loans.claim-item-returned">
-            <Button
-              marginBottom0
-              id="bulk-claim-returned"
-              disabled={noSelectedLoans || onlyClaimedReturnedItemsSelected}
-              onClick={openBulkClaimReturnedModal}
-            >
-              {intl.formatMessage({ id: 'ui-users.loans.claimReturned' })}
-            </Button>
-          </IfPermission>
-          <IfPermission perm="ui-users.loans.change-due-date">
-            <Button
-              marginBottom0
-              id="change-due-date-all"
-              disabled={noSelectedLoans || onlyLostyItemsSelected}
-              onClick={showChangeDueDateDialog}
-            >
-              {intl.formatMessage({ id: 'stripes-smart-components.cddd.changeDueDate' })}
-            </Button>
-          </IfPermission>
-          <ExportCsv
-            data={recordsToCSV}
-            onlyFields={columnHeadersMap}
-          />
-        </span>
+        !isVirtualUser && (
+          <span>
+            <IfPermission perm="ui-users.loans.renew">
+              <Button
+                marginBottom0
+                id="renew-all"
+                disabled={noSelectedLoans || onlyClaimedReturnedItemsSelected || !isUserActive}
+                onClick={!isEmpty(countRenews)
+                  ? openPatronBlockedModal
+                  : () => renewSelected()
+                }
+              >
+                {intl.formatMessage({ id: 'ui-users.renew' })}
+              </Button>
+            </IfPermission>
+            <IfPermission perm="ui-users.loans.claim-item-returned">
+              <Button
+                marginBottom0
+                id="bulk-claim-returned"
+                disabled={noSelectedLoans || onlyClaimedReturnedItemsSelected}
+                onClick={openBulkClaimReturnedModal}
+              >
+                {intl.formatMessage({ id: 'ui-users.loans.claimReturned' })}
+              </Button>
+            </IfPermission>
+            <IfPermission perm="ui-users.loans.change-due-date">
+              <Button
+                marginBottom0
+                id="change-due-date-all"
+                disabled={noSelectedLoans || onlyLostyItemsSelected}
+                onClick={showChangeDueDateDialog}
+              >
+                {intl.formatMessage({ id: 'stripes-smart-components.cddd.changeDueDate' })}
+              </Button>
+            </IfPermission>
+            <ExportCsv
+              data={recordsToCSV}
+              onlyFields={columnHeadersMap}
+            />
+          </span>
+        )
       }
     />
   );
