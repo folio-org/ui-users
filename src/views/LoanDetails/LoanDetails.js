@@ -303,9 +303,10 @@ class LoanDetails extends React.Component {
     const instanceId = get(this.loan, ['item', 'instanceId'], '');
     const holdingsRecordId = get(this.loan, ['item', 'holdingsRecordId'], '');
     const isVirtualItem = isDCBItem({ instanceId, holdingsRecordId });
+    const titleLengthCheck = 77;
 
     if (title) {
-      const titleTodisplay = (title.length >= 77) ? `${title.substring(0, 77)}...` : title;
+      const titleTodisplay = (title.length >= titleLengthCheck) ? `${title.substring(0, titleLengthCheck)}...` : title;
       const formattedValue = `${titleTodisplay} (${get(this.loan, ['item', 'materialType', 'name'])})`;
       return (
         <KeyValue
@@ -313,7 +314,7 @@ class LoanDetails extends React.Component {
           label={<FormattedMessage id="ui-users.loans.columns.title" />}
           value={
             isVirtualItem ?
-              `${formattedValue}` :
+              formattedValue :
               <Link to={`/inventory/view/${instanceId}`}>
                 {formattedValue}
               </Link>
@@ -325,7 +326,7 @@ class LoanDetails extends React.Component {
     return (
       <KeyValue
         label={<FormattedMessage id="ui-users.loans.columns.title" />}
-        value="-"
+        value={<NoValue />}
       />
     );
   }
@@ -335,7 +336,7 @@ class LoanDetails extends React.Component {
     const instanceId = get(this.loan, ['item', 'instanceId'], '');
     const holdingsRecordId = get(this.loan, ['item', 'holdingsRecordId'], '');
     const itemId = get(this.loan, ['itemId'], '');
-    const itemBarcode = get(loan, ['item', 'barcode'], '');
+    const itemBarcode = get(loan, ['item', 'barcode']);
     const isVirtualItem = isDCBItem({ instanceId, holdingsRecordId });
 
     if (isVirtualItem) {
