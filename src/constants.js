@@ -340,13 +340,25 @@ export const RECORD_SOURCE = {
   CONSORTIUM: 'consortium',
 };
 
+export const DCB = 'dcb';
+
 export const USER_TYPE_FIELD = 'type';
 export const USER_TYPES = {
   PATRON: 'patron',
   SHADOW: 'shadow',
   STAFF: 'staff',
   SYSTEM: 'system',
-  DCB: 'dcb',
+  DCB,
+};
+
+export const DCB_INSTANCE_ID = '9d1b77e4-f02e-4b7f-b296-3f2042ddac54';
+export const DCB_HOLDINGS_RECORD_ID = '10cd3a5a-d36f-4c7a-bc4f-e1ae3cf820c9';
+
+export const DCB_VIRTUAL_USER = {
+  personal: {
+    lastName: 'DcbSystem',
+  },
+  type: DCB,
 };
 
 export const DCB_INSTANCE_ID = '9d1b77e4-f02e-4b7f-b296-3f2042ddac54';
