@@ -22,13 +22,17 @@ class CashDrawerReconciliationReport {
   }
 
   buildHeader() {
+    const DEFAULT_DATE_OPTIONS = {
+      timeZone: 'UTC',
+    };
+
     return this.formatMessage(
       { id: 'ui-users.reports.cash.header' },
       {
         servicePoint: this.headerData.createdAt,
         sources: this.headerData.sources,
-        startDate: this.formatDate(this.headerData.startDate),
-        endDate: this.formatDate(this.headerData.endDate) || moment().format('YYYY/MM/DD') // if no endDate then show date='today'
+        startDate: this.formatDate(this.headerData.startDate, DEFAULT_DATE_OPTIONS),
+        endDate: this.formatDate(this.headerData.endDate, DEFAULT_DATE_OPTIONS) || moment().format('YYYY/MM/DD') // if no endDate then show date='today'
       }
     );
   }
