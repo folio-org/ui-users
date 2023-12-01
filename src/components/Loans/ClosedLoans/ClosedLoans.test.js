@@ -15,9 +15,11 @@ import {
   getChargeFineToLoanPath,
   nav,
 } from '../../util';
+import { DCB_VIRTUAL_USER } from '../../../constants';
 
 jest.unmock('@folio/stripes/components');
 jest.mock('../../util', () => ({
+  ...jest.requireActual('../../util'),
   calculateSortParams: jest.fn(),
   getChargeFineToLoanPath: jest.fn(),
   nav: {
@@ -408,6 +410,218 @@ describe('Given ClosedLoans', () => {
       await userEvent.click(screen.getByTestId('feeFineDetailsButton'));
 
       expect(nav.onClickViewOpenAccounts).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('when DCB lending role - virtual user and real item', () => {
+    const dcbUserProps = {
+      ...props,
+      user: DCB_VIRTUAL_USER,
+    };
+
+    it('should not render "Anonymize all loans" button', () => {
+      renderClosedLoans(dcbUserProps);
+      expect(screen.queryByRole('button', { name: 'ui-users.anonymize' })).toBeNull();
+    });
+
+    it('should not render "Export to csv" button', () => {
+      renderClosedLoans(dcbUserProps);
+      expect(screen.queryByRole('button', { name: 'stripes-components.exportToCsv' })).toBeNull();
+    });
+  });
+
+  describe('when DCB borrowing/pickup role - real user and virtual item', () => {
+    const dcbItemProps = {
+      ...props,
+      loans: [
+        {
+          'id': '42255465-5c4c-40a2-be1c-dbb24a99c581',
+          'userId': '23a20881-f1bd-47f7-97b5-b8fbca50a963',
+          'itemId': '41ce406c-2a0f-4a2b-b638-7688000b9caf',
+          'itemEffectiveLocationIdAtCheckOut': '9d1b77e8-f02e-4b7f-b296-3f2042ddac54',
+          'status': {
+            'name': 'Closed'
+          },
+          'loanDate': '2023-11-28T12:21:30.486Z',
+          'dueDate': '2023-11-28T12:22:30.486+00:00',
+          'returnDate': '2023-11-28T12:21:53.707Z',
+          'systemReturnDate': '2023-11-28T12:21:53.623+00:00',
+          'action': 'checkedin',
+          'loanPolicyId': '26791bfd-70ac-4f5f-a186-29d14b5cf94d',
+          'checkoutServicePointId': 'c4c90014-c8c9-4ade-8f24-b5e313319f4b',
+          'checkinServicePointId': 'c4c90014-c8c9-4ade-8f24-b5e313319f4b',
+          'overdueFinePolicyId': 'cd3f6cac-fa17-4079-9fae-2fb28e521412',
+          'lostItemPolicyId': 'ed892c0e-52e0-4cd9-8133-c0ef07b4a709',
+          'metadata': {
+            'createdDate': '2023-11-28T12:21:32.763+00:00',
+            'createdByUserId': '1d435b19-c55a-4b16-a3c3-69b72cc8eeb4',
+            'updatedDate': '2023-11-28T12:21:54.017+00:00',
+            'updatedByUserId': '1d435b19-c55a-4b16-a3c3-69b72cc8eeb4'
+          },
+          'patronGroupAtCheckout': {
+            'id': '7a4df402-bd0a-4c7a-ae7b-c4a2ae59d7b1',
+            'name': 'PT'
+          },
+          'item': {
+            'id': '41ce406c-2a0f-4a2b-b638-7688000b9caf',
+            'holdingsRecordId': '10cd3a5a-d36f-4c7a-bc4f-e1ae3cf820c9',
+            'instanceId': '9d1b77e4-f02e-4b7f-b296-3f2042ddac54',
+            'title': 'DCB_INSTANCE',
+            'barcode': 'abc202311281',
+            'status': {
+              'name': 'In transit',
+              'date': '2023-11-30T11:20:41.154+00:00'
+            },
+            'location': {
+              'name': 'DCB'
+            },
+            'materialType': {
+              'name': 'book'
+            }
+          },
+          'checkinServicePoint': {
+            'name': 'Circ Desk 2',
+            'code': 'cd2',
+            'discoveryDisplayName': 'Circulation Desk -- Back Entrance',
+            'description': null,
+            'shelvingLagTime': null,
+            'pickupLocation': true
+          },
+          'checkoutServicePoint': {
+            'name': 'Circ Desk 2',
+            'code': 'cd2',
+            'discoveryDisplayName': 'Circulation Desk -- Back Entrance',
+            'description': null,
+            'shelvingLagTime': null,
+            'pickupLocation': true
+          },
+          'borrower': {
+            'firstName': '',
+            'lastName': 'dcbB1',
+            'middleName': null,
+            'barcode': 'dcbB1'
+          },
+          'loanPolicy': {
+            'name': 'One minute Loan Policy'
+          },
+          'overdueFinePolicy': {
+            'name': 'Overdue fine policy'
+          },
+          'lostItemPolicy': {
+            'name': 'Lost item fee policy'
+          },
+          'feesAndFines': {
+            'amountRemainingToPay': 0
+          }
+        },
+      ],
+    };
+
+    it('should not render "Item details" menu item in action drop down menu', () => {
+      renderClosedLoans(dcbItemProps);
+      expect(screen.queryByText('ui-users.itemDetails')).toBeNull();
+    });
+  });
+
+  describe('when DCB pickup role - virtual user and virtual item', () => {
+    const dcbProps = {
+      ...props,
+      user: DCB_VIRTUAL_USER,
+      loans: [
+        {
+          'id': '42255465-5c4c-40a2-be1c-dbb24a99c581',
+          'userId': '23a20881-f1bd-47f7-97b5-b8fbca50a963',
+          'itemId': '41ce406c-2a0f-4a2b-b638-7688000b9caf',
+          'itemEffectiveLocationIdAtCheckOut': '9d1b77e8-f02e-4b7f-b296-3f2042ddac54',
+          'status': {
+            'name': 'Closed'
+          },
+          'loanDate': '2023-11-28T12:21:30.486Z',
+          'dueDate': '2023-11-28T12:22:30.486+00:00',
+          'returnDate': '2023-11-28T12:21:53.707Z',
+          'systemReturnDate': '2023-11-28T12:21:53.623+00:00',
+          'action': 'checkedin',
+          'loanPolicyId': '26791bfd-70ac-4f5f-a186-29d14b5cf94d',
+          'checkoutServicePointId': 'c4c90014-c8c9-4ade-8f24-b5e313319f4b',
+          'checkinServicePointId': 'c4c90014-c8c9-4ade-8f24-b5e313319f4b',
+          'overdueFinePolicyId': 'cd3f6cac-fa17-4079-9fae-2fb28e521412',
+          'lostItemPolicyId': 'ed892c0e-52e0-4cd9-8133-c0ef07b4a709',
+          'metadata': {
+            'createdDate': '2023-11-28T12:21:32.763+00:00',
+            'createdByUserId': '1d435b19-c55a-4b16-a3c3-69b72cc8eeb4',
+            'updatedDate': '2023-11-28T12:21:54.017+00:00',
+            'updatedByUserId': '1d435b19-c55a-4b16-a3c3-69b72cc8eeb4'
+          },
+          'patronGroupAtCheckout': {
+            'id': '7a4df402-bd0a-4c7a-ae7b-c4a2ae59d7b1',
+            'name': 'PT'
+          },
+          'item': {
+            'id': '41ce406c-2a0f-4a2b-b638-7688000b9caf',
+            'holdingsRecordId': '10cd3a5a-d36f-4c7a-bc4f-e1ae3cf820c9',
+            'instanceId': '9d1b77e4-f02e-4b7f-b296-3f2042ddac54',
+            'title': 'DCB_INSTANCE',
+            'barcode': 'abc202311281',
+            'status': {
+              'name': 'In transit',
+              'date': '2023-11-30T11:20:41.154+00:00'
+            },
+            'location': {
+              'name': 'DCB'
+            },
+            'materialType': {
+              'name': 'book'
+            }
+          },
+          'checkinServicePoint': {
+            'name': 'Circ Desk 2',
+            'code': 'cd2',
+            'discoveryDisplayName': 'Circulation Desk -- Back Entrance',
+            'description': null,
+            'shelvingLagTime': null,
+            'pickupLocation': true
+          },
+          'checkoutServicePoint': {
+            'name': 'Circ Desk 2',
+            'code': 'cd2',
+            'discoveryDisplayName': 'Circulation Desk -- Back Entrance',
+            'description': null,
+            'shelvingLagTime': null,
+            'pickupLocation': true
+          },
+          'borrower': {
+            'firstName': '',
+            'lastName': 'dcbB1',
+            'middleName': null,
+            'barcode': 'dcbB1'
+          },
+          'loanPolicy': {
+            'name': 'One minute Loan Policy'
+          },
+          'overdueFinePolicy': {
+            'name': 'Overdue fine policy'
+          },
+          'lostItemPolicy': {
+            'name': 'Lost item fee policy'
+          },
+          'feesAndFines': {
+            'amountRemainingToPay': 0
+          }
+        },
+      ],
+    };
+    it('should not render "Anonymize all loans" button', () => {
+      renderClosedLoans(dcbProps);
+      // expect(screen.queryByText('ui-users.anonymize')).toBeNull();
+      expect(screen.queryByRole('button', { name: 'ui-users.anonymize' })).toBeNull();
+    });
+    it('should not render "Export to csv" button', () => {
+      renderClosedLoans(dcbProps);
+      // expect(screen.queryByText('stripes-components.exportToCsv')).toBeNull();
+      expect(screen.queryByRole('button', { name: 'stripes-components.exportToCsv' })).toBeNull();
+    });
+    it('should not render actions column', () => {
+      renderClosedLoans(dcbProps);
     });
   });
 });
