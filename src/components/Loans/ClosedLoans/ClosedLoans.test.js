@@ -612,12 +612,10 @@ describe('Given ClosedLoans', () => {
     };
     it('should not render "Anonymize all loans" button', () => {
       renderClosedLoans(dcbProps);
-      // expect(screen.queryByText('ui-users.anonymize')).toBeNull();
       expect(screen.queryByRole('button', { name: 'ui-users.anonymize' })).toBeNull();
     });
     it('should not render "Export to csv" button', () => {
       renderClosedLoans(dcbProps);
-      // expect(screen.queryByText('stripes-components.exportToCsv')).toBeNull();
       expect(screen.queryByRole('button', { name: 'stripes-components.exportToCsv' })).toBeNull();
     });
     it('should not render actions column', () => {
