@@ -43,6 +43,7 @@ import {
   accountsMatchStatus,
   checkUserActive,
   isDcbUser,
+  isDCBItem,
 } from '../../components/util';
 import { itemStatuses, loanActions, refundClaimReturned } from '../../constants';
 import {
@@ -298,23 +299,57 @@ class LoanDetails extends React.Component {
 
   showTitle(loan) {
     this.loan = loan;
-    const title = `${get(this.loan, ['item', 'title'], '')}`;
+    const title = get(this.loan, ['item', 'title'], '');
+    const instanceId = get(this.loan, ['item', 'instanceId'], '');
+    const holdingsRecordId = get(this.loan, ['item', 'holdingsRecordId'], '');
+    const isVirtualItem = isDCBItem({ instanceId, holdingsRecordId });
+    const titleLengthCheck = 77;
+
     if (title) {
-      const titleTodisplay = (title.length >= 77) ? `${title.substring(0, 77)}...` : title;
-      return <KeyValue
-        label={<FormattedMessage id="ui-users.loans.columns.title" />}
-        value={(
-          <Link to={`/inventory/view/${get(this.loan, ['item', 'instanceId'], '')}`}>
-            {`${titleTodisplay} (${get(this.loan, ['item', 'materialType', 'name'])})`}
-          </Link>
-        )}
-      />;
+      const titleTodisplay = (title.length >= titleLengthCheck) ? `${title.substring(0, titleLengthCheck)}...` : title;
+      const formattedValue = `${titleTodisplay} (${get(this.loan, ['item', 'materialType', 'name'])})`;
+      return (
+        <KeyValue
+          data-testId="item-title"
+          label={<FormattedMessage id="ui-users.loans.columns.title" />}
+          value={
+            isVirtualItem ?
+              formattedValue :
+              <Link to={`/inventory/view/${instanceId}`}>
+                {formattedValue}
+              </Link>
+              }
+        />
+      );
     }
 
-    return <KeyValue
-      label={<FormattedMessage id="ui-users.loans.columns.title" />}
-      value="-"
-    />;
+    return (
+      <KeyValue
+        label={<FormattedMessage id="ui-users.loans.columns.title" />}
+        value={<NoValue />}
+      />
+    );
+  }
+
+  showBarcode(loan) {
+    this.loan = loan;
+    const instanceId = get(this.loan, ['item', 'instanceId'], '');
+    const holdingsRecordId = get(this.loan, ['item', 'holdingsRecordId'], '');
+    const itemId = get(this.loan, ['itemId'], '');
+    const itemBarcode = get(loan, ['item', 'barcode']);
+    const isVirtualItem = isDCBItem({ instanceId, holdingsRecordId });
+
+    if (isVirtualItem) {
+      return itemBarcode;
+    }
+
+    return (
+      <Link
+        to={`/inventory/view/${instanceId}/${holdingsRecordId}/${itemId}`}
+      >
+        {itemBarcode}
+      </Link>
+    );
   }
 
   renderChangeDueDateDialog() {
@@ -627,8 +662,9 @@ class LoanDetails extends React.Component {
               </Col>
               <Col xs={2}>
                 <KeyValue
+                  data-testId="item-barcode"
                   label={<FormattedMessage id="ui-users.loans.columns.barcode" />}
-                  value={<Link to={`/inventory/view/${get(loan, ['item', 'instanceId'], '')}/${get(loan, ['item', 'holdingsRecordId'], '')}/${get(loan, ['itemId'], '')}`}>{get(loan, ['item', 'barcode'], '')}</Link>}
+                  value={this.showBarcode(loan)}
                 />
               </Col>
               <Col xs={2}>
