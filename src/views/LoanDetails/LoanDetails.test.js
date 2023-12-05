@@ -1,11 +1,15 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { screen } from '@folio/jest-config-stripes/testing-library/react';
+import { screen, within } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import okapiOpenLoan from 'fixtures/openLoan';
 import okapiCurrentUser from 'fixtures/okapiCurrentUser';
 import renderWithRouter from 'helpers/renderWithRouter';
 import LoanDetails from './LoanDetails';
+import {
+  DCB_INSTANCE_ID,
+  DCB_HOLDINGS_RECORD_ID,
+} from '../../constants';
 
 jest.useFakeTimers('legacy');
 jest.mock('react-intl', () => ({
@@ -537,6 +541,40 @@ describe('LoanDetails', () => {
         ...virtualPatronPropsData,
       });
       expect(screen.getByRole('button', { name:'ui-users.loans.newStaffInfo' })).toBeDisabled();
+    });
+  });
+
+  describe('when item is dcb item', () => {
+    const virtualItemPropsData = {
+      ...propsData,
+      loan: {
+        ...okapiOpenLoan,
+        item: {
+          ...okapiOpenLoan.item,
+          instanceId: DCB_INSTANCE_ID,
+          holdingsRecordId: DCB_HOLDINGS_RECORD_ID,
+          title: 'Vitual item',
+          barcode: 'virtual barcode'
+        }
+      }
+    };
+
+    it('render item title not as a link but as text', () => {
+      renderLoanProxyDetails({
+        ...virtualItemPropsData,
+      });
+
+      expect(screen.queryByRole('link', { name: /Virtual item/i })).toBeNull();
+      expect(within(screen.getByTestId('item-title')).queryByText('Virtual Item')).toBeDefined();
+    });
+
+    it('render item barcode as text', () => {
+      renderLoanProxyDetails({
+        ...virtualItemPropsData,
+      });
+
+      expect(screen.queryByRole('link', { name: /Virtual barcode/i })).toBeNull();
+      expect(within(screen.getByTestId('item-barcode')).queryByText('Virtual barcode')).toBeDefined();
     });
   });
 });
