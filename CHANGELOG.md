@@ -5,6 +5,7 @@
 * Disable open loan actions for virtual patron. Refs UIU-2964.
 * Hide all actionalble buttons on user details pane for DCB Virtual user. Refs UIU-2987.
 * Open loan page modifications for a virtual patron. Refs UIU-2988.
+* Display item title and barcode as text when the item is dcb virtual item. Refs UIU-2966.
 
 ## [10.0.5](https://github.com/folio-org/ui-users/tree/v10.0.5) (2023-11-21)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.4...v10.0.5)
