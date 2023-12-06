@@ -27,7 +27,7 @@ import {
   isConsortiumEnabled,
   getRequestUrl,
   isAffiliationsEnabled,
-  isDCBItem
+  isDCBItem,
 } from './util';
 
 const STRIPES = {

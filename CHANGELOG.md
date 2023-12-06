@@ -10,6 +10,7 @@
 * Open loan page modifications for a virtual patron. Refs UIU-2988.
 * Display item title and barcode as text when the item is dcb virtual item. Refs UIU-2966.
 * Fix wrong date in Cash-Drawer-Reconciliation-Report.pdf. Refs UIU-3010.
+* Conditionally hide actions on closed loan records for DCB Circulation. Refs UIU-2989.
 
 ## [10.0.4](https://github.com/folio-org/ui-users/tree/v10.0.4) (2023-11-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.3...v10.0.4)
