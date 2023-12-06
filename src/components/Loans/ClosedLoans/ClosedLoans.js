@@ -28,6 +28,8 @@ import {
   calculateSortParams,
   getChargeFineToLoanPath,
   nav,
+  isDcbUser,
+  isDCBItem,
 } from '../../util';
 import ActionsBar from '../components/ActionsBar';
 import Label from '../../Label';
@@ -182,7 +184,7 @@ class ClosedLoans extends React.Component {
   }
 
   getLoansFormatter() {
-    const { intl: { formatMessage } } = this.props;
+    const { intl: { formatMessage }, user } = this.props;
 
     return {
       'title': loan => _.get(loan, ['item', 'title'], ''),
@@ -242,13 +244,20 @@ class ClosedLoans extends React.Component {
       ' ': loan => {
         return <Dropdown
           usePortal
-          renderTrigger={({ getTriggerProps }) => (
-            <IconButton
-              {...getTriggerProps()}
-              icon="ellipsis"
-              aria-label={formatMessage({ id: 'ui-users.action' })}
-            />
-          )}
+          renderTrigger={({ getTriggerProps }) => {
+            const isVirtualUser = isDcbUser(user);
+            const isVirtualItem = loan.item && isDCBItem(loan.item);
+
+            if (isVirtualUser && isVirtualItem) { return null; }
+
+            return (
+              <IconButton
+                {...getTriggerProps()}
+                icon="ellipsis"
+                aria-label={formatMessage({ id: 'ui-users.action' })}
+              />
+            );
+          }}
           renderMenu={this.renderDropDownMenu(loan)}
         />;
       }
@@ -348,16 +357,19 @@ class ClosedLoans extends React.Component {
     const {
       stripes,
       match: { params },
+      user,
     } = this.props;
 
     const accounts = _.get(this.props.resources, ['loanAccount', 'records'], []);
     const accountsLoan = accounts.filter(a => a.loanId === loan.id) || [];
     const itemDetailsLink = loan.item && `/inventory/view/${loan.item.instanceId}/${loan.item.holdingsRecordId}/${loan.itemId}`;
     const buttonDisabled = !stripes.hasPerm('ui-users.feesfines.actions.all');
+    const isVirtualUser = isDcbUser(user);
+    const isVirtualItem = loan.item && isDCBItem(loan.item);
 
     return (
       <DropdownMenu data-role="menu">
-        {itemDetailsLink &&
+        {itemDetailsLink && !isVirtualItem &&
           <IfPermission perm="inventory.items.item.get">
             <Button
               buttonStyle="dropdownItem"
@@ -367,24 +379,30 @@ class ClosedLoans extends React.Component {
             </Button>
           </IfPermission>
         }
-        <Button
-          data-testid="newFeeFineButton"
-          disabled={buttonDisabled}
-          buttonStyle="dropdownItem"
-          to={getChargeFineToLoanPath(params.id, loan.id)}
-        >
-          <FormattedMessage id="ui-users.loans.newFeeFine" />
-        </Button>
-        <Button
-          data-testid="feeFineDetailsButton"
-          disabled={_.isEmpty(accountsLoan)}
-          buttonStyle="dropdownItem"
-          onClick={() => {
-            this.handleOptionsChange({ loan, action: 'feefineDetails' });
-          }}
-        >
-          <FormattedMessage id="ui-users.loans.feeFineDetails" />
-        </Button>
+        {
+          !isVirtualUser && (
+            <>
+              <Button
+                data-testid="newFeeFineButton"
+                disabled={buttonDisabled}
+                buttonStyle="dropdownItem"
+                to={getChargeFineToLoanPath(params.id, loan.id)}
+              >
+                <FormattedMessage id="ui-users.loans.newFeeFine" />
+              </Button>
+              <Button
+                data-testid="feeFineDetailsButton"
+                disabled={_.isEmpty(accountsLoan)}
+                buttonStyle="dropdownItem"
+                onClick={() => {
+                  this.handleOptionsChange({ loan, action: 'feefineDetails' });
+                }}
+              >
+                <FormattedMessage id="ui-users.loans.feeFineDetails" />
+              </Button>
+            </>
+          )
+        }
       </DropdownMenu>
     );
   };
@@ -399,6 +417,7 @@ class ClosedLoans extends React.Component {
     } = this.state;
     const {
       loans,
+      user,
     } = this.props;
 
     const visibleColumns = ['title', 'dueDate', 'barcode', 'feefineIncurred', 'callNumber', 'Contributors', 'renewals', 'loanDate', 'returnDate', 'checkinServicePoint', ' '];
@@ -407,6 +426,7 @@ class ClosedLoans extends React.Component {
       [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
     const clonedLoans = _.cloneDeep(loans);
     const recordsToCSV = this.buildRecords(clonedLoans);
+    const isVirtualUser = isDcbUser(user);
 
     const columnWidths = {
       'title': { max: 200 },
@@ -439,44 +459,46 @@ class ClosedLoans extends React.Component {
             </Label>
           }
           contentEnd={
-            <IntlConsumer>
-              {intl => (
-                <div>
-                  <IfPermission perm="ui-users.loans.anonymize">
-                    <Button
-                      marginBottom0
-                      id="anonymize-all"
-                      onClick={this.toggleLoansAnonymizationConfirmModal}
-                    >
-                      {anonymizeString}
-                    </Button>
-                  </IfPermission>
-                  <ExportCsv
-                    data={recordsToCSV}
-                    onlyFields={this.columnHeadersMap}
-                  />
-                  <ErrorModal
-                    id="anonymization-fees-fines-modal"
-                    open={anonymizationErrorModalOpen}
-                    label={intl.formatMessage({ id: 'ui-users.anonymization.error.header' })}
-                    message={intl.formatMessage(
-                      { id: 'ui-users.anonymization.error.message' },
-                      { amount: failedAnonymizationLoansCount }
-                    )}
-                    onClose={this.closeLoansAnonymizationErrorModal}
-                  />
-                  <ConfirmationModal
-                    open={confirmAnonymizationModalOpen}
-                    heading={intl.formatMessage({ id: 'ui-users.anonymization.confirmation.header' })}
-                    message={intl.formatMessage({ id: 'ui-users.anonymization.confirmation.message' })}
-                    onConfirm={this.anonymizeLoans}
-                    onCancel={this.toggleLoansAnonymizationConfirmModal}
-                    cancelLabel={intl.formatMessage({ id: 'ui-users.anonymization.confirmation.cancel' })}
-                    confirmLabel={intl.formatMessage({ id: 'ui-users.anonymization.confirmation.confirm' })}
-                  />
-                </div>
-              )}
+            !isVirtualUser && (
+              <IntlConsumer>
+                {intl => (
+                  <div>
+                    <IfPermission perm="ui-users.loans.anonymize">
+                      <Button
+                        marginBottom0
+                        id="anonymize-all"
+                        onClick={this.toggleLoansAnonymizationConfirmModal}
+                      >
+                        {anonymizeString}
+                      </Button>
+                    </IfPermission>
+                    <ExportCsv
+                      data={recordsToCSV}
+                      onlyFields={this.columnHeadersMap}
+                    />
+                    <ErrorModal
+                      id="anonymization-fees-fines-modal"
+                      open={anonymizationErrorModalOpen}
+                      label={intl.formatMessage({ id: 'ui-users.anonymization.error.header' })}
+                      message={intl.formatMessage(
+                        { id: 'ui-users.anonymization.error.message' },
+                        { amount: failedAnonymizationLoansCount }
+                      )}
+                      onClose={this.closeLoansAnonymizationErrorModal}
+                    />
+                    <ConfirmationModal
+                      open={confirmAnonymizationModalOpen}
+                      heading={intl.formatMessage({ id: 'ui-users.anonymization.confirmation.header' })}
+                      message={intl.formatMessage({ id: 'ui-users.anonymization.confirmation.message' })}
+                      onConfirm={this.anonymizeLoans}
+                      onCancel={this.toggleLoansAnonymizationConfirmModal}
+                      cancelLabel={intl.formatMessage({ id: 'ui-users.anonymization.confirmation.cancel' })}
+                      confirmLabel={intl.formatMessage({ id: 'ui-users.anonymization.confirmation.confirm' })}
+                    />
+                  </div>
+                )}
             </IntlConsumer>
+            )
           }
         />
         <MultiColumnList
