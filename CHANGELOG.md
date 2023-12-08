@@ -3,8 +3,23 @@
 ## [10.1.0] IN PROGRESS
 
 * Also support `feesfines` interface version `19.0`. Refs UIU-2960.
+* Disable validation for shadow user. Refs UIU-3000.
+* Disable open loan actions for virtual patron. Refs UIU-2964.
+* Fix problem with Date field in User app reports does not populate when a first entry was cleared. Refs UIU-2991.
+* Hide all actionalble buttons on user details pane for DCB Virtual user. Refs UIU-2987.
+* Open loan page modifications for a virtual patron. Refs UIU-2988.
+* Display item title and barcode as text when the item is dcb virtual item. Refs UIU-2966.
+* Fix wrong date in Cash-Drawer-Reconciliation-Report.pdf. Refs UIU-3010.
+* Conditionally hide actions on closed loan records for DCB Circulation. Refs UIU-2989.
+
+## [10.0.4](https://github.com/folio-org/ui-users/tree/v10.0.4) (2023-11-10)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.3...v10.0.4)
+
 * Correctly handle optional `X-Okapi-token` request header. Refs UIU-2977.
 * Fix bug with Edit form Expand/collapse all shortcuts not working. Refs UIU-2959.
+* Update patron groups retrieval in user search to hold `maxUnpagedResourceCount`. Refs UIU-2973.
+* Update resourceData and queryParams in `UserSearchContainer.js` to escape special characters in tags filter. Refs. UIU-2995.
+* Lost item fees not suspended when item is claimed returned from the ellipses in action menu. Refs UIU-2993.
 
 ## [10.0.3](https://github.com/folio-org/ui-users/tree/v10.0.3) (2023-10-23)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.1...v10.0.3)

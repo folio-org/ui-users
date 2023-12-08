@@ -42,6 +42,8 @@ import {
   getRenewalPatronBlocksFromPatronBlocks,
   accountsMatchStatus,
   checkUserActive,
+  isDcbUser,
+  isDCBItem,
 } from '../../components/util';
 import { itemStatuses, loanActions, refundClaimReturned } from '../../constants';
 import {
@@ -297,23 +299,57 @@ class LoanDetails extends React.Component {
 
   showTitle(loan) {
     this.loan = loan;
-    const title = `${get(this.loan, ['item', 'title'], '')}`;
+    const title = get(this.loan, ['item', 'title'], '');
+    const instanceId = get(this.loan, ['item', 'instanceId'], '');
+    const holdingsRecordId = get(this.loan, ['item', 'holdingsRecordId'], '');
+    const isVirtualItem = isDCBItem({ instanceId, holdingsRecordId });
+    const titleLengthCheck = 77;
+
     if (title) {
-      const titleTodisplay = (title.length >= 77) ? `${title.substring(0, 77)}...` : title;
-      return <KeyValue
-        label={<FormattedMessage id="ui-users.loans.columns.title" />}
-        value={(
-          <Link to={`/inventory/view/${get(this.loan, ['item', 'instanceId'], '')}`}>
-            {`${titleTodisplay} (${get(this.loan, ['item', 'materialType', 'name'])})`}
-          </Link>
-        )}
-      />;
+      const titleTodisplay = (title.length >= titleLengthCheck) ? `${title.substring(0, titleLengthCheck)}...` : title;
+      const formattedValue = `${titleTodisplay} (${get(this.loan, ['item', 'materialType', 'name'])})`;
+      return (
+        <KeyValue
+          data-testId="item-title"
+          label={<FormattedMessage id="ui-users.loans.columns.title" />}
+          value={
+            isVirtualItem ?
+              formattedValue :
+              <Link to={`/inventory/view/${instanceId}`}>
+                {formattedValue}
+              </Link>
+              }
+        />
+      );
     }
 
-    return <KeyValue
-      label={<FormattedMessage id="ui-users.loans.columns.title" />}
-      value="-"
-    />;
+    return (
+      <KeyValue
+        label={<FormattedMessage id="ui-users.loans.columns.title" />}
+        value={<NoValue />}
+      />
+    );
+  }
+
+  showBarcode(loan) {
+    this.loan = loan;
+    const instanceId = get(this.loan, ['item', 'instanceId'], '');
+    const holdingsRecordId = get(this.loan, ['item', 'holdingsRecordId'], '');
+    const itemId = get(this.loan, ['itemId'], '');
+    const itemBarcode = get(loan, ['item', 'barcode']);
+    const isVirtualItem = isDCBItem({ instanceId, holdingsRecordId });
+
+    if (isVirtualItem) {
+      return itemBarcode;
+    }
+
+    return (
+      <Link
+        to={`/inventory/view/${instanceId}/${holdingsRecordId}/${itemId}`}
+      >
+        {itemBarcode}
+      </Link>
+    );
   }
 
   renderChangeDueDateDialog() {
@@ -487,6 +523,7 @@ class LoanDetails extends React.Component {
     const patronBlocksForModal = getRenewalPatronBlocksFromPatronBlocks(patronBlocks);
     const isUserActive = user ? checkUserActive(user) : false;
     const borrower = user ? getFullName(user) : <FormattedMessage id="ui-users.user.unknown" />;
+    const isVirtualPatron = isDcbUser(user);
 
     return (
       <div data-test-loan-actions-history>
@@ -507,7 +544,7 @@ class LoanDetails extends React.Component {
                 <IfPermission perm="ui-users.loans.renew">
                   <Button
                     data-test-renew-button
-                    disabled={buttonDisabled || isClaimedReturnedItem || !isUserActive}
+                    disabled={buttonDisabled || isClaimedReturnedItem || !isUserActive || isVirtualPatron}
                     buttonStyle="primary"
                     onClick={this.renew}
                   >
@@ -525,7 +562,7 @@ class LoanDetails extends React.Component {
                         <Button
                           buttonStyle="dropdownItem"
                           data-test-declare-lost-button
-                          disabled={buttonDisabled || isDeclaredLostItem}
+                          disabled={buttonDisabled || isDeclaredLostItem || isVirtualPatron}
                           onClick={() => declareLost(loan, itemRequestCount)}
                         >
                           <FormattedMessage id="ui-users.loans.declareLost" />
@@ -535,6 +572,7 @@ class LoanDetails extends React.Component {
                         <Button
                           buttonStyle="dropdownItem"
                           data-test-dropdown-content-mark-as-missing-button
+                          disabled={isVirtualPatron}
                           onClick={() => markAsMissing(loan, itemRequestCount)}
                         >
                           <FormattedMessage id="ui-users.loans.markAsMissing" />
@@ -544,16 +582,16 @@ class LoanDetails extends React.Component {
                   </Dropdown>
                 }
                 {!isClaimedReturnedItem &&
-                  <IfPermission perm="ui-users.loans.claim-item-returned">
-                    <Button
-                      data-test-claim-returned-button
-                      disabled={buttonDisabled}
-                      buttonStyle="primary"
-                      onClick={() => claimReturned(loan, itemRequestCount)}
-                    >
-                      <FormattedMessage id="ui-users.loans.claimReturned" />
-                    </Button>
-                  </IfPermission>
+                <IfPermission perm="ui-users.loans.claim-item-returned">
+                  <Button
+                    data-test-claim-returned-button
+                    disabled={buttonDisabled || isVirtualPatron}
+                    buttonStyle="primary"
+                    onClick={() => claimReturned(loan, itemRequestCount)}
+                  >
+                    <FormattedMessage id="ui-users.loans.claimReturned" />
+                  </Button>
+                </IfPermission>
                 }
                 <IfPermission perm="ui-users.loans.change-due-date">
                   <Button
@@ -562,7 +600,8 @@ class LoanDetails extends React.Component {
                       buttonDisabled ||
                       isDeclaredLostItem ||
                       isClaimedReturnedItem ||
-                      isAgedToLostItem
+                      isAgedToLostItem ||
+                      isVirtualPatron
                     }
                     buttonStyle="primary"
                     onClick={this.showChangeDueDateDialog}
@@ -573,7 +612,7 @@ class LoanDetails extends React.Component {
                 <IfPermission perm="ui-users.loans.declare-item-lost">
                   <Button
                     data-test-declare-lost-button
-                    disabled={declareLostInProgress || buttonDisabled || isDeclaredLostItem}
+                    disabled={declareLostInProgress || buttonDisabled || isDeclaredLostItem || isVirtualPatron}
                     buttonStyle="primary"
                     onClick={() => declareLost(loan, itemRequestCount)}
                   >
@@ -583,6 +622,7 @@ class LoanDetails extends React.Component {
                 <IfPermission perm="ui-users.loans.add-patron-info">
                   <Button
                     data-test-new-patron-info-button
+                    disabled={isVirtualPatron}
                     onClick={() => addInfo(loan, 'patron')}
                   >
                     <FormattedMessage id="ui-users.loans.newPatronInfo" />
@@ -591,6 +631,7 @@ class LoanDetails extends React.Component {
                 <IfPermission perm="ui-users.loans.add-staff-info">
                   <Button
                     data-test-new-staff-info-button
+                    disabled={isVirtualPatron}
                     onClick={() => addInfo(loan, 'staff')}
                   >
                     <FormattedMessage id="ui-users.loans.newStaffInfo" />
@@ -621,8 +662,9 @@ class LoanDetails extends React.Component {
               </Col>
               <Col xs={2}>
                 <KeyValue
+                  data-testId="item-barcode"
                   label={<FormattedMessage id="ui-users.loans.columns.barcode" />}
-                  value={<Link to={`/inventory/view/${get(loan, ['item', 'instanceId'], '')}/${get(loan, ['item', 'holdingsRecordId'], '')}/${get(loan, ['itemId'], '')}`}>{get(loan, ['item', 'barcode'], '')}</Link>}
+                  value={this.showBarcode(loan)}
                 />
               </Col>
               <Col xs={2}>

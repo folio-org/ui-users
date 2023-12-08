@@ -741,7 +741,7 @@
     "manualBlockTemplate.deleteTemplate": "Smazat šablonu blokace čtenáře?",
     "manualBlockTemplate.deleteTemplateMessage": "{name} bude odstraněno ze šablon blokace čtenáře.",
     "manualBlockTemplate.untitledTemplate": "Šablona blokace čtenáře bez názvu",
-    "field.disabled": "Toto pole je zakázáno",
+    "field.disabled": "Toto pole je deaktivováno",
     "loan404": "Vyžádanou výpůjčku nelze načíst.",
     "actions": "Akce",
     "showColumns": "Zobrazit sloupce",

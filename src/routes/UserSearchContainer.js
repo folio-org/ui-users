@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
+  cloneDeep,
   get,
   template,
 } from 'lodash';
@@ -34,8 +35,39 @@ const searchFields = [
 ];
 const compileQuery = template(`(${searchFields.join(' or ')})`, { interpolate: /%{([\s\S]+?)}/g });
 
+/*
+  Some of the special characters that are allowed while creating a tag are  "", \, *, ?
+  These special characters cause CQL exceptions while searching the user records, which are
+  assigned with such tags.
+  This function "escapeSpecialCharactersInTagFilters" intends to escape the special characters
+  in filters of type "Tags"
+  Ref: https://issues.folio.org/browse/UIU-2995
+*/
+
+const escapeSpecialCharactersInTagFilters = (queryParams, resourceData) => {
+  const newResourceData = cloneDeep(resourceData);
+  let escapedFilters;
+
+  if (resourceData.query.filters) {
+    const filterArr = resourceData.query.filters.split(',');
+    escapedFilters = filterArr.map(f => {
+      let newF = f;
+      if (f.startsWith('tags.')) {
+        newF = f.replace(/["^*?\\]/g, c => '\\' + c);
+      }
+      return newF;
+    });
+    escapedFilters = escapedFilters.join(',');
+
+    newResourceData.query.filters = escapedFilters;
+    queryParams.filters = escapedFilters;
+  }
+  return newResourceData;
+};
+
 export function buildQuery(queryParams, pathComponents, resourceData, logger, props) {
   const customFilterConfig = buildFilterConfig(queryParams.filters);
+  const newResourceData = escapeSpecialCharactersInTagFilters(queryParams, resourceData);
 
   return makeQueryFunction(
     'cql.allRecords=1',
@@ -53,7 +85,7 @@ export function buildQuery(queryParams, pathComponents, resourceData, logger, pr
     },
     [...filterConfig, ...customFilterConfig],
     2,
-  )(queryParams, pathComponents, resourceData, logger, props);
+  )(queryParams, pathComponents, newResourceData, logger, props);
 }
 
 class UserSearchContainer extends React.Component {
@@ -83,7 +115,7 @@ class UserSearchContainer extends React.Component {
       path: 'groups',
       params: {
         query: 'cql.allRecords=1 sortby group',
-        limit: '200',
+        limit: (q, p, r, l, props) => props?.stripes?.config?.maxUnpagedResourceCount || '200',
       },
       records: 'usergroups',
     },

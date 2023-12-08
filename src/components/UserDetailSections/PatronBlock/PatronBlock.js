@@ -16,6 +16,7 @@ import {
 } from '@folio/stripes/components';
 import { stripesConnect } from '@folio/stripes/core';
 
+import { isDcbUser } from '../../util';
 import css from './PatronBlock.css';
 
 const PATRON_BLOCKS_COLUMNS = {
@@ -37,6 +38,11 @@ class PatronBlock extends React.Component {
     expanded: PropTypes.bool,
     accordionId: PropTypes.string,
     patronBlocks: PropTypes.arrayOf(PropTypes.object),
+    resources: PropTypes.shape({
+      selUser: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+    }),
     mutator: PropTypes.shape({
       activeRecord: PropTypes.shape({
         update: PropTypes.func,
@@ -160,7 +166,11 @@ class PatronBlock extends React.Component {
       patronBlocks,
       match: { params },
       location,
+      resources,
     } = this.props;
+
+    const user = resources?.selUser?.records[0];
+
     const {
       sortOrder,
       sortDirection,
@@ -203,7 +213,7 @@ class PatronBlock extends React.Component {
         id={accordionId}
         onToggle={onToggle}
         label={title}
-        displayWhenOpen={displayWhenOpen}
+        displayWhenOpen={!isDcbUser(user) ? displayWhenOpen : null}
       >
         <Row><Col xs>{items}</Col></Row>
       </Accordion>

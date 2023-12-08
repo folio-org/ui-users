@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
+import { get } from 'lodash';
 
 import {
   Row,
@@ -20,6 +21,7 @@ import {
   refundStatuses,
   refundClaimReturned,
 } from '../../../constants';
+import { isDcbUser } from '../../util';
 
 
 /**
@@ -39,6 +41,7 @@ const UserAccounts = ({
   },
   resources,
 }) => {
+  const user = get(resources, ['selUser', 'records', '0']);
   const [totals, setTotals] = useState({
     openAccountsCount: 0,
     closedAccountsCount: 0,
@@ -98,7 +101,7 @@ const UserAccounts = ({
       onToggle={onToggle}
       label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.accounts.title.feeFine" /></Headline>}
       displayWhenClosed={displayWhenClosed}
-      displayWhenOpen={displayWhenOpen}
+      displayWhenOpen={!isDcbUser(user) ? displayWhenOpen : null}
     >
       {accountsLoaded ?
         <Row>

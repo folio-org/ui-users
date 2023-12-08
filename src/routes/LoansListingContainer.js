@@ -12,6 +12,32 @@ import { LoansListing } from '../views';
 
 class LoansListingContainer extends React.Component {
   static manifest = Object.freeze({
+    accounts: {
+      type: 'okapi',
+      records: 'accounts',
+      PUT: {
+        path: 'accounts/%{activeAccount.id}'
+      },
+      fetch: false,
+      accumulate: true,
+    },
+    feefineactions: {
+      type: 'okapi',
+      records: 'feefineactions',
+      path: 'feefineactions',
+      fetch: false,
+      accumulate: true,
+    },
+    loanstorage: {
+      type: 'okapi',
+      PUT: {
+        path: 'loan-storage/loans/%{activeLoanStorage.id}'
+      },
+      fetch: false,
+      accumulate: true,
+    },
+    activeAccount: {},
+    activeLoanStorage: {},
     query: {},
     selUser: {
       type: 'okapi',
