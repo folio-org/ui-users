@@ -34,7 +34,7 @@ const validate = (item, index, items) => {
   return errors;
 };
 
-const suppress = getSourceSuppressor(RECORD_SOURCE.CONSORTIUM);
+const suppress = () => false;
 
 const DepartmentsSettings = () => {
   const { formatMessage } = useIntl();

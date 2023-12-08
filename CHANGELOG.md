@@ -82,6 +82,7 @@
 * Profile Pictures - basic error handling. Refs UIU-3070.
 * Add optional chaining in `AddServicePointModal` in order to safely access `assignedServicePoints` from props. Refs UIU-3069.
 * Fix lint issues. Refs UIU-3072.
+* Leverage `users-keycloak` interface endpoints for user data when available.
 
 ## [10.0.4](https://github.com/folio-org/ui-users/tree/v10.0.4) (2023-11-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.3...v10.0.4)
