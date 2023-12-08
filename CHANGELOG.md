@@ -89,6 +89,7 @@
 * Add `users-keycloak` permissions. Refs UIU-3068.
 * Omit permissions accordions and queries when `roles` interface is present. Refs UIU-3061, UIU-3062.
 * Retrieve user's central-tenant permission from `users-keycloak` endpoints when available. Refs UIU-3054.
+* Leverage `users-keycloak` interface endpoints for user data when available.
 
 ## [10.0.4](https://github.com/folio-org/ui-users/tree/v10.0.4) (2023-11-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.3...v10.0.4)
