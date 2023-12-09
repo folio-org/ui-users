@@ -233,7 +233,7 @@
     "details.columns.created": "Vytvořeno v",
     "details.columns.source": "Zdroj",
     "meta.title": "Uživatelé",
-    "search": "Vyhledávání",
+    "search": "Vyhledat",
     "resultCount": "{count, number} {count, plural, one {nalezený záznam} other {nalezených záznamů}}",
     "active": "Aktivní",
     "inactive": "Neaktivní",
