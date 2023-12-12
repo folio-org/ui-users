@@ -18,4 +18,5 @@ export default {
   'patronInfoAdded': 'ui-users.data.loanActionMap.patronInfo',
   'staffInfoAdded': 'ui-users.data.loanActionMap.staffInfo',
   'unknownAction': 'ui-users.data.loanActionMap.unknownAction',
+  'reminderFee': 'ui-users.data.loanActionMap.reminderFee'
 };

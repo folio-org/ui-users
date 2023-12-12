@@ -1,6 +1,41 @@
 # Change history for ui-users
 
-## 10.0.0 IN PROGRESS
+## [10.1.0] IN PROGRESS
+
+* Also support `feesfines` interface version `19.0`. Refs UIU-2960.
+* Disable validation for shadow user. Refs UIU-3000.
+* Disable open loan actions for virtual patron. Refs UIU-2964.
+* Fix problem with Date field in User app reports does not populate when a first entry was cleared. Refs UIU-2991.
+* Hide all actionalble buttons on user details pane for DCB Virtual user. Refs UIU-2987.
+* Open loan page modifications for a virtual patron. Refs UIU-2988.
+* Display item title and barcode as text when the item is dcb virtual item. Refs UIU-2966.
+* Fix wrong date in Cash-Drawer-Reconciliation-Report.pdf. Refs UIU-3010.
+* Conditionally hide actions on closed loan records for DCB Circulation. Refs UIU-2989.
+* Refactor CSS away from `color()` function. Refs UIU-3013.
+* Add `reminderFee` to loan action map. Fixes UIU-3014.
+
+## [10.0.4](https://github.com/folio-org/ui-users/tree/v10.0.4) (2023-11-10)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.3...v10.0.4)
+
+* Correctly handle optional `X-Okapi-token` request header. Refs UIU-2977.
+* Fix bug with Edit form Expand/collapse all shortcuts not working. Refs UIU-2959.
+* Update patron groups retrieval in user search to hold `maxUnpagedResourceCount`. Refs UIU-2973.
+* Update resourceData and queryParams in `UserSearchContainer.js` to escape special characters in tags filter. Refs. UIU-2995.
+* Lost item fees not suspended when item is claimed returned from the ellipses in action menu. Refs UIU-2993.
+
+## [10.0.3](https://github.com/folio-org/ui-users/tree/v10.0.3) (2023-10-23)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.1...v10.0.3)
+
+* Pass location.search parameter through history search. Refs UIU-2971.
+
+## [10.0.1](https://github.com/folio-org/ui-users/tree/v10.0.1) (2023-10-18)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.0...v10.0.1)
+
+* Don't display affiliations of users with types `patron` or `dcb`. Refs UIU-2967.
+* Make the `username` field required for users with the `staff` type in ECS mode. Refs UIU-2970.
+
+## [10.0.0](https://github.com/folio-org/ui-users/tree/v10.0.0) (2023-10-13)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v9.0.3...v10.0.0)
 
 * Add STATUS FILTER to LOST ITEMS REQUIRING ACTUAL COST processing page. Refs UIU-2748.
 * Correctly handle removing all permissions from given user. Fixes UIU-2822.
