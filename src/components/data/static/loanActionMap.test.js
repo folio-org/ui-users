@@ -2,7 +2,7 @@ import loanActionMap from './loanActionMap';
 
 describe('loan action map', () => {
   test('checking the number of types', () => {
-    expect(Object.keys(loanActionMap).length).toEqual(19);
+    expect(Object.keys(loanActionMap).length).toEqual(20);
   });
   test('checking the type with values', () => {
     expect(Object.values(loanActionMap)[0]).toBe('ui-users.data.loanActionMap.checkedOut');
