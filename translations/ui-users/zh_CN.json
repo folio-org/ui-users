@@ -1137,5 +1137,6 @@
     "information.userType.staff": "员工",
     "information.userType.shadow": "影子用户",
     "information.userType.system": "系统",
-    "userType": "用户类型"
+    "userType": "用户类型",
+    "data.loanActionMap.reminderFee": "Reminder fee"
 }

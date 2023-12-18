@@ -1137,5 +1137,6 @@
     "information.userType.staff": "Zaměstnanci",
     "information.userType.shadow": "Stín",
     "information.userType.system": "Systém",
-    "userType": "Typ uživatele"
+    "userType": "Typ uživatele",
+    "data.loanActionMap.reminderFee": "Poplatek za připomenutí"
 }

@@ -1137,5 +1137,6 @@
     "information.userType.staff": "Staff",
     "information.userType.shadow": "Shadow",
     "information.userType.system": "Sistema",
-    "userType": "Tipo de usuario"
+    "userType": "Tipo de usuario",
+    "data.loanActionMap.reminderFee": "Reminder fee"
 }

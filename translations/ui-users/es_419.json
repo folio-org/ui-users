@@ -771,7 +771,7 @@
     "reports.refunds.refundReason": "Motivo del reembolso",
     "reports.refunds.staffInfo": "Información adicional para el personal de la \"acción\" de reembolso",
     "reports.refunds.patronInfo": "Información adicional para el usuario de la \"acción\" de reembolso",
-    "reports.refunds.itemBarcode": "Código de barras del ejemplar",
+    "reports.refunds.itemBarcode": "Código de barras ítem",
     "reports.refunds.instance": "Instancia",
     "reports.refunds.actionCompletionDate": "Fecha de finalización de la acción",
     "reports.refunds.staffMemberName": "Nombre del miembro del personal",
@@ -805,7 +805,7 @@
     "reports.feeFine.latestPaymentStatus": "Último estado del pago de la Tarifa/multa",
     "reports.feeFine.itemInstance": "Instancia del ejemplar",
     "reports.feeFine.itemMaterialType": "Tipo de material del ejemplar",
-    "reports.feeFine.itemBarcode": "Código de barras del ejemplar",
+    "reports.feeFine.itemBarcode": "Código de barras ítem",
     "reports.feeFine.itemCallNumber": "Número de pedido del ejemplar",
     "reports.feeFine.itemLocation": "Ubicación del ejemplar",
     "reports.feeFine.itemDueDate": "Fecha de vencimiento del ejemplar",
@@ -943,7 +943,7 @@
     "reports.financial.patronEmail": "Dirección de correo electrónico del usuario",
     "reports.financial.instance": "Instancia",
     "reports.financial.contributors": "Colaboradores",
-    "reports.financial.itemBarcode": "Código de barras del ejemplar",
+    "reports.financial.itemBarcode": "Código de barras ítem",
     "reports.financial.callNumber": "Número de pedido",
     "reports.financial.effectiveLocation": "Localización efectiva",
     "reports.financial.loanDate": "Fecha/Hora del préstamo",
@@ -1137,5 +1137,6 @@
     "information.userType.staff": "Personal",
     "information.userType.shadow": "Shadow",
     "information.userType.system": "Sistema",
-    "userType": "User type"
+    "userType": "User type",
+    "data.loanActionMap.reminderFee": "Reminder fee"
 }
