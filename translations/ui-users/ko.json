@@ -1137,5 +1137,6 @@
     "information.userType.staff": "직원",
     "information.userType.shadow": "그림자",
     "information.userType.system": "시스템",
-    "userType": "사용자 유형"
+    "userType": "사용자 유형",
+    "data.loanActionMap.reminderFee": "Reminder fee"
 }
