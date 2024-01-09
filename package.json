@@ -980,6 +980,16 @@
         "visible": true
       },
       {
+        "permissionName": "ui-users.profilepictures.view",
+        "displayName": "Users: Can view profile pictures",
+        "description": "Also includes basic permissions to view users",
+        "subPermissions": [
+          "ui-users.view",
+          "users.profile-picture.item.get"
+        ],
+        "visible": true
+      },
+      {
         "permissionName": "ui-users.settings.general.view",
         "displayName": "Settings (Users): Can view general entries",
         "description": "Permission to view all general entries of settings",
