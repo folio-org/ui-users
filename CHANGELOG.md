@@ -13,7 +13,7 @@
 * Conditionally hide actions on closed loan records for DCB Circulation. Refs UIU-2989.
 * Refactor CSS away from `color()` function. Refs UIU-3013.
 * Add `reminderFee` to loan action map. Fixes UIU-3014.
-* Create new permission 'Users: Can view profile pictures' permission. Refs. UIU-3018.
+* Create new permission 'Users: Can view profile pictures'. Refs. UIU-3018.
 
 ## [10.0.4](https://github.com/folio-org/ui-users/tree/v10.0.4) (2023-11-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.3...v10.0.4)
