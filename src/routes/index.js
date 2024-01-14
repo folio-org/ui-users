@@ -9,3 +9,4 @@ export { default as LoansListingContainer } from './LoansListingContainer';
 export { default as LoanDetailContainer } from './LoanDetailContainer';
 export { default as AccountDetailsContainer } from './AccountDetailsContainer';
 export { default as LostItemsContainer } from './LostItemsContainer';
+export { default as PatronNoticePrintJobsContainer } from './PatronNoticePrintJobsContainer';
