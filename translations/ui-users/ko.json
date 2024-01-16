@@ -1138,5 +1138,6 @@
     "information.userType.shadow": "그림자",
     "information.userType.system": "시스템",
     "userType": "사용자 유형",
-    "data.loanActionMap.reminderFee": "Reminder fee"
+    "data.loanActionMap.reminderFee": "Reminder fee",
+    "permission.profilepictures.view": "Users: Can view profile pictures"
 }

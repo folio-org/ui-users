@@ -691,7 +691,7 @@
     "accounts.actions.warning.unpaidItems": "não foram pagos",
     "accounts.actions.refund": "reembolso",
     "reports.noItemsFound": "Nenhum item encontrado.",
-    "reports.claimReturned.label": "Relatório de reinvidicados como devolvidos (CSV)",
+    "reports.claimReturned.label": "Relatório de alegações de devolução (CSV)",
     "reports.borrower.name": "Nome do usuário",
     "reports.borrower.barcode": "Código de barras do usuário",
     "reports.borrowerId": "ID do usuário",
@@ -1138,5 +1138,6 @@
     "information.userType.shadow": "Sombra",
     "information.userType.system": "Sistema",
     "userType": "Tipo de usuário",
-    "data.loanActionMap.reminderFee": "Taxa de lembrete"
+    "data.loanActionMap.reminderFee": "Taxa de lembrete",
+    "permission.profilepictures.view": "Usuários: Podem visualizar fotos de perfil"
 }
