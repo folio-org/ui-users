@@ -1138,5 +1138,6 @@
     "information.userType.shadow": "Shadow",
     "information.userType.system": "System",
     "userType": "User type",
-    "data.loanActionMap.reminderFee": "Reminder fee"
+    "data.loanActionMap.reminderFee": "Reminder fee",
+    "permission.profilepictures.view": "Users: Can view profile pictures"
 }

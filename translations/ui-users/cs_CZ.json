@@ -1138,5 +1138,6 @@
     "information.userType.shadow": "Stín",
     "information.userType.system": "Systém",
     "userType": "Typ uživatele",
-    "data.loanActionMap.reminderFee": "Poplatek za připomenutí"
+    "data.loanActionMap.reminderFee": "Poplatek za připomenutí",
+    "permission.profilepictures.view": "Users: Can view profile pictures"
 }
