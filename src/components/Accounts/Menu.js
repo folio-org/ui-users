@@ -15,7 +15,7 @@ import {
 import { refundClaimReturned } from '../../constants';
 
 import css from './Menu.css';
-import { useLocalizedCurrency } from "../../hooks/useLocalizedCurrency/useLocalizedCurrency";
+import { useLocalizeCurrency } from "../../hooks/useLocalizedCurrency/useLocalizeCurrency";
 
 const Menu = (props) => {
   const {
@@ -27,7 +27,7 @@ const Menu = (props) => {
     accounts
   } = props;
 
-  const { formatCurrency } = useLocalizedCurrency();
+  const { localizeCurrency } = useLocalizeCurrency();
 
   let balanceOutstanding = 0;
   let balanceSuspended = 0;
@@ -65,19 +65,19 @@ const Menu = (props) => {
           <div id="outstanding-balance">
             <FormattedMessage
               id="ui-users.accounts.outstanding.page"
-              values={{ amount: formatCurrency(balanceOutstanding) }}
+              values={{ amount: localizeCurrency(balanceOutstanding) }}
             />
             &nbsp;|&nbsp;
             <FormattedMessage
               id="ui-users.accounts.suspended.page"
-              values={{ amount: formatCurrency(balanceSuspended) }}
+              values={{ amount: localizeCurrency(balanceSuspended) }}
             />
             {showSelected &&
             <span>
               &nbsp;|&nbsp;
               <FormattedMessage
                 id="ui-users.accounts.selected.balance"
-                values={{ amount: formatCurrency(selected) }}
+                values={{ amount: localizeCurrency(selected) }}
               />
             </span>
             }
