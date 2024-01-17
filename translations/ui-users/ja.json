@@ -1138,5 +1138,6 @@
     "information.userType.shadow": "Shadow",
     "information.userType.system": "System",
     "userType": "User type",
-    "data.loanActionMap.reminderFee": "Reminder fee"
+    "data.loanActionMap.reminderFee": "督促手数料",
+    "permission.profilepictures.view": "ユーザープロフィール写真が閲覧可"
 }
