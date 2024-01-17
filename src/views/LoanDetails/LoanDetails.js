@@ -57,6 +57,7 @@ import loanActionMap from '../../components/data/static/loanActionMap';
 import LoanProxyDetails from './LoanProxyDetails';
 
 import css from './LoanDetails.css';
+import { getFormattedCurrency } from "../../components/util/getFormattedCurrency";
 
 
 function formatLoanAction(la, loanActionsWithUser) {
@@ -205,14 +206,15 @@ class LoanDetails extends React.Component {
   }
 
   viewFeeFine() {
-    const { stripes, loanAccountActions, loan } = this.props;
+    const { stripes, loanAccountActions, loan, intl } = this.props;
     const total = loanAccountActions.reduce((acc, { amount }) => (acc + parseFloat(amount)), 0);
     const suspendedAction = loanAccountActions.filter(a => a?.paymentStatus?.name === refundClaimReturned.PAYMENT_STATUS) || [];
     const suspendedMessage = (suspendedAction.length > 0) ? <FormattedMessage id="ui-users.accounts.suspended" /> : '';
 
     if (total === 0) return '-';
 
-    const value = parseFloat(total).toFixed(2);
+    const value = getFormattedCurrency(total, stripes.currency, intl);
+
     const valueDisplay = stripes.hasPerm('ui-users.feesfines.view')
       ?
         <button
@@ -223,8 +225,7 @@ class LoanDetails extends React.Component {
         >
           { value }
         </button>
-      :
-      value;
+      : value;
 
     return (
       <>

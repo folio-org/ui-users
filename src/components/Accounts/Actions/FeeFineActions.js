@@ -20,6 +20,7 @@ import {
   SHARED_OWNER,
 } from '../../../constants';
 import {
+  formatCurrencyAmount,
   getFullName,
   isRefundAllowed,
 } from '../../util';
@@ -27,6 +28,7 @@ import {
   calculateSelectedAmount,
   loadServicePoints,
 } from '../accountFunctions';
+import { getFormattedCurrency } from "../../util/getFormattedCurrency";
 
 class Actions extends React.Component {
   static manifest = Object.freeze({
@@ -244,9 +246,8 @@ class Actions extends React.Component {
   }
 
   showCalloutMessage({ amount }) {
-    const { user } = this.props;
+    const { user, stripes, intl } = this.props;
     const paymentStatus = this.paymentStatus;
-    const formattedAmount = parseFloat(amount).toFixed(2);
     const fullName = getFullName(user);
 
     const message = (
@@ -254,7 +255,7 @@ class Actions extends React.Component {
         id="ui-users.accounts.actions.cancellation.success"
         values={{
           count: 1,
-          amount: formattedAmount,
+          amount: getFormattedCurrency(amount, stripes.currency, intl),
           action: paymentStatus.toLowerCase(),
           user: fullName
         }}
@@ -303,8 +304,8 @@ class Actions extends React.Component {
       accountId: id,
       dateAction: moment().format(),
       userId: this.props.user.id,
-      amountAction: parseFloat(amount || 0).toFixed(2),
-      balance: parseFloat(balance || 0).toFixed(2),
+      amountAction: formatCurrencyAmount(amount),
+      balance: formatCurrencyAmount(balance),
       transactionInformation: transaction || '',
       comments: comment,
       notify,
@@ -318,7 +319,7 @@ class Actions extends React.Component {
     const newAccount = {
       status: { name: status },
       paymentStatus: { name: paymentStatus },
-      remaining: parseFloat(remaining || 0).toFixed(2),
+      remaining: formatCurrencyAmount(remaining),
     };
 
     return this.props.mutator.accounts.PUT(Object.assign(account, newAccount));
@@ -614,8 +615,9 @@ class Actions extends React.Component {
       stripes,
       resources,
       match: { params },
-      intl: { formatMessage },
+      intl,
     } = this.props;
+    const { formatMessage } = intl;
     const {
       accounts,
       showConfirmDialog,
@@ -753,15 +755,15 @@ class Actions extends React.Component {
                 form={m.form ? m.form : `${m.action}-modal`}
                 onClose={this.onCloseActionModal}
                 servicePointsIds={servicePointsIds}
-                balance={parseFloat(this.props.balance).toFixed(2)}
+                balance={getFormattedCurrency(this.props.balance, stripes.currency, intl)}
                 accounts={(m.accounts) ? m.accounts : ((m.item) ? this.props.accounts : accounts)}
                 onSubmit={(values) => { this.showConfirmDialog(values); }}
                 owners={owners}
                 feefines={feefines}
                 feeFineActions={feeFineActions}
                 okapi={this.props.okapi}
-                totalPaidAmount={parseFloat(this.props.totalPaidAmount).toFixed(2)}
-                owedAmount={parseFloat(this.props.owedAmount).toFixed(2)}
+                totalPaidAmount={getFormattedCurrency(this.props.totalPaidAmount, stripes.currency, intl)}
+                owedAmount={getFormattedCurrency(this.props.owedAmount, stripes.currency, intl)}
               />
             );
           }
