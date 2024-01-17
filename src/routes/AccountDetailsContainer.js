@@ -254,7 +254,7 @@ class AccountDetailsContainer extends React.Component {
     const itemDetails = this.getItemDetails();
     const owedAmount = this.getOwedAmount();
 
-    if (this.props.okapi.currentUser.curServicePoint?.id) {
+    if (!this.props.okapi.currentUser.curServicePoint?.id) {
       return <CurrentUserServicePointAbsenteeErrorModal />;
     }
 

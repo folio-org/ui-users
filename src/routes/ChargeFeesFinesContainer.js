@@ -201,7 +201,7 @@ class ChargeFeesFinesContainer extends React.Component {
   }
 
   render() {
-    if (this.props.okapi.currentUser.curServicePoint?.id) {
+    if (!this.props.okapi.currentUser.curServicePoint?.id) {
       return <CurrentUserServicePointAbsenteeErrorModal />;
     }
 

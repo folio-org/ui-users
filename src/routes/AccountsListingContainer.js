@@ -165,7 +165,7 @@ class AccountsListingContainer extends React.Component {
     const loans = resources?.loans ? resources.loans.records : [];
     const patronGroup = this.getPatronGroup();
 
-    if (this.props.okapi.currentUser.curServicePoint?.id) {
+    if (!this.props.okapi.currentUser.curServicePoint?.id) {
       return <CurrentUserServicePointAbsenteeErrorModal />;
     }
 
