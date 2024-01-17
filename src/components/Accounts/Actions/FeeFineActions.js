@@ -28,7 +28,7 @@ import {
   calculateSelectedAmount,
   loadServicePoints,
 } from '../accountFunctions';
-import { getFormattedCurrency } from "../../util/getFormattedCurrency";
+import { localizeCurrencyAmount } from "../../util/localizeCurrencyAmount";
 
 class Actions extends React.Component {
   static manifest = Object.freeze({
@@ -255,7 +255,7 @@ class Actions extends React.Component {
         id="ui-users.accounts.actions.cancellation.success"
         values={{
           count: 1,
-          amount: getFormattedCurrency(amount, stripes.currency, intl),
+          amount: localizeCurrencyAmount(amount, stripes.currency, intl),
           action: paymentStatus.toLowerCase(),
           user: fullName
         }}
@@ -755,15 +755,15 @@ class Actions extends React.Component {
                 form={m.form ? m.form : `${m.action}-modal`}
                 onClose={this.onCloseActionModal}
                 servicePointsIds={servicePointsIds}
-                balance={getFormattedCurrency(this.props.balance, stripes.currency, intl)}
+                balance={localizeCurrencyAmount(this.props.balance, stripes.currency, intl)}
                 accounts={(m.accounts) ? m.accounts : ((m.item) ? this.props.accounts : accounts)}
                 onSubmit={(values) => { this.showConfirmDialog(values); }}
                 owners={owners}
                 feefines={feefines}
                 feeFineActions={feeFineActions}
                 okapi={this.props.okapi}
-                totalPaidAmount={getFormattedCurrency(this.props.totalPaidAmount, stripes.currency, intl)}
-                owedAmount={getFormattedCurrency(this.props.owedAmount, stripes.currency, intl)}
+                totalPaidAmount={localizeCurrencyAmount(this.props.totalPaidAmount, stripes.currency, intl)}
+                owedAmount={localizeCurrencyAmount(this.props.owedAmount, stripes.currency, intl)}
               />
             );
           }

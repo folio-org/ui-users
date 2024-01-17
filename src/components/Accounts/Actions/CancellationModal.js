@@ -17,7 +17,7 @@ import {
 } from '@folio/stripes/components';
 
 import css from './modal.css';
-import { getFormattedCurrency } from "../../util/getFormattedCurrency";
+import { localizeCurrencyAmount } from "../../util/localizeCurrencyAmount";
 
 class CancellationModal extends React.Component {
   static propTypes = {
@@ -101,7 +101,7 @@ class CancellationModal extends React.Component {
                 <FormattedMessage
                   id="ui-users.accounts.cancellation.feeFinewillBeCancelled"
                   values={{
-                    amount: getFormattedCurrency(amount, stripes.currency, intl),
+                    amount: localizeCurrencyAmount(amount, stripes.currency, intl),
                     feeFineType
                   }}
                 />

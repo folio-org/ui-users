@@ -28,7 +28,7 @@ import {
   isCancelAllowed,
 } from '../accountFunctions';
 import css from './ViewFeesFines.css';
-import { getFormattedCurrency } from "../../util/getFormattedCurrency";
+import { localizeCurrencyAmount } from "../../util/localizeCurrencyAmount";
 
 class ViewFeesFines extends React.Component {
   static propTypes = {
@@ -234,8 +234,8 @@ class ViewFeesFines extends React.Component {
       'metadata.createdDate': f => (f.metadata ? <FormattedDate value={f.metadata.createdDate} /> : '-'),
       'metadata.updatedDate': f => (f.metadata && f.metadata.createdDate !== f.metadata.updatedDate ? <FormattedDate value={f.metadata.updatedDate} /> : '-'),
       'feeFineType': f => (f.feeFineType ? this.showComments(f) : '-'),
-      'amount': f => (f.amount ? getFormattedCurrency(f.amount, stripes.currency, intl) : '-'),
-      'remaining': f => getFormattedCurrency(f.amount || 0, stripes.currency, intl),
+      'amount': f => (f.amount ? localizeCurrencyAmount(f.amount, stripes.currency, intl) : '-'),
+      'remaining': f => localizeCurrencyAmount(f.amount || 0, stripes.currency, intl),
       'paymentStatus.name': f => (f.paymentStatus || {}).name || '-',
       'feeFineOwner': f => (f.feeFineOwner ? f.feeFineOwner : '-'),
       'title': item => this.formatTitle(item),

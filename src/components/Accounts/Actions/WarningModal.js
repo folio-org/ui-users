@@ -26,7 +26,7 @@ import {
 } from '../../util';
 
 import css from './modal.css';
-import { getFormattedCurrency } from "../../util/getFormattedCurrency";
+import { localizeCurrencyAmount } from "../../util/localizeCurrencyAmount";
 
 class WarningModal extends React.Component {
   static propTypes = {
@@ -141,7 +141,7 @@ class WarningModal extends React.Component {
       ),
       'Alert details': this.getAlertDetailsFormatter,
       'Fee/Fine type': a => a.feeFineType || '',
-      'Remaining': a => getFormattedCurrency(a.remaining, stripes.currency, intl),
+      'Remaining': a => localizeCurrencyAmount(a.remaining, stripes.currency, intl),
       'Payment Status': a => (a.paymentStatus || {}).name || '-',
       'Item': a => a.title || '',
     };

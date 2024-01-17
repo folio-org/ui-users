@@ -46,7 +46,7 @@ import {
 } from '../../constants';
 
 import css from './AccountDetails.css';
-import {getFormattedCurrency} from "../../components/util/getFormattedCurrency";
+import {localizeCurrencyAmount} from "../../components/util/localizeCurrencyAmount";
 
 const columnWidths = {
   date: 100,
@@ -483,8 +483,8 @@ feeFineActions
       // Action: aa => loanActionMap[la.action],
       date: action => <FormattedTime value={action.dateAction} day="numeric" month="numeric" year="numeric" />,
       action: action => formatActionDescription(action),
-      amount: action => (action.amountAction > 0 ? getFormattedCurrency(action.amountAction, stripes.currency, intl) : '-'),
-      balance: action => (action.balance > 0 ? getFormattedCurrency(action.balance, stripes.currency, intl) : '-'),
+      amount: action => (action.amountAction > 0 ? localizeCurrencyAmount(action.amountAction, stripes.currency, intl) : '-'),
+      balance: action => (action.balance > 0 ? localizeCurrencyAmount(action.balance, stripes.currency, intl) : '-'),
       transactioninfo: action => action.transactionInformation || '-',
       created: action => getServicePointOfCurrentAction(action, servicePoints),
       source: action => action.source,
@@ -496,7 +496,7 @@ feeFineActions
 
     const actions = this.state.data || [];
     const actionsSort = _.orderBy(actions, [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
-    const amount = account.amount ? getFormattedCurrency(account.amount, stripes.currency, intl) : '-';
+    const amount = account.amount ? localizeCurrencyAmount(account.amount, stripes.currency, intl) : '-';
     const loanId = account.loanId || '';
     const isAccountId = actions[0] && actions[0].accountId === account.id;
 
@@ -609,7 +609,7 @@ feeFineActions
             <Col xs={1.5}>
               <KeyValue
                 label={<FormattedMessage id="ui-users.details.field.remainingamount" />}
-                value={getFormattedCurrency(this.state.remaining || 0, stripes.currency, intl)}
+                value={localizeCurrencyAmount(this.state.remaining || 0, stripes.currency, intl)}
               />
             </Col>
             <Col

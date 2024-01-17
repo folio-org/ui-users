@@ -29,7 +29,7 @@ import {
 } from '../../../constants';
 
 import css from './PayWaive.css';
-import { getFormattedCurrency } from "../../util/getFormattedCurrency";
+import { localizeCurrencyAmount } from "../../util/localizeCurrencyAmount";
 
 class ActionModal extends React.Component {
   static propTypes = {
@@ -110,7 +110,7 @@ class ActionModal extends React.Component {
         id="ui-users.accounts.summary"
         values={{
           count: accounts.length,
-          amount: getFormattedCurrency(amount || 0, stripes.currency, intl),
+          amount: localizeCurrencyAmount(amount || 0, stripes.currency, intl),
           type,
         }}
       />
@@ -383,7 +383,7 @@ class ActionModal extends React.Component {
                     :
                   </Col>
                   <Col xs={4}>
-                    {getFormattedCurrency(totalPaidAmount, stripes.currency, intl)}
+                    {localizeCurrencyAmount(totalPaidAmount, stripes.currency, intl)}
                   </Col>
                 </Row>
               ) : (
@@ -403,7 +403,7 @@ class ActionModal extends React.Component {
                   :
                 </Col>
                 <Col xs={4}>
-                  {getFormattedCurrency(selected, stripes.currency, intl)}
+                  {localizeCurrencyAmount(selected, stripes.currency, intl)}
                 </Col>
               </Row>
               <Row end="xs">
@@ -435,7 +435,7 @@ class ActionModal extends React.Component {
                   :
                 </Col>
                 <Col xs={4}>
-                  {accountRemainingAmount ? getFormattedCurrency(accountRemainingAmount, stripes.currency, intl) : <NoValue />}
+                  {accountRemainingAmount ? localizeCurrencyAmount(accountRemainingAmount, stripes.currency, intl) : <NoValue />}
                 </Col>
               </Row>
               { this.isRefundAction(action) && (

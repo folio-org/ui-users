@@ -36,7 +36,7 @@ import Label from '../../Label';
 import ErrorModal from '../../ErrorModal';
 
 import css from './ClosedLoans.css';
-import { getFormattedCurrency } from "../../util/getFormattedCurrency";
+import { localizeCurrencyAmount } from "../../util/localizeCurrencyAmount";
 
 class ClosedLoans extends React.Component {
   static propTypes = {
@@ -171,7 +171,7 @@ class ClosedLoans extends React.Component {
     accountsLoan.forEach(a => {
       remaining += parseFloat(a.amount);
     });
-    return (remaining === 0) ? '-' : getFormattedCurrency(remaining, stripes.currency, intl);
+    return (remaining === 0) ? '-' : localizeCurrencyAmount(remaining, stripes.currency, intl);
   }
 
   getContributorslist(loan) { // eslint-disable-line class-methods-use-this

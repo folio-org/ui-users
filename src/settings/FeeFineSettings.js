@@ -25,7 +25,7 @@ import {
   MAX_RECORDS,
   SHARED_OWNER,
 } from '../constants';
-import { getFormattedCurrency } from "../components/util/getFormattedCurrency";
+import { localizeCurrencyAmount } from "../components/util/localizeCurrencyAmount";
 
 const columnMapping = {
   feeFineType: (
@@ -290,7 +290,7 @@ class FeeFineSettings extends React.Component {
     };
 
     const formatter = {
-      'defaultAmount': (value) => (value.defaultAmount ? getFormattedCurrency(value.defaultAmount, stripes.currency, intl) : <NoValue />),
+      'defaultAmount': (value) => (value.defaultAmount ? localizeCurrencyAmount(value.defaultAmount, stripes.currency, intl) : <NoValue />),
       'chargeNoticeId': ({ chargeNoticeId }) => this.getNotice(chargeNoticeId, 'Charge'),
       'actionNoticeId': ({ actionNoticeId }) => this.getNotice(actionNoticeId, 'Action'),
     };

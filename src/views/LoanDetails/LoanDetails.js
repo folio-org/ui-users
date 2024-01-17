@@ -57,7 +57,7 @@ import loanActionMap from '../../components/data/static/loanActionMap';
 import LoanProxyDetails from './LoanProxyDetails';
 
 import css from './LoanDetails.css';
-import { getFormattedCurrency } from "../../components/util/getFormattedCurrency";
+import { localizeCurrencyAmount } from "../../components/util/localizeCurrencyAmount";
 
 
 function formatLoanAction(la, loanActionsWithUser) {
@@ -213,7 +213,7 @@ class LoanDetails extends React.Component {
 
     if (total === 0) return '-';
 
-    const value = getFormattedCurrency(total, stripes.currency, intl);
+    const value = localizeCurrencyAmount(total, stripes.currency, intl);
 
     const valueDisplay = stripes.hasPerm('ui-users.feesfines.view')
       ?
