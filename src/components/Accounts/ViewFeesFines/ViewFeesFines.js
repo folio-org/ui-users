@@ -16,7 +16,7 @@ import {
   FormattedDate,
   FormattedTime,
 } from '@folio/stripes/components';
-import { stripesConnect, withStripes } from "@folio/stripes/core";
+import { stripesConnect } from "@folio/stripes/core";
 
 import { itemStatuses } from '../../../constants';
 import {
@@ -501,4 +501,4 @@ class ViewFeesFines extends React.Component {
   }
 }
 
-export default injectIntl(withStripes(stripesConnect(ViewFeesFines)));
+export default injectIntl(stripesConnect(ViewFeesFines));

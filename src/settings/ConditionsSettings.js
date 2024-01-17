@@ -5,7 +5,7 @@ import {
   injectIntl,
 } from 'react-intl';
 
-import { stripesConnect, withStripes } from '@folio/stripes/core';
+import { stripesConnect } from '@folio/stripes/core';
 import { Settings } from '@folio/stripes/smart-components';
 
 import Conditions from './patronBlocks/Conditions/Conditions';
@@ -87,4 +87,4 @@ class ConditionsSettings extends Component {
   }
 }
 
-export default injectIntl(withStripes(stripesConnect(ConditionsSettings)));
+export default injectIntl(stripesConnect(ConditionsSettings));

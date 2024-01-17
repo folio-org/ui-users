@@ -5,7 +5,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { Field } from 'react-final-form';
 import setFieldData from 'final-form-set-field-data';
 
-import { stripesConnect, withStripes } from "@folio/stripes/core";
+import { stripesConnect } from "@folio/stripes/core";
 import stripesFinalForm from '@folio/stripes/final-form';
 import {
   Row,
@@ -567,4 +567,4 @@ export default stripesFinalForm({
   navigationCheck: true,
   subscription: { values: true },
   mutators: { setFieldData },
-})(injectIntl(withStripes(stripesConnect(ActionModal))));
+})(injectIntl(stripesConnect(ActionModal)));

@@ -5,7 +5,7 @@ import {
   injectIntl,
 } from 'react-intl';
 
-import { stripesConnect, withStripes } from "@folio/stripes/core";
+import { stripesConnect } from "@folio/stripes/core";
 import {
   Button,
   Col,
@@ -293,4 +293,4 @@ class WarningModal extends React.Component {
   }
 }
 
-export default injectIntl(withStripes(stripesConnect(WarningModal)));
+export default injectIntl(stripesConnect(WarningModal));

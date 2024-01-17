@@ -5,7 +5,7 @@ import {
   injectIntl,
 } from 'react-intl';
 import { ControlledVocab } from '@folio/stripes/smart-components';
-import { withStripes } from '@folio/stripes/core';
+import { stripesConnect } from '@folio/stripes/core';
 import { getSourceSuppressor } from '@folio/stripes/util';
 
 import { RECORD_SOURCE } from '../constants';
@@ -85,4 +85,4 @@ class PatronGroupsSettings extends React.Component {
   }
 }
 
-export default injectIntl(withStripes(PatronGroupsSettings));
+export default injectIntl(stripesConnect(PatronGroupsSettings));

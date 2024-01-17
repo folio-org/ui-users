@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { Tags } from '@folio/stripes/smart-components';
-import { withStripes, stripesConnect } from '@folio/stripes/core';
+import { stripesConnect } from '@folio/stripes/core';
 
 class HelperApp extends React.Component {
   static propTypes = {
@@ -42,4 +42,4 @@ class HelperApp extends React.Component {
   }
 }
 
-export default withRouter(withStripes(HelperApp));
+export default withRouter(stripesConnect(HelperApp));

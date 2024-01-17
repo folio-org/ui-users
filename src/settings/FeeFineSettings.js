@@ -12,7 +12,7 @@ import {
   NoValue,
 } from '@folio/stripes/components';
 import { ControlledVocab } from '@folio/stripes/smart-components';
-import { IfPermission, stripesConnect, withStripes } from '@folio/stripes/core';
+import { IfPermission, stripesConnect } from '@folio/stripes/core';
 
 import { validate } from '../components/util';
 import {
@@ -362,4 +362,4 @@ class FeeFineSettings extends React.Component {
   }
 }
 
-export default injectIntl(withStripes(stripesConnect(FeeFineSettings)));
+export default injectIntl(stripesConnect(FeeFineSettings));

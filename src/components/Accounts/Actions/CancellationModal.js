@@ -5,7 +5,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { Field } from 'react-final-form';
 import setFieldData from 'final-form-set-field-data';
 
-import { stripesConnect, withStripes } from "@folio/stripes/core";
+import { stripesConnect } from "@folio/stripes/core";
 import stripesFinalForm from '@folio/stripes/final-form';
 import {
   Modal,
@@ -185,4 +185,4 @@ class CancellationModal extends React.Component {
 export default stripesFinalForm({
   subscription: { values: true },
   mutators: { setFieldData }
-})(injectIntl(withStripes(stripesConnect(CancellationModal))));
+})(injectIntl(stripesConnect(CancellationModal)));

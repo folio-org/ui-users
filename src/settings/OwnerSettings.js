@@ -11,7 +11,7 @@ import {
   Label,
 } from '@folio/stripes/components';
 import { ControlledVocab } from '@folio/stripes/smart-components';
-import { stripesConnect, withStripes } from '@folio/stripes/core';
+import { stripesConnect } from '@folio/stripes/core';
 
 import { validate } from '../components/util';
 import { SHARED_OWNER } from '../constants';
@@ -177,4 +177,4 @@ class OwnerSettings extends React.Component {
   }
 }
 
-export default injectIntl(withStripes(stripesConnect(OwnerSettings)));
+export default injectIntl(stripesConnect(OwnerSettings));

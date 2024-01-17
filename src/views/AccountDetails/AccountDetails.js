@@ -22,7 +22,6 @@ import {
 import {
   IfPermission,
   AppIcon,
-  withStripes,
   stripesConnect,
 } from '@folio/stripes/core';
 
@@ -775,4 +774,4 @@ feeFineActions
   }
 }
 
-export default injectIntl(withStripes(stripesConnect(AccountDetails)));
+export default injectIntl(stripesConnect(AccountDetails));
