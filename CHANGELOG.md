@@ -8,6 +8,7 @@
 * Fix problem with Date field in User app reports does not populate when a first entry was cleared. Refs UIU-2991.
 * Hide all actionable buttons on user details pane for DCB Virtual user. Refs UIU-2987.
 * Leverage `users-keycloak` interface endpoints for user data when available.
+* Fix problem with `Reset password email sent` , application points to  bl-users endpoint, even if `users-keycloak` interface provided. Refs UIU-3031.
 
 ## [10.0.4](https://github.com/folio-org/ui-users/tree/v10.0.4) (2023-11-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.3...v10.0.4)
