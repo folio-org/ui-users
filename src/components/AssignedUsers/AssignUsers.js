@@ -5,7 +5,7 @@ import { keyBy } from 'lodash';
 
 import {
   Pluggable,
-  withStripes,
+  stripesConnect,
 } from '@folio/stripes/core';
 
 import styles from './AssignUsers.css';
@@ -41,4 +41,4 @@ AssignUsers.propTypes = {
   tenantId: PropTypes.string,
 };
 
-export default withStripes(AssignUsers);
+export default stripesConnect(AssignUsers);

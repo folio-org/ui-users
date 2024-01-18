@@ -2,9 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import {
-  FormattedMessage,
-} from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import {
   Button,
@@ -18,6 +16,7 @@ import {
   FormattedDate,
   FormattedTime,
 } from '@folio/stripes/components';
+import { stripesConnect } from "@folio/stripes/core";
 
 import { itemStatuses } from '../../../constants';
 import {
@@ -29,6 +28,7 @@ import {
   isCancelAllowed,
 } from '../accountFunctions';
 import css from './ViewFeesFines.css';
+import { localizeCurrencyAmount } from "../../util/localizeCurrencyAmount";
 
 class ViewFeesFines extends React.Component {
   static propTypes = {
@@ -111,7 +111,7 @@ class ViewFeesFines extends React.Component {
       const selected = checkedAccounts.reduce((s, { remaining }) => {
         return s + parseFloat(remaining);
       }, 0);
-      this.props.onChangeSelected(parseFloat(selected).toFixed(2), checkedAccounts);
+      this.props.onChangeSelected(selected, checkedAccounts);
     }
 
     if (!_.isEqual(props.selectedAccounts, nextProps.selectedAccounts)) {
@@ -216,7 +216,7 @@ class ViewFeesFines extends React.Component {
   }
 
   getAccountsFormatter() {
-    const accounts = this.props.selectedAccounts;
+    const { stripes, selectedAccounts, intl } = this.props;
     return {
       // Changed onChange to onClick to make sure the click event is correctly propagated
       // and the checkbox actually changes visually.
@@ -226,7 +226,7 @@ class ViewFeesFines extends React.Component {
       // which currently causes the checkbox to not be visually updated.
       '  ': f => (
         <input
-          checked={(accounts.findIndex(a => a.id === f.id) !== -1)}
+          checked={(selectedAccounts.findIndex(a => a.id === f.id) !== -1)}
           onClick={e => this.toggleItem(e, f)}
           type="checkbox"
         />
@@ -234,8 +234,8 @@ class ViewFeesFines extends React.Component {
       'metadata.createdDate': f => (f.metadata ? <FormattedDate value={f.metadata.createdDate} /> : '-'),
       'metadata.updatedDate': f => (f.metadata && f.metadata.createdDate !== f.metadata.updatedDate ? <FormattedDate value={f.metadata.updatedDate} /> : '-'),
       'feeFineType': f => (f.feeFineType ? this.showComments(f) : '-'),
-      'amount': f => (f.amount ? parseFloat(f.amount).toFixed(2) : '-'),
-      'remaining': f => parseFloat(f.remaining).toFixed(2) || '0.00',
+      'amount': f => (f.amount ? localizeCurrencyAmount(f.amount, stripes.currency, intl) : '-'),
+      'remaining': f => localizeCurrencyAmount(f.amount || 0, stripes.currency, intl),
       'paymentStatus.name': f => (f.paymentStatus || {}).name || '-',
       'feeFineOwner': f => (f.feeFineOwner ? f.feeFineOwner : '-'),
       'title': item => this.formatTitle(item),
@@ -287,7 +287,7 @@ class ViewFeesFines extends React.Component {
       someIsClaimReturnedItem = (someIsClaimReturnedItem || (loan.item && loan.item.status && loan.item.status.name && loan.item.status.name === itemStatuses.CLAIMED_RETURNED));
     });
     selected /= 100;
-    this.props.onChangeSelected(parseFloat(selected).toFixed(2), values);
+    this.props.onChangeSelected(selected, values);
 
     const open = selected > 0;
     const closed = values.length > 0;
@@ -501,4 +501,4 @@ class ViewFeesFines extends React.Component {
   }
 }
 
-export default ViewFeesFines;
+export default injectIntl(stripesConnect(ViewFeesFines));

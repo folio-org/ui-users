@@ -12,7 +12,7 @@ import {
   NoValue,
 } from '@folio/stripes/components';
 import { ControlledVocab } from '@folio/stripes/smart-components';
-import { IfPermission, stripesConnect, withStripes } from '@folio/stripes/core';
+import { IfPermission, stripesConnect } from '@folio/stripes/core';
 
 import { validate } from '../components/util';
 import {
@@ -25,6 +25,7 @@ import {
   MAX_RECORDS,
   SHARED_OWNER,
 } from '../constants';
+import { localizeCurrencyAmount } from "../components/util/localizeCurrencyAmount";
 
 const columnMapping = {
   feeFineType: (
@@ -254,10 +255,10 @@ class FeeFineSettings extends React.Component {
   }
 
   render() {
-    const { intl: { formatMessage }, stripes } = this.props;
+    const { intl, stripes } = this.props;
     const { owners, templates, ownerId } = this.state;
     const filterOwners = this.getOwners();
-    const label = formatMessage({ id: 'ui-users.feefines.singular' });
+    const label = intl.formatMessage({ id: 'ui-users.feefines.singular' });
     const hasEditPerm = stripes.hasPerm('feefines.item.put');
     const hasDeletePerm = stripes.hasPerm('feefines.item.delete');
     const hasCreatePerm = stripes.hasPerm('feefines.item.post');
@@ -289,7 +290,7 @@ class FeeFineSettings extends React.Component {
     };
 
     const formatter = {
-      'defaultAmount': (value) => (value.defaultAmount ? parseFloat(value.defaultAmount).toFixed(2) : <NoValue />),
+      'defaultAmount': (value) => (value.defaultAmount ? localizeCurrencyAmount(value.defaultAmount, stripes.currency, intl) : <NoValue />),
       'chargeNoticeId': ({ chargeNoticeId }) => this.getNotice(chargeNoticeId, 'Charge'),
       'actionNoticeId': ({ actionNoticeId }) => this.getNotice(actionNoticeId, 'Action'),
     };
@@ -337,7 +338,7 @@ class FeeFineSettings extends React.Component {
         formatter={formatter}
         hiddenFields={['lastUpdated', 'numberOfObjects']}
         id="settings-feefines"
-        label={formatMessage({ id: 'ui-users.feefines.title' })}
+        label={intl.formatMessage({ id: 'ui-users.feefines.title' })}
         labelSingular={label}
         nameKey="feefine"
         objectLabel=""
@@ -361,4 +362,4 @@ class FeeFineSettings extends React.Component {
   }
 }
 
-export default injectIntl(withStripes(stripesConnect(FeeFineSettings)));
+export default injectIntl(stripesConnect(FeeFineSettings));

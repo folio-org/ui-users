@@ -8,7 +8,7 @@ import {
   Label,
 } from '@folio/stripes/components';
 import { ControlledVocab } from '@folio/stripes/smart-components';
-import { withStripes } from '@folio/stripes/core';
+import { stripesConnect } from '@folio/stripes/core';
 import { validate } from '../components/util';
 
 const columnMapping = {
@@ -63,4 +63,4 @@ class RefundReasonsSettings extends React.Component {
   }
 }
 
-export default injectIntl(withStripes(RefundReasonsSettings));
+export default injectIntl(stripesConnect(RefundReasonsSettings));

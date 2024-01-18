@@ -8,7 +8,7 @@ import {
 } from '@folio/stripes/components';
 import { Field } from 'react-final-form';
 import { ConfigManager } from '@folio/stripes/smart-components';
-import { withStripes } from '@folio/stripes/core';
+import { stripesConnect } from '@folio/stripes/core';
 
 class ProfilePictureSettings extends React.Component {
   static propTypes = {
@@ -53,4 +53,4 @@ class ProfilePictureSettings extends React.Component {
   }
 }
 
-export default withStripes(ProfilePictureSettings);
+export default stripesConnect(ProfilePictureSettings);

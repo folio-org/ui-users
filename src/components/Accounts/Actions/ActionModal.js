@@ -1,10 +1,11 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Field } from 'react-final-form';
 import setFieldData from 'final-form-set-field-data';
 
+import { stripesConnect } from "@folio/stripes/core";
 import stripesFinalForm from '@folio/stripes/final-form';
 import {
   Row,
@@ -28,6 +29,7 @@ import {
 } from '../../../constants';
 
 import css from './PayWaive.css';
+import { localizeCurrencyAmount } from "../../util/localizeCurrencyAmount";
 
 class ActionModal extends React.Component {
   static propTypes = {
@@ -93,21 +95,22 @@ class ActionModal extends React.Component {
       feeFineActions = [],
       action,
       form: { getState },
-      intl: { formatMessage },
+      intl,
+      stripes,
     } = this.props;
 
     const { values: { amount } } = getState();
     const selected = calculateSelectedAmount(accounts, this.isRefundAction(action), feeFineActions);
     const type = parseFloat(amount) < parseFloat(selected)
-      ? formatMessage({ id: `ui-users.accounts.${action}.summary.partially` })
-      : formatMessage({ id: `ui-users.accounts.${action}.summary.fully` });
+      ? intl.formatMessage({ id: `ui-users.accounts.${action}.summary.partially` })
+      : intl.formatMessage({ id: `ui-users.accounts.${action}.summary.fully` });
 
     return (
       <FormattedMessage
         id="ui-users.accounts.summary"
         values={{
           count: accounts.length,
-          amount,
+          amount: localizeCurrencyAmount(amount || 0, stripes.currency, intl),
           type,
         }}
       />
@@ -325,7 +328,8 @@ class ActionModal extends React.Component {
       owedAmount,
       commentRequired,
       form: { getState },
-      intl: { formatMessage },
+      intl,
+      stripes,
       data,
       handleSubmit,
       label,
@@ -379,7 +383,7 @@ class ActionModal extends React.Component {
                     :
                   </Col>
                   <Col xs={4}>
-                    {totalPaidAmount}
+                    {localizeCurrencyAmount(totalPaidAmount, stripes.currency, intl)}
                   </Col>
                 </Row>
               ) : (
@@ -399,7 +403,7 @@ class ActionModal extends React.Component {
                   :
                 </Col>
                 <Col xs={4}>
-                  {selected}
+                  {localizeCurrencyAmount(selected, stripes.currency, intl)}
                 </Col>
               </Row>
               <Row end="xs">
@@ -431,7 +435,7 @@ class ActionModal extends React.Component {
                   :
                 </Col>
                 <Col xs={4}>
-                  { accountRemainingAmount || <NoValue /> }
+                  {accountRemainingAmount ? localizeCurrencyAmount(accountRemainingAmount, stripes.currency, intl) : <NoValue />}
                 </Col>
               </Row>
               { this.isRefundAction(action) && (
@@ -464,7 +468,7 @@ class ActionModal extends React.Component {
                       name="ownerId"
                       component={Select}
                       dataOptions={ownerOptions}
-                      placeholder={formatMessage({ id: 'ui-users.accounts.payment.owner.placeholder' })}
+                      placeholder={intl.formatMessage({ id: 'ui-users.accounts.payment.owner.placeholder' })}
                       onChange={this.onChangeOwner}
                       defaultValue={ownerId}
                     />
@@ -563,4 +567,4 @@ export default stripesFinalForm({
   navigationCheck: true,
   subscription: { values: true },
   mutators: { setFieldData },
-})(ActionModal);
+})(injectIntl(stripesConnect(ActionModal)));
