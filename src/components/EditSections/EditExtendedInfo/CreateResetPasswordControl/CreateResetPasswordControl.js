@@ -29,7 +29,12 @@ class CreateResetPasswordControl extends React.Component {
   static manifest = Object.freeze({
     resetPassword: {
       type: 'okapi',
-      path: 'bl-users/password-reset/link',
+      path: (queryParams, pathComponents, resourceData, config, props) => {
+        if (props.stripes.hasInterface('users-keycloak')) {
+          return 'users-keycloak/password-reset/link';
+        }
+        return 'bl-users/password-reset/link';
+      },
       fetch: false,
       throwErrors: false,
     },
