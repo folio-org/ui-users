@@ -8,7 +8,7 @@ import {
   Label,
 } from '@folio/stripes/components';
 import { ControlledVocab } from '@folio/stripes/smart-components';
-import { stripesConnect, withStripes } from '@folio/stripes/core';
+import { stripesConnect } from '@folio/stripes/core';
 import { validate } from '../components/util';
 import { Owners } from './FeeFinesTable';
 
@@ -118,4 +118,4 @@ class TransferAccountsSettings extends React.Component {
   }
 }
 
-export default injectIntl(withStripes(stripesConnect(TransferAccountsSettings)));
+export default injectIntl(stripesConnect(TransferAccountsSettings));

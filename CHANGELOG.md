@@ -14,6 +14,7 @@
 * Refactor CSS away from `color()` function. Refs UIU-3013.
 * Add `reminderFee` to loan action map. Fixes UIU-3014.
 * Create new permission 'Users: Can view profile pictures'. Refs UIU-3018.
+* Format currency values as currencies, not numbers. Refs UIU-2026.
 * Show country name in user address instead of country id. Refs UIU-2976.
 
 ## [10.0.4](https://github.com/folio-org/ui-users/tree/v10.0.4) (2023-11-10)

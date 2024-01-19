@@ -10,6 +10,8 @@ import {
   Select,
 } from '@folio/stripes/components';
 
+import { formatCurrencyAmount } from "../../util";
+
 class FeeFineInfo extends React.Component {
   static propTypes = {
     feefineList: PropTypes.arrayOf(PropTypes.object),
@@ -40,7 +42,7 @@ class FeeFineInfo extends React.Component {
   onBlurAmount = (e) => {
     const { form: { change } } = this.props;
 
-    change('amount', parseFloat(e.target.value || 0).toFixed(2));
+    change('amount', formatCurrencyAmount(e.target.value));
   }
 
   render() {

@@ -23,6 +23,7 @@ import UserInfo from './UserInfo';
 import FeeFineInfo from './FeeFineInfo';
 import ItemInfo from './ItemInfo';
 import { SHARED_OWNER } from '../../../constants';
+import {formatCurrencyAmount} from "../../util";
 
 function showValidationErrors({ feeFineId, ownerId, amount }) {
   const errors = {};
@@ -109,7 +110,7 @@ class ChargeForm extends React.Component {
       const feefine = feefines.find(f => f.id === feeFineId) || {};
       const owner = this.props.owners.find(o => o.id === feefine.ownerId) || {};
 
-      const defaultAmount = parseFloat(feefine.defaultAmount || 0).toFixed(2);
+      const defaultAmount = formatCurrencyAmount(feefine.defaultAmount);
       let showNotify = false;
       if (feefine?.chargeNoticeId || owner?.defaultChargeNoticeId) {
         showNotify = true;

@@ -22,6 +22,7 @@ import {
 import {
   IfPermission,
   AppIcon,
+  stripesConnect,
 } from '@folio/stripes/core';
 
 import Actions from '../../components/Accounts/Actions/FeeFineActions';
@@ -29,7 +30,6 @@ import {
   calculateSortParams,
   getFullName,
   formatActionDescription,
-  formatCurrencyAmount,
   getServicePointOfCurrentAction,
   isRefundAllowed,
 } from '../../components/util';
@@ -45,6 +45,7 @@ import {
 } from '../../constants';
 
 import css from './AccountDetails.css';
+import {localizeCurrencyAmount} from "../../components/util/localizeCurrencyAmount";
 
 const columnWidths = {
   date: 100,
@@ -421,6 +422,7 @@ feeFineActions
       patronGroup: patron,
       resources,
       stripes,
+      intl,
       match: { params },
       user,
       itemDetails,
@@ -480,8 +482,8 @@ feeFineActions
       // Action: aa => loanActionMap[la.action],
       date: action => <FormattedTime value={action.dateAction} day="numeric" month="numeric" year="numeric" />,
       action: action => formatActionDescription(action),
-      amount: action => (action.amountAction > 0 ? formatCurrencyAmount(action.amountAction) : '-'),
-      balance: action => (action.balance > 0 ? formatCurrencyAmount(action.balance) : '-'),
+      amount: action => (action.amountAction > 0 ? localizeCurrencyAmount(action.amountAction, stripes.currency, intl) : '-'),
+      balance: action => (action.balance > 0 ? localizeCurrencyAmount(action.balance, stripes.currency, intl) : '-'),
       transactioninfo: action => action.transactionInformation || '-',
       created: action => getServicePointOfCurrentAction(action, servicePoints),
       source: action => action.source,
@@ -493,7 +495,7 @@ feeFineActions
 
     const actions = this.state.data || [];
     const actionsSort = _.orderBy(actions, [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
-    const amount = account.amount ? formatCurrencyAmount(account.amount) : '-';
+    const amount = account.amount ? localizeCurrencyAmount(account.amount, stripes.currency, intl) : '-';
     const loanId = account.loanId || '';
     const isAccountId = actions[0] && actions[0].accountId === account.id;
 
@@ -606,7 +608,7 @@ feeFineActions
             <Col xs={1.5}>
               <KeyValue
                 label={<FormattedMessage id="ui-users.details.field.remainingamount" />}
-                value={formatCurrencyAmount(this.state.remaining)}
+                value={localizeCurrencyAmount(this.state.remaining || 0, stripes.currency, intl)}
               />
             </Col>
             <Col
@@ -772,4 +774,4 @@ feeFineActions
   }
 }
 
-export default injectIntl(AccountDetails);
+export default injectIntl(stripesConnect(AccountDetails));

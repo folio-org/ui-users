@@ -1,10 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import {
-  stripesConnect,
-  withStripes,
-} from '@folio/stripes/core';
+import { stripesConnect } from '@folio/stripes/core';
 
 import { ChargeFeeFine } from '../components/Accounts';
 import CurrentUserServicePointAbsenteeErrorModal from '../components/CurrentUserServicePointAbsenteeErrorModal';
@@ -212,4 +209,4 @@ class ChargeFeesFinesContainer extends React.Component {
   }
 }
 
-export default stripesConnect(withStripes(ChargeFeesFinesContainer));
+export default stripesConnect(ChargeFeesFinesContainer);
