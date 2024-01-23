@@ -133,26 +133,6 @@ const PatronNoticePrintJobs = (props) => {
   );
 };
 
-PatronNoticePrintJobs.manifest = {
-  entries: {
-    type: 'okapi',
-    path: 'print/entries',
-    params: {
-      query: 'type="BATCH"',
-      sortby: 'created/sort.descending'
-    },
-    records: 'items',
-    throwErrors: false,
-  },
-  printingJob: {
-    type: 'okapi',
-    path: 'print/entries',
-    accumulate: 'true',
-    fetch: false,
-    throwErrors: false,
-  },
-};
-
 PatronNoticePrintJobs.propTypes = {
   records: PropTypes.arrayOf(PropTypes.object),
   onClose: PropTypes.func,
