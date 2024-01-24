@@ -17,6 +17,7 @@
 * Format currency values as currencies, not numbers. Refs UIU-2026.
 * Show country name in user address instead of country id. Refs UIU-2976.
 * Add patron notice print jobs to action menu. Refs UIU-3029.
+* Update sub permissions of permission 'Users: Can view user profiles'. Refs UIU-3038.
 
 ## [10.0.4](https://github.com/folio-org/ui-users/tree/v10.0.4) (2023-11-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.3...v10.0.4)
