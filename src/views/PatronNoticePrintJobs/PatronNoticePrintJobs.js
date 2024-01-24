@@ -41,8 +41,8 @@ const PatronNoticePrintJobs = (props) => {
   const markPrintJobForDeletion = (item) => {
     const clonedData = [...contentData];
     const index = clonedData.findIndex(el => el.id === item.id);
-    clonedData[index] = { ...item, selected: !item.selected };
 
+    clonedData[index] = { ...item, selected: !item.selected };
     setContentData(clonedData);
   };
 
@@ -59,6 +59,7 @@ const PatronNoticePrintJobs = (props) => {
       const bytes = new Uint8Array(content.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
       const blob = new Blob([bytes], { type: 'application/pdf' });
       const url = URL.createObjectURL(blob);
+
       window.open(url, '_blank');
     } catch (error) {
       callout.sendCallout({
@@ -89,10 +90,9 @@ const PatronNoticePrintJobs = (props) => {
     const removeSelectedPrintJobs = async () => {
       const selectedJobs = contentData.filter(item => item.selected);
       const ids = selectedJobs.map(job => job.id).join(',');
+      const filtered = contentData.filter(item => !item.selected);
 
       await ky.delete(`print/entries?ids=${ids}`);
-
-      const filtered = contentData.filter(item => !item.selected);
 
       setContentData(filtered);
       onToggle();
