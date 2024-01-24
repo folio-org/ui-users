@@ -13,6 +13,7 @@ const PatronNoticePrintJobsContainer = (props) => {
 
   const onClose = () => {
     const { location } = props;
+
     if (location.state) {
       history.goBack();
     } else {
