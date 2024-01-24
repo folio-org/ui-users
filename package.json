@@ -985,7 +985,8 @@
         "description": "Also includes basic permissions to view users",
         "subPermissions": [
           "ui-users.view",
-          "users.profile-picture.item.get"
+          "users.profile-picture.item.get",
+          "users.configurations.item.get"
         ],
         "visible": true
       },
