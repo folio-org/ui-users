@@ -46,7 +46,9 @@
       "loan-policy-storage": "1.0 2.0",
       "loan-storage": "4.0 5.0 6.0 7.0",
       "notes": "2.0 3.0",
-      "request-storage": "2.5 3.0 4.0 5.0 6.0"
+      "request-storage": "2.5 3.0 4.0 5.0 6.0",
+      "batch-print": "1.0"
+
     },
     "permissionSets": [
       {
@@ -1020,6 +1022,26 @@
           "ui-users.settings.general.view",
           "ui-users.settings.feefines.view",
           "ui-users.settings.patron-blocks.view"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.view-patron-notice-print-jobs",
+        "displayName": "Users: View patron notice print jobs",
+        "subPermissions": [
+          "ui-users.view",
+          "mod-batch-print.entries.collection.get",
+          "mod-batch-print.entries.item.get",
+          "mod-batch-print.print.read"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.remove-patron-notice-print-jobs",
+        "displayName": "Users: View and remove patron notice print jobs",
+        "subPermissions": [
+          "ui-circulation.settings.view-patron-notice-print-jobs",
+          "mod-batch-print.entries.item.delete"
         ],
         "visible": true
       }

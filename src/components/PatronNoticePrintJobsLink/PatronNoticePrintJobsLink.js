@@ -11,7 +11,7 @@ const PatronNoticePrintJobsLink = () => {
   const history = useHistory();
 
   return (
-    <IfPermission perm="mod-batch-print.entries.collection.get">
+    <IfPermission perm="ui-users.view-patron-notice-print-jobs">
       <Button
         data-testid="patronNoticePrintJobsLink"
         to={{

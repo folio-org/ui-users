@@ -1067,6 +1067,8 @@
   "permission.lost-items.requiring-actual-cost":"Users: Can process lost items requiring actual cost",
   "permission.delete":"Users: Can delete user profile if user does not have any open transactions",
   "permission.opentransactions":"Users: Can check open transactions",
+  "permission.view-patron-notice-print-jobs": "Users: View patron notice print jobs",
+  "permission.remove-patron-notice-print-jobs": "Users: View and remove patron notice print jobs",
   "bulkClaimReturned.item.title": "Title",
   "bulkClaimReturned.preConfirm": "Confirm claim returned",
   "bulkClaimReturned.postConfirm": "Claim returned confirmation",
