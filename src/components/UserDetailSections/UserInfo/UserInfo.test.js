@@ -2,10 +2,21 @@ import { screen } from '@folio/jest-config-stripes/testing-library/react';
 import '__mock__/stripesComponents.mock';
 
 import renderWithRouter from 'helpers/renderWithRouter';
+import { useStripes } from '@folio/stripes/core';
 import UserInfo from './UserInfo';
 import { useProfilePicture } from './hooks';
 
 import profilePicData from '../../../../test/jest/fixtures/profilePicture';
+
+jest.unmock('@folio/stripes/components');
+jest.unmock('@folio/stripes/util');
+
+jest.mock('@folio/stripes/core', () => ({
+  ...jest.requireActual('@folio/stripes/core'),
+  useStripes: jest.fn(() => ({
+    hasPerm: () => true,
+  })),
+}));
 
 const toggleMock = jest.fn();
 
@@ -19,9 +30,9 @@ const props = {
   expanded: true,
   onToggle: toggleMock,
   accordionId: 'userInformationSection',
-  stripes: {
-    connect: (Component) => Component,
-  },
+  // stripes: {
+  //   connect: (Component) => Component,
+  // },
   patronGroup: {
     desc: 'Staff Member',
     expirationOffsetInDays: 730,
@@ -35,13 +46,13 @@ const props = {
     departments: [],
     id: 'ec6d380d-bcdd-4ef6-bb65-15677ab7cb84',
     patronGroup: '3684a786-6671-4268-8ed0-9db82ebca60b',
-    personal: { lastName: 'Admin', firstName: 'acq-admin', addresses: [] },
+    personal: { lastName: 'Admin', firstName: 'acq-admin', addresses: [], profilePictureLink: 'profilePictureLink' },
     proxyFor: [],
     type: 'patron',
     updatedDate: '2022-05-10T02:00:49.576+00:00',
     username: 'acq-admin'
   },
-  settings: [{ value: true }]
+  settings: [{ enabled: true }]
 };
 
 describe('Render userInfo component', () => {
@@ -60,5 +71,9 @@ describe('Render userInfo component', () => {
       expect(screen.getByText('acq-admin')).toBeInTheDocument();
       expect(screen.getByText('1652148049552566548')).toBeInTheDocument();
     });
+    it('should display profile picture', () => {
+      renderUserInfo(props);
+      expect(screen.getByText('ui-users.information.profilePicture')).toBeInTheDocument();
+    })
   });
 });
