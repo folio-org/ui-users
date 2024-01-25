@@ -3,8 +3,15 @@ import '__mock__/stripesComponents.mock';
 
 import renderWithRouter from 'helpers/renderWithRouter';
 import UserInfo from './UserInfo';
+import { useProfilePicture } from './hooks';
+
+import profilePicData from '../../../../test/jest/fixtures/profilePicture';
 
 const toggleMock = jest.fn();
+
+jest.mock('./hooks', () => ({
+  useProfilePicture: jest.fn(),
+}));
 
 const renderUserInfo = (props) => renderWithRouter(<UserInfo {...props} />);
 
@@ -38,6 +45,9 @@ const props = {
 };
 
 describe('Render userInfo component', () => {
+  beforeEach(() => {
+    useProfilePicture.mockClear().mockReturnValue(profilePicData.profile_picture_blob);
+  });
   describe('Check if user data are shown', () => {
     it('Active Users', () => {
       renderUserInfo(props);
