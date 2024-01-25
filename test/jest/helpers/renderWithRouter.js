@@ -7,8 +7,9 @@ import { createMemoryHistory } from 'history';
 
 let rtlApi;
 
-const history = createMemoryHistory();
+
 const renderWithRouter = (children, options = {}) => {
+  const history = createMemoryHistory();
   const renderFn = options.rerender ? rtlApi.rerender : render;
   rtlApi = renderFn(
     <Router history={history}>
@@ -22,7 +23,7 @@ const renderWithRouter = (children, options = {}) => {
       </CalloutContext.Provider>
     </Router>
   );
-  return rtlApi;
+  return { ...rtlApi, history };
 };
 
 export default renderWithRouter;

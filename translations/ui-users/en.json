@@ -66,6 +66,7 @@
   "user.unknown": "Unknown user",
   "action": "Action",
   "actionMenu.lostItems": "Lost items requiring actual cost",
+  "actionMenu.patronNoticePrintJobs": "View patron notice print jobs (PDF)",
   "dueDate": "Due date",
   "loanDate": "Loan date",
   "returnDate": "Return date",
@@ -1067,6 +1068,8 @@
   "permission.lost-items.requiring-actual-cost":"Users: Can process lost items requiring actual cost",
   "permission.delete":"Users: Can delete user profile if user does not have any open transactions",
   "permission.opentransactions":"Users: Can check open transactions",
+  "permission.view-patron-notice-print-jobs": "Users: View patron notice print jobs",
+  "permission.remove-patron-notice-print-jobs": "Users: View and remove patron notice print jobs",
   "bulkClaimReturned.item.title": "Title",
   "bulkClaimReturned.preConfirm": "Confirm claim returned",
   "bulkClaimReturned.postConfirm": "Claim returned confirmation",
@@ -1141,5 +1144,13 @@
   "lostItems.notification.billed": "A fee/fine of <strong>{amount}</strong> has been successfully <strong>charged</strong> to <strong>{patronName}</strong>",
   "lostItems.notification.billedBefore": "<strong>{patronName}</strong> has already been billed for this item by another user",
   "lostItems.notification.cancelled": "A lost item fee <strong>will not be charged</strong> to <strong>{patronName}</strong>",
-  "lostItems.notification.serverError": "A system error has occurred - please try again later or contact your FOLIO support staff"
+  "lostItems.notification.serverError": "A system error has occurred - please try again later or contact your FOLIO support staff",
+  "patronNoticePrintJobs.label": "Patron notice print jobs",
+  "patronNoticePrintJobs.actions": "Actions",
+  "patronNoticePrintJobs.actions.delete": "Delete selected print jobs",
+  "patronNoticePrintJobs.name": "Name",
+  "patronNoticePrintJobs.email": "Email",
+  "patronNoticePrintJobs.updated": "Updated",
+  "patronNoticePrintJobs.created": "Created",
+  "patronNoticePrintJobs.errors.pdf": "'PDF generation failed"
 }
