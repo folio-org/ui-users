@@ -30,9 +30,6 @@ const props = {
   expanded: true,
   onToggle: toggleMock,
   accordionId: 'userInformationSection',
-  // stripes: {
-  //   connect: (Component) => Component,
-  // },
   patronGroup: {
     desc: 'Staff Member',
     expirationOffsetInDays: 730,
