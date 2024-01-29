@@ -983,7 +983,7 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.profilepictures.view",
+        "permissionName": "ui-users.profile-pictures.view",
         "displayName": "Users: Can view profile pictures",
         "description": "Also includes basic permissions to view users",
         "subPermissions": [

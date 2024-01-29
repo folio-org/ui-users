@@ -44,7 +44,7 @@ const UserInfo = (props) => {
    */
   const isProfilePictureLinkAURL = !isAValidUUID(profilePictureLink);
   const profilePicturesEnabled = Boolean(settings.length) && settings[0].enabled;
-  const hasViewProfilePicPerm = stripes.hasPerm('ui-users.profilepictures.view');
+  const hasViewProfilePicPerm = stripes.hasPerm('ui-users.profile-pictures.view');
   const { isFetching, isLoading, profilePictureData } = useProfilePicture({ profilePictureId: profilePictureLink });
 
   const renderProfilePic = () => {
