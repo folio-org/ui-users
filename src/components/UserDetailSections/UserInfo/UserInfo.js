@@ -17,6 +17,7 @@ import { useStripes } from '@folio/stripes/core';
 import css from './UserInfo.css';
 import { USER_TYPE_FIELD } from '../../../constants';
 import ProfilePicThumbnail from '../../../../icons/ProfilePicThumbnail.png';
+import { isAValidUUID } from '../../util/util';
 
 import { useProfilePicture } from './hooks';
 
@@ -29,18 +30,28 @@ const UserInfo = (props) => {
     accordionId,
     onToggle
   } = props;
+  const profilePictureLink = user?.personal?.profilePictureLink;
   const stripes = useStripes();
   const intl = useIntl();
   const userStatus = (user?.active ?
     <FormattedMessage id="ui-users.active" /> :
     <FormattedMessage id="ui-users.inactive" />);
-  const hasProfilePicture = Boolean(user?.personal?.profilePictureLink);
+  const hasProfilePicture = Boolean(profilePictureLink);
+  /**
+   * Profile Picture Link can be
+   * 1. an id(uuid) of profile picture stored in database or
+   * 2. a link to an image - a url
+   */
+  const isProfilePictureLinkAURL = !isAValidUUID(profilePictureLink);
   const profilePicturesEnabled = Boolean(settings.length) && settings[0].enabled;
   const hasViewProfilePicPerm = stripes.hasPerm('ui-users.profilepictures.view');
-  const { isFetching, isLoading, profilePictureData } = useProfilePicture({ profilePictureId: user?.personal?.profilePictureLink });
+  const { isFetching, isLoading, profilePictureData } = useProfilePicture({ profilePictureId: profilePictureLink });
 
   const renderProfilePic = () => {
-    const imgSrc = isLoading || isFetching || !hasProfilePicture ? ProfilePicThumbnail : 'data:;base64,' + profilePictureData;
+    const imgSrc = isLoading || isFetching || !hasProfilePicture ?
+      ProfilePicThumbnail :
+      isProfilePictureLinkAURL ? profilePictureLink : 'data:;base64,' + profilePictureData;
+
     return (
       <img
         className={css.profilePlaceholder}

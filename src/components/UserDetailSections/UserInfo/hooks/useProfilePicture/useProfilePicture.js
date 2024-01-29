@@ -6,6 +6,7 @@ import {
 } from '@folio/stripes/core';
 
 import { PROFILE_PIC_API } from '../../../../../constants';
+import { isAValidUUID } from '../../../../util/util';
 
 const useProfilePicture = ({ profilePictureId }, options = {}) => {
   const ky = useOkapiKy();
@@ -21,7 +22,7 @@ const useProfilePicture = ({ profilePictureId }, options = {}) => {
       return ky.get(`${PROFILE_PIC_API}/${profilePictureId}`).json();
     },
     {
-      enabled: Boolean(profilePictureId),
+      enabled: Boolean(profilePictureId) && isAValidUUID(profilePictureId),
       ...options,
     }
   );
