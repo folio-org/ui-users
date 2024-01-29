@@ -982,7 +982,7 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.profilepictures.view",
+        "permissionName": "ui-users.profile-pictures.view",
         "displayName": "Users: Can view profile pictures",
         "description": "Also includes basic permissions to view users",
         "subPermissions": [
@@ -993,11 +993,11 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.profilepictures.all",
+        "permissionName": "ui-users.profile-pictures.all",
         "displayName": "Users: Can view, edit, and delete profile pictures",
         "description": "Also includes basic permissions to edit user profile",
         "subPermissions": [
-          "ui-users.profilepictures.view",
+          "ui-users.profile-pictures.view",
           "ui-users.edit",
           "users.profile-picture.item.post",
           "users.profile-picture.item.put",
