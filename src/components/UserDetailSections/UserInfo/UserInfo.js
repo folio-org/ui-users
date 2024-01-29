@@ -48,9 +48,8 @@ const UserInfo = (props) => {
   const { isFetching, isLoading, profilePictureData } = useProfilePicture({ profilePictureId: profilePictureLink });
 
   const renderProfilePic = () => {
-    const imgSrc = isLoading || isFetching || !hasProfilePicture ?
-      ProfilePicThumbnail :
-      isProfilePictureLinkAURL ? profilePictureLink : 'data:;base64,' + profilePictureData;
+    const profilePictureSrc = isProfilePictureLinkAURL ? profilePictureLink : 'data:;base64,' + profilePictureData;
+    const imgSrc = isLoading || isFetching || !hasProfilePicture ? ProfilePicThumbnail : profilePictureSrc;
 
     return (
       <img
