@@ -13,7 +13,6 @@ const useProfilePicture = ({ profilePictureId }, options = {}) => {
   const [namespace] = useNamespace({ key: 'get-profile-picture-of-a-user' });
   const {
     isFetching,
-    isLoading,
     data = {},
   } = useQuery(
     [namespace, profilePictureId],
@@ -27,7 +26,6 @@ const useProfilePicture = ({ profilePictureId }, options = {}) => {
   );
 
   return ({
-    isLoading,
     isFetching,
     profilePictureData: data?.profile_picture_blob,
   });
