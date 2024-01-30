@@ -11,11 +11,10 @@ import { isAValidUUID } from '../../../../util/util';
 const useProfilePicture = ({ profilePictureId }, options = {}) => {
   const ky = useOkapiKy();
   const [namespace] = useNamespace({ key: 'get-profile-picture-of-a-user' });
-  const DEFAULT_DATA = {};
   const {
     isFetching,
     isLoading,
-    data = DEFAULT_DATA,
+    data = {},
   } = useQuery(
     [namespace, profilePictureId],
     () => {

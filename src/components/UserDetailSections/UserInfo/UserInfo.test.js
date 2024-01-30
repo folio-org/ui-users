@@ -1,22 +1,10 @@
 import { screen } from '@folio/jest-config-stripes/testing-library/react';
-import '__mock__/stripesComponents.mock';
 
 import renderWithRouter from 'helpers/renderWithRouter';
-import { useStripes } from '@folio/stripes/core';
 import UserInfo from './UserInfo';
 import { useProfilePicture } from './hooks';
 
 import profilePicData from '../../../../test/jest/fixtures/profilePicture';
-
-jest.unmock('@folio/stripes/components');
-jest.unmock('@folio/stripes/util');
-
-jest.mock('@folio/stripes/core', () => ({
-  ...jest.requireActual('@folio/stripes/core'),
-  useStripes: jest.fn(() => ({
-    hasPerm: () => true,
-  })),
-}));
 
 const toggleMock = jest.fn();
 
@@ -71,6 +59,6 @@ describe('Render userInfo component', () => {
     it('should display profile picture', () => {
       renderUserInfo(props);
       expect(screen.getByText('ui-users.information.profilePicture')).toBeInTheDocument();
-    })
+    });
   });
 });

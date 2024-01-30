@@ -9,15 +9,8 @@ import { useOkapiKy } from '@folio/stripes/core';
 
 import useProfilePicture from './useProfilePicture';
 
-jest.mock('@folio/stripes/core', () => ({
-  ...jest.requireActual('@folio/stripes/core'),
-  useNamespace: jest.fn(() => ['test']),
-  useOkapiKy: jest.fn(),
-}));
-
 const queryClient = new QueryClient();
 
-// eslint-disable-next-line react/prop-types
 const wrapper = ({ children }) => (
   <QueryClientProvider client={queryClient}>
     {children}
