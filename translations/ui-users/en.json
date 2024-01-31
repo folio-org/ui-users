@@ -309,6 +309,7 @@
   "information.lastName": "Last name",
   "information.firstName": "First name",
   "information.middleName": "Middle name",
+  "information.profilePicture": "Profile picture",
   "information.barcode": "Barcode",
   "information.selectUserType": "Select user type",
   "information.userType": "User type",

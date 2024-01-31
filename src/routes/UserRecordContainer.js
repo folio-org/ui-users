@@ -158,8 +158,7 @@ class UserRecordContainer extends React.Component {
     },
     settings: {
       type: 'okapi',
-      records: 'configs',
-      path: 'configurations/entries?query=(module==USERS and configName==profile_pictures)',
+      path: 'users/configurations/entry',
     },
     requestPreferences: {
       type: 'okapi',
