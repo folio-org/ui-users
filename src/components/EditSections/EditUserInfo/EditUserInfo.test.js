@@ -86,6 +86,7 @@ const props = {
     connect: (Component) => Component,
     timezone: 'USA/TestTimeZone',
     hasInterface: () => true,
+    hasPerm: () => true,
   },
   patronGroups: [{
     desc: 'Staff Member',

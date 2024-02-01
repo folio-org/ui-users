@@ -446,7 +446,8 @@ class UserDetail extends React.Component {
       || this.props.stripes.hasPerm('ui-users.patron_blocks')
       || this.props.stripes.hasPerm('ui-users.feesfines.actions.all')
       || this.props.stripes.hasPerm('ui-requests.all')
-      || this.props.stripes.hasPerm('ui-users.delete,ui-users.opentransactions');
+      || this.props.stripes.hasPerm('ui-users.delete,ui-users.opentransactions')
+      || this.props.stripes.hasPerm('ui-users.profile-pictures.all');
 
     if (showActionMenu && !isVirtualPatron) {
       return (
