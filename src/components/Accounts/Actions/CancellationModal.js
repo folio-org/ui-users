@@ -5,7 +5,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { Field } from 'react-final-form';
 import setFieldData from 'final-form-set-field-data';
 
-import { stripesConnect } from "@folio/stripes/core";
+import { stripesConnect } from '@folio/stripes/core';
 import stripesFinalForm from '@folio/stripes/final-form';
 import {
   Modal,
@@ -17,7 +17,7 @@ import {
 } from '@folio/stripes/components';
 
 import css from './modal.css';
-import { localizeCurrencyAmount } from "../../util/localizeCurrencyAmount";
+import { localizeCurrencyAmount } from '../../util/localizeCurrencyAmount';
 
 class CancellationModal extends React.Component {
   static propTypes = {

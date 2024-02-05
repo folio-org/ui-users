@@ -12,7 +12,7 @@ import {
 } from '../../../../../constants';
 import { getRecordStatus } from '../../util';
 import DateTimeFormatter from '../DateTimeFormatter';
-import { useLocalizeCurrency } from "../../../../../../../hooks/useLocalizedCurrency/useLocalizeCurrency";
+import { useLocalizeCurrency } from '../../../../../../../hooks/useLocalizedCurrency/useLocalizeCurrency';
 
 export const getBilledAmount = (recordId, billedRecords) => billedRecords.find(record => record.id === recordId)?.billedAmount;
 

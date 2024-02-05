@@ -22,7 +22,7 @@ import {
   refundClaimReturned,
 } from '../../../constants';
 import { isDcbUser } from '../../util';
-import { useLocalizeCurrency } from "../../../hooks/useLocalizedCurrency/useLocalizeCurrency";
+import { useLocalizeCurrency } from '../../../hooks/useLocalizedCurrency/useLocalizeCurrency';
 
 
 /**
