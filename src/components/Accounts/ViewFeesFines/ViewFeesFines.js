@@ -235,7 +235,7 @@ class ViewFeesFines extends React.Component {
       'metadata.updatedDate': f => (f.metadata && f.metadata.createdDate !== f.metadata.updatedDate ? <FormattedDate value={f.metadata.updatedDate} /> : '-'),
       'feeFineType': f => (f.feeFineType ? this.showComments(f) : '-'),
       'amount': f => (f.amount ? localizeCurrencyAmount(f.amount, stripes.currency, intl) : '-'),
-      'remaining': f => localizeCurrencyAmount(f.amount || 0, stripes.currency, intl),
+      'remaining': f => localizeCurrencyAmount(f.remaining || 0, stripes.currency, intl),
       'paymentStatus.name': f => (f.paymentStatus || {}).name || '-',
       'feeFineOwner': f => (f.feeFineOwner ? f.feeFineOwner : '-'),
       'title': item => this.formatTitle(item),
