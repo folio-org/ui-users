@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import {
   Button,
@@ -61,7 +61,7 @@ const ProfilePicture = ({ label, profilePictureLink }) => {
           <Dropdown
             data-testId="updateProfilePictureDropdown"
             id="updateProfilePictureDropdown"
-            label="Update"
+            label={<FormattedMessage id="ui-users.information.profilePicture.update" />}
             placement="bottom-end"
             renderMenu={renderMenu}
           />
