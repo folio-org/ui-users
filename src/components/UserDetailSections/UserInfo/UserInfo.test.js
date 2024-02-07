@@ -2,13 +2,13 @@ import { screen } from '@folio/jest-config-stripes/testing-library/react';
 
 import renderWithRouter from 'helpers/renderWithRouter';
 import UserInfo from './UserInfo';
-import { useProfilePicture } from './hooks';
+import { useProfilePicture } from '../../../hooks';
 
 import profilePicData from '../../../../test/jest/fixtures/profilePicture';
 
 const toggleMock = jest.fn();
 
-jest.mock('./hooks', () => ({
+jest.mock('../../../hooks', () => ({
   useProfilePicture: jest.fn(),
 }));
 

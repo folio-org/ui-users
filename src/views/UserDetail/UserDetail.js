@@ -424,6 +424,7 @@ class UserDetail extends React.Component {
         },
       },
       resources,
+      stripes,
     } = this.props;
     const user = this.getUser();
     const patronGroup = this.getPatronGroup(user);
@@ -442,11 +443,12 @@ class UserDetail extends React.Component {
       loans,
     };
 
-    const showActionMenu = this.props.stripes.hasPerm('ui-users.edit')
-      || this.props.stripes.hasPerm('ui-users.patron_blocks')
-      || this.props.stripes.hasPerm('ui-users.feesfines.actions.all')
-      || this.props.stripes.hasPerm('ui-requests.all')
-      || this.props.stripes.hasPerm('ui-users.delete,ui-users.opentransactions');
+    const showActionMenu = stripes.hasPerm('ui-users.edit')
+      || stripes.hasPerm('ui-users.patron_blocks')
+      || stripes.hasPerm('ui-users.feesfines.actions.all')
+      || stripes.hasPerm('ui-requests.all')
+      || stripes.hasPerm('ui-users.delete,ui-users.opentransactions')
+      || stripes.hasPerm('ui-users.profile-pictures.all');
 
     if (showActionMenu && !isVirtualPatron) {
       return (

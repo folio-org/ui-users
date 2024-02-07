@@ -21,6 +21,7 @@
 * Create new permission 'Users: Can view, edit, and delete profile pictures'. Refs UIU-3025.
 * UserInformation in UserDetails to display profile picture. Refs UIU-3011.
 * Enable effective call number column sorting in Open Loans screen. Refs UIU-3002.
+* User Information in User Edit to display profile picture and update button set. Refs UIU-3005.
 
 ## [10.0.4](https://github.com/folio-org/ui-users/tree/v10.0.4) (2023-11-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.3...v10.0.4)
