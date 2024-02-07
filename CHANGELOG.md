@@ -22,6 +22,7 @@
 * UserInformation in UserDetails to display profile picture. Refs UIU-3011.
 * Enable effective call number column sorting in Open Loans screen. Refs UIU-3002.
 * User Information in User Edit to display profile picture and update button set. Refs UIU-3005.
+* Update request header for pay several Fees/fines. Refs UIU-3040.
 
 ## [10.0.4](https://github.com/folio-org/ui-users/tree/v10.0.4) (2023-11-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.3...v10.0.4)
