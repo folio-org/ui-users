@@ -29,10 +29,11 @@ describe('useProfilePicture', () => {
       profilePictureId: undefined,
     }), { wrapper });
 
-    await waitFor(() => !result.current.isFetching);
+    await waitFor(() => !result.current.isLoading);
 
     expect(result.current).toEqual(expect.objectContaining({
       'isFetching': false,
+      'isLoading': false,
       'profilePictureData': undefined,
     }));
   });
@@ -46,6 +47,7 @@ describe('useProfilePicture', () => {
 
     expect(result.current).toEqual(expect.objectContaining({
       'isFetching': false,
+      'isLoading': false,
       'profilePictureData': profilePicture.profile_picture_blob
     }));
   });

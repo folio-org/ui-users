@@ -19,7 +19,7 @@ import { USER_TYPE_FIELD } from '../../../constants';
 import profilePicThumbnail from '../../../../icons/profilePicThumbnail.png';
 import { isAValidUUID } from '../../util/util';
 
-import { useProfilePicture } from './hooks';
+import { useProfilePicture } from '../../../hooks';
 
 const UserInfo = (props) => {
   const {
