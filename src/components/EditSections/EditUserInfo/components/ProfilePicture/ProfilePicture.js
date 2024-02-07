@@ -31,6 +31,7 @@ const ProfilePicture = ({ label, profilePictureLink }) => {
     return (
       <img
         data-testid="profile-picture"
+        id="profile-picture"
         className={css.profilePlaceholder}
         alt={intl.formatMessage({ id: 'ui-users.information.profilePicture' })}
         src={imgSrc}
@@ -43,15 +44,27 @@ const ProfilePicture = ({ label, profilePictureLink }) => {
       aria-label="profile picture action menu"
       role="menu"
     >
-      <Button buttonStyle="dropdownItem"><Icon icon="profile">Local File</Icon></Button>
-      <Button buttonStyle="dropdownItem"><Icon icon="external-link">External URL</Icon></Button>
-      <Button buttonStyle="dropdownItem"><Icon icon="trash">Delete</Icon></Button>
+      <Button buttonStyle="dropdownItem">
+        <Icon icon="profile">
+          {intl.formatMessage({ id: 'ui-users.information.profilePicture.localFile' })}
+        </Icon>
+      </Button>
+      <Button buttonStyle="dropdownItem">
+        <Icon icon="external-link">
+          {intl.formatMessage({ id: 'ui-users.information.profilePicture.externalURL' })}
+        </Icon>
+      </Button>
+      <Button buttonStyle="dropdownItem">
+        <Icon icon="trash">
+          {intl.formatMessage({ id: 'ui-users.information.profilePicture.delete' })}
+        </Icon>
+      </Button>
     </DropdownMenu>
   );
 
   return (
     <>
-      <Label tagName="div">
+      <Label htmlFor="profile-picture">
         {label}
       </Label>
       { renderProfilePic()}
