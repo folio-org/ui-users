@@ -12,7 +12,7 @@ import '../../../../test/jest/__mock__';
 
 import FeeFineActions from './FeeFineActions';
 import CommentModal from './CommentModal';
-import {formatCurrencyAmount} from "../../util";
+import { formatCurrencyAmount } from '../../util';
 
 jest.mock('./CancellationModal', () => jest.fn(() => null));
 jest.mock('./CommentModal', () => jest.fn(() => null));

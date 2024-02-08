@@ -7,7 +7,7 @@ import {
   TextField,
 } from '@folio/stripes/components';
 import { FormattedMessage } from 'react-intl';
-import { isAValidImageURL } from '../../../../util';
+import { isAValidURL } from '../../../../util';
 
 const ExternalLinkModal = ({ open, onClose, onSave, profilePictureLink }) => {
   const [inputValue, setInputValue] = useState('');
@@ -39,7 +39,7 @@ const ExternalLinkModal = ({ open, onClose, onSave, profilePictureLink }) => {
   };
 
   const handleBlur = () => {
-    if (inputValue && !isAValidImageURL(inputValue)) {
+    if (inputValue && !isAValidURL(inputValue)) {
       setError(true);
     }
   };

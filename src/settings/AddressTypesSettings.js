@@ -5,7 +5,7 @@ import {
   injectIntl,
 } from 'react-intl';
 import { ControlledVocab } from '@folio/stripes/smart-components';
-import {stripesConnect } from '@folio/stripes/core';
+import { stripesConnect } from '@folio/stripes/core';
 
 class AddressTypesSettings extends React.Component {
   static propTypes = {
