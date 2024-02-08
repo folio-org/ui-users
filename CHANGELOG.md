@@ -21,6 +21,7 @@
 * Create new permission 'Users: Can view, edit, and delete profile pictures'. Refs UIU-3025.
 * UserInformation in UserDetails to display profile picture. Refs UIU-3011.
 * User Information in User Edit to display profile picture and update button set. Refs UIU-3005.
+* Link externally hosted image as user profile picture. Refs UIU-2975.
 
 ## [10.0.4](https://github.com/folio-org/ui-users/tree/v10.0.4) (2023-11-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.3...v10.0.4)

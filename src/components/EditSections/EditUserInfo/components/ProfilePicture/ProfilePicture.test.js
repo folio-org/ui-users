@@ -11,15 +11,19 @@ jest.mock('../../../../../hooks', () => ({
   useProfilePicture: jest.fn(),
 }));
 
-const props = {
-  label: 'Profile picture',
-  profilePictureLink: 'profilePictureLink'
+const defaultProps = {
+  profilePictureId: 'https://folio.org/wp-content/uploads/2023/08/folio-site-general-Illustration-social-image-1200.jpg',
+  form: {
+    change: jest.fn(),
+  }
 };
+
+const renderProfilePicture = (props) => render(<ProfilePicture {...props} />);
 
 describe('Profile Picture', () => {
   beforeEach(() => {
     useProfilePicture.mockClear().mockReturnValue(profilePicData.profile_picture_blob);
-    render(<ProfilePicture {...props} />);
+    renderProfilePicture(defaultProps);
   });
 
   it('should display Profile picture', () => {
@@ -28,7 +32,7 @@ describe('Profile Picture', () => {
 
   it('Image to be displayed with correct src', () => {
     const image = screen.getByTestId('profile-picture');
-    expect(image.src).toContain('profilePictureLink');
+    expect(image.src).toContain('https://folio.org/wp-content/uploads/2023/08/folio-site-general-Illustration-social-image-1200.jpg');
   });
 
   it('Update button to be displayed', () => {
@@ -54,5 +58,14 @@ describe('Profile Picture', () => {
     await userEvent.click(updateButton);
 
     expect(screen.getByText('Icon (trash)')).toBeInTheDocument();
+  });
+
+  it('should render modal', async () => {
+    const updateButton = screen.getByTestId('updateProfilePictureDropdown');
+    await userEvent.click(updateButton);
+    const externalURLButton = screen.getByTestId('externalURL');
+    await userEvent.click(externalURLButton);
+
+    expect(screen.getByText('ui-users.information.profilePicture.externalLink.modal.externalURL')).toBeInTheDocument();
   });
 });
