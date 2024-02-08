@@ -411,7 +411,8 @@ class EditUserInfo extends React.Component {
               >
                 <OnChange name={USER_TYPE_FIELD}>
                   {(selectedUserType) => {
-                    if (initialValues.type === USER_TYPES.STAFF && selectedUserType === USER_TYPES.PATRON) {
+                    const shouldDisplayModal = isConsortium && initialValues.type === USER_TYPES.STAFF && selectedUserType === USER_TYPES.PATRON;
+                    if (shouldDisplayModal) {
                       this.setState({ showUserTypeModal: true });
                     }
                   }}

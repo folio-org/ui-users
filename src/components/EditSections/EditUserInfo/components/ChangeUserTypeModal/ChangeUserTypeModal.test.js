@@ -18,10 +18,10 @@ describe('ChangeUserTypeModal', () => {
     const cancelButton = screen.getByText('ui-users.cancel');
 
     await userEvent.click(cancelButton);
-    expect(onChange).toHaveBeenCalled();
+    expect(onChange).toHaveBeenCalledWith(USER_TYPES.STAFF);
   });
 
-  it('should confirm modal confirmation', async () => {
+  it('should confirm modal confirmation with `patron` user type', async () => {
     const onChange = jest.fn();
     const initialUserType = USER_TYPES.STAFF;
 
@@ -33,9 +33,9 @@ describe('ChangeUserTypeModal', () => {
 
     expect(screen.getByText('ui-users.information.change.userType.modal.label')).toBeInTheDocument();
 
-    const cancelButton = screen.getByText('ui-users.information.change.userType.modal.button');
+    const cancelButton = screen.getByText('ui-users.information.change.userType.modal.confirm');
 
     await userEvent.click(cancelButton);
-    expect(onChange).toHaveBeenCalled();
+    expect(onChange).toHaveBeenCalledWith(USER_TYPES.PATRON);
   });
 });

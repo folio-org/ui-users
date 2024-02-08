@@ -209,7 +209,8 @@ describe('Render Edit User Information component', () => {
     expect(screen.getByText('Profile Picture')).toBeInTheDocument();
   });
 
-  it('should display change user type modal', async () => {
+  it('should not change user type onClick `Cancel` button', async () => {
+    isConsortiumEnabled.mockClear().mockReturnValue(true);
     renderEditUserInfo({
       ...props,
       initialValues: {
@@ -217,11 +218,10 @@ describe('Render Edit User Information component', () => {
         type: USER_TYPES.STAFF,
       },
     });
-    // expect(screen.getByText('ChangeUserTypeModal')).toBeInTheDocument();
 
-    await userEvent.selectOptions(screen.getByRole('combobox', { name: /ui-users.information.userType/i }), USER_TYPES.PATRON);
+    await userEvent.selectOptions(screen.getByRole('combobox', { name: 'ui-users.information.userType' }), USER_TYPES.PATRON);
 
-    const option = screen.getByRole('option', { name: /ui-users.information.userType.patron/i });
+    const option = screen.getByRole('option', { name: 'ui-users.information.userType.patron' });
 
 
     await userEvent.click(option);
@@ -231,7 +231,7 @@ describe('Render Edit User Information component', () => {
     const cancelButton = screen.getByText('Cancel');
 
     await userEvent.click(cancelButton);
-    expect(changeMock).toHaveBeenCalled();
+    expect(changeMock).toHaveBeenCalledWith('type', USER_TYPES.STAFF);
   });
 
   describe('when profilePicture configuration is not enabled', () => {

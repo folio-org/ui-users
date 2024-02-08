@@ -16,7 +16,7 @@ const ChangeUserTypeModal = ({ onChange, initialUserType, open }) => {
         id="userType-modal-btn"
         onClick={() => onChange(USER_TYPES.PATRON)}
       >
-        <FormattedMessage id="ui-users.information.change.userType.modal.button" />
+        <FormattedMessage id="ui-users.information.change.userType.modal.confirm" />
       </Button>
       <Button
         id="userType-modal-cancel-btn"
@@ -35,9 +35,7 @@ const ChangeUserTypeModal = ({ onChange, initialUserType, open }) => {
       open={open}
     >
       <div>
-        <FormattedMessage
-          id="ui-users.information.change.userType.modal.text"
-        />
+        <FormattedMessage id="ui-users.information.change.userType.modal.text" />
       </div>
     </Modal>
   );
