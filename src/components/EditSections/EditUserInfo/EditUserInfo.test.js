@@ -39,7 +39,11 @@ jest.mock('../../util', () => ({
 
 jest.mock('./components', () => ({
   ProfilePicture : jest.fn(() => 'Profile Picture'),
-  ChangeUserTypeModal: jest.fn(({ onChange, initialUserType }) => {
+  ChangeUserTypeModal: jest.fn(({ onChange, initialUserType, open }) => {
+    if (!open) {
+      return null;
+    }
+
     return (
       <div>
         <h1>ChangeUserTypeModal</h1>
@@ -213,7 +217,16 @@ describe('Render Edit User Information component', () => {
         type: USER_TYPES.STAFF,
       },
     });
-    expect(screen.getByText('ChangeUserTypeModal')).toBeInTheDocument();
+    // expect(screen.getByText('ChangeUserTypeModal')).toBeInTheDocument();
+
+    await userEvent.selectOptions(screen.getByRole('combobox', { name: /ui-users.information.userType/i }), USER_TYPES.PATRON);
+
+    const option = screen.getByRole('option', { name: /ui-users.information.userType.patron/i });
+
+
+    await userEvent.click(option);
+
+    await screen.findByText('ChangeUserTypeModal');
 
     const cancelButton = screen.getByText('Cancel');
 
