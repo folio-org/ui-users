@@ -37,7 +37,10 @@ jest.mock('../../util', () => ({
   isConsortiumEnabled: jest.fn(() => true),
 }));
 
-jest.mock('./components/ProfilePicture', () => jest.fn(() => 'Profile Picture'));
+jest.mock('./components', () => ({
+  ProfilePicture : jest.fn(() => 'Profile Picture'),
+  ChangeUserTypeModal: jest.fn(() => 'ChangeUserTypeModal'),
+}));
 
 const onSubmit = jest.fn();
 
