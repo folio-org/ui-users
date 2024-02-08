@@ -121,7 +121,10 @@ class EditUserInfo extends React.Component {
       uniquenessValidator,
       disabled,
       areProfilePicturesEnabled,
+<<<<<<< HEAD
       form,
+=======
+>>>>>>> master
     } = this.props;
 
     const isConsortium = isConsortiumEnabled(stripes);
