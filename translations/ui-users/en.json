@@ -335,6 +335,9 @@
   "information.recalculate.modal.button": "Set",
   "information.recalculate.modal.text": "Library accounts with patron group <b>{group}</b> expire in <b>{offset} days</b>. Do you want to set this user’s account to expire on <b>{date}</b>?",
   "information.recalculate.modal.label": "Set expiration date?",
+  "information.change.userType.modal.label": "Changing user type?",
+  "information.change.userType.modal.button": "Set",
+  "information.change.userType.modal.text": "Making this change will update the users affiliations and their the permissions they are granted for those affiliations when clicking Save & close. This action can not easily be reversed, you would need to manually update the user's affiliations and permissions to reverse the resulting changes. Would you like to proceed?",
   "information.recalculate.will.reactivate.user": "User will reactivate after saving",
   "lostItems.message.noAccessToActualCostPage": "User does not have permission to access \"Lost items needing actual cost\" processing page",
 
