@@ -5,7 +5,7 @@ import { USER_TYPES } from '../../../../../constants';
 import ChangeUserTypeModal from './ChangeUserTypeModal';
 
 describe('ChangeUserTypeModal', () => {
-  it('should render component', async () => {
+  it('should cancel modal confirmation', async () => {
     const onChange = jest.fn();
     render(<ChangeUserTypeModal
       open
@@ -16,6 +16,24 @@ describe('ChangeUserTypeModal', () => {
     expect(screen.getByText('ui-users.information.change.userType.modal.label')).toBeInTheDocument();
 
     const cancelButton = screen.getByText('ui-users.cancel');
+
+    await userEvent.click(cancelButton);
+    expect(onChange).toHaveBeenCalled();
+  });
+
+  it('should confirm modal confirmation', async () => {
+    const onChange = jest.fn();
+    const initialUserType = USER_TYPES.STAFF;
+
+    render(<ChangeUserTypeModal
+      open
+      onChange={onChange}
+      initialUserType={initialUserType}
+    />);
+
+    expect(screen.getByText('ui-users.information.change.userType.modal.label')).toBeInTheDocument();
+
+    const cancelButton = screen.getByText('ui-users.information.change.userType.modal.button');
 
     await userEvent.click(cancelButton);
     expect(onChange).toHaveBeenCalled();

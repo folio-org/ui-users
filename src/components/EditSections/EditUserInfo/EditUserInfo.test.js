@@ -39,7 +39,14 @@ jest.mock('../../util', () => ({
 
 jest.mock('./components', () => ({
   ProfilePicture : jest.fn(() => 'Profile Picture'),
-  ChangeUserTypeModal: jest.fn(() => 'ChangeUserTypeModal'),
+  ChangeUserTypeModal: jest.fn(({ onChange, initialUserType }) => {
+    return (
+      <div>
+        <h1>ChangeUserTypeModal</h1>
+        <button type="button" onClick={() => onChange(initialUserType)}>Cancel</button>
+      </div>
+    );
+  }),
 }));
 
 const onSubmit = jest.fn();
@@ -196,6 +203,22 @@ describe('Render Edit User Information component', () => {
   it('should display profile picture', () => {
     renderEditUserInfo(props);
     expect(screen.getByText('Profile Picture')).toBeInTheDocument();
+  });
+
+  it('should display change user type modal', async () => {
+    renderEditUserInfo({
+      ...props,
+      initialValues: {
+        ...props.initialValues,
+        type: USER_TYPES.STAFF,
+      },
+    });
+    expect(screen.getByText('ChangeUserTypeModal')).toBeInTheDocument();
+
+    const cancelButton = screen.getByText('Cancel');
+
+    await userEvent.click(cancelButton);
+    expect(changeMock).toHaveBeenCalled();
   });
 
   describe('when profilePicture configuration is not enabled', () => {
