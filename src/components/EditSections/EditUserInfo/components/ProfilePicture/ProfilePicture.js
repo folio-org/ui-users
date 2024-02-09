@@ -58,15 +58,25 @@ const ProfilePicture = ({ profilePictureId, form }) => {
       aria-label="profile picture action menu"
       role="menu"
     >
-      <Button buttonStyle="dropdownItem"><Icon icon="profile">Local File</Icon></Button>
+      <Button buttonStyle="dropdownItem">
+        <Icon icon="profile">
+          {intl.formatMessage({ id: 'ui-users.information.profilePicture.localFile' })}
+        </Icon>
+      </Button>
       <Button
         data-testId="externalURL"
         buttonStyle="dropdownItem"
         onClick={toggleExternalLinkModal}
       >
-        <Icon icon="external-link">External URL</Icon>
+        <Icon icon="external-link">
+          {intl.formatMessage({ id: 'ui-users.information.profilePicture.externalURL' })}
+        </Icon>
       </Button>
-      <Button buttonStyle="dropdownItem"><Icon icon="trash">Delete</Icon></Button>
+      <Button buttonStyle="dropdownItem">
+        <Icon icon="trash">
+          {intl.formatMessage({ id: 'ui-users.information.profilePicture.delete' })}
+        </Icon>
+      </Button>
     </DropdownMenu>
   );
 
@@ -84,7 +94,7 @@ const ProfilePicture = ({ profilePictureId, form }) => {
           <Dropdown
             data-testId="updateProfilePictureDropdown"
             id="updateProfilePictureDropdown"
-            label="Update"
+            label={intl.formatMessage({ id: 'ui-users.information.profilePicture.update' })}
             placement="bottom-end"
             renderMenu={renderMenu}
           />
