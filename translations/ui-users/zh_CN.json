@@ -1139,5 +1139,22 @@
     "information.userType.system": "系统",
     "userType": "用户类型",
     "data.loanActionMap.reminderFee": "提醒费",
-    "permission.profilepictures.view": "Users: Can view profile pictures"
+    "actionMenu.patronNoticePrintJobs": "查看读者通知打印任务 (PDF)",
+    "permission.view-patron-notice-print-jobs": "用户：查看读者通知打印任务",
+    "permission.remove-patron-notice-print-jobs": "用户：查看和删除读者通知打印任务",
+    "patronNoticePrintJobs.label": "读者通知打印任务",
+    "patronNoticePrintJobs.actions": "操作",
+    "patronNoticePrintJobs.actions.delete": "删除选定的打印任务",
+    "patronNoticePrintJobs.name": "名称",
+    "patronNoticePrintJobs.email": "电子邮件",
+    "patronNoticePrintJobs.updated": "已更新",
+    "patronNoticePrintJobs.created": "已创建",
+    "patronNoticePrintJobs.errors.pdf": "'PDF生成失败",
+    "permission.profile-pictures.view": "用户：可以查看简介图片",
+    "permission.profile-pictures.all": "用户：可以查看、编辑和删除简介图片",
+    "information.profilePicture": "简介图片",
+    "information.profilePicture.update": "Update",
+    "information.profilePicture.localFile": "Local File",
+    "information.profilePicture.externalURL": "External URL",
+    "information.profilePicture.delete": "Delete"
 }

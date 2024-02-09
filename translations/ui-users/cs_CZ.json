@@ -1139,5 +1139,22 @@
     "information.userType.system": "Systém",
     "userType": "Typ uživatele",
     "data.loanActionMap.reminderFee": "Poplatek za připomenutí",
-    "permission.profilepictures.view": "Uživatelé: Mohou zobrazit profilové obrázky"
+    "actionMenu.patronNoticePrintJobs": "Zobrazit tiskové úlohy s upozorněním pro čtenáře (PDF)",
+    "permission.view-patron-notice-print-jobs": "Uživatelé: Zobrazení tiskových úloh s upozorněním pro čtenáře",
+    "permission.remove-patron-notice-print-jobs": "Uživatelé: Zobrazení a odstranění tiskových úloh s upozorněním pro čtenáře",
+    "patronNoticePrintJobs.label": "Tiskové úlohy s notifikací čtenáře",
+    "patronNoticePrintJobs.actions": "Akce",
+    "patronNoticePrintJobs.actions.delete": "Smazat vybrané tiskové úlohy",
+    "patronNoticePrintJobs.name": "Jméno",
+    "patronNoticePrintJobs.email": "E-mail",
+    "patronNoticePrintJobs.updated": "Aktualizováno",
+    "patronNoticePrintJobs.created": "Vytvořeno",
+    "patronNoticePrintJobs.errors.pdf": "'Generování PDF se nezdařilo",
+    "permission.profile-pictures.view": "Users: Can view profile pictures",
+    "permission.profile-pictures.all": "Users: Can view, edit, and delete profile pictures",
+    "information.profilePicture": "Profile picture",
+    "information.profilePicture.update": "Update",
+    "information.profilePicture.localFile": "Local File",
+    "information.profilePicture.externalURL": "External URL",
+    "information.profilePicture.delete": "Delete"
 }
