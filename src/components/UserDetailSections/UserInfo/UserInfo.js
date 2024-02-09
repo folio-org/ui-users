@@ -52,15 +52,15 @@ const UserInfo = (props) => {
     const profilePictureSrc = isProfilePictureLinkAURL ? profilePictureLink : 'data:;base64,' + profilePictureData;
     const imgSrc = isFetching || !hasProfilePicture ? profilePicThumbnail : profilePictureSrc;
 
-     return (
-      isFetching ? <Loading /> :  
-      <img
-        data-testid='userProfilePicture'
-        className={css.profilePlaceholder}
-        alt={intl.formatMessage({ id: 'ui-users.information.profilePicture' })}
-        src={imgSrc}
-      />
-     )
+    return (
+    isFetching ? <Loading /> :  
+    <img
+      data-testid='userProfilePicture'
+      className={css.profilePlaceholder}
+      alt={intl.formatMessage({ id: 'ui-users.information.profilePicture' })}
+      src={imgSrc}
+    />
+    )
   };
 
   return (

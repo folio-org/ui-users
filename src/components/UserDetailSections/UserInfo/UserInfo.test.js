@@ -60,7 +60,7 @@ describe('Render userInfo component', () => {
       renderUserInfo(props);
       expect(screen.getByTestId('userProfilePicture')).toBeInTheDocument();
     });
-    it('should display profile picture loader while fetching profile picture', async () => {
+    it('should display profile picture loader while fetching profile picture', () => {
       useProfilePicture.mockClear().mockReturnValue({isFetching: true});
       renderUserInfo(props);
       expect(screen.getByText('Loading')).toBeInTheDocument();
