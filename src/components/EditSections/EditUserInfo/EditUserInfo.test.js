@@ -37,7 +37,21 @@ jest.mock('../../util', () => ({
   isConsortiumEnabled: jest.fn(() => true),
 }));
 
-jest.mock('./components/ProfilePicture', () => jest.fn(() => 'Profile Picture'));
+jest.mock('./components', () => ({
+  ProfilePicture : jest.fn(() => 'Profile Picture'),
+  ChangeUserTypeModal: jest.fn(({ onChange, initialUserType, open }) => {
+    if (!open) {
+      return null;
+    }
+
+    return (
+      <div>
+        <h1>ChangeUserTypeModal</h1>
+        <button type="button" onClick={() => onChange(initialUserType)}>Cancel</button>
+      </div>
+    );
+  }),
+}));
 
 const onSubmit = jest.fn();
 
@@ -193,6 +207,31 @@ describe('Render Edit User Information component', () => {
   it('should display profile picture', () => {
     renderEditUserInfo(props);
     expect(screen.getByText('Profile Picture')).toBeInTheDocument();
+  });
+
+  it('should not change user type onClick `Cancel` button', async () => {
+    isConsortiumEnabled.mockClear().mockReturnValue(true);
+    renderEditUserInfo({
+      ...props,
+      initialValues: {
+        ...props.initialValues,
+        type: USER_TYPES.STAFF,
+      },
+    });
+
+    await userEvent.selectOptions(screen.getByRole('combobox', { name: 'ui-users.information.userType' }), USER_TYPES.PATRON);
+
+    const option = screen.getByRole('option', { name: 'ui-users.information.userType.patron' });
+
+
+    await userEvent.click(option);
+
+    await screen.findByText('ChangeUserTypeModal');
+
+    const cancelButton = screen.getByText('Cancel');
+
+    await userEvent.click(cancelButton);
+    expect(changeMock).toHaveBeenCalledWith('type', USER_TYPES.STAFF);
   });
 
   describe('when profilePicture configuration is not enabled', () => {
