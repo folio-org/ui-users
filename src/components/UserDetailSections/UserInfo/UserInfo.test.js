@@ -42,7 +42,7 @@ const props = {
 
 describe('Render userInfo component', () => {
   beforeEach(() => {
-    useProfilePicture.mockClear().mockReturnValue(profilePicData.profile_picture_blob);
+    useProfilePicture.mockClear().mockReturnValue({profilePictureData: profilePicData.profile_picture_blob});
   });
   describe('Check if user data are shown', () => {
     it('Active Users', () => {
@@ -58,7 +58,12 @@ describe('Render userInfo component', () => {
     });
     it('should display profile picture', () => {
       renderUserInfo(props);
-      expect(screen.getByText('ui-users.information.profilePicture')).toBeInTheDocument();
+      expect(screen.getByTestId('userProfilePicture')).toBeInTheDocument();
+    });
+    it('should display profile picture loader while fetching profile picture', async () => {
+      useProfilePicture.mockClear().mockReturnValue({isFetching: true});
+      renderUserInfo(props);
+      expect(screen.getByText('Loading')).toBeInTheDocument();
     });
   });
 });

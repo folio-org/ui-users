@@ -55,6 +55,7 @@ const UserInfo = (props) => {
      return (
       isFetching ? <Loading /> :  
       <img
+        data-testid='userProfilePicture'
         className={css.profilePlaceholder}
         alt={intl.formatMessage({ id: 'ui-users.information.profilePicture' })}
         src={imgSrc}
