@@ -79,7 +79,8 @@
           "user-settings.custom-fields.item.get",
           "user-settings.custom-fields.item.stats.get",
           "departments.collection.get",
-          "departments.item.get"
+          "departments.item.get",
+          "users.configurations.item.get"
         ],
         "visible": true
       },
@@ -982,13 +983,26 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.profilepictures.view",
+        "permissionName": "ui-users.profile-pictures.view",
         "displayName": "Users: Can view profile pictures",
         "description": "Also includes basic permissions to view users",
         "subPermissions": [
           "ui-users.view",
-          "users.profile-picture.item.get",
-          "users.configurations.item.get"
+          "users.profile-picture.item.get"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.profile-pictures.all",
+        "displayName": "Users: Can view, edit, and delete profile pictures",
+        "description": "Also includes basic permissions to edit user profile",
+        "subPermissions": [
+          "ui-users.profile-pictures.view",
+          "ui-users.edit",
+          "users.profile-picture.item.post",
+          "users.profile-picture.item.put",
+          "users.profile-picture.item.delete"
+
         ],
         "visible": true
       },

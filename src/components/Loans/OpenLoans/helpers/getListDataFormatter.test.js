@@ -1,6 +1,7 @@
 import okapiCurrentUser from 'fixtures/okapiCurrentUser';
 import loan from 'fixtures/openLoan';
 import getListDataFormatter from './getListDataFormatter';
+import { effectiveCallNumber } from '@folio/stripes/util';
 
 const STRIPES = {
   connect: (Component) => Component,
@@ -48,6 +49,10 @@ const STRIPES = {
 const formatMessageMock = jest.fn();
 const contributorsMock = jest.fn(() => ['test', 'test2', 'test3']);
 const getFeeFineMock = jest.fn();
+
+jest.mock('@folio/stripes/util', () => ({
+  effectiveCallNumber: jest.fn(),
+}));
 
 const formatMessage = formatMessageMock;
 const toggleItem = jest.fn();
@@ -112,6 +117,15 @@ describe('Data Formatter component', () => {
     data.contributors.sorter(loan);
     data.contributors.formatter(loan);
     expect(contributorsMock).toHaveBeenCalled();
+  });
+  it('Checking Call Number', async () => {
+    const data = getListDataFormatter(formatMessage, toggleItem, isLoanChecked, requestCounts,
+      requestRecords, resources, getLoanPolicy, handleOptionsChange, stripes, getFeeFine,
+      getContributorslist, feeFineCount, user);
+    data.callNumber.sorter(loan);
+    data.callNumber.formatter(loan);
+    expect(effectiveCallNumber).toHaveBeenCalled();
+    
   });
   it('Checking renewals', async () => {
     const data = getListDataFormatter(formatMessage, toggleItem, isLoanChecked, requestCounts,

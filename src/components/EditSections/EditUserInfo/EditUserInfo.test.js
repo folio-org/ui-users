@@ -11,6 +11,9 @@ import EditUserInfo from './EditUserInfo';
 import { isConsortiumEnabled } from '../../util';
 import { USER_TYPES } from '../../../constants';
 
+jest.mock('../../../hooks', () => ({
+  useProfilePicture: jest.fn(),
+}));
 jest.mock('@folio/stripes/components', () => ({
   ...jest.requireActual('@folio/stripes/components'),
   Modal: jest.fn(({ children, label, footer, ...rest }) => {
@@ -33,6 +36,8 @@ jest.mock('../../util', () => ({
   ...jest.requireActual('../../util'),
   isConsortiumEnabled: jest.fn(() => true),
 }));
+
+jest.mock('./components/ProfilePicture', () => jest.fn(() => 'Profile Picture'));
 
 const onSubmit = jest.fn();
 
@@ -86,6 +91,7 @@ const props = {
     connect: (Component) => Component,
     timezone: 'USA/TestTimeZone',
     hasInterface: () => true,
+    hasPerm: () => true,
   },
   patronGroups: [{
     desc: 'Staff Member',
@@ -121,7 +127,8 @@ const props = {
     PUT: jest.fn(),
     cancel: jest.fn(),
     reset: jest.fn()
-  }
+  },
+  areProfilePicturesEnabled: true,
 };
 
 describe('Render Edit User Information component', () => {
@@ -181,5 +188,17 @@ describe('Render Edit User Information component', () => {
 
     expect(screen.getByRole('textbox', { name: /lastName/ })).toBeDisabled();
     expect(screen.getByRole('textbox', { name: /firstName/ })).toBeDisabled();
+  });
+
+  it('should display profile picture', () => {
+    renderEditUserInfo(props);
+    expect(screen.getByText('Profile Picture')).toBeInTheDocument();
+  });
+
+  describe('when profilePicture configuration is not enabled', () => {
+    it('should not render profile picture', () => {
+      renderEditUserInfo({ ...props, areProfilePicturesEnabled: false });
+      expect(screen.queryByText('Profile Picture')).not.toBeInTheDocument();
+    });
   });
 });
