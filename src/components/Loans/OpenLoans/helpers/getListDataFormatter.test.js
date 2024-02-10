@@ -1,7 +1,7 @@
 import okapiCurrentUser from 'fixtures/okapiCurrentUser';
 import loan from 'fixtures/openLoan';
-import getListDataFormatter from './getListDataFormatter';
 import { effectiveCallNumber } from '@folio/stripes/util';
+import getListDataFormatter from './getListDataFormatter';
 
 const STRIPES = {
   connect: (Component) => Component,
@@ -125,7 +125,6 @@ describe('Data Formatter component', () => {
     data.callNumber.sorter(loan);
     data.callNumber.formatter(loan);
     expect(effectiveCallNumber).toHaveBeenCalled();
-    
   });
   it('Checking renewals', async () => {
     const data = getListDataFormatter(formatMessage, toggleItem, isLoanChecked, requestCounts,

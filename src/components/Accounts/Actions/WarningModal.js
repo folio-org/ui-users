@@ -5,7 +5,7 @@ import {
   injectIntl,
 } from 'react-intl';
 
-import { stripesConnect } from "@folio/stripes/core";
+import { stripesConnect } from '@folio/stripes/core';
 import {
   Button,
   Col,
@@ -26,7 +26,7 @@ import {
 } from '../../util';
 
 import css from './modal.css';
-import { localizeCurrencyAmount } from "../../util/localizeCurrencyAmount";
+import { localizeCurrencyAmount } from '../../util/localizeCurrencyAmount';
 
 class WarningModal extends React.Component {
   static propTypes = {

@@ -5,7 +5,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { Field } from 'react-final-form';
 import setFieldData from 'final-form-set-field-data';
 
-import { stripesConnect } from "@folio/stripes/core";
+import { stripesConnect } from '@folio/stripes/core';
 import stripesFinalForm from '@folio/stripes/final-form';
 import {
   Row,
@@ -29,7 +29,7 @@ import {
 } from '../../../constants';
 
 import css from './PayWaive.css';
-import { localizeCurrencyAmount } from "../../util/localizeCurrencyAmount";
+import { localizeCurrencyAmount } from '../../util/localizeCurrencyAmount';
 
 class ActionModal extends React.Component {
   static propTypes = {
