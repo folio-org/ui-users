@@ -15,7 +15,11 @@ const defaultProps = {
   profilePictureId: 'https://folio.org/wp-content/uploads/2023/08/folio-site-general-Illustration-social-image-1200.jpg',
   form: {
     change: jest.fn(),
-  }
+  },
+  personal: {
+    lastName: 'lastName',
+    firstName: 'firstName',
+  },
 };
 
 const renderProfilePicture = (props) => render(<ProfilePicture {...props} />);
@@ -60,7 +64,7 @@ describe('Profile Picture', () => {
     expect(screen.getByText('Icon (trash)')).toBeInTheDocument();
   });
 
-  it('should render modal', async () => {
+  it('should render external url link modal', async () => {
     const updateButton = screen.getByTestId('updateProfilePictureDropdown');
     await userEvent.click(updateButton);
     const externalURLButton = screen.getByTestId('externalURL');
@@ -81,5 +85,14 @@ describe('Profile Picture', () => {
     await userEvent.click(saveButton);
     const image = screen.getByTestId('profile-picture');
     expect(expect(image.src).toContain('https://upload.wikimedia.org/wikipedia/commons/e/e2/FOLIO_400x400.jpg'));
+  });
+
+  it('should render delete confirmation modal', async () => {
+    const updateButton = screen.getByTestId('updateProfilePictureDropdown');
+    await userEvent.click(updateButton);
+    const deleteButton = screen.getByTestId('delete');
+    await userEvent.click(deleteButton);
+
+    expect(screen.getByText('ui-users.information.profilePicture.delete.modal.heading')).toBeInTheDocument();
   });
 });

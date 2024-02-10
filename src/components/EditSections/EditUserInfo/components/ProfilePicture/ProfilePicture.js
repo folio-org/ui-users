@@ -15,11 +15,13 @@ import { useProfilePicture } from '../../../../../hooks';
 import { isAValidURL } from '../../../../util/util';
 import profilePicThumbnail from '../../../../../../icons/profilePicThumbnail.png';
 import css from '../../EditUserInfo.css';
-import ExternalLinkModal from '../ExternalLinkModal/ExternalLinkModal';
+import ExternalLinkModal from '../ExternalLinkModal';
+import DeleteProfilePictureModal from '../DeleteProfilePictureModal';
 
-const ProfilePicture = ({ profilePictureId, form }) => {
+const ProfilePicture = ({ profilePictureId, form, personal }) => {
   const [profilePictureLink, setProfilePictureLink] = useState(profilePictureId);
   const [externalLinkModalOpen, setExternalLinkModalOpen] = useState(false);
+  const [deleteProfilePictureModalOpen, setDeleteProfilePictureModalOpen] = useState(false);
   const intl = useIntl();
   const stripes = useStripes();
   const hasProfilePicture = Boolean(profilePictureLink);
@@ -53,20 +55,49 @@ const ProfilePicture = ({ profilePictureId, form }) => {
     setProfilePictureLink(externalLink);
   };
 
+  const toggleDeleteModal = () => {
+    setDeleteProfilePictureModalOpen(prev => !prev);
+  };
+
+  const handleProfilePictureDelete = () => {
+    const { change } = form;
+    change('personal.profilePictureLink', undefined);
+    toggleDeleteModal();
+  };
+
   const renderMenu = () => (
     <DropdownMenu
       aria-label="profile picture action menu"
       role="menu"
     >
-      <Button buttonStyle="dropdownItem"><Icon icon="profile">Local File</Icon></Button>
+      <Button buttonStyle="dropdownItem">
+        <Icon icon="profile">
+          {intl.formatMessage({ id: 'ui-users.information.profilePicture.localFile' })}
+        </Icon>
+      </Button>
       <Button
         data-testId="externalURL"
         buttonStyle="dropdownItem"
         onClick={toggleExternalLinkModal}
       >
-        <Icon icon="external-link">External URL</Icon>
+        <Icon icon="external-link">
+          {intl.formatMessage({ id: 'ui-users.information.profilePicture.externalURL' })}
+        </Icon>
       </Button>
-      <Button buttonStyle="dropdownItem"><Icon icon="trash">Delete</Icon></Button>
+      {
+        profilePictureId && (
+          <Button
+            data-testId="delete"
+            buttonStyle="dropdownItem"
+            onClick={toggleDeleteModal}
+          >
+            <Icon icon="trash">
+              {intl.formatMessage({ id: 'ui-users.information.profilePicture.delete' })}
+            </Icon>
+          </Button>
+        )
+      }
+
     </DropdownMenu>
   );
 
@@ -100,6 +131,16 @@ const ProfilePicture = ({ profilePictureId, form }) => {
           />
         )
       }
+      {
+        deleteProfilePictureModalOpen && (
+          <DeleteProfilePictureModal
+            open={deleteProfilePictureModalOpen}
+            onClose={toggleDeleteModal}
+            onConfirm={handleProfilePictureDelete}
+            personal={personal}
+          />
+        )
+      }
     </>
   );
 };
@@ -107,6 +148,7 @@ const ProfilePicture = ({ profilePictureId, form }) => {
 ProfilePicture.propTypes = {
   form: PropTypes.object.isRequired,
   profilePictureId: PropTypes.string.isRequired,
+  personal: PropTypes.object.isRequired,
 };
 
 export default ProfilePicture;
