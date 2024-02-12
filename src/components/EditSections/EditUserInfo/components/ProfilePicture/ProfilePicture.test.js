@@ -1,4 +1,8 @@
-import { render, screen, fireEvent } from '@folio/jest-config-stripes/testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent
+} from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import profilePicData from 'fixtures/profilePicture';
 

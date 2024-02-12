@@ -1,4 +1,8 @@
-import { screen, render, fireEvent } from '@folio/jest-config-stripes/testing-library/react';
+import {
+  screen,
+  render,
+  fireEvent
+} from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
 import { TextField } from '@folio/stripes/components';
@@ -25,9 +29,11 @@ describe('ExternalLinkModal', () => {
     onSave: jest.fn(),
     profilePictureLink: 'profilePictureLink',
   };
+
   beforeEach(() => {
     renderExternalLinkModal(props);
   });
+
   it('should have modal title - Update profile picture', () => {
     expect(screen.getByText('ui-users.information.profilePicture.externalLink.modal.updateProfilePicture')).toBeInTheDocument();
   });
