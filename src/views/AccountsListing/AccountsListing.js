@@ -41,7 +41,7 @@ import {
 } from '../../components/Accounts';
 
 import { refundClaimReturned } from '../../constants';
-import { localizeCurrencyAmount } from "../../components/util/localizeCurrencyAmount";
+import { localizeCurrencyAmount } from '../../components/util/localizeCurrencyAmount';
 
 const filterConfig = [
   {
