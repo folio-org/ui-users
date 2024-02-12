@@ -9,7 +9,12 @@ import {
 import { FormattedMessage } from 'react-intl';
 import { isAValidURL } from '../../../../util';
 
-const ExternalLinkModal = ({ open, onClose, onSave, profilePictureLink }) => {
+const ExternalLinkModal = ({
+  open,
+  onClose,
+  onSave,
+  profilePictureLink
+}) => {
   const [inputValue, setInputValue] = useState('');
   const previousInputValue = useRef(profilePictureLink);
   const [disabled, setDisabled] = useState(false);

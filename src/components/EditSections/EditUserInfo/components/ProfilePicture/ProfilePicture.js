@@ -16,6 +16,7 @@ import { isAValidURL } from '../../../../util/util';
 import profilePicThumbnail from '../../../../../../icons/profilePicThumbnail.png';
 import css from '../../EditUserInfo.css';
 import ExternalLinkModal from '../ExternalLinkModal';
+<<<<<<< HEAD
 import DeleteProfilePictureModal from '../DeleteProfilePictureModal';
 
 const ProfilePicture = ({ profilePictureId, form, personal }) => {
@@ -23,6 +24,12 @@ const ProfilePicture = ({ profilePictureId, form, personal }) => {
   const [externalLinkModalOpen, setExternalLinkModalOpen] = useState(false);
   const [deleteProfilePictureModalOpen, setDeleteProfilePictureModalOpen] = useState(false);
   const [isProfilePictureDeleted, setIsProfilePictureDeleted] = useState(false);
+=======
+
+const ProfilePicture = ({ profilePictureId, form }) => {
+  const [profilePictureLink, setProfilePictureLink] = useState(profilePictureId);
+  const [externalLinkModalOpen, setExternalLinkModalOpen] = useState(false);
+>>>>>>> master
   const intl = useIntl();
   const stripes = useStripes();
   const hasProfilePicture = Boolean(profilePictureLink);
@@ -123,7 +130,7 @@ const ProfilePicture = ({ profilePictureId, form, personal }) => {
           <Dropdown
             data-testId="updateProfilePictureDropdown"
             id="updateProfilePictureDropdown"
-            label="Update"
+            label={intl.formatMessage({ id: 'ui-users.information.profilePicture.update' })}
             placement="bottom-end"
             renderMenu={renderMenu}
           />
