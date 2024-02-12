@@ -22,6 +22,7 @@ const ProfilePicture = ({ profilePictureId, form, personal }) => {
   const [profilePictureLink, setProfilePictureLink] = useState(profilePictureId);
   const [externalLinkModalOpen, setExternalLinkModalOpen] = useState(false);
   const [deleteProfilePictureModalOpen, setDeleteProfilePictureModalOpen] = useState(false);
+  const [isProfilePictureDeleted, setIsProfilePictureDeleted] = useState(false);
   const intl = useIntl();
   const stripes = useStripes();
   const hasProfilePicture = Boolean(profilePictureLink);
@@ -63,6 +64,8 @@ const ProfilePicture = ({ profilePictureId, form, personal }) => {
     const { change } = form;
     change('personal.profilePictureLink', undefined);
     toggleDeleteModal();
+    setProfilePictureLink('');
+    setIsProfilePictureDeleted(true);
   };
 
   const renderMenu = () => (
@@ -70,7 +73,10 @@ const ProfilePicture = ({ profilePictureId, form, personal }) => {
       aria-label="profile picture action menu"
       role="menu"
     >
-      <Button buttonStyle="dropdownItem">
+      <Button
+        buttonStyle="dropdownItem"
+        disabled={isProfilePictureDeleted}
+      >
         <Icon icon="profile">
           {intl.formatMessage({ id: 'ui-users.information.profilePicture.localFile' })}
         </Icon>
@@ -78,6 +84,7 @@ const ProfilePicture = ({ profilePictureId, form, personal }) => {
       <Button
         data-testId="externalURL"
         buttonStyle="dropdownItem"
+        disabled={isProfilePictureDeleted}
         onClick={toggleExternalLinkModal}
       >
         <Icon icon="external-link">
@@ -90,6 +97,7 @@ const ProfilePicture = ({ profilePictureId, form, personal }) => {
             data-testId="delete"
             buttonStyle="dropdownItem"
             onClick={toggleDeleteModal}
+            disabled={isProfilePictureDeleted}
           >
             <Icon icon="trash">
               {intl.formatMessage({ id: 'ui-users.information.profilePicture.delete' })}
