@@ -19,4 +19,8 @@ describe('DeleteProfilePictureModal', () => {
   it('should render confirmation modal', () => {
     expect(screen.getByText('ui-users.information.profilePicture.delete.modal.heading')).toBeInTheDocument();
   });
+
+  it('should render confirmation modal message', () => {
+    expect(screen.getByText('ui-users.information.profilePicture.delete.modal.message')).toBeInTheDocument();
+  });
 });
