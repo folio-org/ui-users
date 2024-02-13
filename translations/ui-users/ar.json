@@ -536,7 +536,7 @@
     "accounts.comment.error.enterComment": "إدخال تعليق",
     "owners.noServicePoints": "نقاط الخدمة المرتبطة غير المسموح بها لجهة تحصيل الرسم/الغرامة المشتركة",
     "anonymization.confirmation.header": "تم منع عدم تعريف الهوية",
-    "anonymization.confirmation.message": "{amount} إعارة يرتبط بها رسوم/غرامات ولا يمكن عدم تجاهلها.",
+    "anonymization.confirmation.message": " All loans for this user will be anonymized. The loans will no longer appear in the user’s closed loans. Anonymizing loans cannot be reversed.",
     "requests.preferences": "مفضلات الطلب",
     "requests.fulfillmentPreference": "مفضلات الاستيفاء",
     "requests.defaultDeliveryAddress": "عنوان التوصيل الافتراضي",
@@ -1156,5 +1156,8 @@
     "information.profilePicture.update": "Update",
     "information.profilePicture.localFile": "Local File",
     "information.profilePicture.externalURL": "External URL",
-    "information.profilePicture.delete": "Delete"
+    "information.profilePicture.delete": "Delete",
+    "information.profilePicture.externalLink.modal.updateProfilePicture": "Update profile picture",
+    "information.profilePicture.externalLink.modal.externalURL": "External URL",
+    "information.profilePicture.externalLink.modal.externalURL.errorMessage": "Invalid image URL"
 }
