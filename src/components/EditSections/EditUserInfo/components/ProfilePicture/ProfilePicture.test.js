@@ -26,12 +26,13 @@ const renderProfilePicture = (props) => render(<ProfilePicture {...props} />);
 
 describe('Profile Picture', () => {
   beforeEach(() => {
-    useProfilePicture.mockClear().mockReturnValue(profilePicData.profile_picture_blob);
+    useProfilePicture.mockClear().mockReturnValue({ profilePictureData: profilePicData.profile_picture_blob, isFetching: false});
     renderProfilePicture(defaultProps);
   });
 
   it('should display Profile picture', () => {
     expect(screen.getByTestId('profile-picture')).toBeInTheDocument();
+    expect(screen.getByAltText('ui-users.information.profilePicture')).toBeInTheDocument();
   });
 
   it('Image to be displayed with correct src', () => {

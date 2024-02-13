@@ -8,6 +8,7 @@ import {
   DropdownMenu,
   Icon,
   Label,
+  Loading,
 } from '@folio/stripes/components';
 import { useStripes } from '@folio/stripes/core';
 
@@ -32,14 +33,13 @@ const ProfilePicture = ({ profilePictureId, form }) => {
     const profilePictureSrc = isProfilePictureLinkAURL ? profilePictureLink : 'data:;base64,' + profilePictureData;
     const imgSrc = isFetching || !hasProfilePicture ? profilePicThumbnail : profilePictureSrc;
 
-    return (
+    return isFetching ? <Loading/> :
       <img
         data-testid="profile-picture"
         className={css.profilePlaceholder}
         alt={intl.formatMessage({ id: 'ui-users.information.profilePicture' })}
         src={imgSrc}
       />
-    );
   };
 
   const toggleExternalLinkModal = () => {
