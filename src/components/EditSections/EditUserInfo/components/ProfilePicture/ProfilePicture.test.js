@@ -33,7 +33,8 @@ describe('Profile Picture', () => {
   it('should display Profile picture Loader while fetching profile picture', () => {
     useProfilePicture.mockClear().mockReturnValue({ profilePictureData: profilePicData.profile_picture_blob, isFetching: true});
     renderProfilePicture(defaultProps);
-    expect(screen.getByTestId('profile-picture-loader')).toBeInTheDocument()
+    const profilePictureLoader = screen.getByTestId('profile-picture-loader').querySelector('.spinner')
+    expect(profilePictureLoader).toBeInTheDocument()
     });
 
   it('should display Profile picture', () => {
