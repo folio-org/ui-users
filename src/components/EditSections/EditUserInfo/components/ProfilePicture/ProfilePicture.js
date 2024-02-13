@@ -33,7 +33,8 @@ const ProfilePicture = ({ profilePictureId, form }) => {
     const profilePictureSrc = isProfilePictureLinkAURL ? profilePictureLink : 'data:;base64,' + profilePictureData;
     const imgSrc = isFetching || !hasProfilePicture ? profilePicThumbnail : profilePictureSrc;
 
-    return isFetching ? <Loading/> :
+    return isFetching ? 
+      <span data-testid='profile-picture-loader'> <Loading/> </span> :
       <img
         data-testid="profile-picture"
         className={css.profilePlaceholder}
