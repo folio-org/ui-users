@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 
 import {
   Button,
@@ -12,17 +12,21 @@ import {
 import { useStripes } from '@folio/stripes/core';
 
 import { useProfilePicture } from '../../../../../hooks';
-import { isAValidUUID } from '../../../../util/util';
+import { isAValidURL } from '../../../../util/util';
 import profilePicThumbnail from '../../../../../../icons/profilePicThumbnail.png';
 import css from '../../EditUserInfo.css';
+import ExternalLinkModal from '../ExternalLinkModal';
 
-const ProfilePicture = ({ label, profilePictureLink }) => {
+const ProfilePicture = ({ profilePictureId, form }) => {
+  const [profilePictureLink, setProfilePictureLink] = useState(profilePictureId);
+  const [externalLinkModalOpen, setExternalLinkModalOpen] = useState(false);
   const intl = useIntl();
   const stripes = useStripes();
-  const isProfilePictureLinkAURL = !isAValidUUID(profilePictureLink);
   const hasProfilePicture = Boolean(profilePictureLink);
-  const { isFetching, profilePictureData } = useProfilePicture({ profilePictureId: profilePictureLink });
+  const isProfilePictureLinkAURL = hasProfilePicture && isAValidURL(profilePictureLink);
   const hasAllProfilePicturePerms = stripes.hasPerm('ui-users.profile-pictures.all');
+
+  const { isFetching, profilePictureData } = useProfilePicture({ profilePictureId });
 
   const renderProfilePic = () => {
     const profilePictureSrc = isProfilePictureLinkAURL ? profilePictureLink : 'data:;base64,' + profilePictureData;
@@ -31,12 +35,22 @@ const ProfilePicture = ({ label, profilePictureLink }) => {
     return (
       <img
         data-testid="profile-picture"
-        id="profile-picture"
         className={css.profilePlaceholder}
         alt={intl.formatMessage({ id: 'ui-users.information.profilePicture' })}
         src={imgSrc}
       />
     );
+  };
+
+  const toggleExternalLinkModal = () => {
+    setExternalLinkModalOpen(prev => !prev);
+  };
+
+  const handleSaveExternalProfilePictureLink = (externalLink) => {
+    const { change } = form;
+    change('personal.profilePictureLink', externalLink);
+    toggleExternalLinkModal();
+    setProfilePictureLink(externalLink);
   };
 
   const renderMenu = () => (
@@ -49,7 +63,11 @@ const ProfilePicture = ({ label, profilePictureLink }) => {
           {intl.formatMessage({ id: 'ui-users.information.profilePicture.localFile' })}
         </Icon>
       </Button>
-      <Button buttonStyle="dropdownItem">
+      <Button
+        data-testId="externalURL"
+        buttonStyle="dropdownItem"
+        onClick={toggleExternalLinkModal}
+      >
         <Icon icon="external-link">
           {intl.formatMessage({ id: 'ui-users.information.profilePicture.externalURL' })}
         </Icon>
@@ -64,8 +82,10 @@ const ProfilePicture = ({ label, profilePictureLink }) => {
 
   return (
     <>
-      <Label htmlFor="profile-picture">
-        {label}
+      <Label tagName="div">
+        {
+          intl.formatMessage({ id: 'ui-users.information.profilePicture' })
+        }
       </Label>
       { renderProfilePic()}
       <br />
@@ -74,9 +94,19 @@ const ProfilePicture = ({ label, profilePictureLink }) => {
           <Dropdown
             data-testId="updateProfilePictureDropdown"
             id="updateProfilePictureDropdown"
-            label={<FormattedMessage id="ui-users.information.profilePicture.update" />}
+            label={intl.formatMessage({ id: 'ui-users.information.profilePicture.update' })}
             placement="bottom-end"
             renderMenu={renderMenu}
+          />
+        )
+      }
+      {
+        externalLinkModalOpen && (
+          <ExternalLinkModal
+            open={externalLinkModalOpen}
+            onClose={toggleExternalLinkModal}
+            onSave={handleSaveExternalProfilePictureLink}
+            profilePictureLink={isProfilePictureLinkAURL ? profilePictureLink : ''}
           />
         )
       }
@@ -85,8 +115,8 @@ const ProfilePicture = ({ label, profilePictureLink }) => {
 };
 
 ProfilePicture.propTypes = {
-  label: PropTypes.node.isRequired,
-  profilePictureLink: PropTypes.string,
+  form: PropTypes.object.isRequired,
+  profilePictureId: PropTypes.string.isRequired,
 };
 
 export default ProfilePicture;

@@ -16,7 +16,7 @@ import {
   FormattedDate,
   FormattedTime,
 } from '@folio/stripes/components';
-import { stripesConnect } from "@folio/stripes/core";
+import { stripesConnect } from '@folio/stripes/core';
 
 import { itemStatuses } from '../../../constants';
 import {
@@ -28,7 +28,7 @@ import {
   isCancelAllowed,
 } from '../accountFunctions';
 import css from './ViewFeesFines.css';
-import { localizeCurrencyAmount } from "../../util/localizeCurrencyAmount";
+import { localizeCurrencyAmount } from '../../util/localizeCurrencyAmount';
 
 class ViewFeesFines extends React.Component {
   static propTypes = {
@@ -235,7 +235,7 @@ class ViewFeesFines extends React.Component {
       'metadata.updatedDate': f => (f.metadata && f.metadata.createdDate !== f.metadata.updatedDate ? <FormattedDate value={f.metadata.updatedDate} /> : '-'),
       'feeFineType': f => (f.feeFineType ? this.showComments(f) : '-'),
       'amount': f => (f.amount ? localizeCurrencyAmount(f.amount, stripes.currency, intl) : '-'),
-      'remaining': f => localizeCurrencyAmount(f.amount || 0, stripes.currency, intl),
+      'remaining': f => localizeCurrencyAmount(f.remaining || 0, stripes.currency, intl),
       'paymentStatus.name': f => (f.paymentStatus || {}).name || '-',
       'feeFineOwner': f => (f.feeFineOwner ? f.feeFineOwner : '-'),
       'title': item => this.formatTitle(item),

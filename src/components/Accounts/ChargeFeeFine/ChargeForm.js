@@ -23,7 +23,7 @@ import UserInfo from './UserInfo';
 import FeeFineInfo from './FeeFineInfo';
 import ItemInfo from './ItemInfo';
 import { SHARED_OWNER } from '../../../constants';
-import {formatCurrencyAmount} from "../../util";
+import { formatCurrencyAmount } from '../../util';
 
 function showValidationErrors({ feeFineId, ownerId, amount }) {
   const errors = {};

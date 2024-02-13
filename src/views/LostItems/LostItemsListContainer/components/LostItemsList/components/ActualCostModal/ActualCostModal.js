@@ -29,7 +29,7 @@ import {
   ACTUAL_COST_DEFAULT,
   ACTUAL_COST_PROP_TYPES,
 } from '../../../../../constants';
-import { formatCurrencyAmount } from "../../../../../../../components/util";
+import { formatCurrencyAmount } from '../../../../../../../components/util';
 
 const actualCostToBillField = 'actualCostToBill';
 const BILLED_AMOUNT_MAX = 9999.99;

@@ -25,7 +25,7 @@ import {
   MAX_RECORDS,
   SHARED_OWNER,
 } from '../constants';
-import { localizeCurrencyAmount } from "../components/util/localizeCurrencyAmount";
+import { localizeCurrencyAmount } from '../components/util/localizeCurrencyAmount';
 
 const columnMapping = {
   feeFineType: (
