@@ -25,6 +25,7 @@
 * Update request header for pay several Fees/fines. Refs UIU-3040.
 * Use correct field for display remaining in list. Refs UIU-3049.
 * Link externally hosted image as user profile picture. Refs UIU-2975.
+* Show loading icon until profile picture loads on user detail screen. Refs - UIU-3043.
 * Delete profile picture. Refs UIU-3004.
 
 ## [10.0.4](https://github.com/folio-org/ui-users/tree/v10.0.4) (2023-11-10)
