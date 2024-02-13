@@ -30,7 +30,7 @@ describe('Profile Picture', () => {
     renderProfilePicture(defaultProps);
   });
 
-  it('should display Profile picture Loader while fetching profile picture', async () => {
+  it('should display Profile picture Loader while fetching profile picture', () => {
     useProfilePicture.mockClear().mockReturnValue({ profilePictureData: profilePicData.profile_picture_blob, isFetching: true});
     renderProfilePicture(defaultProps);
     expect(screen.getByTestId('profile-picture-loader')).toBeInTheDocument()
