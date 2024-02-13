@@ -1156,5 +1156,8 @@
     "information.profilePicture.update": "Atualizar",
     "information.profilePicture.localFile": "Arquivo local",
     "information.profilePicture.externalURL": "URL externa",
-    "information.profilePicture.delete": "Excluir"
+    "information.profilePicture.delete": "Excluir",
+    "information.profilePicture.externalLink.modal.updateProfilePicture": "Atualizar foto do perfil",
+    "information.profilePicture.externalLink.modal.externalURL": "URL externa",
+    "information.profilePicture.externalLink.modal.externalURL.errorMessage": "URL de imagem inválida"
 }
