@@ -29,74 +29,87 @@ const defaultProps = {
 const renderProfilePicture = (props) => render(<ProfilePicture {...props} />);
 
 describe('Profile Picture', () => {
-  beforeEach(() => {
-    useProfilePicture.mockClear().mockReturnValue(profilePicData.profile_picture_blob);
-    renderProfilePicture(defaultProps);
+  describe('when profile picture is a url', () => {
+    beforeEach(() => {
+      useProfilePicture.mockClear().mockReturnValue({ profilePictureData: profilePicData.profile_picture_blob, isFetching: false });
+      renderProfilePicture(defaultProps);
+    });
+
+    it('should display Profile picture', () => {
+      expect(screen.getByTestId('profile-picture')).toBeInTheDocument();
+    });
+
+    it('Image to be displayed with correct src', () => {
+      const image = screen.getByTestId('profile-picture');
+      expect(image.src).toContain('https://folio.org/wp-content/uploads/2023/08/folio-site-general-Illustration-social-image-1200.jpg');
+    });
+
+    it('Update button to be displayed', () => {
+      expect(screen.getByTestId('updateProfilePictureDropdown')).toBeInTheDocument();
+    });
+
+    it('Local file button to be displayed', async () => {
+      const updateButton = screen.getByTestId('updateProfilePictureDropdown');
+      await userEvent.click(updateButton);
+
+      expect(screen.getByText('Icon (profile)')).toBeInTheDocument();
+    });
+
+    it('External link button to be displayed', async () => {
+      const updateButton = screen.getByTestId('updateProfilePictureDropdown');
+      await userEvent.click(updateButton);
+
+      expect(screen.getByText('Icon (external-link)')).toBeInTheDocument();
+    });
+
+    it('Delete link button to be displayed', async () => {
+      const updateButton = screen.getByTestId('updateProfilePictureDropdown');
+      await userEvent.click(updateButton);
+
+      expect(screen.getByText('Icon (trash)')).toBeInTheDocument();
+    });
+
+    it('should render external url link modal', async () => {
+      const updateButton = screen.getByTestId('updateProfilePictureDropdown');
+      await userEvent.click(updateButton);
+      const externalURLButton = screen.getByTestId('externalURL');
+      await userEvent.click(externalURLButton);
+
+      expect(screen.getByText('ui-users.information.profilePicture.externalLink.modal.externalURL')).toBeInTheDocument();
+    });
+
+    it('should call save handler', async () => {
+      const updateButton = screen.getByTestId('updateProfilePictureDropdown');
+      await userEvent.click(updateButton);
+      const externalURLButton = screen.getByTestId('externalURL');
+      await userEvent.click(externalURLButton);
+      const saveButton = screen.getByRole('button', { name: 'ui-users.save' });
+      const inputElement = screen.getByLabelText('ui-users.information.profilePicture.externalLink.modal.externalURL');
+
+      fireEvent.change(inputElement, { target: { value: 'https://upload.wikimedia.org/wikipedia/commons/e/e2/FOLIO_400x400.jpg' } });
+      await userEvent.click(saveButton);
+      const image = screen.getByTestId('profile-picture');
+      expect(expect(image.src).toContain('https://upload.wikimedia.org/wikipedia/commons/e/e2/FOLIO_400x400.jpg'));
+    });
+
+    it('should render delete confirmation modal', async () => {
+      const updateButton = screen.getByTestId('updateProfilePictureDropdown');
+      await userEvent.click(updateButton);
+      const deleteButton = screen.getByTestId('delete');
+      await userEvent.click(deleteButton);
+
+      expect(screen.getByText('ui-users.information.profilePicture.delete.modal.heading')).toBeInTheDocument();
+    });
   });
 
-  it('should display Profile picture', () => {
-    expect(screen.getByTestId('profile-picture')).toBeInTheDocument();
-  });
+  describe('when profile picture is a uuid ', () => {
+    beforeEach(() => {
+      useProfilePicture.mockClear().mockReturnValue({ profilePictureData: profilePicData.profile_picture_blob, isFetching: false });
+      renderProfilePicture({ ...defaultProps, profilePictureId: 'cdc053ff-f88e-445c-878f-650472bd52e6' });
+    });
 
-  it('Image to be displayed with correct src', () => {
-    const image = screen.getByTestId('profile-picture');
-    expect(image.src).toContain('https://folio.org/wp-content/uploads/2023/08/folio-site-general-Illustration-social-image-1200.jpg');
-  });
-
-  it('Update button to be displayed', () => {
-    expect(screen.getByTestId('updateProfilePictureDropdown')).toBeInTheDocument();
-  });
-
-  it('Local file button to be displayed', async () => {
-    const updateButton = screen.getByTestId('updateProfilePictureDropdown');
-    await userEvent.click(updateButton);
-
-    expect(screen.getByText('Icon (profile)')).toBeInTheDocument();
-  });
-
-  it('External link button to be displayed', async () => {
-    const updateButton = screen.getByTestId('updateProfilePictureDropdown');
-    await userEvent.click(updateButton);
-
-    expect(screen.getByText('Icon (external-link)')).toBeInTheDocument();
-  });
-
-  it('Delete link button to be displayed', async () => {
-    const updateButton = screen.getByTestId('updateProfilePictureDropdown');
-    await userEvent.click(updateButton);
-
-    expect(screen.getByText('Icon (trash)')).toBeInTheDocument();
-  });
-
-  it('should render external url link modal', async () => {
-    const updateButton = screen.getByTestId('updateProfilePictureDropdown');
-    await userEvent.click(updateButton);
-    const externalURLButton = screen.getByTestId('externalURL');
-    await userEvent.click(externalURLButton);
-
-    expect(screen.getByText('ui-users.information.profilePicture.externalLink.modal.externalURL')).toBeInTheDocument();
-  });
-
-  it('should call save handler', async () => {
-    const updateButton = screen.getByTestId('updateProfilePictureDropdown');
-    await userEvent.click(updateButton);
-    const externalURLButton = screen.getByTestId('externalURL');
-    await userEvent.click(externalURLButton);
-    const saveButton = screen.getByRole('button', { name: 'ui-users.save' });
-    const inputElement = screen.getByLabelText('ui-users.information.profilePicture.externalLink.modal.externalURL');
-
-    fireEvent.change(inputElement, { target: { value: 'https://upload.wikimedia.org/wikipedia/commons/e/e2/FOLIO_400x400.jpg' } });
-    await userEvent.click(saveButton);
-    const image = screen.getByTestId('profile-picture');
-    expect(expect(image.src).toContain('https://upload.wikimedia.org/wikipedia/commons/e/e2/FOLIO_400x400.jpg'));
-  });
-
-  it('should render delete confirmation modal', async () => {
-    const updateButton = screen.getByTestId('updateProfilePictureDropdown');
-    await userEvent.click(updateButton);
-    const deleteButton = screen.getByTestId('delete');
-    await userEvent.click(deleteButton);
-
-    expect(screen.getByText('ui-users.information.profilePicture.delete.modal.heading')).toBeInTheDocument();
+    it('should display Profile picture', () => {
+      expect(screen.getByTestId('profile-picture')).toBeInTheDocument();
+    });
   });
 });

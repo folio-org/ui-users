@@ -311,7 +311,7 @@
   "information.middleName": "Middle name",
   "information.profilePicture": "Profile picture",
   "information.profilePicture.update": "Update",
-  "information.profilePicture.localFile": "Local File",
+  "information.profilePicture.localFile": "Local file",
   "information.profilePicture.externalURL": "External URL",
   "information.profilePicture.delete": "Delete",
   "information.profilePicture.externalLink.modal.updateProfilePicture": "Update profile picture",
