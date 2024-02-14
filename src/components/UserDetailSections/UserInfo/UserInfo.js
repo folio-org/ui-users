@@ -10,6 +10,7 @@ import {
   Headline,
   NoValue,
   FormattedDate,
+  Loading,
 } from '@folio/stripes/components';
 
 import { ViewMetaData } from '@folio/stripes/smart-components';
@@ -52,12 +53,13 @@ const UserInfo = (props) => {
     const imgSrc = isFetching || !hasProfilePicture ? profilePicThumbnail : profilePictureSrc;
 
     return (
-      <img
-        className={css.profilePlaceholder}
-        alt={intl.formatMessage({ id: 'ui-users.information.profilePicture' })}
-        src={imgSrc}
-      />
-    );
+    isFetching ? <Loading /> :  
+    <img
+      className={css.profilePlaceholder}
+      alt={intl.formatMessage({ id: 'ui-users.information.profilePicture' })}
+      src={imgSrc}
+    />
+    )
   };
 
   return (
