@@ -1150,11 +1150,14 @@
     "patronNoticePrintJobs.updated": "Aktualizováno",
     "patronNoticePrintJobs.created": "Vytvořeno",
     "patronNoticePrintJobs.errors.pdf": "'Generování PDF se nezdařilo",
-    "permission.profile-pictures.view": "Users: Can view profile pictures",
+    "permission.profile-pictures.view": "Uživatelé: Mohou zobrazit profilové obrázky",
     "permission.profile-pictures.all": "Users: Can view, edit, and delete profile pictures",
     "information.profilePicture": "Profile picture",
-    "information.profilePicture.update": "Update",
+    "information.profilePicture.update": "Aktualizace",
     "information.profilePicture.localFile": "Local File",
-    "information.profilePicture.externalURL": "External URL",
-    "information.profilePicture.delete": "Delete"
+    "information.profilePicture.externalURL": "Externí URL",
+    "information.profilePicture.delete": "Smazat",
+    "information.profilePicture.externalLink.modal.updateProfilePicture": "Update profile picture",
+    "information.profilePicture.externalLink.modal.externalURL": "Externí URL",
+    "information.profilePicture.externalLink.modal.externalURL.errorMessage": "Invalid image URL"
 }
