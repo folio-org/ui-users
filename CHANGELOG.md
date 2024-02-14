@@ -27,6 +27,7 @@
 * Link externally hosted image as user profile picture. Refs UIU-2975.
 * Show loading icon until profile picture loads on user detail screen. Refs - UIU-3043.
 * Show loading icon until profile picture loads on user edit screen. Refs - UIU-3044.
+* Delete profile picture. Refs UIU-3004.
 
 ## [10.0.4](https://github.com/folio-org/ui-users/tree/v10.0.4) (2023-11-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.3...v10.0.4)
