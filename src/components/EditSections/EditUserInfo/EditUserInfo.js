@@ -129,6 +129,7 @@ class EditUserInfo extends React.Component {
       uniquenessValidator,
       disabled,
       areProfilePicturesEnabled,
+      form,
     } = this.props;
 
     const isConsortium = isConsortiumEnabled(stripes);
@@ -141,7 +142,6 @@ class EditUserInfo extends React.Component {
     };
 
     const willUserExtend = () => {
-      const { form } = this.props;
       const expirationDate = form.getFieldState('expirationDate')?.value ?? '';
       const currentExpirationDate = new Date(expirationDate);
       const now = Date.now();
@@ -384,13 +384,19 @@ class EditUserInfo extends React.Component {
               <Col xs={3}>
                 <Row>
                   <Col xs={12}>
-                    <Field
-                      label={<FormattedMessage id="ui-users.information.profilePicture" />}
-                      id="profilePicture"
-                      name="profilePicture"
-                      profilePictureLink={initialValues?.personal?.profilePictureLink}
-                      render={(props) => (<ProfilePicture {...props} />)}
+                    <ProfilePicture
+                      profilePictureId={initialValues?.personal?.profilePictureLink}
+                      form={form}
                     />
+                    <Field
+                      name="personal.profilePictureLink"
+                    >
+                      {
+                        (props) => (
+                          <input type="hidden" {...props.input} />
+                        )
+                      }
+                    </Field>
                   </Col>
                 </Row>
               </Col>
