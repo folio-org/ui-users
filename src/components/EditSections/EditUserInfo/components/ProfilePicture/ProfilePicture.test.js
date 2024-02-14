@@ -35,8 +35,15 @@ describe('Profile Picture', () => {
       renderProfilePicture(defaultProps);
     });
 
+    it('should display Profile picture Loader while fetching profile picture', () => {
+      useProfilePicture.mockClear().mockReturnValue({ profilePictureData: profilePicData.profile_picture_blob, isFetching: true });
+      renderProfilePicture(defaultProps);
+      const profilePictureLoader = screen.getByTestId('profile-picture-loader').querySelector('.spinner');
+      expect(profilePictureLoader).toBeInTheDocument();
+    });
+
     it('should display Profile picture', () => {
-      expect(screen.getByTestId('profile-picture')).toBeInTheDocument();
+      expect(screen.getByAltText('ui-users.information.profilePicture')).toBeInTheDocument();
     });
 
     it('Image to be displayed with correct src', () => {

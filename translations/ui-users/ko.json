@@ -1014,7 +1014,7 @@
     "lostItems.modal.bill.confirm.text": "<strong> {actualCostToBill} </strong> 의 수수료/벌금이 <strong>{patronName} </strong> <strong> {instanceTitle} ( {materialType} ) </strong> <strong> 청구됩니다. </strong> .",
     "lostItems.modal.doNotBill.title": "{patronName} 청구하지 마세요.",
     "lostItems.modal.doNotBill.confirm.title": "{patronName}에 대해 생성할 청구서가 없는지 확인합니다.",
-    "lostItems.modal.doNotBill.confirm.text": "<div> <strong> 분실물 수수료 없음 </strong> <strong> {patronName} </strong> <strong> {instanceTitle} ({materialType}) </strong>. </div> <div> <strong> 확인 </strong> 버튼을 누른 후에는 <strong> 취소할 수 없습니다 </strong> . </div>",
+    "lostItems.modal.doNotBill.confirm.text": "<div> <strong> 분실물 수수료 없음 </strong> <strong> {patronName} </strong> <strong> {instanceTitle} ({materialType}) </strong>. <strong> 확인 </strong> 버튼을 누른 후에는 <strong> 취소할 수 없습니다 </strong> . </div>",
     "lostItems.modal.feeFineOwner": "수수료 / 벌금 소유자",
     "lostItems.modal.feeFineType": "수수료/벌금 유형",
     "lostItems.modal.actualCostToBill": "이용자에게 청구하는 실제 비용",
@@ -1156,5 +1156,8 @@
     "information.profilePicture.update": "Update",
     "information.profilePicture.localFile": "Local File",
     "information.profilePicture.externalURL": "External URL",
-    "information.profilePicture.delete": "Delete"
+    "information.profilePicture.delete": "Delete",
+    "information.profilePicture.externalLink.modal.updateProfilePicture": "Update profile picture",
+    "information.profilePicture.externalLink.modal.externalURL": "External URL",
+    "information.profilePicture.externalLink.modal.externalURL.errorMessage": "Invalid image URL"
 }
