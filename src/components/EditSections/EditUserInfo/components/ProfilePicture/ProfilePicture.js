@@ -54,17 +54,6 @@ const ProfilePicture = ({ profilePictureId, form }) => {
     setProfilePictureLink(externalLink);
   };
 
-  const toggleExternalLinkModal = () => {
-    setExternalLinkModalOpen(prev => !prev);
-  };
-
-  const handleSaveExternalProfilePictureLink = (externalLink) => {
-    const { change } = form;
-    change('personal.profilePictureLink', externalLink);
-    toggleExternalLinkModal();
-    setProfilePictureLink(externalLink);
-  };
-
   const renderMenu = () => (
     <DropdownMenu
       aria-label="profile picture action menu"
