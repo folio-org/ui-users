@@ -46,6 +46,7 @@ const ExternalLinkModal = ({
   const handleBlur = () => {
     if (inputValue && !isAValidURL(inputValue)) {
       setError(true);
+      setDisabled(true);
     }
   };
 
