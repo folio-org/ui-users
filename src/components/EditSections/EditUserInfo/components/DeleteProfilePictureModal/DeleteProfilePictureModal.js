@@ -7,10 +7,11 @@ import { ConfirmationModal } from '@folio/stripes/components';
 const DeleteProfilePictureModal = ({ open, onClose, onConfirm, personal }) => {
   const renderMessage = () => {
     const { lastName, firstName = '' } = personal;
+    const name = `${lastName}${firstName ? ', ' + firstName : firstName}`;
     return (
       <FormattedMessage
         id="ui-users.information.profilePicture.delete.modal.message"
-        values={{ lastName, firstName }}
+        values={{ name }}
       />
     );
   };

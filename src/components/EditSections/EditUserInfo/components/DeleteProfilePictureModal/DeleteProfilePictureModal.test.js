@@ -35,6 +35,6 @@ describe('DeleteProfilePictureModal', () => {
 
   it('should render confirmation modal message', () => {
     const { lastName, firstName } = props.personal;
-    expect(screen.getByText(`ui-users.information.profilePicture.delete.modal.message ${lastName},${firstName}`)).toBeInTheDocument();
+    expect(screen.getByText(`ui-users.information.profilePicture.delete.modal.message ${lastName}, ${firstName}`)).toBeInTheDocument();
   });
 });
