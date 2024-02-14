@@ -386,6 +386,7 @@ class EditUserInfo extends React.Component {
                   <Col xs={12}>
                     <ProfilePicture
                       profilePictureId={initialValues?.personal?.profilePictureLink}
+                      personal={initialValues?.personal}
                       form={form}
                     />
                     <Field
