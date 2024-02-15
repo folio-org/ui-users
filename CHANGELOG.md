@@ -28,6 +28,7 @@
 * Show loading icon until profile picture loads on user detail screen. Refs - UIU-3043.
 * Show loading icon until profile picture loads on user edit screen. Refs - UIU-3044.
 * Delete profile picture. Refs UIU-3004.
+* Changing user type confirmation modal for ECS-enabled environment. Refs UIU-2969.
 
 ## [10.0.4](https://github.com/folio-org/ui-users/tree/v10.0.4) (2023-11-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.3...v10.0.4)
