@@ -3,13 +3,17 @@ import { screen } from '@folio/jest-config-stripes/testing-library/react';
 import renderWithRouter from 'helpers/renderWithRouter';
 import UserInfo from './UserInfo';
 import { useProfilePicture } from '../../../hooks';
-
+import { Img } from 'react-image';
 import profilePicData from '../../../../test/jest/fixtures/profilePicture';
 
 const toggleMock = jest.fn();
 
 jest.mock('../../../hooks', () => ({
   useProfilePicture: jest.fn(),
+}));
+
+jest.mock('react-image', () => ({
+  Img: jest.fn(() => null),
 }));
 
 const renderUserInfo = (props) => renderWithRouter(<UserInfo {...props} />);
@@ -58,8 +62,10 @@ describe('Render userInfo component', () => {
     });
     it('should display profile picture', () => {
       renderUserInfo(props);
-      const profilePicture = screen.getByAltText('ui-users.information.profilePicture')
-      expect(profilePicture).toHaveAttribute('src', 'profilePictureLink')
+      expect(Img).toHaveBeenCalled();
+      const renderedProfileImg = Img.mock.calls[0][0];
+      expect(renderedProfileImg.alt).toBe('ui-users.information.profilePicture');
+      expect(renderedProfileImg.src).toBe('profilePictureLink')
     });
     it('should display profile picture loader while fetching profile picture', () => {
       useProfilePicture.mockClear().mockReturnValue({isFetching: true});

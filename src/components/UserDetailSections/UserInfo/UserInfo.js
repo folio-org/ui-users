@@ -2,6 +2,7 @@ import { get } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, useIntl } from 'react-intl';
+import {Img} from 'react-image'
 import {
   Row,
   Col,
@@ -54,10 +55,11 @@ const UserInfo = (props) => {
 
     return (
     isFetching ? <Loading /> :  
-    <img
+    <Img
       className={css.profilePlaceholder}
       alt={intl.formatMessage({ id: 'ui-users.information.profilePicture' })}
       src={imgSrc}
+      loader={<Loading />}
     />
     )
   };
