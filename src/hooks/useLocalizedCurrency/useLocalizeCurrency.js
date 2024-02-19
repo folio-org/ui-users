@@ -1,6 +1,6 @@
-import { useIntl } from "react-intl";
-import { useStripes } from "@folio/stripes/core";
-import { localizeCurrencyAmount } from "../../components/util/localizeCurrencyAmount";
+import { useIntl } from 'react-intl';
+import { useStripes } from '@folio/stripes/core';
+import { localizeCurrencyAmount } from '../../components/util/localizeCurrencyAmount';
 
 export const useLocalizeCurrency = () => {
   const intl = useIntl();
@@ -9,4 +9,4 @@ export const useLocalizeCurrency = () => {
   return {
     localizeCurrency: (value) => localizeCurrencyAmount(value, stripes.currency, intl)
   };
-}
+};

@@ -1,12 +1,11 @@
-import _ from 'lodash';
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Field } from 'react-final-form';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import get from 'lodash/get';
 import moment from 'moment-timezone';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { Field } from 'react-final-form';
 import { OnChange } from 'react-final-form-listeners';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
-import { ViewMetaData } from '@folio/stripes/smart-components';
 import {
   Button,
   Select,
@@ -19,14 +18,16 @@ import {
   Modal,
   ModalFooter,
 } from '@folio/stripes/components';
+import { ViewMetaData } from '@folio/stripes/smart-components';
 
 import { USER_TYPES, USER_TYPE_FIELD } from '../../../constants';
 import { isConsortiumEnabled } from '../../util';
 import asyncValidateField from '../../validators/asyncValidateField';
 import validateMinDate from '../../validators/validateMinDate';
 
+import { ChangeUserTypeModal, ProfilePicture } from './components';
+
 import css from './EditUserInfo.css';
-import ProfilePicture from './components/ProfilePicture';
 
 class EditUserInfo extends React.Component {
   static propTypes = {
@@ -56,6 +57,7 @@ class EditUserInfo extends React.Component {
     const { initialValues: { patronGroup } } = props;
     this.state = {
       showRecalculateModal: false,
+      showUserTypeModal: false,
       selectedPatronGroup: patronGroup,
     };
   }
@@ -78,6 +80,12 @@ class EditUserInfo extends React.Component {
     this.setState({ showRecalculateModal: false });
   }
 
+  setChangedUserType = (userType) => {
+    const { form: { change } } = this.props;
+    change(USER_TYPE_FIELD, userType);
+    this.setState({ showUserTypeModal: false });
+  }
+
   calculateNewExpirationDate = (startCalcToday) => {
     const { initialValues } = this.props;
     const expirationDate = new Date(initialValues.expirationDate);
@@ -94,7 +102,7 @@ class EditUserInfo extends React.Component {
 
   getPatronGroupOffset = () => {
     const selectedPatronGroup = this.props.patronGroups.find(i => i.id === this.state.selectedPatronGroup);
-    return _.get(selectedPatronGroup, 'expirationOffsetInDays', '');
+    return get(selectedPatronGroup, 'expirationOffsetInDays', '');
   };
 
   parseExpirationDate = (expirationDate) => {
@@ -121,6 +129,7 @@ class EditUserInfo extends React.Component {
       uniquenessValidator,
       disabled,
       areProfilePicturesEnabled,
+      form,
     } = this.props;
 
     const isConsortium = isConsortiumEnabled(stripes);
@@ -133,7 +142,6 @@ class EditUserInfo extends React.Component {
     };
 
     const willUserExtend = () => {
-      const { form } = this.props;
       const expirationDate = form.getFieldState('expirationDate')?.value ?? '';
       const currentExpirationDate = new Date(expirationDate);
       const now = Date.now();
@@ -207,7 +215,7 @@ class EditUserInfo extends React.Component {
     ].filter(o => o.visible);
 
     const offset = this.getPatronGroupOffset();
-    const group = _.get(this.props.patronGroups.find(i => i.id === this.state.selectedPatronGroup), 'group', '');
+    const group = get(this.props.patronGroups.find(i => i.id === this.state.selectedPatronGroup), 'group', '');
     const date = moment(this.calculateNewExpirationDate(true)).format('LL');
 
     const modalFooter = (
@@ -376,13 +384,20 @@ class EditUserInfo extends React.Component {
               <Col xs={3}>
                 <Row>
                   <Col xs={12}>
-                    <Field
-                      label={<FormattedMessage id="ui-users.information.profilePicture" />}
-                      id="profilePicture"
-                      name="profilePicture"
-                      profilePictureLink={initialValues?.personal?.profilePictureLink}
-                      render={(props) => (<ProfilePicture {...props} />)}
+                    <ProfilePicture
+                      profilePictureId={initialValues?.personal?.profilePictureLink}
+                      personal={initialValues?.personal}
+                      form={form}
                     />
+                    <Field
+                      name="personal.profilePictureLink"
+                    >
+                      {
+                        (props) => (
+                          <input type="hidden" {...props.input} />
+                        )
+                      }
+                    </Field>
                   </Col>
                 </Row>
               </Col>
@@ -400,7 +415,18 @@ class EditUserInfo extends React.Component {
                 dataOptions={typeOptions}
                 aria-required={isConsortium}
                 required={isConsortium}
-              />
+              >
+                <OnChange name={USER_TYPE_FIELD}>
+                  {(selectedUserType) => {
+                    if (isConsortium
+                      && initialValues.type === USER_TYPES.STAFF
+                      && selectedUserType === USER_TYPES.PATRON
+                    ) {
+                      this.setState({ showUserTypeModal: true });
+                    }
+                  }}
+                </OnChange>
+              </Field>
             </Col>
           </Row>
 
@@ -418,6 +444,11 @@ class EditUserInfo extends React.Component {
             />
           </div>
         </Modal>
+        <ChangeUserTypeModal
+          onChange={this.setChangedUserType}
+          initialUserType={initialValues.type}
+          open={this.state.showUserTypeModal}
+        />
       </>
     );
   }

@@ -10,7 +10,7 @@ import {
   Select,
 } from '@folio/stripes/components';
 
-import { formatCurrencyAmount } from "../../util";
+import { formatCurrencyAmount } from '../../util';
 
 class FeeFineInfo extends React.Component {
   static propTypes = {
