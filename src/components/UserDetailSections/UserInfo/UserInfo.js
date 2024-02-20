@@ -51,10 +51,11 @@ const UserInfo = (props) => {
 
   const renderProfilePic = () => {
     const profilePictureSrc = isProfilePictureLinkAURL ? profilePictureLink : 'data:;base64,' + profilePictureData;
-    const imgSrc = isFetching || !hasProfilePicture ? profilePicThumbnail : profilePictureSrc;
-
+    const imgSrc = !hasProfilePicture ? profilePicThumbnail : profilePictureSrc;
+    if (isFetching) {
+      return <Loading />;
+    }
     return (
-    isFetching ? <Loading /> :  
     <Img
       className={css.profilePlaceholder}
       alt={intl.formatMessage({ id: 'ui-users.information.profilePicture' })}
