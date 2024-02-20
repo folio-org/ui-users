@@ -11,6 +11,7 @@ import {
   Loading,
 } from '@folio/stripes/components';
 import { useStripes } from '@folio/stripes/core';
+import { Img } from 'react-image';
 
 import { useProfilePicture } from '../../../../../hooks';
 import { isAValidURL } from '../../../../util/util';
@@ -38,11 +39,12 @@ const ProfilePicture = ({ profilePictureId, form, personal }) => {
 
     return isFetching ? 
       <span data-testid='profile-picture-loader'> <Loading/> </span> :
-      <img
+      <Img
         data-testid="profile-picture"
         className={css.profilePlaceholder}
         alt={intl.formatMessage({ id: 'ui-users.information.profilePicture' })}
         src={imgSrc}
+        loader={<Loading />}
       />
   };
 
