@@ -1002,7 +1002,6 @@
           "users.profile-picture.item.post",
           "users.profile-picture.item.put",
           "users.profile-picture.item.delete"
-          
         ],
         "visible": true
       },
