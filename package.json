@@ -48,6 +48,7 @@
       "notes": "2.0 3.0",
       "request-storage": "2.5 3.0 4.0 5.0 6.0",
       "batch-print": "1.0"
+
     },
     "permissionSets": [
       {
@@ -1001,6 +1002,7 @@
           "users.profile-picture.item.post",
           "users.profile-picture.item.put",
           "users.profile-picture.item.delete"
+          
         ],
         "visible": true
       },
