@@ -19,6 +19,7 @@ const defaultProps = {
   profilePictureId: 'https://folio.org/wp-content/uploads/2023/08/folio-site-general-Illustration-social-image-1200.jpg',
   form: {
     change: jest.fn(),
+    getState: jest.fn(() => ({ pristine: false })),
   },
   personal: {
     lastName: 'lastName',

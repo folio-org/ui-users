@@ -6,7 +6,7 @@
 * Disable validation for shadow user. Refs UIU-3000.
 * Disable open loan actions for virtual patron. Refs UIU-2964.
 * Fix problem with Date field in User app reports does not populate when a first entry was cleared. Refs UIU-2991.
-* Hide all actionalble buttons on user details pane for DCB Virtual user. Refs UIU-2987.
+* Hide all actionable buttons on user details pane for DCB Virtual user. Refs UIU-2987.
 * Open loan page modifications for a virtual patron. Refs UIU-2988.
 * Display item title and barcode as text when the item is dcb virtual item. Refs UIU-2966.
 * Fix wrong date in Cash-Drawer-Reconciliation-Report.pdf. Refs UIU-3010.
@@ -29,6 +29,7 @@
 * Show loading icon until profile picture loads on user edit screen. Refs - UIU-3044.
 * Delete profile picture. Refs UIU-3004.
 * Changing user type confirmation modal for ECS-enabled environment. Refs UIU-2969.
+* Upload Local File for user profile picture. Refs. UIU-2974.
 
 ## [10.0.4](https://github.com/folio-org/ui-users/tree/v10.0.4) (2023-11-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.3...v10.0.4)
