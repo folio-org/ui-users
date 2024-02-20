@@ -1,3 +1,4 @@
+import './resizeObserver.mock';
 import './stripesConfig.mock';
 import './stripesCore.mock';
 import './stripes.mock';
