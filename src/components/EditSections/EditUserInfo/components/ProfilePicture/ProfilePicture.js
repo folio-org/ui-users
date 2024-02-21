@@ -137,6 +137,9 @@ const ProfilePicture = ({ profilePictureId, form, personal }) => {
         response.json()
           .then(resp => {
             updateFormWithProfilePicture(resp.id);
+          })
+          .catch(error => {
+            console.error(error);
           });
       } else {
         console.error('Failed to upload blob');

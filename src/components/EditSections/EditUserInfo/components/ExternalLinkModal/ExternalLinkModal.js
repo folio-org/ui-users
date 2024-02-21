@@ -82,7 +82,7 @@ const ExternalLinkModal = ({
         name="external-image-url"
         id="external-image-url"
         label={<FormattedMessage id="ui-users.information.profilePicture.externalLink.modal.externalURL" />}
-        error={error && <FormattedMessage id="ui-users.information.profilePicture.externalLink.modal.externalURL.errorMessage" />}
+        error={error ? <FormattedMessage id="ui-users.information.profilePicture.externalLink.modal.externalURL.errorMessage" /> : undefined}
         onChange={handleInputChange}
         onBlur={handleBlur}
         value={inputValue}
