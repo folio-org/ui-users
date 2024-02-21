@@ -1045,9 +1045,9 @@
         "displayName": "Users: View patron notice print jobs",
         "subPermissions": [
           "ui-users.view",
-          "mod-batch-print.entries.collection.get",
-          "mod-batch-print.entries.item.get",
-          "mod-batch-print.print.read"
+          "batch-print.entries.collection.get",
+          "batch-print.entries.item.get",
+          "batch-print.print.read"
         ],
         "visible": true
       },
@@ -1056,7 +1056,7 @@
         "displayName": "Users: View and remove patron notice print jobs",
         "subPermissions": [
           "ui-circulation.settings.view-patron-notice-print-jobs",
-          "mod-batch-print.entries.item.delete"
+          "batch-print.entries.item.delete"
         ],
         "visible": true
       }
