@@ -20,7 +20,7 @@ import css from '../../EditUserInfo.css';
 import ExternalLinkModal from '../ExternalLinkModal';
 import DeleteProfilePictureModal from '../DeleteProfilePictureModal';
 import LocalFileModal from '../LocalFileModal';
-import { getRotatedImage } from './utils/canvasUtils';
+import { getRotatedImage, createImage } from './utils/canvasUtils';
 
 import { PROFILE_PIC_API } from '../../../../../constants';
 
@@ -108,7 +108,8 @@ const ProfilePicture = ({ profilePictureId, form, personal }) => {
         const orientation = await getOrientation(file);
         const rotationByOrientation = ORIENTATION_TO_ANGLE[orientation];
         if (rotationByOrientation) {
-          imageDataUrl = await getRotatedImage(imageDataUrl, rotation);
+          const image = await createImage(imageDataUrl);
+          imageDataUrl = await getRotatedImage(image, rotation);
         }
       } catch (evt) {
         console.warn('failed to detect the orientation');

@@ -9,7 +9,7 @@ import {
   Col,
 } from '@folio/stripes/components';
 import Cropper from 'react-easy-crop';
-import { getCroppedImg } from '../ProfilePicture/utils/canvasUtils';
+import { getCroppedImg, createImage } from '../ProfilePicture/utils/canvasUtils';
 import Slider from './components/Slider';
 import css from './LocalFileModal.css';
 
@@ -21,8 +21,9 @@ const LocalFileModal = ({ open, onClose, imageSrc, rotation, setRotation, onSave
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const showCroppedImage = async () => {
     try {
+      const image = await createImage(imageSrc);
       const cropped = await getCroppedImg(
-        imageSrc,
+        image,
         croppedAreaPixels,
         rotation
       );

@@ -1,3 +1,5 @@
+import { createObjectURL } from './createObjectURL';
+
 export const createImage = (url) => new Promise((resolve, reject) => {
   const image = new Image();
   image.addEventListener('load', () => resolve(image));
@@ -31,12 +33,11 @@ export function rotateSize(width, height, rotation) {
    * This function was adapted from the one in the ReadMe of https://github.com/DominicTobias/react-image-crop
    */
 export async function getCroppedImg(
-  imageSrc,
+  image,
   pixelCrop,
   rotation = 0,
   flip = { horizontal: false, vertical: false }
 ) {
-  const image = await createImage(imageSrc);
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
 
@@ -95,20 +96,19 @@ export async function getCroppedImg(
   // return croppedCanvas.toDataURL('image/jpeg');
 
   // As a blob
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     croppedCanvas.toBlob((file) => {
       resolve(file);
     }, 'image/jpeg');
   });
 }
 
-export async function getRotatedImage(imageSrc, rotation = 0) {
-  const image = await createImage(imageSrc);
+export async function getRotatedImage(image, rotation = 0) {
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
 
-  const orientationChanged =
-      rotation === 90 || rotation === -90 || rotation === 270 || rotation === -270;
+  const orientationChanged = rotation === 90 || rotation === -90 || rotation === 270 || rotation === -270;
+
   if (orientationChanged) {
     canvas.width = image.height;
     canvas.height = image.width;
@@ -123,7 +123,7 @@ export async function getRotatedImage(imageSrc, rotation = 0) {
 
   return new Promise((resolve) => {
     canvas.toBlob((file) => {
-      resolve(URL.createObjectURL(file));
+      resolve(createObjectURL(file));
     }, 'image/png');
   });
 }
