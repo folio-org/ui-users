@@ -49,7 +49,8 @@ export default function getListDataFormatter(
         }
         return '-';
       },
-      sorter: loan => get(loan, ['item', 'title']),
+      sorter: loan => get({ ...loan, item: { ...loan.item, title: loan.item.title.toUpperCase() } },
+        ['item', 'title'])
     },
     'itemStatus': {
       key: 'itemStatus',
