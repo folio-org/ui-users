@@ -35,7 +35,7 @@ const renderProfilePicture = (props) => render(<ProfilePicture {...props} />);
 describe('Profile Picture', () => {
   describe('when profile picture is a url', () => {
     beforeEach(() => {
-      useProfilePicture.mockClear().mockReturnValue({ profilePictureData: profilePicData.profile_picture_blob});
+      useProfilePicture.mockClear().mockReturnValue({ profilePictureData: profilePicData.profile_picture_blob });
       renderProfilePicture(defaultProps);
     });
     it('should display Profile picture', () => {
@@ -125,6 +125,6 @@ describe('Profile Picture', () => {
       renderProfilePicture({ ...defaultProps, profilePictureId: 'cdc053ff-f88e-445c-878f-650472bd52e6' });
       const profilePictureLoader = screen.getByTestId('profile-picture-loader').querySelector('.spinner');
       expect(profilePictureLoader).toBeInTheDocument();
-    })
+    });
   });
 });

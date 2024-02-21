@@ -36,8 +36,8 @@ const ProfilePicture = ({ profilePictureId, form, personal }) => {
   const renderProfilePic = () => {
     const profilePictureSrc = isProfilePictureLinkAURL ? profilePictureLink : 'data:;base64,' + profilePictureData;
     const imgSrc = !hasProfilePicture ? profilePicThumbnail : profilePictureSrc;
-    if(isFetching) {
-      return <span data-testid='profile-picture-loader'> <Loading/> </span>
+    if (isFetching) {
+      return <span data-testid="profile-picture-loader"> <Loading /> </span>;
     }
 
     return (
@@ -48,7 +48,7 @@ const ProfilePicture = ({ profilePictureId, form, personal }) => {
         src={imgSrc}
         loader={<Loading />}
       />
-    )
+    );
   };
 
   const toggleExternalLinkModal = () => {
