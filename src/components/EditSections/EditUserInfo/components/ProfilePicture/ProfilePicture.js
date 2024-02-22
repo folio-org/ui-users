@@ -116,7 +116,7 @@ const ProfilePicture = ({ profilePictureId, form, personal }) => {
       }
 
       setImageSrc(imageDataUrl);
-      fileInputRef.current.value = '';
+      if (fileInputRef.current) fileInputRef.current.value = '';
     }
   };
 
@@ -141,9 +141,12 @@ const ProfilePicture = ({ profilePictureId, form, personal }) => {
           })
           .catch(error => {
             console.error(error);
+            // close modal and show callout?
           });
       } else {
+        // close modal and show callout?
         console.error('Failed to upload blob');
+        toggleLocalFileModal();
       }
     } catch (error) {
       console.error('Error uploading blob:', error);
@@ -223,7 +226,7 @@ const ProfilePicture = ({ profilePictureId, form, personal }) => {
       </Label>
       { renderProfilePic()}
       <br />
-      <input type="file" hidden ref={fileInputRef} onChange={onFileChange} accept="image/*" />
+      <input type="file" data-testid="hidden-file-input" hidden ref={fileInputRef} onChange={onFileChange} accept="image/*" />
       {
         hasAllProfilePicturePerms && (
           <Dropdown
