@@ -49,7 +49,7 @@ export default function getListDataFormatter(
         }
         return '-';
       },
-      sorter: loan => get(loan, ['item', 'title']),
+      sorter: loan => get(loan, ['item', 'title'])?.toLowerCase(),
     },
     'itemStatus': {
       key: 'itemStatus',
