@@ -29,6 +29,7 @@
 * Show loading icon until profile picture loads on user edit screen. Refs - UIU-3044.
 * Delete profile picture. Refs UIU-3004.
 * Changing user type confirmation modal for ECS-enabled environment. Refs UIU-2969.
+* Non case-sensitive sorting of title column in Open Loans Screen. Refs UIU-2983.
 * Upload Local File for user profile picture. Refs. UIU-2974.
 
 ## [10.0.4](https://github.com/folio-org/ui-users/tree/v10.0.4) (2023-11-10)
