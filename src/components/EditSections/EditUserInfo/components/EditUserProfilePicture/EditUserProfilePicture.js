@@ -15,7 +15,7 @@ import { useProfilePicture } from '../../../../../hooks';
 import { isAValidURL } from '../../../../util/util';
 import ExternalLinkModal from '../ExternalLinkModal';
 import DeleteProfilePictureModal from '../DeleteProfilePictureModal';
-import ProfilePicture from '../ProfilePicture';
+import ProfilePicture from '../../../../ProfilePicture';
 
 const EditUserProfilePicture = ({ profilePictureId, form, personal }) => {
   const [profilePictureLink, setProfilePictureLink] = useState(profilePictureId);

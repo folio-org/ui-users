@@ -17,7 +17,7 @@ import { useStripes } from '@folio/stripes/core';
 import { USER_TYPE_FIELD } from '../../../constants';
 
 import { useProfilePicture } from '../../../hooks';
-import ProfilePicture from '../../EditSections/EditUserInfo/components/ProfilePicture';
+import ProfilePicture from '../../ProfilePicture';
 
 const UserInfo = (props) => {
   const {

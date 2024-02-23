@@ -2,8 +2,8 @@ import { useIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import { Img } from 'react-image';
 import { Loading } from '@folio/stripes/components';
-import { isAValidURL } from '../../../../util/util';
-import profilePicThumbnail from '../../../../../../icons/profilePicThumbnail.png';
+import { isAValidURL } from '../util/util';
+import profilePicThumbnail from '../../../icons/profilePicThumbnail.png';
 import css from './ProfilePicture.css';
 
 const ProfilePicture = ({ profilePictureLink, isFetching, profilePictureData }) => {

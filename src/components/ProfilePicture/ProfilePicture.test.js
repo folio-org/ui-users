@@ -5,7 +5,7 @@ import {
 } from '@folio/jest-config-stripes/testing-library/react';
 import { Img } from 'react-image';
 import ProfilePicture from './ProfilePicture';
-import { isAValidURL } from '../../../../util';
+import { isAValidURL } from '../util';
 
 jest.mock('../../../../util/util', () => ({
   isAValidURL: jest.fn(),
