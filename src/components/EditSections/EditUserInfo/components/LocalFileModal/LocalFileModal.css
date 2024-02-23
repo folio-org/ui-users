@@ -1,0 +1,11 @@
+.cropContainer{
+  position: relative;
+  width: 100%;
+  height: 300px;
+  background: #333;
+}
+
+.modalBodyContainer{
+  display: flex;
+  flex-direction: column;
+}
