@@ -13,10 +13,7 @@ import { useProfilePicture } from '../../../../../hooks';
 import * as canvasUtilsmodule from './utils/canvasUtils';
 import { imageSrc } from './utils/data/imageSrc';
 
-global.fetch = jest.fn(() => Promise.resolve({
-  ok: true, // Mocking a successful response
-  json: () => Promise.resolve({ data: 'mocked data' }),
-}));
+jest.unmock('@folio/stripes/components');
 
 jest.mock('./utils/canvasUtils', () => ({
   __esModule: true,
@@ -26,12 +23,12 @@ jest.mock('./utils/canvasUtils', () => ({
   rotateSize: jest.fn(),
   getCroppedImg: jest.fn(),
 }));
-
-
-jest.unmock('@folio/stripes/components');
-
 jest.mock('../../../../../hooks', () => ({
   useProfilePicture: jest.fn(),
+}));
+global.fetch = jest.fn(() => Promise.resolve({
+  ok: true,
+  json: () => Promise.resolve({ data: 'mocked data' }),
 }));
 
 const defaultProps = {
@@ -66,30 +63,30 @@ describe('Profile Picture', () => {
       expect(screen.getByAltText('ui-users.information.profilePicture')).toBeInTheDocument();
     });
 
-    it('Image to be displayed with correct src', () => {
+    it('should display image with correct src', () => {
       const image = screen.getByTestId('profile-picture');
       expect(image.src).toContain('https://folio.org/wp-content/uploads/2023/08/folio-site-general-Illustration-social-image-1200.jpg');
     });
 
-    it('Update button to be displayed', () => {
+    it('should display update button', () => {
       expect(screen.getByTestId('updateProfilePictureDropdown')).toBeInTheDocument();
     });
 
-    it('Local file button to be displayed', async () => {
+    it('should display Local file button', async () => {
       const updateButton = screen.getByTestId('updateProfilePictureDropdown');
       await userEvent.click(updateButton);
 
       expect(screen.getByText('Icon (profile)')).toBeInTheDocument();
     });
 
-    it('External link button to be displayed', async () => {
+    it('should display External link button', async () => {
       const updateButton = screen.getByTestId('updateProfilePictureDropdown');
       await userEvent.click(updateButton);
 
       expect(screen.getByText('Icon (external-link)')).toBeInTheDocument();
     });
 
-    it('Delete link button to be displayed', async () => {
+    it('Should display Delete link button', async () => {
       const updateButton = screen.getByTestId('updateProfilePictureDropdown');
       await userEvent.click(updateButton);
 

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useIntl } from 'react-intl';
 import { getOrientation } from 'get-orientation/browser';
@@ -63,9 +63,9 @@ const ProfilePicture = ({ profilePictureId, form, personal }) => {
     change('personal.profilePictureLink', image);
   };
 
-  const toggleExternalLinkModal = () => {
+  const toggleExternalLinkModal = useCallback(() => {
     setExternalLinkModalOpen(prev => !prev);
-  };
+  }, []);
 
   const handleSaveExternalProfilePictureLink = (externalLink) => {
     updateFormWithProfilePicture(externalLink);
@@ -73,17 +73,17 @@ const ProfilePicture = ({ profilePictureId, form, personal }) => {
     setProfilePictureLink(externalLink);
   };
 
-  const toggleDeleteModal = () => {
+  const toggleDeleteModal = useCallback(() => {
     setDeleteProfilePictureModalOpen(prev => !prev);
-  };
+  }, []);
 
-  const handleProfilePictureDelete = () => {
+  const handleProfilePictureDelete = useCallback(() => {
     const { change } = form;
     change('personal.profilePictureLink', undefined);
     toggleDeleteModal();
     setProfilePictureLink('');
     setIsProfilePictureDeleted(true);
-  };
+  }, [form, toggleDeleteModal]);
 
   const readFile = (file) => {
     return new Promise((resolve) => {
@@ -93,9 +93,9 @@ const ProfilePicture = ({ profilePictureId, form, personal }) => {
     });
   };
 
-  const toggleLocalFileModal = () => {
+  const toggleLocalFileModal = useCallback(() => {
     setLocalFileModalOpen(prev => !prev);
-  };
+  }, []);
 
   const onFileChange = async (e) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -112,6 +112,7 @@ const ProfilePicture = ({ profilePictureId, form, personal }) => {
           imageDataUrl = await getRotatedImage(image, rotation);
         }
       } catch (evt) {
+        // eslint-disable-next-line no-console
         console.warn('failed to detect the orientation');
       }
 
@@ -138,25 +139,25 @@ const ProfilePicture = ({ profilePictureId, form, personal }) => {
         response.json()
           .then(resp => {
             updateFormWithProfilePicture(resp.id);
+            setCroppedLocalImage(URL.createObjectURL(blob));
           })
           .catch(error => {
+            // eslint-disable-next-line no-console
             console.error(error);
-            // close modal and show callout?
           });
       } else {
-        // close modal and show callout?
-        console.error('Failed to upload blob');
-        toggleLocalFileModal();
+        // eslint-disable-next-line no-console
+        console.error(new Error('Failed to upload blob'));
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Error uploading blob:', error);
     }
+    toggleLocalFileModal();
   };
 
   const handleSaveLocalFile = (croppedImage) => {
-    toggleLocalFileModal();
     uploadBlob(croppedImage);
-    setCroppedLocalImage(URL.createObjectURL(croppedImage));
   };
 
   const renderProfilePic = () => {
@@ -276,7 +277,7 @@ const ProfilePicture = ({ profilePictureId, form, personal }) => {
 
 ProfilePicture.propTypes = {
   form: PropTypes.object.isRequired,
-  profilePictureId: PropTypes.string.isRequired,
+  profilePictureId: PropTypes.string,
   personal: PropTypes.object.isRequired,
 };
 

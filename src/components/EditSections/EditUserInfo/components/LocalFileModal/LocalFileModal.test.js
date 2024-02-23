@@ -1,7 +1,4 @@
-import {
-  screen,
-  render,
-} from '@folio/jest-config-stripes/testing-library/react';
+import { screen, render } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
 import LocalFileModal from './LocalFileModal';
@@ -26,19 +23,20 @@ describe('LocalFileModal', () => {
     setRotation: jest.fn(),
     onSave: jest.fn(),
   };
+
   beforeEach(() => {
     render(
       <LocalFileModal {...props} />
     );
   });
 
-  test('render local file modal', () => {
+  it('should render local file modal', () => {
     expect(screen.getByText('ui-users.information.profilePicture.localFile.modal.previewAndEdit')).toBeInTheDocument();
   });
-  test('should display zoom slider ', () => {
+  it('should display zoom slider ', () => {
     expect(screen.getByText('zoom')).toBeInTheDocument();
   });
-  test('should display rotate slider ', () => {
+  it('should display rotate slider ', () => {
     expect(screen.getByText('rotate')).toBeInTheDocument();
   });
   it('should call onSave', async () => {
@@ -47,7 +45,7 @@ describe('LocalFileModal', () => {
 
     expect(props.setRotation).toHaveBeenCalled();
   });
-  test('should close modal on clicking cancel button', async () => {
+  it('should close modal on clicking cancel button', async () => {
     const cancelButton = screen.getByRole('button', { name: 'stripes-core.button.cancel' });
     await userEvent.click(cancelButton);
 

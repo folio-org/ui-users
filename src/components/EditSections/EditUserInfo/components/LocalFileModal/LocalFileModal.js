@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import {
@@ -11,15 +11,17 @@ import {
 import Cropper from 'react-easy-crop';
 import { getCroppedImg, createImage } from '../ProfilePicture/utils/canvasUtils';
 import Slider from './components/Slider';
+
 import css from './LocalFileModal.css';
 
-const defaultZoom = 1;
+const DEFAULT_ZOOM = 1;
 
 const LocalFileModal = ({ open, onClose, imageSrc, rotation, setRotation, onSave }) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(defaultZoom);
+  const [zoom, setZoom] = useState(DEFAULT_ZOOM);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
-  const showCroppedImage = async () => {
+
+  const showCroppedImage = useCallback(async () => {
     try {
       const image = await createImage(imageSrc);
       const cropped = await getCroppedImg(
@@ -29,22 +31,23 @@ const LocalFileModal = ({ open, onClose, imageSrc, rotation, setRotation, onSave
       );
       onSave(cropped);
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.error(e);
     }
-  };
+  }, [croppedAreaPixels, imageSrc, onSave, rotation]);
 
-  const handleSaveProfilePictureLocalFile = () => {
-    setZoom(defaultZoom);
+  const handleSaveProfilePictureLocalFile = useCallback(() => {
+    setZoom(DEFAULT_ZOOM);
     setRotation(0);
     setCrop({ x: 0, y: 0 });
     showCroppedImage();
-  };
+  }, [setRotation, showCroppedImage]);
 
   const onCropComplete = (croppedArea, croppedAreaPxs) => {
     setCroppedAreaPixels(croppedAreaPxs);
   };
 
-  const renderFooter = () => {
+  const renderFooter = useCallback(() => {
     return (
       <ModalFooter>
         <Button
@@ -61,7 +64,7 @@ const LocalFileModal = ({ open, onClose, imageSrc, rotation, setRotation, onSave
         </Button>
       </ModalFooter>
     );
-  };
+  }, [handleSaveProfilePictureLocalFile, onClose]);
 
   return (
     <Modal
@@ -90,20 +93,20 @@ const LocalFileModal = ({ open, onClose, imageSrc, rotation, setRotation, onSave
           <Col xs={4}>
             <Slider
               value={zoom}
-              min="1"
-              max="5"
-              step="0.1"
-              handleChange={(e) => setZoom(e.target.value)}
+              min={1}
+              max={5}
+              step={0.1}
+              handleChange={(e) => setZoom(Number(e.target.value))}
               label="zoom"
             />
           </Col>
           <Col xs={4}>
             <Slider
               value={rotation}
-              min="0"
-              max="360"
-              step="1"
-              handleChange={(e) => setRotation(e.target.value)}
+              min={0}
+              max={360}
+              step={1}
+              handleChange={(e) => setRotation(Number(e.target.value))}
               label="rotate"
             />
           </Col>

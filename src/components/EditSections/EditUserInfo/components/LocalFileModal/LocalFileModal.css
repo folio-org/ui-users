@@ -5,13 +5,7 @@
   background: #333;
 }
 
-.profilePic{
-  height: 100px;
-  width: 100px;
-}
-
 .modalBodyContainer{
   display: flex;
   flex-direction: column;
-  /* padding: 5px; */
 }

@@ -4,8 +4,6 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { FormattedMessage } from 'react-intl';
 
-import css from './Slider.css';
-
 const formatMessageMapping = (label) => (`ui-users.information.profilePicture.localFile.modal.${label}`);
 
 const Slider = ({ value, handleChange, min, max, step, label }) => {
@@ -26,7 +24,6 @@ const Slider = ({ value, handleChange, min, max, step, label }) => {
       <input
         id={id}
         type="range"
-          // className={css.slider}
         defaultValue={value}
         min={min}
         max={max}

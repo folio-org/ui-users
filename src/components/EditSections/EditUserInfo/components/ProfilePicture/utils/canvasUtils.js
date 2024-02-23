@@ -13,8 +13,8 @@ export function getRadianAngle(degreeValue) {
 }
 
 /**
-   * Returns the new bounding area of a rotated rectangle.
-   */
+ * Returns the new bounding area of a rotated rectangle.
+*/
 export function rotateSize(width, height, rotation) {
   const rotRad = getRadianAngle(rotation);
 
@@ -27,11 +27,8 @@ export function rotateSize(width, height, rotation) {
 }
 
 /**
-   * This function was adapted from the one in the ReadMe of https://github.com/DominicTobias/react-image-crop
-   */
-/**
-   * This function was adapted from the one in the ReadMe of https://github.com/DominicTobias/react-image-crop
-   */
+ * This function was adapted from the one in the ReadMe of https://github.com/DominicTobias/react-image-crop
+*/
 export async function getCroppedImg(
   image,
   pixelCrop,
