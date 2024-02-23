@@ -7,7 +7,7 @@ import { Img } from 'react-image';
 import ProfilePicture from './ProfilePicture';
 import { isAValidURL } from '../util';
 
-jest.mock('../../../../util/util', () => ({
+jest.mock('../util/util', () => ({
   isAValidURL: jest.fn(),
 }));
 
