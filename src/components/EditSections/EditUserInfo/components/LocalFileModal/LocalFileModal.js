@@ -1,6 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import Cropper from 'react-easy-crop';
+
 import {
   Button,
   Modal,
@@ -8,7 +10,7 @@ import {
   Row,
   Col,
 } from '@folio/stripes/components';
-import Cropper from 'react-easy-crop';
+
 import { getCroppedImg, createImage } from '../ProfilePicture/utils/canvasUtils';
 import Slider from './components/Slider';
 

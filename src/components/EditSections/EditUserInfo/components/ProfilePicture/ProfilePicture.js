@@ -180,7 +180,7 @@ const ProfilePicture = ({ profilePictureId, form, personal }) => {
       role="menu"
     >
       <Button
-        data-testId="localFile"
+        data-testid="localFile"
         buttonStyle="dropdownItem"
         disabled={isProfilePictureDeleted}
         onClick={fileUploadAction}
@@ -190,7 +190,7 @@ const ProfilePicture = ({ profilePictureId, form, personal }) => {
         </Icon>
       </Button>
       <Button
-        data-testId="externalURL"
+        data-testid="externalURL"
         buttonStyle="dropdownItem"
         disabled={isProfilePictureDeleted}
         onClick={toggleExternalLinkModal}
@@ -202,7 +202,7 @@ const ProfilePicture = ({ profilePictureId, form, personal }) => {
       {
         profilePictureId && (
           <Button
-            data-testId="delete"
+            data-testid="delete"
             buttonStyle="dropdownItem"
             onClick={toggleDeleteModal}
             disabled={isProfilePictureDeleted || disableDeleteButton}
@@ -231,7 +231,7 @@ const ProfilePicture = ({ profilePictureId, form, personal }) => {
       {
         hasAllProfilePicturePerms && (
           <Dropdown
-            data-testId="updateProfilePictureDropdown"
+            data-testid="updateProfilePictureDropdown"
             id="updateProfilePictureDropdown"
             label={intl.formatMessage({ id: 'ui-users.information.profilePicture.update' })}
             placement="bottom-end"
