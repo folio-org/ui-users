@@ -84,6 +84,7 @@
 * Fix lint issues. Refs UIU-3072.
 * Leverage `users-keycloak` interface endpoints for user data when available.
 * Fix problem with `Reset password email sent` , application points to  bl-users endpoint, even if `users-keycloak` interface provided. Refs UIU-3031.
+* Add `users-keycloak` permissions. Refs UIU-3068
 
 ## [10.0.4](https://github.com/folio-org/ui-users/tree/v10.0.4) (2023-11-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.3...v10.0.4)
