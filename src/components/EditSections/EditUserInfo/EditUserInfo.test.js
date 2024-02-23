@@ -38,7 +38,7 @@ jest.mock('../../util', () => ({
 }));
 
 jest.mock('./components', () => ({
-  ProfilePicture : jest.fn(() => 'Profile Picture'),
+  EditUserProfilePicture : jest.fn(() => 'Profile Picture'),
   ChangeUserTypeModal: jest.fn(({ onChange, initialUserType, open }) => {
     if (!open) {
       return null;
