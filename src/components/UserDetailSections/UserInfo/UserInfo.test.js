@@ -65,7 +65,6 @@ describe('Render userInfo component', () => {
       expect(Img).toHaveBeenCalled();
       const renderedProfileImg = Img.mock.calls[0][0];
       expect(renderedProfileImg.alt).toBe('ui-users.information.profilePicture');
-      expect(renderedProfileImg.alt).toBe('ui-users.information.profilePicture');
     });
     it('should display profile picture loader while fetching profile picture', () => {
       useProfilePicture.mockClear().mockReturnValue({ isFetching: true });
