@@ -33,8 +33,3 @@
   top: -10px;
   font-size: var(--font-size-small);
 }
-
-.profilePlaceholder {
-  max-width: 100px;
-  max-height: 100px;
-}

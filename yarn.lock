@@ -9965,6 +9965,11 @@ react-highlight-words@^0.20.0:
     memoize-one "^4.0.0"
     prop-types "^15.5.8"
 
+react-image@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/react-image/-/react-image-4.1.0.tgz#92f2d4a809a178b3bf69acd7bad7da7aa5e7364c"
+  integrity sha512-qwPNlelQe9Zy14K2pGWSwoL+vHsAwmJKS6gkotekDgRpcnRuzXNap00GfibD3eEPYu3WCPlyIUUNzcyHOrLHjw==
+
 react-intl@^6.4.4:
   version "6.5.1"
   resolved "https://registry.yarnpkg.com/react-intl/-/react-intl-6.5.1.tgz#c44f67798e25b2778b2091563e004f54e8dc911b"

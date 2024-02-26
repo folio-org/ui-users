@@ -11,7 +11,7 @@ import {
   Col,
 } from '@folio/stripes/components';
 
-import { getCroppedImg, createImage } from '../ProfilePicture/utils/canvasUtils';
+import { getCroppedImg, createImage } from '../EditUserProfilePicture/utils/canvasUtils';
 import Slider from './components/Slider';
 
 import css from './LocalFileModal.css';

@@ -25,7 +25,7 @@ import { isConsortiumEnabled } from '../../util';
 import asyncValidateField from '../../validators/asyncValidateField';
 import validateMinDate from '../../validators/validateMinDate';
 
-import { ChangeUserTypeModal, ProfilePicture } from './components';
+import { ChangeUserTypeModal, EditUserProfilePicture } from './components';
 
 import css from './EditUserInfo.css';
 
@@ -384,7 +384,7 @@ class EditUserInfo extends React.Component {
               <Col xs={3}>
                 <Row>
                   <Col xs={12}>
-                    <ProfilePicture
+                    <EditUserProfilePicture
                       profilePictureId={initialValues?.personal?.profilePictureLink}
                       personal={initialValues?.personal}
                       form={form}

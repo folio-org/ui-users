@@ -1112,6 +1112,7 @@
     "react-final-form": "^6.3.0",
     "react-final-form-arrays": "^3.1.0",
     "react-final-form-listeners": "^1.0.3",
+    "react-image": "^4.1.0",
     "react-router-prop-types": "^1.0.4",
     "uuid": "^9.0.0"
   },
