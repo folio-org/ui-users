@@ -46,6 +46,17 @@ describe('ProfilePicture', () => {
       />
     );
     expect(Img).toHaveBeenCalled();
+  });
+  test('renders profile picture with correct props', () => {
+    const profilePictureLink = 'https://folio.org/wp-content/uploads/2023/08/folio-site-general-Illustration-social-image-1200.jpg';
+    useProfilePicture.mockClear().mockReturnValue({ isFetching: false });
+    isAValidURL.mockReturnValue(true);
+    render(
+      <ProfilePicture
+        profilePictureLink={profilePictureLink}
+      />
+    );
+    expect(Img).toHaveBeenCalled();
     const renderedProfileImg = Img.mock.calls[0][0];
     expect(renderedProfileImg.alt).toBe('ui-users.information.profilePicture');
     expect(renderedProfileImg.src).toBe(profilePictureLink);

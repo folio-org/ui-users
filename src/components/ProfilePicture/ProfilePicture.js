@@ -39,7 +39,7 @@ const ProfilePicture = ({ profilePictureLink, croppedLocalImage }) => {
 };
 
 ProfilePicture.propTypes = {
-  profilePictureLink: PropTypes.string.isRequired,
+  profilePictureLink: PropTypes.string,
   croppedLocalImage: PropTypes.string,
 };
 

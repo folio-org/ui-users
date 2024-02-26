@@ -126,9 +126,7 @@ const UserInfo = (props) => {
                 <Col xs={12}>
                   <KeyValue
                     label={<FormattedMessage id="ui-users.information.profilePicture" />}
-                    value={<ProfilePicture
-                      profilePictureLink={profilePictureLink}
-                    />}
+                    value={<ProfilePicture profilePictureLink={profilePictureLink} />}
                   />
                 </Col>
               </Row>
