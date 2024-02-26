@@ -1,24 +1,35 @@
 import {
   screen,
   render,
-  fireEvent
+  fireEvent,
+  waitFor,
 } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
-import { TextField } from '@folio/stripes/components';
+import { isAValidURL } from '../../../../util';
 
 import '../../../../../../test/jest/__mock__';
 
 import ExternalLinkModal from './ExternalLinkModal';
 
-TextField.mockImplementation(jest.fn((props) => (
-  <div>
-    <label htmlFor={props.name}>{props.label}</label>
-    <input
-      {...props}
-    />
-  </div>
-)));
+jest.unmock('@folio/stripes/components');
+
+jest.mock('../../../../util');
+jest.mock('@folio/stripes/components', () => ({
+  ...jest.requireActual('@folio/stripes/components'),
+  Modal: jest.fn(({ children, label, dismissible, footer, ...rest }) => {
+    return (
+      <div
+        data-test={dismissible ? '' : ''}
+        {...rest}
+      >
+        <h1>{label}</h1>
+        {children}
+        {footer}
+      </div>
+    );
+  }),
+}));
 
 const renderExternalLinkModal = (props) => render(<ExternalLinkModal {...props} />);
 
@@ -31,6 +42,7 @@ describe('ExternalLinkModal', () => {
   };
 
   beforeEach(() => {
+    isAValidURL.mockReset();
     renderExternalLinkModal(props);
   });
 
@@ -48,6 +60,15 @@ describe('ExternalLinkModal', () => {
     await userEvent.click(saveButton);
 
     expect(props.onSave).toHaveBeenCalled();
+  });
+  it('should show error text when url is invalid', async () => {
+    isAValidURL.mockImplementationOnce(() => false);
+    const inputElement = screen.getByLabelText('ui-users.information.profilePicture.externalLink.modal.externalURL');
+
+    fireEvent.change(inputElement, { target: { value: 'profile picture' } });
+    fireEvent.blur(inputElement);
+
+    await waitFor(() => expect(screen.getByText('ui-users.information.profilePicture.externalLink.modal.externalURL.errorMessage')).toBeInTheDocument());
   });
   it('should call onClose', async () => {
     const cancelButton = screen.getByRole('button', { name: 'stripes-core.button.cancel' });

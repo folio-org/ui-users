@@ -6,16 +6,16 @@ import { isAValidURL } from '../util/util';
 import profilePicThumbnail from '../../../icons/profilePicThumbnail.png';
 import css from './ProfilePicture.css';
 
-const ProfilePicture = ({ profilePictureLink, isFetching, profilePictureData }) => {
+const ProfilePicture = ({ profilePictureLink, isFetching, profilePictureData, croppedLocalImage }) => {
   const intl = useIntl();
-  const hasProfilePicture = Boolean(profilePictureLink);
+  const hasProfilePicture = Boolean(croppedLocalImage) || Boolean(profilePictureLink);
   /**
    * Profile Picture Link can be
    * 1. an id(uuid) of profile picture stored in database or
    * 2. a link to an image - a url
    */
   const isProfilePictureLinkAURL = hasProfilePicture && isAValidURL(profilePictureLink);
-  const profilePictureSrc = isProfilePictureLinkAURL ? profilePictureLink : 'data:;base64,' + profilePictureData;
+  const profilePictureSrc = croppedLocalImage || (isProfilePictureLinkAURL ? profilePictureLink : 'data:;base64,' + profilePictureData);
   const imgSrc = !hasProfilePicture ? profilePicThumbnail : profilePictureSrc;
 
   if (isFetching) {
@@ -37,6 +37,7 @@ ProfilePicture.propTypes = {
   profilePictureLink: PropTypes.string.isRequired,
   isFetching: PropTypes.bool.isRequired,
   profilePictureData: PropTypes.string.isRequired,
+  croppedLocalImage: PropTypes.string,
 };
 
 export default ProfilePicture;

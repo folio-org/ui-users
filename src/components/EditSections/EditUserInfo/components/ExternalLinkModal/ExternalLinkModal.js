@@ -1,4 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React,
+{
+  useEffect,
+  useRef,
+  useState
+} from 'react';
 import PropTypes from 'prop-types';
 import {
   Button,
@@ -19,6 +24,9 @@ const ExternalLinkModal = ({
   const previousInputValue = useRef(profilePictureLink);
   const [disabled, setDisabled] = useState(false);
   const [error, setError] = useState(false);
+  const externalURLValidityError = error ?
+    <FormattedMessage id="ui-users.information.profilePicture.externalLink.modal.externalURL.errorMessage" />
+    : null;
 
   useEffect(() => {
     setInputValue(profilePictureLink);
@@ -82,7 +90,7 @@ const ExternalLinkModal = ({
         name="external-image-url"
         id="external-image-url"
         label={<FormattedMessage id="ui-users.information.profilePicture.externalLink.modal.externalURL" />}
-        error={error && <FormattedMessage id="ui-users.information.profilePicture.externalLink.modal.externalURL.errorMessage" />}
+        error={externalURLValidityError}
         onChange={handleInputChange}
         onBlur={handleBlur}
         value={inputValue}
