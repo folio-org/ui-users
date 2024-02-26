@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useIntl } from 'react-intl';
 import { getOrientation } from 'get-orientation/browser';
 
+import { getHeaderWithCredentials } from '@folio/stripes/util';
 import {
   Button,
   Dropdown,
@@ -44,8 +45,7 @@ const ProfilePicture = ({ profilePictureId, form, personal }) => {
 
   const intl = useIntl();
   const stripes = useStripes();
-  const { okapi } = stripes;
-  const { url, token } = okapi;
+  const { okapi, okapi: { url } } = stripes;
 
   const hasProfilePicture = Boolean(profilePictureLink) || Boolean(croppedLocalImage);
   const isProfilePictureLinkAURL = hasProfilePicture && isAValidURL(profilePictureLink);
@@ -126,15 +126,22 @@ const ProfilePicture = ({ profilePictureId, form, personal }) => {
   };
 
   const uploadBlob = async (blob) => {
+    const headersWithCredentials = getHeaderWithCredentials(okapi);
+    const headers = {
+      ...headersWithCredentials,
+      headers: {
+        ...headersWithCredentials.headers,
+        'Content-Type': 'application/octet-stream',
+      }
+    };
+
     try {
       const response = await fetch(`${url}/${PROFILE_PIC_API}`, {
         method: 'POST',
+        ...headers,
         body: blob,
-        headers: {
-          'Content-Type': 'application/octet-stream',
-          'x-okapi-token': `${token}`
-        },
       });
+
       if (response.ok) {
         response.json()
           .then(resp => {
