@@ -41,6 +41,13 @@ const defaultProps = {
     lastName: 'lastName',
     firstName: 'firstName',
   },
+  stripes: {
+    okapi: {
+      url: 'https://folio-testing-okapi.dev.folio.org',
+      tenant: 'diku',
+      okapiReady: true,
+    }
+  }
 };
 
 const renderProfilePicture = (props) => render(<ProfilePicture {...props} />);
