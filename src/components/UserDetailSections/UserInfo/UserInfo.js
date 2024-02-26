@@ -2,6 +2,7 @@ import { get } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+
 import {
   Row,
   Col,
@@ -11,12 +12,10 @@ import {
   NoValue,
   FormattedDate,
 } from '@folio/stripes/components';
-
 import { ViewMetaData } from '@folio/stripes/smart-components';
 import { useStripes } from '@folio/stripes/core';
-import { USER_TYPE_FIELD } from '../../../constants';
 
-import { useProfilePicture } from '../../../hooks';
+import { USER_TYPE_FIELD } from '../../../constants';
 import ProfilePicture from '../../ProfilePicture';
 
 const UserInfo = (props) => {
@@ -35,8 +34,6 @@ const UserInfo = (props) => {
     <FormattedMessage id="ui-users.inactive" />);
   const profilePicturesEnabled = Boolean(settings.length) && settings[0].enabled;
   const hasViewProfilePicturePerm = stripes.hasPerm('ui-users.profile-pictures.view');
-  const { isFetching, profilePictureData } = useProfilePicture({ profilePictureId: profilePictureLink });
-
 
   return (
     <Accordion
@@ -122,7 +119,7 @@ const UserInfo = (props) => {
         </Col>
 
         {
-          profilePicturesEnabled &&
+        profilePicturesEnabled &&
           hasViewProfilePicturePerm &&
             <Col xs={3}>
               <Row>
@@ -131,8 +128,6 @@ const UserInfo = (props) => {
                     label={<FormattedMessage id="ui-users.information.profilePicture" />}
                     value={<ProfilePicture
                       profilePictureLink={profilePictureLink}
-                      isFetching={isFetching}
-                      profilePictureData={profilePictureData}
                     />}
                   />
                 </Col>

@@ -13,14 +13,12 @@ import {
 } from '@folio/stripes/components';
 import { useStripes } from '@folio/stripes/core';
 
-import { useProfilePicture } from '../../../../../hooks';
 import { isAValidURL } from '../../../../util/util';
 import ExternalLinkModal from '../ExternalLinkModal';
 import DeleteProfilePictureModal from '../DeleteProfilePictureModal';
 import ProfilePicture from '../../../../ProfilePicture';
 import LocalFileModal from '../LocalFileModal';
 import { getRotatedImage, createImage } from './utils/canvasUtils';
-
 import { PROFILE_PIC_API } from '../../../../../constants';
 
 const ORIENTATION_TO_ANGLE = {
@@ -48,8 +46,6 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal }) => {
   const hasProfilePicture = Boolean(profilePictureLink) || Boolean(croppedLocalImage);
   const isProfilePictureLinkAURL = hasProfilePicture && isAValidURL(profilePictureLink);
   const hasAllProfilePicturePerms = stripes.hasPerm('ui-users.profile-pictures.all');
-
-  const { isFetching, profilePictureData } = useProfilePicture({ profilePictureId });
 
   const updateFormWithProfilePicture = (image) => {
     const { change } = form;
@@ -218,8 +214,6 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal }) => {
       </Label>
       <ProfilePicture
         profilePictureLink={profilePictureLink}
-        isFetching={isFetching}
-        profilePictureData={profilePictureData}
         croppedLocalImage={croppedLocalImage}
       />
       <br />

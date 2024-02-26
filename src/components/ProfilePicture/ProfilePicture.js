@@ -1,13 +1,18 @@
 import { useIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import { Img } from 'react-image';
+
 import { Loading } from '@folio/stripes/components';
+
 import { isAValidURL } from '../util/util';
 import profilePicThumbnail from '../../../icons/profilePicThumbnail.png';
+import { useProfilePicture } from '../../hooks';
+
 import css from './ProfilePicture.css';
 
-const ProfilePicture = ({ profilePictureLink, isFetching, profilePictureData, croppedLocalImage }) => {
+const ProfilePicture = ({ profilePictureLink, croppedLocalImage }) => {
   const intl = useIntl();
+  const { isFetching, profilePictureData } = useProfilePicture({ profilePictureId: profilePictureLink });
   const hasProfilePicture = Boolean(croppedLocalImage) || Boolean(profilePictureLink);
   /**
    * Profile Picture Link can be
@@ -35,8 +40,6 @@ const ProfilePicture = ({ profilePictureLink, isFetching, profilePictureData, cr
 
 ProfilePicture.propTypes = {
   profilePictureLink: PropTypes.string.isRequired,
-  isFetching: PropTypes.bool.isRequired,
-  profilePictureData: PropTypes.string.isRequired,
   croppedLocalImage: PropTypes.string,
 };
 
