@@ -35,6 +35,7 @@ const UserInfo = (props) => {
   const profilePicturesEnabled = Boolean(settings.length) && settings[0].enabled;
   const hasViewProfilePicturePerm = stripes.hasPerm('ui-users.profile-pictures.view');
   const isShadowUser = user?.type === USER_TYPES.SHADOW;
+  const displayProfilePicture = profilePicturesEnabled && hasViewProfilePicturePerm && !isShadowUser;
 
   return (
     <Accordion
@@ -55,7 +56,7 @@ const UserInfo = (props) => {
         </Col>
       </Row>
       <Row>
-        <Col xs={profilePicturesEnabled && hasViewProfilePicturePerm && !isShadowUser ? 9 : 12}>
+        <Col xs={displayProfilePicture ? 9 : 12}>
           <Row>
             <Col xs={3}>
               <KeyValue
@@ -120,9 +121,7 @@ const UserInfo = (props) => {
         </Col>
 
         {
-          profilePicturesEnabled &&
-          hasViewProfilePicturePerm &&
-          !isShadowUser &&
+          displayProfilePicture &&
           <Col xs={3}>
             <Row>
               <Col xs={12}>
