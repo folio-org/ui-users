@@ -237,6 +237,8 @@ class EditUserInfo extends React.Component {
 
     const hasViewProfilePicturePerm = stripes.hasPerm('ui-users.profile-pictures.view');
 
+    const displayProfilePicture = areProfilePicturesEnabled && hasViewProfilePicturePerm && !isShadowUser;
+
     return (
       <>
         <Accordion
@@ -249,7 +251,7 @@ class EditUserInfo extends React.Component {
           { initialValues.metadata && <ViewMetaData metadata={initialValues.metadata} /> }
 
           <Row>
-            <Col xs={areProfilePicturesEnabled && hasViewProfilePicturePerm ? 9 : 12}>
+            <Col xs={displayProfilePicture ? 9 : 12}>
               <Row>
                 <Col xs={12} md={3}>
                   <Field
@@ -380,7 +382,7 @@ class EditUserInfo extends React.Component {
             </Col>
 
             {
-              areProfilePicturesEnabled && hasViewProfilePicturePerm &&
+              displayProfilePicture &&
               <Col xs={3}>
                 <Row>
                   <Col xs={12}>
