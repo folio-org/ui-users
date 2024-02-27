@@ -47,7 +47,9 @@ const props = {
 describe('Render userInfo component', () => {
   beforeEach(() => {
     useProfilePicture.mockClear().mockReturnValue({ profilePictureData: profilePicData.profile_picture_blob, isFetching: false });
+    jest.clearAllMocks();
   });
+
   describe('Check if user data are shown', () => {
     it('Active Users', () => {
       renderUserInfo(props);
@@ -70,6 +72,20 @@ describe('Render userInfo component', () => {
       useProfilePicture.mockClear().mockReturnValue({ isFetching: true });
       renderUserInfo(props);
       expect(screen.getByText('Loading')).toBeInTheDocument();
+    });
+  });
+
+  describe('when shadow user', () => {
+    it('should not display profile picture when user type is SHADOW', () => {
+      const alteredProps = {
+        ...props,
+        user: {
+          ...props.user,
+          type: 'shadow',
+        }
+      };
+      renderUserInfo(alteredProps);
+      expect(Img).not.toHaveBeenCalled();
     });
   });
 });

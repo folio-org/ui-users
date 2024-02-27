@@ -240,4 +240,18 @@ describe('Render Edit User Information component', () => {
       expect(screen.queryByText('Profile Picture')).not.toBeInTheDocument();
     });
   });
+
+  describe('when user is of type shadow', () => {
+    it('should not display profile picture', () => {
+      const alteredProps = {
+        ...props,
+        initialValues: {
+          ...props.initialValues,
+          type: 'shadow',
+        }
+      };
+      renderEditUserInfo(alteredProps);
+      expect(screen.queryByText('Profile Picture')).not.toBeInTheDocument();
+    });
+  });
 });
