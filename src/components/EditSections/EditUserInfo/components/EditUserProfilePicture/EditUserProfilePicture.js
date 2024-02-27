@@ -2,6 +2,7 @@ import React, { useState, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useIntl } from 'react-intl';
 import { getOrientation } from 'get-orientation/browser';
+import Compressor from 'compressorjs';
 
 import { getHeaderWithCredentials } from '@folio/stripes/util';
 import {
@@ -158,7 +159,19 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal }) => {
   };
 
   const handleSaveLocalFile = (croppedImage) => {
-    uploadBlob(croppedImage);
+    // eslint-disable-next-line no-new
+    new Compressor(croppedImage, {
+      quality: 0.8,
+      maxWidth: 100,
+      maxHeight: 100,
+      success: (compressedResult) => {
+        uploadBlob(compressedResult);
+      },
+      error: (err) => {
+        // eslint-disable-next-line no-console
+        console.warn(err.message);
+      },
+    });
   };
 
   const renderMenu = () => (

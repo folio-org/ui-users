@@ -15,6 +15,12 @@ import { imageSrc } from './utils/data/imageSrc';
 
 jest.unmock('@folio/stripes/components');
 
+jest.mock('compressorjs', () => {
+  return jest.fn().mockImplementation((croppedImage, options) => {
+    options.success(croppedImage);
+  });
+});
+
 jest.mock('./utils/canvasUtils', () => ({
   __esModule: true,
   ...jest.requireActual('./utils/canvasUtils'),
