@@ -158,21 +158,19 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal }) => {
     toggleLocalFileModal();
   };
 
-  const handleSaveLocalFile = (croppedImage) => {
+  const handleSaveLocalFile = async (croppedImage) => {
     try {
-      // eslint-disable-next-line no-new
-      new Compressor(croppedImage, {
-        quality: 0.8,
-        maxWidth: 100,
-        maxHeight: 100,
-        success: (compressedResult) => {
-          uploadBlob(compressedResult);
-        },
-        error: (err) => {
-          // eslint-disable-next-line no-console
-          console.warn(err.message);
-        },
+      const compressedResult = await new Promise((resolve, reject) => {
+        // eslint-disable-next-line no-new
+        new Compressor(croppedImage, {
+          quality: 0.8,
+          maxWidth: 100,
+          maxHeight: 100,
+          success: resolve,
+          error: reject,
+        });
       });
+      uploadBlob(compressedResult);
     } catch (err) {
       // eslint-disable-next-line no-console
       console.warn(err.message);
