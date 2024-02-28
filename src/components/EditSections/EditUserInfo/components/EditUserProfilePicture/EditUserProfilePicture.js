@@ -168,7 +168,7 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal }) => {
   const getCompressedImage = (croppedImage) => {
     return new Promise((resolve, reject) => {
       // eslint-disable-next-line no-new
-      new Compressor(croppedImage, {
+      return new Compressor(croppedImage, {
         ...COMPRESSION_OPTIONS,
         success: (compressedResult) => {
           resolve(compressedResult);
