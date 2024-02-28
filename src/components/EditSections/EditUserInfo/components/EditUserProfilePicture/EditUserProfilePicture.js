@@ -164,15 +164,28 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal }) => {
     }
     toggleLocalFileModal();
   };
+
+  const getCompressedImage = (croppedImage) => {
+    return new Promise((resolve, reject) => {
+      // eslint-disable-next-line no-new
+      new Compressor(croppedImage, {
+        ...COMPRESSION_OPTIONS,
+        success: (compressedResult) => {
+          resolve(compressedResult);
+        },
+        error: (err) => {
+          reject(err);
+        },
+      });
+    });
+  };
+
   const handleSaveLocalFile = async (croppedImage) => {
     try {
-      const compressedResult = await new Promise((resolve, reject) => {
-        // eslint-disable-next-line no-new
-        new Compressor(croppedImage,
-          { ...COMPRESSION_OPTIONS, success: resolve, error: reject });
-      });
-      uploadBlob(compressedResult);
+      const data = await getCompressedImage(croppedImage);
+      uploadBlob(data);
     } catch (err) {
+      toggleLocalFileModal();
       // eslint-disable-next-line no-console
       console.warn(err.message);
     }
