@@ -72,6 +72,8 @@
           "addresstypes.collection.get",
           "users.collection.get",
           "users.item.get",
+          "users-keycloak.collection.get",
+          "users-keycloak.item.get",
           "usergroups.collection.get",
           "configuration.entries.collection.get",
           "user-settings.custom-fields.collection.get",
@@ -90,6 +92,7 @@
           "ui-users.view",
           "users-bl.item.put",
           "users.item.put",
+          "users-keycloak.item.put",
           "tags.collection.get",
           "tags.item.post",
           "circulation-storage.request-preferences.item.post",
@@ -123,6 +126,7 @@
           "ui-users.edit",
           "users-bl.item.post",
           "users.item.post",
+          "users-keycloak.item.post",
           "perms.users.item.post",
           "login.item.post"
         ],
@@ -418,7 +422,8 @@
           "payments.item.delete",
           "payments.item.post",
           "payments.item.put",
-          "users.collection.get"
+          "users.collection.get",
+          "users-keycloak.collection.get"
         ],
         "visible": true
       },
@@ -861,7 +866,8 @@
           "login.credentials-existence.get",
           "ui-users.view",
           "ui-users.edit",
-          "users-bl.password-reset-link.generate"
+          "users-bl.password-reset-link.generate",
+          "users-keycloak.password-reset-link.generate"
         ],
         "visible": true
       },
