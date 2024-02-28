@@ -28,6 +28,13 @@ const ORIENTATION_TO_ANGLE = {
   '8': -90,
 };
 
+const COMPRESSION_OPTIONS = {
+  quality: 0.8,
+  maxWidth: 100,
+  maxHeight: 100,
+  checkOrientation: false,
+};
+
 const EditUserProfilePicture = ({ profilePictureId, form, personal }) => {
   const [profilePictureLink, setProfilePictureLink] = useState(profilePictureId);
   const [externalLinkModalOpen, setExternalLinkModalOpen] = useState(false);
@@ -157,18 +164,12 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal }) => {
     }
     toggleLocalFileModal();
   };
-
   const handleSaveLocalFile = async (croppedImage) => {
     try {
       const compressedResult = await new Promise((resolve, reject) => {
         // eslint-disable-next-line no-new
-        new Compressor(croppedImage, {
-          quality: 0.8,
-          maxWidth: 100,
-          maxHeight: 100,
-          success: resolve,
-          error: reject,
-        });
+        new Compressor(croppedImage,
+          { ...COMPRESSION_OPTIONS, success: resolve, error: reject });
       });
       uploadBlob(compressedResult);
     } catch (err) {
