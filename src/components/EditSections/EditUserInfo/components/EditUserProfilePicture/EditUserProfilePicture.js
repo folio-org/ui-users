@@ -10,19 +10,15 @@ import {
   DropdownMenu,
   Icon,
   Label,
-  Loading,
 } from '@folio/stripes/components';
 import { useStripes } from '@folio/stripes/core';
 
-import { useProfilePicture } from '../../../../../hooks';
 import { isAValidURL } from '../../../../util/util';
-import profilePicThumbnail from '../../../../../../icons/profilePicThumbnail.png';
-import css from '../../EditUserInfo.css';
 import ExternalLinkModal from '../ExternalLinkModal';
 import DeleteProfilePictureModal from '../DeleteProfilePictureModal';
+import ProfilePicture from '../../../../ProfilePicture';
 import LocalFileModal from '../LocalFileModal';
 import { getRotatedImage, createImage } from './utils/canvasUtils';
-
 import { PROFILE_PIC_API } from '../../../../../constants';
 
 const ORIENTATION_TO_ANGLE = {
@@ -31,7 +27,7 @@ const ORIENTATION_TO_ANGLE = {
   '8': -90,
 };
 
-const ProfilePicture = ({ profilePictureId, form, personal }) => {
+const EditUserProfilePicture = ({ profilePictureId, form, personal }) => {
   const [profilePictureLink, setProfilePictureLink] = useState(profilePictureId);
   const [externalLinkModalOpen, setExternalLinkModalOpen] = useState(false);
   const [deleteProfilePictureModalOpen, setDeleteProfilePictureModalOpen] = useState(false);
@@ -50,8 +46,6 @@ const ProfilePicture = ({ profilePictureId, form, personal }) => {
   const hasProfilePicture = Boolean(profilePictureLink) || Boolean(croppedLocalImage);
   const isProfilePictureLinkAURL = hasProfilePicture && isAValidURL(profilePictureLink);
   const hasAllProfilePicturePerms = stripes.hasPerm('ui-users.profile-pictures.all');
-
-  const { isFetching, profilePictureData } = useProfilePicture({ profilePictureId });
 
   const updateFormWithProfilePicture = (image) => {
     const { change } = form;
@@ -167,20 +161,6 @@ const ProfilePicture = ({ profilePictureId, form, personal }) => {
     uploadBlob(croppedImage);
   };
 
-  const renderProfilePic = () => {
-    const profilePictureSrc = croppedLocalImage || (isProfilePictureLinkAURL ? profilePictureLink : 'data:;base64,' + profilePictureData);
-    const imgSrc = isFetching || !hasProfilePicture ? profilePicThumbnail : profilePictureSrc;
-
-    return isFetching ?
-      <span data-testid="profile-picture-loader"> <Loading /> </span> :
-      <img
-        data-testid="profile-picture"
-        className={css.profilePlaceholder}
-        alt={intl.formatMessage({ id: 'ui-users.information.profilePicture' })}
-        src={imgSrc}
-      />;
-  };
-
   const renderMenu = () => (
     <DropdownMenu
       aria-label="profile picture action menu"
@@ -232,7 +212,10 @@ const ProfilePicture = ({ profilePictureId, form, personal }) => {
           intl.formatMessage({ id: 'ui-users.information.profilePicture' })
         }
       </Label>
-      { renderProfilePic()}
+      <ProfilePicture
+        profilePictureLink={profilePictureLink}
+        croppedLocalImage={croppedLocalImage}
+      />
       <br />
       <input type="file" data-testid="hidden-file-input" hidden ref={fileInputRef} onChange={onFileChange} accept="image/*" />
       {
@@ -282,10 +265,10 @@ const ProfilePicture = ({ profilePictureId, form, personal }) => {
   );
 };
 
-ProfilePicture.propTypes = {
+EditUserProfilePicture.propTypes = {
   form: PropTypes.object.isRequired,
   profilePictureId: PropTypes.string,
   personal: PropTypes.object.isRequired,
 };
 
-export default ProfilePicture;
+export default EditUserProfilePicture;

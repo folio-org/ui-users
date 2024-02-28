@@ -1,7 +1,8 @@
 import { get } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
+
 import {
   Row,
   Col,
@@ -10,17 +11,12 @@ import {
   Headline,
   NoValue,
   FormattedDate,
-  Loading,
 } from '@folio/stripes/components';
-
 import { ViewMetaData } from '@folio/stripes/smart-components';
 import { useStripes } from '@folio/stripes/core';
-import css from './UserInfo.css';
-import { USER_TYPE_FIELD } from '../../../constants';
-import profilePicThumbnail from '../../../../icons/profilePicThumbnail.png';
-import { isAValidUUID } from '../../util/util';
 
-import { useProfilePicture } from '../../../hooks';
+import { USER_TYPE_FIELD, USER_TYPES } from '../../../constants';
+import ProfilePicture from '../../ProfilePicture';
 
 const UserInfo = (props) => {
   const {
@@ -33,34 +29,13 @@ const UserInfo = (props) => {
   } = props;
   const profilePictureLink = user?.personal?.profilePictureLink;
   const stripes = useStripes();
-  const intl = useIntl();
   const userStatus = (user?.active ?
     <FormattedMessage id="ui-users.active" /> :
     <FormattedMessage id="ui-users.inactive" />);
-  const hasProfilePicture = Boolean(profilePictureLink);
-  /**
-   * Profile Picture Link can be
-   * 1. an id(uuid) of profile picture stored in database or
-   * 2. a link to an image - a url
-   */
-  const isProfilePictureLinkAURL = !isAValidUUID(profilePictureLink);
   const profilePicturesEnabled = Boolean(settings.length) && settings[0].enabled;
   const hasViewProfilePicturePerm = stripes.hasPerm('ui-users.profile-pictures.view');
-  const { isFetching, profilePictureData } = useProfilePicture({ profilePictureId: profilePictureLink });
-
-  const renderProfilePic = () => {
-    const profilePictureSrc = isProfilePictureLinkAURL ? profilePictureLink : 'data:;base64,' + profilePictureData;
-    const imgSrc = isFetching || !hasProfilePicture ? profilePicThumbnail : profilePictureSrc;
-
-    return (
-    isFetching ? <Loading /> :  
-    <img
-      className={css.profilePlaceholder}
-      alt={intl.formatMessage({ id: 'ui-users.information.profilePicture' })}
-      src={imgSrc}
-    />
-    )
-  };
+  const isShadowUser = user?.type === USER_TYPES.SHADOW;
+  const displayProfilePicture = profilePicturesEnabled && hasViewProfilePicturePerm && !isShadowUser;
 
   return (
     <Accordion
@@ -81,7 +56,7 @@ const UserInfo = (props) => {
         </Col>
       </Row>
       <Row>
-        <Col xs={profilePicturesEnabled && hasViewProfilePicturePerm ? 9 : 12}>
+        <Col xs={displayProfilePicture ? 9 : 12}>
           <Row>
             <Col xs={3}>
               <KeyValue
@@ -146,18 +121,17 @@ const UserInfo = (props) => {
         </Col>
 
         {
-          profilePicturesEnabled &&
-          hasViewProfilePicturePerm &&
-            <Col xs={3}>
-              <Row>
-                <Col xs={12}>
-                  <KeyValue
-                    label={<FormattedMessage id="ui-users.information.profilePicture" />}
-                    value={renderProfilePic()}
-                  />
-                </Col>
-              </Row>
-            </Col>
+          displayProfilePicture &&
+          <Col xs={3}>
+            <Row>
+              <Col xs={12}>
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.information.profilePicture" />}
+                  value={<ProfilePicture profilePictureLink={profilePictureLink} />}
+                />
+              </Col>
+            </Row>
+          </Col>
         }
       </Row>
     </Accordion>

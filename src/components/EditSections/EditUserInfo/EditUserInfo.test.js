@@ -38,7 +38,7 @@ jest.mock('../../util', () => ({
 }));
 
 jest.mock('./components', () => ({
-  ProfilePicture : jest.fn(() => 'Profile Picture'),
+  EditUserProfilePicture : jest.fn(() => 'Profile Picture'),
   ChangeUserTypeModal: jest.fn(({ onChange, initialUserType, open }) => {
     if (!open) {
       return null;
@@ -237,6 +237,20 @@ describe('Render Edit User Information component', () => {
   describe('when profilePicture configuration is not enabled', () => {
     it('should not render profile picture', () => {
       renderEditUserInfo({ ...props, areProfilePicturesEnabled: false });
+      expect(screen.queryByText('Profile Picture')).not.toBeInTheDocument();
+    });
+  });
+
+  describe('when user is of type shadow', () => {
+    it('should not display profile picture', () => {
+      const alteredProps = {
+        ...props,
+        initialValues: {
+          ...props.initialValues,
+          type: 'shadow',
+        }
+      };
+      renderEditUserInfo(alteredProps);
       expect(screen.queryByText('Profile Picture')).not.toBeInTheDocument();
     });
   });

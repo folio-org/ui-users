@@ -23,9 +23,3 @@
   margin: auto;
   margin-bottom: 14px;
 }
-
-.profilePlaceholder {
-  width: 100px;
-  height: 100px;
-  object-fit: scale-down;
-}

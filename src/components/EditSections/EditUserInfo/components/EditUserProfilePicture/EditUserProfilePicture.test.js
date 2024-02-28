@@ -6,9 +6,9 @@ import {
 } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import profilePicData from 'fixtures/profilePicture';
-
-import ProfilePicture from './ProfilePicture';
+import { Img } from 'react-image';
 import { useProfilePicture } from '../../../../../hooks';
+import EditUserProfilePicture from './EditUserProfilePicture';
 
 import * as canvasUtilsmodule from './utils/canvasUtils';
 import { imageSrc } from './utils/data/imageSrc';
@@ -31,6 +31,10 @@ global.fetch = jest.fn(() => Promise.resolve({
   json: () => Promise.resolve({ data: 'mocked data' }),
 }));
 
+jest.mock('react-image', () => ({
+  Img: jest.fn(() => null),
+}));
+
 const defaultProps = {
   profilePictureId: 'https://folio.org/wp-content/uploads/2023/08/folio-site-general-Illustration-social-image-1200.jpg',
   form: {
@@ -50,29 +54,24 @@ const defaultProps = {
   }
 };
 
-const renderProfilePicture = (props) => render(<ProfilePicture {...props} />);
+const renderProfilePicture = (props) => render(<EditUserProfilePicture {...props} />);
 
 describe('Profile Picture', () => {
   describe('when profile picture is a url', () => {
     beforeEach(() => {
-      useProfilePicture.mockClear().mockReturnValue({ profilePictureData: profilePicData.profile_picture_blob, isFetching: false });
+      useProfilePicture.mockClear().mockReturnValue({ profilePictureData: profilePicData.profile_picture_blob });
       renderProfilePicture(defaultProps);
     });
-
-    it('should display Profile picture Loader while fetching profile picture', () => {
-      useProfilePicture.mockClear().mockReturnValue({ profilePictureData: profilePicData.profile_picture_blob, isFetching: true });
-      renderProfilePicture(defaultProps);
-      const profilePictureLoader = screen.getByTestId('profile-picture-loader').querySelector('.spinner');
-      expect(profilePictureLoader).toBeInTheDocument();
-    });
-
     it('should display Profile picture', () => {
-      expect(screen.getByAltText('ui-users.information.profilePicture')).toBeInTheDocument();
+      expect(Img).toHaveBeenCalled();
+      const renderedProfileImg = Img.mock.calls[0][0];
+      expect(renderedProfileImg.alt).toBe('ui-users.information.profilePicture');
     });
 
-    it('should display image with correct src', () => {
-      const image = screen.getByTestId('profile-picture');
-      expect(image.src).toContain('https://folio.org/wp-content/uploads/2023/08/folio-site-general-Illustration-social-image-1200.jpg');
+    it('Image to be displayed with correct src', () => {
+      expect(Img).toHaveBeenCalled();
+      const renderedProfileImg = Img.mock.calls[0][0];
+      expect(renderedProfileImg.src).toContain('https://folio.org/wp-content/uploads/2023/08/folio-site-general-Illustration-social-image-1200.jpg');
     });
 
     it('should display update button', () => {
@@ -104,6 +103,7 @@ describe('Profile Picture', () => {
       const updateButton = screen.getByTestId('updateProfilePictureDropdown');
       await userEvent.click(updateButton);
       const externalURLButton = screen.getByTestId('externalURL');
+      screen.debug(screen.getByTestId('externalURL'));
       await userEvent.click(externalURLButton);
 
       expect(screen.getByText('ui-users.information.profilePicture.externalLink.modal.externalURL')).toBeInTheDocument();
@@ -119,8 +119,9 @@ describe('Profile Picture', () => {
 
       fireEvent.change(inputElement, { target: { value: 'https://upload.wikimedia.org/wikipedia/commons/e/e2/FOLIO_400x400.jpg' } });
       await userEvent.click(saveButton);
-      const image = screen.getByTestId('profile-picture');
-      expect(expect(image.src).toContain('https://upload.wikimedia.org/wikipedia/commons/e/e2/FOLIO_400x400.jpg'));
+      expect(Img).toHaveBeenCalled();
+      const renderedProfileImg = Img.mock.lastCall[0];
+      expect(expect(renderedProfileImg.src).toContain('https://upload.wikimedia.org/wikipedia/commons/e/e2/FOLIO_400x400.jpg'));
     });
 
     it('should render delete confirmation modal', async () => {
@@ -163,7 +164,15 @@ describe('Profile Picture', () => {
     });
 
     it('should display Profile picture', () => {
-      expect(screen.getByTestId('profile-picture')).toBeInTheDocument();
+      expect(Img).toHaveBeenCalled();
+      const renderedProfileImg = Img.mock.calls[0][0];
+      expect(renderedProfileImg.alt).toBe('ui-users.information.profilePicture');
+    });
+    it('should display Profile picture Loader while fetching profile picture', () => {
+      useProfilePicture.mockClear().mockReturnValue({ profilePictureData: profilePicData.profile_picture_blob, isFetching: true });
+      renderProfilePicture({ ...defaultProps, profilePictureId: 'cdc053ff-f88e-445c-878f-650472bd52e6' });
+      const profilePictureLoader = screen.getByTestId('profile-picture-loader').querySelector('.spinner');
+      expect(profilePictureLoader).toBeInTheDocument();
     });
   });
 });
