@@ -32,6 +32,7 @@
 * Non case-sensitive sorting of title column in Open Loans Screen. Refs UIU-2983.
 * Upload Local File for user profile picture. Refs UIU-2974.
 * Don't allow to display or upload a profile picture to a shadow account. Refs UIU-3045.
+* ECS - Conceal elements that are not relevant for "Shadow" and "Patron" users. Refs UIU-3056.
 
 ## [10.0.4](https://github.com/folio-org/ui-users/tree/v10.0.4) (2023-11-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.3...v10.0.4)

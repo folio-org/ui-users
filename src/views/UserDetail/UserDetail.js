@@ -837,6 +837,7 @@ class UserDetail extends React.Component {
                       expanded={sections.permissionsSection}
                       onToggle={this.handleSectionToggle}
                       accordionId="permissionsSection"
+                      user={this.getUser()}
                       {...this.props}
                     />
                   </IfInterface>
