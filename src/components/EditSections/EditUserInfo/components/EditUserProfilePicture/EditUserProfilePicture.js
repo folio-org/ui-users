@@ -170,12 +170,10 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal }) => {
       // eslint-disable-next-line no-new
       return new Compressor(croppedImage, {
         ...COMPRESSION_OPTIONS,
-        success: (compressedResult) => {
-          resolve(compressedResult);
+        success: (compressedImg) => {
+          resolve(compressedImg);
         },
-        error: (err) => {
-          reject(err);
-        },
+        error: reject,
       });
     });
   };
