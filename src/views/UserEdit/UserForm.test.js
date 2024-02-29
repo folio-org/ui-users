@@ -1,9 +1,68 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+import {
+  screen,
+} from '@folio/jest-config-stripes/testing-library/react';
+
+
+import renderWithRouter from 'helpers/renderWithRouter';
 
 import { USER_TYPES } from '../../constants';
 
-import { validate } from './UserForm';
+import UserForm, { validate } from './UserForm';
+
+jest.mock(
+  '../../components/EditSections',
+  () => ({
+    EditContactInfo: jest.fn(() => <div>EditContactInfo accordion</div>),
+    EditExtendedInfo: jest.fn(() => <div>EditExtendedInfo accordion</div>),
+    EditProxy: jest.fn(() => <div>EditProxy accordion</div>),
+    EditServicePoints: jest.fn(() => <div>EditServicePoints accordion</div>),
+    EditUserInfo: jest.fn(() => <div>EditUserInfo accordion</div>),
+  })
+);
+
+jest.mock(
+  './TenantsPermissionsAccordion',
+  () => jest.fn(() => <div>TenantsPermissionsAccordion accordion</div>),
+);
+
+const STRIPES = {
+  connect: (Component) => Component,
+  config: {},
+  currency: 'USD',
+  hasInterface: (i) => i !== 'roles',
+  hasPerm: jest.fn().mockReturnValue(true),
+  clone: jest.fn(),
+  setToken: jest.fn(),
+  locale: 'en-US',
+  logger: {
+    log: () => {},
+  },
+  okapi: {
+    tenant: 'diku',
+    url: 'https://folio-testing-okapi.dev.folio.org',
+  },
+  store: {
+    getState: () => ({
+      okapi: {
+        token: 'abc',
+      },
+    }),
+    dispatch: () => {},
+    subscribe: () => {},
+    replaceReducer: () => {},
+  },
+  timezone: 'UTC',
+  user: {
+    perms: {},
+    user: {
+      id: 'b1add99d-530b-5912-94f3-4091b4d87e2c',
+      username: 'diku_admin',
+    },
+  },
+  withOkapi: true,
+};
 
 describe('UserForm', () => {
   describe('validate', () => {
@@ -74,6 +133,51 @@ describe('UserForm', () => {
         const result = validate({ servicePoints: ['a', 'b', 'c'] });
         expect(result.preferredServicePoint).toMatchObject(<FormattedMessage id="ui-users.errors.missingRequiredPreferredServicePoint" />);
       });
+    });
+  });
+
+  describe('renders accordions', () => {
+    const props = {
+      formData: {
+        patronGroups: [],
+      },
+      initialValues: {
+        id: 'id',
+        creds: {
+          password: 'password',
+        },
+        patronGroup: 'patronGroup',
+        personal: {
+          lastName: 'lastName',
+          preferredContactTypeId: 'preferredContactTypeId',
+          addresses: [
+            { addressType: 'addressType' },
+          ],
+        },
+        preferredServicePoint: 'preferredServicePoint',
+        servicePoints: ['a', 'b'],
+        username: 'username',
+      },
+      onCancel: jest.fn(),
+      onSubmit: jest.fn(),
+      stripes: STRIPES,
+      uniquenessValidator: {
+        reset: jest.fn(),
+        GET: jest.fn(),
+      }
+    };
+
+    it('shows permissions accordion in legacy mode', async () => {
+      renderWithRouter(<UserForm {...props} />);
+
+      expect(screen.getByText('TenantsPermissionsAccordion accordion')).toBeTruthy();
+    });
+
+    it('omits permissions pane when "roles" interface is present', async () => {
+      props.stripes.hasInterface = () => true;
+      renderWithRouter(<UserForm {...props} />);
+
+      expect(screen.queryByText('Permissions accordion')).toBeFalsy();
     });
   });
 
