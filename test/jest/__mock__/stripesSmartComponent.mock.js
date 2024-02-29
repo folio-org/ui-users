@@ -48,6 +48,7 @@ jest.mock('@folio/stripes/smart-components', () => {
     AddressEditList: () => <div data-testid="address-edit-list">AddressEditList</div>,
     ChangeDueDateDialog: (props) => <div data-testid="change-duedate-dialog">ChangeDueDateDialog</div>,
     ControlledVocab: jest.fn(({ validate }) => <div data-testid="controlled-vocab">ControlledVocab</div>),
+    EditCustomFieldsRecord: () => <div>EditCustomFieldsRecord accordion</div>,
     DueDatePicker: () => <div data-testid="due-date-picker">DueDatePicker</div>,
     LocationLookup: () => <div>LocationLookup</div>,
     NotePopupModal: () => <div>NotePopupModal</div>,
@@ -75,7 +76,7 @@ jest.mock('@folio/stripes/smart-components', () => {
         if(props.onBeforeSave){
         props.onBeforeSave(data);
       }
-        const values = { 
+        const values = {
           name: 'test1'
         };
         props.validate(values);
