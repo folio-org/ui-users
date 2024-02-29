@@ -219,6 +219,19 @@ class UserDetail extends React.Component {
     this._isMounted = false;
   }
 
+  /**
+   * showPermissionsAccordion
+   * Return true unless the `roles` interface is present; then return false.
+   * When `roles` is present, this indicates access management is handled
+   * by keycloak; thus, roles, policies, and capabilites are used to manage
+   * access, not the legacy permissions system.
+   *
+   * @returns boolean true unless the `roles` interface is present
+   */
+  showPermissionsAccordion = () => {
+    return !this.props.stripes.hasInterface('roles');
+  };
+
   getUser = () => {
     const { resources, match: { params: { id } } } = this.props;
     const selUser = (resources.selUser || {}).records || [];
@@ -861,17 +874,18 @@ class UserDetail extends React.Component {
                   )
                 }
 
-                <IfPermission perm="perms.users.get">
-                  <IfInterface name="permissions" version="5.0">
-                    <UserPermissions
-                      expanded={sections.permissionsSection}
-                      onToggle={this.handleSectionToggle}
-                      accordionId="permissionsSection"
-                      user={this.getUser()}
-                      {...this.props}
-                    />
-                  </IfInterface>
-                </IfPermission>
+                { this.showPermissionsAccordion() &&
+                  <IfPermission perm="perms.users.get">
+                    <IfInterface name="permissions" version="5.0">
+                      <UserPermissions
+                        expanded={sections.permissionsSection}
+                        onToggle={this.handleSectionToggle}
+                        accordionId="permissionsSection"
+                        {...this.props}
+                      />
+                    </IfInterface>
+                  </IfPermission>
+                }
 
                 <IfPermission perm="inventory-storage.service-points.collection.get,inventory-storage.service-points-users.collection.get">
                   <IfInterface name="service-points-users" version="1.0">

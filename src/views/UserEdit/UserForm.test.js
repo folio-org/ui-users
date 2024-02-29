@@ -1,4 +1,7 @@
 import { FormattedMessage } from 'react-intl';
+import {
+  screen,
+} from '@folio/jest-config-stripes/testing-library/react';
 
 import renderWithRouter from 'helpers/renderWithRouter';
 import { USER_TYPES } from '../../constants';
@@ -65,6 +68,43 @@ const renderUserForm = (props = {}) => renderWithRouter(
     {...props}
   />
 );
+
+const STRIPES = {
+  connect: (Component) => Component,
+  config: {},
+  currency: 'USD',
+  hasInterface: (i) => i !== 'roles',
+  hasPerm: jest.fn().mockReturnValue(true),
+  clone: jest.fn(),
+  setToken: jest.fn(),
+  locale: 'en-US',
+  logger: {
+    log: () => {},
+  },
+  okapi: {
+    tenant: 'diku',
+    url: 'https://folio-testing-okapi.dev.folio.org',
+  },
+  store: {
+    getState: () => ({
+      okapi: {
+        token: 'abc',
+      },
+    }),
+    dispatch: () => {},
+    subscribe: () => {},
+    replaceReducer: () => {},
+  },
+  timezone: 'UTC',
+  user: {
+    perms: {},
+    user: {
+      id: 'b1add99d-530b-5912-94f3-4091b4d87e2c',
+      username: 'diku_admin',
+    },
+  },
+  withOkapi: true,
+};
 
 describe('UserForm', () => {
   beforeEach(() => {
@@ -147,22 +187,49 @@ describe('UserForm', () => {
     });
   });
 
-  describe('Actions menu', () => {
-    it('should display action menu', () => {
-      const { container } = renderUserForm();
 
-      expect(container.querySelector('[data-test-actions-menu]')).toBeInTheDocument();
+  describe('renders accordions', () => {
+    const props = {
+      formData: {
+        patronGroups: [],
+      },
+      initialValues: {
+        id: 'id',
+        creds: {
+          password: 'password',
+        },
+        patronGroup: 'patronGroup',
+        personal: {
+          lastName: 'lastName',
+          preferredContactTypeId: 'preferredContactTypeId',
+          addresses: [
+            { addressType: 'addressType' },
+          ],
+        },
+        preferredServicePoint: 'preferredServicePoint',
+        servicePoints: ['a', 'b'],
+        username: 'username',
+      },
+      onCancel: jest.fn(),
+      onSubmit: jest.fn(),
+      stripes: STRIPES,
+      uniquenessValidator: {
+        reset: jest.fn(),
+        GET: jest.fn(),
+      }
+    };
+
+    it('shows permissions accordion in legacy mode', async () => {
+      renderWithRouter(<UserForm {...props} />);
+
+      expect(screen.getByText('TenantsPermissionsAccordion accordion')).toBeTruthy();
     });
 
-    it('should not display request, fee/fines and block actions for a shadow user', () => {
-      const { container } = renderUserForm({
-        initialValues: {
-          ...user,
-          type: USER_TYPES.SHADOW,
-        },
-      });
+    it('omits permissions pane when "roles" interface is present', async () => {
+      props.stripes.hasInterface = () => true;
+      renderWithRouter(<UserForm {...props} />);
 
-      expect(container.querySelector('[data-test-actions-menu]')).not.toBeInTheDocument();
+      expect(screen.queryByText('Permissions accordion')).toBeFalsy();
     });
   });
 

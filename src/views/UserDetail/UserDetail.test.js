@@ -119,10 +119,11 @@ jest.mock(
     ContactInfo: jest.fn(() => null),
     ProxyPermissions: jest.fn(() => null),
     PatronBlock: jest.fn(() => null),
-    UserPermissions: jest.fn(() => null),
+    UserPermissions: jest.fn(() => <div>Permissions accordion</div>),
     UserLoans: jest.fn(() => null),
     UserRequests: jest.fn(() => null),
     UserAccounts: jest.fn(() => null),
+    UserAffiliations: jest.fn(() => null),
     UserServicePoints: jest.fn(() => null),
     ReadingRoomAccess: jest.fn(() => null),
   })
@@ -284,6 +285,23 @@ describe('UserDetail', () => {
     test('should render checkDelete button in action menu ', async () => {
       renderUserDetail(stripes);
       expect(screen.getByRole('button', { name: 'ui-users.details.checkDelete' })).toBeVisible();
+    });
+
+    describe('permissions', () => {
+      it('shows permissions accordion in legacy mode', async () => {
+        stripes.hasInterface = () => false;
+        renderUserDetail(stripes);
+        expect(screen.getByText('Permissions accordion')).toBeTruthy();
+      });
+
+      it('omits permissions pane when "roles" interface is present', async () => {
+        stripes.hasInterface = (i) => {
+          return (i === 'roles');
+        };
+
+        renderUserDetail(stripes);
+        expect(screen.queryByText('Permissions accordion')).toBeFalsy();
+      });
     });
 
     describe('click checkDelete button', () => {
