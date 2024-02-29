@@ -314,6 +314,23 @@ describe('UserDetail', () => {
       });
     });
 
+    describe('permissions', () => {
+      it('shows permissions accordion in legacy mode', async () => {
+        stripes.hasInterface = () => false;
+        renderUserDetail(stripes);
+        expect(screen.getByText('Permissions accordion')).toBeTruthy();
+      });
+
+      it('omits permissions pane when "roles" interface is present', async () => {
+        stripes.hasInterface = (i) => {
+          return (i === 'roles');
+        };
+
+        renderUserDetail(stripes);
+        expect(screen.queryByText('Permissions accordion')).toBeFalsy();
+      });
+    });
+
     describe('click checkDelete button', () => {
       beforeEach(async () => {
         renderUserDetail(stripes);

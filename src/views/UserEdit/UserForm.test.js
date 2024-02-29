@@ -30,6 +30,10 @@ jest.mock('../../hooks', () => ({
   useUserTenantPermissions: jest.fn(),
 }));
 
+jest.mock(
+  './TenantsPermissionsAccordion',
+  () => jest.fn(() => <div>TenantsPermissionsAccordion accordion</div>),
+);
 const user = {
   id: 'user-id',
   personal: {
@@ -40,34 +44,6 @@ const user = {
   sponsors: [],
   preferredEmailCommunication: [],
 };
-
-const defaultProps = {
-  profilePictureConfig: {
-    enabled: false,
-  },
-  formData: {
-    departments: [],
-    patronGroups: [],
-  },
-  initialValues: { ...user },
-  onCancel: jest.fn(),
-  onSubmit: jest.fn(),
-  stripes: {
-    hasInterface: () => true,
-    hasPerm: () => true,
-  },
-  uniquenessValidator: {
-    reset: jest.fn(),
-    GET: jest.fn(),
-  },
-};
-
-const renderUserForm = (props = {}) => renderWithRouter(
-  <UserForm
-    {...defaultProps}
-    {...props}
-  />
-);
 
 const STRIPES = {
   connect: (Component) => Component,
