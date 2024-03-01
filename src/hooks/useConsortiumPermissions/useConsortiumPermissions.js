@@ -11,6 +11,13 @@ import {
   OKAPI_TENANT_HEADER,
 } from '../../constants';
 
+/**
+ * useConsortiumPermissions
+ * Retrieve a list of consortia-related permissions assigned to the current
+ * user in their central tenant.
+ *
+ * @returns {object} shaped like { foo: true, bar: true } where foo, bar are permissions
+ */
 const useConsortiumPermissions = () => {
   const stripes = useStripes();
   const ky = useOkapiKy();
@@ -20,6 +27,43 @@ const useConsortiumPermissions = () => {
   const consortium = user?.consortium;
 
   const enabled = Boolean(user?.id && consortium?.id);
+
+  // retrieve permissions via permissions interface
+  const permissionsPermissions = async (api) => {
+    const { id } = await api.get(
+      `perms/users/${user.id}`,
+      { searchParams: { indexField: 'userId' } },
+    ).json();
+    const { permissions } = await api.get(
+      'perms/permissions',
+      { searchParams: { limit: MAX_RECORDS, query: `(grantedTo=${id})`, expanded: true } },
+    ).json();
+
+    return permissions
+      .map(({ subPermissions = [] }) => subPermissions)
+      .flat()
+      .filter(permission => permission.includes('consortia'))
+      .reduce((acc, permission) => {
+        acc[permission] = true;
+
+        return acc;
+      }, {});
+  };
+
+  // retrieve permissions via users-keycloak interface
+  const capabilitiesPermissions = async (api) => {
+    const { permissions } = await api.get(
+      'users-keycloak/_self',
+    ).json();
+
+    return permissions?.permissions
+      .filter(permission => permission.includes('consortia'))
+      .reduce((acc, permission) => {
+        acc[permission] = true;
+
+        return acc;
+      }, {});
+  };
 
   const {
     isLoading,
@@ -38,24 +82,7 @@ const useConsortiumPermissions = () => {
       });
 
       try {
-        const { id } = await api.get(
-          `perms/users/${user.id}`,
-          { searchParams: { indexField: 'userId' } },
-        ).json();
-        const { permissions } = await api.get(
-          'perms/permissions',
-          { searchParams: { limit: MAX_RECORDS, query: `(grantedTo=${id})`, expanded: true } },
-        ).json();
-
-        return permissions
-          .map(({ subPermissions = [] }) => subPermissions)
-          .flat()
-          .filter(permission => permission.includes('consortia'))
-          .reduce((acc, permission) => {
-            acc[permission] = true;
-
-            return acc;
-          }, {});
+        return stripes.hasInterface('users-keycloak', '1.0') ? capabilitiesPermissions(api) : permissionsPermissions(api);
       } catch {
         return {};
       }
