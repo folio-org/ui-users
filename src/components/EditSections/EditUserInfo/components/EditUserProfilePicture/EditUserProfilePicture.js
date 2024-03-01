@@ -173,7 +173,7 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal }) => {
         success: (compressedImg) => {
           resolve(compressedImg);
         },
-        error: reject,
+        error: (err) => reject(err),
       });
     });
   };
