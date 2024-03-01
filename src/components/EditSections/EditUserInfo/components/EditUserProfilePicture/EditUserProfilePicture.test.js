@@ -159,7 +159,6 @@ describe('Profile Picture', () => {
       const updateButton = screen.getByTestId('updateProfilePictureDropdown');
       await userEvent.click(updateButton);
       const mockImage = new Image();
-      console.log(mockImage, 'mc img');
       const consoleWarnMock = jest.spyOn(console, 'warn').mockImplementation(() => {});
       const file = new File(['fake content'], mockImage, { type: 'image/png' });
       const fileInput = screen.getByTestId('hidden-file-input');
