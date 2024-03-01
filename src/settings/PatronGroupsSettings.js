@@ -5,10 +5,12 @@ import {
   injectIntl,
 } from 'react-intl';
 import { ControlledVocab } from '@folio/stripes/smart-components';
-import { withStripes } from '@folio/stripes/core';
+import { stripesConnect } from '@folio/stripes/core';
+import { getSourceSuppressor } from '@folio/stripes/util';
 
-const suppress = () => false;
-const actionSuppressor = { delete: suppress, edit: suppress };
+import { RECORD_SOURCE } from '../constants';
+
+const suppress = getSourceSuppressor(RECORD_SOURCE.CONSORTIUM);
 
 class PatronGroupsSettings extends React.Component {
   static propTypes = {
@@ -62,7 +64,6 @@ class PatronGroupsSettings extends React.Component {
         label={intl.formatMessage({ id: 'ui-users.information.patronGroups' })}
         labelSingular={intl.formatMessage({ id: 'ui-users.information.patronGroup' })}
         objectLabel={<FormattedMessage id="ui-users.information.patronGroup.users" />}
-        actionSuppressor={actionSuppressor}
         visibleFields={['group', 'desc', 'expirationOffsetInDays']}
         hiddenFields={['numberOfObjects']}
         columnMapping={{
@@ -75,9 +76,13 @@ class PatronGroupsSettings extends React.Component {
         id="patrongroups"
         sortby="group"
         canCreate={hasCreatePerm}
+        actionSuppressor={{
+          delete: item => !hasDeletePerm || suppress(item),
+          edit: (item) => !hasEditPerm || suppress(item),
+        }}
       />
     );
   }
 }
 
-export default injectIntl(withStripes(PatronGroupsSettings));
+export default injectIntl(stripesConnect(PatronGroupsSettings));
