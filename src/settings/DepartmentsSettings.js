@@ -7,6 +7,10 @@ import {
 import { NoValue } from '@folio/stripes/components';
 import { ControlledVocab } from '@folio/stripes/smart-components';
 import { useStripes } from '@folio/stripes/core';
+import { getSourceSuppressor } from '@folio/stripes/util';
+
+import { RECORD_SOURCE } from '../constants';
+
 
 const validate = (item, index, items) => {
   const filteredDepartments = items.filter((department, i) => i !== index);
@@ -30,7 +34,7 @@ const validate = (item, index, items) => {
   return errors;
 };
 
-const suppress = () => false;
+const suppress = getSourceSuppressor(RECORD_SOURCE.CONSORTIUM);
 
 const DepartmentsSettings = () => {
   const { formatMessage } = useIntl();
