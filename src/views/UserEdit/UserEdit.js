@@ -120,7 +120,6 @@ class UserEdit extends React.Component {
       'addressTypes',
       'servicePoints',
       'departments',
-      'settings',
       'configSettings'
     );
 

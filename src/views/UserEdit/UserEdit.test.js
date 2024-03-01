@@ -75,7 +75,7 @@ describe('UserEdit', () => {
       servicePoints: {
         records: [],
       },
-      settings: {
+      configSettings: {
         records: [],
       },
       departments: {
@@ -157,7 +157,7 @@ describe('UserEdit', () => {
         permissions: {
           records: [{ id: '4', group: 'tst', desc: 'description' }],
         },
-        settings: {
+        configSettings: {
           records: [
             {
               id: 'f2b84177-d85a-4b0c-93dd-279e8f9d1d42',
@@ -200,7 +200,7 @@ describe('UserEdit', () => {
         permissions: {
           records: [{ id: '4', group: 'tst', desc: 'description' }],
         },
-        settings: {
+        configSettings: {
           records: [
             {
               id: 'f2b84177-d85a-4b0c-93dd-279e8f9d1d42',
@@ -241,7 +241,7 @@ describe('UserEdit', () => {
         permissions: {
           records: [{ id: '4', group: 'tst', desc: 'description' }],
         },
-        settings: {
+        configSettings: {
           records: [
             {
               id: 'f2b84177-d85a-4b0c-93dd-279e8f9d1d42',
@@ -296,7 +296,7 @@ describe('UserEdit', () => {
         permissions: {
           records: [{ id: '4', group: 'tst', desc: 'description' }],
         },
-        settings: {
+        configSettings: {
           records: [
             {
               id: 'f2b84177-d85a-4b0c-93dd-279e8f9d1d42',
@@ -337,7 +337,7 @@ describe('UserEdit', () => {
         permissions: {
           records: [{ id: '4', group: 'tst', desc: 'description' }],
         },
-        settings: {
+        configSettings: {
           records: [
             {
               id: 'f2b84177-d85a-4b0c-93dd-279e8f9d1d42',
@@ -378,7 +378,7 @@ describe('UserEdit', () => {
         permissions: {
           records: [{ id: '4', group: 'tst', desc: 'description' }],
         },
-        settings: {
+        configSettings: {
           records: [
             {
               id: 'f2b84177-d85a-4b0c-93dd-279e8f9d1d42',
@@ -495,7 +495,7 @@ describe('UserEdit', () => {
         departments: {
           records: [],
         },
-        settings: {
+        configSettings: {
           records: [],
         },
       },
