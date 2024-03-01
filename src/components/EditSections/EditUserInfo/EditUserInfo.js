@@ -140,9 +140,7 @@ class EditUserInfo extends React.Component {
 
     let barcodeGeneratorSetting = 'useTextField';
     if (stripes.hasInterface('servint')) {
-      console.log("SETTINGS: %o", settings);
       const numberGeneratorSettings = JSON.parse((settings?.find(sett => sett.configName === 'number_generator') ?? { value: '{}' }).value);
-      console.log("NGS: %o", numberGeneratorSettings);
       barcodeGeneratorSetting = numberGeneratorSettings?.barcodeGeneratorSetting ?? 'useTextField';
     }
 
