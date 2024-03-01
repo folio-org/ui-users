@@ -45,9 +45,24 @@ const response = {
   ],
 };
 
-describe('useConsortiumPermissions', () => {
+describe('useConsortiumPermissions with users-keycloak', () => {
+  const keycloakResponse = {
+    'user': {
+      'username': 'circ-admin',
+      'id': '7cf60c03-1a83-4d40-9aec-961f2e55963f',
+    },
+    'permissions': {
+      'userId': '7cf60c03-1a83-4d40-9aec-961f2e55963f',
+      'permissions': [
+        'monkey.bagel',
+        'thunder.chicken',
+        'consortia.view',
+      ]
+    }
+  };
+
   const mockGet = jest.fn(() => ({
-    json: () => Promise.resolve(response),
+    json: () => Promise.resolve(keycloakResponse),
   }));
   const setHeaderMock = jest.fn();
   const kyMock = {
@@ -64,32 +79,19 @@ describe('useConsortiumPermissions', () => {
     mockGet.mockClear();
     useOkapiKy.mockClear().mockReturnValue(kyMock);
     useStripes.mockClear().mockReturnValue({
-      hasInterface: () => (false),
+      hasInterface: () => (true),
       user: {
         user: { ...user, consortium },
       }
     });
   });
 
-  it('should fetch consortium permissions', async () => {
+  it('should fetch consortium permissions via capabilities interface', async () => {
     const { result } = renderHook(() => useConsortiumPermissions(), { wrapper });
 
     await waitFor(() => !result.current.isLoading);
 
-    expect(mockGet).toHaveBeenCalledWith(
-      `perms/users/${user.id}`,
-      expect.objectContaining({ searchParams: { indexField: 'userId' } }),
-    );
-    expect(mockGet).toHaveBeenCalledWith(
-      'perms/permissions',
-      expect.objectContaining({
-        searchParams: {
-          limit: MAX_RECORDS,
-          query: `(grantedTo=${response.id})`,
-          expanded: true,
-        },
-      }),
-    );
+    expect(mockGet).toHaveBeenCalledWith('users-keycloak/_self');
   });
 
   it('should return consortia permissions', async () => {

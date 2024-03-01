@@ -47,7 +47,8 @@
       "loan-storage": "4.0 5.0 6.0 7.0",
       "notes": "2.0 3.0",
       "request-storage": "2.5 3.0 4.0 5.0 6.0",
-      "roles": "1.0"
+      "roles": "1.0",
+      "users-keycloak": "1.0"
     },
     "permissionSets": [
       {
