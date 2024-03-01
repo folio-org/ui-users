@@ -19,7 +19,7 @@ import DeleteProfilePictureModal from '../DeleteProfilePictureModal';
 import ProfilePicture from '../../../../ProfilePicture';
 import LocalFileModal from '../LocalFileModal';
 import { getRotatedImage, createImage } from './utils/canvasUtils';
-import { PROFILE_PIC_API } from '../../../../../constants';
+import { PROFILE_PIC_API, PROFILE_PIC_CONFIGURATIONS_ENTRY_API } from '../../../../../constants';
 
 const ORIENTATION_TO_ANGLE = {
   '3': 180,
@@ -91,8 +91,41 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal }) => {
     setLocalFileModalOpen(prev => !prev);
   }, []);
 
+  const getProfilePictureConfig = async () => {
+    const headersWithCredentials = getHeaderWithCredentials(okapi);
+    const headers = {
+      ...headersWithCredentials,
+      headers: {
+        ...headersWithCredentials.headers,
+        'Content-Type': 'application/octet-stream',
+      }
+    };
+    try {
+      const response = await fetch(`${url}/user/${PROFILE_PIC_CONFIGURATIONS_ENTRY_API}`, {
+        method: 'GET',
+        ...headers,
+      });
+
+      if (response.ok) {
+        const resp = await response.json();
+        return resp?.maxFileSize * 1024 * 1024;
+      } else {
+        // eslint-disable-next-line no-console
+        console.error(new Error('Failed to upload blob'));
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+    }
+    return 0;
+  };
+
   const onFileChange = async (e) => {
-    if (e.target.files && e.target.files.length > 0) {
+    const maxFileSize = await getProfilePictureConfig();
+    if (maxFileSize && e.target.files[0].size > maxFileSize) {
+      // eslint-disable-next-line no-console
+      console.warn('max file size can be ', maxFileSize);
+    } else if (maxFileSize && e.target.files && e.target.files.length > 0) {
       setLocalFileModalOpen(true);
       const file = e.target.files[0];
       let imageDataUrl = await readFile(file);
@@ -217,7 +250,7 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal }) => {
         croppedLocalImage={croppedLocalImage}
       />
       <br />
-      <input type="file" data-testid="hidden-file-input" hidden ref={fileInputRef} onChange={onFileChange} accept="image/*" />
+      <input type="file" data-testid="hidden-file-input" hidden ref={fileInputRef} onChange={onFileChange} accept="image/jpg, image/jpeg, image/png" />
       {
         hasAllProfilePicturePerms && (
           <Dropdown
