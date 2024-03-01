@@ -22,6 +22,7 @@ import {
   refundClaimReturned,
 } from '../../../constants';
 import { isDcbUser } from '../../util';
+import { useLocalizeCurrency } from '../../../hooks/useLocalizedCurrency/useLocalizeCurrency';
 
 
 /**
@@ -52,6 +53,7 @@ const UserAccounts = ({
     totalRefunded: 0.00,
   });
   const stripes = useStripes();
+  const { localizeCurrency } = useLocalizeCurrency();
   const accountsLoaded = !isPending;
   const {
     openAccountsCount,
@@ -88,9 +90,9 @@ const UserAccounts = ({
       closedAccountsCount: closed.length,
       claimAccountsCount: claim.length,
       refundedAccountsCount: refunded.length,
-      total: parseFloat(openTotal).toFixed(2),
-      totalClaim: parseFloat(claimTotal).toFixed(2),
-      totalRefunded: parseFloat(refundedTotal).toFixed(2),
+      total: parseFloat(openTotal),
+      totalClaim: parseFloat(claimTotal),
+      totalRefunded: parseFloat(refundedTotal),
     });
   }, [records, resources]);
 
@@ -118,7 +120,7 @@ const UserAccounts = ({
                     {' '}
                     {' '}
                   </Link>
-                  {item.id === 'clickable-viewcurrentaccounts' && <FormattedMessage id="ui-users.accounts.totalOpenAccounts" values={{ amount: total }} />}
+                  {item.id === 'clickable-viewcurrentaccounts' && <FormattedMessage id="ui-users.accounts.totalOpenAccounts" values={{ amount: localizeCurrency(total) }} />}
                 </li>)}
               items={[
                 {
@@ -150,7 +152,7 @@ const UserAccounts = ({
                   <div id={item.id}>
                     <FormattedMessage id={item.formattedMessageId} values={{ count: item.count }} />
                     {' '}
-                    <FormattedMessage id="ui-users.accounts.totalOpenAccounts" values={{ amount: item.total }} />
+                    <FormattedMessage id="ui-users.accounts.totalOpenAccounts" values={{ amount: localizeCurrency(item.total) }} />
                   </div>
                 </li>)}
               items={[

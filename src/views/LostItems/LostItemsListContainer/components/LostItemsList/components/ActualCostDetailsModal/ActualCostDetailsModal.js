@@ -22,10 +22,8 @@ import {
   ACTUAL_COST_DETAILS_MODAL_DEFAULT,
   LOST_ITEM_STATUSES,
 } from '../../../../../constants';
+import { useLocalizeCurrency } from '../../../../../../../hooks/useLocalizedCurrency/useLocalizeCurrency';
 
-export const getActualCostToBillViewValue = (value = 0) => (
-  value.toFixed(2)
-);
 
 const ActualCostDetailsModal = ({
   actualCostDetailsModal: {
@@ -42,6 +40,7 @@ const ActualCostDetailsModal = ({
   setActualCost,
   setActualCostDetailsModal,
 }) => {
+  const { localizeCurrency } = useLocalizeCurrency();
   const patronName = getPatronName(actualCostRecord);
   const instanceTitle = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.INSTANCE_TITLE], DEFAULT_VALUE);
   const materialType = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.MATERIAL_TYPE], DEFAULT_VALUE);
@@ -79,7 +78,7 @@ const ActualCostDetailsModal = ({
               ? <FormattedMessage
                   id="ui-users.lostItems.modal.summaryMessageCharged"
                   values={{
-                    actualCostToBill: getActualCostToBillViewValue(actualCostToBill),
+                    actualCostToBill: localizeCurrency(actualCostToBill),
                     patronName,
                     instanceTitle,
                     materialType,

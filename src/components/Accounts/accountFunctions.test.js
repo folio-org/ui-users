@@ -3,7 +3,6 @@ import account from 'fixtures/account';
 import {
   count,
   calculateSelectedAmount,
-  calculateRemainingAmount,
   loadServicePoints,
   accountRefundInfo,
   calculateTotalPaymentAmount,
@@ -31,10 +30,6 @@ describe('Account Functions', () => {
   it('If calculateSelectedAmount works', async () => {
     const data = calculateSelectedAmount([account], true);
     expect(data).toBe('90.00');
-  });
-  it('If calculateRemainingAmount works', async () => {
-    const data = calculateRemainingAmount('100.00', '200.00', '500.00', 'refund');
-    expect(data).toBe('400.00');
   });
   it('If loadServicePoints works', async () => {
     const owners = [

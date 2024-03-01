@@ -5,6 +5,7 @@ import {
   injectIntl,
 } from 'react-intl';
 
+import { stripesConnect } from '@folio/stripes/core';
 import {
   Button,
   Col,
@@ -25,6 +26,7 @@ import {
 } from '../../util';
 
 import css from './modal.css';
+import { localizeCurrencyAmount } from '../../util/localizeCurrencyAmount';
 
 class WarningModal extends React.Component {
   static propTypes = {
@@ -127,6 +129,7 @@ class WarningModal extends React.Component {
   };
 
   getAccountsFormatter() {
+    const { intl, stripes } = this.props;
     const { checkedAccounts } = this.state;
     return {
       ' ': a => (
@@ -138,7 +141,7 @@ class WarningModal extends React.Component {
       ),
       'Alert details': this.getAlertDetailsFormatter,
       'Fee/Fine type': a => a.feeFineType || '',
-      'Remaining': a => parseFloat(a.remaining).toFixed(2) || '0.00',
+      'Remaining': a => localizeCurrencyAmount(a.remaining, stripes.currency, intl),
       'Payment Status': a => (a.paymentStatus || {}).name || '-',
       'Item': a => a.title || '',
     };
@@ -290,4 +293,4 @@ class WarningModal extends React.Component {
   }
 }
 
-export default injectIntl(WarningModal);
+export default injectIntl(stripesConnect(WarningModal));

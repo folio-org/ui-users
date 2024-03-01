@@ -1,10 +1,10 @@
-import _ from 'lodash';
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Field } from 'react-final-form';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import get from 'lodash/get';
 import moment from 'moment-timezone';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { Field } from 'react-final-form';
 import { OnChange } from 'react-final-form-listeners';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import { ViewMetaData } from '@folio/stripes/smart-components';
 import { NumberGeneratorModalButton } from '@folio/service-interaction';
@@ -27,6 +27,8 @@ import { isConsortiumEnabled } from '../../util';
 import asyncValidateField from '../../validators/asyncValidateField';
 import validateMinDate from '../../validators/validateMinDate';
 
+import { ChangeUserTypeModal, EditUserProfilePicture } from './components';
+
 import css from './EditUserInfo.css';
 
 class EditUserInfo extends React.Component {
@@ -45,10 +47,12 @@ class EditUserInfo extends React.Component {
         dispatch: PropTypes.func.isRequired,
         getState: PropTypes.func,
       }),
+      hasPerm: PropTypes.func,
     }).isRequired,
     form: PropTypes.object,
     disabled: PropTypes.bool,
     uniquenessValidator: PropTypes.object,
+    areProfilePicturesEnabled: PropTypes.bool.isRequired,
   };
 
   constructor(props) {
@@ -57,6 +61,7 @@ class EditUserInfo extends React.Component {
     const { initialValues: { patronGroup } } = props;
     this.state = {
       showRecalculateModal: false,
+      showUserTypeModal: false,
       selectedPatronGroup: patronGroup,
     };
   }
@@ -79,6 +84,12 @@ class EditUserInfo extends React.Component {
     this.setState({ showRecalculateModal: false });
   }
 
+  setChangedUserType = (userType) => {
+    const { form: { change } } = this.props;
+    change(USER_TYPE_FIELD, userType);
+    this.setState({ showUserTypeModal: false });
+  }
+
   calculateNewExpirationDate = (startCalcToday) => {
     const { initialValues } = this.props;
     const expirationDate = new Date(initialValues.expirationDate);
@@ -95,7 +106,7 @@ class EditUserInfo extends React.Component {
 
   getPatronGroupOffset = () => {
     const selectedPatronGroup = this.props.patronGroups.find(i => i.id === this.state.selectedPatronGroup);
-    return _.get(selectedPatronGroup, 'expirationOffsetInDays', '');
+    return get(selectedPatronGroup, 'expirationOffsetInDays', '');
   };
 
   parseExpirationDate = (expirationDate) => {
@@ -112,6 +123,7 @@ class EditUserInfo extends React.Component {
 
   render() {
     const {
+      areProfilePicturesEnabled,
       disabled,
       patronGroups,
       initialValues,
@@ -122,12 +134,15 @@ class EditUserInfo extends React.Component {
       uniquenessValidator,
       form: { change },
       settings,
-      stripes
+      stripes,
+      form,
     } = this.props;
 
     let barcodeGeneratorSetting = 'useTextField';
     if (stripes.hasInterface('servint')) {
+      console.log("SETTINGS: %o", settings);
       const numberGeneratorSettings = JSON.parse((settings?.find(sett => sett.configName === 'number_generator') ?? { value: '{}' }).value);
+      console.log("NGS: %o", numberGeneratorSettings);
       barcodeGeneratorSetting = numberGeneratorSettings?.barcodeGeneratorSetting ?? 'useTextField';
     }
 
@@ -141,7 +156,6 @@ class EditUserInfo extends React.Component {
     };
 
     const willUserExtend = () => {
-      const { form } = this.props;
       const expirationDate = form.getFieldState('expirationDate')?.value ?? '';
       const currentExpirationDate = new Date(expirationDate);
       const now = Date.now();
@@ -215,7 +229,7 @@ class EditUserInfo extends React.Component {
     ].filter(o => o.visible);
 
     const offset = this.getPatronGroupOffset();
-    const group = _.get(this.props.patronGroups.find(i => i.id === this.state.selectedPatronGroup), 'group', '');
+    const group = get(this.props.patronGroups.find(i => i.id === this.state.selectedPatronGroup), 'group', '');
     const date = moment(this.calculateNewExpirationDate(true)).format('LL');
 
     const modalFooter = (
@@ -235,6 +249,10 @@ class EditUserInfo extends React.Component {
       </ModalFooter>
     );
 
+    const hasViewProfilePicturePerm = stripes.hasPerm('ui-users.profile-pictures.view');
+
+    const displayProfilePicture = areProfilePicturesEnabled && hasViewProfilePicturePerm && !isShadowUser;
+
     return (
       <>
         <Accordion
@@ -247,152 +265,178 @@ class EditUserInfo extends React.Component {
           { initialValues.metadata && <ViewMetaData metadata={initialValues.metadata} /> }
 
           <Row>
-            <Col xs={12} md={3}>
-              <Field
-                label={<FormattedMessage id="ui-users.information.lastName" />}
-                name="personal.lastName"
-                id="adduser_lastname"
-                component={TextField}
-                required
-                fullWidth
-                autoFocus
-                disabled={disabled}
-              />
-            </Col>
-            <Col xs={12} md={3}>
-              <Field
-                label={<FormattedMessage id="ui-users.information.firstName" />}
-                name="personal.firstName"
-                id="adduser_firstname"
-                component={TextField}
-                fullWidth
-                disabled={disabled}
-              />
-            </Col>
-            <Col xs={12} md={3}>
-              <Field
-                label={<FormattedMessage id="ui-users.information.middleName" />}
-                name="personal.middleName"
-                id="adduser_middlename"
-                component={TextField}
-                fullWidth
-                disabled={disabled}
-              />
-            </Col>
-            <Col xs={12} md={3}>
-              <Field
-                label={<FormattedMessage id="ui-users.information.preferredName" />}
-                name="personal.preferredFirstName"
-                id="adduser_preferredname"
-                component={TextField}
-                fullWidth
-                disabled={disabled}
-              />
-            </Col>
-          </Row>
-
-          <Row>
-            <Col xs={12} md={3}>
-              <Field
-                label={<FormattedMessage id="ui-users.information.patronGroup" />}
-                name="patronGroup"
-                id="adduser_group"
-                component={Select}
-                selectClass={css.patronGroup}
-                fullWidth
-                dataOptions={patronGroupOptions}
-                defaultValue={initialValues.patronGroup}
-                aria-required="true"
-                required={!disabled}
-              />
-              <OnChange name="patronGroup">
-                {(selectedPatronGroup) => {
-                  this.setState({ selectedPatronGroup }, () => {
-                    if (this.getPatronGroupOffset()) {
-                      this.showModal(true);
-                    }
-                  });
-                }}
-              </OnChange>
-            </Col>
-            <Col xs={12} md={3}>
-              <Field
-                label={<FormattedMessage id="ui-users.information.status" />}
-                name="active"
-                id="useractive"
-                component={Select}
-                fullWidth
-                disabled={disabled || isStatusFieldDisabled()}
-                dataOptions={statusOptions}
-                defaultValue={initialValues.active}
-                format={(v) => (v ? v.toString() : 'false')}
-                aria-required="true"
-                required
-              />
-              {isUserExpired() && (
-                <span className={css.expiredMessage}>
-                  <FormattedMessage id="ui-users.errors.userExpired" />
-                </span>
-              )}
-              {isUserExpired() && willUserExtend() && (
-                <p className={css.expiredMessage} id="saving-will-reactivate-user">
-                  <FormattedMessage id="ui-users.information.recalculate.will.reactivate.user" />
-                </p>
-              )}
-            </Col>
-            <Col xs={12} md={3}>
-              <Field
-                component={Datepicker}
-                label={<FormattedMessage id="ui-users.expirationDate" />}
-                dateFormat="YYYY-MM-DD"
-                defaultValue={initialValues.expirationDate}
-                name="expirationDate"
-                id="adduser_expirationdate"
-                parse={this.parseExpirationDate}
-                disabled={disabled}
-                validate={validateMinDate('ui-users.errors.personal.dateOfBirth')}
-              />
-              {checkShowRecalculateButton() && (
-                <Button
-                  id="recalculate-expirationDate-btn"
-                  onClick={() => this.setRecalculatedExpirationDate(false)}
-                >
-                  <FormattedMessage id="ui-users.information.recalculate.expirationDate" />
-                </Button>
-              )}
-            </Col>
-            <Col xs={12} md={3}>
+            <Col xs={displayProfilePicture ? 9 : 12}>
               <Row>
-                <Col xs={12}>
+                <Col xs={12} md={3}>
                   <Field
+                    label={<FormattedMessage id="ui-users.information.lastName" />}
+                    name="personal.lastName"
+                    id="adduser_lastname"
                     component={TextField}
-                    disabled={disabled || barcodeGeneratorSetting === 'useGenerator'}
+                    required
                     fullWidth
+                    autoFocus
+                    disabled={disabled}
+                  />
+                </Col>
+                <Col xs={12} md={3}>
+                  <Field
+                    label={<FormattedMessage id="ui-users.information.firstName" />}
+                    name="personal.firstName"
+                    id="adduser_firstname"
+                    component={TextField}
+                    fullWidth
+                    disabled={disabled}
+                  />
+                </Col>
+                <Col xs={12} md={3}>
+                  <Field
+                    label={<FormattedMessage id="ui-users.information.middleName" />}
+                    name="personal.middleName"
+                    id="adduser_middlename"
+                    component={TextField}
+                    fullWidth
+                    disabled={disabled}
+                  />
+                </Col>
+                <Col xs={12} md={3}>
+                  <Field
+                    label={<FormattedMessage id="ui-users.information.preferredName" />}
+                    name="personal.preferredFirstName"
+                    id="adduser_preferredname"
+                    component={TextField}
+                    fullWidth
+                    disabled={disabled}
+                  />
+                </Col>
+              </Row>
+
+              <Row>
+                <Col xs={12} md={3}>
+                  <Field
+                    label={<FormattedMessage id="ui-users.information.patronGroup" />}
+                    name="patronGroup"
+                    id="adduser_group"
+                    component={Select}
+                    selectClass={css.patronGroup}
+                    fullWidth
+                    dataOptions={patronGroupOptions}
+                    defaultValue={initialValues.patronGroup}
+                    aria-required="true"
+                    required={!disabled}
+                  />
+                  <OnChange name="patronGroup">
+                    {(selectedPatronGroup) => {
+                      this.setState({ selectedPatronGroup }, () => {
+                        if (this.getPatronGroupOffset()) {
+                          this.showModal(true);
+                        }
+                      });
+                    }}
+                  </OnChange>
+                </Col>
+                <Col xs={12} md={3}>
+                  <Field
+                    label={<FormattedMessage id="ui-users.information.status" />}
+                    name="active"
+                    id="useractive"
+                    component={Select}
+                    fullWidth
+                    disabled={disabled || isStatusFieldDisabled()}
+                    dataOptions={statusOptions}
+                    defaultValue={initialValues.active}
+                    format={(v) => (v ? v.toString() : 'false')}
+                    aria-required="true"
+                    required
+                  />
+                  {isUserExpired() && (
+                    <span className={css.expiredMessage}>
+                      <FormattedMessage id="ui-users.errors.userExpired" />
+                    </span>
+                  )}
+                  {isUserExpired() && willUserExtend() && (
+                    <p className={css.expiredMessage} id="saving-will-reactivate-user">
+                      <FormattedMessage id="ui-users.information.recalculate.will.reactivate.user" />
+                    </p>
+                  )}
+                </Col>
+                <Col xs={12} md={3}>
+                  <Field
+                    component={Datepicker}
+                    label={<FormattedMessage id="ui-users.expirationDate" />}
+                    dateFormat="YYYY-MM-DD"
+                    defaultValue={initialValues.expirationDate}
+                    name="expirationDate"
+                    id="adduser_expirationdate"
+                    parse={this.parseExpirationDate}
+                    disabled={disabled}
+                    validate={validateMinDate('ui-users.errors.personal.dateOfBirth')}
+                  />
+                  {checkShowRecalculateButton() && (
+                    <Button
+                      id="recalculate-expirationDate-btn"
+                      onClick={() => this.setRecalculatedExpirationDate(false)}
+                    >
+                      <FormattedMessage id="ui-users.information.recalculate.expirationDate" />
+                    </Button>
+                  )}
+                </Col>
+                <Col xs={12} md={3}>
+                  <Field
                     label={<FormattedMessage id="ui-users.information.barcode" />}
                     name="barcode"
                     id="adduser_barcode"
+                    component={TextField}
                     validate={asyncValidateField('barcode', barcode, uniquenessValidator)}
+                    fullWidth
+                    disabled={disabled || barcodeGeneratorSetting === 'useGenerator'}
                   />
+                  {(
+                    barcodeGeneratorSetting === 'useGenerator' ||
+                    barcodeGeneratorSetting === 'useBoth'
+                  ) &&
+                    <Col xs={12}>
+                      <NumberGeneratorModalButton
+                        buttonLabel={<FormattedMessage id="ui-users.numberGenerator.generateUserBarcode" />}
+                        callback={(generated) => change('barcode', generated)}
+                        id="userbarcode"
+                        generateButtonLabel={<FormattedMessage id="ui-users.numberGenerator.generateUserBarcode" />}
+                        generator="users_patronBarcode"
+                        modalProps={{
+                          label: <FormattedMessage id="ui-users.numberGenerator.userBarcodeGenerator" />
+                        }}
+                      />
+                    </Col>
+                  }
                 </Col>
-                {(
-                  barcodeGeneratorSetting === 'useGenerator' ||
-                  barcodeGeneratorSetting === 'useBoth'
-                ) &&
-                  <Col xs={12}>
-                    <NumberGeneratorModalButton
-                      buttonLabel={<FormattedMessage id="ui-users.numberGenerator.generateUserBarcode" />}
-                      callback={(generated) => change('barcode', generated)}
-                      id="userbarcode"
-                      generateButtonLabel={<FormattedMessage id="ui-users.numberGenerator.generateUserBarcode" />}
-                      generator="users_patronBarcode"
-                      modalProps={{
-                        label: <FormattedMessage id="ui-users.numberGenerator.userBarcodeGenerator" />
-                      }}
-                    />
-                  </Col>
-                }
               </Row>
             </Col>
+
+            {
+              displayProfilePicture &&
+              <Col xs={3}>
+                <Row>
+                  <Col xs={12}>
+                    <EditUserProfilePicture
+                      profilePictureId={initialValues?.personal?.profilePictureLink}
+                      personal={initialValues?.personal}
+                      form={form}
+                    />
+                    <Field
+                      name="personal.profilePictureLink"
+                    >
+                      {
+                        (props) => (
+                          <input type="hidden" {...props.input} />
+                        )
+                      }
+                    </Field>
+                  </Col>
+                </Row>
+              </Col>
+            }
+          </Row>
+          <Row>
             <Col xs={12} md={3}>
               <Field
                 label={<FormattedMessage id="ui-users.information.userType" />}
@@ -404,9 +448,21 @@ class EditUserInfo extends React.Component {
                 dataOptions={typeOptions}
                 aria-required={isConsortium}
                 required={isConsortium}
-              />
+              >
+                <OnChange name={USER_TYPE_FIELD}>
+                  {(selectedUserType) => {
+                    if (isConsortium
+                      && initialValues.type === USER_TYPES.STAFF
+                      && selectedUserType === USER_TYPES.PATRON
+                    ) {
+                      this.setState({ showUserTypeModal: true });
+                    }
+                  }}
+                </OnChange>
+              </Field>
             </Col>
           </Row>
+
         </Accordion>
         <Modal
           footer={modalFooter}
@@ -421,6 +477,11 @@ class EditUserInfo extends React.Component {
             />
           </div>
         </Modal>
+        <ChangeUserTypeModal
+          onChange={this.setChangedUserType}
+          initialUserType={initialValues.type}
+          open={this.state.showUserTypeModal}
+        />
       </>
     );
   }

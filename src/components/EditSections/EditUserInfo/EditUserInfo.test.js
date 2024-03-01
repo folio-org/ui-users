@@ -11,6 +11,9 @@ import EditUserInfo from './EditUserInfo';
 import { isConsortiumEnabled } from '../../util';
 import { USER_TYPES } from '../../../constants';
 
+jest.mock('../../../hooks', () => ({
+  useProfilePicture: jest.fn(),
+}));
 jest.mock('@folio/stripes/components', () => ({
   ...jest.requireActual('@folio/stripes/components'),
   Modal: jest.fn(({ children, label, footer, ...rest }) => {
@@ -36,6 +39,22 @@ jest.mock('../../util', () => ({
 
 jest.mock('@folio/service-interaction', () => ({
   NumberGeneratorModalButton: () => <div>NumberGeneratorModalButton</div>
+}));
+
+jest.mock('./components', () => ({
+  EditUserProfilePicture : jest.fn(() => 'Profile Picture'),
+  ChangeUserTypeModal: jest.fn(({ onChange, initialUserType, open }) => {
+    if (!open) {
+      return null;
+    }
+
+    return (
+      <div>
+        <h1>ChangeUserTypeModal</h1>
+        <button type="button" onClick={() => onChange(initialUserType)}>Cancel</button>
+      </div>
+    );
+  }),
 }));
 
 const onSubmit = jest.fn();
@@ -90,6 +109,7 @@ const props = {
     connect: (Component) => Component,
     timezone: 'USA/TestTimeZone',
     hasInterface: () => true,
+    hasPerm: () => true,
   },
   patronGroups: [{
     desc: 'Staff Member',
@@ -125,7 +145,8 @@ const props = {
     PUT: jest.fn(),
     cancel: jest.fn(),
     reset: jest.fn()
-  }
+  },
+  areProfilePicturesEnabled: true,
 };
 
 describe('Render Edit User Information component', () => {
@@ -185,5 +206,56 @@ describe('Render Edit User Information component', () => {
 
     expect(screen.getByRole('textbox', { name: /lastName/ })).toBeDisabled();
     expect(screen.getByRole('textbox', { name: /firstName/ })).toBeDisabled();
+  });
+
+  it('should display profile picture', () => {
+    renderEditUserInfo(props);
+    expect(screen.getByText('Profile Picture')).toBeInTheDocument();
+  });
+
+  it('should not change user type onClick `Cancel` button', async () => {
+    isConsortiumEnabled.mockClear().mockReturnValue(true);
+    renderEditUserInfo({
+      ...props,
+      initialValues: {
+        ...props.initialValues,
+        type: USER_TYPES.STAFF,
+      },
+    });
+
+    await userEvent.selectOptions(screen.getByRole('combobox', { name: 'ui-users.information.userType' }), USER_TYPES.PATRON);
+
+    const option = screen.getByRole('option', { name: 'ui-users.information.userType.patron' });
+
+
+    await userEvent.click(option);
+
+    await screen.findByText('ChangeUserTypeModal');
+
+    const cancelButton = screen.getByText('Cancel');
+
+    await userEvent.click(cancelButton);
+    expect(changeMock).toHaveBeenCalledWith('type', USER_TYPES.STAFF);
+  });
+
+  describe('when profilePicture configuration is not enabled', () => {
+    it('should not render profile picture', () => {
+      renderEditUserInfo({ ...props, areProfilePicturesEnabled: false });
+      expect(screen.queryByText('Profile Picture')).not.toBeInTheDocument();
+    });
+  });
+
+  describe('when user is of type shadow', () => {
+    it('should not display profile picture', () => {
+      const alteredProps = {
+        ...props,
+        initialValues: {
+          ...props.initialValues,
+          type: 'shadow',
+        }
+      };
+      renderEditUserInfo(alteredProps);
+      expect(screen.queryByText('Profile Picture')).not.toBeInTheDocument();
+    });
   });
 });

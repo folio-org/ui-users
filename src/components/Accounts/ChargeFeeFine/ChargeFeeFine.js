@@ -16,7 +16,7 @@ import { effectiveCallNumber } from '@folio/stripes/util';
 import ChargeForm from './ChargeForm';
 import ItemLookup from './ItemLookup';
 import ActionModal from '../Actions/ActionModal';
-import { getFullName } from '../../util';
+import { formatCurrencyAmount, getFullName } from '../../util';
 import {
   loadServicePoints,
   deleteOptionalActionFields,
@@ -194,8 +194,8 @@ class ChargeFeeFine extends React.Component {
         accountId: id,
         dateAction,
         userId: user.id,
-        amountAction: parseFloat(amount || 0).toFixed(2),
-        balance: parseFloat(balance || 0).toFixed(2),
+        amountAction: formatCurrencyAmount(amount),
+        balance: formatCurrencyAmount(balance),
         transactionInformation: transaction || '',
         comments: comment,
         notify,
@@ -274,7 +274,7 @@ class ChargeFeeFine extends React.Component {
     const {
       intl: { formatNumber },
     } = this.props;
-    const amount = parseFloat(a.amount).toFixed(2);
+    const amount = formatCurrencyAmount(a.amount);
     const paymentName = (a.paymentStatus.name).toLowerCase();
     const fullName = getFullName(this.props.user);
     const { feeFineType } = a;
@@ -337,7 +337,7 @@ class ChargeFeeFine extends React.Component {
       comment = `${comment} \n ${tagPatron} : ${values.patronInfo}`;
     }
 
-    this.type.remaining = parseFloat(this.type.amount - values.amount).toFixed(2);
+    this.type.remaining = formatCurrencyAmount(this.type.amount - values.amount);
     let paymentStatus = _.capitalize(formatMessage({ id: 'ui-users.accounts.actions.warning.paymentAction' }));
 
     if (this.type.remaining === '0.00') {
@@ -382,7 +382,7 @@ class ChargeFeeFine extends React.Component {
     const { intl: { formatMessage } } = this.props;
     const values = this.state.values || {};
     const type = this.type || {};
-    const amount = parseFloat(values.amount || 0).toFixed(2);
+    const amount = formatCurrencyAmount(values.amount);
     let paymentStatus = formatMessage({ id: 'ui-users.accounts.actions.warning.paymentAction' });
     paymentStatus = `${(parseFloat(values.amount) !== parseFloat(type.amount)
       ? formatMessage({ id: 'ui-users.accounts.status.partially' })

@@ -36,6 +36,7 @@ import Label from '../../Label';
 import ErrorModal from '../../ErrorModal';
 
 import css from './ClosedLoans.css';
+import { localizeCurrencyAmount } from '../../util/localizeCurrencyAmount';
 
 class ClosedLoans extends React.Component {
   static propTypes = {
@@ -163,13 +164,14 @@ class ClosedLoans extends React.Component {
   };
 
   getFeeFine(loan) {
+    const { intl, stripes } = this.props;
     const accounts = _.get(this.props.resources, ['loanAccount', 'records'], []);
     const accountsLoan = accounts.filter(a => a.loanId === loan.id) || [];
     let remaining = 0;
     accountsLoan.forEach(a => {
       remaining += parseFloat(a.amount);
     });
-    return (remaining === 0) ? '-' : remaining.toFixed(2);
+    return (remaining === 0) ? '-' : localizeCurrencyAmount(remaining, stripes.currency, intl);
   }
 
   getContributorslist(loan) { // eslint-disable-line class-methods-use-this

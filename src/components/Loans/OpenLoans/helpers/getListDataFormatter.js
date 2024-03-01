@@ -49,7 +49,7 @@ export default function getListDataFormatter(
         }
         return '-';
       },
-      sorter: loan => get(loan, ['item', 'title']),
+      sorter: loan => get(loan, ['item', 'title'])?.toLowerCase(),
     },
     'itemStatus': {
       key: 'itemStatus',
@@ -85,6 +85,7 @@ export default function getListDataFormatter(
       key:'callNumber',
       view: formatMessage({ id: 'ui-users.loans.details.effectiveCallNumber' }),
       formatter: loan => (<div data-test-list-call-numbers>{effectiveCallNumber(loan)}</div>),
+      sorter: loan => effectiveCallNumber(loan),
     },
     'loanPolicy': {
       key:'loanPolicy',

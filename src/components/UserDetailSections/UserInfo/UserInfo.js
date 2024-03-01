@@ -2,6 +2,7 @@ import { get } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+
 import {
   Row,
   Col,
@@ -11,139 +12,139 @@ import {
   NoValue,
   FormattedDate,
 } from '@folio/stripes/components';
-
 import { ViewMetaData } from '@folio/stripes/smart-components';
-import css from './UserInfo.css';
-import appIcon from '../../../../icons/app.png';
-import { USER_TYPE_FIELD } from '../../../constants';
+import { useStripes } from '@folio/stripes/core';
 
-class UserInfo extends React.Component {
-  static propTypes = {
-    expanded: PropTypes.bool,
-    stripes: PropTypes.object.isRequired,
-    onToggle: PropTypes.func,
-    accordionId: PropTypes.string.isRequired,
-    user: PropTypes.object.isRequired,
-    patronGroup: PropTypes.object.isRequired,
-    settings: PropTypes.arrayOf(PropTypes.object).isRequired,
-  };
+import { USER_TYPE_FIELD, USER_TYPES } from '../../../constants';
+import ProfilePicture from '../../ProfilePicture';
 
-  constructor(props) {
-    super(props);
+const UserInfo = (props) => {
+  const {
+    user,
+    patronGroup,
+    settings,
+    expanded,
+    accordionId,
+    onToggle
+  } = props;
+  const profilePictureLink = user?.personal?.profilePictureLink;
+  const stripes = useStripes();
+  const userStatus = (user?.active ?
+    <FormattedMessage id="ui-users.active" /> :
+    <FormattedMessage id="ui-users.inactive" />);
+  const profilePicturesEnabled = Boolean(settings.length) && settings[0].enabled;
+  const hasViewProfilePicturePerm = stripes.hasPerm('ui-users.profile-pictures.view');
+  const isShadowUser = user?.type === USER_TYPES.SHADOW;
+  const displayProfilePicture = profilePicturesEnabled && hasViewProfilePicturePerm && !isShadowUser;
 
-    this.cViewMetaData = props.stripes.connect(ViewMetaData);
-  }
-
-  render() {
-    const {
-      user,
-      patronGroup,
-      settings,
-      expanded,
-      accordionId,
-      onToggle,
-    } = this.props;
-    const userStatus = (user?.active ?
-      <FormattedMessage id="ui-users.active" /> :
-      <FormattedMessage id="ui-users.inactive" />);
-    const hasProfilePicture = (settings.length && settings[0].value === 'true');
-
-    return (
-      <Accordion
-        open={expanded}
-        id={accordionId}
-        onToggle={onToggle}
-        label={(
-          <Headline
-            size="large"
-            tag="h3"
-          >
-            <FormattedMessage id="ui-users.information.userInformation" />
-          </Headline>)}
-      >
-        <Row>
-          <Col xs={12}>
-            <this.cViewMetaData metadata={user.metadata} />
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={hasProfilePicture ? 9 : 12}>
-            <Row>
-              <Col xs={3}>
-                <KeyValue
-                  label={<FormattedMessage id="ui-users.information.lastName" />}
-                  value={get(user, ['personal', 'lastName'], '')}
-                />
-              </Col>
-              <Col xs={3}>
-                <KeyValue
-                  label={<FormattedMessage id="ui-users.information.firstName" />}
-                  value={get(user, ['personal', 'firstName'], '')}
-                />
-              </Col>
-              <Col xs={3}>
-                <KeyValue
-                  label={<FormattedMessage id="ui-users.information.middleName" />}
-                  value={get(user, ['personal', 'middleName'], '')}
-                />
-              </Col>
-              <Col xs={3}>
-                <KeyValue
-                  label={<FormattedMessage id="ui-users.information.preferredName" />}
-                  value={get(user, ['personal', 'preferredFirstName']) || <NoValue />}
-                />
-              </Col>
-            </Row>
-
-            <Row>
-              <Col xs={3}>
-                <KeyValue
-                  label={<FormattedMessage id="ui-users.information.patronGroup" />}
-                  value={patronGroup.group}
-                />
-              </Col>
-              <Col xs={3}>
-                <KeyValue
-                  label={<FormattedMessage id="ui-users.information.status" />}
-                  value={userStatus}
-                />
-              </Col>
-              <Col xs={3}>
-                <KeyValue
-                  label={<FormattedMessage id="ui-users.information.expirationDate" />}
-                  value={user.expirationDate ? <FormattedDate value={user.expirationDate} /> : '-'}
-                />
-              </Col>
-              <Col xs={3}>
-                <KeyValue
-                  label={<FormattedMessage id="ui-users.information.barcode" />}
-                  value={get(user, ['barcode'], '')}
-                />
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={3}>
-                <KeyValue
-                  label={<FormattedMessage id="ui-users.information.userType" />}
-                  value={get(user, [USER_TYPE_FIELD], '')}
-                />
-              </Col>
-            </Row>
-          </Col>
-
-          {hasProfilePicture === true &&
+  return (
+    <Accordion
+      open={expanded}
+      id={accordionId}
+      onToggle={onToggle}
+      label={(
+        <Headline
+          size="large"
+          tag="h3"
+        >
+          <FormattedMessage id="ui-users.information.userInformation" />
+        </Headline>)}
+    >
+      <Row>
+        <Col xs={12}>
+          <ViewMetaData metadata={user?.metadata} />
+        </Col>
+      </Row>
+      <Row>
+        <Col xs={displayProfilePicture ? 9 : 12}>
+          <Row>
             <Col xs={3}>
-              <Row>
-                <Col xs={12}>
-                  <img className={`floatEnd ${css.profilePlaceholder}`} src={appIcon} alt="presentation" />
-                </Col>
-              </Row>
+              <KeyValue
+                label={<FormattedMessage id="ui-users.information.lastName" />}
+                value={get(user, ['personal', 'lastName'], '')}
+              />
             </Col>
-          }
-        </Row>
-      </Accordion>
-    );
-  }
-}
+            <Col xs={3}>
+              <KeyValue
+                label={<FormattedMessage id="ui-users.information.firstName" />}
+                value={get(user, ['personal', 'firstName'], '')}
+              />
+            </Col>
+            <Col xs={3}>
+              <KeyValue
+                label={<FormattedMessage id="ui-users.information.middleName" />}
+                value={get(user, ['personal', 'middleName'], '')}
+              />
+            </Col>
+            <Col xs={3}>
+              <KeyValue
+                label={<FormattedMessage id="ui-users.information.preferredName" />}
+                value={get(user, ['personal', 'preferredFirstName']) || <NoValue />}
+              />
+            </Col>
+          </Row>
+
+          <Row>
+            <Col xs={3}>
+              <KeyValue
+                label={<FormattedMessage id="ui-users.information.patronGroup" />}
+                value={patronGroup.group}
+              />
+            </Col>
+            <Col xs={3}>
+              <KeyValue
+                label={<FormattedMessage id="ui-users.information.status" />}
+                value={userStatus}
+              />
+            </Col>
+            <Col xs={3}>
+              <KeyValue
+                label={<FormattedMessage id="ui-users.information.expirationDate" />}
+                value={user.expirationDate ? <FormattedDate value={user.expirationDate} /> : '-'}
+              />
+            </Col>
+            <Col xs={3}>
+              <KeyValue
+                label={<FormattedMessage id="ui-users.information.barcode" />}
+                value={get(user, ['barcode'], '')}
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={3}>
+              <KeyValue
+                label={<FormattedMessage id="ui-users.information.userType" />}
+                value={get(user, [USER_TYPE_FIELD], '')}
+              />
+            </Col>
+          </Row>
+        </Col>
+
+        {
+          displayProfilePicture &&
+          <Col xs={3}>
+            <Row>
+              <Col xs={12}>
+                <KeyValue
+                  label={<FormattedMessage id="ui-users.information.profilePicture" />}
+                  value={<ProfilePicture profilePictureLink={profilePictureLink} />}
+                />
+              </Col>
+            </Row>
+          </Col>
+        }
+      </Row>
+    </Accordion>
+  );
+};
+
+UserInfo.propTypes = {
+  expanded: PropTypes.bool,
+  onToggle: PropTypes.func,
+  accordionId: PropTypes.string.isRequired,
+  user: PropTypes.object.isRequired,
+  patronGroup: PropTypes.object.isRequired,
+  settings: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
 
 export default UserInfo;

@@ -8,10 +8,7 @@ import {
   isEmpty,
 } from 'lodash';
 
-import {
-  stripesConnect,
-  withStripes,
-} from '@folio/stripes/core';
+import { stripesConnect } from '@folio/stripes/core';
 import { Settings } from '@folio/stripes/smart-components';
 
 import Limits from './patronBlocks/Limits/Limits';
@@ -143,4 +140,4 @@ class LimitsSettings extends Component {
   }
 }
 
-export default injectIntl(withStripes(stripesConnect(LimitsSettings)));
+export default injectIntl(stripesConnect(LimitsSettings));

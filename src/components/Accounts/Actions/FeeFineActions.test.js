@@ -12,6 +12,7 @@ import '../../../../test/jest/__mock__';
 
 import FeeFineActions from './FeeFineActions';
 import CommentModal from './CommentModal';
+import { formatCurrencyAmount } from '../../util';
 
 jest.mock('./CancellationModal', () => jest.fn(() => null));
 jest.mock('./CommentModal', () => jest.fn(() => null));
@@ -167,8 +168,8 @@ describe('FeeFineActions', () => {
         createdAt: mockedCurServicePoint.id,
         accountId: mockedAccount.id,
         userId: mockedUser.id,
-        amountAction: parseFloat(0).toFixed(2),
-        balance: parseFloat(mockedAccount.remaining).toFixed(2),
+        amountAction: formatCurrencyAmount(0),
+        balance: formatCurrencyAmount(mockedAccount.remaining),
         transactionInformation: '',
         comments: `${labelIds.tagStaff} : ${mockedComment}`,
       })));
@@ -178,7 +179,7 @@ describe('FeeFineActions', () => {
         paymentStatus: {
           name: mockedAccount.paymentStatus.name,
         },
-        remaining: parseFloat(mockedAccount.remaining).toFixed(2),
+        remaining: formatCurrencyAmount(mockedAccount.remaining),
         status: {
           name: mockedAccount.status.name,
         },

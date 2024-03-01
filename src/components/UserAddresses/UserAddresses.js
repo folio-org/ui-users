@@ -80,13 +80,18 @@ class UserAddresses extends React.Component {
       },
     };
 
+    const updatedAddresses = addresses.map(addr => {
+      addr.country = intl.formatDisplayName(addr.country, { type: 'region' });
+      return addr;
+    });
+
     return (<AddressList
       label={<FormattedMessage id="ui-users.contact.addresses" />}
       onUpdate={this.onUpdate}
       onCreate={this.onUpdate}
       onDelete={this.onDelete}
       fieldComponents={addressFields}
-      addresses={addresses}
+      addresses={updatedAddresses}
       expanded={expanded}
       canEdit={editable}
       canDelete={editable}

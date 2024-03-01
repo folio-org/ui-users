@@ -15,6 +15,7 @@ const props = {
   onUpdate: updateMock,
   intl: {
     formatMessage: jest.fn(),
+    formatDisplayName: jest.fn(),
   },
   expanded: false,
   editable: true,

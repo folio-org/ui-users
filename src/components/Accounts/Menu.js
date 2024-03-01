@@ -15,6 +15,7 @@ import {
 import { refundClaimReturned } from '../../constants';
 
 import css from './Menu.css';
+import { useLocalizeCurrency } from '../../hooks/useLocalizedCurrency/useLocalizeCurrency';
 
 const Menu = (props) => {
   const {
@@ -26,24 +27,21 @@ const Menu = (props) => {
     accounts
   } = props;
 
+  const { localizeCurrency } = useLocalizeCurrency();
+
   let balanceOutstanding = 0;
   let balanceSuspended = 0;
   if (params.accountstatus !== 'closed') {
     accounts.forEach((a) => {
       if (a.paymentStatus.name === refundClaimReturned.PAYMENT_STATUS) {
-        balanceSuspended += (parseFloat(a.remaining) * 100);
+        balanceSuspended += (parseFloat(a.remaining));
       } else {
-        balanceOutstanding += (parseFloat(a.remaining) * 100);
+        balanceOutstanding += (parseFloat(a.remaining));
       }
     });
   }
-  balanceOutstanding /= 100;
-  balanceSuspended /= 100;
-  const suspended = parseFloat(balanceSuspended).toFixed(2);
-  const outstanding = parseFloat(balanceOutstanding).toFixed(2);
 
-  const showSelected = (selected !== 0 && selected !== parseFloat(0).toFixed(2))
-    && outstanding > parseFloat(0).toFixed(2);
+  const showSelected = selected !== 0 && balanceOutstanding > 0;
 
   const type = <FormattedMessage id={`ui-users.accounts.${params.accountstatus}`} />;
 
@@ -67,19 +65,19 @@ const Menu = (props) => {
           <div id="outstanding-balance">
             <FormattedMessage
               id="ui-users.accounts.outstanding.page"
-              values={{ amount: outstanding }}
+              values={{ amount: localizeCurrency(balanceOutstanding) }}
             />
             &nbsp;|&nbsp;
             <FormattedMessage
               id="ui-users.accounts.suspended.page"
-              values={{ amount: suspended }}
+              values={{ amount: localizeCurrency(balanceSuspended) }}
             />
             {showSelected &&
             <span>
               &nbsp;|&nbsp;
               <FormattedMessage
                 id="ui-users.accounts.selected.balance"
-                values={{ amount: parseFloat(selected).toFixed(2) }}
+                values={{ amount: localizeCurrency(selected) }}
               />
             </span>
             }

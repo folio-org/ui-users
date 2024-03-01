@@ -120,7 +120,8 @@ class UserEdit extends React.Component {
       'addressTypes',
       'servicePoints',
       'departments',
-      'settings'
+      'settings',
+      'configSettings'
     );
 
     return formData;
@@ -378,6 +379,8 @@ class UserEdit extends React.Component {
       match: { params },
     } = this.props;
 
+    const areProfilePicturesEnabled = get(resources, 'settings.records[0].enabled');
+
     if (!resourcesLoaded(resources, ['uniquenessValidator']) || (!this.getUser() && this.props.match.params.id)) {
       return (
         <LoadingView
@@ -412,6 +415,7 @@ class UserEdit extends React.Component {
         location={location}
         history={history}
         stripes={this.props.stripes}
+        areProfilePicturesEnabled={areProfilePicturesEnabled}
       />
     );
   }

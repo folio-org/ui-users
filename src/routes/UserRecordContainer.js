@@ -158,8 +158,12 @@ class UserRecordContainer extends React.Component {
     },
     settings: {
       type: 'okapi',
+      path: 'users/configurations/entry',
+    },
+    configSettings: {
+      type: 'okapi',
       records: 'configs',
-      path: 'configurations/entries?query=(module==USERS and (configName==profile_pictures or configName==number_generator))',
+      path: 'configurations/entries?query=(module==USERS and configName==number_generator)',
     },
     requestPreferences: {
       type: 'okapi',
@@ -214,6 +218,9 @@ class UserRecordContainer extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
       settings: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      configSettings: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
       loansHistory: PropTypes.shape({

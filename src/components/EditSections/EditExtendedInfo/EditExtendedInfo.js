@@ -171,14 +171,15 @@ class EditExtendedInfo extends Component {
             md={6}
           >
             <Row>
-              <RequestPreferencesEdit
+              {/* FIXME this is only commented because of some stripes-connect weirdness */}
+              {/* <RequestPreferencesEdit
                 addressTypes={addressTypes}
                 addresses={addresses}
                 defaultDeliveryAddressTypeId={defaultDeliveryAddressTypeId}
                 deliveryAvailable={deliveryAvailable}
                 setFieldValue={change}
                 disabled={disabled}
-              />
+              /> */}
             </Row>
           </Col>
           {departments.length

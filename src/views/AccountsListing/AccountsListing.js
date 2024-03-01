@@ -41,6 +41,7 @@ import {
 } from '../../components/Accounts';
 
 import { refundClaimReturned } from '../../constants';
+import { localizeCurrencyAmount } from '../../components/util/localizeCurrencyAmount';
 
 const filterConfig = [
   {
@@ -538,7 +539,8 @@ class AccountsHistory extends React.Component {
       patronGroup,
       resources,
       intl,
-      loans
+      loans,
+      stripes
     } = this.props;
     const query = location.search ? queryString.parse(location.search) : {};
     let accounts = resources?.feefineshistory?.records || [];
@@ -649,13 +651,9 @@ class AccountsHistory extends React.Component {
 
     const owedAmount = calculateOwedFeeFines(uncheckedAccounts);
 
-    const outstandingBalance = userOwned
-      ? parseFloat(balance || 0).toFixed(2)
-      : '0.00';
+    const outstandingBalance = userOwned ? parseFloat(balance || 0) : 0;
 
-    const suspendedBalance = userOwned
-      ? parseFloat(balanceSuspended || 0).toFixed(2)
-      : '0.00';
+    const suspendedBalance = userOwned ? parseFloat(balanceSuspended || 0) : 0;
 
     const visibleColumns = this.getVisibleColumns();
 
@@ -678,12 +676,12 @@ class AccountsHistory extends React.Component {
             <div id="outstanding-balance">
               <FormattedMessage
                 id="ui-users.accounts.outstanding.total"
-                values={{ amount: outstandingBalance }}
+                values={{ amount: localizeCurrencyAmount(outstandingBalance, stripes.currency, intl) }}
               />
               &nbsp;|&nbsp;
               <FormattedMessage
                 id="ui-users.accounts.suspended.total"
-                values={{ amount: suspendedBalance }}
+                values={{ amount: localizeCurrencyAmount(suspendedBalance, stripes.currency, intl) }}
               />
             </div>
           )}

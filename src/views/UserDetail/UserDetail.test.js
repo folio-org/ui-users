@@ -198,6 +198,7 @@ describe('UserDetail', () => {
 
   beforeEach(() => {
     stripes = useStripes();
+    stripes.hasPerm = () => true;
     mutator.hasManualPatronBlocks.GET.mockImplementation(() => Promise.resolve([]));
     mutator.hasAutomatedPatronBlocks.GET.mockImplementation(() => Promise.resolve([]));
   });

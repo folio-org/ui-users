@@ -103,6 +103,7 @@ class UserForm extends React.Component {
     stripes: PropTypes.object,
     form: PropTypes.object, // provided by final-form
     intl: PropTypes.object,
+    areProfilePicturesEnabled: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -295,6 +296,7 @@ class UserForm extends React.Component {
       stripes,
       form,
       uniquenessValidator,
+      areProfilePicturesEnabled,
     } = this.props;
 
     const selectedPatronGroup = form.getFieldState('patronGroup')?.value;
@@ -359,12 +361,13 @@ class UserForm extends React.Component {
                     accordionId="editUserInfo"
                     initialValues={initialValues}
                     patronGroups={formData.patronGroups}
-                    settings={formData.settings}
+                    settings={formData.configSettings}
                     stripes={stripes}
                     form={form}
                     selectedPatronGroup={selectedPatronGroup}
                     uniquenessValidator={uniquenessValidator}
                     disabled={isShadowUser}
+                    areProfilePicturesEnabled={areProfilePicturesEnabled}
                   />
                   <EditExtendedInfo
                     accordionId="extendedInfo"

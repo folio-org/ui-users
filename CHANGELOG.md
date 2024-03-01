@@ -6,11 +6,32 @@
 * Disable validation for shadow user. Refs UIU-3000.
 * Disable open loan actions for virtual patron. Refs UIU-2964.
 * Fix problem with Date field in User app reports does not populate when a first entry was cleared. Refs UIU-2991.
-* Hide all actionalble buttons on user details pane for DCB Virtual user. Refs UIU-2987.
+* Hide all actionable buttons on user details pane for DCB Virtual user. Refs UIU-2987.
 * Open loan page modifications for a virtual patron. Refs UIU-2988.
 * Display item title and barcode as text when the item is dcb virtual item. Refs UIU-2966.
 * Fix wrong date in Cash-Drawer-Reconciliation-Report.pdf. Refs UIU-3010.
 * Conditionally hide actions on closed loan records for DCB Circulation. Refs UIU-2989.
+* Refactor CSS away from `color()` function. Refs UIU-3013.
+* Add `reminderFee` to loan action map. Fixes UIU-3014.
+* Create new permission 'Users: Can view profile pictures'. Refs UIU-3018.
+* Format currency values as currencies, not numbers. Refs UIU-2026.
+* Show country name in user address instead of country id. Refs UIU-2976.
+* Add patron notice print jobs to action menu. Refs UIU-3029.
+* Update sub permissions of permission 'Users: Can view user profiles'. Refs UIU-3038.
+* Create new permission 'Users: Can view, edit, and delete profile pictures'. Refs UIU-3025.
+* UserInformation in UserDetails to display profile picture. Refs UIU-3011.
+* Enable effective call number column sorting in Open Loans screen. Refs UIU-3002.
+* User Information in User Edit to display profile picture and update button set. Refs UIU-3005.
+* Update request header for pay several Fees/fines. Refs UIU-3040.
+* Use correct field for display remaining in list. Refs UIU-3049.
+* Link externally hosted image as user profile picture. Refs UIU-2975.
+* Show loading icon until profile picture loads on user detail screen. Refs - UIU-3043.
+* Show loading icon until profile picture loads on user edit screen. Refs - UIU-3044.
+* Delete profile picture. Refs UIU-3004.
+* Changing user type confirmation modal for ECS-enabled environment. Refs UIU-2969.
+* Non case-sensitive sorting of title column in Open Loans Screen. Refs UIU-2983.
+* Upload Local File for user profile picture. Refs UIU-2974.
+* Don't allow to display or upload a profile picture to a shadow account. Refs UIU-3045.
 
 ## [10.0.4](https://github.com/folio-org/ui-users/tree/v10.0.4) (2023-11-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.3...v10.0.4)

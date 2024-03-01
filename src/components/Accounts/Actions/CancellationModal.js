@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { isEmpty } from 'lodash';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Field } from 'react-final-form';
 import setFieldData from 'final-form-set-field-data';
 
+import { stripesConnect } from '@folio/stripes/core';
 import stripesFinalForm from '@folio/stripes/final-form';
 import {
   Modal,
@@ -16,6 +17,7 @@ import {
 } from '@folio/stripes/components';
 
 import css from './modal.css';
+import { localizeCurrencyAmount } from '../../util/localizeCurrencyAmount';
 
 class CancellationModal extends React.Component {
   static propTypes = {
@@ -29,6 +31,8 @@ class CancellationModal extends React.Component {
     handleSubmit: PropTypes.func.isRequired,
     owners: PropTypes.arrayOf(PropTypes.object),
     feefines: PropTypes.arrayOf(PropTypes.object),
+    intl: PropTypes.object.isRequired,
+    stripes: PropTypes.object.isRequired,
   };
 
   onCloseModal = () => {
@@ -46,7 +50,7 @@ class CancellationModal extends React.Component {
   };
 
   render() {
-    const defaultAmount = '0.00';
+    const defaultAmount = 0;
     const defaultFeeFineType = 'fee/fine type';
     const {
       account,
@@ -60,6 +64,8 @@ class CancellationModal extends React.Component {
       pristine,
       submitting,
       handleSubmit,
+      intl,
+      stripes,
       form: { getState },
     } = this.props;
 
@@ -95,7 +101,7 @@ class CancellationModal extends React.Component {
                 <FormattedMessage
                   id="ui-users.accounts.cancellation.feeFinewillBeCancelled"
                   values={{
-                    amount: parseFloat(amount).toFixed(2),
+                    amount: localizeCurrencyAmount(amount, stripes.currency, intl),
                     feeFineType
                   }}
                 />
@@ -179,4 +185,4 @@ class CancellationModal extends React.Component {
 export default stripesFinalForm({
   subscription: { values: true },
   mutators: { setFieldData }
-})(CancellationModal);
+})(injectIntl(stripesConnect(CancellationModal)));

@@ -45,6 +45,7 @@ import CashDrawerReconciliationReportPDF from '../../components/data/reports/cas
 import CashDrawerReconciliationReportCSV from '../../components/data/reports/cashDrawerReconciliationReportCSV';
 import FinancialTransactionsReport from '../../components/data/reports/FinancialTransactionsReport';
 import LostItemsLink from '../../components/LostItemsLink';
+import PatronNoticePrintJobsLink from '../../components/PatronNoticePrintJobsLink';
 import Filters from './Filters';
 
 import css from './UserSearch.css';
@@ -292,6 +293,7 @@ class UserSearch extends React.Component {
             </PaneMenu>
           </IfPermission>
           <LostItemsLink />
+          <PatronNoticePrintJobsLink />
         </MenuSection>
         <MenuSection
           label={intl.formatMessage({ id: 'ui-users.reports' })}

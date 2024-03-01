@@ -12,6 +12,7 @@ import {
 } from '../../../../../constants';
 import { getRecordStatus } from '../../util';
 import DateTimeFormatter from '../DateTimeFormatter';
+import { useLocalizeCurrency } from '../../../../../../../hooks/useLocalizedCurrency/useLocalizeCurrency';
 
 export const getBilledAmount = (recordId, billedRecords) => billedRecords.find(record => record.id === recordId)?.billedAmount;
 
@@ -20,6 +21,7 @@ const RecordStatus = ({
   billedRecords,
   cancelledRecords,
 }) => {
+  const { localizeCurrency } = useLocalizeCurrency();
   const status = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.STATUS]);
   const {
     isBilled,
@@ -29,12 +31,12 @@ const RecordStatus = ({
   if (status === LOST_ITEM_STATUSES.BILLED || isBilled) {
     const amount = isBilled ?
       getBilledAmount(actualCostRecord.id, billedRecords) :
-      get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.BILLED_AMOUNT]).toFixed(2);
+      get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.BILLED_AMOUNT]);
 
     return (
       <FormattedMessage
         id={LOST_ITEM_STATUS_TRANSLATIONS_KEYS[LOST_ITEM_STATUSES.BILLED]}
-        values={{ amount }}
+        values={{ amount: localizeCurrency(amount) }}
       />
     );
   }
@@ -53,7 +55,7 @@ const RecordStatus = ({
           <>
             <br /><DateTimeFormatter value={actualCostRecord.expirationDate} />
           </>
-        )}
+        )}c
       </>
     );
   }
