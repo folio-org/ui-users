@@ -1,11 +1,77 @@
-import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import renderWithRouter from 'helpers/renderWithRouter';
 import { USER_TYPES } from '../../constants';
+import {
+  useUserAffiliations,
+  useUserTenantPermissions,
+} from '../../hooks';
+import UserForm, { validate } from './UserForm';
 
-import { validate } from './UserForm';
+jest.mock('@folio/stripes/smart-components', () => ({
+  ...jest.requireActual('@folio/stripes/smart-components'),
+  EditCustomFieldsRecord: jest.fn(() => 'EditCustomFieldsRecord'),
+}));
+jest.mock('../../components/EditSections', () => ({
+  EditUserInfo: jest.fn(() => 'EditUserInfo'),
+  EditExtendedInfo: jest.fn(() => 'EditExtendedInfo'),
+  EditContactInfo: jest.fn(() => 'EditContactInfo'),
+  EditProxy: jest.fn(() => 'EditProxy'),
+  EditServicePoints: jest.fn(() => 'EditServicePoints'),
+}));
+jest.mock('../../components/PermissionsAccordion/components/PermissionsModal', () => 'PermissionsModal');
+jest.mock('../../hooks', () => ({
+  ...jest.requireActual('../../hooks'),
+  useUserAffiliations: jest.fn(),
+  useUserTenantPermissions: jest.fn(),
+}));
+
+const user = {
+  id: 'user-id',
+  personal: {
+    firstName: 'Luke',
+  },
+  type: USER_TYPES.STAFF,
+  proxies: [],
+  sponsors: [],
+};
+
+const defaultProps = {
+  areProfilePicturesEnabled: false,
+  formData: {
+    departments: [],
+    patronGroups: [],
+  },
+  initialValues: { ...user },
+  onCancel: jest.fn(),
+  onSubmit: jest.fn(),
+  stripes: {
+    hasInterface: () => true,
+    hasPerm: () => true,
+  },
+  uniquenessValidator: {
+    reset: jest.fn(),
+    GET: jest.fn(),
+  },
+};
+
+const renderUserForm = (props = {}) => renderWithRouter(
+  <UserForm
+    {...defaultProps}
+    {...props}
+  />
+);
 
 describe('UserForm', () => {
+  beforeEach(() => {
+    useUserAffiliations
+      .mockClear()
+      .mockReturnValue({ affiliations: [] });
+    useUserTenantPermissions
+      .mockClear()
+      .mockReturnValue({ isFetching: false });
+  });
+
   describe('validate', () => {
     it('validates correctly-shaped data', () => {
       const result = validate({
@@ -74,6 +140,25 @@ describe('UserForm', () => {
         const result = validate({ servicePoints: ['a', 'b', 'c'] });
         expect(result.preferredServicePoint).toMatchObject(<FormattedMessage id="ui-users.errors.missingRequiredPreferredServicePoint" />);
       });
+    });
+  });
+
+  describe('Actions menu', () => {
+    it('should display action menu', () => {
+      const { container } = renderUserForm();
+
+      expect(container.querySelector('[data-test-actions-menu]')).toBeInTheDocument();
+    });
+
+    it('should not display request, fee/fines and block actions for a shadow user', () => {
+      const { container } = renderUserForm({
+        initialValues: {
+          ...user,
+          type: USER_TYPES.SHADOW,
+        },
+      });
+
+      expect(container.querySelector('[data-test-actions-menu]')).not.toBeInTheDocument();
     });
   });
 

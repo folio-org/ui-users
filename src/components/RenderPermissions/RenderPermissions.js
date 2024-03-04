@@ -103,7 +103,7 @@ class RenderPermissions extends React.Component {
       >
         <IfConsortium>
           <IfConsortiumPermission perm="consortia.user-tenants.collection.get">
-            {Boolean(affiliations) && (
+            {Boolean(affiliations?.length) && (
               <AffiliationsSelect
                 affiliations={affiliations}
                 onChange={onChangeAffiliation}
