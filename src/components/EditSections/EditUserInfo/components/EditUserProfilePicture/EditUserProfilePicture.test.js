@@ -18,6 +18,20 @@ jest.unmock('@folio/stripes/components');
 
 jest.mock('compressorjs');
 
+jest.mock('@folio/stripes/core', () => ({
+  ...jest.requireActual('@folio/stripes/core'),
+  useCallout: jest.fn(() => ({
+    sendCallout: jest.fn(),
+  })),
+  useStripes: jest.fn(() => ({
+    okapi: {
+      url: 'https://folio-testing-okapi.dev.folio.org',
+      tenant: 'diku',
+      okapiReady: true,
+    },
+    hasPerm: jest.fn().mockReturnValue(true),
+  })),
+}));
 jest.mock('./utils/canvasUtils', () => ({
   __esModule: true,
   ...jest.requireActual('./utils/canvasUtils'),
@@ -29,13 +43,12 @@ jest.mock('./utils/canvasUtils', () => ({
 jest.mock('../../../../../hooks', () => ({
   useProfilePicture: jest.fn(),
 }));
+jest.mock('react-image', () => ({
+  Img: jest.fn(() => null),
+}));
 global.fetch = jest.fn(() => Promise.resolve({
   ok: true,
   json: () => Promise.resolve({ data: 'mocked data' }),
-}));
-
-jest.mock('react-image', () => ({
-  Img: jest.fn(() => null),
 }));
 
 const defaultProps = {
@@ -179,6 +192,38 @@ describe('Profile Picture', () => {
       await userEvent.click(deleteButton);
 
       expect(screen.getByText('ui-users.information.profilePicture.delete.modal.heading')).toBeInTheDocument();
+    });
+    it('should display callout when API fetch call fails', async () => {
+      const updateButton = screen.getByTestId('updateProfilePictureDropdown');
+      await userEvent.click(updateButton);
+      const mockImage = new Image();
+      mockImage.width = 100;
+      mockImage.height = 200;
+      jest.spyOn(canvasUtilsmodule, 'createImage').mockResolvedValueOnce(mockImage);
+      jest.spyOn(canvasUtilsmodule, 'getCroppedImg').mockResolvedValueOnce('mocked-blob-data');
+      const mockCreateObjectURL = jest.fn(() => 'mockedURL');
+      URL.createObjectURL = mockCreateObjectURL;
+      const image = await canvasUtilsmodule.createImage(imageSrc);
+
+      const fetchMock = jest.spyOn(global, 'fetch');
+
+      // Set up the mock implementation for one call
+      fetchMock.mockResolvedValueOnce({
+        ok: false,
+        text: jest.fn().mockResolvedValueOnce('error message'),
+        // status: 200,
+        // headers: { 'Content-Type': 'application/json' },
+      });
+
+      const file = new File(['fake content'], image, { type: 'image/png' });
+      const fileInput = screen.getByTestId('hidden-file-input');
+
+      fireEvent.change(fileInput, { target: { files: [file] } });
+
+      await waitFor(() => expect(screen.getByText('ui-users.information.profilePicture.localFile.modal.previewAndEdit')).toBeInTheDocument());
+
+      const saveAndCloseButton = document.querySelector('[id="save-external-link-btn"]');
+      fireEvent.click(saveAndCloseButton);
     });
   });
 

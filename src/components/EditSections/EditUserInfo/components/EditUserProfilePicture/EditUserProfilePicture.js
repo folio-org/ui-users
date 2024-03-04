@@ -12,7 +12,7 @@ import {
   Icon,
   Label,
 } from '@folio/stripes/components';
-import { useStripes } from '@folio/stripes/core';
+import { useStripes, useCallout } from '@folio/stripes/core';
 
 import { isAValidURL } from '../../../../util/util';
 import ExternalLinkModal from '../ExternalLinkModal';
@@ -49,6 +49,7 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal }) => {
 
   const intl = useIntl();
   const stripes = useStripes();
+  const callout = useCallout();
   const { okapi, okapi: { url } } = stripes;
 
   const hasProfilePicture = Boolean(profilePictureLink) || Boolean(croppedLocalImage);
@@ -155,12 +156,27 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal }) => {
             console.error(error);
           });
       } else {
+        const errMsg = await response.text();
+        // eslint-disable-next-line no-console
+        console.error(errMsg);
         // eslint-disable-next-line no-console
         console.error(new Error('Failed to upload blob'));
+        callout.sendCallout({
+          type: 'error',
+          message: intl.formatMessage(
+            { id: 'ui-users.errors.generic' },
+          ),
+        });
       }
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error('Error uploading blob:', error);
+      callout.sendCallout({
+        type: 'error',
+        message: intl.formatMessage(
+          { id: 'ui-users.errors.generic' },
+        ),
+      });
     }
     toggleLocalFileModal();
   };
