@@ -49,6 +49,12 @@ const LocalFileModal = ({ open, onClose, imageSrc, rotation, setRotation, onSave
     setCroppedAreaPixels(croppedAreaPxs);
   };
 
+  const handleClose = useCallback(() => {
+    setZoom(DEFAULT_ZOOM);
+    setRotation(0);
+    onClose();
+  }, [onClose, setRotation]);
+
   const renderFooter = useCallback(() => {
     return (
       <ModalFooter>
@@ -60,13 +66,13 @@ const LocalFileModal = ({ open, onClose, imageSrc, rotation, setRotation, onSave
           <FormattedMessage id="ui-users.saveAndClose" />
         </Button>
         <Button
-          onClick={onClose}
+          onClick={handleClose}
         >
           <FormattedMessage id="stripes-core.button.cancel" />
         </Button>
       </ModalFooter>
     );
-  }, [handleSaveProfilePictureLocalFile, onClose]);
+  }, [handleSaveProfilePictureLocalFile, handleClose]);
 
   return (
     <Modal
