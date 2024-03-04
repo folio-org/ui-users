@@ -41,6 +41,7 @@ const defaultProps = {
   permToRead: 'perms.permissions.get',
   intl: {},
   stripes: STRIPES,
+  user: {},
 };
 
 const renderUserPermissions = (props = {}) => renderWithRouter(

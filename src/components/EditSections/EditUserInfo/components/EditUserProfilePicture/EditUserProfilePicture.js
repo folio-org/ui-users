@@ -2,6 +2,7 @@ import React, { useState, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useIntl } from 'react-intl';
 import { getOrientation } from 'get-orientation/browser';
+import Compressor from 'compressorjs';
 
 import { getHeaderWithCredentials } from '@folio/stripes/util';
 import {
@@ -25,6 +26,13 @@ const ORIENTATION_TO_ANGLE = {
   '3': 180,
   '6': 90,
   '8': -90,
+};
+
+const COMPRESSION_OPTIONS = {
+  quality: 0.8,
+  maxWidth: 100,
+  maxHeight: 100,
+  checkOrientation: false,
 };
 
 const EditUserProfilePicture = ({ profilePictureId, form, personal }) => {
@@ -157,8 +165,28 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal }) => {
     toggleLocalFileModal();
   };
 
-  const handleSaveLocalFile = (croppedImage) => {
-    uploadBlob(croppedImage);
+  const getCompressedImage = (croppedImage) => {
+    return new Promise((resolve, reject) => {
+      // eslint-disable-next-line no-new
+      return new Compressor(croppedImage, {
+        ...COMPRESSION_OPTIONS,
+        success: (compressedImg) => {
+          resolve(compressedImg);
+        },
+        error: (err) => reject(err),
+      });
+    });
+  };
+
+  const handleSaveLocalFile = async (croppedImage) => {
+    try {
+      const data = await getCompressedImage(croppedImage);
+      uploadBlob(data);
+    } catch (err) {
+      toggleLocalFileModal();
+      // eslint-disable-next-line no-console
+      console.warn(err.message);
+    }
   };
 
   const renderMenu = () => (
