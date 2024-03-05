@@ -48,8 +48,7 @@ class EditUserInfo extends React.Component {
     form: PropTypes.object,
     disabled: PropTypes.bool,
     uniquenessValidator: PropTypes.object,
-    areProfilePicturesEnabled: PropTypes.bool.isRequired,
-    profilePictureMaxFileSize: PropTypes.number.isRequired,
+    profilePictureConfig: PropTypes.object.isRequired,
   };
 
   constructor(props) {
@@ -128,8 +127,7 @@ class EditUserInfo extends React.Component {
       stripes,
       uniquenessValidator,
       disabled,
-      areProfilePicturesEnabled,
-      profilePictureMaxFileSize,
+      profilePictureConfig,
       form,
     } = this.props;
 
@@ -237,7 +235,7 @@ class EditUserInfo extends React.Component {
     );
 
     const hasViewProfilePicturePerm = stripes.hasPerm('ui-users.profile-pictures.view');
-
+    const areProfilePicturesEnabled = profilePictureConfig?.enabled;
     const displayProfilePicture = areProfilePicturesEnabled && hasViewProfilePicturePerm && !isShadowUser;
 
     return (
@@ -390,7 +388,7 @@ class EditUserInfo extends React.Component {
                     <EditUserProfilePicture
                       profilePictureId={initialValues?.personal?.profilePictureLink}
                       personal={initialValues?.personal}
-                      profilePictureMaxFileSize={profilePictureMaxFileSize}
+                      profilePictureMaxFileSize={profilePictureConfig?.maxFileSize}
                       form={form}
                     />
                     <Field

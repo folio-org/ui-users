@@ -377,8 +377,7 @@ class UserEdit extends React.Component {
       match: { params },
     } = this.props;
 
-    const areProfilePicturesEnabled = get(resources, 'settings.records[0].enabled');
-    const profilePictureMaxFileSize = get(resources, 'settings.records[0].maxFileSize');
+    const profilePictureConfig = get(resources, 'settings.records[0]');
 
     if (!resourcesLoaded(resources, ['uniquenessValidator']) || (!this.getUser() && this.props.match.params.id)) {
       return (
@@ -414,8 +413,7 @@ class UserEdit extends React.Component {
         location={location}
         history={history}
         stripes={this.props.stripes}
-        areProfilePicturesEnabled={areProfilePicturesEnabled}
-        profilePictureMaxFileSize={profilePictureMaxFileSize}
+        profilePictureConfig={profilePictureConfig}
       />
     );
   }
