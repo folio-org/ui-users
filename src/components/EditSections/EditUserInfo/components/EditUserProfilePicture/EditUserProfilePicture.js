@@ -110,7 +110,7 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal, profilePictu
         Please choose a photo with a size of ${profilePictureMaxFileSize}MB  or less.`,
       });
       // eslint-disable-next-line no-console
-      console.warn('max file size can be ', profilePictureMaxFileSize, 'mb.');
+      console.warn('max file size can be ' + profilePictureMaxFileSize + 'mb.');
     } else if (maxFileSizeInBytes && e.target.files && e.target.files.length > 0) {
       setLocalFileModalOpen(true);
       const file = e.target.files[0];
