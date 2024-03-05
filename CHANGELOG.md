@@ -34,6 +34,7 @@
 * Don't allow to display or upload a profile picture to a shadow account. Refs UIU-3045.
 * Compress selected local file before uploading to server as profile picture. Refs UIU-3064.
 * ECS - Conceal elements that are not relevant for "Shadow" and "Patron" users. Refs UIU-3056.
+* Reset rotation when profile picture upload is canceled. Refs UIU-3071.
 
 ## [10.0.4](https://github.com/folio-org/ui-users/tree/v10.0.4) (2023-11-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.3...v10.0.4)
