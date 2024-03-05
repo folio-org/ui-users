@@ -36,6 +36,7 @@ jest.mock('react-image', () => ({
 }));
 
 const defaultProps = {
+  profilePictureMaxFileSize: 4,
   profilePictureId: 'https://folio.org/wp-content/uploads/2023/08/folio-site-general-Illustration-social-image-1200.jpg',
   form: {
     change: jest.fn(),

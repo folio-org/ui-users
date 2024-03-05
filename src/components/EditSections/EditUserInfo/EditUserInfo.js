@@ -49,11 +49,11 @@ class EditUserInfo extends React.Component {
     disabled: PropTypes.bool,
     uniquenessValidator: PropTypes.object,
     areProfilePicturesEnabled: PropTypes.bool.isRequired,
+    profilePictureMaxFileSize: PropTypes.number.isRequired,
   };
 
   constructor(props) {
     super(props);
-
     const { initialValues: { patronGroup } } = props;
     this.state = {
       showRecalculateModal: false,
@@ -129,6 +129,7 @@ class EditUserInfo extends React.Component {
       uniquenessValidator,
       disabled,
       areProfilePicturesEnabled,
+      profilePictureMaxFileSize,
       form,
     } = this.props;
 
@@ -389,6 +390,7 @@ class EditUserInfo extends React.Component {
                     <EditUserProfilePicture
                       profilePictureId={initialValues?.personal?.profilePictureLink}
                       personal={initialValues?.personal}
+                      profilePictureMaxFileSize={profilePictureMaxFileSize}
                       form={form}
                     />
                     <Field

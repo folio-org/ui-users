@@ -10,6 +10,7 @@ import {
   DropdownMenu,
   Icon,
   Label,
+  Callout,
 } from '@folio/stripes/components';
 import { useStripes } from '@folio/stripes/core';
 
@@ -19,7 +20,7 @@ import DeleteProfilePictureModal from '../DeleteProfilePictureModal';
 import ProfilePicture from '../../../../ProfilePicture';
 import LocalFileModal from '../LocalFileModal';
 import { getRotatedImage, createImage } from './utils/canvasUtils';
-import { PROFILE_PIC_API, PROFILE_PIC_CONFIGURATIONS_ENTRY_API } from '../../../../../constants';
+import { PROFILE_PIC_API } from '../../../../../constants';
 
 const ORIENTATION_TO_ANGLE = {
   '3': 180,
@@ -27,7 +28,7 @@ const ORIENTATION_TO_ANGLE = {
   '8': -90,
 };
 
-const EditUserProfilePicture = ({ profilePictureId, form, personal }) => {
+const EditUserProfilePicture = ({ profilePictureId, form, personal, profilePictureMaxFileSize }) => {
   const [profilePictureLink, setProfilePictureLink] = useState(profilePictureId);
   const [externalLinkModalOpen, setExternalLinkModalOpen] = useState(false);
   const [deleteProfilePictureModalOpen, setDeleteProfilePictureModalOpen] = useState(false);
@@ -38,6 +39,7 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal }) => {
   const [imageSrc, setImageSrc] = useState(null);
   const [croppedLocalImage, setCroppedLocalImage] = useState(null);
   const fileInputRef = useRef(null);
+  const calloutRef = useRef(null);
 
   const intl = useIntl();
   const stripes = useStripes();
@@ -91,41 +93,17 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal }) => {
     setLocalFileModalOpen(prev => !prev);
   }, []);
 
-  const getProfilePictureConfig = async () => {
-    const headersWithCredentials = getHeaderWithCredentials(okapi);
-    const headers = {
-      ...headersWithCredentials,
-      headers: {
-        ...headersWithCredentials.headers,
-        'Content-Type': 'application/octet-stream',
-      }
-    };
-    try {
-      const response = await fetch(`${url}/user/${PROFILE_PIC_CONFIGURATIONS_ENTRY_API}`, {
-        method: 'GET',
-        ...headers,
-      });
-
-      if (response.ok) {
-        const resp = await response.json();
-        return resp?.maxFileSize * 1024 * 1024;
-      } else {
-        // eslint-disable-next-line no-console
-        console.error(new Error('Failed to upload blob'));
-      }
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
-    }
-    return 0;
-  };
-
   const onFileChange = async (e) => {
-    const maxFileSize = await getProfilePictureConfig();
-    if (maxFileSize && e.target.files[0].size > maxFileSize) {
+    const maxFileSizeInBytes = profilePictureMaxFileSize * 1024 * 1024;
+    if (maxFileSizeInBytes && e.target.files[0].size > maxFileSizeInBytes) {
+      calloutRef.current.sendCallout({
+        type: 'error',
+        message: `Photo size exceeds the ${profilePictureMaxFileSize}MB limit.
+        Please choose a photo with a size of ${profilePictureMaxFileSize}MB  or less.`,
+      });
       // eslint-disable-next-line no-console
-      console.warn('max file size can be ', maxFileSize);
-    } else if (maxFileSize && e.target.files && e.target.files.length > 0) {
+      console.warn('max file size can be ', profilePictureMaxFileSize);
+    } else if (maxFileSizeInBytes && e.target.files && e.target.files.length > 0) {
       setLocalFileModalOpen(true);
       const file = e.target.files[0];
       let imageDataUrl = await readFile(file);
@@ -294,6 +272,7 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal }) => {
             />
           )
       }
+      <Callout ref={calloutRef} />
     </>
   );
 };
@@ -302,6 +281,7 @@ EditUserProfilePicture.propTypes = {
   form: PropTypes.object.isRequired,
   profilePictureId: PropTypes.string,
   personal: PropTypes.object.isRequired,
+  profilePictureMaxFileSize: PropTypes.number.isRequired,
 };
 
 export default EditUserProfilePicture;
