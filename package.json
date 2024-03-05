@@ -1108,6 +1108,7 @@
     "regenerator-runtime": "^0.13.9"
   },
   "dependencies": {
+    "compressorjs": "^1.2.1",
     "final-form-set-field-data": "^1.0.2",
     "get-orientation": "^1.1.2",
     "hashcode": "^1.0.3",
