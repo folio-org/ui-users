@@ -271,8 +271,20 @@ class UserForm extends React.Component {
       || stripes.hasPerm('ui-users.feesfines.actions.all')
       || stripes.hasPerm('ui-requests.all');
 
+    const isShadowUser = initialValues?.type === USER_TYPES.SHADOW;
     const isEditing = initialValues && initialValues.id;
-    if (showActionMenu && isEditing) {
+
+    const isActionMenuVisible = (
+      showActionMenu
+      && isEditing
+      /*
+        Essentially, a shadow user should not have visibility to request, fee/fines, or block actions.
+        Since there are no other sections in the menu there is no point in showing the menu button for the shadow user.
+       */
+      && !isShadowUser
+    );
+
+    if (isActionMenuVisible) {
       return (
         <>
           <RequestFeeFineBlockButtons

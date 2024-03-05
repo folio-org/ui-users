@@ -8,20 +8,22 @@ import {
   useUserTenantPermissions,
 } from '../../../hooks';
 import RenderPermissions from '../../RenderPermissions';
+import { isAffiliationsEnabled } from '../../util';
 
 const propTypes = {
   stripes: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
 };
 
 const UserPermissions = (props) => {
-  const { stripes } = props;
+  const { stripes, user } = props;
   const { id: userId } = useParams();
   const [tenantId, setTenantId] = useState(stripes.okapi.tenant);
 
   const {
     affiliations,
     isFetching: isAffiliationsFetching,
-  } = useUserAffiliations({ userId });
+  } = useUserAffiliations({ userId }, { enabled: isAffiliationsEnabled(user) });
 
   const {
     userPermissions,

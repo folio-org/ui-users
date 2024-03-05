@@ -7,6 +7,7 @@ import {
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import profilePicData from 'fixtures/profilePicture';
 import { Img } from 'react-image';
+import Compressor from 'compressorjs';
 import { useProfilePicture } from '../../../../../hooks';
 import EditUserProfilePicture from './EditUserProfilePicture';
 
@@ -14,6 +15,8 @@ import * as canvasUtilsmodule from './utils/canvasUtils';
 import { imageSrc } from './utils/data/imageSrc';
 
 jest.unmock('@folio/stripes/components');
+
+jest.mock('compressorjs');
 
 jest.mock('./utils/canvasUtils', () => ({
   __esModule: true,
@@ -60,6 +63,7 @@ const renderProfilePicture = (props) => render(<EditUserProfilePicture {...props
 describe('Profile Picture', () => {
   describe('when profile picture is a url', () => {
     beforeEach(() => {
+      Compressor.mockReset();
       useProfilePicture.mockClear().mockReturnValue({ profilePictureData: profilePicData.profile_picture_blob });
       renderProfilePicture(defaultProps);
     });
@@ -124,17 +128,10 @@ describe('Profile Picture', () => {
       const renderedProfileImg = Img.mock.lastCall[0];
       expect(expect(renderedProfileImg.src).toContain('https://upload.wikimedia.org/wikipedia/commons/e/e2/FOLIO_400x400.jpg'));
     });
-
-    it('should render delete confirmation modal', async () => {
-      const updateButton = screen.getByTestId('updateProfilePictureDropdown');
-      await userEvent.click(updateButton);
-      const deleteButton = screen.getByTestId('delete');
-      await userEvent.click(deleteButton);
-
-      expect(screen.getByText('ui-users.information.profilePicture.delete.modal.heading')).toBeInTheDocument();
-    });
-
-    it('should invoke local file upload handlers', async () => {
+    it('should invoke local file upload handlers with compression', async () => {
+      Compressor.mockImplementationOnce((croppedImage, options) => {
+        return options.success(croppedImage);
+      });
       const updateButton = screen.getByTestId('updateProfilePictureDropdown');
       await userEvent.click(updateButton);
       const mockImage = new Image();
@@ -155,6 +152,34 @@ describe('Profile Picture', () => {
 
       const saveAndCloseButton = document.querySelector('[id="save-external-link-btn"]');
       fireEvent.click(saveAndCloseButton);
+    });
+    it('should handle local file upload compression error scnenario', async () => {
+      Compressor.mockImplementationOnce((croppedImage, options) => {
+        return options.error(new Error('compression failed'));
+      });
+      const updateButton = screen.getByTestId('updateProfilePictureDropdown');
+      await userEvent.click(updateButton);
+      const mockImage = new Image();
+      const consoleWarnMock = jest.spyOn(console, 'warn').mockImplementation(() => {});
+      const file = new File(['fake content'], mockImage, { type: 'image/png' });
+      const fileInput = screen.getByTestId('hidden-file-input');
+      fireEvent.change(fileInput, { target: { files: [file] } });
+
+      await waitFor(() => expect(screen.getByText('ui-users.information.profilePicture.localFile.modal.previewAndEdit')).toBeInTheDocument());
+      const saveAndCloseButton = document.querySelector('[id="save-external-link-btn"]');
+      fireEvent.click(saveAndCloseButton);
+
+      await waitFor(() => {
+        expect(consoleWarnMock).toHaveBeenCalledWith('compression failed');
+      });
+    });
+    it('should render delete confirmation modal', async () => {
+      const updateButton = screen.getByTestId('updateProfilePictureDropdown');
+      await userEvent.click(updateButton);
+      const deleteButton = screen.getByTestId('delete');
+      await userEvent.click(deleteButton);
+
+      expect(screen.getByText('ui-users.information.profilePicture.delete.modal.heading')).toBeInTheDocument();
     });
   });
 
