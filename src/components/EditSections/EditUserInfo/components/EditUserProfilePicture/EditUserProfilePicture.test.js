@@ -3,35 +3,24 @@ import {
   screen,
   fireEvent,
   waitFor,
+  act,
 } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
-import profilePicData from 'fixtures/profilePicture';
 import { Img } from 'react-image';
 import Compressor from 'compressorjs';
+
+import { useCallout, useStripes } from '@folio/stripes/core';
+
+import profilePicData from 'fixtures/profilePicture';
+
 import { useProfilePicture } from '../../../../../hooks';
 import EditUserProfilePicture from './EditUserProfilePicture';
-
 import * as canvasUtilsmodule from './utils/canvasUtils';
 import { imageSrc } from './utils/data/imageSrc';
 
 jest.unmock('@folio/stripes/components');
 
 jest.mock('compressorjs');
-
-jest.mock('@folio/stripes/core', () => ({
-  ...jest.requireActual('@folio/stripes/core'),
-  useCallout: jest.fn(() => ({
-    sendCallout: jest.fn(),
-  })),
-  useStripes: jest.fn(() => ({
-    okapi: {
-      url: 'https://folio-testing-okapi.dev.folio.org',
-      tenant: 'diku',
-      okapiReady: true,
-    },
-    hasPerm: jest.fn().mockReturnValue(true),
-  })),
-}));
 jest.mock('./utils/canvasUtils', () => ({
   __esModule: true,
   ...jest.requireActual('./utils/canvasUtils'),
@@ -45,10 +34,6 @@ jest.mock('../../../../../hooks', () => ({
 }));
 jest.mock('react-image', () => ({
   Img: jest.fn(() => null),
-}));
-global.fetch = jest.fn(() => Promise.resolve({
-  ok: true,
-  json: () => Promise.resolve({ data: 'mocked data' }),
 }));
 
 const defaultProps = {
@@ -72,13 +57,37 @@ const defaultProps = {
 
 const renderProfilePicture = (props) => render(<EditUserProfilePicture {...props} />);
 
-describe('Profile Picture', () => {
+describe('Edit User Profile Picture', () => {
   describe('when profile picture is a url', () => {
+    const sendCallout = jest.fn();
     beforeEach(() => {
       Compressor.mockReset();
       useProfilePicture.mockClear().mockReturnValue({ profilePictureData: profilePicData.profile_picture_blob });
+      sendCallout.mockClear();
+      useCallout.mockClear().mockReturnValue({ sendCallout });
+      useStripes.mockClear().mockReturnValue({
+        okapi: {
+          url: 'https://folio-testing-okapi.dev.folio.org',
+          tenant: 'diku',
+          okapiReady: true,
+        },
+        hasPerm: jest.fn().mockReturnValue(true),
+      });
+      global.fetch = jest.fn(() => Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({ data: 'mocked data' }),
+      }));
       renderProfilePicture(defaultProps);
+      jest.spyOn(console, 'error').mockImplementation(() => {});
+      jest.spyOn(console, 'warn').mockImplementation(() => {});
     });
+
+    afterEach(() => {
+      global.fetch.mockClear();
+      console.error.mockRestore();
+      console.warn.mockRestore();
+    });
+
     it('should display Profile picture', () => {
       expect(Img).toHaveBeenCalled();
       const renderedProfileImg = Img.mock.calls[0][0];
@@ -140,10 +149,12 @@ describe('Profile Picture', () => {
       const renderedProfileImg = Img.mock.lastCall[0];
       expect(expect(renderedProfileImg.src).toContain('https://upload.wikimedia.org/wikipedia/commons/e/e2/FOLIO_400x400.jpg'));
     });
+
     it('should invoke local file upload handlers with compression', async () => {
       Compressor.mockImplementationOnce((croppedImage, options) => {
         return options.success(croppedImage);
       });
+
       const updateButton = screen.getByTestId('updateProfilePictureDropdown');
       await userEvent.click(updateButton);
       const mockImage = new Image();
@@ -151,10 +162,11 @@ describe('Profile Picture', () => {
       mockImage.height = 200;
       jest.spyOn(canvasUtilsmodule, 'createImage').mockResolvedValueOnce(mockImage);
       jest.spyOn(canvasUtilsmodule, 'getCroppedImg').mockResolvedValueOnce('mocked-blob-data');
+
       const mockCreateObjectURL = jest.fn(() => 'mockedURL');
       URL.createObjectURL = mockCreateObjectURL;
-      const image = await canvasUtilsmodule.createImage(imageSrc);
 
+      const image = await canvasUtilsmodule.createImage(imageSrc);
       const file = new File(['fake content'], image, { type: 'image/png' });
       const fileInput = screen.getByTestId('hidden-file-input');
 
@@ -162,29 +174,33 @@ describe('Profile Picture', () => {
 
       await waitFor(() => expect(screen.getByText('ui-users.information.profilePicture.localFile.modal.previewAndEdit')).toBeInTheDocument());
 
-      const saveAndCloseButton = document.querySelector('[id="save-external-link-btn"]');
+      const saveAndCloseButton = document.querySelector('[id="save-local-file-btn"]');
       fireEvent.click(saveAndCloseButton);
     });
+
     it('should handle local file upload compression error scnenario', async () => {
       Compressor.mockImplementationOnce((croppedImage, options) => {
         return options.error(new Error('compression failed'));
       });
+
       const updateButton = screen.getByTestId('updateProfilePictureDropdown');
       await userEvent.click(updateButton);
       const mockImage = new Image();
-      const consoleWarnMock = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+
       const file = new File(['fake content'], mockImage, { type: 'image/png' });
       const fileInput = screen.getByTestId('hidden-file-input');
       fireEvent.change(fileInput, { target: { files: [file] } });
-
       await waitFor(() => expect(screen.getByText('ui-users.information.profilePicture.localFile.modal.previewAndEdit')).toBeInTheDocument());
-      const saveAndCloseButton = document.querySelector('[id="save-external-link-btn"]');
+
+      const saveAndCloseButton = document.querySelector('[id="save-local-file-btn"]');
       fireEvent.click(saveAndCloseButton);
 
       await waitFor(() => {
-        expect(consoleWarnMock).toHaveBeenCalledWith('compression failed');
+        expect(console.warn).toHaveBeenCalledWith('compression failed');
       });
     });
+
     it('should render delete confirmation modal', async () => {
       const updateButton = screen.getByTestId('updateProfilePictureDropdown');
       await userEvent.click(updateButton);
@@ -193,37 +209,83 @@ describe('Profile Picture', () => {
 
       expect(screen.getByText('ui-users.information.profilePicture.delete.modal.heading')).toBeInTheDocument();
     });
-    it('should display callout when API fetch call fails', async () => {
-      const updateButton = screen.getByTestId('updateProfilePictureDropdown');
-      await userEvent.click(updateButton);
+
+    it('should display callout when API fetch responds with error', async () => {
+      Compressor.mockImplementationOnce((croppedImage, options) => {
+        return options.success(croppedImage);
+      });
+      global.fetch = jest.fn().mockResolvedValueOnce(
+        {
+          ok: false,
+          text: jest.fn().mockResolvedValueOnce('error message'),
+        }
+      );
+
+      const mockCreateObjectURL = jest.fn(() => 'mockedURL');
+      URL.createObjectURL = mockCreateObjectURL;
+
       const mockImage = new Image();
       mockImage.width = 100;
       mockImage.height = 200;
       jest.spyOn(canvasUtilsmodule, 'createImage').mockResolvedValueOnce(mockImage);
       jest.spyOn(canvasUtilsmodule, 'getCroppedImg').mockResolvedValueOnce('mocked-blob-data');
-      const mockCreateObjectURL = jest.fn(() => 'mockedURL');
-      URL.createObjectURL = mockCreateObjectURL;
+
       const image = await canvasUtilsmodule.createImage(imageSrc);
 
-      const fetchMock = jest.spyOn(global, 'fetch');
-
-      // Set up the mock implementation for one call
-      fetchMock.mockResolvedValueOnce({
-        ok: false,
-        text: jest.fn().mockResolvedValueOnce('error message'),
-        // status: 200,
-        // headers: { 'Content-Type': 'application/json' },
-      });
+      const updateButton = screen.getByTestId('updateProfilePictureDropdown');
+      await act(async () => userEvent.click(updateButton));
 
       const file = new File(['fake content'], image, { type: 'image/png' });
       const fileInput = screen.getByTestId('hidden-file-input');
 
-      fireEvent.change(fileInput, { target: { files: [file] } });
-
+      await act(async () => fireEvent.change(fileInput, { target: { files: [file] } }));
       await waitFor(() => expect(screen.getByText('ui-users.information.profilePicture.localFile.modal.previewAndEdit')).toBeInTheDocument());
 
-      const saveAndCloseButton = document.querySelector('[id="save-external-link-btn"]');
-      fireEvent.click(saveAndCloseButton);
+      const saveAndCloseButton = document.querySelector('[id="save-local-file-btn"]');
+      await act(async () => fireEvent.click(saveAndCloseButton));
+
+      await waitFor(() => expect(screen.queryByText('ui-users.information.profilePicture.localFile.modal.previewAndEdit')).not.toBeInTheDocument());
+      waitFor(() => expect(sendCallout).toHaveBeenCalled());
+      waitFor(() => expect(console.error).toHaveBeenCalled());
+    });
+
+    it('should display callout when API fetch call fails', async () => {
+      Compressor.mockImplementationOnce((croppedImage, options) => {
+        return options.success(croppedImage);
+      });
+      global.fetch = jest.fn().mockRejectedValueOnce(
+        {
+          ok: false,
+          text: jest.fn().mockResolvedValueOnce('error message'),
+        }
+      );
+
+      const mockCreateObjectURL = jest.fn(() => 'mockedURL');
+      URL.createObjectURL = mockCreateObjectURL;
+
+      const mockImage = new Image();
+      mockImage.width = 100;
+      mockImage.height = 200;
+      jest.spyOn(canvasUtilsmodule, 'createImage').mockResolvedValueOnce(mockImage);
+      jest.spyOn(canvasUtilsmodule, 'getCroppedImg').mockResolvedValueOnce('mocked-blob-data');
+
+      const image = await canvasUtilsmodule.createImage(imageSrc);
+
+      const updateButton = screen.getByTestId('updateProfilePictureDropdown');
+      await act(async () => userEvent.click(updateButton));
+
+      const file = new File(['fake content'], image, { type: 'image/png' });
+      const fileInput = screen.getByTestId('hidden-file-input');
+
+      await act(async () => fireEvent.change(fileInput, { target: { files: [file] } }));
+      await waitFor(() => expect(screen.getByText('ui-users.information.profilePicture.localFile.modal.previewAndEdit')).toBeInTheDocument());
+
+      const saveAndCloseButton = document.querySelector('[id="save-local-file-btn"]');
+      await act(async () => fireEvent.click(saveAndCloseButton));
+
+      await waitFor(() => expect(screen.queryByText('ui-users.information.profilePicture.localFile.modal.previewAndEdit')).not.toBeInTheDocument());
+      waitFor(() => expect(sendCallout).toHaveBeenCalled());
+      waitFor(() => expect(console.error).toHaveBeenCalled());
     });
   });
 
@@ -238,6 +300,7 @@ describe('Profile Picture', () => {
       const renderedProfileImg = Img.mock.calls[0][0];
       expect(renderedProfileImg.alt).toBe('ui-users.information.profilePicture');
     });
+
     it('should display Profile picture Loader while fetching profile picture', () => {
       useProfilePicture.mockClear().mockReturnValue({ profilePictureData: profilePicData.profile_picture_blob, isFetching: true });
       renderProfilePicture({ ...defaultProps, profilePictureId: 'cdc053ff-f88e-445c-878f-650472bd52e6' });
