@@ -20,7 +20,11 @@ import DeleteProfilePictureModal from '../DeleteProfilePictureModal';
 import ProfilePicture from '../../../../ProfilePicture';
 import LocalFileModal from '../LocalFileModal';
 import { getRotatedImage, createImage } from './utils/canvasUtils';
-import { ACCEPTED_FILE_TYPES, PROFILE_PIC_API, PROFILE_PIC_DEFAULT_MAX_SIZE } from '../../../../../constants';
+import {
+  ACCEPTED_FILE_TYPES,
+  PROFILE_PIC_API,
+  PROFILE_PIC_DEFAULT_MAX_SIZE,
+} from '../../../../../constants';
 
 const ORIENTATION_TO_ANGLE = {
   '3': 180,
