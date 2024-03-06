@@ -4,6 +4,7 @@ import {
   fireEvent,
   waitFor,
 } from '@folio/jest-config-stripes/testing-library/react';
+import { useCallout } from '@folio/stripes/core';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import profilePicData from 'fixtures/profilePicture';
 import { Img } from 'react-image';
@@ -39,6 +40,7 @@ jest.mock('react-image', () => ({
 }));
 
 const defaultProps = {
+  profilePictureMaxFileSize: 3,
   profilePictureId: 'https://folio.org/wp-content/uploads/2023/08/folio-site-general-Illustration-social-image-1200.jpg',
   form: {
     change: jest.fn(),
@@ -61,28 +63,34 @@ const renderProfilePicture = (props) => render(<EditUserProfilePicture {...props
 
 describe('Profile Picture', () => {
   describe('when profile picture is a url', () => {
+    const sendCallout = jest.fn();
     beforeEach(() => {
       Compressor.mockReset();
       useProfilePicture.mockClear().mockReturnValue({ profilePictureData: profilePicData.profile_picture_blob });
-      renderProfilePicture(defaultProps);
+      sendCallout.mockClear();
+      useCallout.mockClear().mockReturnValue({ sendCallout });
     });
     it('should display Profile picture', () => {
+      renderProfilePicture(defaultProps);
       expect(Img).toHaveBeenCalled();
       const renderedProfileImg = Img.mock.calls[0][0];
       expect(renderedProfileImg.alt).toBe('ui-users.information.profilePicture');
     });
 
     it('Image to be displayed with correct src', () => {
+      renderProfilePicture(defaultProps);
       expect(Img).toHaveBeenCalled();
       const renderedProfileImg = Img.mock.calls[0][0];
       expect(renderedProfileImg.src).toContain('https://folio.org/wp-content/uploads/2023/08/folio-site-general-Illustration-social-image-1200.jpg');
     });
 
     it('should display update button', () => {
+      renderProfilePicture(defaultProps);
       expect(screen.getByTestId('updateProfilePictureDropdown')).toBeInTheDocument();
     });
 
     it('should display Local file button', async () => {
+      renderProfilePicture(defaultProps);
       const updateButton = screen.getByTestId('updateProfilePictureDropdown');
       await userEvent.click(updateButton);
 
@@ -90,6 +98,7 @@ describe('Profile Picture', () => {
     });
 
     it('should display External link button', async () => {
+      renderProfilePicture(defaultProps);
       const updateButton = screen.getByTestId('updateProfilePictureDropdown');
       await userEvent.click(updateButton);
 
@@ -97,6 +106,7 @@ describe('Profile Picture', () => {
     });
 
     it('Should display Delete link button', async () => {
+      renderProfilePicture(defaultProps);
       const updateButton = screen.getByTestId('updateProfilePictureDropdown');
       await userEvent.click(updateButton);
 
@@ -104,6 +114,7 @@ describe('Profile Picture', () => {
     });
 
     it('should render external url link modal', async () => {
+      renderProfilePicture(defaultProps);
       const updateButton = screen.getByTestId('updateProfilePictureDropdown');
       await userEvent.click(updateButton);
       const externalURLButton = screen.getByTestId('externalURL');
@@ -114,6 +125,7 @@ describe('Profile Picture', () => {
     });
 
     it('should call save handler', async () => {
+      renderProfilePicture(defaultProps);
       const updateButton = screen.getByTestId('updateProfilePictureDropdown');
       await userEvent.click(updateButton);
       const externalURLButton = screen.getByTestId('externalURL');
@@ -131,6 +143,7 @@ describe('Profile Picture', () => {
       Compressor.mockImplementationOnce((croppedImage, options) => {
         return options.success(croppedImage);
       });
+      renderProfilePicture(defaultProps);
       const updateButton = screen.getByTestId('updateProfilePictureDropdown');
       await userEvent.click(updateButton);
       const mockImage = new Image();
@@ -156,6 +169,7 @@ describe('Profile Picture', () => {
       Compressor.mockImplementationOnce((croppedImage, options) => {
         return options.error(new Error('compression failed'));
       });
+      renderProfilePicture(defaultProps);
       const updateButton = screen.getByTestId('updateProfilePictureDropdown');
       await userEvent.click(updateButton);
       const mockImage = new Image();
@@ -172,7 +186,23 @@ describe('Profile Picture', () => {
         expect(consoleWarnMock).toHaveBeenCalledWith('compression failed');
       });
     });
+    it('should restrict local file upload and display callout for file exceeding maxFileSize', async () => {
+      renderProfilePicture({ ...defaultProps, profilePictureMaxFileSize: 0.00001 });
+      const updateButton = screen.getByTestId('updateProfilePictureDropdown');
+      await userEvent.click(updateButton);
+      const mockImage = new Image();
+      const consoleWarnMock = jest.spyOn(console, 'warn').mockImplementation(() => {});
+      const file = new File(['fake content'], mockImage, { type: 'image/png' });
+      const fileInput = screen.getByTestId('hidden-file-input');
+      fireEvent.change(fileInput, { target: { files: [file] } });
+
+      await waitFor(() => {
+        expect(sendCallout).toHaveBeenCalled();
+        expect(consoleWarnMock).toHaveBeenCalledWith('max file size can be 0.00001mb.');
+      });
+    });
     it('should render delete confirmation modal', async () => {
+      renderProfilePicture(defaultProps);
       const updateButton = screen.getByTestId('updateProfilePictureDropdown');
       await userEvent.click(updateButton);
       const deleteButton = screen.getByTestId('delete');
