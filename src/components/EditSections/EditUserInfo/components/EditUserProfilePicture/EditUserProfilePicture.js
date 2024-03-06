@@ -20,7 +20,7 @@ import DeleteProfilePictureModal from '../DeleteProfilePictureModal';
 import ProfilePicture from '../../../../ProfilePicture';
 import LocalFileModal from '../LocalFileModal';
 import { getRotatedImage, createImage } from './utils/canvasUtils';
-import { PROFILE_PIC_API, acceptedFileTypes, profilePictureDefaultMaxSize } from '../../../../../constants';
+import { ACCEPTED_FILE_TYPES, PROFILE_PIC_API, PROFILE_PIC_DEFAULT_MAX_SIZE } from '../../../../../constants';
 
 const ORIENTATION_TO_ANGLE = {
   '3': 180,
@@ -101,38 +101,41 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal, profilePictu
   }, []);
 
   const onFileChange = async (e) => {
-    const maxFileSize = profilePictureMaxFileSize || profilePictureDefaultMaxSize;
+    const maxFileSize = profilePictureMaxFileSize || PROFILE_PIC_DEFAULT_MAX_SIZE;
     const maxFileSizeInBytes = maxFileSize * 1024 * 1024;
-    if (maxFileSizeInBytes && e.target.files[0].size > maxFileSizeInBytes) {
-      callout.sendCallout({
-        type: 'error',
-        message: intl.formatMessage(
-          { id: 'ui-users.information.profilePicture.localFile.maxFileSize.error' },
-          { maxFileSize: maxFileSize },
-        ),
-      });
-      // eslint-disable-next-line no-console
-      console.warn('max file size can be ' + profilePictureMaxFileSize + 'mb.');
-    } else if (maxFileSizeInBytes && e.target.files && e.target.files.length > 0) {
-      setLocalFileModalOpen(true);
-      const file = e.target.files[0];
-      let imageDataUrl = await readFile(file);
-
-      try {
-        // apply rotation if needed
-        const orientation = await getOrientation(file);
-        const rotationByOrientation = ORIENTATION_TO_ANGLE[orientation];
-        if (rotationByOrientation) {
-          const image = await createImage(imageDataUrl);
-          imageDataUrl = await getRotatedImage(image, rotation);
-        }
-      } catch (evt) {
+    if (maxFileSizeInBytes && e.target.files && e.target.files.length > 0) {
+      if (e.target.files[0].size > maxFileSizeInBytes) {
+        callout.sendCallout({
+          type: 'error',
+          message: intl.formatMessage(
+            { id: 'ui-users.information.profilePicture.localFile.maxFileSize.error' },
+            { maxFileSize: maxFileSize },
+          ),
+        });
         // eslint-disable-next-line no-console
-        console.warn('failed to detect the orientation');
+        console.warn('max file size can be ' + profilePictureMaxFileSize + 'mb.');
       }
+      else {
+        setLocalFileModalOpen(true);
+        const file = e.target.files[0];
+        let imageDataUrl = await readFile(file);
 
-      setImageSrc(imageDataUrl);
-      if (fileInputRef.current) fileInputRef.current.value = '';
+        try {
+          // apply rotation if needed
+          const orientation = await getOrientation(file);
+          const rotationByOrientation = ORIENTATION_TO_ANGLE[orientation];
+          if (rotationByOrientation) {
+            const image = await createImage(imageDataUrl);
+            imageDataUrl = await getRotatedImage(image, rotation);
+          }
+        } catch (evt) {
+          // eslint-disable-next-line no-console
+          console.warn('failed to detect the orientation');
+        }
+
+        setImageSrc(imageDataUrl);
+        if (fileInputRef.current) fileInputRef.current.value = '';
+      }
     }
   };
 
@@ -258,7 +261,7 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal, profilePictu
         croppedLocalImage={croppedLocalImage}
       />
       <br />
-      <input type="file" data-testid="hidden-file-input" hidden ref={fileInputRef} onChange={onFileChange} accept= {acceptedFileTypes} />
+      <input type="file" data-testid="hidden-file-input" hidden ref={fileInputRef} onChange={onFileChange} accept= {ACCEPTED_FILE_TYPES} />
       {
         hasAllProfilePicturePerms && (
           <Dropdown
