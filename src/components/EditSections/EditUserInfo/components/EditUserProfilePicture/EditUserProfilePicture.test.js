@@ -4,6 +4,7 @@ import {
   fireEvent,
   waitFor,
 } from '@folio/jest-config-stripes/testing-library/react';
+import { useCallout } from '@folio/stripes/core';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import profilePicData from 'fixtures/profilePicture';
 import { Img } from 'react-image';
@@ -62,9 +63,12 @@ const renderProfilePicture = (props) => render(<EditUserProfilePicture {...props
 
 describe('Profile Picture', () => {
   describe('when profile picture is a url', () => {
+    const sendCallout = jest.fn();
     beforeEach(() => {
       Compressor.mockReset();
       useProfilePicture.mockClear().mockReturnValue({ profilePictureData: profilePicData.profile_picture_blob });
+      sendCallout.mockClear();
+      useCallout.mockClear().mockReturnValue({ sendCallout });
     });
     it('should display Profile picture', () => {
       renderProfilePicture(defaultProps);
@@ -182,7 +186,7 @@ describe('Profile Picture', () => {
         expect(consoleWarnMock).toHaveBeenCalledWith('compression failed');
       });
     });
-    it('should restrict local file upload for file exceeding maxFileSize', async () => {
+    it('should restrict local file upload and display callout for file exceeding maxFileSize', async () => {
       renderProfilePicture({ ...defaultProps, profilePictureMaxFileSize: 0.00001 });
       const updateButton = screen.getByTestId('updateProfilePictureDropdown');
       await userEvent.click(updateButton);
@@ -193,6 +197,7 @@ describe('Profile Picture', () => {
       fireEvent.change(fileInput, { target: { files: [file] } });
 
       await waitFor(() => {
+        expect(sendCallout).toHaveBeenCalled();
         expect(consoleWarnMock).toHaveBeenCalledWith('max file size can be 0.00001mb.');
       });
     });

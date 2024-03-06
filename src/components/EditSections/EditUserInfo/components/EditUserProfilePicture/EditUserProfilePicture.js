@@ -11,9 +11,8 @@ import {
   DropdownMenu,
   Icon,
   Label,
-  Callout,
 } from '@folio/stripes/components';
-import { useStripes } from '@folio/stripes/core';
+import { useStripes, useCallout } from '@folio/stripes/core';
 
 import { isAValidURL } from '../../../../util/util';
 import ExternalLinkModal from '../ExternalLinkModal';
@@ -21,7 +20,7 @@ import DeleteProfilePictureModal from '../DeleteProfilePictureModal';
 import ProfilePicture from '../../../../ProfilePicture';
 import LocalFileModal from '../LocalFileModal';
 import { getRotatedImage, createImage } from './utils/canvasUtils';
-import { PROFILE_PIC_API } from '../../../../../constants';
+import { PROFILE_PIC_API, acceptedFileTypes, profilePictureDefaultMaxSize } from '../../../../../constants';
 
 const ORIENTATION_TO_ANGLE = {
   '3': 180,
@@ -47,10 +46,10 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal, profilePictu
   const [imageSrc, setImageSrc] = useState(null);
   const [croppedLocalImage, setCroppedLocalImage] = useState(null);
   const fileInputRef = useRef(null);
-  const calloutRef = useRef(null);
 
   const intl = useIntl();
   const stripes = useStripes();
+  const callout = useCallout();
   const { okapi, okapi: { url } } = stripes;
 
   const hasProfilePicture = Boolean(profilePictureLink) || Boolean(croppedLocalImage);
@@ -102,12 +101,15 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal, profilePictu
   }, []);
 
   const onFileChange = async (e) => {
-    const maxFileSizeInBytes = profilePictureMaxFileSize * 1024 * 1024;
+    const maxFileSize = profilePictureMaxFileSize || profilePictureDefaultMaxSize;
+    const maxFileSizeInBytes = maxFileSize * 1024 * 1024;
     if (maxFileSizeInBytes && e.target.files[0].size > maxFileSizeInBytes) {
-      calloutRef.current.sendCallout({
+      callout.sendCallout({
         type: 'error',
-        message: `Photo size exceeds the ${profilePictureMaxFileSize}MB limit.
-        Please choose a photo with a size of ${profilePictureMaxFileSize}MB  or less.`,
+        message: intl.formatMessage(
+          { id: 'ui-users.information.profilePicture.localFile.maxFileSize.error' },
+          { maxFileSize: maxFileSize },
+        ),
       });
       // eslint-disable-next-line no-console
       console.warn('max file size can be ' + profilePictureMaxFileSize + 'mb.');
@@ -256,7 +258,7 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal, profilePictu
         croppedLocalImage={croppedLocalImage}
       />
       <br />
-      <input type="file" data-testid="hidden-file-input" hidden ref={fileInputRef} onChange={onFileChange} accept="image/jpg, image/jpeg, image/png" />
+      <input type="file" data-testid="hidden-file-input" hidden ref={fileInputRef} onChange={onFileChange} accept= {acceptedFileTypes} />
       {
         hasAllProfilePicturePerms && (
           <Dropdown
@@ -300,7 +302,6 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal, profilePictu
             />
           )
       }
-      <Callout ref={calloutRef} />
     </>
   );
 };

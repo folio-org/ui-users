@@ -361,3 +361,6 @@ export const DCB_VIRTUAL_USER = {
   },
   type: DCB,
 };
+
+export const profilePictureDefaultMaxSize = 10;
+export const acceptedFileTypes = 'image/jpg, image/jpeg, image/png';
