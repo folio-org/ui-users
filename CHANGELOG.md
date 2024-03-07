@@ -36,6 +36,7 @@
 * ECS - Conceal elements that are not relevant for "Shadow" and "Patron" users. Refs UIU-3056.
 * Reset rotation when profile picture upload is canceled. Refs UIU-3071.
 * Restrict profile picture upload exceeding max file size from profile picture configuration. Refs UIU-3047.
+* Profile Pictures - basic error handling. Refs UIU-3070.
 
 ## [10.0.4](https://github.com/folio-org/ui-users/tree/v10.0.4) (2023-11-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.3...v10.0.4)
