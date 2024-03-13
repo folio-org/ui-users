@@ -104,6 +104,7 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal, profilePictu
     setLocalFileModalOpen(prev => !prev);
   }, []);
 
+  // to invoke error callout message on same local file upload.
   const onFileSelect = (event) => {
     event.target.value = '';
   };
