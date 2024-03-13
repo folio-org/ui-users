@@ -222,6 +222,8 @@ describe('Edit User Profile Picture', () => {
       const consoleWarnMock = jest.spyOn(console, 'warn').mockImplementation(() => {});
       const file = new File(['fake content'], mockImage, { type: 'image/png' });
       const fileInput = screen.getByTestId('hidden-file-input');
+
+      fireEvent.click(fileInput, { target: { files: [file] } });
       fireEvent.change(fileInput, { target: { files: [file] } });
 
       await waitFor(() => {
