@@ -1167,5 +1167,6 @@
     "information.change.userType.modal.text": "Wenn Sie diese Änderung vornehmen, werden die Zugehörigkeiten des/der Benutzers/-in und die Berechtigungen, die ihm für diese Zugehörigkeiten gewährt werden, aktualisiert, wenn Sie auf Speichern und schließen klicken. Diese Aktion kann nicht ohne weiteres rückgängig gemacht werden. Sie müssten die Zugehörigkeiten und Berechtigungen des/der Benutzers/-in manuell aktualisieren, um die Änderungen rückgängig zu machen. Möchten Sie fortfahren?",
     "information.profilePicture.localFile.modal.previewAndEdit": "Vorschau und Bearbeitung",
     "information.profilePicture.localFile.modal.zoom": "Zoom",
-    "information.profilePicture.localFile.modal.rotate": "Drehen"
+    "information.profilePicture.localFile.modal.rotate": "Drehen",
+    "information.profilePicture.localFile.maxFileSize.error": "Photo size exceeds the {maxFileSize}MB limit. Please choose a photo with a size of {maxFileSize}MB or less."
 }

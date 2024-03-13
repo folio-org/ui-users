@@ -146,7 +146,9 @@ const props = {
     cancel: jest.fn(),
     reset: jest.fn()
   },
-  areProfilePicturesEnabled: true,
+  profilePictureConfig: {
+    enabled: true,
+  },
 };
 
 describe('Render Edit User Information component', () => {
@@ -240,7 +242,7 @@ describe('Render Edit User Information component', () => {
 
   describe('when profilePicture configuration is not enabled', () => {
     it('should not render profile picture', () => {
-      renderEditUserInfo({ ...props, areProfilePicturesEnabled: false });
+      renderEditUserInfo({ ...props, profilePictureConfig: { enabled: false } });
       expect(screen.queryByText('Profile Picture')).not.toBeInTheDocument();
     });
   });

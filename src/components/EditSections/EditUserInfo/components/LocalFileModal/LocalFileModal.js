@@ -60,7 +60,7 @@ const LocalFileModal = ({ open, onClose, imageSrc, rotation, setRotation, onSave
       <ModalFooter>
         <Button
           buttonStyle="primary"
-          id="save-external-link-btn"
+          id="save-local-file-btn"
           onClick={handleSaveProfilePictureLocalFile}
         >
           <FormattedMessage id="ui-users.saveAndClose" />

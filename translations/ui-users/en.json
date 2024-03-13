@@ -328,6 +328,7 @@
   "information.profilePicture.localFile.modal.previewAndEdit": "Preview and edit",
   "information.profilePicture.localFile.modal.zoom": "Zoom",
   "information.profilePicture.localFile.modal.rotate": "Rotate",
+  "information.profilePicture.localFile.maxFileSize.error": "Photo size exceeds the {maxFileSize}MB limit. Please choose a photo with a size of {maxFileSize}MB or less.",
   "information.barcode": "Barcode",
   "information.selectUserType": "Select user type",
   "information.userType": "User type",

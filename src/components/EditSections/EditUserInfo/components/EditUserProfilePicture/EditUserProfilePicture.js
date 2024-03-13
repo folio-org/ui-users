@@ -12,7 +12,7 @@ import {
   Icon,
   Label,
 } from '@folio/stripes/components';
-import { useStripes } from '@folio/stripes/core';
+import { useStripes, useCallout } from '@folio/stripes/core';
 
 import { isAValidURL } from '../../../../util/util';
 import ExternalLinkModal from '../ExternalLinkModal';
@@ -20,7 +20,11 @@ import DeleteProfilePictureModal from '../DeleteProfilePictureModal';
 import ProfilePicture from '../../../../ProfilePicture';
 import LocalFileModal from '../LocalFileModal';
 import { getRotatedImage, createImage } from './utils/canvasUtils';
-import { PROFILE_PIC_API } from '../../../../../constants';
+import {
+  ACCEPTED_IMAGE_TYPES,
+  PROFILE_PIC_API,
+  PROFILE_PIC_DEFAULT_MAX_SIZE,
+} from '../../../../../constants';
 
 const ORIENTATION_TO_ANGLE = {
   '3': 180,
@@ -35,7 +39,7 @@ const COMPRESSION_OPTIONS = {
   checkOrientation: false,
 };
 
-const EditUserProfilePicture = ({ profilePictureId, form, personal }) => {
+const EditUserProfilePicture = ({ profilePictureId, form, personal, profilePictureMaxFileSize }) => {
   const [profilePictureLink, setProfilePictureLink] = useState(profilePictureId);
   const [externalLinkModalOpen, setExternalLinkModalOpen] = useState(false);
   const [deleteProfilePictureModalOpen, setDeleteProfilePictureModalOpen] = useState(false);
@@ -49,6 +53,7 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal }) => {
 
   const intl = useIntl();
   const stripes = useStripes();
+  const callout = useCallout();
   const { okapi, okapi: { url } } = stripes;
 
   const hasProfilePicture = Boolean(profilePictureLink) || Boolean(croppedLocalImage);
@@ -99,27 +104,46 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal }) => {
     setLocalFileModalOpen(prev => !prev);
   }, []);
 
+  // to invoke error callout message on same local file upload.
+  const onFileSelect = (event) => {
+    event.target.value = '';
+  };
+
   const onFileChange = async (e) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setLocalFileModalOpen(true);
-      const file = e.target.files[0];
-      let imageDataUrl = await readFile(file);
-
-      try {
-        // apply rotation if needed
-        const orientation = await getOrientation(file);
-        const rotationByOrientation = ORIENTATION_TO_ANGLE[orientation];
-        if (rotationByOrientation) {
-          const image = await createImage(imageDataUrl);
-          imageDataUrl = await getRotatedImage(image, rotation);
-        }
-      } catch (evt) {
+    const maxFileSize = profilePictureMaxFileSize || PROFILE_PIC_DEFAULT_MAX_SIZE;
+    const maxFileSizeInBytes = maxFileSize * 1024 * 1024;
+    if (maxFileSizeInBytes && e.target.files?.length > 0) {
+      if (e.target.files[0].size > maxFileSizeInBytes) {
+        callout.sendCallout({
+          type: 'error',
+          message: intl.formatMessage(
+            { id: 'ui-users.information.profilePicture.localFile.maxFileSize.error' },
+            { maxFileSize },
+          ),
+        });
         // eslint-disable-next-line no-console
-        console.warn('failed to detect the orientation');
-      }
+        console.warn('max file size can be ' + profilePictureMaxFileSize + 'mb.');
+      } else {
+        setLocalFileModalOpen(true);
+        const file = e.target.files[0];
+        let imageDataUrl = await readFile(file);
 
-      setImageSrc(imageDataUrl);
-      if (fileInputRef.current) fileInputRef.current.value = '';
+        try {
+          // apply rotation if needed
+          const orientation = await getOrientation(file);
+          const rotationByOrientation = ORIENTATION_TO_ANGLE[orientation];
+          if (rotationByOrientation) {
+            const image = await createImage(imageDataUrl);
+            imageDataUrl = await getRotatedImage(image, rotation);
+          }
+        } catch (evt) {
+          // eslint-disable-next-line no-console
+          console.warn('failed to detect the orientation');
+        }
+
+        setImageSrc(imageDataUrl);
+        if (fileInputRef.current) fileInputRef.current.value = '';
+      }
     }
   };
 
@@ -155,12 +179,27 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal }) => {
             console.error(error);
           });
       } else {
+        const errMsg = await response.text();
+        // eslint-disable-next-line no-console
+        console.error(errMsg);
         // eslint-disable-next-line no-console
         console.error(new Error('Failed to upload blob'));
+        callout.sendCallout({
+          type: 'error',
+          message: intl.formatMessage(
+            { id: 'ui-users.errors.generic' },
+          ),
+        });
       }
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error('Error uploading blob:', error);
+      callout.sendCallout({
+        type: 'error',
+        message: intl.formatMessage(
+          { id: 'ui-users.errors.generic' },
+        ),
+      });
     }
     toggleLocalFileModal();
   };
@@ -245,7 +284,7 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal }) => {
         croppedLocalImage={croppedLocalImage}
       />
       <br />
-      <input type="file" data-testid="hidden-file-input" hidden ref={fileInputRef} onChange={onFileChange} accept="image/*" />
+      <input type="file" data-testid="hidden-file-input" hidden ref={fileInputRef} onClick={onFileSelect} onChange={onFileChange} accept={ACCEPTED_IMAGE_TYPES} />
       {
         hasAllProfilePicturePerms && (
           <Dropdown
@@ -297,6 +336,7 @@ EditUserProfilePicture.propTypes = {
   form: PropTypes.object.isRequired,
   profilePictureId: PropTypes.string,
   personal: PropTypes.object.isRequired,
+  profilePictureMaxFileSize: PropTypes.number.isRequired,
 };
 
 export default EditUserProfilePicture;

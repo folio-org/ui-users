@@ -37,7 +37,9 @@ const user = {
 };
 
 const defaultProps = {
-  areProfilePicturesEnabled: false,
+  profilePictureConfig: {
+    enabled: false,
+  },
   formData: {
     departments: [],
     patronGroups: [],
