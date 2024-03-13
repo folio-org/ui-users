@@ -33,7 +33,7 @@ class AddServicePointModal extends React.Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    const assignedServicePointIds = props.assignedServicePoints.map(({ id }) => id);
+    const assignedServicePointIds = props.assignedServicePoints?.map(({ id }) => id);
     const selectionIds = Object.keys(state.selection).filter(id => state.selection[id]);
 
     if (!isEqual(assignedServicePointIds, selectionIds)) {
