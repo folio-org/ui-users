@@ -18,6 +18,7 @@ import {
 } from '@folio/stripes/smart-components';
 
 import CustomFieldsFilters from '../../components/CustomFieldsFilters';
+import PermissionSetsFilter from '../../components/PermissionSetsFilter';
 import { isConsortiumEnabled } from '../../components/util';
 import { USER_TYPES, statusFilter } from '../../constants';
 
@@ -97,6 +98,7 @@ class Filters extends React.Component {
     } = activeFilters;
 
     const departmentsAreNotEmpty = !!resources.departments?.records?.length;
+    const filteredUsersExist = !!resources?.records?.records?.length;
 
     const isConsortium = isConsortiumEnabled(stripes);
     const { PATRON, SHADOW, STAFF, SYSTEM } = USER_TYPES;
@@ -169,6 +171,21 @@ class Filters extends React.Component {
             />
           </Accordion>
         )}
+
+        {
+          filteredUsersExist && (
+            <Accordion
+              displayClearButton
+              id={`${ACCORDION_ID_PREFIX}-permissionsets`}
+              header={FilterAccordionHeader}
+              label="Permission Sets"
+              separator={false}
+              onClearFilter={() => clearGroup('permissionsets')}
+            >
+              <PermissionSetsFilter {...this.props} onChange={this.handleFilterChange} />
+            </Accordion>
+          )
+        }
         <Accordion
           displayClearButton
           id={`${ACCORDION_ID_PREFIX}-tags`}
