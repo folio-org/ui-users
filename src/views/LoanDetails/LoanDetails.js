@@ -57,7 +57,7 @@ import loanActionMap from '../../components/data/static/loanActionMap';
 import LoanProxyDetails from './LoanProxyDetails';
 
 import css from './LoanDetails.css';
-import { localizeCurrencyAmount } from '../../components/util/localizeCurrencyAmount';
+import localizeCurrencyAmount from '../../components/util/localizeCurrencyAmount';
 
 
 function formatLoanAction(la, loanActionsWithUser) {

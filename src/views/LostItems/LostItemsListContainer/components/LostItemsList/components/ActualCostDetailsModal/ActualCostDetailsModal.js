@@ -22,7 +22,7 @@ import {
   ACTUAL_COST_DETAILS_MODAL_DEFAULT,
   LOST_ITEM_STATUSES,
 } from '../../../../../constants';
-import { useLocalizeCurrency } from '../../../../../../../hooks/useLocalizedCurrency/useLocalizeCurrency';
+import useLocalizeCurrency from '../../../../../../../hooks/useLocalizedCurrency/useLocalizeCurrency';
 
 
 const ActualCostDetailsModal = ({

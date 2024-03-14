@@ -21,6 +21,7 @@ import {
   Row,
   Callout,
 } from '@folio/stripes/components';
+import { stripesShape } from '@folio/stripes/core';
 import css from './AccountsListing.css';
 
 import { getFullName, isRefundAllowed } from '../../components/util';
@@ -41,7 +42,7 @@ import {
 } from '../../components/Accounts';
 
 import { refundClaimReturned } from '../../constants';
-import { localizeCurrencyAmount } from '../../components/util/localizeCurrencyAmount';
+import localizeCurrencyAmount from '../../components/util/localizeCurrencyAmount';
 
 const filterConfig = [
   {
@@ -101,10 +102,7 @@ const possibleColumns = [
 
 class AccountsHistory extends React.Component {
   static propTypes = {
-    stripes: PropTypes.shape({
-      connect: PropTypes.func.isRequired,
-      hasPerm: PropTypes.func,
-    }),
+    stripes: stripesShape.isRequired,
     resources: PropTypes.shape({
       feefineshistory: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),

@@ -16,7 +16,7 @@ import {
   FormattedDate,
   FormattedTime,
 } from '@folio/stripes/components';
-import { stripesConnect } from '@folio/stripes/core';
+import { stripesConnect, stripesShape } from '@folio/stripes/core';
 
 import { itemStatuses } from '../../../constants';
 import {
@@ -28,7 +28,7 @@ import {
   isCancelAllowed,
 } from '../accountFunctions';
 import css from './ViewFeesFines.css';
-import { localizeCurrencyAmount } from '../../util/localizeCurrencyAmount';
+import localizeCurrencyAmount from '../../util/localizeCurrencyAmount';
 
 class ViewFeesFines extends React.Component {
   static propTypes = {
@@ -45,9 +45,7 @@ class ViewFeesFines extends React.Component {
         update: PropTypes.func.isRequired,
       }),
     }).isRequired,
-    stripes: PropTypes.shape({
-      hasPerm: PropTypes.func,
-    }),
+    stripes: stripesShape.isRequired,
     onChangeActions: PropTypes.func.isRequired,
     onChangeSelected: PropTypes.func.isRequired,
     accounts: PropTypes.arrayOf(PropTypes.object),

@@ -45,7 +45,7 @@ import {
 } from '../../constants';
 
 import css from './AccountDetails.css';
-import { localizeCurrencyAmount } from '../../components/util/localizeCurrencyAmount';
+import localizeCurrencyAmount from '../../components/util/localizeCurrencyAmount';
 
 const columnWidths = {
   date: 100,

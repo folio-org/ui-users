@@ -28,7 +28,7 @@ import {
   calculateSelectedAmount,
   loadServicePoints,
 } from '../accountFunctions';
-import { localizeCurrencyAmount } from '../../util/localizeCurrencyAmount';
+import localizeCurrencyAmount from '../../util/localizeCurrencyAmount';
 
 class Actions extends React.Component {
   static manifest = Object.freeze({

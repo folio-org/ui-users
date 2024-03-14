@@ -15,7 +15,7 @@ import {
 import { refundClaimReturned } from '../../constants';
 
 import css from './Menu.css';
-import { useLocalizeCurrency } from '../../hooks/useLocalizedCurrency/useLocalizeCurrency';
+import useLocalizeCurrency from '../../hooks/useLocalizedCurrency/useLocalizeCurrency';
 
 const Menu = (props) => {
   const {
