@@ -23,12 +23,13 @@ import {
   calculateSortParams,
   nav,
   isRefundAllowed,
+  localizeCurrencyAmount,
 } from '../../util';
 import {
   isCancelAllowed,
 } from '../accountFunctions';
+
 import css from './ViewFeesFines.css';
-import localizeCurrencyAmount from '../../util/localizeCurrencyAmount';
 
 class ViewFeesFines extends React.Component {
   static propTypes = {

@@ -29,7 +29,7 @@ import {
 } from '../../../constants';
 
 import css from './PayWaive.css';
-import localizeCurrencyAmount from '../../util/localizeCurrencyAmount';
+import { localizeCurrencyAmount } from '../../util';
 
 class ActionModal extends React.Component {
   static propTypes = {

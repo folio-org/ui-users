@@ -23,10 +23,10 @@ import {
 import {
   calculateSortParams,
   isRefundAllowed,
+  localizeCurrencyAmount,
 } from '../../util';
 
 import css from './modal.css';
-import localizeCurrencyAmount from '../../util/localizeCurrencyAmount';
 
 class WarningModal extends React.Component {
   static propTypes = {

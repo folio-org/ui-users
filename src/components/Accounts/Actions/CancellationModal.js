@@ -16,8 +16,9 @@ import {
   Col,
 } from '@folio/stripes/components';
 
+import { localizeCurrencyAmount } from '../../util';
+
 import css from './modal.css';
-import localizeCurrencyAmount from '../../util/localizeCurrencyAmount';
 
 class CancellationModal extends React.Component {
   static propTypes = {

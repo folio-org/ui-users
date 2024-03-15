@@ -13,9 +13,9 @@ import {
 } from '../util';
 
 import { refundClaimReturned } from '../../constants';
+import { useLocalizedCurrency } from '../../hooks';
 
 import css from './Menu.css';
-import useLocalizeCurrency from '../../hooks/useLocalizedCurrency/useLocalizeCurrency';
 
 const Menu = (props) => {
   const {
@@ -27,7 +27,7 @@ const Menu = (props) => {
     accounts
   } = props;
 
-  const { localizeCurrency } = useLocalizeCurrency();
+  const { localizeCurrency } = useLocalizedCurrency();
 
   let balanceOutstanding = 0;
   let balanceSuspended = 0;

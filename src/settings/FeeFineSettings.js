@@ -14,7 +14,7 @@ import {
 import { ControlledVocab } from '@folio/stripes/smart-components';
 import { IfPermission, stripesConnect, stripesShape } from '@folio/stripes/core';
 
-import { validate } from '../components/util';
+import { validate, localizeCurrencyAmount } from '../components/util';
 import {
   Owners,
   CopyModal,
@@ -25,7 +25,6 @@ import {
   MAX_RECORDS,
   SHARED_OWNER,
 } from '../constants';
-import localizeCurrencyAmount from '../components/util/localizeCurrencyAmount';
 
 const columnMapping = {
   feeFineType: (
