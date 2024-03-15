@@ -44,6 +44,7 @@ import {
   checkUserActive,
   isDcbUser,
   isDCBItem,
+  localizeCurrencyAmount,
 } from '../../components/util';
 import { itemStatuses, loanActions, refundClaimReturned } from '../../constants';
 import {
@@ -57,8 +58,6 @@ import loanActionMap from '../../components/data/static/loanActionMap';
 import LoanProxyDetails from './LoanProxyDetails';
 
 import css from './LoanDetails.css';
-import { localizeCurrencyAmount } from '../../components/util/localizeCurrencyAmount';
-
 
 function formatLoanAction(la, loanActionsWithUser) {
   const actionsOfThisType = loanActionsWithUser.filter(x => x.action === la.action);

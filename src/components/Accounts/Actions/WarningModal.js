@@ -5,7 +5,7 @@ import {
   injectIntl,
 } from 'react-intl';
 
-import { stripesConnect } from '@folio/stripes/core';
+import { stripesConnect, stripesShape } from '@folio/stripes/core';
 import {
   Button,
   Col,
@@ -23,10 +23,10 @@ import {
 import {
   calculateSortParams,
   isRefundAllowed,
+  localizeCurrencyAmount,
 } from '../../util';
 
 import css from './modal.css';
-import { localizeCurrencyAmount } from '../../util/localizeCurrencyAmount';
 
 class WarningModal extends React.Component {
   static propTypes = {
@@ -37,6 +37,7 @@ class WarningModal extends React.Component {
     label: PropTypes.string,
     onClose: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired,
+    stripes: stripesShape.isRequired,
   };
 
   constructor(props) {

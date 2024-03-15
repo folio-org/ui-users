@@ -12,9 +12,9 @@ import {
   NoValue,
 } from '@folio/stripes/components';
 import { ControlledVocab } from '@folio/stripes/smart-components';
-import { IfPermission, stripesConnect } from '@folio/stripes/core';
+import { IfPermission, stripesConnect, stripesShape } from '@folio/stripes/core';
 
-import { validate } from '../components/util';
+import { validate, localizeCurrencyAmount } from '../components/util';
 import {
   Owners,
   CopyModal,
@@ -25,7 +25,6 @@ import {
   MAX_RECORDS,
   SHARED_OWNER,
 } from '../constants';
-import { localizeCurrencyAmount } from '../components/util/localizeCurrencyAmount';
 
 const columnMapping = {
   feeFineType: (
@@ -71,10 +70,7 @@ class FeeFineSettings extends React.Component {
   });
 
   static propTypes = {
-    stripes: PropTypes.shape({
-      connect: PropTypes.func.isRequired,
-      hasPerm: PropTypes.func.isRequired,
-    }).isRequired,
+    stripes: stripesShape.isRequired,
     resources: PropTypes.object,
     mutator: PropTypes.shape({
       feefines: PropTypes.shape({

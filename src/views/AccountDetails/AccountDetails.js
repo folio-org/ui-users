@@ -32,6 +32,7 @@ import {
   formatActionDescription,
   getServicePointOfCurrentAction,
   isRefundAllowed,
+  localizeCurrencyAmount,
 } from '../../components/util';
 
 import {
@@ -45,7 +46,6 @@ import {
 } from '../../constants';
 
 import css from './AccountDetails.css';
-import { localizeCurrencyAmount } from '../../components/util/localizeCurrencyAmount';
 
 const columnWidths = {
   date: 100,

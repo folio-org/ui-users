@@ -1,7 +1,6 @@
 import {
   render,
   screen,
-  fireEvent,
 } from '@folio/jest-config-stripes/testing-library/react';
 
 import Slider from './Slider';

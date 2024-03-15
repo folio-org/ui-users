@@ -22,8 +22,7 @@ import {
   refundClaimReturned,
 } from '../../../constants';
 import { isDcbUser } from '../../util';
-import { useLocalizeCurrency } from '../../../hooks/useLocalizedCurrency/useLocalizeCurrency';
-
+import { useLocalizedCurrency } from '../../../hooks';
 
 /**
  * User-details "Accounts" accordian pane.
@@ -53,7 +52,7 @@ const UserAccounts = ({
     totalRefunded: 0.00,
   });
   const stripes = useStripes();
-  const { localizeCurrency } = useLocalizeCurrency();
+  const { localizeCurrency } = useLocalizedCurrency();
   const accountsLoaded = !isPending;
   const {
     openAccountsCount,

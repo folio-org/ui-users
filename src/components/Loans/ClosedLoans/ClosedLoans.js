@@ -30,13 +30,13 @@ import {
   nav,
   isDcbUser,
   isDCBItem,
+  localizeCurrencyAmount,
 } from '../../util';
 import ActionsBar from '../components/ActionsBar';
 import Label from '../../Label';
 import ErrorModal from '../../ErrorModal';
 
 import css from './ClosedLoans.css';
-import { localizeCurrencyAmount } from '../../util/localizeCurrencyAmount';
 
 class ClosedLoans extends React.Component {
   static propTypes = {
