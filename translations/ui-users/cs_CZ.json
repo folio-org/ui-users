@@ -1167,5 +1167,6 @@
     "information.change.userType.modal.text": "Provedením této změny se aktualizují přidružení uživatele a oprávnění, která jsou pro tyto přidružení udělena po kliknutí na Uložit a zavřít. Tuto akci nelze snadno vrátit zpět, k vrácení výsledných změn byste museli ručně aktualizovat příslušnost a oprávnění uživatele. Chcete pokračovat?",
     "information.profilePicture.localFile.modal.previewAndEdit": "Náhled a úpravit",
     "information.profilePicture.localFile.modal.zoom": "Zvětšit",
-    "information.profilePicture.localFile.modal.rotate": "Otočit"
+    "information.profilePicture.localFile.modal.rotate": "Otočit",
+    "information.profilePicture.localFile.maxFileSize.error": "Photo size exceeds the {maxFileSize}MB limit. Please choose a photo with a size of {maxFileSize}MB or less."
 }

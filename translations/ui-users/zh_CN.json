@@ -1167,5 +1167,6 @@
     "information.change.userType.modal.text": "Making this change will update the user's affiliations and the permissions they are granted for those affiliations when clicking Save & close. This action cannot easily be reversed, you would need to manually update the user's affiliations and permissions to reverse the resulting changes. Would you like to proceed?",
     "information.profilePicture.localFile.modal.previewAndEdit": "Preview and edit",
     "information.profilePicture.localFile.modal.zoom": "Zoom",
-    "information.profilePicture.localFile.modal.rotate": "Rotate"
+    "information.profilePicture.localFile.modal.rotate": "Rotate",
+    "information.profilePicture.localFile.maxFileSize.error": "Photo size exceeds the {maxFileSize}MB limit. Please choose a photo with a size of {maxFileSize}MB or less."
 }

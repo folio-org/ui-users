@@ -104,6 +104,11 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal, profilePictu
     setLocalFileModalOpen(prev => !prev);
   }, []);
 
+  // to invoke error callout message on same local file upload.
+  const onFileSelect = (event) => {
+    event.target.value = '';
+  };
+
   const onFileChange = async (e) => {
     const maxFileSize = profilePictureMaxFileSize || PROFILE_PIC_DEFAULT_MAX_SIZE;
     const maxFileSizeInBytes = maxFileSize * 1024 * 1024;
@@ -279,7 +284,7 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal, profilePictu
         croppedLocalImage={croppedLocalImage}
       />
       <br />
-      <input type="file" data-testid="hidden-file-input" hidden ref={fileInputRef} onChange={onFileChange} accept={ACCEPTED_IMAGE_TYPES} />
+      <input type="file" data-testid="hidden-file-input" hidden ref={fileInputRef} onClick={onFileSelect} onChange={onFileChange} accept={ACCEPTED_IMAGE_TYPES} />
       {
         hasAllProfilePicturePerms && (
           <Dropdown
