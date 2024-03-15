@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { screen, waitFor, within } from '@folio/jest-config-stripes/testing-library/react';
+import { screen, within } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import okapiOpenLoan from 'fixtures/openLoan';
@@ -11,18 +11,6 @@ import {
   DCB_HOLDINGS_RECORD_ID,
 } from '../../constants';
 
-jest.mock('lodash', () => ({
-  ...jest.requireActual('lodash'),
-  isEmpty: jest.fn().mockImplementation(() => false),
-  get: jest.fn().mockImplementation(() => {
-    return 'Lost and paid';
-  }),
-}));
-
-const mockGetLodash = jest.fn().mockImplementation(() => {
-  return 'Claimed returned';
-});
-const mockIsEmpty = jest.fn().mockImplementation(() => false);
 
 jest.useFakeTimers('legacy');
 jest.mock('react-intl', () => ({
@@ -73,6 +61,16 @@ jest.mock('@folio/stripes/smart-components', () => ({
 jest.mock('@folio/stripes/util', () => ({
   effectiveCallNumber: jest.fn().mockReturnValue(3),
 }));
+const mockGetLodash = jest.fn().mockImplementation(() => {
+  return 'Claimed returned';
+});
+const mockIsEmpty = jest.fn().mockImplementation(() => false);
+
+// jest.mock('lodash', () => ({
+//   ...jest.requireActual('lodash'),
+//   isEmpty: (...args) => mockIsEmpty(...args),
+//   get: (item1, item2, item3) => mockGetLodash(item1, item2, item3),
+// }));
 
 const STRIPES = {
   connect: (Component) => Component,
@@ -350,9 +348,7 @@ describe('LoanDetails', () => {
       renderLoanProxyDetails(updatedPropsData);
       userEvent.click(screen.queryAllByRole('button')[5]);
       userEvent.click(screen.queryAllByRole('button')[9]);
-      waitFor(() => {
-        expect(screen.getAllByText('ui-users.loans.markAsMissing')).toBeTruthy();
-      });
+      expect(screen.getAllByText('ui-users.loans.markAsMissing')).toBeTruthy();
     });
     xit('Fee Fine Else Condition More than 1 loanAccountActions', () => {
       mockGetLodash.mockReset();
