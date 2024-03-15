@@ -1070,7 +1070,6 @@
     "formatjs-compile": "formatjs compile-folder --ast --format simple ./translations/ui-users ./translations/ui-users/compiled"
   },
   "devDependencies": {
-    "@aashutoshrathi/word-wrap": "^1.2.6",
     "@babel/core": "^7.21.4",
     "@babel/eslint-parser": "^7.15.0",
     "@babel/plugin-proposal-class-properties": "^7.13.0",
@@ -1131,8 +1130,5 @@
   },
   "optionalDependencies": {
     "@folio/plugin-find-user": "^7.0.0"
-  },
-  "resolutions": {
-    "word-wrap": "npm:@aashutoshrathi/word-wrap@^1.2.6"
   }
 }
