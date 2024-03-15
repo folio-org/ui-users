@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { screen, within } from '@folio/jest-config-stripes/testing-library/react';
+import { screen, waitFor, within } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import okapiOpenLoan from 'fixtures/openLoan';
@@ -10,6 +10,14 @@ import {
   DCB_INSTANCE_ID,
   DCB_HOLDINGS_RECORD_ID,
 } from '../../constants';
+
+jest.mock('lodash', () => ({
+  ...jest.requireActual('lodash'),
+  isEmpty: jest.fn().mockImplementation(() => false),
+  get: jest.fn().mockImplementation(() => {
+    return 'Lost and paid';
+  }),
+}));
 
 jest.useFakeTimers('legacy');
 jest.mock('react-intl', () => ({
@@ -60,15 +68,6 @@ jest.mock('@folio/stripes/smart-components', () => ({
 jest.mock('@folio/stripes/util', () => ({
   effectiveCallNumber: jest.fn().mockReturnValue(3),
 }));
-const mockGetLodash = jest.fn().mockImplementation(() => {
-  return 'Lost and paid';
-});
-const mockIsEmpty = jest.fn().mockImplementation(() => false);
-// jest.mock('lodash', () => ({
-//   ...jest.requireActual('lodash'),
-//   isEmpty: (...args) => mockIsEmpty(...args),
-//   get: (item1, item2, item3) => mockGetLodash(item1, item2, item3),
-// }));
 
 const STRIPES = {
   connect: (Component) => Component,
@@ -271,6 +270,13 @@ const renderLoanProxyDetails = (props1) => renderWithRouter(<LoanDetails {...pro
 
 describe('LoanDetails', () => {
   describe('Render LoanProxyDetails component', () => {
+    const mockGetLodash = jest.fn().mockImplementation(() => {
+      return 'Claimed returned';
+    });
+    const mockIsEmpty = jest.fn().mockImplementation(() => false);
+    afterEach(() => {
+      mockGetLodash.mockReset();
+    });
     it('When props ID and proxy ID are same with Loan Missing', () => {
       mockGetLodash.mockReset();
       mockGetLodash.mockImplementation(() => {
@@ -327,7 +333,7 @@ describe('LoanDetails', () => {
       userEvent.click(getByText('Close Button'));
       expect(screen.getAllByText('ui-users.loans.markAsMissing')).toBeTruthy();
     });
-    xit('Fee Fine Else Condition More than 1 loanAccountActions with Amount 0', () => {
+    it('Fee Fine Else Condition More than 1 loanAccountActions with Amount 0', async () => {
       mockGetLodash.mockReset();
       mockGetLodash.mockImplementation(() => {
         return 'Claimed returned';
@@ -344,11 +350,13 @@ describe('LoanDetails', () => {
         ],
       };
       renderLoanProxyDetails(updatedPropsData);
-      userEvent.click(screen.queryAllByRole('button')[5]);
-      userEvent.click(screen.queryAllByRole('button')[9]);
-      expect(screen.getAllByText('ui-users.loans.markAsMissing')).toBeTruthy();
+      await userEvent.click(screen.queryAllByRole('button')[5]);
+      await userEvent.click(screen.queryAllByRole('button')[9]);
+      await waitFor(() => {
+        expect(screen.getAllByText('ui-users.loans.markAsMissing')).toBeTruthy();
+      });
     });
-    xit('Fee Fine Else Condition More than 1 loanAccountActions', () => {
+    it('Fee Fine Else Condition More than 1 loanAccountActions', async () => {
       mockGetLodash.mockReset();
       mockGetLodash.mockImplementation(() => {
         return 'Claimed returned';
@@ -362,11 +370,11 @@ describe('LoanDetails', () => {
         loanAccountActions: [{}, {}],
       };
       renderLoanProxyDetails(updatedPropsData);
-      userEvent.click(screen.queryAllByRole('button')[5]);
-      userEvent.click(screen.queryAllByRole('button')[9]);
+      await userEvent.click(screen.queryAllByRole('button')[5]);
+      await userEvent.click(screen.queryAllByRole('button')[9]);
       expect(screen.getAllByText('ui-users.loans.markAsMissing')).toBeTruthy();
     });
-    xit('Fee Fine Else Condition More than 1 loanAccountActions with open item', () => {
+    it('Fee Fine Else Condition More than 1 loanAccountActions with open item', async () => {
       mockGetLodash.mockReset();
       mockGetLodash.mockImplementation(() => {
         return 'Claimed returned';
@@ -378,10 +386,10 @@ describe('LoanDetails', () => {
       const updatedPropsData = { ...propsData, loanAccountActions: [{}, {}] };
       renderLoanProxyDetails(updatedPropsData);
 
-      userEvent.click(screen.queryAllByRole('button')[5]);
+      await userEvent.click(screen.queryAllByRole('button')[5]);
       expect(screen.getAllByText('ui-users.loans.markAsMissing')).toBeTruthy();
     });
-    xit('Fee Fine Else Condition More than 1 loanAccountActions with new loan', () => {
+    it('Fee Fine Else Condition More than 1 loanAccountActions with new loan', async () => {
       mockGetLodash.mockReset();
       mockGetLodash.mockImplementation(() => {
         return 'Claimed returned';
@@ -399,7 +407,7 @@ describe('LoanDetails', () => {
         ...updatedPropsData,
         loan: { ...updatedPropsData.loan, item: { status: { name: 'new' } } },
       };
-      userEvent.click(screen.queryAllByRole('button')[5]);
+      await userEvent.click(screen.queryAllByRole('button')[5]);
       expect(screen.getAllByText('ui-users.loans.markAsMissing')).toBeTruthy();
     });
     it('Component is loading with out policies', () => {
