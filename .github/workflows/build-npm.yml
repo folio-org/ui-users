@@ -58,7 +58,7 @@ jobs:
           JOB_ID: ${{ github.run_number }}
 
       - name: Run yarn install
-        run: yarn install
+        run: yarn install --ignore-scripts --frozen-lockfile
 
       - name: Run yarn list
         run: yarn list --pattern @folio
