@@ -1,6 +1,10 @@
 # Change history for ui-users
 
-## [10.1.0] IN PROGRESS
+## [10.2.0] IN PROGRESS
+
+
+## [10.1.0](https://github.com/folio-org/ui-users/tree/v10.1.0) (2024-03-20)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.4...v10.1.0)
 
 * Also support `feesfines` interface version `19.0`. Refs UIU-2960.
 * Disable validation for shadow user. Refs UIU-3000.
@@ -20,6 +24,7 @@
 * Update sub permissions of permission 'Users: Can view user profiles'. Refs UIU-3038.
 * Create new permission 'Users: Can view, edit, and delete profile pictures'. Refs UIU-3025.
 * UserInformation in UserDetails to display profile picture. Refs UIU-3011.
+* User Record View to display thumbnail image in the absence of profile picture. Refs UIU-3024.
 * Enable effective call number column sorting in Open Loans screen. Refs UIU-3002.
 * User Information in User Edit to display profile picture and update button set. Refs UIU-3005.
 * Update request header for pay several Fees/fines. Refs UIU-3040.
