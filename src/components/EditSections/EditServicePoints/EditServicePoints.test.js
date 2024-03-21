@@ -95,7 +95,7 @@ describe('Edit Service Points Component', () => {
     it('Add service points functionality ', async () => {
       await userEvent.click(document.querySelector('[id=add-service-point-btn]'));
       await userEvent.click(document.querySelector('[data-test-sp-modal-checkbox="7c5abc9f-f3d7-4856-b8d7-6712462ca007"]'));
-      await userEvent.click(screen.getByText('ui-users.saveAndClose'));
+      await userEvent.click(screen.getByText(/saveAndClose/));
       expect(onChangeMock).toHaveBeenCalled();
     });
     it('Remove service points functionality ', async () => {
