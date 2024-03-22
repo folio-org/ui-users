@@ -32,7 +32,7 @@ const AffiliationsManagerModalFooter = ({
         buttonStyle="primary"
         onClick={onSubmit}
       >
-        <FormattedMessage id="ui-users.saveAndClose" />
+        <FormattedMessage id="stripes-components.saveAndClose" />
       </Button>
     </Layout>
   );

@@ -75,7 +75,7 @@ describe('AffiliationsManager', () => {
     });
 
     it('should handle affiliations assignment when \'Save & close\' button was clicked', async () => {
-      await userEvent.click(await screen.findByText('ui-users.saveAndClose'));
+      await userEvent.click(await screen.findByText(/saveAndClose/));
 
       expect(defaultProps.onUpdateAffiliations).toHaveBeenCalled();
     });

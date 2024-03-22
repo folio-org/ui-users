@@ -50,7 +50,7 @@ const withAddInfo = WrappedComponent => class withAddInfoComponent extends React
             modalLabel={modalLabel}
             open={addInfoDialogOpen}
             onClose={this.hideAddInfoDialog}
-            confirmTag="ui-users.saveAndClose"
+            confirmTag="stripes-components.saveAndClose"
           />
         }
       </>

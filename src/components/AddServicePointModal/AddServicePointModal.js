@@ -92,7 +92,7 @@ class AddServicePointModal extends React.Component {
           id="save-service-point-btn"
           onClick={this.onSaveAndClose}
         >
-          <FormattedMessage id="ui-users.saveAndClose" />
+          <FormattedMessage id="stripes-components.saveAndClose" />
         </Button>
         <Button
           onClick={this.onCancel}

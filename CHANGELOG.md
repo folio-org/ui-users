@@ -2,6 +2,7 @@
 
 ## [10.2.0] IN PROGRESS
 
+* UX consistency: Use Save & close button label stripes-component translation key. Refs UIU-3078.
 
 ## [10.1.0](https://github.com/folio-org/ui-users/tree/v10.1.0) (2024-03-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.4...v10.1.0)

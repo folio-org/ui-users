@@ -78,7 +78,7 @@ const FinancialTransactionsReportModal = (props) => {
         buttonStyle="primary"
         onClick={props.form.submit}
       >
-        <FormattedMessage id="ui-users.saveAndClose" />
+        <FormattedMessage id="stripes-components.saveAndClose" />
       </Button>
       <Button
         marginBottom0
