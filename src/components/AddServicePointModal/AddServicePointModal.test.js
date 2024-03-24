@@ -56,7 +56,7 @@ describe('AddServicePointModal Component', () => {
       expect(screen.getByText('Circ Desk 1')).toBeInTheDocument();
     });
     it('Checking Save and Cancel Operation', async () => {
-      await userEvent.click(screen.getByText('ui-users.saveAndClose'));
+      await userEvent.click(screen.getByText(/saveAndClose/i));
       expect(onSaveMock).toHaveBeenCalled();
       await userEvent.click(screen.getByText('stripes-core.button.cancel'));
       expect(onCancelMock).toHaveBeenCalled();
