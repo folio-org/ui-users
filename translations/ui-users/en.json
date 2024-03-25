@@ -691,7 +691,7 @@
   "accounts.refund.method": "Refund reason",
   "accounts.refund.method.placeholder": "Select reason",
   "accounts.refund.error.select": "Refund reason is required",
-  "accounts.warning.itemSelected": "{total, number} items selected. {items, number} {items, plural, one {item} other {items}} cannot be {action} because they are already closed.",
+  "accounts.warning.itemSelected": "{total, number} items selected. {items, number} {items, plural, one {item} other {items}} cannot be {action} because {items, plural, one {it is} other {they are}} already closed.",
   "accounts.cancelError": "Cancelled as error",
   "accounts.cancellation.field.feefinewill": "fee/fine will be",
   "accounts.cancellation.field.cancelled": "cancelled",

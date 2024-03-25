@@ -195,10 +195,10 @@ class WarningModal extends React.Component {
 
     return (
       <FormattedMessage
-        id="ui-users.accounts.actions.warning.summary"
+        id="ui-users.accounts.warning.itemSelected"
         values={{
-          selectedItemsAmount,
-          invalidItemsAmount,
+          total: selectedItemsAmount,
+          items: invalidItemsAmount,
           action,
           reason,
         }}
