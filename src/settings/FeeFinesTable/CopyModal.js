@@ -75,13 +75,14 @@ class CopyForm extends React.Component {
             </Field>
           </Col>
           <Col>
-            <Field
-              className={css.ownerIdField}
-              name="ownerId"
-              component={Select}
-              dataOptions={options}
-              placeholder={this.props.intl.formatMessage({ id: 'ui-users.feefines.modal.placeholder' })}
-            />
+            <div className={css.ownerIdField}>
+              <Field
+                name="ownerId"
+                component={Select}
+                dataOptions={options}
+                placeholder={this.props.intl.formatMessage({ id: 'ui-users.feefines.modal.placeholder' })}
+              />
+            </div>
           </Col>
         </Row>
         <Button onClick={this.props.handleSubmit}>
