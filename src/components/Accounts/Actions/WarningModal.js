@@ -172,7 +172,6 @@ class WarningModal extends React.Component {
 
     let action;
     let invalidItemsAmount = accounts.filter(a => a.status && a.status.name === 'Closed').length;
-    let reason = <FormattedMessage id="ui-users.accounts.actions.warning.closedItems" />;
     const notAllowedToRefundItemsAmount = accounts.filter(a => !isRefundAllowed(a, feeFineActions)).length;
     const selectedItemsAmount = accounts.length;
 
@@ -189,18 +188,17 @@ class WarningModal extends React.Component {
       default:
         action = <FormattedMessage id="ui-users.accounts.actions.warning.refundAction" />;
         invalidItemsAmount = notAllowedToRefundItemsAmount;
-        reason = <FormattedMessage id="ui-users.accounts.actions.warning.unpaidItems" />;
         break;
     }
 
     return (
       <FormattedMessage
-        id="ui-users.accounts.warning.itemSelected"
+        id={action.props.id === 'ui-users.accounts.actions.warning.refundAction'
+          ? 'ui-users.accounts.warning.unpaidItemSelected' : 'ui-users.accounts.warning.itemSelected'}
         values={{
           total: selectedItemsAmount,
           items: invalidItemsAmount,
           action,
-          reason,
         }}
       />
     );
