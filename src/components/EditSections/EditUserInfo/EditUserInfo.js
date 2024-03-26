@@ -6,6 +6,9 @@ import { Field } from 'react-final-form';
 import { OnChange } from 'react-final-form-listeners';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
+import { ViewMetaData } from '@folio/stripes/smart-components';
+import { NumberGeneratorModalButton } from '@folio/service-interaction';
+
 import {
   Button,
   Select,
@@ -18,7 +21,6 @@ import {
   Modal,
   ModalFooter,
 } from '@folio/stripes/components';
-import { ViewMetaData } from '@folio/stripes/smart-components';
 
 import { USER_TYPES, USER_TYPE_FIELD } from '../../../constants';
 import { isConsortiumEnabled } from '../../util';
@@ -37,7 +39,9 @@ class EditUserInfo extends React.Component {
     intl: PropTypes.object.isRequired,
     onToggle: PropTypes.func,
     patronGroups: PropTypes.arrayOf(PropTypes.object),
+    settings: PropTypes.arrayOf(PropTypes.object),
     stripes: PropTypes.shape({
+      hasInterface: PropTypes.func.isRequired,
       timezone: PropTypes.string.isRequired,
       store: PropTypes.shape({
         dispatch: PropTypes.func.isRequired,
@@ -118,18 +122,26 @@ class EditUserInfo extends React.Component {
 
   render() {
     const {
+      disabled,
       patronGroups,
       initialValues,
       expanded,
       onToggle,
       accordionId,
       intl,
-      stripes,
       uniquenessValidator,
-      disabled,
+      form: { change },
+      settings,
+      stripes,
       profilePictureConfig,
       form,
     } = this.props;
+
+    let barcodeGeneratorSetting = 'useTextField';
+    if (stripes.hasInterface('servint')) {
+      const numberGeneratorSettings = JSON.parse((settings?.find(sett => sett.configName === 'number_generator') ?? { value: '{}' }).value);
+      barcodeGeneratorSetting = numberGeneratorSettings?.barcodeGeneratorSetting ?? 'useTextField';
+    }
 
     const isConsortium = isConsortiumEnabled(stripes);
     const { barcode } = initialValues;
@@ -374,8 +386,25 @@ class EditUserInfo extends React.Component {
                     component={TextField}
                     validate={asyncValidateField('barcode', barcode, uniquenessValidator)}
                     fullWidth
-                    disabled={disabled}
+                    disabled={disabled || barcodeGeneratorSetting === 'useGenerator'}
                   />
+                  {(
+                    barcodeGeneratorSetting === 'useGenerator' ||
+                    barcodeGeneratorSetting === 'useBoth'
+                  ) &&
+                    <Col xs={12}>
+                      <NumberGeneratorModalButton
+                        buttonLabel={<FormattedMessage id="ui-users.numberGenerator.generateUserBarcode" />}
+                        callback={(generated) => change('barcode', generated)}
+                        id="userbarcode"
+                        generateButtonLabel={<FormattedMessage id="ui-users.numberGenerator.generateUserBarcode" />}
+                        generator="users_patronBarcode"
+                        modalProps={{
+                          label: <FormattedMessage id="ui-users.numberGenerator.userBarcodeGenerator" />
+                        }}
+                      />
+                    </Col>
+                  }
                 </Col>
               </Row>
             </Col>

@@ -37,6 +37,10 @@ jest.mock('../../util', () => ({
   isConsortiumEnabled: jest.fn(() => true),
 }));
 
+jest.mock('@folio/service-interaction', () => ({
+  NumberGeneratorModalButton: () => <div>NumberGeneratorModalButton</div>
+}));
+
 jest.mock('./components', () => ({
   EditUserProfilePicture : jest.fn(() => 'Profile Picture'),
   ChangeUserTypeModal: jest.fn(({ onChange, initialUserType, open }) => {
