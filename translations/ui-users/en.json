@@ -764,7 +764,6 @@
   "accounts.actions.waiveFeeFine": "Waive fees/fines",
   "accounts.actions.transferFeeFine": "Transfer fees/fines",
   "accounts.actions.refundFeeFine": "Refund fees/fines",
-  "accounts.actions.warning.summary": "{selectedItemsAmount} items selected. {invalidItemsAmount} items cannot be {action} because they {reason}.",
   "accounts.actions.warning.alertDetails": "Alert details",
   "accounts.actions.warning.feeFineType": "Fee/Fine type",
   "accounts.actions.warning.remaining": "Remainig",
