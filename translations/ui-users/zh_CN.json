@@ -388,7 +388,6 @@
     "accounts.actions.calloutMessage": "为{name}的{feeFineType}费用/罚款{amount}已成功{paymentStatus} 。",
     "accounts.actions.payFeeFine": "支付费用/罚款",
     "accounts.actions.waiveFeeFine": "豁免费用/罚款",
-    "accounts.actions.warning.summary": "{selectedItemsAmount}单件已选。 {invalidItemsAmount}单件不能{action}，因为{reason} 。",
     "accounts.actions.warning.alertDetails": "警示详情",
     "accounts.actions.warning.feeFineType": "费用/罚款类型",
     "accounts.actions.warning.remaining": "剩余",
@@ -686,8 +685,6 @@
     "accounts.refund.error.select": "需要退款原因",
     "accounts.actions.refundFeeFine": "退款费用/罚款",
     "accounts.actions.warning.refundAction": "已退款",
-    "accounts.actions.warning.closedItems": "已关闭",
-    "accounts.actions.warning.unpaidItems": "未支付",
     "accounts.actions.refund": "退款",
     "reports.noItemsFound": "未找到任何单件。",
     "reports.claimReturned.label": "声称已还报告（CSV）",
@@ -1167,5 +1164,6 @@
     "information.profilePicture.localFile.modal.previewAndEdit": "Preview and edit",
     "information.profilePicture.localFile.modal.zoom": "Zoom",
     "information.profilePicture.localFile.modal.rotate": "Rotate",
-    "information.profilePicture.localFile.maxFileSize.error": "Photo size exceeds the {maxFileSize}MB limit. Please choose a photo with a size of {maxFileSize}MB or less."
+    "information.profilePicture.localFile.maxFileSize.error": "Photo size exceeds the {maxFileSize}MB limit. Please choose a photo with a size of {maxFileSize}MB or less.",
+    "accounts.warning.unpaidItemSelected": "{total, number} {total, plural, one {item} other {items}} selected. {items, number} {items, plural, one {item} other {items}} cannot be {action} because {items, plural, one {it was} other {they were}} not paid."
 }

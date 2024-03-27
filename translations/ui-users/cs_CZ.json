@@ -388,7 +388,6 @@
     "accounts.actions.calloutMessage": "Poplatek/pokuta {feeFineType} ve výši {amount} byl/a úspěšně {paymentStatus} pro {name}.",
     "accounts.actions.payFeeFine": "Zaplatit poplatky/pokuty",
     "accounts.actions.waiveFeeFine": "Odpuštění poplatků/pokut",
-    "accounts.actions.warning.summary": "Vybráno {selectedItemsAmount} jednotek. {invalidItemsAmount} jednotek nemůže být {action} protože {reason}.",
     "accounts.actions.warning.alertDetails": "Detaily upozornění",
     "accounts.actions.warning.feeFineType": "Typ poplatku/pokuty",
     "accounts.actions.warning.remaining": "Zbývající",
@@ -686,8 +685,6 @@
     "accounts.refund.error.select": "Je vyžadován důvod vrácení",
     "accounts.actions.refundFeeFine": "Vrácení poplatků/pokut",
     "accounts.actions.warning.refundAction": "vráceno",
-    "accounts.actions.warning.closedItems": "Jsou již uzavřeny",
-    "accounts.actions.warning.unpaidItems": "nebyly zaplaceny",
     "accounts.actions.refund": "vrátit platbu",
     "reports.noItemsFound": "Nenalezeny žádné jednotky",
     "reports.claimReturned.label": "Výstup výpůjček označených jako údajně vrácené (CSV)",
@@ -1167,5 +1164,6 @@
     "information.profilePicture.localFile.modal.previewAndEdit": "Náhled a úpravit",
     "information.profilePicture.localFile.modal.zoom": "Zvětšit",
     "information.profilePicture.localFile.modal.rotate": "Otočit",
-    "information.profilePicture.localFile.maxFileSize.error": "Photo size exceeds the {maxFileSize}MB limit. Please choose a photo with a size of {maxFileSize}MB or less."
+    "information.profilePicture.localFile.maxFileSize.error": "Photo size exceeds the {maxFileSize}MB limit. Please choose a photo with a size of {maxFileSize}MB or less.",
+    "accounts.warning.unpaidItemSelected": "{total, number} {total, plural, one {jednotka} other {jednotky}} vybrána/y. {items, number} {items, plural, one {jednotka} other {jednotky}} nelze {action} protože {items, plural, one {byla} other {byly}} nezaplacena/y."
 }
