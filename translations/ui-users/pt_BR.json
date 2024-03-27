@@ -388,7 +388,6 @@
     "accounts.actions.calloutMessage": "A taxa/multa {feeFineType} de {amount} foi com sucesso {paymentStatus} para {name} .",
     "accounts.actions.payFeeFine": "Pagar taxas/multas",
     "accounts.actions.waiveFeeFine": "Renunciar a taxas/multas",
-    "accounts.actions.warning.summary": "{selectedItemsAmount} itens selecionados. {invalidItemsAmount} itens não podem ser {action} porque eles {reason}.",
     "accounts.actions.warning.alertDetails": "Detalhes de alertas",
     "accounts.actions.warning.feeFineType": "Tipo de taxa/multa",
     "accounts.actions.warning.remaining": "Remanescente",
@@ -686,8 +685,6 @@
     "accounts.refund.error.select": "O motivo do reembolso é obrigatório",
     "accounts.actions.refundFeeFine": "Reembolso de taxas/multas",
     "accounts.actions.warning.refundAction": "reembolsado",
-    "accounts.actions.warning.closedItems": "já estão fechados",
-    "accounts.actions.warning.unpaidItems": "não foram pagos",
     "accounts.actions.refund": "reembolso",
     "reports.noItemsFound": "Nenhum item encontrado.",
     "reports.claimReturned.label": "Relatório de supostas devolução (CSV)",
@@ -1167,5 +1164,6 @@
     "information.profilePicture.localFile.modal.previewAndEdit": "Visualizar e editar",
     "information.profilePicture.localFile.modal.zoom": "Zoom",
     "information.profilePicture.localFile.modal.rotate": "Girar",
-    "information.profilePicture.localFile.maxFileSize.error": "O tamanho da foto excede o limite de {maxFileSize} MB. Escolha uma foto com tamanho de {maxFileSize} MB ou menos."
+    "information.profilePicture.localFile.maxFileSize.error": "O tamanho da foto excede o limite de {maxFileSize} MB. Escolha uma foto com tamanho de {maxFileSize} MB ou menos.",
+    "accounts.warning.unpaidItemSelected": "{total, number} {total, plural, one {item} other {items}} selected. {items, number} {items, plural, one {item} other {items}} cannot be {action} because {items, plural, one {it was} other {they were}} not paid."
 }
