@@ -155,7 +155,7 @@ class UserEdit extends React.Component {
   }
 
   externalSystemIdValidator = (user) => {
-    if(!user.externalSystemId?.trim()) {
+    if (!user.externalSystemId?.trim()) {
       delete user.externalSystemId;
     }
   };
