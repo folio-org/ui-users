@@ -166,6 +166,10 @@ class UserEdit extends React.Component {
       delete user.username;
     }
 
+    if (!user.externalSystemId?.trim()) {
+      delete user.externalSystemId;
+    }
+
     mutator.records.POST(user)
       .then(() => {
         this.createRequestPreferences(requestPreferences, user.id);
@@ -211,6 +215,10 @@ class UserEdit extends React.Component {
       this.updateRequestPreferences(requestPreferences);
     } else {
       this.createRequestPreferences(requestPreferences, user.id);
+    }
+
+    if (!user.externalSystemId?.trim()) {
+      delete user.externalSystemId;
     }
 
     user.personal.addresses = toUserAddresses(user.personal.addresses); // eslint-disable-line no-param-reassign
