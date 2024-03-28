@@ -154,6 +154,12 @@ class UserEdit extends React.Component {
       .catch((e) => showErrorCallout(e, this.context.sendCallout));
   }
 
+  externalSystemIdValidator = (user) => {
+    if(!user.externalSystemId?.trim()) {
+      delete user.externalSystemId;
+    }
+  };
+
   create = ({ requestPreferences, ...userFormData }) => {
     const { mutator, history, location: { search } } = this.props;
     const userData = cloneDeep(userFormData);
@@ -165,10 +171,7 @@ class UserEdit extends React.Component {
     if (!user.username) {
       delete user.username;
     }
-
-    if (!user.externalSystemId?.trim()) {
-      delete user.externalSystemId;
-    }
+    this.externalSystemIdValidator(user);
 
     mutator.records.POST(user)
       .then(() => {
@@ -217,10 +220,7 @@ class UserEdit extends React.Component {
       this.createRequestPreferences(requestPreferences, user.id);
     }
 
-    if (!user.externalSystemId?.trim()) {
-      delete user.externalSystemId;
-    }
-
+    this.externalSystemIdValidator(user);
     user.personal.addresses = toUserAddresses(user.personal.addresses); // eslint-disable-line no-param-reassign
     user.personal.email = user.personal.email?.trim();
     user.departments = compact(user.departments);
