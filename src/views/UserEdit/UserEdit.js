@@ -154,7 +154,7 @@ class UserEdit extends React.Component {
       .catch((e) => showErrorCallout(e, this.context.sendCallout));
   }
 
-  deleteEmptyField = (user) => {
+  deleteEmptyFields = (user) => {
     if (!user.username) {
       delete user.username;
     }
@@ -171,7 +171,7 @@ class UserEdit extends React.Component {
     user.personal.email = user.personal.email.trim();
     user.departments = compact(user.departments);
 
-    this.deleteEmptyField(user);
+    this.deleteEmptyFields(user);
 
     mutator.records.POST(user)
       .then(() => {
@@ -220,7 +220,7 @@ class UserEdit extends React.Component {
       this.createRequestPreferences(requestPreferences, user.id);
     }
 
-    this.deleteEmptyField(user);
+    this.deleteEmptyFields(user);
     user.personal.addresses = toUserAddresses(user.personal.addresses); // eslint-disable-line no-param-reassign
     user.personal.email = user.personal.email?.trim();
     user.departments = compact(user.departments);
