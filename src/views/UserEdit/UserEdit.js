@@ -154,13 +154,12 @@ class UserEdit extends React.Component {
       .catch((e) => showErrorCallout(e, this.context.sendCallout));
   }
 
-  deleteEmptyFields = (user) => {
-    if (!user.username) {
-      delete user.username;
-    }
-    if (!user.externalSystemId?.trim()) {
-      delete user.externalSystemId;
-    }
+  nullifyEmptyFields = (user, fields) => {
+    fields.forEach((field) => {
+      if (!user[field]?.trim()) {
+        user[field] = null;
+      }
+    });
   };
 
   create = ({ requestPreferences, ...userFormData }) => {
@@ -171,7 +170,7 @@ class UserEdit extends React.Component {
     user.personal.email = user.personal.email.trim();
     user.departments = compact(user.departments);
 
-    this.deleteEmptyFields(user);
+    this.nullifyEmptyFields(user, ['externalSystemId', 'username']);
 
     mutator.records.POST(user)
       .then(() => {
@@ -220,7 +219,7 @@ class UserEdit extends React.Component {
       this.createRequestPreferences(requestPreferences, user.id);
     }
 
-    this.deleteEmptyFields(user);
+    this.nullifyEmptyFields(user, ['externalSystemId']);
     user.personal.addresses = toUserAddresses(user.personal.addresses); // eslint-disable-line no-param-reassign
     user.personal.email = user.personal.email?.trim();
     user.departments = compact(user.departments);
