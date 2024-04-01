@@ -26,6 +26,7 @@ import { toUserAddresses, getFormAddressList } from '../../components/data/conve
 import contactTypes from '../../components/data/static/contactTypes';
 import {
   OKAPI_TENANT_HEADER,
+  USER_FIELDS_TO_CHECK,
   deliveryFulfillmentValues,
 } from '../../constants';
 import { resourcesLoaded, showErrorCallout } from './UserEditHelpers';
@@ -155,9 +156,16 @@ class UserEdit extends React.Component {
   }
 
   nullifyEmptyFields = (user, fields) => {
-    fields.forEach((field) => {
-      if (!user[field]?.trim()) {
-        user[field] = null;
+    fields?.forEach((field) => {
+      const [property, nestedProperty] = field.split('.');
+      const fieldProperty = nestedProperty ? user[property][nestedProperty] : user[property];
+
+      if (!fieldProperty?.trim()) {
+        if (nestedProperty) {
+          user[property][nestedProperty] = null;
+        } else {
+          user[property] = null;
+        }
       }
     });
   };
@@ -169,8 +177,7 @@ class UserEdit extends React.Component {
     user.personal.addresses = toUserAddresses(user.personal.addresses);
     user.personal.email = user.personal.email.trim();
     user.departments = compact(user.departments);
-
-    this.nullifyEmptyFields(user, ['externalSystemId', 'username']);
+    this.nullifyEmptyFields(user, USER_FIELDS_TO_CHECK);
 
     mutator.records.POST(user)
       .then(() => {
@@ -219,7 +226,7 @@ class UserEdit extends React.Component {
       this.createRequestPreferences(requestPreferences, user.id);
     }
 
-    this.nullifyEmptyFields(user, ['externalSystemId']);
+    this.nullifyEmptyFields(user, USER_FIELDS_TO_CHECK);
     user.personal.addresses = toUserAddresses(user.personal.addresses); // eslint-disable-line no-param-reassign
     user.personal.email = user.personal.email?.trim();
     user.departments = compact(user.departments);
