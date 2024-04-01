@@ -155,16 +155,16 @@ class UserEdit extends React.Component {
       .catch((e) => showErrorCallout(e, this.context.sendCallout));
   }
 
-  nullifyEmptyFields = (user, fields) => {
-    fields?.forEach((field) => {
+  deleteEmptyFields = (user) => {
+    USER_FIELDS_TO_CHECK.forEach((field) => {
       const [property, nestedProperty] = field.split('.');
       const fieldProperty = nestedProperty ? user[property][nestedProperty] : user[property];
 
       if (!fieldProperty?.trim()) {
         if (nestedProperty) {
-          user[property][nestedProperty] = null;
+          delete user[property][nestedProperty];
         } else {
-          user[property] = null;
+          delete user[property];
         }
       }
     });
@@ -177,7 +177,7 @@ class UserEdit extends React.Component {
     user.personal.addresses = toUserAddresses(user.personal.addresses);
     user.personal.email = user.personal.email.trim();
     user.departments = compact(user.departments);
-    this.nullifyEmptyFields(user, USER_FIELDS_TO_CHECK);
+    this.deleteEmptyFields(user);
 
     mutator.records.POST(user)
       .then(() => {
@@ -226,7 +226,7 @@ class UserEdit extends React.Component {
       this.createRequestPreferences(requestPreferences, user.id);
     }
 
-    this.nullifyEmptyFields(user, USER_FIELDS_TO_CHECK);
+    this.deleteEmptyFields(user);
     user.personal.addresses = toUserAddresses(user.personal.addresses); // eslint-disable-line no-param-reassign
     user.personal.email = user.personal.email?.trim();
     user.departments = compact(user.departments);
