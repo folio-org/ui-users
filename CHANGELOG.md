@@ -4,8 +4,9 @@
 
 * UX consistency: Use Save & close button label stripes-component translation key. Refs UIU-3078.
 * Fix two "triangle down" icons in select element of "Copy existing fee/fine owner table entries" modal. Refs UIU-2929.
-* Fix incorrect translation key having count-disagreements in Pay fees/fines modal in Fees/Fines Page. Refs - UIU-1097.
-* Trim input values and delete properties with empty string when user record save. Refs - UIU-2049.
+* Fix incorrect translation key having count-disagreements in Pay fees/fines modal in Fees/Fines Page. Refs UIU-1097.
+* Trim input values and delete properties with empty string when user record save. Refs UIU-2049.
+* Update username field validation to trim leading and trailing spaces. Refs UIU-3099.
 
 ## [10.1.0](https://github.com/folio-org/ui-users/tree/v10.1.0) (2024-03-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.4...v10.1.0)
