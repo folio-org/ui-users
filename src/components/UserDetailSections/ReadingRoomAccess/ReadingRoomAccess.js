@@ -46,6 +46,7 @@ const mockedRRAData = [
     }
   }
 ];
+
 const ReadingRoomAccess = (props) => {
   const intl = useIntl();
   const [filteredRRA, setFilteredRRA] = useState(mockedRRAData);
