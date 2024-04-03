@@ -366,6 +366,8 @@
   "readingRoom.note": "Note",
   "readingRoom.lastUpdated": "Last updated",
   "readingRoom.filter": "Filter",
+  "readingRoom.allowed": "Allowed",
+  "readingRoom.notAllowed": "Not allowed",
 
   "crud.closeNewUserDialog": "Close New User Dialog",
   "crud.editUser": "Edit User",

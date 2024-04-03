@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, useIntl } from 'react-intl';
 // import { Link } from 'react-router-dom';
-// import { get } from 'lodash';
+import { get, orderBy } from 'lodash';
 
 import {
   Accordion,
@@ -13,7 +13,7 @@ import {
   SearchField,
 } from '@folio/stripes/components';
 // import { ViewMetaData } from '@folio/stripes/smart-components';
-import { READING_ROOM_ACCESS } from '../../../constants';
+import { READING_ROOM_ACCESS, SORT_DIRECTIONS } from '../../../constants';
 // import css from './ReadingRoom.css';
 
 const mockedRRAData = [
@@ -22,7 +22,7 @@ const mockedRRAData = [
     'userId': 'userId1',
     'readingRoomId': 'rrId1',
     'readingRoomName': 'reading room 1',
-    'access': 'ALLOWED',
+    'access': 'NOT_ALLOWED',
     'notes': 'string',
     'metadata': {
       'createdDate': 'string',
@@ -50,6 +50,9 @@ const mockedRRAData = [
 const ReadingRoomAccess = (props) => {
   const intl = useIntl();
   const [filteredRRA, setFilteredRRA] = useState(mockedRRAData);
+  const [sortedColumn, setSortedColumn] = useState('access');
+  const [sortOrder, setSortOrder] = useState(SORT_DIRECTIONS.asc.name);
+
   const {
     accordionId,
     expanded,
@@ -100,7 +103,7 @@ const ReadingRoomAccess = (props) => {
     id: <FormattedMessage id="ui-users.readingRoom.lastUpdated" />,
   };
   const formatter = {
-    access: (rra) => READING_ROOM_ACCESS[rra.access],
+    access: (rra) => <FormattedMessage id={READING_ROOM_ACCESS[rra.access]} />,
     readingRoomName: (rra) => rra.readingRoomName,
     notes: rra => rra.notes,
     // id: rra => (
@@ -114,6 +117,17 @@ const ReadingRoomAccess = (props) => {
     //   </ViewMetaData>
     // )
     id: rra => <FormattedUTCDate value={rra.updatedDate} />
+  };
+  const onHeaderClick = (e, { name: columnName }) => {
+    if (sortedColumn !== columnName) {
+      setSortedColumn(columnName);
+      setSortOrder(SORT_DIRECTIONS.desc.name);
+    } else {
+      const newSortOrder = (sortOrder === SORT_DIRECTIONS.desc.name)
+        ? SORT_DIRECTIONS.asc.name
+        : SORT_DIRECTIONS.desc.name;
+      setSortOrder(newSortOrder);
+    }
   };
 
   return (
@@ -134,11 +148,15 @@ const ReadingRoomAccess = (props) => {
       }
     >
       <MultiColumnList
+        striped
         data-testid="reading-room-access-mcl"
         contentData={filteredRRA}
         columnMapping={columnMapping}
         visibleColumns={visibleColumns}
         formatter={formatter}
+        sortedColumn={sortedColumn}
+        onHeaderClick={onHeaderClick}
+        sortDirection={SORT_DIRECTIONS[sortOrder].fullName}
       />
     </Accordion>
   );
