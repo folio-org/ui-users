@@ -1,4 +1,4 @@
-import { screen, render } from '@folio/jest-config-stripes/testing-library/react';
+import { screen, render, fireEvent } from '@folio/jest-config-stripes/testing-library/react';
 
 import ReadingRoomAccess from './ReadingRoomAccess';
 
@@ -41,5 +41,12 @@ describe('ReadingRoomAccess', () => {
   it('should display search field', () => {
     render(<ReadingRoomAccess {...alteredProps} />);
     expect(screen.getByPlaceholderText('ui-users.readingRoom.filter')).toBeDefined();
+  });
+
+  it('should filter MCL records "Name" column, based on the string entered in search box', () => {
+    render(<ReadingRoomAccess {...alteredProps} />);
+    const inputEl = screen.getByPlaceholderText('ui-users.readingRoom.filter');
+    fireEvent.change(inputEl, { target: { value: '1' } });
+    expect(screen.getByTestId('reading-room-access-mcl')).toBeDefined();
   });
 });

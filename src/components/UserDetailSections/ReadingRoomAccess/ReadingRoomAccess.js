@@ -56,7 +56,8 @@ const ReadingRoomAccess = (props) => {
     // userId,
   } = props;
 
-  const filterReadingRoomsByName = (name) => {
+  const filterReadingRoomsByName = (e) => {
+    const name = e.target.value;
     const filteredRRs = mockedRRAData.filter(r => r.readingRoomName.includes(name));
     setFilteredRRA(filteredRRs);
   };
