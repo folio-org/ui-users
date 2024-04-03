@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, useIntl } from 'react-intl';
 // import { Link } from 'react-router-dom';
-import { get, orderBy } from 'lodash';
+// import { get } from 'lodash';
 
 import {
   Accordion,
@@ -13,7 +13,7 @@ import {
   SearchField,
 } from '@folio/stripes/components';
 // import { ViewMetaData } from '@folio/stripes/smart-components';
-import { READING_ROOM_ACCESS, SORT_DIRECTIONS } from '../../../constants';
+import { READING_ROOM_ACCESS } from '../../../constants';
 // import css from './ReadingRoom.css';
 
 const mockedRRAData = [
@@ -50,8 +50,6 @@ const mockedRRAData = [
 const ReadingRoomAccess = (props) => {
   const intl = useIntl();
   const [filteredRRA, setFilteredRRA] = useState(mockedRRAData);
-  const [sortedColumn, setSortedColumn] = useState('access');
-  const [sortOrder, setSortOrder] = useState(SORT_DIRECTIONS.asc.name);
 
   const {
     accordionId,
@@ -118,17 +116,6 @@ const ReadingRoomAccess = (props) => {
     // )
     id: rra => <FormattedUTCDate value={rra.updatedDate} />
   };
-  const onHeaderClick = (e, { name: columnName }) => {
-    if (sortedColumn !== columnName) {
-      setSortedColumn(columnName);
-      setSortOrder(SORT_DIRECTIONS.desc.name);
-    } else {
-      const newSortOrder = (sortOrder === SORT_DIRECTIONS.desc.name)
-        ? SORT_DIRECTIONS.asc.name
-        : SORT_DIRECTIONS.desc.name;
-      setSortOrder(newSortOrder);
-    }
-  };
 
   return (
     <Accordion
@@ -154,9 +141,6 @@ const ReadingRoomAccess = (props) => {
         columnMapping={columnMapping}
         visibleColumns={visibleColumns}
         formatter={formatter}
-        sortedColumn={sortedColumn}
-        onHeaderClick={onHeaderClick}
-        sortDirection={SORT_DIRECTIONS[sortOrder].fullName}
       />
     </Accordion>
   );
