@@ -365,6 +365,7 @@
   "readingRoom.name": "Name",
   "readingRoom.note": "Note",
   "readingRoom.lastUpdated": "Last updated",
+  "readingRoom.filter": "Filter",
 
   "crud.closeNewUserDialog": "Close New User Dialog",
   "crud.editUser": "Edit User",

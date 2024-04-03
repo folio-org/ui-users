@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 // import { Link } from 'react-router-dom';
 // import { get } from 'lodash';
 
@@ -47,6 +47,7 @@ const mockedRRAData = [
   }
 ];
 const ReadingRoomAccess = (props) => {
+  const intl = useIntl();
   const [filteredRRA, setFilteredRRA] = useState(mockedRRAData);
   const {
     accordionId,
@@ -126,7 +127,7 @@ const ReadingRoomAccess = (props) => {
         <SearchField
           onChange={filterReadingRoomsByName}
           onClear={() => setFilteredRRA(mockedRRAData)}
-          placeholder="Search by Reading Room"
+          placeholder={intl.formatMessage({ id:'ui-users.readingRoom.filter' })}
         />
       }
     >

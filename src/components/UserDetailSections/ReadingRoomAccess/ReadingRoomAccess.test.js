@@ -8,6 +8,11 @@ jest.mock('@folio/stripes/components', () => ({
   MultiColumnList: jest.fn((props) => (
     <div data-testid={props['data-testid']} />
   )),
+  SearchField: jest.fn((props) => (
+    <input
+      {...props}
+    />
+  )),
 }));
 
 const props = {
@@ -18,18 +23,23 @@ const props = {
 };
 
 describe('ReadingRoomAccess', () => {
+  const alteredProps = {
+    ...props,
+    expanded : true,
+  };
+
   it('should render and accordion', () => {
     render(<ReadingRoomAccess {...props} />);
     expect(screen.getByText('ui-users.readingRoom.readingRoomAccess')).toBeDefined();
   });
 
   it('should display MultiColumnList', () => {
-    const alteredProps = {
-      ...props,
-      expanded : true,
-    };
-
     render(<ReadingRoomAccess {...alteredProps} />);
     expect(screen.getByTestId('reading-room-access-mcl')).toBeDefined();
+  });
+
+  it('should display search field', () => {
+    render(<ReadingRoomAccess {...alteredProps} />);
+    expect(screen.getByPlaceholderText('ui-users.readingRoom.filter')).toBeDefined();
   });
 });
