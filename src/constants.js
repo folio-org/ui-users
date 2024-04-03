@@ -364,3 +364,8 @@ export const DCB_VIRTUAL_USER = {
 
 export const PROFILE_PIC_DEFAULT_MAX_SIZE = 10;
 export const ACCEPTED_IMAGE_TYPES = 'image/jpg, image/jpeg, image/png';
+
+export const READING_ROOM_ACCESS = {
+  ALLOWED: 'Allowed',
+  NOT_ALLOWED: 'Not allowed'
+};
