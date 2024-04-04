@@ -49,6 +49,7 @@ import {
   UserAccounts,
   UserAffiliations,
   UserServicePoints,
+  ReadingRoomAccess,
 } from '../../components/UserDetailSections';
 import HelperApp from '../../components/HelperApp';
 import IfConsortium from '../../components/IfConsortium';
@@ -196,6 +197,7 @@ class UserDetail extends React.Component {
         servicePointsSection: false,
         notesAccordion: false,
         customFields: false,
+        readingRoomAccessSection: false,
       },
     };
 
@@ -765,6 +767,12 @@ class UserDetail extends React.Component {
                   customFieldsValues={customFields}
                   customFieldsLabel={<FormattedMessage id="ui-users.custom.customFields" />}
                   noCustomFieldsFoundLabel={<FormattedMessage id="ui-users.custom.noCustomFieldsFound" />}
+                />
+                <ReadingRoomAccess
+                  accordionId="readingRoomAccessSection"
+                  onToggle={this.handleSectionToggle}
+                  expanded={sections.readingRoomAccessSection}
+                  userId={user?.id}
                 />
                 {
                   !isShadowUser && (

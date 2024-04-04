@@ -10,3 +10,4 @@ export { default as UserAffiliations } from './UserAffiliations';
 export { default as UserPermissions } from './UserPermissions';
 export { default as UserServicePoints } from './UserServicePoints';
 export { default as RequestPreferencesView } from './ExtendedInfo/components/RequestPreferencesView';
+export { default as ReadingRoomAccess } from './ReadingRoomAccess';
