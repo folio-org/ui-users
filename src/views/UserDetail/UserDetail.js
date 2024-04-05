@@ -44,6 +44,7 @@ import {
   ProxyPermissions,
   PatronBlock,
   UserPermissions,
+  UserRoles,
   UserLoans,
   UserRequests,
   UserAccounts,
@@ -193,6 +194,7 @@ class UserDetail extends React.Component {
         requestsSection: false,
         accountsSection: false,
         permissionsSection: false,
+        rolesSection: false,
         servicePointsSection: false,
         notesAccordion: false,
         customFields: false,
@@ -855,6 +857,16 @@ class UserDetail extends React.Component {
                       />
                     </IfInterface>
                   </IfPermission>
+                }
+
+                { !this.showPermissionsAccordion() &&
+                  <UserRoles
+                    expanded={sections.rolesSection}
+                    onToggle={this.handleSectionToggle}
+                    accordionId="rolesSection"
+                    user={this.getUser()}
+                    {...this.props}
+                  />
                 }
 
                 <IfPermission perm="inventory-storage.service-points.collection.get,inventory-storage.service-points-users.collection.get">
