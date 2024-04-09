@@ -40,6 +40,7 @@
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.1.0...v10.1.1)
 
 * Allow override for reminder fees with renewal blocked. Refs UICIRC-1077.
+* Show Roles assigned to users. Refs UIU-3110.
 
 ## [10.1.0](https://github.com/folio-org/ui-users/tree/v10.1.0) (2024-03-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.4...v10.1.0)

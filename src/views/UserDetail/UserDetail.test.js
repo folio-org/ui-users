@@ -120,6 +120,7 @@ jest.mock(
     ProxyPermissions: jest.fn(() => null),
     PatronBlock: jest.fn(() => null),
     UserPermissions: jest.fn(() => <div>Permissions accordion</div>),
+    UserRoles: jest.fn(() => <div>Roles accordion</div>),
     UserLoans: jest.fn(() => null),
     UserRequests: jest.fn(() => null),
     UserAccounts: jest.fn(() => null),
@@ -287,14 +288,23 @@ describe('UserDetail', () => {
       expect(screen.getByRole('button', { name: 'ui-users.details.checkDelete' })).toBeVisible();
     });
 
-    describe('permissions', () => {
-      it('shows permissions accordion in legacy mode', async () => {
+    describe('when roles interface is absent', () => {
+      it('shows permissions accordion', async () => {
         stripes.hasInterface = () => false;
         renderUserDetail(stripes);
         expect(screen.getByText('Permissions accordion')).toBeTruthy();
       });
+    });
 
-      it('omits permissions pane when "roles" interface is present', async () => {
+    describe('when roles interface is present', () => {
+      it('shows roles accordion', async () => {
+        stripes.hasInterface = () => true;
+        renderUserDetail(stripes);
+        expect(screen.queryByText('Permissions accordion')).not.toBeTruthy();
+        expect(screen.getByText('Roles accordion')).toBeTruthy();
+      });
+
+      it('omits permissions accordion', async () => {
         stripes.hasInterface = (i) => {
           return (i === 'roles');
         };
