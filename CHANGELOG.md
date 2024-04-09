@@ -4,6 +4,7 @@
 
 * UX consistency: Use Save & close button label stripes-component translation key. Refs UIU-3078.
 * Fix two "triangle down" icons in select element of "Copy existing fee/fine owner table entries" modal. Refs UIU-2929.
+* Show Roles assigned to users. Refs UIU-3110.
 * Fix incorrect translation key having count-disagreements in Pay fees/fines modal in Fees/Fines Page. Refs UIU-1097.
 * Reading Room Access accordion in User record - Basic Layout. Refs UIU-3096.
 * Trim input values and delete properties with empty string when user record save. Refs UIU-2049.

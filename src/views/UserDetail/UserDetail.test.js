@@ -314,14 +314,49 @@ describe('UserDetail', () => {
       });
     });
 
-    describe('permissions', () => {
-      it('shows permissions accordion in legacy mode', async () => {
+    describe('when roles interface is absent', () => {
+      it('shows permissions accordion', async () => {
         stripes.hasInterface = () => false;
         renderUserDetail(stripes);
         expect(screen.getByText('Permissions accordion')).toBeTruthy();
       });
+    });
 
-      it('omits permissions pane when "roles" interface is present', async () => {
+    describe('when roles interface is present', () => {
+      it('shows roles accordion', async () => {
+        stripes.hasInterface = () => true;
+        renderUserDetail(stripes);
+        expect(screen.queryByText('Permissions accordion')).not.toBeTruthy();
+        expect(screen.getByText('Roles accordion')).toBeTruthy();
+      });
+
+      it('omits permissions accordion', async () => {
+        stripes.hasInterface = (i) => {
+          return (i === 'roles');
+        };
+
+        renderUserDetail(stripes);
+        expect(screen.queryByText('Permissions accordion')).toBeFalsy();
+      });
+    });
+
+    describe('when roles interface is absent', () => {
+      it('shows permissions accordion', async () => {
+        stripes.hasInterface = () => false;
+        renderUserDetail(stripes);
+        expect(screen.getByText('Permissions accordion')).toBeTruthy();
+      });
+    });
+
+    describe('when roles interface is present', () => {
+      it('shows roles accordion', async () => {
+        stripes.hasInterface = () => true;
+        renderUserDetail(stripes);
+        expect(screen.queryByText('Permissions accordion')).not.toBeTruthy();
+        expect(screen.getByText('Roles accordion')).toBeTruthy();
+      });
+
+      it('omits permissions accordion', async () => {
         stripes.hasInterface = (i) => {
           return (i === 'roles');
         };
