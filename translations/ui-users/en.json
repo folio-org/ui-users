@@ -1168,5 +1168,8 @@
   "patronNoticePrintJobs.email": "Email",
   "patronNoticePrintJobs.updated": "Updated",
   "patronNoticePrintJobs.created": "Created",
-  "patronNoticePrintJobs.errors.pdf": "'PDF generation failed"
+  "patronNoticePrintJobs.errors.pdf": "'PDF generation failed",
+
+  "roles.userRoles": "Roles",
+  "roles.empty": "No roles found"
 }
