@@ -8,5 +8,6 @@ export { default as UserRequests } from './UserRequests';
 export { default as UserAccounts } from './UserAccounts';
 export { default as UserAffiliations } from './UserAffiliations';
 export { default as UserPermissions } from './UserPermissions';
+export { default as UserRoles } from './UserRoles';
 export { default as UserServicePoints } from './UserServicePoints';
 export { default as RequestPreferencesView } from './ExtendedInfo/components/RequestPreferencesView';
