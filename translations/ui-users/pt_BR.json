@@ -395,7 +395,7 @@
     "accounts.actions.warning.item": "Item",
     "accounts.actions.warning.waiveAction": "abonada",
     "accounts.error.exceeds": "O valor do pagamento excede o montante selecionado",
-    "accounts.warning.itemSelected": "{total, number} itens selecionados. {items, number} {items, plural, one { item } other { itens }} não pode ser {action} porque já estão fechados.",
+    "accounts.warning.itemSelected": "{total, number} {total, plural, one {item} other {itens}} selecionados. {items, number} {items, plural, one { item} other {itens}} não podem ser {action} porque {items, plural, one {é} other {eles são}} já fechados.",
     "blocks.reason": "Razão para suspensão:",
     "blocks.modal.header": "Usuário suspenso de renovações",
     "blocks.detailsButton": "Ver detalhes da suspensão",
@@ -1165,5 +1165,5 @@
     "information.profilePicture.localFile.modal.zoom": "Zoom",
     "information.profilePicture.localFile.modal.rotate": "Girar",
     "information.profilePicture.localFile.maxFileSize.error": "O tamanho da foto excede o limite de {maxFileSize} MB. Escolha uma foto com tamanho de {maxFileSize} MB ou menos.",
-    "accounts.warning.unpaidItemSelected": "{total, number} {total, plural, one {item} other {items}} selected. {items, number} {items, plural, one {item} other {items}} cannot be {action} because {items, plural, one {it was} other {they were}} not paid."
+    "accounts.warning.unpaidItemSelected": "{total, number} {total, plural, one {item} other {itens}} selecionados. {items, number} {items, plural, one { item} other {itens}} não podem ser {action} porque {items, plural, one {foi} other {eles foram}} não pagos."
 }
