@@ -23,20 +23,16 @@ const ExternalLinkModal = ({
   const [inputValue, setInputValue] = useState('');
   const previousInputValue = useRef(profilePictureLink);
   const [disabled, setDisabled] = useState(false);
-  const [error, setError] = useState(false);
-  const externalURLValidityError = error ?
-    <FormattedMessage id="ui-users.information.profilePicture.externalLink.modal.externalURL.errorMessage" />
-    : null;
+  const [externalURLValidityError, setExternalURLValidityError] = useState(null);
 
   useEffect(() => {
     setInputValue(profilePictureLink);
-    setError(false);
   }, [profilePictureLink]);
 
   useEffect(() => {
     if (inputValue) {
       setDisabled(previousInputValue.current === inputValue);
-      setError(false);
+      setExternalURLValidityError(null);
     } else {
       setDisabled(true);
     }
@@ -51,9 +47,30 @@ const ExternalLinkModal = ({
     setInputValue(e.target.value);
   };
 
-  const handleBlur = () => {
-    if (inputValue && !isAValidURL(inputValue)) {
-      setError(true);
+  async function isValidImageUrl(url) {
+    try {
+      const response = await fetch(url);
+      if (response.ok) {
+        const contentType = response.headers.get('content-type');
+        return contentType && contentType.startsWith('image/');
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+  }
+
+  const handleBlur = async () => {
+    if (!inputValue || !isAValidURL(inputValue)) {
+      setExternalURLValidityError(<FormattedMessage id="ui-users.information.profilePicture.externalLink.modal.externalURL.invalidURLErrorMessage" />);
+      setDisabled(true);
+      return;
+    }
+
+    const isValidImgURL = await isValidImageUrl(inputValue);
+    if (!isValidImgURL) {
+      setExternalURLValidityError(<FormattedMessage id="ui-users.information.profilePicture.externalLink.modal.externalURL.invalidImageURLErrorMessage" />);
       setDisabled(true);
     }
   };

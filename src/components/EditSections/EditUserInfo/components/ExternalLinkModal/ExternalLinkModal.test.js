@@ -61,14 +61,14 @@ describe('ExternalLinkModal', () => {
 
     expect(props.onSave).toHaveBeenCalled();
   });
-  it('should show error text when url is invalid', async () => {
+  it('should show error text when url is invalid url', async () => {
     isAValidURL.mockImplementationOnce(() => false);
     const inputElement = screen.getByLabelText('ui-users.information.profilePicture.externalLink.modal.externalURL');
 
     fireEvent.change(inputElement, { target: { value: 'profile picture' } });
     fireEvent.blur(inputElement);
 
-    await waitFor(() => expect(screen.getByText('ui-users.information.profilePicture.externalLink.modal.externalURL.errorMessage')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText('ui-users.information.profilePicture.externalLink.modal.externalURL.invalidURLErrorMessage')).toBeInTheDocument());
   });
   it('should call onClose', async () => {
     const cancelButton = screen.getByRole('button', { name: 'stripes-core.button.cancel' });
