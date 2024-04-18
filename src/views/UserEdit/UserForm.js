@@ -33,6 +33,7 @@ import {
   EditContactInfo,
   EditProxy,
   EditServicePoints,
+  EditUserRoles,
 } from '../../components/EditSections';
 import { getFullName } from '../../components/util';
 import RequestFeeFineBlockButtons from '../../components/RequestFeeFineBlockButtons';
@@ -448,6 +449,7 @@ class UserForm extends React.Component {
                       />
                     </div>
                   }
+                  <EditUserRoles accordionId="userRoles" />
                 </AccordionSet>
               </AccordionStatus>
             </Pane>
