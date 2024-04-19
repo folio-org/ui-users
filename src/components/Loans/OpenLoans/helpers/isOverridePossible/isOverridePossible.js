@@ -37,6 +37,5 @@ export default (errors, loan) => {
   };
 
   data.overridable = errors.every((error) => isOverridableMessage(error, loan, data));
-  data.overridable = true;
   return data;
 };
