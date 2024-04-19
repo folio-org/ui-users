@@ -3,15 +3,16 @@ import { Accordion, Headline, Badge, Row, Col, List, Button, Icon, Loading } fro
 import { useIntl, FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
+import { useStripes } from '@folio/stripes/core';
 import { useUserTenantRoles } from '../../../hooks';
 
 function EditUserRoles({ match, accordionId }) {
+  const { okapi } = useStripes();
+  const intl = useIntl();
+
   const userId = match.params.id;
 
-  const intl = useIntl();
-  const [open, setOpen] = useState(false);
-
-  const { userRoles, isLoading } = useUserTenantRoles({ userId, tenantId: 'diku2' });
+  const { userRoles, isLoading } = useUserTenantRoles({ userId, tenantId: okapi.tenant });
 
   const renderRoles = (role) => {
     return (
@@ -36,9 +37,7 @@ function EditUserRoles({ match, accordionId }) {
   return (
     <Accordion
       label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.roles.userRoles" /></Headline>}
-      open={open}
       id={accordionId}
-      onToggle={() => { setOpen(!open); }}
       displayWhenClosed={isLoading ? <Loading /> : <Badge>{userRoles.length}</Badge>}
     >
       <Row>
@@ -49,6 +48,8 @@ function EditUserRoles({ match, accordionId }) {
             isEmptyMessage={<FormattedMessage id="ui-users.roles.empty" />}
           />
         </Col>
+        <Button><FormattedMessage id="ui-users.roles.addRoles" /></Button>
+        <Button><FormattedMessage id="ui-users.roles.unassignAllRoles" /></Button>
       </Row>
     </Accordion>
   );

@@ -449,7 +449,7 @@ class UserForm extends React.Component {
                       />
                     </div>
                   }
-                  <EditUserRoles accordionId="userRoles" />
+                  {!this.showPermissionsAccordion() && <EditUserRoles accordionId="userRoles" />}
                 </AccordionSet>
               </AccordionStatus>
             </Pane>

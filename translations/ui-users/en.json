@@ -1172,5 +1172,7 @@
 
   "roles.userRoles": "Roles",
   "roles.empty": "No roles found",
-  "roles.deleteRole": "Delete user role"
+  "roles.deleteRole": "Delete user role",
+  "roles.addRoles": "Add roles",
+  "roles.unassignAllRoles": "Unassign all roles"
 }
