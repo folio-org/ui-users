@@ -157,7 +157,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
         renewFailure.push(loan);
         errorMsg[loan.id] = {
           ...error,
-          ...isOverridePossible(this.state.errors),
+          ...isOverridePossible(this.state.errors, loan),
         };
       }
     }
