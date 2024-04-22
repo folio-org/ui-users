@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Accordion, Headline, Badge, Row, Col, List, Button, Icon, Loading } from '@folio/stripes/components';
 import { useIntl, FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router';
