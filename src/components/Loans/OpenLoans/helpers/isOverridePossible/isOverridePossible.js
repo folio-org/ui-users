@@ -21,12 +21,6 @@ const isOverridableMessage = (error, loan, data) => {
     return true;
   }
 
-  // allow for override for reminder fees with renewal blocked
-  // https://folio-org.atlassian.net/browse/UICIRC-1077
-  if (loan?.reminders?.renewalBlocked) {
-    return true;
-  }
-
   return false;
 };
 
