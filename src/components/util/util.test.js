@@ -28,6 +28,7 @@ import {
   getRequestUrl,
   isAffiliationsEnabled,
   isDCBItem,
+  isAValidImageUrl,
 } from './util';
 
 const STRIPES = {
@@ -474,3 +475,42 @@ describe('isDCBItem ', () => {
     expect(isDCBItem(item)).toBeFalsy();
   });
 });
+
+describe('isAValidImageUrl', () => {
+  it('should return true for a valid image URL with correct content-type', async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      headers: {
+        get: jest.fn().mockReturnValue('image/jpeg'),
+      },
+    });
+
+    const url = 'https://folio.org/wp-content/folio-site-general-Illustration-social-image-1200.jpg';
+    const result = await isAValidImageUrl(url);
+
+    expect(result).toBe(true);
+  });
+
+  it('should return false for an invalid image URL with incorrect content-type', async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      headers: {
+        get: jest.fn().mockReturnValue('text/plain'),
+      },
+    });
+
+    const url = 'https://folio.org/wp-content/folio-site-general-Illustration-social-image-1200.txt';
+    const result = await isAValidImageUrl(url);
+
+    expect(result).toBe(false);
+  });
+
+  it('should return false for network errors', async () => {
+    global.fetch = jest.fn().mockRejectedValue(new Error('Network Error'));
+
+    const url = 'https://folio.org/wp-content/folio-site-general-Illustration-social-image-1200.jpg';
+    const result = await isAValidImageUrl(url);
+    expect(result).toBe(false);
+  });
+});
+
