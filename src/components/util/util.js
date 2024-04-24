@@ -228,7 +228,7 @@ export const isAValidImageUrl = async (url) => {
     if (!response.ok) return false;
 
     const contentType = response.headers.get('content-type');
-    return contentType && contentType?.startsWith('image/');
+    return contentType?.startsWith('image/') ?? false;
   } catch (e) {
     return false;
   }
