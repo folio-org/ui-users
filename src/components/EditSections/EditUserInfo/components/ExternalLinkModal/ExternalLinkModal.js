@@ -59,11 +59,7 @@ const ExternalLinkModal = ({
     if (!isValidImgURL) {
       setExternalURLValidityError(<FormattedMessage id="ui-users.information.profilePicture.externalLink.modal.externalURL.invalidImageURLErrorMessage" />);
       setDisabled(true);
-      return;
     }
-
-    setExternalURLValidityError(null);
-    setDisabled(false);
   };
 
   const renderModalFooter = () => {

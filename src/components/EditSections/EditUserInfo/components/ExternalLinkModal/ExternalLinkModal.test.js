@@ -72,6 +72,16 @@ describe('ExternalLinkModal', () => {
 
     await waitFor(() => expect(screen.getByText('ui-users.information.profilePicture.externalLink.modal.externalURL.invalidURLErrorMessage')).toBeInTheDocument());
   });
+  it('should show error text when url is invalid image url', async () => {
+    isAValidURL.mockImplementationOnce(() => true);
+    isAValidImageUrl.mockImplementationOnce(() => false);
+    const inputElement = screen.getByLabelText('ui-users.information.profilePicture.externalLink.modal.externalURL');
+
+    fireEvent.change(inputElement, { target: { value: 'https://folio-org.atlassian.net/browse/UIU-3080' } });
+    await fireEvent.blur(inputElement);
+
+    await waitFor(() => expect(screen.getByText('ui-users.information.profilePicture.externalLink.modal.externalURL.invalidImageURLErrorMessage')).toBeInTheDocument());
+  });
   it('should call onClose', async () => {
     const cancelButton = screen.getByRole('button', { name: 'stripes-core.button.cancel' });
     await userEvent.click(cancelButton);
