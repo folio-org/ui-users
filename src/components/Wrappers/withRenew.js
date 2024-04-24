@@ -18,6 +18,7 @@ import {
 // HOC used to manage renew
 const withRenew = WrappedComponent => class WithRenewComponent extends React.Component {
   static propTypes = {
+    intl: PropTypes.object,
     loans: PropTypes.arrayOf(PropTypes.object),
     patronBlocks: PropTypes.arrayOf(PropTypes.object),
     mutator: PropTypes.shape({
@@ -143,21 +144,35 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
     const bulkRenewal = (loansSize > 1);
 
     for (const [index, loan] of loans.entries()) {
-      try {
-        // We actually want to execute it in a sequence so turning off eslint warning
-        // https://issues.folio.org/browse/UIU-1299
-        // eslint-disable-next-line no-await-in-loop
-        renewSuccess.push(
-          await this.renewItem(loan, patron, bulkRenewal, index !== loansSize - 1, additionalInfo)
-        );
-      } catch (errors) {
-        const errorMessage = this.getMessage(errors);
-
+      // Allow override for reminder fees with renewal blocked
+      // https://folio-org.atlassian.net/browse/UICIRC-1077
+      if (loan?.reminders?.renewalBlocked) {
         renewFailure.push(loan);
+        const error = this.props.intl.formatMessage({ id: 'ui-users.errors.renewWithReminders' });
+
         errorMsg[loan.id] = {
-          ...errorMessage,
-          ...isOverridePossible(errors),
+          ...this.getMessage(error),
+          overridable: true,
+          autoNewDueDate: true,
         };
+      }
+      else {
+        try {
+          // We actually want to execute it in a sequence so turning off eslint warning
+          // https://issues.folio.org/browse/UIU-1299
+          // eslint-disable-next-line no-await-in-loop
+          renewSuccess.push(
+            await this.renewItem(loan, patron, bulkRenewal, index !== loansSize - 1, additionalInfo)
+          );
+        } catch (errors) {
+          const errorMessage = this.getMessage(errors);
+
+          renewFailure.push(loan);
+          errorMsg[loan.id] = {
+            ...errorMessage,
+            ...isOverridePossible(errors),
+          };
+        }
       }
     }
 
@@ -205,7 +220,14 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
 
   // eslint-disable-next-line class-methods-use-this
   getMessage = (errors) => {
-    if (!errors || !errors.length) return '';
+    if (!errors) return '';
+
+    if (!Array.isArray(errors)) {
+      return <FormattedMessage
+        id="ui-users.errors.loanNotRenewedReason"
+        values={{ message: errors }}
+      />;
+    }
 
     const policyName = this.getPolicyName(errors);
     const message = errors.reduce((msg, err) => ((msg) ? `${msg}, ${err.message}` : err.message), '');

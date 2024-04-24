@@ -393,9 +393,9 @@ class OpenLoansControl extends React.Component {
 }
 
 export default compose(
+  injectIntl,
   withRenew,
   withDeclareLost,
   withClaimReturned,
   withMarkAsMissing,
-  injectIntl,
 )(OpenLoansControl);
