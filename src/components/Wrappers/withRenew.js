@@ -155,8 +155,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
           overridable: true,
           autoNewDueDate: true,
         };
-      }
-      else {
+      } else {
         try {
           // We actually want to execute it in a sequence so turning off eslint warning
           // https://issues.folio.org/browse/UIU-1299
