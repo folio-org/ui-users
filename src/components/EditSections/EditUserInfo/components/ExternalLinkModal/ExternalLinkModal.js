@@ -12,7 +12,7 @@ import {
   TextField,
 } from '@folio/stripes/components';
 import { FormattedMessage } from 'react-intl';
-import { isAValidURL } from '../../../../util';
+import { isAValidURL, isAValidImageUrl } from '../../../../util';
 
 const ExternalLinkModal = ({
   open,
@@ -33,33 +33,20 @@ const ExternalLinkModal = ({
     if (inputValue) {
       setDisabled(previousInputValue.current === inputValue);
       setExternalURLValidityError(null);
-    } else {
-      setDisabled(true);
     }
   }, [inputValue]);
 
-  const handleSave = () => {
-    onSave(inputValue);
+  const handleSave = async () => {
+    const isValidImgURL = await isAValidImageUrl(inputValue);
+    if (isValidImgURL) {
+      onSave(inputValue);
+    }
   };
 
   const handleInputChange = (e) => {
     previousInputValue.current = inputValue;
     setInputValue(e.target.value);
   };
-
-  async function isValidImageUrl(url) {
-    try {
-      const response = await fetch(url);
-      if (response.ok) {
-        const contentType = response.headers.get('content-type');
-        return contentType && contentType.startsWith('image/');
-      } else {
-        return false;
-      }
-    } catch (e) {
-      return false;
-    }
-  }
 
   const handleBlur = async () => {
     if (!inputValue || !isAValidURL(inputValue)) {
@@ -68,11 +55,15 @@ const ExternalLinkModal = ({
       return;
     }
 
-    const isValidImgURL = await isValidImageUrl(inputValue);
+    const isValidImgURL = await isAValidImageUrl(inputValue);
     if (!isValidImgURL) {
       setExternalURLValidityError(<FormattedMessage id="ui-users.information.profilePicture.externalLink.modal.externalURL.invalidImageURLErrorMessage" />);
       setDisabled(true);
+      return;
     }
+
+    setExternalURLValidityError(null);
+    setDisabled(false);
   };
 
   const renderModalFooter = () => {

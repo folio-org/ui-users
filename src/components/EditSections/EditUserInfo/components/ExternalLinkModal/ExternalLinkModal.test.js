@@ -6,7 +6,7 @@ import {
 } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
-import { isAValidURL } from '../../../../util';
+import { isAValidURL, isAValidImageUrl } from '../../../../util';
 
 import '../../../../../../test/jest/__mock__';
 
@@ -43,6 +43,7 @@ describe('ExternalLinkModal', () => {
 
   beforeEach(() => {
     isAValidURL.mockReset();
+    isAValidImageUrl.mockReset();
     renderExternalLinkModal(props);
   });
 
@@ -53,6 +54,7 @@ describe('ExternalLinkModal', () => {
     expect(screen.getByText('ui-users.information.profilePicture.externalLink.modal.externalURL')).toBeInTheDocument();
   });
   it('should call onSave', async () => {
+    isAValidImageUrl.mockImplementationOnce(() => true);
     const saveButton = screen.getByRole('button', { name: 'ui-users.save' });
     const inputElement = screen.getByLabelText('ui-users.information.profilePicture.externalLink.modal.externalURL');
 
