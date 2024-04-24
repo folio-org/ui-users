@@ -36,6 +36,11 @@ jest.mock('react-image', () => ({
   Img: jest.fn(() => null),
 }));
 
+jest.mock('../../../../util', () => ({
+  isAValidImageUrl: jest.fn(() => true),
+  isAValidURL: jest.fn(() => true),
+}));
+
 const defaultProps = {
   profilePictureMaxFileSize: 3,
   profilePictureId: 'https://folio.org/wp-content/uploads/2023/08/folio-site-general-Illustration-social-image-1200.jpg',
@@ -157,7 +162,7 @@ describe('Edit User Profile Picture', () => {
       await userEvent.click(saveButton);
       expect(Img).toHaveBeenCalled();
       const renderedProfileImg = Img.mock.lastCall[0];
-      expect(expect(renderedProfileImg.src).toContain('https://upload.wikimedia.org/wikipedia/commons/e/e2/FOLIO_400x400.jpg'));
+      expect(renderedProfileImg.src).toContain('https://upload.wikimedia.org/wikipedia/commons/e/e2/FOLIO_400x400.jpg');
     });
 
     it('should invoke local file upload handlers with compression', async () => {

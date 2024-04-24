@@ -7,6 +7,7 @@
 * Fix incorrect translation key having count-disagreements in Pay fees/fines modal in Fees/Fines Page. Refs UIU-1097.
 * Trim input values and delete properties with empty string when user record save. Refs UIU-2049.
 * Update username field validation to trim leading and trailing spaces. Refs UIU-3099.
+* Fix "Total paid amount" value that set as "$NaN" on "Refund fee/fine" modal. Refs UIU-3094.
 * Handle invalid image URLs when uploading profile photo via External URL. Refs UIU-3080.
 
 ## [10.1.0](https://github.com/folio-org/ui-users/tree/v10.1.0) (2024-03-20)
