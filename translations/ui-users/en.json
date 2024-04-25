@@ -1190,6 +1190,9 @@
   "patronNoticePrintJobs.created": "Created",
   "patronNoticePrintJobs.errors.pdf": "'PDF generation failed",
 
-  "roles.userRoles": "Roles",
-  "roles.empty": "No roles found"
+  "roles.userRoles": "User roles",
+  "roles.empty": "No user roles found",
+  "roles.deleteRole": "Delete user role",
+  "roles.addRoles": "Add user roles",
+  "roles.unassignAllRoles": "Unassign all user roles"
 }

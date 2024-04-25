@@ -4,3 +4,4 @@ export { default as EditProxy } from './EditProxy';
 export { default as EditUserInfo } from './EditUserInfo';
 export { default as EditServicePoints } from './EditServicePoints';
 export { default as EditReadingRoomAccess } from './EditReadingRoomAccess';
+export { default as EditUserRoles } from './EditUserRoles';
