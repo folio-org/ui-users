@@ -1,7 +1,5 @@
 # Change history for ui-users
 
-## [10.2.0] IN PROGRESS
-
 ## [10.1.0](https://github.com/folio-org/ui-users/tree/v10.1.0) (2024-03-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.4...v10.1.0)
 
@@ -49,6 +47,8 @@
 * Omit permissions accordions and queries when `roles` interface is present. Refs UIU-3061, UIU-3062.
 * Retrieve user's central-tenant permission from `users-keycloak` endpoints when available. Refs UIU-3054.
 * Show Roles assigned to users. Refs UIU-3110.
+* Add edit user roles accordion on edit role modal view. Refs UIU-3021.
+
 
 ## [10.0.4](https://github.com/folio-org/ui-users/tree/v10.0.4) (2023-11-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.3...v10.0.4)

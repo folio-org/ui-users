@@ -19,6 +19,7 @@ jest.mock(
     EditProxy: jest.fn(() => <div>EditProxy accordion</div>),
     EditServicePoints: jest.fn(() => <div>EditServicePoints accordion</div>),
     EditUserInfo: jest.fn(() => <div>EditUserInfo accordion</div>),
+    EditUserRoles: jest.fn(() => <div>EditUserRoles accordion</div>)
   })
 );
 
@@ -190,11 +191,17 @@ describe('UserForm', () => {
       expect(screen.getByText('TenantsPermissionsAccordion accordion')).toBeTruthy();
     });
 
-    it('omits permissions pane when "roles" interface is present', async () => {
+    it('shows permissions accordion when "roles" interface is NOT present', async () => {
+      renderWithRouter(<UserForm {...props} />);
+
+      expect(screen.queryByText('TenantsPermissionsAccordion accordion')).toBeInTheDocument();
+    });
+
+    it('show roles accordion when "roles" interface is present', async () => {
       props.stripes.hasInterface = () => true;
       renderWithRouter(<UserForm {...props} />);
 
-      expect(screen.queryByText('Permissions accordion')).toBeFalsy();
+      expect(screen.queryByText('EditUserRoles accordion')).toBeInTheDocument();
     });
   });
 
