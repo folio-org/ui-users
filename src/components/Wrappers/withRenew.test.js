@@ -29,7 +29,6 @@ const mutator = {
 };
 
 const props = {
-  match: { params: { id: '1' } },
   mutator,
   intl: { formatMessage: ({ id }) => id },
   stripes: buildStripes({ connect: (Component) => Component }),
