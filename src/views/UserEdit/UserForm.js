@@ -33,6 +33,7 @@ import {
   EditContactInfo,
   EditProxy,
   EditServicePoints,
+  EditUserRoles,
 } from '../../components/EditSections';
 import { getFullName } from '../../components/util';
 import RequestFeeFineBlockButtons from '../../components/RequestFeeFineBlockButtons';
@@ -380,6 +381,7 @@ class UserForm extends React.Component {
                     permissions: false,
                     servicePoints: false,
                     customFields: true,
+                    userRoles: false
                   }}
                 >
                   <EditUserInfo
@@ -434,12 +436,12 @@ class UserForm extends React.Component {
                       )
                       }
                       {
-                      this.showPermissionsAccordion() &&
+                      this.showPermissionsAccordion() ?
                         <TenantsPermissionsAccordion
                           form={form}
                           initialValues={initialValues}
                           setButtonRef={this.setButtonRef}
-                        />
+                        /> : <EditUserRoles accordionId="userRoles" />
                       }
                       <EditServicePoints
                         accordionId="servicePoints"
