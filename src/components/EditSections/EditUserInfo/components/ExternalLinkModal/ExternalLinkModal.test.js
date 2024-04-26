@@ -54,7 +54,9 @@ describe('ExternalLinkModal', () => {
     expect(screen.getByText('ui-users.information.profilePicture.externalLink.modal.externalURL')).toBeInTheDocument();
   });
   it('should call onSave', async () => {
+    isAValidURL.mockImplementationOnce(() => true);
     isAValidImageUrl.mockImplementationOnce(() => true);
+
     const saveButton = screen.getByRole('button', { name: 'ui-users.save' });
     const inputElement = screen.getByLabelText('ui-users.information.profilePicture.externalLink.modal.externalURL');
 
@@ -65,20 +67,24 @@ describe('ExternalLinkModal', () => {
   });
   it('should show error text when url is invalid url', async () => {
     isAValidURL.mockImplementationOnce(() => false);
+
+    const saveButton = screen.getByRole('button', { name: 'ui-users.save' });
     const inputElement = screen.getByLabelText('ui-users.information.profilePicture.externalLink.modal.externalURL');
 
     fireEvent.change(inputElement, { target: { value: 'profile picture' } });
-    fireEvent.blur(inputElement);
+    await userEvent.click(saveButton);
 
     await waitFor(() => expect(screen.getByText('ui-users.information.profilePicture.externalLink.modal.externalURL.invalidURLErrorMessage')).toBeInTheDocument());
   });
   it('should show error text when url is invalid image url', async () => {
     isAValidURL.mockImplementationOnce(() => true);
     isAValidImageUrl.mockImplementationOnce(() => false);
+
+    const saveButton = screen.getByRole('button', { name: 'ui-users.save' });
     const inputElement = screen.getByLabelText('ui-users.information.profilePicture.externalLink.modal.externalURL');
 
     fireEvent.change(inputElement, { target: { value: 'https://folio-org.atlassian.net/browse/UIU-3080' } });
-    await fireEvent.blur(inputElement);
+    await userEvent.click(saveButton);
 
     await waitFor(() => expect(screen.getByText('ui-users.information.profilePicture.externalLink.modal.externalURL.invalidImageURLErrorMessage')).toBeInTheDocument());
   });

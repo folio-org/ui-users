@@ -39,18 +39,6 @@ const ExternalLinkModal = ({
   }, [inputValue]);
 
   const handleSave = async () => {
-    const isValidImgURL = await isAValidImageUrl(inputValue);
-    if (isValidImgURL) {
-      onSave(inputValue);
-    }
-  };
-
-  const handleInputChange = (e) => {
-    previousInputValue.current = inputValue;
-    setInputValue(e.target.value);
-  };
-
-  const handleBlur = async () => {
     setExternalURLValidityError(null);
     if (!inputValue) return;
 
@@ -64,7 +52,15 @@ const ExternalLinkModal = ({
     if (!isValidImgURL) {
       setExternalURLValidityError(<FormattedMessage id="ui-users.information.profilePicture.externalLink.modal.externalURL.invalidImageURLErrorMessage" />);
       setDisabled(true);
+      return;
     }
+    onSave(inputValue);
+  };
+
+  const handleInputChange = (e) => {
+    setExternalURLValidityError(null);
+    previousInputValue.current = inputValue;
+    setInputValue(e.target.value);
   };
 
   const renderModalFooter = () => {
@@ -74,7 +70,7 @@ const ExternalLinkModal = ({
           buttonStyle="primary"
           id="save-external-link-btn"
           disabled={disabled}
-          onMouseDown={handleSave}
+          onClick={handleSave}
         >
           <FormattedMessage id="ui-users.save" />
         </Button>
@@ -101,7 +97,6 @@ const ExternalLinkModal = ({
         label={<FormattedMessage id="ui-users.information.profilePicture.externalLink.modal.externalURL" />}
         error={externalURLValidityError}
         onChange={handleInputChange}
-        onBlur={handleBlur}
         value={inputValue}
         hasClearIcon={false}
       />
