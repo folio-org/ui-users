@@ -8,6 +8,7 @@
 * Trim input values and delete properties with empty string when user record save. Refs UIU-2049.
 * Update username field validation to trim leading and trailing spaces. Refs UIU-3099.
 * Fix "Total paid amount" value that set as "$NaN" on "Refund fee/fine" modal. Refs UIU-3094.
+* Allow override for reminder fees with renewal blocked. Refs UICIRC-1077.
 * Validate image url provided as external url for user profile picture. Refs UIU-3080.
 
 ## [10.1.0](https://github.com/folio-org/ui-users/tree/v10.1.0) (2024-03-20)
