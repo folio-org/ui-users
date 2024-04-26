@@ -224,11 +224,12 @@ export const isAValidURL = (str) => {
 
 export const isAValidImageUrl = async (url) => {
   try {
-    const response = await fetch(url);
-    if (!response.ok) return false;
-
-    const contentType = response.headers.get('content-type');
-    return contentType?.startsWith('image/') ?? false;
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => resolve(true);
+      img.onerror = () => resolve(false);
+      img.src = url;
+    });
   } catch (e) {
     return false;
   }

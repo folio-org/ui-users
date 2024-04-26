@@ -32,6 +32,8 @@ const ExternalLinkModal = ({
   useEffect(() => {
     if (inputValue) {
       setDisabled(previousInputValue.current === inputValue);
+    } else {
+      setDisabled(true);
       setExternalURLValidityError(null);
     }
   }, [inputValue]);
@@ -49,7 +51,10 @@ const ExternalLinkModal = ({
   };
 
   const handleBlur = async () => {
-    if (!inputValue || !isAValidURL(inputValue)) {
+    setExternalURLValidityError(null);
+    if (!inputValue) return;
+
+    if (!isAValidURL(inputValue)) {
       setExternalURLValidityError(<FormattedMessage id="ui-users.information.profilePicture.externalLink.modal.externalURL.invalidURLErrorMessage" />);
       setDisabled(true);
       return;
@@ -69,7 +74,7 @@ const ExternalLinkModal = ({
           buttonStyle="primary"
           id="save-external-link-btn"
           disabled={disabled}
-          onClick={handleSave}
+          onMouseDown={handleSave}
         >
           <FormattedMessage id="ui-users.save" />
         </Button>

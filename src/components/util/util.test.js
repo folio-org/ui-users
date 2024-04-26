@@ -477,40 +477,50 @@ describe('isDCBItem ', () => {
 });
 
 describe('isAValidImageUrl', () => {
-  it('should return true for a valid image URL with correct content-type', async () => {
-    global.fetch = jest.fn().mockResolvedValue({
-      ok: true,
-      headers: {
-        get: jest.fn().mockReturnValue('image/jpeg'),
-      },
-    });
+  it('should return true for a valid image URL', async () => {
+    class MockImage {
+      constructor() {
+        this.onload = null;
+        this.onerror = null;
+      }
 
-    const url = 'https://folio.org/wp-content/folio-site-general-Illustration-social-image-1200.jpg';
-    const result = await isAValidImageUrl(url);
+      set src(value) {
+        if (this.onload) {
+          setTimeout(() => {
+            this.onload();
+          }, 0);
+        }
+      }
+    }
 
-    expect(result).toBe(true);
+    global.Image = MockImage;
+    const validImageUrl = 'https://upload.wikimedia.org/wikipedia/commons/e/e2/FOLIO_400x400.jpg';
+
+    const isValid = await isAValidImageUrl(validImageUrl);
+    expect(isValid).toBe(true);
   });
 
-  it('should return false for an invalid image URL with incorrect content-type', async () => {
-    global.fetch = jest.fn().mockResolvedValue({
-      ok: true,
-      headers: {
-        get: jest.fn().mockReturnValue('text/plain'),
-      },
-    });
+  it('should return false for an invalid image URL', async () => {
+    class MockImage {
+      constructor() {
+        this.onload = null;
+        this.onerror = null;
+      }
 
-    const url = 'https://folio.org/wp-content/folio-site-general-Illustration-social-image-1200.txt';
-    const result = await isAValidImageUrl(url);
+      set src(value) {
+        if (this.onerror) {
+          setTimeout(() => {
+            this.onerror();
+          }, 0);
+        }
+      }
+    }
 
-    expect(result).toBe(false);
-  });
+    global.Image = MockImage;
+    const invalidImageUrl = 'https://example.com';
 
-  it('should return false for network errors', async () => {
-    global.fetch = jest.fn().mockRejectedValue(new Error('Network Error'));
-
-    const url = 'https://folio.org/wp-content/folio-site-general-Illustration-social-image-1200.jpg';
-    const result = await isAValidImageUrl(url);
-    expect(result).toBe(false);
+    const isValid = await isAValidImageUrl(invalidImageUrl);
+    expect(isValid).toBe(false);
   });
 });
 
