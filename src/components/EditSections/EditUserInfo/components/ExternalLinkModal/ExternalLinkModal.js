@@ -30,11 +30,11 @@ const ExternalLinkModal = ({
   }, [profilePictureLink]);
 
   useEffect(() => {
+    setExternalURLValidityError(null);
     if (inputValue) {
       setDisabled(previousInputValue.current === inputValue);
     } else {
       setDisabled(true);
-      setExternalURLValidityError(null);
     }
   }, [inputValue]);
 
@@ -58,7 +58,6 @@ const ExternalLinkModal = ({
   };
 
   const handleInputChange = (e) => {
-    setExternalURLValidityError(null);
     previousInputValue.current = inputValue;
     setInputValue(e.target.value);
   };
