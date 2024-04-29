@@ -283,7 +283,6 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal, profilePictu
         profilePictureLink={profilePictureLink}
         croppedLocalImage={croppedLocalImage}
       />
-      <br />
       <input type="file" data-testid="hidden-file-input" hidden ref={fileInputRef} onClick={onFileSelect} onChange={onFileChange} accept={ACCEPTED_IMAGE_TYPES} />
       {
         hasAllProfilePicturePerms && (

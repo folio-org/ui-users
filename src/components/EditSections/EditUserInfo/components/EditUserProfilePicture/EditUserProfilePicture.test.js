@@ -26,9 +26,6 @@ jest.mock('./utils/canvasUtils', () => ({
   rotateSize: jest.fn(),
   getCroppedImg: jest.fn(),
 }));
-jest.mock('react-image', () => ({
-  Img: jest.fn(() => null),
-}));
 
 const defaultProps = {
   profilePictureMaxFileSize: 3,
