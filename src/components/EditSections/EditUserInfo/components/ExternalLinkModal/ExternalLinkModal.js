@@ -39,9 +39,6 @@ const ExternalLinkModal = ({
   }, [inputValue]);
 
   const handleSave = async () => {
-    setExternalURLValidityError(null);
-    if (!inputValue) return;
-
     if (!isAValidURL(inputValue)) {
       setExternalURLValidityError(<FormattedMessage id="ui-users.information.profilePicture.externalLink.modal.externalURL.invalidURLErrorMessage" />);
       setDisabled(true);
