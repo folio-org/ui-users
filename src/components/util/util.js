@@ -222,3 +222,15 @@ export const isAValidURL = (str) => {
   return URL.canParse(str);
 };
 
+export const isAValidImageUrl = async (url) => {
+  try {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => resolve(true);
+      img.onerror = () => resolve(false);
+      img.src = url;
+    });
+  } catch (e) {
+    return false;
+  }
+};
