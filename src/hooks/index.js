@@ -6,5 +6,4 @@ export { default as useUserAffiliations } from './useUserAffiliations';
 export { default as useUserAffiliationsMutation } from './useUserAffiliationsMutation';
 export { default as useUserTenantPermissions } from './useUserTenantPermissions';
 export { default as useUserTenantRoles } from './useUserTenantRoles';
-export { default as useProfilePicture } from './useProfilePicture';
 export { default as useLocalizedCurrency } from './useLocalizedCurrency';
