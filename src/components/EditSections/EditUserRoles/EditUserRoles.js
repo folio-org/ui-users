@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Accordion, Headline, Badge, Row, Col, List, Button, Icon, Loading } from '@folio/stripes/components';
 import { useIntl, FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { useStripes } from '@folio/stripes/core';
 import { useUserTenantRoles } from '../../../hooks';
+import UserRolesModal from './components/UserRolesModal';
+import { filtersConfig } from './helpers';
 
 function EditUserRoles({ match, accordionId }) {
+  const [isOpen, setIsOpen] = useState(false);
   const { okapi } = useStripes();
   const intl = useIntl();
 
@@ -35,23 +38,31 @@ function EditUserRoles({ match, accordionId }) {
   };
 
   return (
-    <Accordion
-      label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.roles.userRoles" /></Headline>}
-      id={accordionId}
-      displayWhenClosed={isLoading ? <Loading /> : <Badge>{userRoles.length}</Badge>}
-    >
-      <Row>
-        <Col xs={12}>
-          <List
-            items={userRoles}
-            itemFormatter={renderRoles}
-            isEmptyMessage={<FormattedMessage id="ui-users.roles.empty" />}
-          />
-        </Col>
-        <Button><FormattedMessage id="ui-users.roles.addRoles" /></Button>
-        <Button><FormattedMessage id="ui-users.roles.unassignAllRoles" /></Button>
-      </Row>
-    </Accordion>
+    <div>
+      <Accordion
+        label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.roles.userRoles" /></Headline>}
+        id={accordionId}
+        displayWhenClosed={isLoading ? <Loading /> : <Badge>{userRoles.length}</Badge>}
+      >
+        <Row>
+          <Col xs={12}>
+            <List
+              items={userRoles}
+              itemFormatter={renderRoles}
+              isEmptyMessage={<FormattedMessage id="ui-users.roles.empty" />}
+            />
+          </Col>
+          <Button onClick={() => setIsOpen(true)}><FormattedMessage id="ui-users.roles.addRoles" /></Button>
+          <Button><FormattedMessage id="ui-users.roles.unassignAllRoles" /></Button>
+        </Row>
+      </Accordion>
+      <UserRolesModal
+        filtersConfig={filtersConfig}
+        assignedRoles={userRoles}
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+      />
+    </div>
   );
 }
 

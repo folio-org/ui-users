@@ -1174,5 +1174,10 @@
   "roles.empty": "No user roles found",
   "roles.deleteRole": "Delete user role",
   "roles.addRoles": "Add user roles",
-  "roles.unassignAllRoles": "Unassign all user roles"
+  "roles.unassignAllRoles": "Unassign all user roles",
+  "roles.modal.assigned": "Assigned",
+  "roles.modal.unassigned": "Unassigned",
+  "roles.modal.list.pane.subheader": "{amount} roles found",
+  "roles.modal.search.resetAll": "Reset all"
+  
 }
