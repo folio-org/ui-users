@@ -27,6 +27,11 @@ jest.mock('./utils/canvasUtils', () => ({
   getCroppedImg: jest.fn(),
 }));
 
+jest.mock('../../../../util', () => ({
+  isAValidImageUrl: jest.fn(() => true),
+  isAValidURL: jest.fn(() => true),
+}));
+
 const defaultProps = {
   profilePictureMaxFileSize: 3,
   profilePictureId: 'https://folio.org/wp-content/uploads/2023/08/folio-site-general-Illustration-social-image-1200.jpg',

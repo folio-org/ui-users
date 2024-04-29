@@ -12,7 +12,7 @@ import {
   TextField,
 } from '@folio/stripes/components';
 import { FormattedMessage } from 'react-intl';
-import { isAValidURL } from '../../../../util';
+import { isAValidURL, isAValidImageUrl } from '../../../../util';
 
 const ExternalLinkModal = ({
   open,
@@ -23,39 +23,40 @@ const ExternalLinkModal = ({
   const [inputValue, setInputValue] = useState('');
   const previousInputValue = useRef(profilePictureLink);
   const [disabled, setDisabled] = useState(false);
-  const [error, setError] = useState(false);
-  const externalURLValidityError = error ?
-    <FormattedMessage id="ui-users.information.profilePicture.externalLink.modal.externalURL.errorMessage" />
-    : null;
+  const [externalURLValidityError, setExternalURLValidityError] = useState(null);
 
   useEffect(() => {
     setInputValue(profilePictureLink);
-    setError(false);
   }, [profilePictureLink]);
 
   useEffect(() => {
+    setExternalURLValidityError(null);
     if (inputValue) {
       setDisabled(previousInputValue.current === inputValue);
-      setError(false);
     } else {
       setDisabled(true);
     }
   }, [inputValue]);
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    if (!isAValidURL(inputValue)) {
+      setExternalURLValidityError(<FormattedMessage id="ui-users.information.profilePicture.externalLink.modal.externalURL.invalidURLErrorMessage" />);
+      setDisabled(true);
+      return;
+    }
+
+    const isValidImgURL = await isAValidImageUrl(inputValue);
+    if (!isValidImgURL) {
+      setExternalURLValidityError(<FormattedMessage id="ui-users.information.profilePicture.externalLink.modal.externalURL.invalidImageURLErrorMessage" />);
+      setDisabled(true);
+      return;
+    }
     onSave(inputValue);
   };
 
   const handleInputChange = (e) => {
     previousInputValue.current = inputValue;
     setInputValue(e.target.value);
-  };
-
-  const handleBlur = () => {
-    if (inputValue && !isAValidURL(inputValue)) {
-      setError(true);
-      setDisabled(true);
-    }
   };
 
   const renderModalFooter = () => {
@@ -92,7 +93,6 @@ const ExternalLinkModal = ({
         label={<FormattedMessage id="ui-users.information.profilePicture.externalLink.modal.externalURL" />}
         error={externalURLValidityError}
         onChange={handleInputChange}
-        onBlur={handleBlur}
         value={inputValue}
         hasClearIcon={false}
       />
