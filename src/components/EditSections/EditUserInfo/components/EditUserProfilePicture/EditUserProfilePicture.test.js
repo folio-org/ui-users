@@ -6,14 +6,11 @@ import {
   act,
 } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
-import { Img } from 'react-image';
 import Compressor from 'compressorjs';
 
-import { useCallout, useStripes, useOkapiKy } from '@folio/stripes/core';
+import { useCallout, useStripes } from '@folio/stripes/core';
 
-import profilePicData from 'fixtures/profilePicture';
-
-import { useProfilePicture } from '@folio/stripes/smart-components';
+import '__mock__/stripesSmartComponent.mock';
 import EditUserProfilePicture from './EditUserProfilePicture';
 import * as canvasUtilsmodule from './utils/canvasUtils';
 import { imageSrc } from './utils/data/imageSrc';
@@ -28,10 +25,6 @@ jest.mock('./utils/canvasUtils', () => ({
   getRadianAngle: jest.fn(),
   rotateSize: jest.fn(),
   getCroppedImg: jest.fn(),
-}));
-jest.mock('@folio/stripes/smart-components', () => ({
-  ...jest.requireActual('@folio/stripes/smart-components'),
-  useProfilePicture: jest.fn(),
 }));
 jest.mock('react-image', () => ({
   Img: jest.fn(() => null),
@@ -65,10 +58,6 @@ describe('Edit User Profile Picture', () => {
 
     beforeEach(() => {
       Compressor.mockReset();
-      useOkapiKy.mockClear().mockReturnValue({
-        get: () => ({ json: () => Promise.resolve(profilePicData) }),
-      });
-      useProfilePicture.mockClear().mockReturnValue({ profilePictureData: profilePicData.profile_picture_blob });
       sendCallout.mockClear();
       useCallout.mockClear().mockReturnValue({ sendCallout });
       useStripes.mockClear().mockReturnValue({
@@ -95,16 +84,7 @@ describe('Edit User Profile Picture', () => {
 
     it('should display Profile picture', () => {
       renderProfilePicture(defaultProps);
-      expect(Img).toHaveBeenCalled();
-      const renderedProfileImg = Img.mock.calls[0][0];
-      expect(renderedProfileImg.alt).toBe('ui-users.information.profilePicture');
-    });
-
-    it('Image to be displayed with correct src', () => {
-      renderProfilePicture(defaultProps);
-      expect(Img).toHaveBeenCalled();
-      const renderedProfileImg = Img.mock.calls[0][0];
-      expect(renderedProfileImg.src).toContain('https://folio.org/wp-content/uploads/2023/08/folio-site-general-Illustration-social-image-1200.jpg');
+      expect(screen.getByText('ProfilePicture')).toBeInTheDocument();
     });
 
     it('should display update button', () => {
@@ -141,7 +121,6 @@ describe('Edit User Profile Picture', () => {
       const updateButton = screen.getByTestId('updateProfilePictureDropdown');
       await userEvent.click(updateButton);
       const externalURLButton = screen.getByTestId('externalURL');
-      screen.debug(screen.getByTestId('externalURL'));
       await userEvent.click(externalURLButton);
 
       expect(screen.getByText('ui-users.information.profilePicture.externalLink.modal.externalURL')).toBeInTheDocument();
@@ -159,9 +138,7 @@ describe('Edit User Profile Picture', () => {
 
       fireEvent.change(inputElement, { target: { value: 'https://upload.wikimedia.org/wikipedia/commons/e/e2/FOLIO_400x400.jpg' } });
       await userEvent.click(saveButton);
-      expect(Img).toHaveBeenCalled();
-      const renderedProfileImg = Img.mock.lastCall[0];
-      expect(expect(renderedProfileImg.src).toContain('https://upload.wikimedia.org/wikipedia/commons/e/e2/FOLIO_400x400.jpg'));
+      expect(screen.getByText('ProfilePicture')).toBeInTheDocument();
     });
 
     it('should invoke local file upload handlers with compression', async () => {
@@ -330,22 +307,9 @@ describe('Edit User Profile Picture', () => {
   });
 
   describe('when profile picture is a uuid', () => {
-    beforeEach(() => {
-      useProfilePicture.mockClear().mockReturnValue({ profilePictureData: profilePicData.profile_picture_blob, isFetching: false });
-      renderProfilePicture({ ...defaultProps, profilePictureId: 'cdc053ff-f88e-445c-878f-650472bd52e6' });
-    });
-
     it('should display Profile picture', () => {
-      expect(Img).toHaveBeenCalled();
-      const renderedProfileImg = Img.mock.calls[0][0];
-      expect(renderedProfileImg.alt).toBe('ui-users.information.profilePicture');
-    });
-
-    it('should display Profile picture Loader while fetching profile picture', () => {
-      useProfilePicture.mockClear().mockReturnValue({ profilePictureData: profilePicData.profile_picture_blob, isFetching: true });
       renderProfilePicture({ ...defaultProps, profilePictureId: 'cdc053ff-f88e-445c-878f-650472bd52e6' });
-      const profilePictureLoader = screen.getByTestId('profile-picture-loader').querySelector('.spinner');
-      expect(profilePictureLoader).toBeInTheDocument();
+      expect(screen.getByText('ProfilePicture')).toBeInTheDocument();
     });
   });
 });

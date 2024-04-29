@@ -1,16 +1,10 @@
 import { screen } from '@folio/jest-config-stripes/testing-library/react';
 
 import renderWithRouter from 'helpers/renderWithRouter';
+import '__mock__/stripesSmartComponent.mock';
 import UserInfo from './UserInfo';
 
 const toggleMock = jest.fn();
-
-
-jest.mock('@folio/stripes/smart-components', () => ({
-  ...jest.requireActual('@folio/stripes/smart-components'),
-  ProfilePicture: () => <div>Profile Picture</div>,
-  ViewMetaData: () => <div>View MetaData</div>,
-}));
 
 const renderUserInfo = (props) => renderWithRouter(<UserInfo {...props} />);
 
@@ -55,7 +49,7 @@ describe('Render userInfo component', () => {
     });
     it('should display profile picture', () => {
       renderUserInfo(props);
-      expect(screen.getByText('Profile Picture')).toBeInTheDocument();
+      expect(screen.getByText('ProfilePicture')).toBeInTheDocument();
     });
   });
 
@@ -69,7 +63,7 @@ describe('Render userInfo component', () => {
         }
       };
       renderUserInfo(alteredProps);
-      expect(screen.queryByText('Profile Picture')).not.toBeInTheDocument();
+      expect(screen.queryByText('ProfilePicture')).not.toBeInTheDocument();
     });
   });
 });
