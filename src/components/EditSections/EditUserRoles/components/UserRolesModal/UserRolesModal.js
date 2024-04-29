@@ -52,7 +52,8 @@ export default function UserRolesModal({ isOpen, onClose, assignedRoles }) {
 
   const filteredRoles = getFilteredRoles();
 
-  const getFilterConfigGroups = () => [filtersConfig].map(({ filte, ...filterConfig }) => (filterConfig));
+  // eslint-disable-next-line no-unused-vars
+  const getFilterConfigGroups = () => [filtersConfig].map(({ filter, ...filterConfig }) => (filterConfig));
 
   const onChangeFilter = ({ target: { name, checked } }) => {
     setFilters((prState) => {
@@ -185,5 +186,10 @@ export default function UserRolesModal({ isOpen, onClose, assignedRoles }) {
 UserRolesModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  assignedRoles: PropTypes.array.isRequired
+  assignedRoles: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired
+    })
+  ).isRequired,
 };
