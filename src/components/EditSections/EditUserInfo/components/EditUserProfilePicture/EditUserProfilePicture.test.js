@@ -9,11 +9,11 @@ import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import { Img } from 'react-image';
 import Compressor from 'compressorjs';
 
-import { useCallout, useStripes } from '@folio/stripes/core';
+import { useCallout, useStripes, useOkapiKy } from '@folio/stripes/core';
 
 import profilePicData from 'fixtures/profilePicture';
 
-import { useProfilePicture } from '../../../../../hooks';
+import { useProfilePicture } from '@folio/stripes/smart-components';
 import EditUserProfilePicture from './EditUserProfilePicture';
 import * as canvasUtilsmodule from './utils/canvasUtils';
 import { imageSrc } from './utils/data/imageSrc';
@@ -29,7 +29,8 @@ jest.mock('./utils/canvasUtils', () => ({
   rotateSize: jest.fn(),
   getCroppedImg: jest.fn(),
 }));
-jest.mock('../../../../../hooks', () => ({
+jest.mock('@folio/stripes/smart-components', () => ({
+  ...jest.requireActual('@folio/stripes/smart-components'),
   useProfilePicture: jest.fn(),
 }));
 jest.mock('react-image', () => ({
@@ -64,6 +65,9 @@ describe('Edit User Profile Picture', () => {
 
     beforeEach(() => {
       Compressor.mockReset();
+      useOkapiKy.mockClear().mockReturnValue({
+        get: () => ({ json: () => Promise.resolve(profilePicData) }),
+      });
       useProfilePicture.mockClear().mockReturnValue({ profilePictureData: profilePicData.profile_picture_blob });
       sendCallout.mockClear();
       useCallout.mockClear().mockReturnValue({ sendCallout });

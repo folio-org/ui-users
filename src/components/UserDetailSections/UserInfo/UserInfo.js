@@ -12,11 +12,10 @@ import {
   NoValue,
   FormattedDate,
 } from '@folio/stripes/components';
-import { ViewMetaData } from '@folio/stripes/smart-components';
+import { ViewMetaData, ProfilePicture } from '@folio/stripes/smart-components';
 import { useStripes } from '@folio/stripes/core';
 
 import { USER_TYPE_FIELD, USER_TYPES } from '../../../constants';
-import ProfilePicture from '../../ProfilePicture';
 
 const UserInfo = (props) => {
   const {

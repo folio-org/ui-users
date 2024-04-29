@@ -1,19 +1,15 @@
 import { screen } from '@folio/jest-config-stripes/testing-library/react';
 
 import renderWithRouter from 'helpers/renderWithRouter';
-import { Img } from 'react-image';
 import UserInfo from './UserInfo';
-import { useProfilePicture } from '../../../hooks';
-import profilePicData from '../../../../test/jest/fixtures/profilePicture';
 
 const toggleMock = jest.fn();
 
-jest.mock('../../../hooks', () => ({
-  useProfilePicture: jest.fn(),
-}));
 
-jest.mock('react-image', () => ({
-  Img: jest.fn(() => null),
+jest.mock('@folio/stripes/smart-components', () => ({
+  ...jest.requireActual('@folio/stripes/smart-components'),
+  ProfilePicture: () => <div>Profile Picture</div>,
+  ViewMetaData: () => <div>View MetaData</div>,
 }));
 
 const renderUserInfo = (props) => renderWithRouter(<UserInfo {...props} />);
@@ -45,11 +41,6 @@ const props = {
 };
 
 describe('Render userInfo component', () => {
-  beforeEach(() => {
-    useProfilePicture.mockClear().mockReturnValue({ profilePictureData: profilePicData.profile_picture_blob, isFetching: false });
-    jest.clearAllMocks();
-  });
-
   describe('Check if user data are shown', () => {
     it('Active Users', () => {
       renderUserInfo(props);
@@ -64,14 +55,7 @@ describe('Render userInfo component', () => {
     });
     it('should display profile picture', () => {
       renderUserInfo(props);
-      expect(Img).toHaveBeenCalled();
-      const renderedProfileImg = Img.mock.calls[0][0];
-      expect(renderedProfileImg.alt).toBe('ui-users.information.profilePicture');
-    });
-    it('should display profile picture loader while fetching profile picture', () => {
-      useProfilePicture.mockClear().mockReturnValue({ isFetching: true });
-      renderUserInfo(props);
-      expect(screen.getByText('Loading')).toBeInTheDocument();
+      expect(screen.getByText('Profile Picture')).toBeInTheDocument();
     });
   });
 
@@ -85,7 +69,7 @@ describe('Render userInfo component', () => {
         }
       };
       renderUserInfo(alteredProps);
-      expect(Img).not.toHaveBeenCalled();
+      expect(screen.queryByText('Profile Picture')).not.toBeInTheDocument();
     });
   });
 });
