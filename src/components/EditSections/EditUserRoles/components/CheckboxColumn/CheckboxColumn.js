@@ -26,7 +26,7 @@ const CheckboxColumn = memo(props => {
         name={`selected-${value}`}
         checked={checked}
         onChange={onChange}
-        data-permission-name={roleName}
+        data-role-name={roleName}
       />
     </div>
   );

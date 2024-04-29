@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { cloneDeep } from 'lodash';
 import css from './index.css';
 import UserRolesList from '../UserRolesList/UserRolesList';
-import useUserRoles from '../../../../../hooks/useUserRoles/useUserRoles';
+import { useUserRoles } from '../../../../../hooks';
 import SearchForm from '../SearchForm/SearchForm';
 import { filtersConfig, getInitialFiltersState } from '../../helpers';
 
@@ -16,7 +16,7 @@ export default function UserRolesModal({ isOpen, onClose, assignedRoles }) {
   const [assignedRoleIds, setAssignedRoleIds] = useState(assignedRoles.map(role => role.id));
   const [filters, setFilters] = useState(getInitialFiltersState([filtersConfig]));
 
-  const { data } = useUserRoles();
+  const { data: allRolesData } = useUserRoles();
 
   const handleCloseModal = () => {
     setAssignedRoleIds(assignedRoles.map(role => role.id));
@@ -24,9 +24,9 @@ export default function UserRolesModal({ isOpen, onClose, assignedRoles }) {
   };
 
   const getFilteredRoles = () => {
-    if (!data?.roles) return [];
+    if (!allRolesData?.roles) return [];
 
-    let filtered = cloneDeep(data.roles);
+    let filtered = cloneDeep(allRolesData.roles);
     [filtersConfig].forEach((filterData) => {
       // eslint-disable-next-line no-unused-vars
       filtered = filterData.filter(filtered, filters, assignedRoleIds);
@@ -34,8 +34,6 @@ export default function UserRolesModal({ isOpen, onClose, assignedRoles }) {
 
     return filtered.filter(role => role.name.includes(submittedSearchTerm.trim().toLowerCase()));
   };
-
-  // const resetSearchForm = () => setSubmittedSearchTerm('');
 
   const toggleRole = (id) => {
     if (assignedRoleIds.includes(id)) {
@@ -46,7 +44,7 @@ export default function UserRolesModal({ isOpen, onClose, assignedRoles }) {
   };
 
   const toggleAllRoles = (checked) => {
-    if (checked) setAssignedRoleIds(data?.roles.map(role => role.id));
+    if (checked) setAssignedRoleIds(allRolesData?.roles.map(role => role.id));
     else setAssignedRoleIds([]);
   };
 

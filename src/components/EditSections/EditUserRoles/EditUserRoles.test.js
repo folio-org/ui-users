@@ -7,11 +7,12 @@ import {
 } from '@folio/stripes/core';
 import EditUserRoles from './EditUserRoles';
 
-import { useUserTenantRoles } from '../../../hooks';
+import { useUserRoles, useUserTenantRoles } from '../../../hooks';
 
 jest.mock('../../../hooks', () => ({
   ...jest.requireActual('../../../hooks'),
   useUserTenantRoles: jest.fn(),
+  useUserRoles: jest.fn()
 }));
 
 jest.mock('@folio/stripes/core', () => ({
@@ -34,12 +35,21 @@ const STRIPES = {
   },
 };
 
+const MOCK_USE_USER_ROLES = {
+  data: {
+    roles: [{ id: '1', name: 'test role' },
+    { id: '2', name: 'admin role' },
+    { id: '3', name: 'simple role' }
+  ]
+  },
+}
 
 const renderEditRolesAccordion = () => renderWithRouter(<EditUserRoles accordionId="user-roles" />);
 
 describe('EditUserRoles Component', () => {
   beforeEach(() => {
     useStripes.mockClear().mockReturnValue(STRIPES);
+    useUserRoles.mockClear().mockReturnValue(MOCK_USE_USER_ROLES);
     useUserTenantRoles.mockClear().mockReturnValue({
       isFetching: false,
       userRoles: [{ id: '1', name: 'test role' },
@@ -50,9 +60,10 @@ describe('EditUserRoles Component', () => {
   afterEach(cleanup);
 
   it('shows the list of user roles', () => {
-    const { getByText } = renderEditRolesAccordion();
+    const { getByText, queryByText } = renderEditRolesAccordion();
 
     expect(getByText('test role')).toBeInTheDocument();
     expect(getByText('admin role')).toBeInTheDocument();
+    expect(queryByText('simple role')).not.toBeInTheDocument();
   });
 });

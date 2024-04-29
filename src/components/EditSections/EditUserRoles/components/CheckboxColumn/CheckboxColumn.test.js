@@ -17,7 +17,7 @@ const mockFunc = jest.fn();
 const propData = {
   checked: true,
   value: 'testCheckBox',
-  permissionName: 'testPermissionName',
+  roleName: 'testRoleName',
   onChange: mockFunc,
 };
 
@@ -25,7 +25,7 @@ describe('CheckboxColumn component', () => {
   afterEach(cleanup);
   it('If CheckboxColumn Renders', () => {
     renderCheckboxColumn(propData);
-    expect(document.querySelector('[data-permission-name="testPermissionName"]')).toBeInTheDocument();
+    expect(document.querySelector('[data-role-name="testRoleName"]')).toBeInTheDocument();
   });
   it('If CheckboxColumn can be checked', async () => {
     renderCheckboxColumn(propData);
