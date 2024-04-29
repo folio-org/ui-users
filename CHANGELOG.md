@@ -10,6 +10,7 @@
 * Fix "Total paid amount" value that set as "$NaN" on "Refund fee/fine" modal. Refs UIU-3094.
 * Allow override for reminder fees with renewal blocked. Refs UICIRC-1077.
 * Validate image url provided as external url for user profile picture. Refs UIU-3080.
+* Implement ProfilePicture Component from stripes/smart-components. Refs UIU-3104.
 
 ## [10.1.0](https://github.com/folio-org/ui-users/tree/v10.1.0) (2024-03-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.4...v10.1.0)
