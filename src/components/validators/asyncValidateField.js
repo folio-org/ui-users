@@ -8,7 +8,7 @@ export default function asyncValidateField(fieldName, initValue, validator) {
   return memoize(async (value) => {
     if (!value || value === initValue) return '';
 
-    const query = `(${fieldName}=="${value}")`;
+    const query = `(${fieldName}=="${value.trim()}")`;
 
     validator.reset();
     const records = await validator.GET({ params: { query } });

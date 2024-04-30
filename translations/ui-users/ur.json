@@ -388,7 +388,6 @@
     "accounts.actions.calloutMessage": "The {feeFineType} fee/fine of {amount} has been successfully {paymentStatus} for {name}.",
     "accounts.actions.payFeeFine": "Pay fees/fines",
     "accounts.actions.waiveFeeFine": "Waive fees/fines",
-    "accounts.actions.warning.summary": "{selectedItemsAmount} items selected. {invalidItemsAmount} items cannot be {action} because they {reason}.",
     "accounts.actions.warning.alertDetails": "Alert details",
     "accounts.actions.warning.feeFineType": "Fee/Fine type",
     "accounts.actions.warning.remaining": "Remainig",
@@ -396,7 +395,7 @@
     "accounts.actions.warning.item": "Item",
     "accounts.actions.warning.waiveAction": "waived",
     "accounts.error.exceeds": "Pay amount exceeds the selected amount",
-    "accounts.warning.itemSelected": "{total, number} items selected. {items, number} {items, plural, one {item} other {items}} cannot be {action} because they are already closed.",
+    "accounts.warning.itemSelected": "{total, number} {total, plural, one {item} other {items}} selected. {items, number} {items, plural, one {item} other {items}} cannot be {action} because {items, plural, one {it is} other {they are}} already closed.",
     "blocks.reason": "Reason for block:",
     "blocks.modal.header": "Patron blocked from renewing",
     "blocks.detailsButton": "View block details",
@@ -686,8 +685,6 @@
     "accounts.refund.error.select": "Refund reason is required",
     "accounts.actions.refundFeeFine": "Refund fees/fines",
     "accounts.actions.warning.refundAction": "refunded",
-    "accounts.actions.warning.closedItems": "are already closed",
-    "accounts.actions.warning.unpaidItems": "were not paid",
     "accounts.actions.refund": "refund",
     "reports.noItemsFound": "No items found.",
     "reports.claimReturned.label": "Claimed returned report (CSV)",
@@ -1167,5 +1164,6 @@
     "information.profilePicture.localFile.modal.previewAndEdit": "Preview and edit",
     "information.profilePicture.localFile.modal.zoom": "Zoom",
     "information.profilePicture.localFile.modal.rotate": "Rotate",
-    "information.profilePicture.localFile.maxFileSize.error": "Photo size exceeds the {maxFileSize}MB limit. Please choose a photo with a size of {maxFileSize}MB or less."
+    "information.profilePicture.localFile.maxFileSize.error": "Photo size exceeds the {maxFileSize}MB limit. Please choose a photo with a size of {maxFileSize}MB or less.",
+    "accounts.warning.unpaidItemSelected": "{total, number} {total, plural, one {item} other {items}} selected. {items, number} {items, plural, one {item} other {items}} cannot be {action} because {items, plural, one {it was} other {they were}} not paid."
 }

@@ -4,6 +4,13 @@
 
 * UX consistency: Use Save & close button label stripes-component translation key. Refs UIU-3078.
 * Fix two "triangle down" icons in select element of "Copy existing fee/fine owner table entries" modal. Refs UIU-2929.
+* Fix incorrect translation key having count-disagreements in Pay fees/fines modal in Fees/Fines Page. Refs UIU-1097.
+* Trim input values and delete properties with empty string when user record save. Refs UIU-2049.
+* Update username field validation to trim leading and trailing spaces. Refs UIU-3099.
+* Fix "Total paid amount" value that set as "$NaN" on "Refund fee/fine" modal. Refs UIU-3094.
+* Allow override for reminder fees with renewal blocked. Refs UICIRC-1077.
+* Validate image url provided as external url for user profile picture. Refs UIU-3080.
+* Import and use ProfilePicture Component from stripes/smart-components. Refs UIU-3104.
 * Show Roles assigned to users. Refs UIU-3110.
 * Add edit user roles accordion on edit role modal view. Refs UIU-3021.    
 

@@ -6,7 +6,7 @@ import {
 } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
-import { isAValidURL } from '../../../../util';
+import { isAValidURL, isAValidImageUrl } from '../../../../util';
 
 import '../../../../../../test/jest/__mock__';
 
@@ -43,6 +43,7 @@ describe('ExternalLinkModal', () => {
 
   beforeEach(() => {
     isAValidURL.mockReset();
+    isAValidImageUrl.mockReset();
     renderExternalLinkModal(props);
   });
 
@@ -53,6 +54,9 @@ describe('ExternalLinkModal', () => {
     expect(screen.getByText('ui-users.information.profilePicture.externalLink.modal.externalURL')).toBeInTheDocument();
   });
   it('should call onSave', async () => {
+    isAValidURL.mockImplementationOnce(() => true);
+    isAValidImageUrl.mockImplementationOnce(() => true);
+
     const saveButton = screen.getByRole('button', { name: 'ui-users.save' });
     const inputElement = screen.getByLabelText('ui-users.information.profilePicture.externalLink.modal.externalURL');
 
@@ -61,14 +65,28 @@ describe('ExternalLinkModal', () => {
 
     expect(props.onSave).toHaveBeenCalled();
   });
-  it('should show error text when url is invalid', async () => {
+  it('should show error text when url is invalid url', async () => {
     isAValidURL.mockImplementationOnce(() => false);
+
+    const saveButton = screen.getByRole('button', { name: 'ui-users.save' });
     const inputElement = screen.getByLabelText('ui-users.information.profilePicture.externalLink.modal.externalURL');
 
     fireEvent.change(inputElement, { target: { value: 'profile picture' } });
-    fireEvent.blur(inputElement);
+    await userEvent.click(saveButton);
 
-    await waitFor(() => expect(screen.getByText('ui-users.information.profilePicture.externalLink.modal.externalURL.errorMessage')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText('ui-users.information.profilePicture.externalLink.modal.externalURL.invalidURLErrorMessage')).toBeInTheDocument());
+  });
+  it('should show error text when url is invalid image url', async () => {
+    isAValidURL.mockImplementationOnce(() => true);
+    isAValidImageUrl.mockImplementationOnce(() => false);
+
+    const saveButton = screen.getByRole('button', { name: 'ui-users.save' });
+    const inputElement = screen.getByLabelText('ui-users.information.profilePicture.externalLink.modal.externalURL');
+
+    fireEvent.change(inputElement, { target: { value: 'https://folio-org.atlassian.net/browse/UIU-3080' } });
+    await userEvent.click(saveButton);
+
+    await waitFor(() => expect(screen.getByText('ui-users.information.profilePicture.externalLink.modal.externalURL.invalidImageURLErrorMessage')).toBeInTheDocument());
   });
   it('should call onClose', async () => {
     const cancelButton = screen.getByRole('button', { name: 'stripes-core.button.cancel' });

@@ -11,6 +11,7 @@ const userFormData = {
     addresses: [],
     email: 'ex@mp.le',
   },
+  externalSystemId: '  ',
   permissions: {
     tenantId: [{ permissionName: 'users.item.get' }],
     testTenant: [{ permissionName: 'users.item.get' }],

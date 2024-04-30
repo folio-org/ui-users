@@ -388,7 +388,6 @@
     "accounts.actions.calloutMessage": "La tassa / sanzione {feeFineType} di {amount} è stata {paymentStatus} correttamente per {name} .",
     "accounts.actions.payFeeFine": "Paga tariffe/multe",
     "accounts.actions.waiveFeeFine": "Revoca tariffe/multe",
-    "accounts.actions.warning.summary": "{selectedItemsAmount} items selezionati. {invalidItemsAmount} items non possono essere {action} perché {reason}",
     "accounts.actions.warning.alertDetails": "Dettagli avviso",
     "accounts.actions.warning.feeFineType": "Tipologia tariffa/multa",
     "accounts.actions.warning.remaining": "Residuo",
@@ -686,8 +685,6 @@
     "accounts.refund.error.select": "Il motivo del rimborso è obbligatorio",
     "accounts.actions.refundFeeFine": "Rimborso tariffe/multe",
     "accounts.actions.warning.refundAction": "rimborsato",
-    "accounts.actions.warning.closedItems": "sono già chiusi",
-    "accounts.actions.warning.unpaidItems": "non sono stati pagati",
     "accounts.actions.refund": "rimborso",
     "reports.noItemsFound": "Nessun item trovato",
     "reports.claimReturned.label": "Rapporto dei dichiarati reso (CSV)",
@@ -1167,5 +1164,6 @@
     "information.profilePicture.localFile.modal.previewAndEdit": "Preview and edit",
     "information.profilePicture.localFile.modal.zoom": "Zoom",
     "information.profilePicture.localFile.modal.rotate": "Rotate",
-    "information.profilePicture.localFile.maxFileSize.error": "Photo size exceeds the {maxFileSize}MB limit. Please choose a photo with a size of {maxFileSize}MB or less."
+    "information.profilePicture.localFile.maxFileSize.error": "Photo size exceeds the {maxFileSize}MB limit. Please choose a photo with a size of {maxFileSize}MB or less.",
+    "accounts.warning.unpaidItemSelected": "{total, number} {total, plural, one {item} other {items}} selected. {items, number} {items, plural, one {item} other {items}} cannot be {action} because {items, plural, one {it was} other {they were}} not paid."
 }

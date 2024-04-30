@@ -364,3 +364,18 @@ export const DCB_VIRTUAL_USER = {
 
 export const PROFILE_PIC_DEFAULT_MAX_SIZE = 10;
 export const ACCEPTED_IMAGE_TYPES = 'image/jpg, image/jpeg, image/png';
+
+export const USER_INFO = {
+  FIRST_NAME: 'personal.firstName',
+  MIDDLE_NAME: 'personal.middleName',
+  MOBILE_PHONE: 'personal.mobilePhone',
+  PHONE: 'personal.phone',
+  PREFERRED_FIRST_NAME: 'personal.preferredFirstName',
+  BARCODE: 'barcode',
+  EXTERNAL_SYSTEM_ID: 'externalSystemId',
+  USERNAME: 'username',
+};
+
+export const USER_FIELDS_TO_CHECK = [USER_INFO.FIRST_NAME, USER_INFO.MIDDLE_NAME,
+  USER_INFO.MOBILE_PHONE, USER_INFO.PHONE, USER_INFO.PREFERRED_FIRST_NAME,
+  USER_INFO.BARCODE, USER_INFO.EXTERNAL_SYSTEM_ID, USER_INFO.USERNAME];
