@@ -78,7 +78,7 @@ describe('UserRoleModal', () => {
   });
 
   it('should reset all filters', async () => {
-    const { getAllByRole } = renderComponent({ isOpen: true, onClose: mockOnClose, assignedRoles: mockAssignedRoles });
+    renderComponent({ isOpen: true, onClose: mockOnClose, assignedRoles: mockAssignedRoles });
 
     const unassignedFilterCheckbox = document.querySelector('[name="status.unassigned"]');
     await userEvent.click(unassignedFilterCheckbox);
@@ -92,5 +92,17 @@ describe('UserRoleModal', () => {
     await userEvent.click(resetButton);
     expect(unassignedFilterCheckbox.checked).toBe(false);
     expect(assignedFilterCheckbox.checked).toBe(false);
+  });
+
+  it('should toggle filters pane', async () => {
+    const { getByText } = renderComponent({ isOpen: true, onClose: mockOnClose, assignedRoles: mockAssignedRoles });
+
+    const collapseButton = document.querySelector('[data-test-collapse-filter-pane-button="true"]');
+    await userEvent.click(collapseButton);
+    expect(getByText('stripes-smart-components.showSearchPane')).toBeInTheDocument();
+
+    const expandButton = document.querySelector('[data-test-expand-filter-pane-button="true"]');
+    await userEvent.click(expandButton);
+    expect(getByText('stripes-smart-components.hideSearchPane')).toBeInTheDocument();
   });
 });
