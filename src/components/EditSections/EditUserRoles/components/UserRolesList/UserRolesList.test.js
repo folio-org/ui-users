@@ -1,4 +1,4 @@
-import { cleanup, render, screen } from '@folio/jest-config-stripes/testing-library/react';
+import { cleanup, render } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import UserRolesList from './UserRolesList';
 
@@ -27,12 +27,12 @@ describe('UserRolesList', () => {
   it('toggle select all roles', async () => {
     await userEvent.click(document.querySelector('[name="selected-selectAll"]'));
 
-    expect(mockToggleAllRoles).toHaveBeenCalledTimes(1);
+    expect(mockToggleAllRoles).toHaveBeenCalledWith(true);
   });
 
   it('toggle select role', async () => {
     await userEvent.click(document.querySelector('[name="selected-1"]'));
 
-    expect(mockToggleRole).toHaveBeenCalledTimes(1);
+    expect(mockToggleRole).toHaveBeenCalledWith('1');
   });
 });

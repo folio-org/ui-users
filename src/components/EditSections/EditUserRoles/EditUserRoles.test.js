@@ -22,6 +22,11 @@ jest.mock('@folio/stripes/core', () => ({
 
 jest.unmock('@folio/stripes/components');
 
+jest.mock('@folio/stripes/components', () => ({
+  ...jest.requireActual('@folio/stripes/components'),
+  Loading: 'Loading spinner'
+}));
+
 const STRIPES = {
   config: {},
   hasPerm: jest.fn().mockReturnValue(true),
@@ -38,11 +43,11 @@ const STRIPES = {
 const MOCK_USE_USER_ROLES = {
   data: {
     roles: [{ id: '1', name: 'test role' },
-    { id: '2', name: 'admin role' },
-    { id: '3', name: 'simple role' }
-  ]
+      { id: '2', name: 'admin role' },
+      { id: '3', name: 'simple role' }
+    ]
   },
-}
+};
 
 const renderEditRolesAccordion = () => renderWithRouter(<EditUserRoles accordionId="user-roles" />);
 
@@ -65,5 +70,11 @@ describe('EditUserRoles Component', () => {
     expect(getByText('test role')).toBeInTheDocument();
     expect(getByText('admin role')).toBeInTheDocument();
     expect(queryByText('simple role')).not.toBeInTheDocument();
+  });
+
+  it('shows the Loading spinner on loading status', () => {
+    const { getByText, queryByText } = renderEditRolesAccordion();
+    useUserRoles.mockClear().mockReturnValue({ isLoading:true });
+    expect(getByText('Loading spinner')).toBeInTheDocument();
   });
 });

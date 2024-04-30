@@ -70,10 +70,12 @@ describe('Search Form Component', () => {
   it('Check if search works', async () => {
     await userEvent.type(document.querySelector('[data-test-search-field="true"]'), 'roless');
     await userEvent.click(document.querySelector('[data-test-submit-button="true"]'));
+
     expect(mockSearchFunc).toHaveBeenCalled();
   });
   it('Check if reset all works', async () => {
     await userEvent.click(document.querySelector('[data-test-reset-all-button="true"]'));
+
     expect(mockResetFunc).toHaveBeenCalled();
   });
 });
