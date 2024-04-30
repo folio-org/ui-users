@@ -388,7 +388,6 @@
     "accounts.actions.calloutMessage": "Les {feeFineType} frais / amende de {amount} ont bien été {paymentStatus} pour {name} .",
     "accounts.actions.payFeeFine": "Payer les frais / amendes",
     "accounts.actions.waiveFeeFine": "Effacer frais / amendes",
-    "accounts.actions.warning.summary": "{selectedItemsAmount} éléments sélectionnés. {invalidItemsAmount} ne peuvent pas être {action} car ils {reason} .",
     "accounts.actions.warning.alertDetails": "Détails de l'alerte",
     "accounts.actions.warning.feeFineType": "Type de frais/amendes",
     "accounts.actions.warning.remaining": "Restant",
@@ -396,7 +395,7 @@
     "accounts.actions.warning.item": "Exemplaire",
     "accounts.actions.warning.waiveAction": "Renoncé",
     "accounts.error.exceeds": "Le montant à payer dépasse le montant sélectionné",
-    "accounts.warning.itemSelected": "{total, number} items selected. {items, number} {items, plural, one {item} other {items}} cannot be {action} because they are already closed.",
+    "accounts.warning.itemSelected": "{total, number} {total, plural, one {item} other {items}} selected. {items, number} {items, plural, one {item} other {items}} cannot be {action} because {items, plural, one {it is} other {they are}} already closed.",
     "blocks.reason": "Motif de la suspension",
     "blocks.modal.header": "Utilisateur bloqué",
     "blocks.detailsButton": "Voir les détails de la suspension",
@@ -686,8 +685,6 @@
     "accounts.refund.error.select": "La raison du remboursement est requise",
     "accounts.actions.refundFeeFine": "Frais de remboursement / amendes",
     "accounts.actions.warning.refundAction": "remboursé",
-    "accounts.actions.warning.closedItems": "sont déjà fermés",
-    "accounts.actions.warning.unpaidItems": "n'ont pas été payés",
     "accounts.actions.refund": "remboursement",
     "reports.noItemsFound": "Aucun exemplaire trouvé.",
     "reports.claimReturned.label": "Rapport sur exemplaires rendus (CSV)",
@@ -1167,5 +1164,6 @@
     "information.profilePicture.localFile.modal.previewAndEdit": "Preview and edit",
     "information.profilePicture.localFile.modal.zoom": "Zoom",
     "information.profilePicture.localFile.modal.rotate": "Rotate",
-    "information.profilePicture.localFile.maxFileSize.error": "Photo size exceeds the {maxFileSize}MB limit. Please choose a photo with a size of {maxFileSize}MB or less."
+    "information.profilePicture.localFile.maxFileSize.error": "Photo size exceeds the {maxFileSize}MB limit. Please choose a photo with a size of {maxFileSize}MB or less.",
+    "accounts.warning.unpaidItemSelected": "{total, number} {total, plural, one {item} other {items}} selected. {items, number} {items, plural, one {item} other {items}} cannot be {action} because {items, plural, one {it was} other {they were}} not paid."
 }

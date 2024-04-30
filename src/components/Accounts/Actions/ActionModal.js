@@ -380,7 +380,7 @@ class ActionModal extends React.Component {
                     :
                   </Col>
                   <Col xs={4}>
-                    {localizeCurrencyAmount(totalPaidAmount, stripes.currency, intl)}
+                    {totalPaidAmount}
                   </Col>
                 </Row>
               ) : (

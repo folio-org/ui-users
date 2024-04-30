@@ -388,7 +388,6 @@
     "accounts.actions.calloutMessage": "Opłata / kara za {feeFineType} w wysokości {amount} została pomyślnie {paymentStatus} dla {name}.",
     "accounts.actions.payFeeFine": "Opłać opłaty / kary",
     "accounts.actions.waiveFeeFine": "Umorzenie opłat/kar",
-    "accounts.actions.warning.summary": "Zaznaczono {selectedItemsAmount} egzemplarze(y). {invalidItemsAmount} nie może być {action} z powodu {reason}.",
     "accounts.actions.warning.alertDetails": "Szczegóły ostrzeżenia",
     "accounts.actions.warning.feeFineType": "Rodzaj opłaty/kary",
     "accounts.actions.warning.remaining": "Pozostało",
@@ -686,8 +685,6 @@
     "accounts.refund.error.select": "Wymagany jest powód zwrotu",
     "accounts.actions.refundFeeFine": "Zwrot opłat/kar",
     "accounts.actions.warning.refundAction": "zwrócona",
-    "accounts.actions.warning.closedItems": "są już zamknięte",
-    "accounts.actions.warning.unpaidItems": "nie zostały opłacone",
     "accounts.actions.refund": "zwrot",
     "reports.noItemsFound": "Nie znaleziono żadnych egzemplarzy.",
     "reports.claimReturned.label": "Raport żądań zwrotu (CSV)",
@@ -1167,5 +1164,6 @@
     "information.profilePicture.localFile.modal.previewAndEdit": "Preview and edit",
     "information.profilePicture.localFile.modal.zoom": "Zoom",
     "information.profilePicture.localFile.modal.rotate": "Rotate",
-    "information.profilePicture.localFile.maxFileSize.error": "Photo size exceeds the {maxFileSize}MB limit. Please choose a photo with a size of {maxFileSize}MB or less."
+    "information.profilePicture.localFile.maxFileSize.error": "Photo size exceeds the {maxFileSize}MB limit. Please choose a photo with a size of {maxFileSize}MB or less.",
+    "accounts.warning.unpaidItemSelected": "{total, number} {total, plural, one {item} other {items}} selected. {items, number} {items, plural, one {item} other {items}} cannot be {action} because {items, plural, one {it was} other {they were}} not paid."
 }

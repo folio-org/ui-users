@@ -28,6 +28,7 @@ import {
   getRequestUrl,
   isAffiliationsEnabled,
   isDCBItem,
+  isAValidImageUrl,
 } from './util';
 
 const STRIPES = {
@@ -474,3 +475,52 @@ describe('isDCBItem ', () => {
     expect(isDCBItem(item)).toBeFalsy();
   });
 });
+
+describe('isAValidImageUrl', () => {
+  it('should return true for a valid image URL', async () => {
+    class MockImage {
+      constructor() {
+        this.onload = null;
+        this.onerror = null;
+      }
+
+      set src(value) {
+        if (this.onload) {
+          setTimeout(() => {
+            this.onload();
+          }, 0);
+        }
+      }
+    }
+
+    global.Image = MockImage;
+    const validImageUrl = 'https://upload.wikimedia.org/wikipedia/commons/e/e2/FOLIO_400x400.jpg';
+
+    const isValid = await isAValidImageUrl(validImageUrl);
+    expect(isValid).toBe(true);
+  });
+
+  it('should return false for an invalid image URL', async () => {
+    class MockImage {
+      constructor() {
+        this.onload = null;
+        this.onerror = null;
+      }
+
+      set src(value) {
+        if (this.onerror) {
+          setTimeout(() => {
+            this.onerror();
+          }, 0);
+        }
+      }
+    }
+
+    global.Image = MockImage;
+    const invalidImageUrl = 'https://example.com';
+
+    const isValid = await isAValidImageUrl(invalidImageUrl);
+    expect(isValid).toBe(false);
+  });
+});
+

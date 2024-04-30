@@ -388,7 +388,6 @@
     "accounts.actions.calloutMessage": "Die {feeFineType} Forderung in Höhe von {amount} wurde erfolgreich {paymentStatus} for {name}.",
     "accounts.actions.payFeeFine": "Forderungen bezahlen",
     "accounts.actions.waiveFeeFine": "Forderungen erlassen",
-    "accounts.actions.warning.summary": "{selectedItemsAmount} Exemplar ausgewählt. {invalidItemsAmount} Exemplare können nicht {action} werden, weil sie {reason} sind.",
     "accounts.actions.warning.alertDetails": "Warndetails",
     "accounts.actions.warning.feeFineType": "Art der Forderungen",
     "accounts.actions.warning.remaining": "Verbleibend",
@@ -686,8 +685,6 @@
     "accounts.refund.error.select": "Erstattungsgrund ist erforderlich",
     "accounts.actions.refundFeeFine": "Forderungen erstatten",
     "accounts.actions.warning.refundAction": "zurückerstattet",
-    "accounts.actions.warning.closedItems": "sind bereits geschlossen",
-    "accounts.actions.warning.unpaidItems": "wurden nicht bezahlt",
     "accounts.actions.refund": "Erstattung",
     "reports.noItemsFound": "Keine Exemplare gefunden",
     "reports.claimReturned.label": "Bericht angeblich zurückgegeben (CSV)",
@@ -1167,5 +1164,6 @@
     "information.profilePicture.localFile.modal.previewAndEdit": "Vorschau und Bearbeitung",
     "information.profilePicture.localFile.modal.zoom": "Zoom",
     "information.profilePicture.localFile.modal.rotate": "Drehen",
-    "information.profilePicture.localFile.maxFileSize.error": "Photo size exceeds the {maxFileSize}MB limit. Please choose a photo with a size of {maxFileSize}MB or less."
+    "information.profilePicture.localFile.maxFileSize.error": "Photo size exceeds the {maxFileSize}MB limit. Please choose a photo with a size of {maxFileSize}MB or less.",
+    "accounts.warning.unpaidItemSelected": "{total, number} {total, plural, one {item} other {items}} selected. {items, number} {items, plural, one {item} other {items}} cannot be {action} because {items, plural, one {it was} other {they were}} not paid."
 }

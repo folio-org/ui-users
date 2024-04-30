@@ -388,7 +388,6 @@
     "accounts.actions.calloutMessage": "رسم/غرامة {feeFineType} البالغ قيمتها {amount} تم {paymentStatus} بنجاح لـ {name}",
     "accounts.actions.payFeeFine": "دفع الرسوم/الغرامات",
     "accounts.actions.waiveFeeFine": "العفو عن الرسوم/الغرامات",
-    "accounts.actions.warning.summary": "تم تحديد {selectedItemsAmount}. لا يمكن {action} {invalidItemsAmount} مادة لأنها {reason}.",
     "accounts.actions.warning.alertDetails": "تفاصيل التنبيه",
     "accounts.actions.warning.feeFineType": "نوع الرسم/الغرامة",
     "accounts.actions.warning.remaining": "المتبقي",
@@ -686,8 +685,6 @@
     "accounts.refund.error.select": "سبب الاسترداد مطلوب",
     "accounts.actions.refundFeeFine": "استرداد الرسوم/الغرامات",
     "accounts.actions.warning.refundAction": "تم استرداد المبلغ المدفوع",
-    "accounts.actions.warning.closedItems": "مغلقة بالفعل",
-    "accounts.actions.warning.unpaidItems": "لم يتم دفعه",
     "accounts.actions.refund": "رد المدفوع",
     "reports.noItemsFound": "لم يتم العثور على مواد.",
     "reports.claimReturned.label": "تقرير إدعاء إعادة المادة (CSV)",
@@ -1167,5 +1164,6 @@
     "information.profilePicture.localFile.modal.previewAndEdit": "Preview and edit",
     "information.profilePicture.localFile.modal.zoom": "Zoom",
     "information.profilePicture.localFile.modal.rotate": "Rotate",
-    "information.profilePicture.localFile.maxFileSize.error": "Photo size exceeds the {maxFileSize}MB limit. Please choose a photo with a size of {maxFileSize}MB or less."
+    "information.profilePicture.localFile.maxFileSize.error": "Photo size exceeds the {maxFileSize}MB limit. Please choose a photo with a size of {maxFileSize}MB or less.",
+    "accounts.warning.unpaidItemSelected": "{total, number} {total, plural, one {item} other {items}} selected. {items, number} {items, plural, one {item} other {items}} cannot be {action} because {items, plural, one {it was} other {they were}} not paid."
 }

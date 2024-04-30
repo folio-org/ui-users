@@ -11,9 +11,6 @@ import EditUserInfo from './EditUserInfo';
 import { isConsortiumEnabled } from '../../util';
 import { USER_TYPES } from '../../../constants';
 
-jest.mock('../../../hooks', () => ({
-  useProfilePicture: jest.fn(),
-}));
 jest.mock('@folio/stripes/components', () => ({
   ...jest.requireActual('@folio/stripes/components'),
   Modal: jest.fn(({ children, label, footer, ...rest }) => {
