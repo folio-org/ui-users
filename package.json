@@ -1067,6 +1067,16 @@
           "reading-room-patron-permission.item.get"
         ],
         "visible": true
+      },
+      {
+        "permissionName": "ui-users.edit-reading-room-access",
+        "displayName": "Users: Can view, and edit reading room access",
+        "subPermissions": [
+          "ui-users.edit",
+          "ui-users.view-reading-room-access",
+          "reading-room-patron-permission.item.put"
+        ],
+        "visible": true
       }
     ]
   },
