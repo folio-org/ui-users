@@ -1,4 +1,4 @@
-import { cleanup, render, waitFor, screen } from '@folio/jest-config-stripes/testing-library/react';
+import { cleanup, render, waitFor } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import UserRolesModal from './UserRolesModal';
 
@@ -23,7 +23,6 @@ describe('UserRoleModal', () => {
   it('renders user roles modal', async () => {
     const { getByText } = await waitFor(() => renderComponent({ isOpen: true, onClose: mockOnClose, assignedRoles: mockAssignedRoles }));
 
-    screen.debug();
     expect(getByText('testRole')).toBeInTheDocument();
     expect(getByText('testRole4')).toBeInTheDocument();
     expect(getByText('testRole3')).toBeInTheDocument();
