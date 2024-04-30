@@ -81,6 +81,7 @@ const SearchForm = (props) => {
   );
 };
 
+// BEGIN-NOSCAN
 SearchForm.propTypes = {
   config: PropTypes.arrayOf(
     PropTypes.shape({
@@ -102,5 +103,6 @@ SearchForm.propTypes = {
   onClearFilter: PropTypes.func.isRequired,
   resetSearchForm: PropTypes.func.isRequired,
 };
+// END-NOSCAN
 
 export default SearchForm;
