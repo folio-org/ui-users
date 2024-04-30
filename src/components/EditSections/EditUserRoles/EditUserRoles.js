@@ -5,7 +5,7 @@ import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { useStripes } from '@folio/stripes/core';
 import { useUserTenantRoles } from '../../../hooks';
-import UserRolesModal from './components/UserRolesModal';
+import UserRolesModal from './components/UserRolesModal/UserRolesModal';
 import { filtersConfig } from './helpers';
 
 function EditUserRoles({ match, accordionId }) {

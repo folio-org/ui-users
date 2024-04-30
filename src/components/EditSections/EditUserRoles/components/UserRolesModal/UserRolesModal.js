@@ -54,8 +54,8 @@ export default function UserRolesModal({ isOpen, onClose, assignedRoles }) {
   const getFilterConfigGroups = () => [filtersConfig].map(({ filter, ...filterConfig }) => (filterConfig));
 
   const onChangeFilter = ({ target: { name, checked } }) => {
-    setFilters((prState) => {
-      const updatedFilters = { ...prState };
+    setFilters((prevState) => {
+      const updatedFilters = { ...prevState };
       if (checked) {
         updatedFilters[name] = checked;
       } else {

@@ -5,10 +5,11 @@ import { FormattedMessage } from 'react-intl';
 import { MultiColumnList } from '@folio/stripes/components';
 import CheckboxColumn from '../CheckboxColumn/CheckboxColumn';
 
+const visibleColumns = ['selected', 'roleName', 'status'];
+
 const UserRolesList = ({ assignedUserRoleIds,
   filteredRoles,
   toggleRole,
-  visibleColumns = ['selected', 'roleName', 'status'],
   toggleAllRoles }) => {
   const allChecked = filteredRoles.length === assignedUserRoleIds.length;
 
@@ -28,7 +29,7 @@ const UserRolesList = ({ assignedUserRoleIds,
           (
             <div data-test-select-all-user-roles>
               <CheckboxColumn
-                permissionName="select-all"
+                roleName="select-all"
                 value="selectAll"
                 checked={allChecked}
                 onChange={handleToggleAllRoles}
@@ -80,7 +81,6 @@ UserRolesList.propTypes = {
   ).isRequired,
   toggleRole: PropTypes.func.isRequired,
   toggleAllRoles: PropTypes.func.isRequired,
-  visibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default UserRolesList;

@@ -12,12 +12,14 @@ import {
 
 import css from './SearchForm.css';
 
-const SearchForm = ({ onSubmitSearch,
-  onChangeFilter,
-  onClearFilter,
-  filters,
-  resetSearchForm,
-  config }) => {
+export default function SearchForm(props) {
+  const { onSubmitSearch,
+    onChangeFilter,
+    onClearFilter,
+    filters,
+    resetSearchForm,
+    config } = props;
+
   const intl = useIntl();
 
   const [searchText, setSearchText] = useState('');
@@ -74,7 +76,7 @@ const SearchForm = ({ onSubmitSearch,
       />
     </form>
   );
-};
+}
 
 SearchForm.propTypes = {
   config: PropTypes.arrayOf(
@@ -98,4 +100,4 @@ SearchForm.propTypes = {
   resetSearchForm: PropTypes.func.isRequired,
 };
 
-export default SearchForm;
+
