@@ -1086,6 +1086,7 @@
   "permission.opentransactions":"Users: Can check open transactions",
   "permission.view-patron-notice-print-jobs": "Users: View patron notice print jobs",
   "permission.remove-patron-notice-print-jobs": "Users: View and remove patron notice print jobs",
+  "permission.view-reading-room-access": "Users: Can view reading room access",
   "bulkClaimReturned.item.title": "Title",
   "bulkClaimReturned.preConfirm": "Confirm claim returned",
   "bulkClaimReturned.postConfirm": "Claim returned confirmation",
