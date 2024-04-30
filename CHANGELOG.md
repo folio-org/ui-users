@@ -1,6 +1,6 @@
 # Change history for ui-users
 
-## [10.2.0] IN PROGRESS
+## [11.0.0] IN PROGRESS
 
 * UX consistency: Use Save & close button label stripes-component translation key. Refs UIU-3078.
 * Fix two "triangle down" icons in select element of "Copy existing fee/fine owner table entries" modal. Refs UIU-2929.
@@ -12,6 +12,7 @@
 * Validate image url provided as external url for user profile picture. Refs UIU-3080.
 * Import and use ProfilePicture Component from stripes/smart-components. Refs UIU-3104.
 * Rename isDCBItem function name to isDcbItem. Refs UIU-3020.
+* *BREAKING* Add new okapi interface reading-room-patron-permission. Create new permission 'Users: Can view reading room access'. Refs UIU-3116.
 
 ## [10.1.0](https://github.com/folio-org/ui-users/tree/v10.1.0) (2024-03-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.4...v10.1.0)
