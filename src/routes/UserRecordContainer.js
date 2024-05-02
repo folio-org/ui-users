@@ -27,8 +27,8 @@ class UserRecordContainer extends React.Component {
       },
       clear: false,
       shouldRefresh: (resource, action, refresh) => {
-        const { path } = action.meta;
-        return refresh || (path && path.match(/link/));
+        const { path, name } = action.meta;
+        return (name && name !== 'resetPassword') && (refresh || (path && path.match(/link/)));
       },
       throwErrors: false,
     },
