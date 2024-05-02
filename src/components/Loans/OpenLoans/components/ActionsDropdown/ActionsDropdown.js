@@ -19,7 +19,7 @@ import {
   getOpenRequestsPath,
   checkUserActive,
   isDcbUser,
-  isDCBItem,
+  isDcbItem,
 } from '../../../../util';
 
 import { itemStatuses } from '../../../../../constants';
@@ -57,7 +57,7 @@ class ActionsDropdown extends React.Component {
     const buttonDisabled = !stripes.hasPerm('ui-users.feesfines.actions.all');
     const isUserActive = checkUserActive(user);
     const isVirtualUser = isDcbUser(user);
-    const isVirtualItem = isDCBItem(loan?.item);
+    const isVirtualItem = isDcbItem(loan?.item);
 
     return (
       <DropdownMenu data-role="menu">
@@ -204,7 +204,7 @@ class ActionsDropdown extends React.Component {
     const { intl: { formatMessage }, user, loan } = this.props;
 
     const isVirtualUser = isDcbUser(user);
-    const isVirtualItem = isDCBItem(loan?.item);
+    const isVirtualItem = isDcbItem(loan?.item);
 
     return (
       <Dropdown

@@ -211,7 +211,7 @@ export const isAffiliationsEnabled = (user) => {
   return !isPatronUser(user) && !isDcbUser(user);
 };
 
-export const isDCBItem = (item) => item.instanceId === DCB_INSTANCE_ID && item.holdingsRecordId === DCB_HOLDINGS_RECORD_ID;
+export const isDcbItem = (item) => item.instanceId === DCB_INSTANCE_ID && item.holdingsRecordId === DCB_HOLDINGS_RECORD_ID;
 
 export const isAValidUUID = (str) => {
   const regex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -222,3 +222,15 @@ export const isAValidURL = (str) => {
   return URL.canParse(str);
 };
 
+export const isAValidImageUrl = async (url) => {
+  try {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => resolve(true);
+      img.onerror = () => resolve(false);
+      img.src = url;
+    });
+  } catch (e) {
+    return false;
+  }
+};
