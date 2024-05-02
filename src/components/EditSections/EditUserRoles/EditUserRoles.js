@@ -4,11 +4,12 @@ import { useIntl, FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { useStripes } from '@folio/stripes/core';
-import { useUserTenantRoles } from '../../../hooks';
+import { isEmpty } from 'lodash';
+import { useUserTenantRoles, useUserRoles } from '../../../hooks';
 import UserRolesModal from './components/UserRolesModal/UserRolesModal';
 import { filtersConfig } from './helpers';
 
-function EditUserRoles({ match, accordionId }) {
+function EditUserRoles({ match, accordionId, assignedRoleIds, setAssignedRoleIds }) {
   const [isOpen, setIsOpen] = useState(false);
   const { okapi } = useStripes();
   const intl = useIntl();
@@ -16,6 +17,12 @@ function EditUserRoles({ match, accordionId }) {
   const userId = match.params.id;
 
   const { userRoles, isLoading } = useUserTenantRoles({ userId, tenantId: okapi.tenant });
+
+  const { data: allRolesData } = useUserRoles();
+
+  const handleRemoveRoleItem = (id) => {
+    setAssignedRoleIds(assignedRoleIds.filter(assignedRoleId => assignedRoleId !== id));
+  };
 
   const renderRoles = (role) => {
     return (
@@ -30,11 +37,22 @@ function EditUserRoles({ match, accordionId }) {
           type="button"
           id={`clickable-remove-user-role-${role.id}`}
           aria-label={`${intl.formatMessage({ id:'ui-users.roles.deleteRole' })}: ${role.name}`}
+          onClick={() => handleRemoveRoleItem(role.id)}
         >
           <Icon icon="times-circle" />
         </Button>
       </li>
     );
+  };
+
+  const renderListItems = () => {
+    if (isEmpty(assignedRoleIds)) return [];
+
+    return assignedRoleIds.map(roleId => {
+      const foundUserRole = allRolesData?.roles?.find(role => roleId === role.id);
+
+      return { name: foundUserRole?.name, id: foundUserRole?.id };
+    });
   };
 
   return (
@@ -47,7 +65,7 @@ function EditUserRoles({ match, accordionId }) {
         <Row>
           <Col xs={12}>
             <List
-              items={userRoles}
+              items={renderListItems()}
               itemFormatter={renderRoles}
               isEmptyMessage={<FormattedMessage id="ui-users.roles.empty" />}
             />
@@ -61,6 +79,8 @@ function EditUserRoles({ match, accordionId }) {
         assignedRoles={userRoles}
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
+        assignedRoleIds={assignedRoleIds}
+        setAssignedRoleIds={setAssignedRoleIds}
       />
     </div>
   );
@@ -68,7 +88,9 @@ function EditUserRoles({ match, accordionId }) {
 
 EditUserRoles.propTypes = {
   match: PropTypes.shape({ params: { id: PropTypes.string } }),
-  accordionId: PropTypes.string
+  accordionId: PropTypes.string,
+  assignedRoleIds: PropTypes.arrayOf(PropTypes.string).isRequired,
+  setAssignedRoleIds: PropTypes.func.isRequired
 };
 
 export default withRouter(EditUserRoles);

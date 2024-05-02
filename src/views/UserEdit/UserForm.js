@@ -105,6 +105,8 @@ class UserForm extends React.Component {
     form: PropTypes.object, // provided by final-form
     intl: PropTypes.object,
     profilePictureConfig: PropTypes.object.isRequired,
+    assignedRoleIds: PropTypes.arrayOf(PropTypes.string),
+    setAssignedRoleIds: PropTypes.func
   };
 
   static defaultProps = {
@@ -441,7 +443,11 @@ class UserForm extends React.Component {
                           form={form}
                           initialValues={initialValues}
                           setButtonRef={this.setButtonRef}
-                        /> : <EditUserRoles accordionId="userRoles" />
+                        /> : <EditUserRoles
+                          accordionId="userRoles"
+                          assignedRoleIds={this.props.assignedRoleIds}
+                          setAssignedRoleIds={this.props.setAssignedRoleIds}
+                        />
                       }
                       <EditServicePoints
                         accordionId="servicePoints"

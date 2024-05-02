@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Modal, Pane, PaneHeader, Paneset } from '@folio/stripes/components';
 import { FormattedMessage } from 'react-intl';
 import { CollapseFilterPaneButton, ExpandFilterPaneButton } from '@folio/stripes/smart-components';
@@ -10,16 +10,20 @@ import { useUserRoles } from '../../../../../hooks';
 import SearchForm from '../SearchForm/SearchForm';
 import { filtersConfig, getInitialFiltersState } from '../../helpers';
 
-export default function UserRolesModal({ isOpen, onClose, assignedRoles }) {
+export default function UserRolesModal({ isOpen, onClose, assignedRoles, setAssignedRoleIds: setRoleIdsToForm, assignedRoleIds: initialRoleIds }) {
   const [filterPaneIsVisible, setFilterPaneIsVisible] = useState(true);
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState('');
-  const [assignedRoleIds, setAssignedRoleIds] = useState(assignedRoles.map(role => role.id));
+  const [assignedRoleIds, setAssignedRoleIds] = useState([]);
   const [filters, setFilters] = useState(getInitialFiltersState([filtersConfig]));
 
   const { data: allRolesData } = useUserRoles();
 
+  useEffect(() => {
+    setAssignedRoleIds(initialRoleIds);
+  }, [initialRoleIds]);
+
   const handleCloseModal = () => {
-    setAssignedRoleIds(assignedRoles.map(role => role.id));
+    setAssignedRoleIds(initialRoleIds);
     onClose();
   };
 
@@ -85,6 +89,11 @@ export default function UserRolesModal({ isOpen, onClose, assignedRoles }) {
     setFilters({});
   };
 
+  const handleSaveClick = () => {
+    setRoleIdsToForm(assignedRoleIds);
+    onClose();
+  };
+
   return (
     <Modal
       open={isOpen}
@@ -115,6 +124,7 @@ export default function UserRolesModal({ isOpen, onClose, assignedRoles }) {
             data-test-user-roles-modal-save
             marginBottom0
             buttonStyle="primary"
+            onClick={handleSaveClick}
           >
             <FormattedMessage id="stripes-components.saveAndClose" />
           </Button>
@@ -184,6 +194,8 @@ export default function UserRolesModal({ isOpen, onClose, assignedRoles }) {
 UserRolesModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  assignedRoleIds: PropTypes.arrayOf(PropTypes.string),
+  setAssignedRoleIds: PropTypes.func.isRequired,
   assignedRoles: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,

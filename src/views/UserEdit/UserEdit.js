@@ -30,6 +30,7 @@ import {
   deliveryFulfillmentValues,
 } from '../../constants';
 import { resourcesLoaded, showErrorCallout } from './UserEditHelpers';
+import withUserRoles from '../../components/Wrappers/withUserRoles';
 
 class UserEdit extends React.Component {
   static propTypes = {
@@ -47,6 +48,9 @@ class UserEdit extends React.Component {
     mutator: PropTypes.object,
     getProxies: PropTypes.func,
     getSponsors: PropTypes.func,
+    // assignedRoleIds, setAssignedRoleIds comes from withUserRoles HOC
+    assignedRoleIds: PropTypes.arrayOf(PropTypes.string),
+    setAssignedRolesIds: PropTypes.func
   }
 
   static contextType = CalloutContext;
@@ -428,9 +432,11 @@ class UserEdit extends React.Component {
         history={history}
         stripes={this.props.stripes}
         profilePictureConfig={profilePictureConfig}
+        assignedRoleIds={this.props.assignedRoleIds}
+        setAssignedRolesIds={this.props.setAssignedRolesIds}
       />
     );
   }
 }
 
-export default withOkapiKy(UserEdit);
+export default withOkapiKy(withUserRoles(UserEdit));

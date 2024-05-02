@@ -1,26 +1,36 @@
 import React, { useEffect, useState } from 'react';
 
-import { useStripes } from '@folio/stripes/core';
-import { isEmpty } from 'lodash';
-import { useUserTenantRoles } from '../../hooks';
+import { useStripes, useOkapiKy } from '@folio/stripes/core';
 
 const withUserRoles = (WrappedComponent) => (props) => {
-  const { okapi } = useStripes();
+  const { okapi, config } = useStripes();
   // eslint-disable-next-line react/prop-types
   const userId = props.match.params.id;
   const [assignedRoleIds, setAssignedRoleIds] = useState([]);
-  const { userRoles, isLoading } = useUserTenantRoles({ userId, tenantId: okapi.tenant });
+
+  const searchParams = {
+    limit: config.maxUnpagedResourceCount,
+    query: `userId==${userId}`,
+  };
+
+  const ky = useOkapiKy();
+  const api = ky.extend({
+    hooks: {
+      beforeRequest: [(req) => req.headers.set('X-Okapi-Tenant', okapi.tenant)]
+    }
+  });
 
   useEffect(() => {
-    if (!isEmpty(userRoles) && !isLoading) {
-      setAssignedRoleIds(userRoles.map(({ id }) => id));
-    }
-  }, [isLoading, userRoles]);
+    api.get(
+      'roles/users', { searchParams },
+    )
+      .json()
+      .then(data => setAssignedRoleIds(data.userRoles.map(({ roleId }) => roleId)))
+      .catch(error => alert(JSON.stringify(error)));
+  }, []);
 
   return <WrappedComponent
     {...props}
-    isRolesLoading={isLoading}
-    userRoles={userRoles}
     assignedRoleIds={assignedRoleIds}
     setAssignedRoleIds={setAssignedRoleIds}
   />;
