@@ -48,7 +48,8 @@ class UserEdit extends React.Component {
     mutator: PropTypes.object,
     getProxies: PropTypes.func,
     getSponsors: PropTypes.func,
-    // assignedRoleIds, setAssignedRoleIds comes from withUserRoles HOC
+    // assignedRoleIds, setAssignedRoleIds, updateUserRoles comes from withUserRoles HOC
+    updateUserRoles: PropTypes.func,
     assignedRoleIds: PropTypes.arrayOf(PropTypes.string),
     setAssignedRoleIds: PropTypes.func
   }
@@ -210,6 +211,7 @@ class UserEdit extends React.Component {
       updateProxies,
       updateSponsors,
       updateServicePoints,
+      updateUserRoles,
       mutator,
       history,
       resources,
@@ -248,6 +250,10 @@ class UserEdit extends React.Component {
 
     if (stripes.hasPerm('inventory-storage.service-points-users.item.post,inventory-storage.service-points-users.item.put')) {
       updateServicePoints(servicePoints, preferredServicePoint);
+    }
+
+    if (stripes.hasInterface('roles')) {
+      updateUserRoles();
     }
 
     const data = omit(user, ['creds', 'proxies', 'sponsors', 'permissions', 'servicePoints', 'preferredServicePoint']);

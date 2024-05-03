@@ -29,10 +29,18 @@ const withUserRoles = (WrappedComponent) => (props) => {
       .catch(error => alert(JSON.stringify(error)));
   }, []);
 
+  const updateUserRoles = () => api.put(
+    `roles/users/${userId}`, { json: {
+      userId,
+      roleIds: assignedRoleIds
+    } },
+  ).json();
+
   return <WrappedComponent
     {...props}
     assignedRoleIds={assignedRoleIds}
     setAssignedRoleIds={setAssignedRoleIds}
+    updateUserRoles={updateUserRoles}
   />;
 };
 
