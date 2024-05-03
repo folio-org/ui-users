@@ -1,7 +1,7 @@
 import { useNamespace, useOkapiKy, useStripes } from '@folio/stripes/core';
 import { useQuery } from 'react-query';
 
-function useUserRoles() {
+function useAllRolesData() {
   const stripes = useStripes();
   const ky = useOkapiKy();
 
@@ -12,4 +12,4 @@ function useUserRoles() {
   });
 }
 
-export default useUserRoles;
+export default useAllRolesData;

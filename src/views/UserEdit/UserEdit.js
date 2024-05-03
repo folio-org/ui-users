@@ -50,7 +50,7 @@ class UserEdit extends React.Component {
     getSponsors: PropTypes.func,
     // assignedRoleIds, setAssignedRoleIds comes from withUserRoles HOC
     assignedRoleIds: PropTypes.arrayOf(PropTypes.string),
-    setAssignedRolesIds: PropTypes.func
+    setAssignedRoleIds: PropTypes.func
   }
 
   static contextType = CalloutContext;
@@ -433,7 +433,7 @@ class UserEdit extends React.Component {
         stripes={this.props.stripes}
         profilePictureConfig={profilePictureConfig}
         assignedRoleIds={this.props.assignedRoleIds}
-        setAssignedRolesIds={this.props.setAssignedRolesIds}
+        setAssignedRoleIds={this.props.setAssignedRoleIds}
       />
     );
   }

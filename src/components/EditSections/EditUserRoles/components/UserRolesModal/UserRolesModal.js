@@ -1,22 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Modal, Pane, PaneHeader, Paneset } from '@folio/stripes/components';
-import { FormattedMessage } from 'react-intl';
-import { CollapseFilterPaneButton, ExpandFilterPaneButton } from '@folio/stripes/smart-components';
-import PropTypes from 'prop-types';
 import { cloneDeep } from 'lodash';
-import css from './index.css';
+import { FormattedMessage } from 'react-intl';
+import PropTypes from 'prop-types';
+import { Button, Modal, Pane, PaneHeader, Paneset } from '@folio/stripes/components';
+import { CollapseFilterPaneButton, ExpandFilterPaneButton } from '@folio/stripes/smart-components';
 import UserRolesList from '../UserRolesList/UserRolesList';
-import { useUserRoles } from '../../../../../hooks';
 import SearchForm from '../SearchForm/SearchForm';
+import { useAllRolesData } from '../../../../../hooks';
 import { filtersConfig, getInitialFiltersState } from '../../helpers';
+import css from './index.css';
 
-export default function UserRolesModal({ isOpen, onClose, assignedRoles, setAssignedRoleIds: setRoleIdsToForm, assignedRoleIds: initialRoleIds }) {
+export default function UserRolesModal({ isOpen,
+  onClose,
+  assignedRoles,
+  setAssignedRoleIds: setRoleIdsToForm,
+  assignedRoleIds: initialRoleIds }) {
   const [filterPaneIsVisible, setFilterPaneIsVisible] = useState(true);
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState('');
   const [assignedRoleIds, setAssignedRoleIds] = useState([]);
   const [filters, setFilters] = useState(getInitialFiltersState([filtersConfig]));
 
-  const { data: allRolesData } = useUserRoles();
+  const { data: allRolesData } = useAllRolesData();
 
   useEffect(() => {
     setAssignedRoleIds(initialRoleIds);

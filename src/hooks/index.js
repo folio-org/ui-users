@@ -7,5 +7,5 @@ export { default as useUserAffiliationsMutation } from './useUserAffiliationsMut
 export { default as useUserTenantPermissions } from './useUserTenantPermissions';
 export { default as useUserTenantRoles } from './useUserTenantRoles';
 export { default as useLocalizedCurrency } from './useLocalizedCurrency';
-export { default as useUserRoles } from './useUserRoles';
+export { default as useAllRolesData } from './useAllRolesData';
 

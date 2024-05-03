@@ -7,12 +7,12 @@ import {
 } from '@folio/stripes/core';
 import EditUserRoles from './EditUserRoles';
 
-import { useUserRoles, useUserTenantRoles } from '../../../hooks';
+import { useAllRolesData, useUserTenantRoles } from '../../../hooks';
 
 jest.mock('../../../hooks', () => ({
   ...jest.requireActual('../../../hooks'),
   useUserTenantRoles: jest.fn(),
-  useUserRoles: jest.fn()
+  useAllRolesData: jest.fn()
 }));
 
 jest.mock('@folio/stripes/core', () => ({
@@ -36,7 +36,7 @@ const STRIPES = {
   },
 };
 
-const MOCK_USE_USER_ROLES = {
+const mockAllRolesData = {
   data: {
     roles: [{ id: '1', name: 'test role' },
       { id: '2', name: 'admin role' },
@@ -45,12 +45,12 @@ const MOCK_USE_USER_ROLES = {
   },
 };
 
-const renderEditRolesAccordion = () => renderWithRouter(<EditUserRoles accordionId="user-roles" />);
+const renderEditRolesAccordion = () => renderWithRouter(<EditUserRoles accordionId="user-roles" assignedRoleIds={['1', '2']} />);
 
 describe('EditUserRoles Component', () => {
   beforeEach(() => {
     useStripes.mockClear().mockReturnValue(STRIPES);
-    useUserRoles.mockClear().mockReturnValue(MOCK_USE_USER_ROLES);
+    useAllRolesData.mockClear().mockReturnValue(mockAllRolesData);
     useUserTenantRoles.mockClear().mockReturnValue({
       isFetching: false,
       userRoles: [{ id: '1', name: 'test role' },

@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
-import { Accordion, Headline, Badge, Row, Col, List, Button, Icon, Loading } from '@folio/stripes/components';
+import React, { useMemo, useState } from 'react';
+import { Accordion, Headline, Badge, Row, Col, List, Button, Icon, Loading, ConfirmationModal } from '@folio/stripes/components';
 import { useIntl, FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { useStripes } from '@folio/stripes/core';
 import { isEmpty } from 'lodash';
-import { useUserTenantRoles, useUserRoles } from '../../../hooks';
+import { useUserTenantRoles, useAllRolesData } from '../../../hooks';
 import UserRolesModal from './components/UserRolesModal/UserRolesModal';
 import { filtersConfig } from './helpers';
 
 function EditUserRoles({ match, accordionId, assignedRoleIds, setAssignedRoleIds }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [unassignModalOpen, setUnassignModalOpen] = useState(false);
   const { okapi } = useStripes();
   const intl = useIntl();
 
@@ -18,10 +19,15 @@ function EditUserRoles({ match, accordionId, assignedRoleIds, setAssignedRoleIds
 
   const { userRoles, isLoading } = useUserTenantRoles({ userId, tenantId: okapi.tenant });
 
-  const { data: allRolesData } = useUserRoles();
+  const { data: allRolesData } = useAllRolesData();
 
   const handleRemoveRoleItem = (id) => {
     setAssignedRoleIds(assignedRoleIds.filter(assignedRoleId => assignedRoleId !== id));
+  };
+
+  const handleUnassignAllRoles = () => {
+    setAssignedRoleIds([]);
+    setUnassignModalOpen(false);
   };
 
   const renderRoles = (role) => {
@@ -45,7 +51,7 @@ function EditUserRoles({ match, accordionId, assignedRoleIds, setAssignedRoleIds
     );
   };
 
-  const renderListItems = () => {
+  const listItemsData = useMemo(() => {
     if (isEmpty(assignedRoleIds)) return [];
 
     return assignedRoleIds.map(roleId => {
@@ -53,7 +59,12 @@ function EditUserRoles({ match, accordionId, assignedRoleIds, setAssignedRoleIds
 
       return { name: foundUserRole?.name, id: foundUserRole?.id };
     });
-  };
+  }, [assignedRoleIds, allRolesData]);
+
+  const unassignAllMessage = <FormattedMessage
+    id="ui-users.roles.modal.unassignAll.label"
+    values={{ roles: listItemsData.map(d => d.name).join(', ') }}
+  />;
 
   return (
     <div>
@@ -65,13 +76,13 @@ function EditUserRoles({ match, accordionId, assignedRoleIds, setAssignedRoleIds
         <Row>
           <Col xs={12}>
             <List
-              items={renderListItems()}
+              items={listItemsData}
               itemFormatter={renderRoles}
               isEmptyMessage={<FormattedMessage id="ui-users.roles.empty" />}
             />
           </Col>
           <Button onClick={() => setIsOpen(true)}><FormattedMessage id="ui-users.roles.addRoles" /></Button>
-          <Button><FormattedMessage id="ui-users.roles.unassignAllRoles" /></Button>
+          <Button disabled={isEmpty(listItemsData)} onClick={() => setUnassignModalOpen(true)}><FormattedMessage id="ui-users.roles.unassignAllRoles" /></Button>
         </Row>
       </Accordion>
       <UserRolesModal
@@ -81,6 +92,15 @@ function EditUserRoles({ match, accordionId, assignedRoleIds, setAssignedRoleIds
         onClose={() => setIsOpen(false)}
         assignedRoleIds={assignedRoleIds}
         setAssignedRoleIds={setAssignedRoleIds}
+      />
+      <ConfirmationModal
+        open={unassignModalOpen}
+        heading={<FormattedMessage id="ui-users.roles.modal.unassignAll.header" />}
+        message={unassignAllMessage}
+        onConfirm={handleUnassignAllRoles}
+        onCancel={() => setUnassignModalOpen(false)}
+        cancelLabel={<FormattedMessage id="ui-users.no" />}
+        confirmLabel={<FormattedMessage id="ui-users.yes" />}
       />
     </div>
   );

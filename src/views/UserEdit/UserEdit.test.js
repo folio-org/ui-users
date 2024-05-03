@@ -18,6 +18,10 @@ const userFormData = {
   },
 };
 
+jest.mock('../../components/Wrappers/withUserRoles', () => (Component) => {
+  return Component;
+});
+
 jest.mock('@folio/stripes/components', () => ({
   ...jest.requireActual('@folio/stripes/components'),
   LoadingView: () => 'LoadingView',

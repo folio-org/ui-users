@@ -2,11 +2,10 @@ import { cleanup, render, waitFor } from '@folio/jest-config-stripes/testing-lib
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import UserRolesModal from './UserRolesModal';
 
-
 jest.mock('../../../../../hooks', () => {
   const mockAllRolesData = { data:{ roles: [{ id: '1', name: 'testRole' }, { id: '4', name: 'testRole4' }, { id: '3', name: 'testRole3' }] } };
   return { ...jest.requireActual('../../../../../hooks'),
-    useUserRoles: jest.fn().mockReturnValue(mockAllRolesData) };
+    useAllRolesData: jest.fn().mockReturnValue(mockAllRolesData) };
 });
 jest.unmock('@folio/stripes/components');
 
@@ -21,7 +20,7 @@ describe('UserRoleModal', () => {
     jest.clearAllMocks();
   });
   it('renders user roles modal', async () => {
-    const { getByText } = await waitFor(() => renderComponent({ isOpen: true, onClose: mockOnClose, assignedRoles: mockAssignedRoles }));
+    const { getByText } = await waitFor(() => renderComponent({ isOpen: true, onClose: mockOnClose, assignedRoles: mockAssignedRoles, assignedRoleIds: ['1'], setAssignedRolesIds:jest.fn() }));
 
     expect(getByText('testRole')).toBeInTheDocument();
     expect(getByText('testRole4')).toBeInTheDocument();
@@ -29,14 +28,18 @@ describe('UserRoleModal', () => {
   });
 
   it('should call onClose function', async () => {
-    await waitFor(() => renderComponent({ isOpen: true, onClose: mockOnClose, assignedRoles: mockAssignedRoles }));
+    await waitFor(() => renderComponent({ isOpen: true, onClose: mockOnClose, assignedRoles: mockAssignedRoles, assignedRoleIds: ['1'], setAssignedRolesIds:jest.fn() }));
     await userEvent.click(document.getElementById('user-roles-modal-close-button'));
 
     expect(mockOnClose).toHaveBeenCalledTimes(1);
   });
 
   it('should select/unselect all roles, and ', async () => {
-    renderComponent({ isOpen: true, onClose: mockOnClose, assignedRoles: mockAssignedRoles });
+    renderComponent({ isOpen: true,
+      onClose: mockOnClose,
+      assignedRoles: mockAssignedRoles,
+      assignedRoleIds: ['1'],
+      setAssignedRolesIds:jest.fn() });
 
     const selectAllButton = document.querySelector('[name="selected-selectAll"]');
     await userEvent.click(selectAllButton);
@@ -53,7 +56,11 @@ describe('UserRoleModal', () => {
 
 
   it('should show assigned roles only', async () => {
-    const { queryByText } = renderComponent({ isOpen: true, onClose: mockOnClose, assignedRoles: mockAssignedRoles });
+    const { queryByText } = renderComponent({ isOpen: true,
+      onClose: mockOnClose,
+      assignedRoles: mockAssignedRoles,
+      assignedRoleIds: ['1'],
+      setAssignedRolesIds:jest.fn() });
 
     const assignedFilterCheckbox = document.querySelector('[name="status.assigned"]');
     await userEvent.click(assignedFilterCheckbox);
@@ -64,7 +71,11 @@ describe('UserRoleModal', () => {
   });
 
   it('should show unassigned roles only', async () => {
-    const { getAllByRole } = renderComponent({ isOpen: true, onClose: mockOnClose, assignedRoles: mockAssignedRoles });
+    const { getAllByRole } = renderComponent({ isOpen: true,
+      onClose: mockOnClose,
+      assignedRoles: mockAssignedRoles,
+      assignedRoleIds: ['1'],
+      setAssignedRolesIds:jest.fn() });
 
     const unassignedFilterCheckbox = document.querySelector('[name="status.unassigned"]');
     await userEvent.click(unassignedFilterCheckbox);
@@ -78,7 +89,11 @@ describe('UserRoleModal', () => {
   });
 
   it('should reset all filters', async () => {
-    renderComponent({ isOpen: true, onClose: mockOnClose, assignedRoles: mockAssignedRoles });
+    renderComponent({ isOpen: true,
+      onClose: mockOnClose,
+      assignedRoles: mockAssignedRoles,
+      assignedRoleIds: ['1'],
+      setAssignedRolesIds:jest.fn() });
 
     const unassignedFilterCheckbox = document.querySelector('[name="status.unassigned"]');
     await userEvent.click(unassignedFilterCheckbox);
@@ -95,7 +110,11 @@ describe('UserRoleModal', () => {
   });
 
   it('should toggle filters pane', async () => {
-    const { getByText } = renderComponent({ isOpen: true, onClose: mockOnClose, assignedRoles: mockAssignedRoles });
+    const { getByText } = renderComponent({ isOpen: true,
+      onClose: mockOnClose,
+      assignedRoles: mockAssignedRoles,
+      assignedRoleIds: ['1'],
+      setAssignedRolesIds:jest.fn() });
 
     const collapseButton = document.querySelector('[data-test-collapse-filter-pane-button="true"]');
     await userEvent.click(collapseButton);
