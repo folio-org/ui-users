@@ -1,6 +1,7 @@
 
 import React from 'react';
-import { cleanup } from '@folio/jest-config-stripes/testing-library/react';
+import { cleanup, waitFor } from '@folio/jest-config-stripes/testing-library/react';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import renderWithRouter from 'helpers/renderWithRouter';
 import {
   useStripes,
@@ -66,5 +67,19 @@ describe('EditUserRoles Component', () => {
     expect(getByText('test role')).toBeInTheDocument();
     expect(getByText('admin role')).toBeInTheDocument();
     expect(queryByText('simple role')).not.toBeInTheDocument();
+  });
+
+  it('shows the unassignAll confirmation modal window and close it', async () => {
+    const { getByTestId, getByText, queryByText } = renderEditRolesAccordion();
+    const cancelConfirmationButton = document.querySelector('[data-test-confirmation-modal-cancel-button="true"]');
+
+    await userEvent.click(getByTestId('unassign-all-roles-button'));
+
+    expect(getByText('ui-users.roles.modal.unassignAll.label')).toBeInTheDocument();
+
+    waitFor(async () => {
+      await userEvent.click(cancelConfirmationButton);
+      expect(queryByText('ui-users.roles.modal.unassignAll.label')).not.toBeInTheDocument();
+    });
   });
 });
