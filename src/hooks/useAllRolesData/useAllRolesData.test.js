@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { act, renderHook } from '@folio/jest-config-stripes/testing-library/react';
+import { renderHook, waitFor } from '@folio/jest-config-stripes/testing-library/react';
 
 import { useOkapiKy } from '@folio/stripes/core';
 
@@ -29,7 +29,7 @@ describe('useAllRolesData', () => {
 
   it('fetches all roles data', async () => {
     const { result } = renderHook(() => useAllRolesData(), { wrapper });
-    await act(() => result.current.isSuccess);
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
     expect(result.current.isSuccess).toBe(true);
     expect(result.current.data.roles).toStrictEqual(data.roles);

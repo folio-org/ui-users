@@ -143,7 +143,7 @@ export default function UserRolesModal({ isOpen,
               renderHeader={(renderProps) => (
                 <PaneHeader
                   {...renderProps}
-                  paneTitle="Search and filter"
+                  paneTitle={<FormattedMessage id="ui-users.roles.modal.search.header" />}
                   lastMenu={<CollapseFilterPaneButton onClick={() => setFilterPaneIsVisible(!filterPaneIsVisible)} />}
                 />
               )}

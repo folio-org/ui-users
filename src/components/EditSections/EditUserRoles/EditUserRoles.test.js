@@ -45,8 +45,13 @@ const mockAllRolesData = {
     ]
   },
 };
+const mockAssignRolesFunction = jest.fn();
 
-const renderEditRolesAccordion = () => renderWithRouter(<EditUserRoles accordionId="user-roles" assignedRoleIds={['1', '2']} />);
+const renderEditRolesAccordion = () => renderWithRouter(<EditUserRoles
+  accordionId="user-roles"
+  setAssignedRoleIds={mockAssignRolesFunction}
+  assignedRoleIds={['1', '2']}
+/>);
 
 describe('EditUserRoles Component', () => {
   beforeEach(() => {
@@ -69,6 +74,27 @@ describe('EditUserRoles Component', () => {
     expect(queryByText('simple role')).not.toBeInTheDocument();
   });
 
+  it('calls delete user role function', async () => {
+    const id = `clickable-remove-user-role-${mockAllRolesData.data.roles[0].id}`;
+    renderEditRolesAccordion();
+
+    await waitFor(async () => {
+      await userEvent.click(document.getElementById(id));
+      expect(mockAssignRolesFunction).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  it('shows the roles modal on add role button click', async () => {
+    const { getByTestId } = renderEditRolesAccordion();
+
+    expect(getByTestId('add-roles-button')).toBeInTheDocument();
+
+    await waitFor(async () => {
+      await userEvent.click(getByTestId('add-roles-button'));
+      expect(document.getElementById('user-roles-modal')).toBeInTheDocument();
+    });
+  });
+
   it('shows the unassignAll confirmation modal window and close it', async () => {
     const { getByTestId, getByText, queryByText } = renderEditRolesAccordion();
     const cancelConfirmationButton = document.querySelector('[data-test-confirmation-modal-cancel-button="true"]');
@@ -80,6 +106,19 @@ describe('EditUserRoles Component', () => {
     waitFor(async () => {
       await userEvent.click(cancelConfirmationButton);
       expect(queryByText('ui-users.roles.modal.unassignAll.label')).not.toBeInTheDocument();
+    });
+  });
+
+  it('shows the unassignAll confirmation modal window and confirm it', async () => {
+    const { getByTestId } = renderEditRolesAccordion();
+    const confirmButton = document.querySelector('[data-test-confirmation-modal-confirm-button="true"]');
+
+    await userEvent.click(getByTestId('unassign-all-roles-button'));
+
+    waitFor(async () => {
+      await userEvent.click(confirmButton);
+      expect(mockAssignRolesFunction).toHaveBeenCalledWith([]);
+      expect(document.getElementById('user-roles-modal')).not.toBeInTheDocument();
     });
   });
 });
