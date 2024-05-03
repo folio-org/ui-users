@@ -7,8 +7,9 @@ import { CollapseFilterPaneButton, ExpandFilterPaneButton } from '@folio/stripes
 import UserRolesList from '../UserRolesList/UserRolesList';
 import SearchForm from '../SearchForm/SearchForm';
 import { useAllRolesData } from '../../../../../hooks';
-import { filtersConfig, getInitialFiltersState } from '../../helpers';
+import { filtersConfig } from '../../helpers';
 import css from './index.css';
+import useRolesModalFilters from './useRolesModalFilters';
 
 export default function UserRolesModal({ isOpen,
   onClose,
@@ -18,7 +19,7 @@ export default function UserRolesModal({ isOpen,
   const [filterPaneIsVisible, setFilterPaneIsVisible] = useState(true);
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState('');
   const [assignedRoleIds, setAssignedRoleIds] = useState([]);
-  const [filters, setFilters] = useState(getInitialFiltersState([filtersConfig]));
+  const { filters, onChangeFilter, onClearFilter, resetFilters } = useRolesModalFilters();
 
   const { data: allRolesData } = useAllRolesData();
 
@@ -28,6 +29,7 @@ export default function UserRolesModal({ isOpen,
 
   const handleCloseModal = () => {
     setAssignedRoleIds(initialRoleIds);
+    resetFilters();
     onClose();
   };
 
@@ -61,36 +63,9 @@ export default function UserRolesModal({ isOpen,
   // eslint-disable-next-line no-unused-vars
   const getFilterConfigGroups = () => [filtersConfig].map(({ filter, ...filterConfig }) => (filterConfig));
 
-  const onChangeFilter = ({ target: { name, checked } }) => {
-    setFilters((prevState) => {
-      const updatedFilters = { ...prevState };
-      if (checked) {
-        updatedFilters[name] = checked;
-      } else {
-        delete updatedFilters[name];
-      }
-
-      return updatedFilters;
-    });
-  };
-
-  const onClearFilter = (filterName) => {
-    setFilters((prevState) => {
-      const updatedFilters = { ...prevState };
-
-      Object.keys(updatedFilters).forEach((key) => {
-        if (key.startsWith(filterName)) {
-          delete updatedFilters[key];
-        }
-      });
-
-      return updatedFilters;
-    });
-  };
-
   const resetSearchForm = () => {
     setAssignedRoleIds(assignedRoles.map(role => role.id));
-    setFilters({});
+    resetFilters();
   };
 
   const handleSaveClick = () => {
