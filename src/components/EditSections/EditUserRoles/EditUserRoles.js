@@ -112,8 +112,8 @@ function EditUserRoles({ match, accordionId, form:{ change }, initialValues }) {
         assignedRoles={userRoles}
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
-        assignedRoleIds={assignedRoleIds}
-        setAssignedRoleIds={changeUserRoles}
+        initialRoleIds={assignedRoleIds}
+        changeUserRoles={changeUserRoles}
       />
       <ConfirmationModal
         open={unassignModalOpen}

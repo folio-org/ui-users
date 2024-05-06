@@ -14,8 +14,8 @@ import useRolesModalFilters from './useRolesModalFilters';
 export default function UserRolesModal({ isOpen,
   onClose,
   assignedRoles,
-  setAssignedRoleIds: setRoleIdsToForm,
-  assignedRoleIds: initialRoleIds }) {
+  changeUserRoles,
+  initialRoleIds }) {
   const [filterPaneIsVisible, setFilterPaneIsVisible] = useState(true);
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState('');
   const [assignedRoleIds, setAssignedRoleIds] = useState([]);
@@ -69,7 +69,7 @@ export default function UserRolesModal({ isOpen,
   };
 
   const handleSaveClick = () => {
-    setRoleIdsToForm(assignedRoleIds);
+    changeUserRoles(assignedRoleIds);
     onClose();
   };
 
@@ -173,8 +173,8 @@ export default function UserRolesModal({ isOpen,
 UserRolesModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  assignedRoleIds: PropTypes.arrayOf(PropTypes.string),
-  setAssignedRoleIds: PropTypes.func.isRequired,
+  initialRoleIds: PropTypes.arrayOf(PropTypes.string),
+  changeUserRoles: PropTypes.func.isRequired,
   assignedRoles: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,

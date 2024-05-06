@@ -2,18 +2,18 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 const filtersConfig = {
-  label: (<FormattedMessage id="ui-users.permissions.modal.filter.status.label" />),
+  label: (<FormattedMessage id="ui-users.roles.modal.filter.status.label" />),
   name: 'status',
   cql: 'status',
   values: [
     {
-      displayName: <FormattedMessage id="ui-users.permissions.modal.assigned" />,
+      displayName: <FormattedMessage id="ui-users.roles.modal.assigned" />,
       name: 'assigned',
       cql: 'assigned',
       value: false,
     },
     {
-      displayName: <FormattedMessage id="ui-users.permissions.modal.unassigned" />,
+      displayName: <FormattedMessage id="ui-users.roles.modal.unassigned" />,
       name: 'unassigned',
       cql: 'unassigned',
       value: false,
@@ -26,11 +26,11 @@ const filtersConfig = {
     } = filters;
 
     return roles.filter(({ id }) => {
-      const permissionAssigned = assignedRoleIds.includes(id);
+      const rolesAssigned = assignedRoleIds.includes(id);
 
       return (
-        (showUnassigned && !permissionAssigned && !showAssigned)
-          || (!showUnassigned && permissionAssigned && showAssigned)
+        (showUnassigned && !rolesAssigned && !showAssigned)
+          || (!showUnassigned && rolesAssigned && showAssigned)
           || (showUnassigned && showAssigned)
           || !Object.keys(filters).some((key) => (key.startsWith(this.name)))
       );
