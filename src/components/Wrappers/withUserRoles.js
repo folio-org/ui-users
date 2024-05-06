@@ -27,12 +27,12 @@ const withUserRoles = (WrappedComponent) => (props) => {
       .json()
       .then(data => setAssignedRoleIds(data.userRoles.map(({ roleId }) => roleId)))
       .catch(error => alert(JSON.stringify(error)));
-  }, []);
+  }, [userId]);
 
-  const updateUserRoles = () => api.put(
+  const updateUserRoles = (roleIds) => api.put(
     `roles/users/${userId}`, { json: {
       userId,
-      roleIds: assignedRoleIds
+      roleIds
     } },
   ).json();
 

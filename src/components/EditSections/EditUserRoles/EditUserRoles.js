@@ -5,50 +5,30 @@ import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { useStripes } from '@folio/stripes/core';
 import { isEmpty } from 'lodash';
+import { FieldArray } from 'react-final-form-arrays';
+import { OnChange } from 'react-final-form-listeners';
 import { useUserTenantRoles, useAllRolesData } from '../../../hooks';
 import UserRolesModal from './components/UserRolesModal/UserRolesModal';
 import { filtersConfig } from './helpers';
 
-function EditUserRoles({ match, accordionId, assignedRoleIds, setAssignedRoleIds }) {
+function EditUserRoles({ match, accordionId, form:{ change }, initialValues }) {
   const [isOpen, setIsOpen] = useState(false);
   const [unassignModalOpen, setUnassignModalOpen] = useState(false);
+  const [assignedRoleIds, setAssignedRoleIds] = useState(initialValues.assignedRoleIds);
   const { okapi } = useStripes();
   const intl = useIntl();
-
   const userId = match.params.id;
 
   const { userRoles, isLoading } = useUserTenantRoles({ userId, tenantId: okapi.tenant });
-
   const { data: allRolesData } = useAllRolesData();
 
-  const handleRemoveRoleItem = (id) => {
-    setAssignedRoleIds(assignedRoleIds.filter(assignedRoleId => assignedRoleId !== id));
+  const changeUserRoles = (roleIds) => {
+    change('assignedRoleIds', roleIds);
   };
 
   const handleUnassignAllRoles = () => {
-    setAssignedRoleIds([]);
+    changeUserRoles([]);
     setUnassignModalOpen(false);
-  };
-
-  const renderRoles = (role) => {
-    return (
-      <li
-        data-test-user-role={role.id}
-        key={role.id}
-      >
-        {role.name}
-        <Button
-          buttonStyle="fieldControl"
-          align="end"
-          type="button"
-          id={`clickable-remove-user-role-${role.id}`}
-          aria-label={`${intl.formatMessage({ id:'ui-users.roles.deleteRole' })}: ${role.name}`}
-          onClick={() => handleRemoveRoleItem(role.id)}
-        >
-          <Icon icon="times-circle" />
-        </Button>
-      </li>
-    );
   };
 
   const listItemsData = useMemo(() => {
@@ -66,6 +46,54 @@ function EditUserRoles({ match, accordionId, assignedRoleIds, setAssignedRoleIds
     values={{ roles: listItemsData.map(d => d.name).join(', ') }}
   />;
 
+  const renderRoleComponent = (fields) => (_, index) => {
+    if (isEmpty(fields.value)) return null;
+
+    const roleId = fields.value[index];
+    const role = allRolesData?.roles?.find(r => roleId === r.id);
+
+    if (!role) return null;
+    return (
+      <li
+        data-test-user-role={role.id}
+        key={role.id}
+      >
+        {role.name}
+        <Button
+          buttonStyle="fieldControl"
+          align="end"
+          type="button"
+          id={`clickable-remove-user-role-${role.id}`}
+          aria-label={`${intl.formatMessage({ id:'ui-users.roles.deleteRole' })}: ${role.name}`}
+          onClick={() => fields.remove(index)}
+        >
+          <Icon icon="times-circle" />
+        </Button>
+      </li>
+    );
+  };
+
+  const renderUserRolesComponent = ({ fields }) => {
+    return (
+      <List
+        items={listItemsData}
+        itemFormatter={renderRoleComponent(fields)}
+        isEmptyMessage={<FormattedMessage id="ui-users.roles.empty" />}
+      />
+    );
+  };
+
+  function renderUserRoles() {
+    return (
+      <Col xs={12}>
+        <FieldArray
+          name="assignedRoleIds"
+          component={renderUserRolesComponent}
+        />
+      </Col>
+    );
+  }
+
   return (
     <div>
       <Accordion
@@ -74,13 +102,7 @@ function EditUserRoles({ match, accordionId, assignedRoleIds, setAssignedRoleIds
         displayWhenClosed={isLoading ? <Loading /> : <Badge>{userRoles.length}</Badge>}
       >
         <Row>
-          <Col xs={12}>
-            <List
-              items={listItemsData}
-              itemFormatter={renderRoles}
-              isEmptyMessage={<FormattedMessage id="ui-users.roles.empty" />}
-            />
-          </Col>
+          {renderUserRoles()}
           <Button data-testId="add-roles-button" onClick={() => setIsOpen(true)}><FormattedMessage id="ui-users.roles.addRoles" /></Button>
           <Button data-testId="unassign-all-roles-button" disabled={isEmpty(listItemsData)} onClick={() => setUnassignModalOpen(true)}><FormattedMessage id="ui-users.roles.unassignAllRoles" /></Button>
         </Row>
@@ -91,7 +113,7 @@ function EditUserRoles({ match, accordionId, assignedRoleIds, setAssignedRoleIds
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         assignedRoleIds={assignedRoleIds}
-        setAssignedRoleIds={setAssignedRoleIds}
+        setAssignedRoleIds={changeUserRoles}
       />
       <ConfirmationModal
         open={unassignModalOpen}
@@ -102,6 +124,12 @@ function EditUserRoles({ match, accordionId, assignedRoleIds, setAssignedRoleIds
         cancelLabel={<FormattedMessage id="ui-users.no" />}
         confirmLabel={<FormattedMessage id="ui-users.yes" />}
       />
+      <OnChange name="assignedRoleIds">
+        {(userAssignedRoleIds) => {
+          const userRoleIds = isEmpty(userAssignedRoleIds) ? [] : userAssignedRoleIds;
+          setAssignedRoleIds(userRoleIds);
+        }}
+      </OnChange>
     </div>
   );
 }
@@ -109,8 +137,8 @@ function EditUserRoles({ match, accordionId, assignedRoleIds, setAssignedRoleIds
 EditUserRoles.propTypes = {
   match: PropTypes.shape({ params: { id: PropTypes.string } }),
   accordionId: PropTypes.string,
-  assignedRoleIds: PropTypes.arrayOf(PropTypes.string).isRequired,
-  setAssignedRoleIds: PropTypes.func.isRequired
+  form: PropTypes.object.isRequired,
+  initialValues: PropTypes.object.isRequired
 };
 
 export default withRouter(EditUserRoles);

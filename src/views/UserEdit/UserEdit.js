@@ -48,10 +48,9 @@ class UserEdit extends React.Component {
     mutator: PropTypes.object,
     getProxies: PropTypes.func,
     getSponsors: PropTypes.func,
-    // assignedRoleIds, setAssignedRoleIds, updateUserRoles comes from withUserRoles HOC
+    // assignedRoleIds, updateUserRoles comes from withUserRoles HOC
     updateUserRoles: PropTypes.func,
     assignedRoleIds: PropTypes.arrayOf(PropTypes.string),
-    setAssignedRoleIds: PropTypes.func
   }
 
   static contextType = CalloutContext;
@@ -72,6 +71,7 @@ class UserEdit extends React.Component {
       getSponsors,
       getPreferredServicePoint,
       getUserServicePoints,
+      assignedRoleIds,
       match,
     } = this.props;
 
@@ -109,6 +109,7 @@ class UserEdit extends React.Component {
       proxies: getProxies(),
       sponsors: getSponsors(),
       servicePoints: getUserServicePoints(),
+      assignedRoleIds,
       requestPreferences: {
         ...initialFormValues.requestPreferences,
         ...get(this.props.resources, 'requestPreferences.records[0].requestPreferences[0]', {})
@@ -119,6 +120,7 @@ class UserEdit extends React.Component {
   getUserFormData() {
     const {
       resources,
+      assignedRoleIds
     } = this.props;
     const formData = getRecordObject(
       resources,
@@ -128,7 +130,7 @@ class UserEdit extends React.Component {
       'departments',
     );
 
-    return formData;
+    return { ...formData, assignedRoleIds };
   }
 
   createRequestPreferences = (requestPreferencesData, userId) => {
@@ -253,7 +255,7 @@ class UserEdit extends React.Component {
     }
 
     if (stripes.hasInterface('roles')) {
-      updateUserRoles();
+      updateUserRoles(user.assignedRoleIds);
     }
 
     const data = omit(user, ['creds', 'proxies', 'sponsors', 'permissions', 'servicePoints', 'preferredServicePoint']);
@@ -439,7 +441,6 @@ class UserEdit extends React.Component {
         stripes={this.props.stripes}
         profilePictureConfig={profilePictureConfig}
         assignedRoleIds={this.props.assignedRoleIds}
-        setAssignedRoleIds={this.props.setAssignedRoleIds}
       />
     );
   }

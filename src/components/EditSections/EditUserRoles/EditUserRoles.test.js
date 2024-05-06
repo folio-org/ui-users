@@ -6,6 +6,7 @@ import renderWithRouter from 'helpers/renderWithRouter';
 import {
   useStripes,
 } from '@folio/stripes/core';
+import { Form } from 'react-final-form';
 import EditUserRoles from './EditUserRoles';
 
 import { useAllRolesData, useUserTenantRoles } from '../../../hooks';
@@ -46,12 +47,43 @@ const mockAllRolesData = {
   },
 };
 const mockAssignRolesFunction = jest.fn();
+const mockChangeFunction = jest.fn();
 
-const renderEditRolesAccordion = () => renderWithRouter(<EditUserRoles
-  accordionId="user-roles"
-  setAssignedRoleIds={mockAssignRolesFunction}
-  assignedRoleIds={['1', '2']}
-/>);
+const mockRemoveMutator = jest.fn();
+
+const arrayMutators = {
+  concat: jest.fn(),
+  move: jest.fn(),
+  pop: jest.fn(),
+  push: jest.fn(),
+  remove: mockRemoveMutator,
+  removeBatch: jest.fn(),
+  shift: jest.fn(),
+  swap: jest.fn(),
+  unshift: jest.fn(),
+  update: jest.fn()
+};
+
+const renderEditRolesAccordion = (props) => {
+  const component = () => <EditUserRoles {...props} />;
+  return renderWithRouter(<Form
+    id="form-user"
+    mutators={{
+      ...arrayMutators
+    }}
+    initialValues={{ assignedRoleIds: ['1', '2'] }}
+    render={component}
+    onSubmit={jest.fn()}
+  />);
+};
+
+const propsData = {
+  accordionId: 'user-roles',
+  initialValues: { assignedRoleIds: ['1', '2'] },
+  form: {
+    change: mockChangeFunction,
+  },
+};
 
 describe('EditUserRoles Component', () => {
   beforeEach(() => {
@@ -67,7 +99,7 @@ describe('EditUserRoles Component', () => {
   afterEach(cleanup);
 
   it('shows the list of user roles', () => {
-    const { getByText, queryByText } = renderEditRolesAccordion();
+    const { getByText, queryByText } = renderEditRolesAccordion(propsData);
 
     expect(getByText('test role')).toBeInTheDocument();
     expect(getByText('admin role')).toBeInTheDocument();
@@ -76,16 +108,16 @@ describe('EditUserRoles Component', () => {
 
   it('calls delete user role function', async () => {
     const id = `clickable-remove-user-role-${mockAllRolesData.data.roles[0].id}`;
-    renderEditRolesAccordion();
+    renderEditRolesAccordion(propsData);
 
     await waitFor(async () => {
       await userEvent.click(document.getElementById(id));
-      expect(mockAssignRolesFunction).toHaveBeenCalledTimes(1);
+      expect(mockRemoveMutator).toHaveBeenCalledTimes(1);
     });
   });
 
   it('shows the roles modal on add role button click', async () => {
-    const { getByTestId } = renderEditRolesAccordion();
+    const { getByTestId } = renderEditRolesAccordion(propsData);
 
     expect(getByTestId('add-roles-button')).toBeInTheDocument();
 
@@ -96,7 +128,7 @@ describe('EditUserRoles Component', () => {
   });
 
   it('shows the unassignAll confirmation modal window and close it', async () => {
-    const { getByTestId, getByText, queryByText } = renderEditRolesAccordion();
+    const { getByTestId, getByText, queryByText } = renderEditRolesAccordion(propsData);
     const cancelConfirmationButton = document.querySelector('[data-test-confirmation-modal-cancel-button="true"]');
 
     await userEvent.click(getByTestId('unassign-all-roles-button'));
@@ -110,7 +142,7 @@ describe('EditUserRoles Component', () => {
   });
 
   it('shows the unassignAll confirmation modal window and confirm it', async () => {
-    const { getByTestId } = renderEditRolesAccordion();
+    const { getByTestId } = renderEditRolesAccordion(propsData);
     const confirmButton = document.querySelector('[data-test-confirmation-modal-confirm-button="true"]');
 
     await userEvent.click(getByTestId('unassign-all-roles-button'));
