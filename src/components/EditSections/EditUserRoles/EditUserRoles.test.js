@@ -143,14 +143,11 @@ describe('EditUserRoles Component', () => {
 
   it('shows the unassignAll confirmation modal window and confirm it', async () => {
     const { getByTestId } = renderEditRolesAccordion(propsData);
-    const confirmButton = document.querySelector('[data-test-confirmation-modal-confirm-button="true"]');
 
     await userEvent.click(getByTestId('unassign-all-roles-button'));
+    const confirmButton = document.querySelector('[data-test-confirmation-modal-confirm-button="true"]');
+    await userEvent.click(confirmButton);
 
-    waitFor(async () => {
-      await userEvent.click(confirmButton);
-      expect(mockAssignRolesFunction).toHaveBeenCalledWith([]);
-      expect(document.getElementById('user-roles-modal')).not.toBeInTheDocument();
-    });
+    expect(mockChangeFunction).toHaveBeenCalledWith('assignedRoleIds', []);
   });
 });
