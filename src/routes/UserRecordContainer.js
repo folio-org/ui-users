@@ -185,7 +185,12 @@ class UserRecordContainer extends React.Component {
     },
     userReadingRoomPermissions: {
       type: 'okapi',
-      path: 'reading-room-patron-permission/:{id}'
+      // eslint-disable-next-line consistent-return
+      path: (queryParams, pathComponents, resourceData, config, props) => {
+        if (props.stripes.hasPerm('reading-room-patron-permission.item.get')) {
+          return `reading-room-patron-permission/${pathComponents.id}`;
+        }
+      }
     }
   });
 

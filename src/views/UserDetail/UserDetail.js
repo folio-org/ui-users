@@ -778,12 +778,14 @@ class UserDetail extends React.Component {
                 />
                 {
                   displayReadingRoomAccessAccordion && (
-                    <ReadingRoomAccess
-                      accordionId="readingRoomAccessSection"
-                      onToggle={this.handleSectionToggle}
-                      expanded={sections.readingRoomAccessSection}
-                      userRRAPermissions={userRRAPermissions}
-                    />
+                    <IfPermission perm="ui-users.view-reading-room-access">
+                      <ReadingRoomAccess
+                        accordionId="readingRoomAccessSection"
+                        onToggle={this.handleSectionToggle}
+                        expanded={sections.readingRoomAccessSection}
+                        userRRAPermissions={userRRAPermissions}
+                      />
+                    </IfPermission>
                   )
                 }
 
