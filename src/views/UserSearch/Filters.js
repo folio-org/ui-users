@@ -99,7 +99,7 @@ class Filters extends React.Component {
     const departmentsAreNotEmpty = !!resources.departments?.records?.length;
 
     const isConsortium = isConsortiumEnabled(stripes);
-    const { PATRON, SHADOW, STAFF, SYSTEM } = USER_TYPES;
+    const { PATRON, SHADOW, STAFF, SYSTEM, DCB } = USER_TYPES;
     const userTypeOptions = [
       {
         value: PATRON,
@@ -116,6 +116,10 @@ class Filters extends React.Component {
       {
         value: SYSTEM,
         label: formatMessage({ id: 'ui-users.information.userType.system' }),
+      },
+      {
+        value: DCB,
+        label: formatMessage({ id: 'ui-users.information.userType.dcb' }),
       }
     ];
 
