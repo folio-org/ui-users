@@ -395,6 +395,7 @@
   "errors.personal.dateOfBirth": "Please enter correct birth date",
   "errors.extended.dateEnrolled": "Please enter correct enrolled date",
   "errors.expirationDate": "Please enter correct expiration date",
+  "errors.renewWithReminders": "Renewals not allowed for loans with reminders.",
   "hide": "Hide",
   "show": "Show",
   "active": "Active",
