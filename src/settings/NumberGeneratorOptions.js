@@ -6,7 +6,9 @@ import { Field } from 'react-final-form';
 import { stripesConnect, withStripes } from '@folio/stripes/core';
 import { ConfigManager } from '@folio/stripes/smart-components';
 
-import { Col, RadioButton, Row } from '@folio/stripes/components';
+import { Col, MessageBanner, RadioButton, Row } from '@folio/stripes/components';
+
+import css from './NumberGeneratorOptions.css';
 
 class NumberGeneratorOptions extends React.Component {
   static propTypes = {
@@ -53,6 +55,15 @@ class NumberGeneratorOptions extends React.Component {
         stripes={this.props.stripes}
         formType="final-form"
       >
+        <Row>
+          <Col xs={12}>
+            <div className={css.marginBottomGutter}>
+              <MessageBanner>
+                <FormattedMessage id="ui-users.settings.numberGeneratorOptions.info" />
+              </MessageBanner>
+            </div>
+          </Col>
+        </Row>
         <Row>
           <Col xs={12}>
             <Field

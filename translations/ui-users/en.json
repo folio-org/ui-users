@@ -168,6 +168,7 @@
   "settings.manualBlockTemplates": "Templates",
   "settings.manualBlockTemplates.paneTitle": "Patron block templates",
   "settings.numberGeneratorOptions": "Number generator options",
+  "settings.numberGeneratorOptions.info": "Fields which are usually filled using a numeric sequence can use the number generator. When the generator is switched on the field can either be fixed to prevent manual update, or made fully editable. When switched off, the field must be filled manually.",
   "settings.numberGeneratorOptions.useGeneratorForBarcode": "Number generator on, fixed: the barcode can be filled using the generator only.",
   "settings.numberGeneratorOptions.useTextFieldForBarcode": "Number generator off: the barcode can be filled manually only.",
   "settings.numberGeneratorOptions.useBothForBarcode": "Number generator on, editable: the barcode can be filled using the generator and be edited, or filled manually.",
