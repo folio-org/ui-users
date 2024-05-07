@@ -12,8 +12,6 @@ import {
   MultiColumnList,
   NoValue,
   SearchField,
-  Row,
-  Column,
 } from '@folio/stripes/components';
 import { ViewMetaData } from '@folio/stripes/smart-components';
 

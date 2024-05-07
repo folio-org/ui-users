@@ -1,13 +1,10 @@
-import { screen, render, fireEvent } from '@folio/jest-config-stripes/testing-library/react';
+import { screen, render, fireEvent, waitFor } from '@folio/jest-config-stripes/testing-library/react';
 
 import ReadingRoomAccess from './ReadingRoomAccess';
 
 jest.unmock('@folio/stripes/components');
 jest.mock('@folio/stripes/components', () => ({
   ...jest.requireActual('@folio/stripes/components'),
-  MultiColumnList: jest.fn((props) => (
-    <div data-testid={props['data-testid']} />
-  )),
   SearchField: jest.fn((props) => (
     <input
       {...props}
@@ -56,7 +53,7 @@ describe('ReadingRoomAccess', () => {
 
   it('should display MultiColumnList', () => {
     render(<ReadingRoomAccess {...alteredProps} />);
-    expect(screen.getByTestId('reading-room-access-mcl')).toBeDefined();
+    expect(document.querySelectorAll('[class^="mclContainer"]')).toBeDefined();
   });
 
   it('should display search field', () => {
@@ -64,10 +61,12 @@ describe('ReadingRoomAccess', () => {
     expect(screen.getByPlaceholderText('ui-users.readingRoom.filter')).toBeDefined();
   });
 
-  it('should filter MCL records "Name" column, based on the string entered in search box', () => {
+  it('should filter MCL records "Name" column, based on the string entered in search box', async () => {
     render(<ReadingRoomAccess {...alteredProps} />);
     const inputEl = screen.getByPlaceholderText('ui-users.readingRoom.filter');
     fireEvent.change(inputEl, { target: { value: '1' } });
-    expect(screen.getByTestId('reading-room-access-mcl')).toBeDefined();
+    const numOfRows = document.querySelectorAll('[class^="mclRowFormatterContainer"]').length;
+    console.log('numOfRows ', numOfRows);
+    await waitFor(() => expect(numOfRows).toBe(1));
   });
 });
