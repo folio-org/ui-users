@@ -15,6 +15,7 @@
 * Rename isDCBItem function name to isDcbItem. Refs UIU-3020.
 * *BREAKING* Add new okapi interface reading-room-patron-permission. Create new permission 'Users: Can view reading room access'. Refs UIU-3116.
 * Create new permission 'Users: Can view, and edit reading room access'. Refs UIU-3117.
+* Displaying Default Reading Room Access in User Records. Refs UIU-3114.
 
 ## [10.1.0](https://github.com/folio-org/ui-users/tree/v10.1.0) (2024-03-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.4...v10.1.0)
