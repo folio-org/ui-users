@@ -96,8 +96,8 @@ const ReadingRoomAccess = (props) => {
           metadata={rra.metadata}
         >
           {
-          (updater) => lastUpdatedDetails(updater?.lastUpdatedBy, rra.metadata.updatedDate)
-        }
+            (updater) => lastUpdatedDetails(updater?.lastUpdatedBy, rra.metadata.updatedDate)
+          }
         </ViewMetaData>
       ) :
         <NoValue />
