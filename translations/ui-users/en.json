@@ -331,6 +331,7 @@
   "information.userType.staff": "Staff",
   "information.userType.shadow": "Shadow",
   "information.userType.system": "System",
+  "information.userType.dcb": "DCB",
   "information.patronGroup": "Patron group",
   "information.patronGroups": "Patron groups",
   "information.status": "Status",
