@@ -1,4 +1,4 @@
-import { renderHook, waitFor, act } from '@folio/jest-config-stripes/testing-library/react';
+import { renderHook, waitFor } from '@folio/jest-config-stripes/testing-library/react';
 import useRolesModalFilters from './useRolesModalFilters';
 
 describe('useRolesModalFilters', () => {

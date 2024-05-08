@@ -46,7 +46,6 @@ const mockAllRolesData = {
     ]
   },
 };
-const mockAssignRolesFunction = jest.fn();
 const mockChangeFunction = jest.fn();
 
 const mockRemoveMutator = jest.fn();

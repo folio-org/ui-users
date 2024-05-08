@@ -26,7 +26,10 @@ const withUserRoles = (WrappedComponent) => (props) => {
     )
       .json()
       .then(data => setAssignedRoleIds(data.userRoles.map(({ roleId }) => roleId)))
-      .catch(error => alert(JSON.stringify(error)));
+      // eslint-disable-next-line no-console
+      .catch(console.error);
+    // Only userId can be changed dynamically
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 
   const updateUserRoles = (roleIds) => api.put(
@@ -34,7 +37,9 @@ const withUserRoles = (WrappedComponent) => (props) => {
       userId,
       roleIds
     } },
-  ).json();
+  ).json()
+  // eslint-disable-next-line no-console
+    .catch(console.error);
 
   return <WrappedComponent
     {...props}
