@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { isEmpty } from 'lodash';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import {
   Button,
@@ -13,14 +13,15 @@ import {
 import css from './SearchForm.css';
 
 export default function SearchForm(props) {
-  const {
-    onSubmitSearch,
+  const { onSubmitSearch,
     onChangeFilter,
-    config,
+    onClearFilter,
     filters,
     resetSearchForm,
-    onClearFilter,
-  } = props;
+    config } = props;
+
+  const intl = useIntl();
+
   const [searchText, setSearchText] = useState('');
   const onFormSubmit = (e) => {
     e.stopPropagation();
@@ -35,19 +36,15 @@ export default function SearchForm(props) {
   return (
     <form onSubmit={onFormSubmit}>
       <div className={css.searchGroupWrap}>
-        <FormattedMessage id="ui-users.userSearch">
-          {label => (
-            <SearchField
-              data-test-search-field
-              aria-label={label}
-              name="query"
-              onChange={({ target: { value } }) => { setSearchText(value); }}
-              className={css.searchField}
-              value={searchText}
-              autoFocus
-            />
-          )}
-        </FormattedMessage>
+        <SearchField
+          data-test-search-field
+          aria-label={intl.formatMessage({ id: 'ui-users.userSearch' })}
+          name="query"
+          onChange={({ target: { value } }) => setSearchText(value)}
+          className={css.searchField}
+          value={searchText}
+          autoFocus
+        />
         <Button
           data-test-submit-button
           type="submit"
@@ -67,7 +64,7 @@ export default function SearchForm(props) {
           onClick={onResetSearchForm}
         >
           <Icon icon="times-circle-solid">
-            <FormattedMessage id="ui-users.permissions.modal.search.resetAll" />
+            <FormattedMessage id="ui-users.roles.modal.search.resetAll" />
           </Icon>
         </Button>
       </div>
@@ -82,11 +79,25 @@ export default function SearchForm(props) {
 }
 
 SearchForm.propTypes = {
-  config: PropTypes.object.isRequired,
+  config: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.node.isRequired,
+      name: PropTypes.string.isRequired,
+      cql: PropTypes.string.isRequired,
+      values: PropTypes.arrayOf(
+        PropTypes.shape({
+          name: PropTypes.string.isRequired,
+          displayName: PropTypes.element.isRequired,
+          value: PropTypes.bool.isRequired,
+        }).isRequired,
+      ).isRequired,
+    })
+  ).isRequired,
   filters: PropTypes.object.isRequired,
   onSubmitSearch: PropTypes.func.isRequired,
   onChangeFilter: PropTypes.func.isRequired,
   onClearFilter: PropTypes.func.isRequired,
   resetSearchForm: PropTypes.func.isRequired,
 };
+
 

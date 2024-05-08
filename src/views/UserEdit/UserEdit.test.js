@@ -18,6 +18,10 @@ const userFormData = {
   },
 };
 
+jest.mock('../../components/Wrappers/withUserRoles', () => (Component) => {
+  return Component;
+});
+
 jest.mock('@folio/stripes/components', () => ({
   ...jest.requireActual('@folio/stripes/components'),
   LoadingView: () => 'LoadingView',
@@ -54,6 +58,7 @@ describe('UserEdit', () => {
   let props = {
     stripes: {
       hasPerm: jest.fn().mockReturnValue(true),
+      hasInterface: jest.fn().mockReturnValue(true),
       okapi: {
         tenant: 'tenantId',
       },
@@ -88,6 +93,7 @@ describe('UserEdit', () => {
     updateProxies: jest.fn(),
     updateSponsors: jest.fn(),
     updateServicePoints: jest.fn(),
+    updateUserRoles:jest.fn(),
     getUserServicePoints: jest.fn(),
     getPreferredServicePoint: jest.fn(),
     mutator: {
