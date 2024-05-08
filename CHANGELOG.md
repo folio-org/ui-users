@@ -43,7 +43,8 @@
 * Allow override for reminder fees with renewal blocked. Refs UICIRC-1077.
 * Show Roles assigned to users. Refs UIU-3110.
 * Add edit user roles accordion on edit role modal view. Refs UIU-3021.    
-* Add edit user roles accordion on edit role modal view. Refs UIU-3021.    
+* Add edit user roles accordion on edit role modal view. Refs UIU-3021.
+* Wire up with API ability to assign/unassign user roles in UserForm. Refs UIU-3124.    
 
 ## [10.1.0](https://github.com/folio-org/ui-users/tree/v10.1.0) (2024-03-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.4...v10.1.0)
