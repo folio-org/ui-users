@@ -10,13 +10,11 @@ import {
   FormattedUTCDate,
   Headline,
   MultiColumnList,
-  NoValue,
   SearchField,
 } from '@folio/stripes/components';
-import { ViewMetaData } from '@folio/stripes/smart-components';
 
-import { READING_ROOM_ACCESS } from '../../../constants';
 import { rraColumns } from './constant';
+import { getFormatter } from './getFormatter';
 import css from './ReadingRoomAccess.css';
 
 const ReadingRoomAccess = (props) => {
@@ -86,23 +84,6 @@ const ReadingRoomAccess = (props) => {
     [rraColumns.NOTES]: <FormattedMessage id="ui-users.readingRoom.note" />,
     [rraColumns.ID]: <FormattedMessage id="ui-users.readingRoom.lastUpdated" />,
   };
-  const formatter = {
-    [rraColumns.ACCESS]: (rra) => <FormattedMessage id={READING_ROOM_ACCESS[rra.access]} />,
-    [rraColumns.READING_ROOM_NAME]: (rra) => rra.readingRoomName,
-    [rraColumns.NOTES]: rra => rra.notes,
-    [rraColumns.ID]: rra => (
-      rra?.metadata?.updatedDate ? (
-        <ViewMetaData
-          metadata={rra.metadata}
-        >
-          {
-            (updater) => lastUpdatedDetails(updater?.lastUpdatedBy, rra.metadata.updatedDate)
-          }
-        </ViewMetaData>
-      ) :
-        <NoValue />
-    )
-  };
 
   return (
     <Accordion
@@ -132,7 +113,7 @@ const ReadingRoomAccess = (props) => {
         contentData={filteredRRA}
         columnMapping={columnMapping}
         visibleColumns={visibleColumns}
-        formatter={formatter}
+        formatter={getFormatter(lastUpdatedDetails)}
       />
     </Accordion>
   );
