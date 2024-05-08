@@ -1,4 +1,4 @@
-import React, { useState, isValidElement, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
@@ -46,15 +46,9 @@ const ReadingRoomAccess = (props) => {
   };
 
   const renderUser = (usr) => {
-    if (typeof usr === 'string' || isValidElement(usr)) return usr;
-
     const name = renderName(usr);
 
-    if (usr?.id) {
-      return <Link to={`/users/view/${usr.id}`} data-test-user-link>{name}</Link>;
-    } else {
-      return name;
-    }
+    return <Link to={`/users/view/${usr?.id}`} data-test-user-link>{name}</Link>;
   };
 
   const lastUpdatedDetails = (updater, date) => {
@@ -104,7 +98,6 @@ const ReadingRoomAccess = (props) => {
             placeholder={intl.formatMessage({ id:'ui-users.readingRoom.filter' })}
           />
         </div>
-        // <p>Add item</p>
       }
     >
       <MultiColumnList
