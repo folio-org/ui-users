@@ -1064,7 +1064,7 @@
         "displayName": "Users: Can view reading room access",
         "subPermissions": [
           "ui-users.view",
-          "reading-room-patron-permission.item.get"
+          "reading-room.patron-permission.item.get"
         ],
         "visible": true
       },
@@ -1074,7 +1074,7 @@
         "subPermissions": [
           "ui-users.edit",
           "ui-users.view-reading-room-access",
-          "reading-room-patron-permission.item.put"
+          "reading-room.patron-permission.item.put"
         ],
         "visible": true
       }
