@@ -1155,7 +1155,6 @@
     "information.profilePicture.delete": "削除",
     "information.profilePicture.externalLink.modal.updateProfilePicture": "Update profile picture",
     "information.profilePicture.externalLink.modal.externalURL": "External URL",
-    "information.profilePicture.externalLink.modal.externalURL.errorMessage": "Invalid image URL",
     "information.profilePicture.delete.modal.message": "You are deleting the profile picture for {name}",
     "information.profilePicture.delete.modal.heading": "Delete profile picture",
     "information.change.userType.modal.label": "Changing user type?",
@@ -1165,5 +1164,11 @@
     "information.profilePicture.localFile.modal.zoom": "ズーム",
     "information.profilePicture.localFile.modal.rotate": "Rotate",
     "information.profilePicture.localFile.maxFileSize.error": "Photo size exceeds the {maxFileSize}MB limit. Please choose a photo with a size of {maxFileSize}MB or less.",
-    "accounts.warning.unpaidItemSelected": "{total, number} {total, plural, one {item} other {items}} selected. {items, number} {items, plural, one {item} other {items}} cannot be {action} because {items, plural, one {it was} other {they were}} not paid."
+    "accounts.warning.unpaidItemSelected": "{total, number} {total, plural, one {item} other {items}} selected. {items, number} {items, plural, one {item} other {items}} cannot be {action} because {items, plural, one {it was} other {they were}} not paid.",
+    "errors.renewWithReminders": "Renewals not allowed for loans with reminders.",
+    "information.profilePicture.externalLink.modal.externalURL.invalidURLErrorMessage": "Invalid image URL",
+    "information.profilePicture.externalLink.modal.externalURL.invalidImageURLErrorMessage": "The provided URL is valid but does not point to an image file",
+    "permission.view-reading-room-access": "Users: Can view reading room access",
+    "permission.edit-reading-room-access": "Users: Can view, and edit reading room access",
+    "information.userType.dcb": "DCB"
 }
