@@ -370,6 +370,7 @@
   "readingRoom.filter": "Filter",
   "readingRoom.allowed": "Allowed",
   "readingRoom.notAllowed": "Not allowed",
+  "readingRoom.metaSection.lastUpdatedDetails": "{date} by {name}",
 
   "crud.closeNewUserDialog": "Close New User Dialog",
   "crud.editUser": "Edit User",

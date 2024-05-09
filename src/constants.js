@@ -369,6 +369,7 @@ export const READING_ROOM_ACCESS = {
   ALLOWED: 'Allowed',
   NOT_ALLOWED: 'Not allowed'
 };
+
 export const USER_INFO = {
   FIRST_NAME: 'personal.firstName',
   MIDDLE_NAME: 'personal.middleName',
