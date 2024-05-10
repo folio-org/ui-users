@@ -1183,5 +1183,6 @@
   "roles.modal.unassignAll.header": "Unassign all user roles",
   "roles.modal.unassignAll.label": "You are unassigning all user roles <strong>{roles}</strong> <p><strong>Are you sure?</strong></p>",
   "roles.modal.search.header": "Search & filter",
-  "roles.modal.filter.status.label": "Role assigment status"
+  "roles.modal.filter.status.label": "Role assigment status",
+  "roles.modal.header": "Select user roles"
 }

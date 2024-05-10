@@ -49,6 +49,7 @@
 * Show Roles assigned to users. Refs UIU-3110.
 * Add edit user roles accordion on edit role modal view. Refs UIU-3021.
 * Wire up with API ability to assign/unassign user roles in UserForm. Refs UIU-3124.
+* Fix filter issues in user roles modal. Refs UIU-3124.
 
 ## [10.0.4](https://github.com/folio-org/ui-users/tree/v10.0.4) (2023-11-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.3...v10.0.4)
