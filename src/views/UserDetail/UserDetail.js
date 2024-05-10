@@ -127,6 +127,9 @@ class UserDetail extends React.Component {
       suppressEdit: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
+      userReadingRoomPermissions: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
     }),
     match: PropTypes.shape({
       path: PropTypes.string.isRequired,
@@ -633,6 +636,11 @@ class UserDetail extends React.Component {
     const isVirtualPatron = isDcbUser(user);
     const showPatronBlocksSection = hasPatronBlocksPermissions && !isShadowUser;
 
+    const isPatronUser = user?.type === USER_TYPES.PATRON;
+    const isStaffUser = user?.type === USER_TYPES.STAFF;
+    const displayReadingRoomAccessAccordion = isPatronUser || isStaffUser;
+    const userRRAPermissions = resources?.userReadingRoomPermissions?.records || [];
+
     if (this.userNotFound()) {
       return (
         <ErrorPane
@@ -768,12 +776,19 @@ class UserDetail extends React.Component {
                   customFieldsLabel={<FormattedMessage id="ui-users.custom.customFields" />}
                   noCustomFieldsFoundLabel={<FormattedMessage id="ui-users.custom.noCustomFieldsFound" />}
                 />
-                <ReadingRoomAccess
-                  accordionId="readingRoomAccessSection"
-                  onToggle={this.handleSectionToggle}
-                  expanded={sections.readingRoomAccessSection}
-                  userId={user?.id}
-                />
+                {
+                  displayReadingRoomAccessAccordion && (
+                    <IfPermission perm="ui-users.view-reading-room-access">
+                      <ReadingRoomAccess
+                        accordionId="readingRoomAccessSection"
+                        onToggle={this.handleSectionToggle}
+                        expanded={sections.readingRoomAccessSection}
+                        userRRAPermissions={userRRAPermissions}
+                      />
+                    </IfPermission>
+                  )
+                }
+
                 {
                   !isShadowUser && (
                     <>

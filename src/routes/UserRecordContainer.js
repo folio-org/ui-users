@@ -183,6 +183,15 @@ class UserRecordContainer extends React.Component {
       path: 'configurations/entries?query=module=="@folio/users" AND configName=="suppressEdit"',
       records: 'configs',
     },
+    userReadingRoomPermissions: {
+      type: 'okapi',
+      // eslint-disable-next-line consistent-return
+      path: (queryParams, pathComponents, resourceData, config, props) => {
+        if (props.stripes.hasPerm('reading-room-patron-permission.item.get') && pathComponents.id) {
+          return `reading-room-patron-permission/${pathComponents.id}`;
+        }
+      }
+    }
   });
 
   static propTypes = {
