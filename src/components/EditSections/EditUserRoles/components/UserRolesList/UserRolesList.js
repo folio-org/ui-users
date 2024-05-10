@@ -11,7 +11,7 @@ const UserRolesList = ({ assignedUserRoleIds,
   filteredRoles,
   toggleRole,
   toggleAllRoles }) => {
-  const allChecked = filteredRoles.length === assignedUserRoleIds.length;
+  const allChecked = filteredRoles.every(filteredRole => assignedUserRoleIds.includes(filteredRole.id));
 
   const handleToggleAllRoles = (event) => toggleAllRoles(event.target.checked);
 
