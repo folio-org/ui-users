@@ -29,6 +29,7 @@ export default function UserRolesModal({ isOpen,
 
   const handleCloseModal = () => {
     setAssignedRoleIds(initialRoleIds);
+    setSubmittedSearchTerm('');
     resetFilters();
     onClose();
   };
@@ -42,7 +43,7 @@ export default function UserRolesModal({ isOpen,
       filtered = filterData.filter(filtered, filters, assignedRoleIds);
     });
 
-    return filtered.filter(role => role.name.includes(submittedSearchTerm.trim().toLowerCase()));
+    return filtered.filter(role => role.name.trim().toLowerCase().includes(submittedSearchTerm.trim().toLowerCase()));
   };
 
   const toggleRole = (id) => {
@@ -65,6 +66,7 @@ export default function UserRolesModal({ isOpen,
 
   const resetSearchForm = () => {
     setAssignedRoleIds(assignedRoles.map(role => role.id));
+    setSubmittedSearchTerm('');
     resetFilters();
   };
 
@@ -77,6 +79,7 @@ export default function UserRolesModal({ isOpen,
     <Modal
       open={isOpen}
       id="user-roles-modal"
+      label={<FormattedMessage id="ui-users.roles.modal.header" />}
       size="large"
       dismissible
       showHeader
@@ -120,6 +123,7 @@ export default function UserRolesModal({ isOpen,
                   {...renderProps}
                   paneTitle={<FormattedMessage id="ui-users.roles.modal.search.header" />}
                   lastMenu={<CollapseFilterPaneButton onClick={() => setFilterPaneIsVisible(!filterPaneIsVisible)} />}
+                  className={css.modalHeader}
                 />
               )}
             >
@@ -134,7 +138,6 @@ export default function UserRolesModal({ isOpen,
             </Pane>}
           <Pane
             defaultWidth="fill"
-            className={css.modalHeader}
             renderHeader={renderProps => (
               <PaneHeader
                 {...renderProps}
