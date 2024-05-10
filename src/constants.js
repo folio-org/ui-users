@@ -349,7 +349,7 @@ export const USER_TYPES = {
   SHADOW: 'shadow',
   STAFF: 'staff',
   SYSTEM: 'system',
-  DCB,
+  DCB: 'dcb',
 };
 
 export const DCB_INSTANCE_ID = '9d1b77e4-f02e-4b7f-b296-3f2042ddac54';
