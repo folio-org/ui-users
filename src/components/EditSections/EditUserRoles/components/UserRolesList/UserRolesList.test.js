@@ -25,9 +25,12 @@ describe('UserRolesList', () => {
   });
 
   it('toggle select all roles', async () => {
-    await userEvent.click(document.querySelector('[name="selected-selectAll"]'));
+    const selectAllCheckbox = document.querySelector('[name="selected-selectAll"]');
+    expect(selectAllCheckbox).toBeChecked();
 
-    expect(mockToggleAllRoles).toHaveBeenCalledWith(true);
+    await userEvent.click(selectAllCheckbox);
+
+    expect(mockToggleAllRoles).toHaveBeenCalledWith(false);
   });
 
   it('toggle select role', async () => {
