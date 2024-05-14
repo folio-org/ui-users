@@ -84,7 +84,7 @@ const ReadingRoomAccess = (props) => {
     return (
       <div className={css.lastUpdatedBy}>
         <FormattedMessage
-          id="ui-users.reading-room-access.metaSection.lastUpdatedDetails"
+          id="ui-users.readingRoom.metaSection.lastUpdatedDetails"
           values={{
             date: <FormattedUTCDate value={date} />,
             name: lastUpdatedUser,
@@ -123,7 +123,6 @@ const ReadingRoomAccess = (props) => {
         >
           <SearchField
             onChange={filterReadingRoomsByName}
-            // onClear={() => setFilteredRRA(userRRAPermissions)}
             onClear={() => setSortedRecordsDetails(prev => ({
               ...prev.sortedRecordsDetails,
               data: orderBy(userRRAPermissions, ['access'])

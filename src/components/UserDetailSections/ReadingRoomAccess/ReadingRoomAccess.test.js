@@ -94,7 +94,7 @@ describe('ReadingRoomAccess', () => {
 
   it('should render updated date', () => {
     render(<ReadingRoomAccess {...alteredProps} />);
-    expect(screen.getByText('ui-users.reading-room-access.metaSection.lastUpdatedDetails')).toBeDefined();
+    expect(screen.getByText('ui-users.readingRoom.metaSection.lastUpdatedDetails')).toBeDefined();
   });
 
   it('should sort the records by access, by default', () => {
