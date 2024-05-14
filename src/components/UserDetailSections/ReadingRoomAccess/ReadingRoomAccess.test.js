@@ -35,7 +35,7 @@ const mockedRRAData = [
   {
     'userId': '2205005b-ca51-4a04-87fd-938eefa8f6de',
     'readingRoomId': '0e589a51-5f28-4b59-b923-b036cf56a41d',
-    'readingRoomName': 'reading room1',
+    'readingRoomName': 'reading room 2',
     'access': 'NOT_ALLOWED'
   },
   {
@@ -57,7 +57,10 @@ const props = {
   accordionId: 'readingRoomSection',
   expanded: false,
   onToggle: jest.fn(),
-  userRRAPermissions: mockedRRAData,
+  readingRoomPermissions: {
+    records: mockedRRAData,
+    isPending: false,
+  }
 };
 
 describe('ReadingRoomAccess', () => {
@@ -84,7 +87,7 @@ describe('ReadingRoomAccess', () => {
   it('should filter MCL records "Name" column, based on the string entered in search box', async () => {
     render(<ReadingRoomAccess {...alteredProps} />);
     const inputEl = screen.getByPlaceholderText('ui-users.readingRoom.filter');
-    fireEvent.change(inputEl, { target: { value: 'room1' } });
+    fireEvent.change(inputEl, { target: { value: 'room 1' } });
     const numOfRows = document.querySelectorAll('[class^="mclRowFormatterContainer"]').length;
     await waitFor(() => expect(numOfRows).toBe(1));
   });
@@ -92,5 +95,16 @@ describe('ReadingRoomAccess', () => {
   it('should render updated date', () => {
     render(<ReadingRoomAccess {...alteredProps} />);
     expect(screen.getByText('ui-users.reading-room-access.metaSection.lastUpdatedDetails')).toBeDefined();
+  });
+
+  it('should sort the records by access, by default', () => {
+    render(<ReadingRoomAccess {...alteredProps} />);
+    expect(document.querySelectorAll('[class^="mclCell"]')[0].innerHTML).toBe('Allowed');
+  });
+
+  it('should sort the records by room name when name column header is clicked', () => {
+    render(<ReadingRoomAccess {...alteredProps} />);
+    fireEvent.click(document.getElementById('clickable-list-column-readingroomname'));
+    expect(document.querySelectorAll('[class^="mclCell"]')[1].innerHTML).toBe('reading room 1');
   });
 });

@@ -639,7 +639,7 @@ class UserDetail extends React.Component {
     const isPatronUser = user?.type === USER_TYPES.PATRON;
     const isStaffUser = user?.type === USER_TYPES.STAFF;
     const displayReadingRoomAccessAccordion = isPatronUser || isStaffUser;
-    const userRRAPermissions = resources?.userReadingRoomPermissions?.records || [];
+    const readingRoomPermissions = resources?.userReadingRoomPermissions;
 
     if (this.userNotFound()) {
       return (
@@ -783,7 +783,7 @@ class UserDetail extends React.Component {
                         accordionId="readingRoomAccessSection"
                         onToggle={this.handleSectionToggle}
                         expanded={sections.readingRoomAccessSection}
-                        userRRAPermissions={userRRAPermissions}
+                        readingRoomPermissions={readingRoomPermissions}
                       />
                     </IfPermission>
                   )

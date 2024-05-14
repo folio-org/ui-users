@@ -5,3 +5,10 @@ export const rraColumns = {
   NOTES: 'notes',
   ID: 'id'
 };
+
+export const DEFAULT_SORT_ORDER = rraColumns.ACCESS;
+
+export const SORT_DIRECTION = {
+  ASCENDING: 'asc',
+  DESCENDING: 'desc'
+};
