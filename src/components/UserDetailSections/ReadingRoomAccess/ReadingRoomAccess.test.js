@@ -92,6 +92,16 @@ describe('ReadingRoomAccess', () => {
     await waitFor(() => expect(numOfRows).toBe(1));
   });
 
+  it('should render all records when search string is cleared', async () => {
+    render(<ReadingRoomAccess {...alteredProps} />);
+    const inputEl = screen.getByPlaceholderText('ui-users.readingRoom.filter');
+    fireEvent.change(inputEl, { target: { value: 'room 1' } });
+    const numOfRows = document.querySelectorAll('[class^="mclRowFormatterContainer"]').length;
+    await waitFor(() => expect(numOfRows).toBe(1));
+    fireEvent.change(inputEl, { target: { value: '' } });
+    expect(document.querySelectorAll('[class^="mclRowFormatterContainer"]').length).toBe(2);
+  });
+
   it('should render updated date', () => {
     render(<ReadingRoomAccess {...alteredProps} />);
     expect(screen.getByText('ui-users.readingRoom.metaSection.lastUpdatedDetails')).toBeDefined();

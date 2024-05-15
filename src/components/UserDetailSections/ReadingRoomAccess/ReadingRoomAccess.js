@@ -51,7 +51,7 @@ const ReadingRoomAccess = (props) => {
     if (!isPending) {
       setSortedRecordsDetails(prev => ({
         ...prev.sortedRecordsDetails,
-        data: orderBy(userRRAPermissions, ['access'])
+        data: orderBy(userRRAPermissions, [rraColumns.ACCESS])
       }));
     }
   }, [userRRAPermissions, isPending]);
@@ -61,7 +61,7 @@ const ReadingRoomAccess = (props) => {
     const filteredRRs = userRRAPermissions.filter(r => r.readingRoomName.includes(name));
     setSortedRecordsDetails(prev => ({
       ...prev.sortedRecordsDetails,
-      data: orderBy(filteredRRs, ['access'])
+      data: orderBy(filteredRRs, [rraColumns.ACCESS])
     }));
   };
 
@@ -125,7 +125,7 @@ const ReadingRoomAccess = (props) => {
             onChange={filterReadingRoomsByName}
             onClear={() => setSortedRecordsDetails(prev => ({
               ...prev.sortedRecordsDetails,
-              data: orderBy(userRRAPermissions, ['access'])
+              data: orderBy(userRRAPermissions, [rraColumns.ACCESS])
             }))}
             placeholder={intl.formatMessage({ id:'ui-users.readingRoom.filter' })}
           />
