@@ -112,6 +112,13 @@ describe('ReadingRoomAccess', () => {
     expect(document.querySelectorAll('[class^="mclCell"]')[0].innerHTML).toBe('Allowed');
   });
 
+  it('should sort records in descending order of access when access header is clicked', () => {
+    render(<ReadingRoomAccess {...alteredProps} />);
+    fireEvent.click(document.getElementById('clickable-list-column-access'));
+    fireEvent.click(document.getElementById('clickable-list-column-access'));
+    expect(document.querySelectorAll('[class^="mclCell"]')[0].innerHTML).toBe('Not allowed');
+  });
+
   it('should sort the records by room name when name column header is clicked', () => {
     render(<ReadingRoomAccess {...alteredProps} />);
     fireEvent.click(document.getElementById('clickable-list-column-readingroomname'));
