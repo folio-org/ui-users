@@ -115,7 +115,6 @@ describe('ReadingRoomAccess', () => {
   it('should sort records in descending order of access when access header is clicked', () => {
     render(<ReadingRoomAccess {...alteredProps} />);
     fireEvent.click(document.getElementById('clickable-list-column-access'));
-    fireEvent.click(document.getElementById('clickable-list-column-access'));
     expect(document.querySelectorAll('[class^="mclCell"]')[0].innerHTML).toBe('Not allowed');
   });
 

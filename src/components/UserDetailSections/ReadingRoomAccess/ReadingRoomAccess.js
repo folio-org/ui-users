@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { get, orderBy } from 'lodash';
+import { get, orderBy, noop } from 'lodash';
 
 import {
   Accordion,
@@ -14,7 +14,8 @@ import {
   Icon,
 } from '@folio/stripes/components';
 
-import { rraColumns, DEFAULT_SORT_ORDER, SORT_DIRECTION } from './constant';
+import { rraColumns, DEFAULT_SORT_ORDER } from './constant';
+import { sortTypes } from '../../../constants';
 import { getFormatter } from './getFormatter';
 import css from './ReadingRoomAccess.css';
 
@@ -43,15 +44,15 @@ const ReadingRoomAccess = (props) => {
   const sortInitialState = {
     data: [],
     order: DEFAULT_SORT_ORDER,
-    direction: SORT_DIRECTION.ASCENDING,
+    direction: sortTypes.ASC,
   };
   const [sortedRecordsDetails, setSortedRecordsDetails] = useState(sortInitialState);
 
   useEffect(() => {
     if (!isPending) {
       setSortedRecordsDetails(prev => ({
-        ...prev.sortedRecordsDetails,
-        data: orderBy(userRRAPermissions, [rraColumns.ACCESS])
+        ...prev,
+        data: orderBy(userRRAPermissions, prev.order, prev.direction)
       }));
     }
   }, [userRRAPermissions, isPending]);
@@ -60,9 +61,23 @@ const ReadingRoomAccess = (props) => {
     const name = e.target.value;
     const filteredRRs = userRRAPermissions.filter(r => r.readingRoomName.includes(name));
     setSortedRecordsDetails(prev => ({
-      ...prev.sortedRecordsDetails,
-      data: orderBy(filteredRRs, [rraColumns.ACCESS])
+      ...prev,
+      data: orderBy(filteredRRs, prev.order, prev.direction)
     }));
+  };
+
+  const onSort = (e, meta) => {
+    let newSortDirection = sortTypes.ASC;
+    if (sortedRecordsDetails.order === meta.name) {
+      newSortDirection = sortedRecordsDetails.direction === sortTypes.ASC ? sortTypes.DESC : sortTypes.ASC;
+    }
+    const sortedData = orderBy(sortedRecordsDetails.data, [meta.name], newSortDirection);
+
+    setSortedRecordsDetails({
+      data: sortedData,
+      order: meta.name,
+      direction: newSortDirection
+    });
   };
 
   const renderName = (usr) => {
@@ -94,20 +109,6 @@ const ReadingRoomAccess = (props) => {
     );
   };
 
-  const onSort = (e, meta) => {
-    let newSortDirection = SORT_DIRECTION.ASCENDING;
-    if (sortedRecordsDetails.order === meta.name) {
-      newSortDirection = sortedRecordsDetails.direction === SORT_DIRECTION.ASCENDING ? SORT_DIRECTION.DESCENDING : SORT_DIRECTION.ASCENDING;
-    }
-    const sortedData = orderBy(sortedRecordsDetails.data, [meta.name], newSortDirection);
-
-    setSortedRecordsDetails({
-      data: sortedData,
-      order: meta.name,
-      direction: newSortDirection
-    });
-  };
-
   return (
     <Accordion
       id={accordionId}
@@ -115,7 +116,7 @@ const ReadingRoomAccess = (props) => {
       onToggle={onToggle}
       open={expanded}
       displayWhenClosed={
-        isPending ? <Icon icon="spinner-ellipsis" width="10px" /> : <Badge>{userRRAPermissions.length}</Badge>
+        isPending ? <Icon icon="spinner-ellipsis" /> : <Badge>{userRRAPermissions.length}</Badge>
       }
       displayWhenOpen={
         <div
@@ -123,10 +124,7 @@ const ReadingRoomAccess = (props) => {
         >
           <SearchField
             onChange={filterReadingRoomsByName}
-            onClear={() => setSortedRecordsDetails(prev => ({
-              ...prev.sortedRecordsDetails,
-              data: orderBy(userRRAPermissions, [rraColumns.ACCESS])
-            }))}
+            onClear={noop}
             placeholder={intl.formatMessage({ id:'ui-users.readingRoom.filter' })}
           />
         </div>
@@ -142,6 +140,7 @@ const ReadingRoomAccess = (props) => {
         sortOrder={sortedRecordsDetails.order}
         sortDirection={`${sortedRecordsDetails.direction}ending`}
         onHeaderClick={onSort}
+        sortedColumn={sortedRecordsDetails.order}
       />
     </Accordion>
   );
