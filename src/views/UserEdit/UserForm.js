@@ -250,7 +250,7 @@ class UserForm extends React.Component {
         disabled={disabled}
         buttonRef={this.saveButton}
       >
-        <FormattedMessage id="ui-users.saveAndClose" />
+        <FormattedMessage id="stripes-components.saveAndClose" />
       </Button>
     );
 

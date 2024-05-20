@@ -225,11 +225,13 @@ describe('FeeFine settings', () => {
 
     expect(screen.getByRole('grid', { id: 'editList-settings-feefines' })).toBeDefined();
 
-    await userEvent.type(document.querySelector('[name="items[0].feeFineType"]'), 'feefinetype');
-    await userEvent.type(document.querySelector('[name="items[0].defaultAmount"]'), '1.0');
+    await waitFor(() => {
+      userEvent.type(document.querySelector('[name="items[0].feeFineType"]'), 'feefinetype');
+      userEvent.type(document.querySelector('[name="items[0].defaultAmount"]'), '1.0');
+    });
     await userEvent.click(document.querySelector('[id="clickable-save-settings-feefines-0"]'));
 
-    waitFor(() => {
+    await waitFor(() => {
       expect(document.querySelectorAll('.editListRow').length).toEqual(1);
     });
   });

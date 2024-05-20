@@ -40,7 +40,7 @@ describe('LocalFileModal', () => {
     expect(screen.getByText('rotate')).toBeInTheDocument();
   });
   it('should call onSave', async () => {
-    const saveButton = screen.getByRole('button', { name: 'ui-users.saveAndClose' });
+    const saveButton = screen.getByRole('button', { name: /saveAndClose/ });
     await userEvent.click(saveButton);
 
     expect(props.setRotation).toHaveBeenCalled();

@@ -54,6 +54,7 @@ jest.mock('@folio/stripes/smart-components', () => {
     NotesSmartAccordion: () => <div>NotesSmartAccordion</div>,
     ViewCustomFieldsRecord: () => <div>ViewCustomFieldsRecord</div>,
     ViewMetaData: () => <div>ViewMetaData</div>,
+    ProfilePicture: () => <div>ProfilePicture</div>,
     EntryManager: (props) => {
       // console.log(props);
       const actions = () => {

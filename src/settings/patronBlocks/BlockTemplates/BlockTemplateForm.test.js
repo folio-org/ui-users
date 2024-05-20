@@ -55,7 +55,7 @@ describe('BlockTemplateForm', () => {
   });
 
   it('should disable the save button when pristine or submitting', () => {
-    const saveButton = screen.getByRole('button', { name: 'ui-users.saveAndClose' });
+    const saveButton = screen.getByRole('button', { name: /saveAndClose/ });
     expect(saveButton).toBeDisabled();
     const templateInformationButton = screen.getByRole('button', { name: 'Icon (caret-up) ui-users.manualBlockTemplates.templateInformation' });
     userEvent.click(templateInformationButton);
@@ -72,7 +72,7 @@ describe('BlockTemplateForm', () => {
     expect(nameInput).toHaveValue('Test Block Template Enter Something');
     const ConfirmationButton = screen.getByRole('button', { name: 'Confirmation' });
     await userEvent.click(ConfirmationButton);
-    const saveButton = screen.getByRole('button', { name: 'ui-users.saveAndClose' });
+    const saveButton = screen.getByRole('button', { name: /saveAndClose/ });
     expect(saveButton).toBeEnabled();
     userEvent.click(saveButton);
   });

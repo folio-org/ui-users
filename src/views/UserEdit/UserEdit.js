@@ -26,6 +26,7 @@ import { toUserAddresses, getFormAddressList } from '../../components/data/conve
 import contactTypes from '../../components/data/static/contactTypes';
 import {
   OKAPI_TENANT_HEADER,
+  USER_FIELDS_TO_CHECK,
   deliveryFulfillmentValues,
 } from '../../constants';
 import { resourcesLoaded, showErrorCallout } from './UserEditHelpers';
@@ -154,6 +155,21 @@ class UserEdit extends React.Component {
       .catch((e) => showErrorCallout(e, this.context.sendCallout));
   }
 
+  deleteEmptyFields = (user) => {
+    USER_FIELDS_TO_CHECK.forEach((field) => {
+      const [property, nestedProperty] = field.split('.');
+      const fieldProperty = nestedProperty ? user[property][nestedProperty] : user[property];
+
+      if (!fieldProperty?.trim()) {
+        if (nestedProperty) {
+          delete user[property][nestedProperty];
+        } else {
+          delete user[property];
+        }
+      }
+    });
+  };
+
   create = ({ requestPreferences, ...userFormData }) => {
     const { mutator, history, location: { search } } = this.props;
     const userData = cloneDeep(userFormData);
@@ -161,10 +177,7 @@ class UserEdit extends React.Component {
     user.personal.addresses = toUserAddresses(user.personal.addresses);
     user.personal.email = user.personal.email.trim();
     user.departments = compact(user.departments);
-
-    if (!user.username) {
-      delete user.username;
-    }
+    this.deleteEmptyFields(user);
 
     mutator.records.POST(user)
       .then(() => {
@@ -213,6 +226,7 @@ class UserEdit extends React.Component {
       this.createRequestPreferences(requestPreferences, user.id);
     }
 
+    this.deleteEmptyFields(user);
     user.personal.addresses = toUserAddresses(user.personal.addresses); // eslint-disable-line no-param-reassign
     user.personal.email = user.personal.email?.trim();
     user.departments = compact(user.departments);

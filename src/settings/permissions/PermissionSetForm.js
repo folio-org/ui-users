@@ -134,7 +134,7 @@ class PermissionSetForm extends React.Component {
         marginBottom0
         disabled={(pristine || submitting)}
       >
-        <FormattedMessage id="ui-users.saveAndClose" />
+        <FormattedMessage id="stripes-components.saveAndClose" />
       </Button>
     );
 

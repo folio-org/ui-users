@@ -63,7 +63,7 @@ const LocalFileModal = ({ open, onClose, imageSrc, rotation, setRotation, onSave
           id="save-local-file-btn"
           onClick={handleSaveProfilePictureLocalFile}
         >
-          <FormattedMessage id="ui-users.saveAndClose" />
+          <FormattedMessage id="stripes-components.saveAndClose" />
         </Button>
         <Button
           onClick={handleClose}

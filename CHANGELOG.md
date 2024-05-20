@@ -1,6 +1,29 @@
 # Change history for ui-users
 
-## [10.1.0] IN PROGRESS
+## [11.0.0] IN PROGRESS
+
+* UX consistency: Use Save & close button label stripes-component translation key. Refs UIU-3078.
+* Fix two "triangle down" icons in select element of "Copy existing fee/fine owner table entries" modal. Refs UIU-2929.
+* Fix incorrect translation key having count-disagreements in Pay fees/fines modal in Fees/Fines Page. Refs UIU-1097.
+* Reading Room Access accordion in User record - Basic Layout. Refs UIU-3096.
+* Trim input values and delete properties with empty string when user record save. Refs UIU-2049.
+* Update username field validation to trim leading and trailing spaces. Refs UIU-3099.
+* Fix "Total paid amount" value that set as "$NaN" on "Refund fee/fine" modal. Refs UIU-3094.
+* Validate image url provided as external url for user profile picture. Refs UIU-3080.
+* Import and use ProfilePicture Component from stripes/smart-components. Refs UIU-3104.
+* Rename isDCBItem function name to isDcbItem. Refs UIU-3020.
+* *BREAKING* Add new okapi interface reading-room-patron-permission. Create new permission 'Users: Can view reading room access'. Refs UIU-3116.
+* Create new permission 'Users: Can view, and edit reading room access'. Refs UIU-3117.
+* Include DCB in 'User Type' search filter group. Refs UIU-3016.
+* Displaying Default Reading Room Access in User Records. Refs UIU-3114.
+
+## [10.1.1](https://github.com/folio-org/ui-users/tree/v10.1.1) (2024-05-07)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v10.1.0...v10.1.1)
+
+* Allow override for reminder fees with renewal blocked. Refs UICIRC-1077.
+
+## [10.1.0](https://github.com/folio-org/ui-users/tree/v10.1.0) (2024-03-20)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.4...v10.1.0)
 
 * Also support `feesfines` interface version `19.0`. Refs UIU-2960.
 * Disable validation for shadow user. Refs UIU-3000.
@@ -20,6 +43,7 @@
 * Update sub permissions of permission 'Users: Can view user profiles'. Refs UIU-3038.
 * Create new permission 'Users: Can view, edit, and delete profile pictures'. Refs UIU-3025.
 * UserInformation in UserDetails to display profile picture. Refs UIU-3011.
+* User Record View to display thumbnail image in the absence of profile picture. Refs UIU-3024.
 * Enable effective call number column sorting in Open Loans screen. Refs UIU-3002.
 * User Information in User Edit to display profile picture and update button set. Refs UIU-3005.
 * Update request header for pay several Fees/fines. Refs UIU-3040.
@@ -37,6 +61,8 @@
 * Reset rotation when profile picture upload is canceled. Refs UIU-3071.
 * Restrict profile picture upload exceeding max file size from profile picture configuration. Refs UIU-3047.
 * Profile Pictures - basic error handling. Refs UIU-3070.
+* Add optional chaining in `AddServicePointModal` in order to safely access `assignedServicePoints` from props. Refs UIU-3069.
+* Fix lint issues. Refs UIU-3072.
 
 ## [10.0.4](https://github.com/folio-org/ui-users/tree/v10.0.4) (2023-11-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.3...v10.0.4)

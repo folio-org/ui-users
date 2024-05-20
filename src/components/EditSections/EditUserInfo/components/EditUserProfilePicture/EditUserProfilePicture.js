@@ -13,11 +13,11 @@ import {
   Label,
 } from '@folio/stripes/components';
 import { useStripes, useCallout } from '@folio/stripes/core';
+import { ProfilePicture } from '@folio/stripes/smart-components';
 
 import { isAValidURL } from '../../../../util/util';
 import ExternalLinkModal from '../ExternalLinkModal';
 import DeleteProfilePictureModal from '../DeleteProfilePictureModal';
-import ProfilePicture from '../../../../ProfilePicture';
 import LocalFileModal from '../LocalFileModal';
 import { getRotatedImage, createImage } from './utils/canvasUtils';
 import {
@@ -283,7 +283,6 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal, profilePictu
         profilePictureLink={profilePictureLink}
         croppedLocalImage={croppedLocalImage}
       />
-      <br />
       <input type="file" data-testid="hidden-file-input" hidden ref={fileInputRef} onClick={onFileSelect} onChange={onFileChange} accept={ACCEPTED_IMAGE_TYPES} />
       {
         hasAllProfilePicturePerms && (

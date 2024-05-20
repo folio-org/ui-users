@@ -29,14 +29,14 @@ import {
   getChargeFineToLoanPath,
   nav,
   isDcbUser,
-  isDCBItem,
+  isDcbItem,
+  localizeCurrencyAmount,
 } from '../../util';
 import ActionsBar from '../components/ActionsBar';
 import Label from '../../Label';
 import ErrorModal from '../../ErrorModal';
 
 import css from './ClosedLoans.css';
-import { localizeCurrencyAmount } from '../../util/localizeCurrencyAmount';
 
 class ClosedLoans extends React.Component {
   static propTypes = {
@@ -248,7 +248,7 @@ class ClosedLoans extends React.Component {
           usePortal
           renderTrigger={({ getTriggerProps }) => {
             const isVirtualUser = isDcbUser(user);
-            const isVirtualItem = loan.item && isDCBItem(loan.item);
+            const isVirtualItem = loan.item && isDcbItem(loan.item);
 
             if (isVirtualUser && isVirtualItem) { return null; }
 
@@ -367,7 +367,7 @@ class ClosedLoans extends React.Component {
     const itemDetailsLink = loan.item && `/inventory/view/${loan.item.instanceId}/${loan.item.holdingsRecordId}/${loan.itemId}`;
     const buttonDisabled = !stripes.hasPerm('ui-users.feesfines.actions.all');
     const isVirtualUser = isDcbUser(user);
-    const isVirtualItem = loan.item && isDCBItem(loan.item);
+    const isVirtualItem = loan.item && isDcbItem(loan.item);
 
     return (
       <DropdownMenu data-role="menu">

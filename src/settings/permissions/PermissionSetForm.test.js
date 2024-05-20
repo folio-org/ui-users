@@ -44,12 +44,12 @@ describe('PermissionSetForm', () => {
   it('show if component renders data with no inital values', () => {
     renderPermissionSetForm();
 
-    expect(screen.getByText('ui-users.saveAndClose')).toBeDefined();
+    expect(screen.getByText(/saveAndClose/)).toBeDefined();
   });
   it('show if component renders data with empty inital values', () => {
     renderPermissionSetForm(initialVal);
 
-    expect(screen.getByText('ui-users.saveAndClose')).toBeDefined();
+    expect(screen.getByText(/saveAndClose/)).toBeDefined();
   });
   it('Permission list check', () => {
     renderPermissionSetForm(initialVal);

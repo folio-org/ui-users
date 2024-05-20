@@ -5,7 +5,7 @@ import {
   injectIntl,
 } from 'react-intl';
 
-import { stripesConnect } from '@folio/stripes/core';
+import { stripesConnect, stripesShape } from '@folio/stripes/core';
 import {
   Button,
   Col,
@@ -23,10 +23,10 @@ import {
 import {
   calculateSortParams,
   isRefundAllowed,
+  localizeCurrencyAmount,
 } from '../../util';
 
 import css from './modal.css';
-import { localizeCurrencyAmount } from '../../util/localizeCurrencyAmount';
 
 class WarningModal extends React.Component {
   static propTypes = {
@@ -37,6 +37,7 @@ class WarningModal extends React.Component {
     label: PropTypes.string,
     onClose: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired,
+    stripes: stripesShape.isRequired,
   };
 
   constructor(props) {
@@ -171,7 +172,6 @@ class WarningModal extends React.Component {
 
     let action;
     let invalidItemsAmount = accounts.filter(a => a.status && a.status.name === 'Closed').length;
-    let reason = <FormattedMessage id="ui-users.accounts.actions.warning.closedItems" />;
     const notAllowedToRefundItemsAmount = accounts.filter(a => !isRefundAllowed(a, feeFineActions)).length;
     const selectedItemsAmount = accounts.length;
 
@@ -188,18 +188,17 @@ class WarningModal extends React.Component {
       default:
         action = <FormattedMessage id="ui-users.accounts.actions.warning.refundAction" />;
         invalidItemsAmount = notAllowedToRefundItemsAmount;
-        reason = <FormattedMessage id="ui-users.accounts.actions.warning.unpaidItems" />;
         break;
     }
 
     return (
       <FormattedMessage
-        id="ui-users.accounts.actions.warning.summary"
+        id={action.props.id === 'ui-users.accounts.actions.warning.refundAction'
+          ? 'ui-users.accounts.warning.unpaidItemSelected' : 'ui-users.accounts.warning.itemSelected'}
         values={{
-          selectedItemsAmount,
-          invalidItemsAmount,
+          total: selectedItemsAmount,
+          items: invalidItemsAmount,
           action,
-          reason,
         }}
       />
     );

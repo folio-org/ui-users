@@ -313,7 +313,7 @@ describe('PermissionsModal', () => {
     fireEvent.click(document.querySelector('[data-permission-name="ui-agreements.resources.edit"]'));
 
     // save
-    fireEvent.click(screen.getByText('ui-users.saveAndClose'));
+    fireEvent.click(screen.getByText(/saveAndClose/));
 
     // removes permission if clicked twice
     fireEvent.click(document.querySelector('[data-permission-name="ui-agreements.resources.edit"]'));
@@ -382,7 +382,7 @@ describe('PermissionsModal', () => {
 
     expect.assertions(2);
     await waitFor(() => expect(renderPermissionsModal(props)).toBeDefined());
-    fireEvent.click(screen.getByText('ui-users.saveAndClose'));
+    fireEvent.click(screen.getByText(/saveAndClose/));
     // Previously, saving a new set of permissions via the modal would delete
     // any invisible permissions that were assigned. Thus, we should have the
     // same number of (invisible) perms that we started with.

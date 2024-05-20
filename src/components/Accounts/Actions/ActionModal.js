@@ -29,7 +29,7 @@ import {
 } from '../../../constants';
 
 import css from './PayWaive.css';
-import { localizeCurrencyAmount } from '../../util/localizeCurrencyAmount';
+import { localizeCurrencyAmount } from '../../util';
 
 class ActionModal extends React.Component {
   static propTypes = {
@@ -54,6 +54,7 @@ class ActionModal extends React.Component {
     checkAmount: PropTypes.string,
     okapi: PropTypes.object,
     initialValues: PropTypes.object,
+    stripes: PropTypes.object,
   };
 
   static defaultProps = {
@@ -379,7 +380,7 @@ class ActionModal extends React.Component {
                     :
                   </Col>
                   <Col xs={4}>
-                    {localizeCurrencyAmount(totalPaidAmount, stripes.currency, intl)}
+                    {totalPaidAmount}
                   </Col>
                 </Row>
               ) : (

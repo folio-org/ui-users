@@ -27,7 +27,8 @@ import {
   isConsortiumEnabled,
   getRequestUrl,
   isAffiliationsEnabled,
-  isDCBItem,
+  isDcbItem,
+  isAValidImageUrl,
 } from './util';
 
 const STRIPES = {
@@ -441,13 +442,13 @@ describe('isAffiliationsEnabled', () => {
   });
 });
 
-describe('isDCBItem ', () => {
+describe('isDcbItem ', () => {
   it('should return true when both item instance id and item holdings record id are DCB_INSTANCE_ID and DCB_HOLDINGS_RECORD_ID respectively', () => {
     const item = {
       instanceId: DCB_INSTANCE_ID,
       holdingsRecordId: DCB_HOLDINGS_RECORD_ID,
     };
-    expect(isDCBItem(item)).toBeTruthy();
+    expect(isDcbItem(item)).toBeTruthy();
   });
 
   it('should return false when item instance id is DCB_INSTANCE_ID and item holdings record id is not DCB_HOLDINGS_RECORD_ID', () => {
@@ -455,7 +456,7 @@ describe('isDCBItem ', () => {
       instanceId: DCB_INSTANCE_ID,
       holdingsRecordId: 'test',
     };
-    expect(isDCBItem(item)).toBeFalsy();
+    expect(isDcbItem(item)).toBeFalsy();
   });
 
   it('should return false when item instance id is not DCB_INSTANCE_ID and item holdings record id is DCB_HOLDINGS_RECORD_ID', () => {
@@ -463,7 +464,7 @@ describe('isDCBItem ', () => {
       instanceId: 'test',
       holdingsRecordId: DCB_HOLDINGS_RECORD_ID,
     };
-    expect(isDCBItem(item)).toBeFalsy();
+    expect(isDcbItem(item)).toBeFalsy();
   });
 
   it('should return false when item instance id is not DCB_INSTANCE_ID and item holdings record id is not DCB_HOLDINGS_RECORD_ID', () => {
@@ -471,6 +472,55 @@ describe('isDCBItem ', () => {
       instanceId: 'test',
       holdingsRecordId: 'test',
     };
-    expect(isDCBItem(item)).toBeFalsy();
+    expect(isDcbItem(item)).toBeFalsy();
   });
 });
+
+describe('isAValidImageUrl', () => {
+  it('should return true for a valid image URL', async () => {
+    class MockImage {
+      constructor() {
+        this.onload = null;
+        this.onerror = null;
+      }
+
+      set src(value) {
+        if (this.onload) {
+          setTimeout(() => {
+            this.onload();
+          }, 0);
+        }
+      }
+    }
+
+    global.Image = MockImage;
+    const validImageUrl = 'https://upload.wikimedia.org/wikipedia/commons/e/e2/FOLIO_400x400.jpg';
+
+    const isValid = await isAValidImageUrl(validImageUrl);
+    expect(isValid).toBe(true);
+  });
+
+  it('should return false for an invalid image URL', async () => {
+    class MockImage {
+      constructor() {
+        this.onload = null;
+        this.onerror = null;
+      }
+
+      set src(value) {
+        if (this.onerror) {
+          setTimeout(() => {
+            this.onerror();
+          }, 0);
+        }
+      }
+    }
+
+    global.Image = MockImage;
+    const invalidImageUrl = 'https://example.com';
+
+    const isValid = await isAValidImageUrl(invalidImageUrl);
+    expect(isValid).toBe(false);
+  });
+});
+

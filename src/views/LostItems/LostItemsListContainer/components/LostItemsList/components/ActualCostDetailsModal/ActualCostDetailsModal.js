@@ -22,8 +22,7 @@ import {
   ACTUAL_COST_DETAILS_MODAL_DEFAULT,
   LOST_ITEM_STATUSES,
 } from '../../../../../constants';
-import { useLocalizeCurrency } from '../../../../../../../hooks/useLocalizedCurrency/useLocalizeCurrency';
-
+import { useLocalizedCurrency } from '../../../../../../../hooks';
 
 const ActualCostDetailsModal = ({
   actualCostDetailsModal: {
@@ -40,7 +39,7 @@ const ActualCostDetailsModal = ({
   setActualCost,
   setActualCostDetailsModal,
 }) => {
-  const { localizeCurrency } = useLocalizeCurrency();
+  const { localizeCurrency } = useLocalizedCurrency();
   const patronName = getPatronName(actualCostRecord);
   const instanceTitle = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.INSTANCE_TITLE], DEFAULT_VALUE);
   const materialType = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.MATERIAL_TYPE], DEFAULT_VALUE);

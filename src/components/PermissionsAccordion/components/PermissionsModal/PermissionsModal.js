@@ -387,7 +387,7 @@ class PermissionsModal extends React.Component {
               buttonStyle="primary"
               onClick={this.onSave}
             >
-              <FormattedMessage id="ui-users.saveAndClose" />
+              <FormattedMessage id="stripes-components.saveAndClose" />
             </Button>
           </div>
         }

@@ -43,7 +43,8 @@ import {
   accountsMatchStatus,
   checkUserActive,
   isDcbUser,
-  isDCBItem,
+  isDcbItem,
+  localizeCurrencyAmount,
 } from '../../components/util';
 import { itemStatuses, loanActions, refundClaimReturned } from '../../constants';
 import {
@@ -57,8 +58,6 @@ import loanActionMap from '../../components/data/static/loanActionMap';
 import LoanProxyDetails from './LoanProxyDetails';
 
 import css from './LoanDetails.css';
-import { localizeCurrencyAmount } from '../../components/util/localizeCurrencyAmount';
-
 
 function formatLoanAction(la, loanActionsWithUser) {
   const actionsOfThisType = loanActionsWithUser.filter(x => x.action === la.action);
@@ -303,7 +302,7 @@ class LoanDetails extends React.Component {
     const title = get(this.loan, ['item', 'title'], '');
     const instanceId = get(this.loan, ['item', 'instanceId'], '');
     const holdingsRecordId = get(this.loan, ['item', 'holdingsRecordId'], '');
-    const isVirtualItem = isDCBItem({ instanceId, holdingsRecordId });
+    const isVirtualItem = isDcbItem({ instanceId, holdingsRecordId });
     const titleLengthCheck = 77;
 
     if (title) {
@@ -338,7 +337,7 @@ class LoanDetails extends React.Component {
     const holdingsRecordId = get(this.loan, ['item', 'holdingsRecordId'], '');
     const itemId = get(this.loan, ['itemId'], '');
     const itemBarcode = get(loan, ['item', 'barcode']);
-    const isVirtualItem = isDCBItem({ instanceId, holdingsRecordId });
+    const isVirtualItem = isDcbItem({ instanceId, holdingsRecordId });
 
     if (isVirtualItem) {
       return itemBarcode;

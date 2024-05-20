@@ -114,10 +114,10 @@ describe('UserAffiliations', () => {
       checked: true,
     });
     expect(listOfAssignedTenants).toHaveLength(affiliations.length - 1);
-    const saveAndCloseButton = screen.getByText('ui-users.saveAndClose');
+    const saveAndCloseButton = screen.getByText(/saveAndClose/);
     await userEvent.click(saveAndCloseButton);
 
     expect(handleAssignment).toHaveBeenCalled();
-    expect(screen.queryByText('ui-users.saveAndClose')).toBeNull();
+    expect(screen.queryByText(/saveAndClose/)).toBeNull();
   });
 });

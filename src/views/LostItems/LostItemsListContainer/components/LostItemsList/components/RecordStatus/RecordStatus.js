@@ -12,7 +12,7 @@ import {
 } from '../../../../../constants';
 import { getRecordStatus } from '../../util';
 import DateTimeFormatter from '../DateTimeFormatter';
-import { useLocalizeCurrency } from '../../../../../../../hooks/useLocalizedCurrency/useLocalizeCurrency';
+import { useLocalizedCurrency } from '../../../../../../../hooks';
 
 export const getBilledAmount = (recordId, billedRecords) => billedRecords.find(record => record.id === recordId)?.billedAmount;
 
@@ -21,7 +21,7 @@ const RecordStatus = ({
   billedRecords,
   cancelledRecords,
 }) => {
-  const { localizeCurrency } = useLocalizeCurrency();
+  const { localizeCurrency } = useLocalizedCurrency();
   const status = get(actualCostRecord, ACTUAL_COST_RECORD_FIELD_PATH[ACTUAL_COST_RECORD_FIELD_NAME.STATUS]);
   const {
     isBilled,

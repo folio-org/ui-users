@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "10.1.0",
+  "version": "11.0.0",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -30,12 +30,13 @@
     ],
     "okapiInterfaces": {
       "add-info": "0.1",
-      "users": "16.0",
+      "users": "16.0 16.1",
       "configuration": "2.0",
       "permissions": "5.6",
       "login": "7.3",
       "users-bl": "6.1",
-      "tags": "1.0"
+      "tags": "1.0",
+      "reading-room-patron-permission": "1.0"
     },
     "optionalOkapiInterfaces": {
       "actual-cost-record-storage": "0.4",
@@ -1057,6 +1058,25 @@
           "batch-print.entries.item.delete"
         ],
         "visible": true
+      },
+      {
+        "permissionName": "ui-users.view-reading-room-access",
+        "displayName": "Users: Can view reading room access",
+        "subPermissions": [
+          "ui-users.view",
+          "reading-room.patron-permission.item.get"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.edit-reading-room-access",
+        "displayName": "Users: Can view, and edit reading room access",
+        "subPermissions": [
+          "ui-users.edit",
+          "ui-users.view-reading-room-access",
+          "reading-room.patron-permission.item.put"
+        ],
+        "visible": true
       }
     ]
   },
@@ -1070,6 +1090,7 @@
     "formatjs-compile": "formatjs compile-folder --ast --format simple ./translations/ui-users ./translations/ui-users/compiled"
   },
   "devDependencies": {
+    "@aashutoshrathi/word-wrap": "^1.2.6",
     "@babel/core": "^7.21.4",
     "@babel/eslint-parser": "^7.15.0",
     "@babel/plugin-proposal-class-properties": "^7.13.0",
@@ -1113,7 +1134,6 @@
     "react-final-form": "^6.3.0",
     "react-final-form-arrays": "^3.1.0",
     "react-final-form-listeners": "^1.0.3",
-    "react-image": "^4.1.0",
     "react-router-prop-types": "^1.0.4",
     "uuid": "^9.0.0"
   },
@@ -1130,8 +1150,5 @@
   },
   "optionalDependencies": {
     "@folio/plugin-find-user": "^7.0.0"
-  },
-  "resolutions": {
-    "word-wrap": "npm:@aashutoshrathi/word-wrap@^1.2.6"
   }
 }

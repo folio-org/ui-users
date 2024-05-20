@@ -1,0 +1,9 @@
+.lastUpdatedBy {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.rraSearchFieldContainer {
+    margin-top: 10px;
+}
