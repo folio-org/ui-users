@@ -124,6 +124,7 @@ jest.mock(
     UserRequests: jest.fn(() => null),
     UserAccounts: jest.fn(() => null),
     UserServicePoints: jest.fn(() => null),
+    ReadingRoomAccess: jest.fn(() => null),
   })
 );
 
