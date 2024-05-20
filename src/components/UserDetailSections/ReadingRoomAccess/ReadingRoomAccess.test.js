@@ -1,5 +1,4 @@
 import { screen, render, fireEvent, waitFor } from '@folio/jest-config-stripes/testing-library/react';
-import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
 import ReadingRoomAccess from './ReadingRoomAccess';
 
@@ -88,7 +87,7 @@ describe('ReadingRoomAccess', () => {
   it('should filter MCL records "Name" column, based on the string entered in search box', async () => {
     render(<ReadingRoomAccess {...alteredProps} />);
     const inputEl = screen.getByPlaceholderText('ui-users.readingRoom.filter');
-    userEvent.change(inputEl, { target: { value: 'room 1' } });
+    fireEvent.change(inputEl, { target: { value: 'room 1' } });
     const numOfRows = document.querySelectorAll('[class^="mclRowFormatterContainer"]').length;
     await waitFor(() => expect(numOfRows).toBe(1));
   });
