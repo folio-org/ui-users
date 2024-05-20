@@ -29,18 +29,13 @@ const ReadingRoomAccess = (props) => {
   const intl = useIntl();
   const userRRAPermissions = useMemo(() => readingRoomPermissions?.records, [readingRoomPermissions]);
   const { isPending } = readingRoomPermissions;
-  const visibleColumns = [
-    rraColumns.ACCESS,
-    rraColumns.READING_ROOM_NAME,
-    rraColumns.NOTES,
-    rraColumns.ID
-  ];
   const columnMapping = {
     [rraColumns.ACCESS]: <FormattedMessage id="ui-users.readingRoom.access" />,
     [rraColumns.READING_ROOM_NAME]: <FormattedMessage id="ui-users.readingRoom.name" />,
     [rraColumns.NOTES]: <FormattedMessage id="ui-users.readingRoom.note" />,
     [rraColumns.ID]: <FormattedMessage id="ui-users.readingRoom.lastUpdated" />,
   };
+  const visibleColumns = Object.keys(columnMapping);
   const sortInitialState = {
     data: [],
     order: DEFAULT_SORT_ORDER,
