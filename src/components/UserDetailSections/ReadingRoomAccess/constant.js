@@ -5,3 +5,5 @@ export const rraColumns = {
   NOTES: 'notes',
   ID: 'id'
 };
+
+export const DEFAULT_SORT_ORDER = rraColumns.ACCESS;

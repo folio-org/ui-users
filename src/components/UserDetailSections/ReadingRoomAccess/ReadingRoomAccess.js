@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { get } from 'lodash';
+import { get, orderBy, noop } from 'lodash';
 
 import {
   Accordion,
@@ -11,9 +11,11 @@ import {
   Headline,
   MultiColumnList,
   SearchField,
+  Icon,
 } from '@folio/stripes/components';
 
-import { rraColumns } from './constant';
+import { rraColumns, DEFAULT_SORT_ORDER } from './constant';
+import { sortTypes } from '../../../constants';
 import { getFormatter } from './getFormatter';
 import css from './ReadingRoomAccess.css';
 
@@ -22,19 +24,55 @@ const ReadingRoomAccess = (props) => {
     accordionId,
     expanded,
     onToggle,
-    userRRAPermissions,
+    readingRoomPermissions,
   } = props;
   const intl = useIntl();
-  const [filteredRRA, setFilteredRRA] = useState([]);
+  const userRRAPermissions = useMemo(() => readingRoomPermissions?.records, [readingRoomPermissions]);
+  const { isPending } = readingRoomPermissions;
+  const columnMapping = {
+    [rraColumns.ACCESS]: <FormattedMessage id="ui-users.readingRoom.access" />,
+    [rraColumns.READING_ROOM_NAME]: <FormattedMessage id="ui-users.readingRoom.name" />,
+    [rraColumns.NOTES]: <FormattedMessage id="ui-users.readingRoom.note" />,
+    [rraColumns.ID]: <FormattedMessage id="ui-users.readingRoom.lastUpdated" />,
+  };
+  const visibleColumns = Object.keys(columnMapping);
+  const sortInitialState = {
+    data: [],
+    order: DEFAULT_SORT_ORDER,
+    direction: sortTypes.ASC,
+  };
+  const [sortedRecordsDetails, setSortedRecordsDetails] = useState(sortInitialState);
 
   useEffect(() => {
-    setFilteredRRA(userRRAPermissions);
-  }, [userRRAPermissions]);
+    if (!isPending) {
+      setSortedRecordsDetails(prev => ({
+        ...prev,
+        data: orderBy(userRRAPermissions, prev.order, prev.direction)
+      }));
+    }
+  }, [userRRAPermissions, isPending]);
 
   const filterReadingRoomsByName = (e) => {
     const name = e.target.value;
     const filteredRRs = userRRAPermissions.filter(r => r.readingRoomName.includes(name));
-    setFilteredRRA(filteredRRs);
+    setSortedRecordsDetails(prev => ({
+      ...prev,
+      data: orderBy(filteredRRs, prev.order, prev.direction)
+    }));
+  };
+
+  const onSort = (e, meta) => {
+    let newSortDirection = sortTypes.ASC;
+    if (sortedRecordsDetails.order === meta.name) {
+      newSortDirection = sortedRecordsDetails.direction === sortTypes.ASC ? sortTypes.DESC : sortTypes.ASC;
+    }
+    const sortedData = orderBy(sortedRecordsDetails.data, [meta.name], newSortDirection);
+
+    setSortedRecordsDetails({
+      data: sortedData,
+      order: meta.name,
+      direction: newSortDirection
+    });
   };
 
   const renderName = (usr) => {
@@ -66,19 +104,6 @@ const ReadingRoomAccess = (props) => {
     );
   };
 
-  const visibleColumns = [
-    rraColumns.ACCESS,
-    rraColumns.READING_ROOM_NAME,
-    rraColumns.NOTES,
-    rraColumns.ID
-  ];
-  const columnMapping = {
-    [rraColumns.ACCESS]: <FormattedMessage id="ui-users.readingRoom.access" />,
-    [rraColumns.READING_ROOM_NAME]: <FormattedMessage id="ui-users.readingRoom.name" />,
-    [rraColumns.NOTES]: <FormattedMessage id="ui-users.readingRoom.note" />,
-    [rraColumns.ID]: <FormattedMessage id="ui-users.readingRoom.lastUpdated" />,
-  };
-
   return (
     <Accordion
       id={accordionId}
@@ -86,7 +111,7 @@ const ReadingRoomAccess = (props) => {
       onToggle={onToggle}
       open={expanded}
       displayWhenClosed={
-        <Badge>{filteredRRA.length}</Badge>
+        isPending ? <Icon icon="spinner-ellipsis" /> : <Badge>{userRRAPermissions.length}</Badge>
       }
       displayWhenOpen={
         <div
@@ -94,7 +119,7 @@ const ReadingRoomAccess = (props) => {
         >
           <SearchField
             onChange={filterReadingRoomsByName}
-            onClear={() => setFilteredRRA(userRRAPermissions)}
+            onClear={noop}
             placeholder={intl.formatMessage({ id:'ui-users.readingRoom.filter' })}
           />
         </div>
@@ -103,10 +128,14 @@ const ReadingRoomAccess = (props) => {
       <MultiColumnList
         striped
         data-testid="reading-room-access-mcl"
-        contentData={filteredRRA}
+        contentData={sortedRecordsDetails.data}
         columnMapping={columnMapping}
         visibleColumns={visibleColumns}
         formatter={getFormatter(lastUpdatedDetails)}
+        sortOrder={sortedRecordsDetails.order}
+        sortDirection={`${sortedRecordsDetails.direction}ending`}
+        onHeaderClick={onSort}
+        sortedColumn={sortedRecordsDetails.order}
       />
     </Accordion>
   );
@@ -116,7 +145,10 @@ ReadingRoomAccess.propTypes = {
   expanded: PropTypes.bool,
   onToggle: PropTypes.func,
   accordionId: PropTypes.string.isRequired,
-  userRRAPermissions: PropTypes.arrayOf(PropTypes.object),
+  readingRoomPermissions: PropTypes.shape({
+    isPending: PropTypes.bool,
+    records: PropTypes.arrayOf(PropTypes.object),
+  })
 };
 
 export default ReadingRoomAccess;

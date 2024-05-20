@@ -367,7 +367,7 @@
   "readingRoom.name": "Name",
   "readingRoom.note": "Note",
   "readingRoom.lastUpdated": "Last updated",
-  "readingRoom.filter": "Filter",
+  "readingRoom.filter": "Room name",
   "readingRoom.allowed": "Allowed",
   "readingRoom.notAllowed": "Not allowed",
   "readingRoom.metaSection.lastUpdatedDetails": "{date} by {name}",
