@@ -361,6 +361,14 @@
   "proxy.notificationsTo": "Notifications sent to",
   "proxy.accrueTo": "Fees/fines accrue to",
   "sponsor.addSponsor": "Add",
+
+  "readingRoom.readingRoomAccess": "Reading room access",
+  "readingRoom.access": "Access",
+  "readingRoom.name": "Name",
+  "readingRoom.note": "Note",
+  "readingRoom.allowed": "Allowed",
+  "readingRoom.notAllowed": "Not allowed",
+  
   "crud.closeNewUserDialog": "Close New User Dialog",
   "crud.editUser": "Edit User",
   "crud.createUser": "Create User",

@@ -33,6 +33,7 @@ import {
   EditContactInfo,
   EditProxy,
   EditServicePoints,
+  EditReadingRoomAccess,
 } from '../../components/EditSections';
 import { getFullName } from '../../components/util';
 import RequestFeeFineBlockButtons from '../../components/RequestFeeFineBlockButtons';
@@ -319,6 +320,7 @@ class UserForm extends React.Component {
       ? <FormattedMessage id="ui-users.edit" />
       : <FormattedMessage id="ui-users.crud.createUser" />;
     const isShadowUser = initialValues?.type === USER_TYPES.SHADOW;
+    const displayReadingRoomAccess = [USER_TYPES.PATRON, USER_TYPES.STAFF].includes(initialValues?.type);
 
     return (
       <HasCommand commands={this.keyboardCommands}>
@@ -367,6 +369,7 @@ class UserForm extends React.Component {
                     permissions: false,
                     servicePoints: false,
                     customFields: true,
+                    readingRoomAccess: false,
                   }}
                 >
                   <EditUserInfo
@@ -411,6 +414,16 @@ class UserForm extends React.Component {
                   {initialValues.id &&
                     <div>
                       {
+                        displayReadingRoomAccess && (
+                        <EditReadingRoomAccess // TODO: add perm check, interface check
+                          accordionId="readingRoomAccess"
+                          userRRAPermissions={initialValues.readingRoomAccess?.records}
+                          form={form}
+                          formData={formData.userReadingRoomPermissions}
+                        />
+                        )
+                      }
+                      {
                       !isShadowUser && (
                         <EditProxy
                           accordionId="proxy"
@@ -439,6 +452,7 @@ class UserForm extends React.Component {
           <FormSpy
             subscription={{ values: true }}
             onChange={({ values }) => {
+              // console.log('FormSpy values ', values);
               const { mutators } = form;
 
               ['sponsors', 'proxies'].forEach(namespace => {

@@ -16,6 +16,7 @@ const userFormData = {
     tenantId: [{ permissionName: 'users.item.get' }],
     testTenant: [{ permissionName: 'users.item.get' }],
   },
+  readingRoomsAccessList: [],
 };
 
 jest.mock('@folio/stripes/components', () => ({
@@ -77,6 +78,9 @@ describe('UserEdit', () => {
       departments: {
         records: [],
       },
+      userReadingRoomPermissions: {
+        records: [],
+      },
     },
     history: {
       push: jest.fn(),
@@ -121,6 +125,10 @@ describe('UserEdit', () => {
       post: jest.fn(() => ({ json: () => Promise.resolve({}) })),
       put: jest.fn(() => ({ json: () => Promise.resolve({}) })),
     },
+    userReadingRoomPermissions: {
+      PUT: jest.fn().mockResolvedValue({ data: {} }),
+      GET: jest.fn().mockResolvedValue({ data: {} }),
+    }
   };
 
   it('should render without crashing', () => {
@@ -152,6 +160,9 @@ describe('UserEdit', () => {
         },
         permissions: {
           records: [{ id: '4', group: 'tst', desc: 'description' }],
+        },
+        userReadingRoomPermissions: {
+          records: [],
         },
       },
     };
@@ -185,6 +196,9 @@ describe('UserEdit', () => {
         permissions: {
           records: [{ id: '4', group: 'tst', desc: 'description' }],
         },
+        userReadingRoomPermissions: {
+          records: [],
+        },
       },
     };
     const { container } = renderWithRouter(<UserEdit {...props} />);
@@ -214,6 +228,9 @@ describe('UserEdit', () => {
         },
         permissions: {
           records: [{ id: '4', group: 'tst', desc: 'description' }],
+        },
+        userReadingRoomPermissions: {
+          records: [],
         },
       },
     };
@@ -259,6 +276,9 @@ describe('UserEdit', () => {
         permissions: {
           records: [{ id: '4', group: 'tst', desc: 'description' }],
         },
+        userReadingRoomPermissions: {
+          records: [],
+        },
       },
     };
     const { container } = renderWithRouter(<UserEdit {...props} />);
@@ -289,6 +309,9 @@ describe('UserEdit', () => {
         permissions: {
           records: [{ id: '4', group: 'tst', desc: 'description' }],
         },
+        userReadingRoomPermissions: {
+          records: [],
+        },
       },
     };
     const { container } = renderWithRouter(<UserEdit {...props} />);
@@ -318,6 +341,9 @@ describe('UserEdit', () => {
         },
         permissions: {
           records: [{ id: '4', group: 'tst', desc: 'description' }],
+        },
+        userReadingRoomPermissions: {
+          records: [],
         },
       },
     };
@@ -424,6 +450,9 @@ describe('UserEdit', () => {
         },
         departments: {
           records: [],
+        },
+        userReadingRoomPermissions: {
+          records: []
         },
       },
       history: {

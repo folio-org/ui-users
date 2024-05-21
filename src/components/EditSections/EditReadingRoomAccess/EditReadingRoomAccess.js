@@ -1,0 +1,67 @@
+import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
+import { noop } from 'lodash';
+
+import {
+  Accordion,
+  Headline,
+  MultiColumnList,
+} from '@folio/stripes/components';
+import { useStripes } from '@folio/stripes/core';
+
+import { rraColumns } from './constants';
+import { getFormatter } from './getFormatter';
+
+const EditReadingRoomAccess = ({
+  expanded,
+  onToggle,
+  accordionId,
+  form,
+  formData,
+}) => {
+  const stripes = useStripes();
+  const columnMapping = {
+    [rraColumns.ACCESS]: <FormattedMessage id="ui-users.readingRoom.access" />,
+    [rraColumns.READING_ROOM_NAME]: <FormattedMessage id="ui-users.readingRoom.name" />,
+    [rraColumns.NOTES]: <FormattedMessage id="ui-users.readingRoom.note" />,
+  };
+  const visibleColumns = Object.keys(columnMapping);
+  const readOnly = !stripes.hasPerm('reading-room-patron-permission.item.put');
+
+  useEffect(() => {
+    const unregisterReadingRoomAccessList = form.registerField('readingRoomsAccessList', noop, { initialValue: [] });
+    return () => {
+      unregisterReadingRoomAccessList();
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <Accordion
+      open={expanded}
+      id={accordionId}
+      onToggle={onToggle}
+      label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.readingRoom.readingRoomAccess" /></Headline>}
+      displayWhenClosed={formData.length}
+    >
+      <MultiColumnList
+        striped
+        contentData={formData}
+        columnMapping={columnMapping}
+        visibleColumns={visibleColumns}
+        formatter={getFormatter(form, readOnly)}
+      />
+    </Accordion>
+  );
+};
+
+EditReadingRoomAccess.propTypes = {
+  expanded: PropTypes.bool,
+  onToggle: PropTypes.func,
+  accordionId: PropTypes.string.isRequired,
+  formData: PropTypes.object,
+  form: PropTypes.object,
+};
+
+export default EditReadingRoomAccess;
