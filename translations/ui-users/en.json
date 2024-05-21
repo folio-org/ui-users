@@ -365,10 +365,13 @@
   "readingRoom.readingRoomAccess": "Reading room access",
   "readingRoom.access": "Access",
   "readingRoom.name": "Name",
-  "readingRoom.note": "Note",
+  "readingRoom.note": "Note",  
+  "readingRoom.lastUpdated": "Last updated",
+  "readingRoom.filter": "Room name",
   "readingRoom.allowed": "Allowed",
   "readingRoom.notAllowed": "Not allowed",
-  
+  "readingRoom.metaSection.lastUpdatedDetails": "{date} by {name}",
+
   "crud.closeNewUserDialog": "Close New User Dialog",
   "crud.editUser": "Edit User",
   "crud.createUser": "Create User",

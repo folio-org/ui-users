@@ -49,6 +49,7 @@ import {
   UserAccounts,
   UserAffiliations,
   UserServicePoints,
+  ReadingRoomAccess,
 } from '../../components/UserDetailSections';
 import HelperApp from '../../components/HelperApp';
 import IfConsortium from '../../components/IfConsortium';
@@ -126,6 +127,9 @@ class UserDetail extends React.Component {
       suppressEdit: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
+      userReadingRoomPermissions: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
     }),
     match: PropTypes.shape({
       path: PropTypes.string.isRequired,
@@ -196,6 +200,7 @@ class UserDetail extends React.Component {
         servicePointsSection: false,
         notesAccordion: false,
         customFields: false,
+        readingRoomAccessSection: false,
       },
     };
 
@@ -631,6 +636,11 @@ class UserDetail extends React.Component {
     const isVirtualPatron = isDcbUser(user);
     const showPatronBlocksSection = hasPatronBlocksPermissions && !isShadowUser;
 
+    const isPatronUser = user?.type === USER_TYPES.PATRON;
+    const isStaffUser = user?.type === USER_TYPES.STAFF;
+    const displayReadingRoomAccessAccordion = isPatronUser || isStaffUser;
+    const readingRoomPermissions = resources?.userReadingRoomPermissions;
+
     if (this.userNotFound()) {
       return (
         <ErrorPane
@@ -766,6 +776,19 @@ class UserDetail extends React.Component {
                   customFieldsLabel={<FormattedMessage id="ui-users.custom.customFields" />}
                   noCustomFieldsFoundLabel={<FormattedMessage id="ui-users.custom.noCustomFieldsFound" />}
                 />
+                {
+                  displayReadingRoomAccessAccordion && (
+                    <IfPermission perm="ui-users.view-reading-room-access">
+                      <ReadingRoomAccess
+                        accordionId="readingRoomAccessSection"
+                        onToggle={this.handleSectionToggle}
+                        expanded={sections.readingRoomAccessSection}
+                        readingRoomPermissions={readingRoomPermissions}
+                      />
+                    </IfPermission>
+                  )
+                }
+
                 {
                   !isShadowUser && (
                     <>

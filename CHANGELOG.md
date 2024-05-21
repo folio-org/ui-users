@@ -5,6 +5,7 @@
 * UX consistency: Use Save & close button label stripes-component translation key. Refs UIU-3078.
 * Fix two "triangle down" icons in select element of "Copy existing fee/fine owner table entries" modal. Refs UIU-2929.
 * Fix incorrect translation key having count-disagreements in Pay fees/fines modal in Fees/Fines Page. Refs UIU-1097.
+* Reading Room Access accordion in User record - Basic Layout. Refs UIU-3096.
 * Trim input values and delete properties with empty string when user record save. Refs UIU-2049.
 * Update username field validation to trim leading and trailing spaces. Refs UIU-3099.
 * Fix "Total paid amount" value that set as "$NaN" on "Refund fee/fine" modal. Refs UIU-3094.
@@ -14,6 +15,7 @@
 * *BREAKING* Add new okapi interface reading-room-patron-permission. Create new permission 'Users: Can view reading room access'. Refs UIU-3116.
 * Create new permission 'Users: Can view, and edit reading room access'. Refs UIU-3117.
 * Include DCB in 'User Type' search filter group. Refs UIU-3016.
+* Displaying Default Reading Room Access in User Records. Refs UIU-3114.
 * Implement Reading Room Access functionality in user profile edit. Refs UIU-3115.
 
 ## [10.1.1](https://github.com/folio-org/ui-users/tree/v10.1.1) (2024-05-07)
