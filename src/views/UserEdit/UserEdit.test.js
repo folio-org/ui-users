@@ -1,5 +1,7 @@
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
+import { screen } from '@folio/jest-config-stripes/testing-library/react';
+
 import renderWithRouter from 'helpers/renderWithRouter';
 
 import UserForm from './UserForm';
@@ -72,6 +74,9 @@ describe('UserEdit', () => {
         records: [],
       },
       servicePoints: {
+        records: [],
+      },
+      configSettings: {
         records: [],
       },
       departments: {
@@ -153,6 +158,17 @@ describe('UserEdit', () => {
         permissions: {
           records: [{ id: '4', group: 'tst', desc: 'description' }],
         },
+        configSettings: {
+          records: [
+            {
+              id: 'f2b84177-d85a-4b0c-93dd-279e8f9d1d42',
+              module: 'USERS',
+              configName: 'number_generator',
+              enabled: true,
+              value: '{"barcodeGeneratorSetting":"useBoth"}',
+            }
+          ],
+        }
       },
     };
     const { container } = renderWithRouter(<UserEdit {...props} />);
@@ -185,6 +201,17 @@ describe('UserEdit', () => {
         permissions: {
           records: [{ id: '4', group: 'tst', desc: 'description' }],
         },
+        configSettings: {
+          records: [
+            {
+              id: 'f2b84177-d85a-4b0c-93dd-279e8f9d1d42',
+              module: 'USERS',
+              configName: 'number_generator',
+              enabled: true,
+              value: '{"barcodeGeneratorSetting":"useBoth"}',
+            }
+          ],
+        }
       },
     };
     const { container } = renderWithRouter(<UserEdit {...props} />);
@@ -215,6 +242,17 @@ describe('UserEdit', () => {
         permissions: {
           records: [{ id: '4', group: 'tst', desc: 'description' }],
         },
+        configSettings: {
+          records: [
+            {
+              id: 'f2b84177-d85a-4b0c-93dd-279e8f9d1d42',
+              module: 'USERS',
+              configName: 'number_generator',
+              enabled: true,
+              value: '{"barcodeGeneratorSetting":"useBoth"}',
+            }
+          ],
+        }
       },
     };
     const { container } = renderWithRouter(<UserEdit {...props} />);
@@ -259,6 +297,17 @@ describe('UserEdit', () => {
         permissions: {
           records: [{ id: '4', group: 'tst', desc: 'description' }],
         },
+        configSettings: {
+          records: [
+            {
+              id: 'f2b84177-d85a-4b0c-93dd-279e8f9d1d42',
+              module: 'USERS',
+              configName: 'number_generator',
+              enabled: true,
+              value: '{"barcodeGeneratorSetting":"useBoth"}',
+            }
+          ],
+        }
       },
     };
     const { container } = renderWithRouter(<UserEdit {...props} />);
@@ -289,6 +338,17 @@ describe('UserEdit', () => {
         permissions: {
           records: [{ id: '4', group: 'tst', desc: 'description' }],
         },
+        configSettings: {
+          records: [
+            {
+              id: 'f2b84177-d85a-4b0c-93dd-279e8f9d1d42',
+              module: 'USERS',
+              configName: 'number_generator',
+              enabled: true,
+              value: '{"barcodeGeneratorSetting":"useBoth"}',
+            }
+          ],
+        }
       },
     };
     const { container } = renderWithRouter(<UserEdit {...props} />);
@@ -319,6 +379,17 @@ describe('UserEdit', () => {
         permissions: {
           records: [{ id: '4', group: 'tst', desc: 'description' }],
         },
+        configSettings: {
+          records: [
+            {
+              id: 'f2b84177-d85a-4b0c-93dd-279e8f9d1d42',
+              module: 'USERS',
+              configName: 'number_generator',
+              enabled: true,
+              value: '{"barcodeGeneratorSetting":"useBoth"}',
+            }
+          ],
+        }
       },
     };
     const { container } = renderWithRouter(<UserEdit {...props} />);
@@ -423,6 +494,9 @@ describe('UserEdit', () => {
           records: [],
         },
         departments: {
+          records: [],
+        },
+        configSettings: {
           records: [],
         },
       },

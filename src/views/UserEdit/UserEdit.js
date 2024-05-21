@@ -121,6 +121,7 @@ class UserEdit extends React.Component {
       'addressTypes',
       'servicePoints',
       'departments',
+      'configSettings'
     );
 
     return formData;

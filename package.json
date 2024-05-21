@@ -48,6 +48,7 @@
       "loan-storage": "4.0 5.0 6.0 7.0",
       "notes": "2.0 3.0",
       "request-storage": "2.5 3.0 4.0 5.0 6.0",
+      "servint": "2.0 3.0",
       "batch-print": "1.0"
     },
     "permissionSets": [
@@ -983,6 +984,13 @@
         "visible": true
       },
       {
+        "permissionName": "ui-users.settings.numberGenerator.manage",
+        "displayName": "Settings (Users): Manage number generator options",
+        "subPermissions": [
+          "settings.users.enabled"
+        ]
+      },
+      {
         "permissionName": "ui-users.profile-pictures.view",
         "displayName": "Users: Can view profile pictures",
         "description": "Also includes basic permissions to view users",
@@ -1100,6 +1108,7 @@
     "@babel/preset-react": "^7.9.0",
     "@folio/eslint-config-stripes": "^7.0.0",
     "@folio/jest-config-stripes": "^2.0.0",
+    "@folio/service-interaction": "^3.0.0",
     "@folio/stripes": "^9.0.0",
     "@folio/stripes-cli": "^3.0.0",
     "@formatjs/cli": "^6.1.3",
@@ -1138,6 +1147,7 @@
     "uuid": "^9.0.0"
   },
   "peerDependencies": {
+    "@folio/service-interaction": "^3.0.0",
     "@folio/stripes": "^9.0.0",
     "moment": "^2.24.0",
     "react": "^18.2.0",
