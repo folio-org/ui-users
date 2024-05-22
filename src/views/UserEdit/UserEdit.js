@@ -207,11 +207,7 @@ class UserEdit extends React.Component {
     // collect the values in the list and make a PUT request
     const payload = list.filter(rra => rra && rra);
 
-    mutator.userReadingRoomPermissions.PUT(payload)
-      .then((resp) => {
-        console.log('response ', resp);
-        // history.push(`/users/preview/${user.id}${search}`);
-      }).catch((e) => showErrorCallout(e, this.context.sendCallout));
+    mutator.userReadingRoomPermissions.PUT(payload);
   }
 
   update({ requestPreferences, readingRoomsAccessList, ...userFormData }) {

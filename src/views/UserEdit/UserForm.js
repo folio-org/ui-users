@@ -5,7 +5,7 @@ import { injectIntl, FormattedMessage } from 'react-intl';
 import { Field, FormSpy } from 'react-final-form';
 import setFieldData from 'final-form-set-field-data';
 
-import { AppIcon } from '@folio/stripes/core';
+import { AppIcon, IfInterface, IfPermission } from '@folio/stripes/core';
 import {
   Paneset,
   Pane,
@@ -415,12 +415,16 @@ class UserForm extends React.Component {
                     <div>
                       {
                         displayReadingRoomAccess && (
-                        <EditReadingRoomAccess // TODO: add perm check, interface check
-                          accordionId="readingRoomAccess"
-                          userRRAPermissions={initialValues.readingRoomAccess?.records}
-                          form={form}
-                          formData={formData.userReadingRoomPermissions}
-                        />
+                          <IfInterface name="reading-room-patron-permission">
+                            <IfPermission perm="reading-room.patron-permission.item.get">
+                              <EditReadingRoomAccess
+                                accordionId="readingRoomAccess"
+                                userRRAPermissions={initialValues.readingRoomAccess?.records}
+                                form={form}
+                                formData={formData.userReadingRoomPermissions}
+                              />
+                            </IfPermission>
+                          </IfInterface>
                         )
                       }
                       {
