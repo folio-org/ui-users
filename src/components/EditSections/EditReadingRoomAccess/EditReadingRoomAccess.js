@@ -9,7 +9,6 @@ import {
   Headline,
   MultiColumnList,
 } from '@folio/stripes/components';
-import { useStripes } from '@folio/stripes/core';
 
 import { rraColumns } from './constants';
 import { getFormatter } from './getFormatter';
@@ -21,14 +20,12 @@ const EditReadingRoomAccess = ({
   form,
   formData,
 }) => {
-  const stripes = useStripes();
   const columnMapping = {
     [rraColumns.ACCESS]: <FormattedMessage id="ui-users.readingRoom.access" />,
     [rraColumns.READING_ROOM_NAME]: <FormattedMessage id="ui-users.readingRoom.name" />,
     [rraColumns.NOTES]: <FormattedMessage id="ui-users.readingRoom.note" />,
   };
   const visibleColumns = Object.keys(columnMapping);
-  const readOnly = !stripes.hasPerm('reading-room-patron-permission.item.put');
 
   useEffect(() => {
     const unregisterReadingRoomAccessList = form.registerField('readingRoomsAccessList', noop, { initialValue: [] });
@@ -51,7 +48,7 @@ const EditReadingRoomAccess = ({
         contentData={formData}
         columnMapping={columnMapping}
         visibleColumns={visibleColumns}
-        formatter={getFormatter(form, readOnly)}
+        formatter={getFormatter(form)}
       />
     </Accordion>
   );

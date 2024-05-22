@@ -416,7 +416,7 @@ class UserForm extends React.Component {
                       {
                         displayReadingRoomAccess && (
                           <IfInterface name="reading-room-patron-permission">
-                            <IfPermission perm="reading-room.patron-permission.item.get">
+                            <IfPermission perm="reading-room.patron-permission.item.put">
                               <EditReadingRoomAccess
                                 accordionId="readingRoomAccess"
                                 userRRAPermissions={initialValues.readingRoomAccess?.records}

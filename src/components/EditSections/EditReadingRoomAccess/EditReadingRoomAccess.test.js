@@ -3,6 +3,8 @@ import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import { within } from '@folio/jest-config-stripes/testing-library/dom';
 import { Form } from 'react-final-form';
 
+import { runAxeTest } from '@folio/stripes-testing';
+
 import renderWithRouter from 'helpers/renderWithRouter';
 import '../../../../test/jest/__mock__/matchMedia.mock';
 
@@ -84,6 +86,12 @@ const props = {
   ],
 };
 describe('EditReadingRoomAccess', () => {
+  it('should render with no axe errors', async () => {
+    await runAxeTest({
+      rootNode: document.body,
+    });
+  });
+
   it('should render component', () => {
     renderEditReadingRoomAccess(props);
     expect(screen.getByText('ui-users.readingRoom.readingRoomAccess')).toBeDefined();

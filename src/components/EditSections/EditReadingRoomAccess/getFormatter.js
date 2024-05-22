@@ -31,7 +31,6 @@ export const getFormatter = (form, readOnly) => {
                 ariaLabel="reading-room access"
                 dataOptions={READING_ROOM_ACCESS_OPTIONS}
                 id="reading-room-access-select"
-                disabled={readOnly}
                 value={record.access}
                 onChange={(val) => {
                   updateRecord(record, val, input.name, rowIndex);
@@ -55,7 +54,6 @@ export const getFormatter = (form, readOnly) => {
               {...input}
               fullWidth
               value={record?.notes}
-              disabled={readOnly}
               onChange={(e) => {
                 updateRecord(record, e.target.value, input.name, rowIndex);
               }}
