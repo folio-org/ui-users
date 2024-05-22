@@ -1,17 +1,18 @@
+import { FormattedMessage } from 'react-intl';
+
 export const rraColumns = {
   ACCESS: 'access',
   READING_ROOM_NAME: 'readingRoomName',
   NOTES: 'notes',
 };
 
-// TODO: Translations to be applied to the options
 export const READING_ROOM_ACCESS_OPTIONS = [
   {
-    label: 'Allowed',
+    label: (<FormattedMessage id="ui-users.readingRoom.allowed" />),
     value: 'ALLOWED'
   },
   {
-    label: 'Not allowed',
+    label: (<FormattedMessage id="ui-users.readingRoom.notAllowed" />),
     value: 'NOT_ALLOWED'
   }
 ];

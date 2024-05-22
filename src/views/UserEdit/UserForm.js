@@ -456,7 +456,6 @@ class UserForm extends React.Component {
           <FormSpy
             subscription={{ values: true }}
             onChange={({ values }) => {
-              // console.log('FormSpy values ', values);
               const { mutators } = form;
 
               ['sponsors', 'proxies'].forEach(namespace => {

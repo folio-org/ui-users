@@ -110,7 +110,7 @@ describe('EditReadingRoomAccess', () => {
     const accessSelectField = document.querySelectorAll('[id=reading-room-access-select]')[0];
     await userEvent.click(accessSelectField);
     const list = screen.getByRole('listbox');
-    await userEvent.click(within(list).getByText('Not allowed', { exact: false }));
+    await userEvent.click(within(list).getByText('ui-users.readingRoom.notAllowed', { exact: false }));
     await waitFor(() => expect(props.form.change).toHaveBeenCalled());
   });
 });

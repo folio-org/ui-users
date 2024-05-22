@@ -204,8 +204,7 @@ class UserEdit extends React.Component {
 
   updateUserReadingRoomAccess(list) {
     const { mutator } = this.props;
-    // collect the values in the list and make a PUT request
-    const payload = list.filter(rra => rra && rra);
+    const payload = list.filter(Boolean);
 
     mutator.userReadingRoomPermissions.PUT(payload);
   }
