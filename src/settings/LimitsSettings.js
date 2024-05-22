@@ -8,7 +8,7 @@ import {
   isEmpty,
 } from 'lodash';
 
-import { stripesConnect } from '@folio/stripes/core';
+import { stripesConnect, TitleManager } from '@folio/stripes/core';
 import { Settings } from '@folio/stripes/smart-components';
 
 import Limits from './patronBlocks/Limits/Limits';
@@ -66,6 +66,7 @@ class LimitsSettings extends Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }).isRequired,
     }),
+    intl: PropTypes.object,
   };
 
   static defaultProps = {
@@ -127,15 +128,22 @@ class LimitsSettings extends Component {
   }
 
   render() {
+    const {
+      intl: { formatMessage },
+    } = this.props;
     if (!this.shouldRenderSettings()) return null;
 
     return (
-      <Settings
-        {...this.props}
-        navPaneWidth="fill"
-        paneTitle={<FormattedMessage id="ui-users.settings.limits" />}
-        pages={this.getPatronGroupsPages()}
-      />
+      <TitleManager
+        record={formatMessage({ id: 'ui-users.settings.limits' })}
+      >
+        <Settings
+          {...this.props}
+          navPaneWidth="fill"
+          paneTitle={<FormattedMessage id="ui-users.settings.limits" />}
+          pages={this.getPatronGroupsPages()}
+        />
+      </TitleManager>
     );
   }
 }

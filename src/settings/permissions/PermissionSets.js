@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
 import { EntryManager } from '@folio/stripes/smart-components';
-import { stripesConnect } from '@folio/stripes/core';
+import { stripesConnect, TitleManager } from '@folio/stripes/core';
 
 import PermissionSetDetails from './PermissionSetDetails';
 import PermissionSetForm from './PermissionSetForm';
@@ -78,23 +78,27 @@ class PermissionSets extends React.Component {
     } = this.props;
 
     return (
-      <EntryManager
-        {...this.props}
-        parentMutator={mutator}
-        entryList={sortBy((entries || {}).records || [], ['displayName'])}
-        detailComponent={PermissionSetDetails}
-        paneTitle={<FormattedMessage id="ui-users.settings.permissionSet" />}
-        entryLabel={formatMessage({ id: 'ui-users.permissionSet' })}
-        entryFormComponent={PermissionSetForm}
-        validate={validate}
-        onBeforeSave={this.beforeSave}
-        nameKey="displayName"
-        permissions={{
-          put: 'perms.permissions.item.post',
-          post: 'perms.permissions.item.post',
-          delete: 'perms.permissions.item.delete',
-        }}
-      />
+      <TitleManager
+        record={formatMessage({ id: 'ui-users.settings.permissionSet' })}
+      >
+        <EntryManager
+          {...this.props}
+          parentMutator={mutator}
+          entryList={sortBy((entries || {}).records || [], ['displayName'])}
+          detailComponent={PermissionSetDetails}
+          paneTitle={<FormattedMessage id="ui-users.settings.permissionSet" />}
+          entryLabel={formatMessage({ id: 'ui-users.permissionSet' })}
+          entryFormComponent={PermissionSetForm}
+          validate={validate}
+          onBeforeSave={this.beforeSave}
+          nameKey="displayName"
+          permissions={{
+            put: 'perms.permissions.item.post',
+            post: 'perms.permissions.item.post',
+            delete: 'perms.permissions.item.delete',
+          }}
+        />
+      </TitleManager>
     );
   }
 }

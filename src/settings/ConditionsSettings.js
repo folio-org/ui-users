@@ -5,7 +5,7 @@ import {
   injectIntl,
 } from 'react-intl';
 
-import { stripesConnect } from '@folio/stripes/core';
+import { stripesConnect, TitleManager } from '@folio/stripes/core';
 import { Settings } from '@folio/stripes/smart-components';
 
 import Conditions from './patronBlocks/Conditions/Conditions';
@@ -34,6 +34,7 @@ class ConditionsSettings extends Component {
         GET: PropTypes.func,
       }).isRequired,
     }).isRequired,
+    intl: PropTypes.object,
   };
 
   getConditionsPages = () => {
@@ -74,15 +75,22 @@ class ConditionsSettings extends Component {
   }
 
   render() {
+    const {
+      intl: { formatMessage },
+    } = this.props;
     if (!this.shouldRenderSettings()) return null;
 
     return (
-      <Settings
-        {...this.props}
-        navPaneWidth="fill"
-        pages={this.getConditionsPages()}
-        paneTitle={<FormattedMessage id="ui-users.settings.conditions" />}
-      />
+      <TitleManager
+        record={formatMessage({ id: 'ui-users.settings.conditions' })}
+      >
+        <Settings
+          {...this.props}
+          navPaneWidth="fill"
+          pages={this.getConditionsPages()}
+          paneTitle={<FormattedMessage id="ui-users.settings.conditions" />}
+        />
+      </TitleManager>
     );
   }
 }

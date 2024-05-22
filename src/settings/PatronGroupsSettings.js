@@ -5,7 +5,7 @@ import {
   injectIntl,
 } from 'react-intl';
 import { ControlledVocab } from '@folio/stripes/smart-components';
-import { stripesConnect } from '@folio/stripes/core';
+import { stripesConnect, TitleManager } from '@folio/stripes/core';
 import { getSourceSuppressor } from '@folio/stripes/util';
 
 import { RECORD_SOURCE } from '../constants';
@@ -54,33 +54,37 @@ class PatronGroupsSettings extends React.Component {
     const hasCreatePerm = stripes.hasPerm('usergroups.item.post');
 
     return (
-      <this.connectedControlledVocab
-        {...this.props}
-        // We have to unset the dataKey to prevent the props.resources in
-        // <ControlledVocab> from being overwritten by the props.resources here.
-        dataKey={undefined}
-        baseUrl="groups"
-        records="usergroups"
-        label={intl.formatMessage({ id: 'ui-users.information.patronGroups' })}
-        labelSingular={intl.formatMessage({ id: 'ui-users.information.patronGroup' })}
-        objectLabel={<FormattedMessage id="ui-users.information.patronGroup.users" />}
-        visibleFields={['group', 'desc', 'expirationOffsetInDays']}
-        hiddenFields={['numberOfObjects']}
-        columnMapping={{
-          group: intl.formatMessage({ id: 'ui-users.information.patronGroup' }),
-          desc: intl.formatMessage({ id: 'ui-users.description' }),
-          expirationOffsetInDays: intl.formatMessage({ id: 'ui-users.information.patronGroup.expirationOffset' }),
-        }}
-        validate={this.validateFields}
-        nameKey="group"
-        id="patrongroups"
-        sortby="group"
-        canCreate={hasCreatePerm}
-        actionSuppressor={{
-          delete: item => !hasDeletePerm || suppress(item),
-          edit: (item) => !hasEditPerm || suppress(item),
-        }}
-      />
+      <TitleManager
+        record={intl.formatMessage({ id: 'ui-users.settings.patronGroups' })}
+      >
+        <this.connectedControlledVocab
+          {...this.props}
+          // We have to unset the dataKey to prevent the props.resources in
+          // <ControlledVocab> from being overwritten by the props.resources here.
+          dataKey={undefined}
+          baseUrl="groups"
+          records="usergroups"
+          label={intl.formatMessage({ id: 'ui-users.information.patronGroups' })}
+          labelSingular={intl.formatMessage({ id: 'ui-users.information.patronGroup' })}
+          objectLabel={<FormattedMessage id="ui-users.information.patronGroup.users" />}
+          visibleFields={['group', 'desc', 'expirationOffsetInDays']}
+          hiddenFields={['numberOfObjects']}
+          columnMapping={{
+            group: intl.formatMessage({ id: 'ui-users.information.patronGroup' }),
+            desc: intl.formatMessage({ id: 'ui-users.description' }),
+            expirationOffsetInDays: intl.formatMessage({ id: 'ui-users.information.patronGroup.expirationOffset' }),
+          }}
+          validate={this.validateFields}
+          nameKey="group"
+          id="patrongroups"
+          sortby="group"
+          canCreate={hasCreatePerm}
+          actionSuppressor={{
+            delete: item => !hasDeletePerm || suppress(item),
+            edit: (item) => !hasEditPerm || suppress(item),
+          }}
+        />
+      </TitleManager>
     );
   }
 }

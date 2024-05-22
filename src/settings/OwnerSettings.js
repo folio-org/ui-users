@@ -6,12 +6,13 @@ import {
   FormattedMessage,
 } from 'react-intl';
 import { Field } from 'react-final-form';
+
 import {
   MultiSelection,
   Label,
 } from '@folio/stripes/components';
 import { ControlledVocab } from '@folio/stripes/smart-components';
-import { stripesConnect } from '@folio/stripes/core';
+import { stripesConnect, TitleManager } from '@folio/stripes/core';
 
 import { validate } from '../components/util';
 import { SHARED_OWNER } from '../constants';
@@ -153,26 +154,30 @@ class OwnerSettings extends React.Component {
     };
 
     return (
-      <this.connectedControlledVocab
-        {...this.props}
-        baseUrl="owners"
-        columnMapping={columnMapping(formatMessage)}
-        editable={editable}
-        fieldComponents={fieldComponents}
-        formatter={formatter}
-        hiddenFields={['lastUpdated', 'numberOfObjects']}
-        id="settings-owners"
-        label={formatMessage({ id: 'ui-users.owners.label' })}
-        labelSingular={label}
-        nameKey="owner"
-        objectLabel=""
-        records="owners"
-        sortby="owner"
-        validate={this.validateItem}
-        visibleFields={['owner', 'desc', 'servicePointOwner']}
-        warn={this.warn}
-        formType="final-form"
-      />
+      <TitleManager
+        record={formatMessage({ id: 'ui-users.settings.owners' })}
+      >
+        <this.connectedControlledVocab
+          {...this.props}
+          baseUrl="owners"
+          columnMapping={columnMapping(formatMessage)}
+          editable={editable}
+          fieldComponents={fieldComponents}
+          formatter={formatter}
+          hiddenFields={['lastUpdated', 'numberOfObjects']}
+          id="settings-owners"
+          label={formatMessage({ id: 'ui-users.owners.label' })}
+          labelSingular={label}
+          nameKey="owner"
+          objectLabel=""
+          records="owners"
+          sortby="owner"
+          validate={this.validateItem}
+          visibleFields={['owner', 'desc', 'servicePointOwner']}
+          warn={this.warn}
+          formType="final-form"
+        />
+      </TitleManager>
     );
   }
 }
