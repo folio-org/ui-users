@@ -66,7 +66,7 @@ class PermissionSetDetails extends React.Component {
     return (
       <TitleManager
         prefix={`${formatMessage({ id: 'ui-users.settings.users.title' })} - `}
-        page={formatMessage({ id: 'ui-users.permissionSet' })}
+        page={formatMessage({ id: 'ui-users.settings.permissionSet' })}
         record={selectedSet.displayName}
       >
         <Row end="xs">
