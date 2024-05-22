@@ -8,14 +8,19 @@ import { Selection, TextArea } from '@folio/stripes/components';
 
 import { rraColumns, READING_ROOM_ACCESS_OPTIONS } from './constants';
 
-export const getFormatter = (form, readOnly) => {
+export const getFormatter = (form) => {
   const updateRecord = (record, val, name, rowIndex) => {
-    const clonedRecord = cloneDeep(record);
-    clonedRecord[name] = val;
-    if (!clonedRecord.id) {
-      clonedRecord.id = uuidv4();
+    const fieldState = form.getFieldState('readingRoomsAccessList');
+    if (fieldState?.value && fieldState.value[rowIndex]) {
+      form.change(`readingRoomsAccessList[${rowIndex}][${name}]`, val);
+    } else {
+      const clonedRecord = cloneDeep(record);
+      clonedRecord[name] = val;
+      if (!clonedRecord.id) {
+        clonedRecord.id = uuidv4();
+      }
+      form.change(`readingRoomsAccessList[${rowIndex}]`, clonedRecord);
     }
-    form.change(`readingRoomsAccessList[${rowIndex}]`, clonedRecord);
   };
 
   return ({
