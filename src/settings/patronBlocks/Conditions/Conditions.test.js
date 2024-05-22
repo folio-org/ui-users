@@ -63,6 +63,7 @@ const propData = {
     authFailure: [],
     bindings: {},
   },
+  intl: {},
 };
 
 

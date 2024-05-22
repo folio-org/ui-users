@@ -89,7 +89,8 @@ class LimitsSettings extends Component {
         groups: {
           records: groups,
         }
-      }
+      },
+      intl: { formatMessage },
     } = this.props;
     const routes = [];
 
@@ -100,13 +101,19 @@ class LimitsSettings extends Component {
       } = group;
       const renderLimits = () => {
         return (
-          <Limits
-            key={id}
-            patronGroupId={id}
-            patronGroup={patronGroup}
-            patronBlockConditions={this.getPatronBlockConditions()}
-            patronBlockLimits={this.getPatronBlockLimits()}
-          />
+          <TitleManager
+            prefix={`${formatMessage({ id: 'ui-users.settings.users.title' })} - `}
+            page={formatMessage({ id: 'ui-users.settings.limits' })}
+            record={patronGroup}
+          >
+            <Limits
+              key={id}
+              patronGroupId={id}
+              patronGroup={patronGroup}
+              patronBlockConditions={this.getPatronBlockConditions()}
+              patronBlockLimits={this.getPatronBlockLimits()}
+            />
+          </TitleManager>
         );
       };
 
