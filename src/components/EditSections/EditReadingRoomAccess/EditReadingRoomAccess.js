@@ -26,6 +26,11 @@ const EditReadingRoomAccess = ({
     [rraColumns.NOTES]: <FormattedMessage id="ui-users.readingRoom.note" />,
   };
   const visibleColumns = Object.keys(columnMapping);
+  const columnWidths = {
+    [rraColumns.ACCESS]: 130,
+    [rraColumns.READING_ROOM_NAME]: { min: 100, max: 200 },
+    [rraColumns.NOTES]: 300
+  };
 
   useEffect(() => {
     const unregisterReadingRoomAccessList = form.registerField('readingRoomsAccessList', noop, { initialValue: [] });
@@ -49,6 +54,7 @@ const EditReadingRoomAccess = ({
         columnMapping={columnMapping}
         visibleColumns={visibleColumns}
         formatter={getFormatter(form)}
+        columnWidths={columnWidths}
       />
     </Accordion>
   );

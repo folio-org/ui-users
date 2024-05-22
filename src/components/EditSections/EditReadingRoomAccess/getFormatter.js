@@ -58,6 +58,7 @@ export const getFormatter = (form) => {
             <TextArea
               {...input}
               fullWidth
+              marginBottom0
               value={record?.notes}
               onChange={(e) => {
                 updateRecord(record, e.target.value, input.name, rowIndex);
