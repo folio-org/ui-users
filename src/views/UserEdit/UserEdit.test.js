@@ -131,6 +131,10 @@ describe('UserEdit', () => {
         PUT: jest.fn().mockResolvedValue({ data: {} }),
       },
       permUserId: '2',
+      userReadingRoomPermissions: {
+        PUT: jest.fn().mockResolvedValue({ data: {} }),
+        GET: jest.fn().mockResolvedValue({ data: {} }),
+      }
     },
     getProxies: jest.fn(),
     getSponsors: jest.fn(),
@@ -140,10 +144,6 @@ describe('UserEdit', () => {
       post: jest.fn(() => ({ json: () => Promise.resolve({}) })),
       put: jest.fn(() => ({ json: () => Promise.resolve({}) })),
     },
-    userReadingRoomPermissions: {
-      PUT: jest.fn().mockResolvedValue({ data: {} }),
-      GET: jest.fn().mockResolvedValue({ data: {} }),
-    }
   };
 
   it('should render without crashing', () => {
@@ -249,6 +249,7 @@ describe('UserEdit', () => {
         },
       },
     };
+    console.log('mutator ', props.mutator);
     const { container } = renderWithRouter(<UserEdit {...props} />);
     const submitButton = container.querySelector('#clickable-save');
     await userEvent.click(submitButton);
