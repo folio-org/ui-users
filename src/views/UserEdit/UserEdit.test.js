@@ -79,7 +79,22 @@ describe('UserEdit', () => {
         records: [],
       },
       userReadingRoomPermissions: {
-        records: [],
+        records: [
+          {
+            'id': '2205004b-ca51-4a14-87fd-938eefa8f5df',
+            'userId': '2205005b-ca51-4a04-87fd-938eefa8f6de',
+            'readingRoomId': 'ea7ac988-ede1-466b-968c-46a770333b14',
+            'readingRoomName': 'rr-4',
+            'access': 'ALLOWED',
+            'notes': 'Allowed for this reading room...',
+            'metadata': {
+              'createdDate': '2024-05-15 18:39:31',
+              'createdByUserId': '21457ab5-4635-4e56-906a-908f05e9233b',
+              'updatedDate': '2024-05-15 18:40:27',
+              'updatedByUserId': '21457ab5-4635-4e56-906a-908f05e9233b'
+            }
+          }
+        ],
       },
     },
     history: {

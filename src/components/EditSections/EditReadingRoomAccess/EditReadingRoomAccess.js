@@ -5,6 +5,7 @@ import { noop } from 'lodash';
 
 import {
   Accordion,
+  Badge,
   Headline,
   MultiColumnList,
 } from '@folio/stripes/components';
@@ -43,7 +44,7 @@ const EditReadingRoomAccess = ({
       id={accordionId}
       onToggle={onToggle}
       label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.readingRoom.readingRoomAccess" /></Headline>}
-      displayWhenClosed={formData.length}
+      displayWhenClosed={<Badge>{formData.length}</Badge>}
     >
       <MultiColumnList
         striped
