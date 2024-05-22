@@ -1,4 +1,4 @@
-import { screen, waitFor } from '@folio/jest-config-stripes/testing-library/react';
+import { screen, waitFor, act } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import { within } from '@folio/jest-config-stripes/testing-library/dom';
 import { Form } from 'react-final-form';
@@ -126,27 +126,27 @@ describe('EditReadingRoomAccess', () => {
   it('should update the notes', async () => {
     renderEditReadingRoomAccess(props);
     const noteField1 = document.querySelectorAll('[id^=textarea]')[0];
-    await userEvent.type(noteField1, 'note1');
+    await act(async () => userEvent.type(noteField1, 'note1'));
     await waitFor(() => expect(props.form.change).toHaveBeenCalled());
   });
 
   it('should update access', async () => {
     renderEditReadingRoomAccess(props);
-    const accessSelectField = document.querySelectorAll('[id=reading-room-access-select]')[0];
-    await userEvent.click(accessSelectField);
+    const accessSelectField = document.querySelectorAll('[id=reading-room-access-select]')[1];
+    await act(async () => userEvent.click(accessSelectField));
     const list = screen.getByRole('listbox');
-    await userEvent.click(within(list).getByText('ui-users.readingRoom.notAllowed', { exact: false }));
+    await act(async () => userEvent.click(within(list).getByText('ui-users.readingRoom.notAllowed', { exact: false })));
     await waitFor(() => expect(props.form.change).toHaveBeenCalled());
   });
 
   it('should update both access and note', async () => {
     renderEditReadingRoomAccess(props);
     const noteField1 = document.querySelectorAll('[id^=textarea]')[0];
-    await userEvent.type(noteField1, 'note1');
+    await act(async () => userEvent.type(noteField1, 'note1'));
     const accessSelectField = document.querySelectorAll('[id=reading-room-access-select]')[0];
-    await userEvent.click(accessSelectField);
+    await act(async () => userEvent.click(accessSelectField));
     const list = screen.getByRole('listbox');
-    await userEvent.click(within(list).getByText('ui-users.readingRoom.notAllowed', { exact: false }));
+    await act(async () => userEvent.click(within(list).getByText('ui-users.readingRoom.allowed', { exact: false })));
     await waitFor(() => expect(props.form.change).toHaveBeenCalled());
   });
 });
