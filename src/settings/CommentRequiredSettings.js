@@ -88,9 +88,7 @@ class CommentRequiredSettings extends React.Component {
   }
 
   render() {
-    const {
-      intl: { formatMessage },
-    } = this.props;
+    const { intl: { formatMessage } } = this.props;
     const hasLoadedComment = _.get(this.props.resources, ['commentRequired', 'hasLoaded'], false);
     if (hasLoadedComment === false) return <div />;
 

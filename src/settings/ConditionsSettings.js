@@ -75,9 +75,7 @@ class ConditionsSettings extends Component {
   }
 
   render() {
-    const {
-      intl: { formatMessage },
-    } = this.props;
+    const { intl: { formatMessage } } = this.props;
     if (!this.shouldRenderSettings()) return null;
 
     return (
