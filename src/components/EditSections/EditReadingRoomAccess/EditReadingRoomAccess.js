@@ -27,9 +27,8 @@ const EditReadingRoomAccess = ({
   };
   const visibleColumns = Object.keys(columnMapping);
   const columnWidths = {
-    [rraColumns.ACCESS]: 130,
-    [rraColumns.READING_ROOM_NAME]: { min: 100, max: 200 },
-    [rraColumns.NOTES]: 300
+    [rraColumns.ACCESS]: '15%',
+    [rraColumns.READING_ROOM_NAME]: '25%',
   };
 
   useEffect(() => {

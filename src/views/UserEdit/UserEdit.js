@@ -229,7 +229,7 @@ class UserEdit extends React.Component {
     const prevUser = resources?.selUser?.records?.[0] ?? {};
 
     // update user reading room access
-    if (get(resources, 'userReadingRoomPermissions') && readingRoomsAccessList?.length > 0) {
+    if (get(resources, 'userReadingRoomPermissions') && readingRoomsAccessList?.length) {
       this.updateUserReadingRoomAccess(readingRoomsAccessList);
     }
 

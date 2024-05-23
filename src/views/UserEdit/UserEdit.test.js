@@ -249,7 +249,6 @@ describe('UserEdit', () => {
         },
       },
     };
-    console.log('mutator ', props.mutator);
     const { container } = renderWithRouter(<UserEdit {...props} />);
     const submitButton = container.querySelector('#clickable-save');
     await userEvent.click(submitButton);
