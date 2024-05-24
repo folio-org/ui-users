@@ -441,9 +441,13 @@ class AccountsHistory extends React.Component {
 
     const feeFineActions = resources?.comments?.records || [];
     const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
+    const waiveButtonDisabled = !this.props.stripes.hasPerm('ui-users.manual_waive');
+    const payButtonDisabled = !this.props.stripes.hasPerm('ui-users.manual_pay');
     const canRefund = selectedAccounts.some((a) => isRefundAllowed(a, feeFineActions));
+    const showActionMenu = this.props.stripes.hasPerm('ui-users.feesfines.actions.all') ||
+      this.props.stripes.hasPerm('ui-users.manual_waive') ||
+      this.props.stripes.hasPerm('ui-users.manual_pay');
 
-    const showActionMenu = this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
     if (showActionMenu) {
       return (
         <>
@@ -466,7 +470,7 @@ class AccountsHistory extends React.Component {
               id="open-closed-all-pay-button"
               buttonStyle="dropdownItem"
               marginBottom0
-              disabled={!((this.state.actions.regularpayment === true) && (buttonDisabled === false))}
+              disabled={!((this.state.actions.regularpayment === true) && !payButtonDisabled)}
               onClick={() => { this.onChangeActions({ regular: true }); }}
             >
               <Icon icon="cart">
@@ -476,7 +480,7 @@ class AccountsHistory extends React.Component {
             <Button
               id="open-closed-all-wave-button"
               marginBottom0
-              disabled={!((this.state.actions.waive === true) && (buttonDisabled === false))}
+              disabled={!((this.state.actions.waive === true) && !waiveButtonDisabled)}
               buttonStyle="dropdownItem"
               onClick={() => { this.onChangeActions({ waiveMany: true }); }}
             >
