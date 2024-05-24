@@ -5,7 +5,7 @@ import {
   NavListItem,
 } from '@folio/stripes/components';
 
-const SectionPageItem = ({ setting, path }) => {
+const SectionPageItem = ({ setting, path, hasInterface }) => {
   let sectionItem = (
     <NavListItem to={`${path}/${setting.route}`} data-test-sectionpageitem>
       {setting.label}
@@ -28,6 +28,10 @@ const SectionPageItem = ({ setting, path }) => {
     );
   }
 
+  if (hasInterface(setting?.dependsOnNoneInterface)) {
+    return null;
+  }
+
   return sectionItem;
 };
 
@@ -38,7 +42,9 @@ SectionPageItem.propTypes = {
     label: PropTypes.element,
     perm: PropTypes.string,
     route: PropTypes.string,
-  })
+    dependsOnNoneInterface: PropTypes.string
+  }),
+  hasInterface: PropTypes.func
 };
 
 export default SectionPageItem;
