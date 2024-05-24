@@ -16,6 +16,7 @@
 * Create new permission 'Users: Can view, and edit reading room access'. Refs UIU-3117.
 * Include DCB in 'User Type' search filter group. Refs UIU-3016.
 * Displaying Default Reading Room Access in User Records. Refs UIU-3114.
+* Implement Reading Room Access functionality in user profile edit. Refs UIU-3115.
 
 ## [10.1.1](https://github.com/folio-org/ui-users/tree/v10.1.1) (2024-05-07)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.1.0...v10.1.1)

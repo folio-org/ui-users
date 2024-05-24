@@ -16,6 +16,22 @@ const userFormData = {
     tenantId: [{ permissionName: 'users.item.get' }],
     testTenant: [{ permissionName: 'users.item.get' }],
   },
+  readingRoomsAccessList: [
+    {
+      'id': '2205004b-ca51-4a14-87fd-938eefa8f5df',
+      'userId': '2205005b-ca51-4a04-87fd-938eefa8f6de',
+      'readingRoomId': 'ea7ac988-ede1-466b-968c-46a770333b14',
+      'readingRoomName': 'rr-4',
+      'access': 'ALLOWED',
+      'notes': 'Allowed for this reading room...',
+      'metadata': {
+        'createdDate': '2024-05-15 18:39:31',
+        'createdByUserId': '21457ab5-4635-4e56-906a-908f05e9233b',
+        'updatedDate': '2024-05-15 18:40:27',
+        'updatedByUserId': '21457ab5-4635-4e56-906a-908f05e9233b'
+      }
+    }
+  ],
 };
 
 jest.mock('@folio/stripes/components', () => ({
@@ -77,6 +93,9 @@ describe('UserEdit', () => {
       departments: {
         records: [],
       },
+      userReadingRoomPermissions: {
+        records: [],
+      },
     },
     history: {
       push: jest.fn(),
@@ -112,6 +131,10 @@ describe('UserEdit', () => {
         PUT: jest.fn().mockResolvedValue({ data: {} }),
       },
       permUserId: '2',
+      userReadingRoomPermissions: {
+        PUT: jest.fn().mockResolvedValue({ data: {} }),
+        GET: jest.fn().mockResolvedValue({ data: {} }),
+      }
     },
     getProxies: jest.fn(),
     getSponsors: jest.fn(),
@@ -153,6 +176,9 @@ describe('UserEdit', () => {
         permissions: {
           records: [{ id: '4', group: 'tst', desc: 'description' }],
         },
+        userReadingRoomPermissions: {
+          records: [],
+        },
       },
     };
     const { container } = renderWithRouter(<UserEdit {...props} />);
@@ -185,6 +211,9 @@ describe('UserEdit', () => {
         permissions: {
           records: [{ id: '4', group: 'tst', desc: 'description' }],
         },
+        userReadingRoomPermissions: {
+          records: [],
+        },
       },
     };
     const { container } = renderWithRouter(<UserEdit {...props} />);
@@ -214,6 +243,9 @@ describe('UserEdit', () => {
         },
         permissions: {
           records: [{ id: '4', group: 'tst', desc: 'description' }],
+        },
+        userReadingRoomPermissions: {
+          records: [],
         },
       },
     };
@@ -259,6 +291,9 @@ describe('UserEdit', () => {
         permissions: {
           records: [{ id: '4', group: 'tst', desc: 'description' }],
         },
+        userReadingRoomPermissions: {
+          records: [],
+        },
       },
     };
     const { container } = renderWithRouter(<UserEdit {...props} />);
@@ -289,6 +324,9 @@ describe('UserEdit', () => {
         permissions: {
           records: [{ id: '4', group: 'tst', desc: 'description' }],
         },
+        userReadingRoomPermissions: {
+          records: [],
+        },
       },
     };
     const { container } = renderWithRouter(<UserEdit {...props} />);
@@ -318,6 +356,9 @@ describe('UserEdit', () => {
         },
         permissions: {
           records: [{ id: '4', group: 'tst', desc: 'description' }],
+        },
+        userReadingRoomPermissions: {
+          records: [],
         },
       },
     };
@@ -424,6 +465,9 @@ describe('UserEdit', () => {
         },
         departments: {
           records: [],
+        },
+        userReadingRoomPermissions: {
+          records: []
         },
       },
       history: {

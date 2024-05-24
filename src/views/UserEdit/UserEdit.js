@@ -121,6 +121,7 @@ class UserEdit extends React.Component {
       'addressTypes',
       'servicePoints',
       'departments',
+      'userReadingRoomPermissions'
     );
 
     return formData;
@@ -201,7 +202,14 @@ class UserEdit extends React.Component {
     return copiedCustomFields;
   }
 
-  update({ requestPreferences, ...userFormData }) {
+  updateUserReadingRoomAccess(list) {
+    const { mutator } = this.props;
+    const payload = list.filter(Boolean);
+
+    mutator.userReadingRoomPermissions.PUT(payload);
+  }
+
+  update({ requestPreferences, readingRoomsAccessList, ...userFormData }) {
     const {
       updateProxies,
       updateSponsors,
@@ -219,6 +227,11 @@ class UserEdit extends React.Component {
 
     const user = cloneDeep(userFormData);
     const prevUser = resources?.selUser?.records?.[0] ?? {};
+
+    // update user reading room access
+    if (get(resources, 'userReadingRoomPermissions') && readingRoomsAccessList?.length) {
+      this.updateUserReadingRoomAccess(readingRoomsAccessList);
+    }
 
     if (get(resources, 'requestPreferences.records[0].totalRecords')) {
       this.updateRequestPreferences(requestPreferences);
@@ -246,7 +259,7 @@ class UserEdit extends React.Component {
       updateServicePoints(servicePoints, preferredServicePoint);
     }
 
-    const data = omit(user, ['creds', 'proxies', 'sponsors', 'permissions', 'servicePoints', 'preferredServicePoint']);
+    const data = omit(user, ['creds', 'proxies', 'sponsors', 'permissions', 'servicePoints', 'preferredServicePoint', 'readingRoomsAccessList']);
     const today = moment().endOf('day');
     const curActive = user.active;
     const prevActive = prevUser.active;
