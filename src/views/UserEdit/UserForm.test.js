@@ -18,6 +18,7 @@ jest.mock('../../components/EditSections', () => ({
   EditContactInfo: jest.fn(() => 'EditContactInfo'),
   EditProxy: jest.fn(() => 'EditProxy'),
   EditServicePoints: jest.fn(() => 'EditServicePoints'),
+  EditReadingRoomAccess: jest.fn(() => 'EditReadingRoomAccess'),
 }));
 jest.mock('../../components/PermissionsAccordion/components/PermissionsModal', () => 'PermissionsModal');
 jest.mock('../../hooks', () => ({

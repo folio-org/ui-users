@@ -5,7 +5,7 @@ import { injectIntl, FormattedMessage } from 'react-intl';
 import { Field, FormSpy } from 'react-final-form';
 import setFieldData from 'final-form-set-field-data';
 
-import { AppIcon } from '@folio/stripes/core';
+import { AppIcon, IfInterface, IfPermission } from '@folio/stripes/core';
 import {
   Paneset,
   Pane,
@@ -33,6 +33,7 @@ import {
   EditContactInfo,
   EditProxy,
   EditServicePoints,
+  EditReadingRoomAccess,
 } from '../../components/EditSections';
 import { getFullName } from '../../components/util';
 import RequestFeeFineBlockButtons from '../../components/RequestFeeFineBlockButtons';
@@ -319,6 +320,7 @@ class UserForm extends React.Component {
       ? <FormattedMessage id="ui-users.edit" />
       : <FormattedMessage id="ui-users.crud.createUser" />;
     const isShadowUser = initialValues?.type === USER_TYPES.SHADOW;
+    const displayReadingRoomAccess = [USER_TYPES.PATRON, USER_TYPES.STAFF].includes(initialValues?.type);
 
     return (
       <HasCommand commands={this.keyboardCommands}>
@@ -367,6 +369,7 @@ class UserForm extends React.Component {
                     permissions: false,
                     servicePoints: false,
                     customFields: true,
+                    readingRoomAccess: false,
                   }}
                 >
                   <EditUserInfo
@@ -410,6 +413,20 @@ class UserForm extends React.Component {
                   />
                   {initialValues.id &&
                     <div>
+                      {
+                        displayReadingRoomAccess && (
+                          <IfInterface name="reading-room-patron-permission">
+                            <IfPermission perm="reading-room.patron-permission.item.put">
+                              <EditReadingRoomAccess
+                                accordionId="readingRoomAccess"
+                                userRRAPermissions={initialValues.readingRoomAccess?.records}
+                                form={form}
+                                formData={formData.userReadingRoomPermissions}
+                              />
+                            </IfPermission>
+                          </IfInterface>
+                        )
+                      }
                       {
                       !isShadowUser && (
                         <EditProxy

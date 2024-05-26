@@ -191,7 +191,7 @@ class UserRecordContainer extends React.Component {
           return `reading-room-patron-permission/${pathComponents.id}`;
         }
       }
-    }
+    },
   });
 
   static propTypes = {
