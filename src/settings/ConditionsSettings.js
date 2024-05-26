@@ -76,18 +76,19 @@ class ConditionsSettings extends Component {
 
   render() {
     const { intl: { formatMessage } } = this.props;
-    if (!this.shouldRenderSettings()) return null;
 
     return (
       <TitleManager
         record={formatMessage({ id: 'ui-users.settings.conditions' })}
       >
-        <Settings
-          {...this.props}
-          navPaneWidth="fill"
-          pages={this.getConditionsPages()}
-          paneTitle={<FormattedMessage id="ui-users.settings.conditions" />}
-        />
+        {this.shouldRenderSettings() ?
+          <Settings
+            {...this.props}
+            navPaneWidth="fill"
+            pages={this.getConditionsPages()}
+            paneTitle={<FormattedMessage id="ui-users.settings.conditions" />}
+          /> :
+          null}
       </TitleManager>
     );
   }

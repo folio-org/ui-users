@@ -136,18 +136,19 @@ class LimitsSettings extends Component {
 
   render() {
     const { intl: { formatMessage } } = this.props;
-    if (!this.shouldRenderSettings()) return null;
 
     return (
       <TitleManager
         record={formatMessage({ id: 'ui-users.settings.limits' })}
       >
-        <Settings
-          {...this.props}
-          navPaneWidth="fill"
-          paneTitle={<FormattedMessage id="ui-users.settings.limits" />}
-          pages={this.getPatronGroupsPages()}
-        />
+        {this.shouldRenderSettings() ?
+          <Settings
+            {...this.props}
+            navPaneWidth="fill"
+            paneTitle={<FormattedMessage id="ui-users.settings.limits" />}
+            pages={this.getPatronGroupsPages()}
+          /> :
+          null}
       </TitleManager>
     );
   }
