@@ -4,11 +4,12 @@ import {
   injectIntl,
   FormattedMessage,
 } from 'react-intl';
+
 import {
   Label,
 } from '@folio/stripes/components';
 import { ControlledVocab } from '@folio/stripes/smart-components';
-import { stripesConnect } from '@folio/stripes/core';
+import { stripesConnect, TitleManager } from '@folio/stripes/core';
 
 import { validate } from '../components/util';
 import { Owners } from './FeeFinesTable';
@@ -89,27 +90,31 @@ class PaymentSettings extends React.Component {
     };
 
     return (
-      <this.connectedControlledVocab
-        {...this.props}
-        baseUrl="payments"
-        columnMapping={columnMapping}
-        hiddenFields={['numberOfObjects']}
-        editable={editable}
-        id="settings-payments"
-        itemTemplate={{ allowedRefundMethod: false }}
-        label={formatMessage({ id: 'ui-users.payments.label' })}
-        labelSingular={label}
-        nameKey="payment"
-        objectLabel=""
-        preCreateHook={preCreateHook}
-        records="payments"
-        rowFilter={<Owners dataOptions={owners} onChange={this.onChangeOwner} />}
-        rowFilterFunction={(item) => (item.ownerId === ownerId)}
-        sortby="nameMethod"
-        validate={(item, index, items) => validate(item, index, items, 'nameMethod', label)}
-        visibleFields={['nameMethod']}
-        formType="final-form"
-      />
+      <TitleManager
+        record={formatMessage({ id: 'ui-users.settings.paymentMethods' })}
+      >
+        <this.connectedControlledVocab
+          {...this.props}
+          baseUrl="payments"
+          columnMapping={columnMapping}
+          hiddenFields={['numberOfObjects']}
+          editable={editable}
+          id="settings-payments"
+          itemTemplate={{ allowedRefundMethod: false }}
+          label={formatMessage({ id: 'ui-users.payments.label' })}
+          labelSingular={label}
+          nameKey="payment"
+          objectLabel=""
+          preCreateHook={preCreateHook}
+          records="payments"
+          rowFilter={<Owners dataOptions={owners} onChange={this.onChangeOwner} />}
+          rowFilterFunction={(item) => (item.ownerId === ownerId)}
+          sortby="nameMethod"
+          validate={(item, index, items) => validate(item, index, items, 'nameMethod', label)}
+          visibleFields={['nameMethod']}
+          formType="final-form"
+        />
+      </TitleManager>
     );
   }
 }

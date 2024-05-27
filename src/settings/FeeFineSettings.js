@@ -12,7 +12,7 @@ import {
   NoValue,
 } from '@folio/stripes/components';
 import { ControlledVocab } from '@folio/stripes/smart-components';
-import { IfPermission, stripesConnect, stripesShape } from '@folio/stripes/core';
+import { IfPermission, stripesConnect, stripesShape, TitleManager } from '@folio/stripes/core';
 
 import { validate, localizeCurrencyAmount } from '../components/util';
 import {
@@ -326,34 +326,38 @@ class FeeFineSettings extends React.Component {
       </div>;
 
     return (
-      <this.connectedControlledVocab
-        stripes={this.props.stripes}
-        baseUrl="feefines"
-        columnMapping={columnMapping}
-        fieldComponents={fieldComponents}
-        formatter={formatter}
-        hiddenFields={['lastUpdated', 'numberOfObjects']}
-        id="settings-feefines"
-        label={intl.formatMessage({ id: 'ui-users.feefines.title' })}
-        labelSingular={label}
-        nameKey="feefine"
-        objectLabel=""
-        preCreateHook={preCreateHook}
-        preUpdateHook={preUpdateHook}
-        records="feefines"
-        rowFilter={rowFilter}
-        rowFilterFunction={(item) => (item.ownerId === ownerId && !item.automatic)}
-        sortby="feeFineType"
-        validate={this.validate}
-        visibleFields={['feeFineType', 'defaultAmount', 'chargeNoticeId', 'actionNoticeId']}
-        formType="final-form"
-        shouldReinitialize
-        canCreate={hasCreatePerm}
-        actionSuppressor={{
-          delete: () => !hasDeletePerm,
-          edit: () => !hasEditPerm,
-        }}
-      />
+      <TitleManager
+        record={intl.formatMessage({ id: 'ui-users.settings.manualCharges' })}
+      >
+        <this.connectedControlledVocab
+          stripes={this.props.stripes}
+          baseUrl="feefines"
+          columnMapping={columnMapping}
+          fieldComponents={fieldComponents}
+          formatter={formatter}
+          hiddenFields={['lastUpdated', 'numberOfObjects']}
+          id="settings-feefines"
+          label={intl.formatMessage({ id: 'ui-users.feefines.title' })}
+          labelSingular={label}
+          nameKey="feefine"
+          objectLabel=""
+          preCreateHook={preCreateHook}
+          preUpdateHook={preUpdateHook}
+          records="feefines"
+          rowFilter={rowFilter}
+          rowFilterFunction={(item) => (item.ownerId === ownerId && !item.automatic)}
+          sortby="feeFineType"
+          validate={this.validate}
+          visibleFields={['feeFineType', 'defaultAmount', 'chargeNoticeId', 'actionNoticeId']}
+          formType="final-form"
+          shouldReinitialize
+          canCreate={hasCreatePerm}
+          actionSuppressor={{
+            delete: () => !hasDeletePerm,
+            edit: () => !hasEditPerm,
+          }}
+        />
+      </TitleManager>
     );
   }
 }

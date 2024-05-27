@@ -127,6 +127,7 @@
   "loans.selectAllLoans": "Select all loans",
   "loans.lastReminderNumber": "{count, number} {count, plural, one {reminder fee} other {reminder fees}} billed",
   "settings.label": "Users",
+  "settings.users.title": "Users settings",
   "settings.general": "General",
   "settings.feefine": "Fee/fine",
   "settings.patronBlocks": "Patron blocks",

@@ -4,11 +4,12 @@ import {
   injectIntl,
   FormattedMessage,
 } from 'react-intl';
+
 import {
   Label,
 } from '@folio/stripes/components';
 import { ControlledVocab } from '@folio/stripes/smart-components';
-import { stripesConnect } from '@folio/stripes/core';
+import { stripesConnect, TitleManager } from '@folio/stripes/core';
 import { validate } from '../components/util';
 
 const columnMapping = {
@@ -43,22 +44,26 @@ class RefundReasonsSettings extends React.Component {
     const editable = stripes.hasPerm('ui-users.settings.refunds.all');
 
     return (
-      <this.connectedControlledVocab
-        {...this.props}
-        validate={(item, index, items) => validate(item, index, items, 'nameReason', label)}
-        baseUrl="refunds"
-        records="refunds"
-        label={intl.formatMessage({ id: 'ui-users.refunds.label' })}
-        labelSingular={label}
-        objectLabel=""
-        visibleFields={['nameReason', 'description']}
-        columnMapping={columnMapping}
-        nameKey="refund"
-        hiddenFields={['numberOfObjects']}
-        id="settings-refunds"
-        sortby="nameReason"
-        editable={editable}
-      />
+      <TitleManager
+        record={intl.formatMessage({ id: 'ui-users.settings.refundReasons' })}
+      >
+        <this.connectedControlledVocab
+          {...this.props}
+          validate={(item, index, items) => validate(item, index, items, 'nameReason', label)}
+          baseUrl="refunds"
+          records="refunds"
+          label={intl.formatMessage({ id: 'ui-users.refunds.label' })}
+          labelSingular={label}
+          objectLabel=""
+          visibleFields={['nameReason', 'description']}
+          columnMapping={columnMapping}
+          nameKey="refund"
+          hiddenFields={['numberOfObjects']}
+          id="settings-refunds"
+          sortby="nameReason"
+          editable={editable}
+        />
+      </TitleManager>
     );
   }
 }

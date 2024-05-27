@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Switch, Route } from 'react-router-dom';
+import { useIntl } from 'react-intl';
 
-import { useStripes } from '@folio/stripes/core';
+import { useStripes, TitleManager } from '@folio/stripes/core';
 import { ViewCustomFieldsSettings, EditCustomFieldsSettings } from '@folio/stripes/smart-components';
 
 const propTypes = {
@@ -15,6 +16,7 @@ const propTypes = {
 const CustomFieldsSettings = ({
   history,
 }) => {
+  const { formatMessage } = useIntl();
   const stripes = useStripes();
 
   const base = '/settings/users/custom-fields';
@@ -33,24 +35,28 @@ const CustomFieldsSettings = ({
   }
 
   return (
-    <Switch>
-      <Route exact path={base}>
-        <ViewCustomFieldsSettings
-          backendModuleName={backendModuleName}
-          entityType={entityType}
-          editRoute={`${base}/edit`}
-          permissions={permissions}
-        />
-      </Route>
-      <Route exact path={`${base}/edit`}>
-        <EditCustomFieldsSettings
-          backendModuleName={backendModuleName}
-          entityType={entityType}
-          viewRoute={base}
-          permissions={permissions}
-        />
-      </Route>
-    </Switch>
+    <TitleManager
+      record={formatMessage({ id: 'ui-users.settings.customFields' })}
+    >
+      <Switch>
+        <Route exact path={base}>
+          <ViewCustomFieldsSettings
+            backendModuleName={backendModuleName}
+            entityType={entityType}
+            editRoute={`${base}/edit`}
+            permissions={permissions}
+          />
+        </Route>
+        <Route exact path={`${base}/edit`}>
+          <EditCustomFieldsSettings
+            backendModuleName={backendModuleName}
+            entityType={entityType}
+            viewRoute={base}
+            permissions={permissions}
+          />
+        </Route>
+      </Switch>
+    </TitleManager>
   );
 };
 

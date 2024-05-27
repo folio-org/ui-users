@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
-import { stripesConnect } from '@folio/stripes/core';
+import { stripesConnect, TitleManager } from '@folio/stripes/core';
 import { Callout } from '@folio/stripes/components';
 
 import ConditionsForm from './ConditionsForm';
@@ -35,6 +35,7 @@ class Conditions extends Component {
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired
     }).isRequired,
+    intl: PropTypes.object,
   };
 
   callout = React.createRef();
@@ -77,7 +78,7 @@ class Conditions extends Component {
   }
 
   render() {
-    const { stripes } = this.props;
+    const { stripes, intl: { formatMessage } } = this.props;
     const areConditionsEditable = stripes.hasPerm('ui-users.settings.conditions.edit');
 
     if (!this.shouldRenderCondition()) {
@@ -87,24 +88,29 @@ class Conditions extends Component {
     const {
       name,
     } = this.getInitialValues();
-
     return (
-      <section className={css.partonBlockWrapperHolder}>
-        <div
-          data-test-conditions-wrapper
-          className={css.partonBlockWrapper}
-        >
-          <ConditionsForm
-            label={name}
-            initialValues={this.getInitialValues()}
-            onSubmit={this.onSubmit}
-            areConditionsEditable={areConditionsEditable}
-          />
-          <Callout ref={this.callout} />
-        </div>
-      </section>
+      <TitleManager
+        prefix={`${formatMessage({ id: 'ui-users.settings.users.title' })} - `}
+        page={formatMessage({ id: 'ui-users.settings.conditions' })}
+        record={name}
+      >
+        <section className={css.partonBlockWrapperHolder}>
+          <div
+            data-test-conditions-wrapper
+            className={css.partonBlockWrapper}
+          >
+            <ConditionsForm
+              label={name}
+              initialValues={this.getInitialValues()}
+              onSubmit={this.onSubmit}
+              areConditionsEditable={areConditionsEditable}
+            />
+            <Callout ref={this.callout} />
+          </div>
+        </section>
+      </TitleManager>
     );
   }
 }
 
-export default stripesConnect(Conditions);
+export default injectIntl(stripesConnect(Conditions));
