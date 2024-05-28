@@ -29,7 +29,7 @@ const SectionPageItem = ({ setting, path, hasInterface }) => {
   }
 
   if (hasInterface(setting?.dependsOnNoneInterface)) {
-    return null;
+    sectionItem = null;
   }
 
   return sectionItem;
