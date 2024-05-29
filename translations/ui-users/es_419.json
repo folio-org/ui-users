@@ -1170,5 +1170,15 @@
     "information.profilePicture.externalLink.modal.externalURL.invalidImageURLErrorMessage": "The provided URL is valid but does not point to an image file",
     "permission.view-reading-room-access": "Users: Can view reading room access",
     "permission.edit-reading-room-access": "Users: Can view, and edit reading room access",
-    "information.userType.dcb": "DCB"
+    "information.userType.dcb": "DCB",
+    "readingRoom.readingRoomAccess": "Acceso a la sala de lectura",
+    "readingRoom.access": "Acceso",
+    "readingRoom.name": "Nombre",
+    "readingRoom.note": "Nota",
+    "readingRoom.lastUpdated": "Last updated",
+    "readingRoom.filter": "Room name",
+    "readingRoom.allowed": "Permitido",
+    "readingRoom.notAllowed": "No autorizado",
+    "readingRoom.metaSection.lastUpdatedDetails": "{date} por {name}",
+    "settings.users.title": "Configuración de usuarios"
 }

@@ -1170,5 +1170,15 @@
     "information.profilePicture.externalLink.modal.externalURL.invalidImageURLErrorMessage": "Zadaná adresa URL je platná, ale neodkazuje na soubor obrázku",
     "permission.view-reading-room-access": "Uživatelé: Mohou zobrazit přístup do čítárny",
     "permission.edit-reading-room-access": "Uživatelé: Mohou prohlížet a upravovat přístup do čítárny",
-    "information.userType.dcb": "DCB"
+    "information.userType.dcb": "DCB",
+    "readingRoom.readingRoomAccess": "Přístup do čítárny",
+    "readingRoom.access": "Přístup",
+    "readingRoom.name": "Jméno",
+    "readingRoom.note": "Poznámka",
+    "readingRoom.lastUpdated": "Poslední aktualizace",
+    "readingRoom.filter": "Název místnosti",
+    "readingRoom.allowed": "Povoleno",
+    "readingRoom.notAllowed": "Nepovoleno",
+    "readingRoom.metaSection.lastUpdatedDetails": "{date} podle {name}",
+    "settings.users.title": "Users settings"
 }
