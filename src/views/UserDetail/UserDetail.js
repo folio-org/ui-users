@@ -59,6 +59,9 @@ import {
   getFullName,
   isAffiliationsEnabled,
   isDcbUser,
+  isPatronUser,
+  isStaffUser,
+  isShadowUser,
 } from '../../components/util';
 import RequestFeeFineBlockButtons from '../../components/RequestFeeFineBlockButtons';
 import { departmentsShape } from '../../shapes';
@@ -632,13 +635,10 @@ class UserDetail extends React.Component {
     const accounts = resources?.accounts;
     const isAffiliationsVisible = isAffiliationsEnabled(user);
 
-    const isShadowUser = user?.type === USER_TYPES.SHADOW;
     const isVirtualPatron = isDcbUser(user);
-    const showPatronBlocksSection = hasPatronBlocksPermissions && !isShadowUser;
+    const showPatronBlocksSection = hasPatronBlocksPermissions && !isShadowUser(user);
 
-    const isPatronUser = user?.type === USER_TYPES.PATRON;
-    const isStaffUser = user?.type === USER_TYPES.STAFF;
-    const displayReadingRoomAccessAccordion = isPatronUser || isStaffUser;
+    const displayReadingRoomAccessAccordion = isPatronUser(user) || isStaffUser(user);
     const readingRoomPermissions = resources?.userReadingRoomPermissions;
 
     if (this.userNotFound()) {
