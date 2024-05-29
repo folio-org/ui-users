@@ -68,7 +68,6 @@ import { departmentsShape } from '../../shapes';
 import ErrorPane from '../../components/ErrorPane';
 import LostItemsLink from '../../components/LostItemsLink';
 import IfConsortiumPermission from '../../components/IfConsortiumPermission';
-import { USER_TYPES } from '../../constants';
 import ActionMenuEditButton from './components/ActionMenuEditButton';
 import ActionMenuDeleteButton from './components/ActionMenuDeleteButton';
 import OpenTransactionModal from './components/OpenTransactionModal';
@@ -439,7 +438,7 @@ class UserDetail extends React.Component {
     const feeFineActions = get(resources, ['feefineactions', 'records'], []);
     const accounts = get(resources, ['accounts', 'records'], []);
     const loans = get(resources, ['loanRecords', 'records'], []);
-    const isShadowUser = user?.type === USER_TYPES.SHADOW;
+    const isShadowUserType = isShadowUser(user);
     const isVirtualPatron = isDcbUser(user);
 
     const feesFinesReportData = {
@@ -461,13 +460,13 @@ class UserDetail extends React.Component {
     if (showActionMenu && !isVirtualPatron) {
       return (
         <>
-          {!isShadowUser && (
+          {!isShadowUserType && (
             <IfInterface name="feesfines">
               <RequestFeeFineBlockButtons
                 barcode={barcode}
                 onToggle={onToggle}
                 userId={this.props.match.params.id}
-                disabled={isShadowUser}
+                disabled={isShadowUserType}
               />
             </IfInterface>
           )}
@@ -478,7 +477,7 @@ class UserDetail extends React.Component {
             goToEdit={this.goToEdit}
             editButton={this.editButton}
           />
-          {!isShadowUser && <LostItemsLink />}
+          {!isShadowUserType && <LostItemsLink />}
           <IfInterface name="feesfines">
             <ExportFeesFinesReportButton
               feesFinesReportData={feesFinesReportData}
@@ -636,7 +635,8 @@ class UserDetail extends React.Component {
     const isAffiliationsVisible = isAffiliationsEnabled(user);
 
     const isVirtualPatron = isDcbUser(user);
-    const showPatronBlocksSection = hasPatronBlocksPermissions && !isShadowUser(user);
+    const isShadowUserType = isShadowUser(user);
+    const showPatronBlocksSection = hasPatronBlocksPermissions && !isShadowUserType;
 
     const displayReadingRoomAccessAccordion = isPatronUser(user) || isStaffUser(user);
     const readingRoomPermissions = resources?.userReadingRoomPermissions;
@@ -792,7 +792,7 @@ class UserDetail extends React.Component {
                 }
 
                 {
-                  !isShadowUser && (
+                  !isShadowUserType && (
                     <>
                       <IfPermission perm="proxiesfor.collection.get">
                         <ProxyPermissions
