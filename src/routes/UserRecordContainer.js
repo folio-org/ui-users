@@ -13,6 +13,8 @@ import {
 import { departmentsShape } from '../shapes';
 import { MAX_RECORDS } from '../constants';
 
+import { isStaffUser, isPatronUser } from '../components/util';
+
 class UserRecordContainer extends React.Component {
   static manifest = Object.freeze({
     query: {},
@@ -187,7 +189,15 @@ class UserRecordContainer extends React.Component {
       type: 'okapi',
       // eslint-disable-next-line consistent-return
       path: (queryParams, pathComponents, resourceData, config, props) => {
-        if (props.stripes.hasPerm('reading-room.patron-permission.item.get') && pathComponents.id) {
+        const isCurrentUserUpdatedAsSelUser = props?.resources?.selUser?.records[0]?.id === pathComponents?.id;
+        const selUser = props?.resources?.selUser?.records[0];
+        const fetchUserReadingRoomsAccess = isCurrentUserUpdatedAsSelUser &&
+        (isStaffUser(selUser) || isPatronUser(selUser)) &&
+        props.stripes.hasInterface('reading-room-patron-permission') &&
+        props.stripes.hasPerm('reading-room.patron-permission.item.get') &&
+        pathComponents.id;
+
+        if (fetchUserReadingRoomsAccess) {
           return `reading-room-patron-permission/${pathComponents.id}`;
         }
       }
