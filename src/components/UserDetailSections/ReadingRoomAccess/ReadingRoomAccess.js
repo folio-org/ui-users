@@ -53,8 +53,8 @@ const ReadingRoomAccess = (props) => {
   }, [userRRAPermissions, isPending]);
 
   const filterReadingRoomsByName = (e) => {
-    const name = e.target.value;
-    const filteredRRs = userRRAPermissions.filter(r => r.readingRoomName.includes(name));
+    const name = e.target.value.toLowerCase();
+    const filteredRRs = userRRAPermissions.filter(r => r.readingRoomName.toLowerCase().includes(name));
     setSortedRecordsDetails(prev => ({
       ...prev,
       data: orderBy(filteredRRs, prev.order, prev.direction)
