@@ -334,10 +334,13 @@ feeFineActions
 
     const disabled = account.remaining === 0;
     const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
+    const waiveButtonDisabled = !this.props.stripes.hasPerm('ui-users.manual_waive');
+    const payButtonDisabled = !this.props.stripes.hasPerm('ui-users.manual_pay');
     const refundAllowed = isRefundAllowed(account, feeFineActions);
     const cancelAllowed = isCancelAllowed(account);
-
-    const showActionMenu = this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
+    const showActionMenu = this.props.stripes.hasPerm('ui-users.feesfines.actions.all') ||
+      this.props.stripes.hasPerm('ui-users.manual_waive') ||
+      this.props.stripes.hasPerm('ui-users.manual_pay');
 
     if (showActionMenu) {
       return (
@@ -345,7 +348,7 @@ feeFineActions
           <Button
             id="payAccountActionsHistory"
             buttonStyle="dropdownItem"
-            disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending || isClaimReturnedItem}
+            disabled={disabled || payButtonDisabled || isActionsPending || isAccountsPending || isClaimReturnedItem}
             onClick={this.pay}
           >
             <Icon icon="cart">
@@ -355,7 +358,7 @@ feeFineActions
           <Button
             id="waiveAccountActionsHistory"
             buttonStyle="dropdownItem"
-            disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending || isClaimReturnedItem}
+            disabled={disabled || waiveButtonDisabled || isActionsPending || isAccountsPending || isClaimReturnedItem}
             onClick={this.waive}
           >
             <Icon icon="cancel">
@@ -396,7 +399,7 @@ feeFineActions
             id="exportAccountActionsHistoryReport"
             buttonStyle="dropdownItem"
             data-test-export-account-actions-history-report
-            disabled={_.isEmpty(allFeeFineActions)}
+            disabled={_.isEmpty(allFeeFineActions) || buttonDisabled}
             onClick={this.generateFeesFinesReport}
           >
             <Icon icon="download">

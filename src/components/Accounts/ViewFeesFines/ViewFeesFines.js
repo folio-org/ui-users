@@ -411,6 +411,8 @@ class ViewFeesFines extends React.Component {
 
     // disable ellipses menu actions based on permissions
     const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
+    const waiveButtonDisabled = !this.props.stripes.hasPerm('ui-users.manual_waive');
+    const payButtonDisabled = !this.props.stripes.hasPerm('ui-users.manual_pay');
     const isClaimReturnedItem = (loan.item && loan.item.status && loan.item.status.name && loan.item.status.name === itemStatuses.CLAIMED_RETURNED);
     const loanText = isDisabled.loan ? 'ui-users.accounts.history.button.loanAnonymized' : 'ui-users.accounts.history.button.loanDetails';
     return (
@@ -419,10 +421,10 @@ class ViewFeesFines extends React.Component {
         usePortal
       >
         <DropdownMenu id="ellipsis-drop-down">
-          <this.MenuButton disabled={isDisabled.pay || buttonDisabled || isClaimReturnedItem} account={a} action="pay">
+          <this.MenuButton disabled={isDisabled.pay || payButtonDisabled || isClaimReturnedItem} account={a} action="pay">
             <FormattedMessage id="ui-users.accounts.history.button.pay" />
           </this.MenuButton>
-          <this.MenuButton disabled={isDisabled.waive || buttonDisabled || isClaimReturnedItem} account={a} action="waive">
+          <this.MenuButton disabled={isDisabled.waive || waiveButtonDisabled || isClaimReturnedItem} account={a} action="waive">
             <FormattedMessage id="ui-users.accounts.history.button.waive" />
           </this.MenuButton>
           <this.MenuButton disabled={isDisabled.refund || buttonDisabled || isClaimReturnedItem} account={a} action="refund">
