@@ -134,8 +134,8 @@ describe('EditReadingRoomAccess', () => {
     renderEditReadingRoomAccess(props);
     const accessSelectField = document.querySelectorAll('[id=reading-room-access-select]')[1];
     await act(async () => userEvent.click(accessSelectField));
-    const list = screen.getByRole('listbox');
-    await act(async () => userEvent.click(within(list).getByText('ui-users.readingRoom.notAllowed', { exact: false })));
+    const list = screen.getAllByRole('option');
+    await act(async () => userEvent.click(within(list[1]).getByText('ui-users.readingRoom.notAllowed', { exact: false })));
     await waitFor(() => expect(props.form.change).toHaveBeenCalled());
   });
 
@@ -145,8 +145,8 @@ describe('EditReadingRoomAccess', () => {
     await act(async () => userEvent.type(noteField1, 'note1'));
     const accessSelectField = document.querySelectorAll('[id=reading-room-access-select]')[0];
     await act(async () => userEvent.click(accessSelectField));
-    const list = screen.getByRole('listbox');
-    await act(async () => userEvent.click(within(list).getByText('ui-users.readingRoom.allowed', { exact: false })));
+    const list = screen.getAllByRole('option');
+    await act(async () => userEvent.click(within(list[0]).getByText('ui-users.readingRoom.allowed', { exact: false })));
     await waitFor(() => expect(props.form.change).toHaveBeenCalled());
   });
 });
