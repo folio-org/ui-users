@@ -1,6 +1,5 @@
-import { screen, waitFor, act } from '@folio/jest-config-stripes/testing-library/react';
+import { screen, waitFor, act, fireEvent } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
-import { within } from '@folio/jest-config-stripes/testing-library/dom';
 import { Form } from 'react-final-form';
 
 import { runAxeTest } from '@folio/stripes-testing';
@@ -132,10 +131,8 @@ describe('EditReadingRoomAccess', () => {
 
   it('should update access', async () => {
     renderEditReadingRoomAccess(props);
-    const accessSelectField = document.querySelectorAll('[id=reading-room-access-select]')[1];
-    await act(async () => userEvent.click(accessSelectField));
-    const list = screen.getByRole('listbox');
-    await act(async () => userEvent.click(within(list).getByText('ui-users.readingRoom.notAllowed', { exact: false })));
+    const accessSelectField = screen.getAllByRole('combobox')[1];
+    fireEvent.change(accessSelectField, { target: { value: 'ALLOWED' } });
     await waitFor(() => expect(props.form.change).toHaveBeenCalled());
   });
 
@@ -143,10 +140,9 @@ describe('EditReadingRoomAccess', () => {
     renderEditReadingRoomAccess(props);
     const noteField1 = document.querySelectorAll('[id^=textarea]')[0];
     await act(async () => userEvent.type(noteField1, 'note1'));
-    const accessSelectField = document.querySelectorAll('[id=reading-room-access-select]')[0];
-    await act(async () => userEvent.click(accessSelectField));
-    const list = screen.getByRole('listbox');
-    await act(async () => userEvent.click(within(list).getByText('ui-users.readingRoom.allowed', { exact: false })));
+
+    const accessSelectField = screen.getAllByRole('combobox')[0];
+    fireEvent.change(accessSelectField, { target: { value: 'NOT_ALLOWED' } });
     await waitFor(() => expect(props.form.change).toHaveBeenCalled());
   });
 });
