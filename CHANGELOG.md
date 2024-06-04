@@ -19,6 +19,7 @@
 * Implement Reading Room Access functionality in user profile edit. Refs UIU-3115.
 * Add HTML page titles for each page in Users Settings. Refs UIU-2935.
 * Make dependency on mod-reading-rooms optional. Refs UIU-3146.
+* Make Reading Room Filter case insensitive. Refs UIU-3150.
 * Improve UX of Reading Room Access accordion selection box in user profile edit. Refs UIU-3151.
 
 ## [10.1.1](https://github.com/folio-org/ui-users/tree/v10.1.1) (2024-05-07)
