@@ -18,6 +18,7 @@ import { rraColumns, DEFAULT_SORT_ORDER } from './constant';
 import { sortTypes } from '../../../constants';
 import { getFormatter } from './getFormatter';
 import css from './ReadingRoomAccess.css';
+import { getReadingRoomSortedData } from '../../util/util';
 
 const ReadingRoomAccess = (props) => {
   const {
@@ -59,20 +60,6 @@ const ReadingRoomAccess = (props) => {
       ...prev,
       data: orderBy(filteredRRs, prev.order, prev.direction)
     }));
-  };
-
-  const onSort = (e, meta) => {
-    let newSortDirection = sortTypes.ASC;
-    if (sortedRecordsDetails.order === meta.name) {
-      newSortDirection = sortedRecordsDetails.direction === sortTypes.ASC ? sortTypes.DESC : sortTypes.ASC;
-    }
-    const sortedData = orderBy(sortedRecordsDetails.data, [meta.name], newSortDirection);
-
-    setSortedRecordsDetails({
-      data: sortedData,
-      order: meta.name,
-      direction: newSortDirection
-    });
   };
 
   const renderName = (usr) => {
@@ -134,7 +121,9 @@ const ReadingRoomAccess = (props) => {
         formatter={getFormatter(lastUpdatedDetails)}
         sortOrder={sortedRecordsDetails.order}
         sortDirection={`${sortedRecordsDetails.direction}ending`}
-        onHeaderClick={onSort}
+        onHeaderClick={(e, meta) => setSortedRecordsDetails(
+          getReadingRoomSortedData(e, meta, sortedRecordsDetails)
+        )}
         sortedColumn={sortedRecordsDetails.order}
       />
     </Accordion>

@@ -19,6 +19,7 @@
 * Implement Reading Room Access functionality in user profile edit. Refs UIU-3115.
 * Add HTML page titles for each page in Users Settings. Refs UIU-2935.
 * Make dependency on mod-reading-rooms optional. Refs UIU-3146.
+* Support sorting for each column in the Reading Room Access accordion in User Profile Edit. Refs UIU-3132.
 
 ## [10.1.1](https://github.com/folio-org/ui-users/tree/v10.1.1) (2024-05-07)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.1.0...v10.1.1)

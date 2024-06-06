@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { every } from 'lodash';
+import { every, orderBy } from 'lodash';
 import queryString from 'query-string';
 
 import { NoValue } from '@folio/stripes/components';
@@ -234,4 +234,19 @@ export const isAValidImageUrl = async (url) => {
   } catch (e) {
     return false;
   }
+};
+
+export const getReadingRoomSortedData = (e, meta, recordDetails) => {
+  let newSortDirection = sortTypes.ASC;
+  if (recordDetails.order === meta.name) {
+    newSortDirection = recordDetails.direction === sortTypes.ASC ? sortTypes.DESC : sortTypes.ASC;
+  }
+  const sortedData = orderBy(recordDetails.data,
+    [sortedRecord => sortedRecord[meta.name]?.toLowerCase()], newSortDirection);
+
+  return {
+    data: sortedData,
+    order: meta.name,
+    direction: newSortDirection
+  };
 };
