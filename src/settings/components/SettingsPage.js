@@ -4,7 +4,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { IfInterface, useStripes } from '@folio/stripes/core';
+import { IfInterface } from '@folio/stripes/core';
 import {
   Headline,
   NavList,
@@ -17,7 +17,6 @@ import SectionPageItem from './SectionPageItem';
 
 const SettingsPage = ({ sections, path }) => {
   const paneTitleRef = useRef(null);
-  const stripes = useStripes();
 
   useEffect(() => {
     if (paneTitleRef.current) {
@@ -40,7 +39,7 @@ const SettingsPage = ({ sections, path }) => {
         {sections.map((section, index) => {
           const sectionInner = (
             <NavListSection key={index} label={section.label} tag="h3" data-test-settingspage>
-              {section.pages.map((setting) => <SectionPageItem hasInterface={(arg) => stripes.hasInterface(arg)} setting={setting} path={path} key={setting.route} />)}
+              {section.pages.map((setting) => <SectionPageItem setting={setting} path={path} key={setting.route} />)}
             </NavListSection>
           );
           return section.interface ? <IfInterface name={section.interface} key={index}>{sectionInner}</IfInterface> : sectionInner;

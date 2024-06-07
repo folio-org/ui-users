@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { IfInterface, IfPermission } from '@folio/stripes/core';
+import { IfInterface, IfPermission, useStripes } from '@folio/stripes/core';
 import {
   NavListItem,
 } from '@folio/stripes/components';
 
-const SectionPageItem = ({ setting, path, hasInterface }) => {
+const SectionPageItem = ({ setting, path }) => {
+  const stripes = useStripes();
   let sectionItem = (
     <NavListItem to={`${path}/${setting.route}`} data-test-sectionpageitem>
       {setting.label}
@@ -28,7 +29,7 @@ const SectionPageItem = ({ setting, path, hasInterface }) => {
     );
   }
 
-  if (hasInterface(setting?.dependsOnNoneInterface)) {
+  if (stripes.hasInterface(setting?.unlessInterface)) {
     sectionItem = null;
   }
 
@@ -42,9 +43,8 @@ SectionPageItem.propTypes = {
     label: PropTypes.element,
     perm: PropTypes.string,
     route: PropTypes.string,
-    dependsOnNoneInterface: PropTypes.string
+    unlessInterface: PropTypes.string
   }),
-  hasInterface: PropTypes.func
 };
 
 export default SectionPageItem;

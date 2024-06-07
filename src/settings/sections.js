@@ -25,7 +25,7 @@ const settingsGeneral = [
     label: <FormattedMessage id="ui-users.settings.permissionSet" />,
     component: PermissionSets,
     perm: 'ui-users.settings.permsets.view',
-    dependsOnNoneInterface: 'roles'
+    unlessInterface: 'roles'
   },
   {
     route: 'groups',

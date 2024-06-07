@@ -6,18 +6,18 @@ import {
 } from '@folio/jest-config-stripes/testing-library/react';
 import { createMemoryHistory } from 'history';
 import { FormattedMessage } from 'react-intl';
+import { useStripes } from '@folio/stripes/core';
 
 import '__mock__';
 import SectionPageItem from './SectionPageItem';
 
-const renderSectionPageItem = ({ setting, path, hasInterface = () => false }) => {
+const renderSectionPageItem = ({ setting, path }) => {
   const history = createMemoryHistory();
   return render(
     <Router history={history}>
       <SectionPageItem
         setting={setting}
         path={path}
-        hasInterface={hasInterface}
       />
     </Router>
   );
@@ -25,6 +25,14 @@ const renderSectionPageItem = ({ setting, path, hasInterface = () => false }) =>
 
 describe('Settings SectionPageItem', () => {
   let sectionPageItem;
+  beforeAll(() => {
+    useStripes.mockClear().mockReturnValue({ hasInterface: () => false });
+  });
+
+  afterAll(() => {
+    jest.clearAllMocks();
+    cleanup();
+  });
 
   describe('vanilla', () => {
     beforeEach(() => {
@@ -47,8 +55,6 @@ describe('Settings SectionPageItem', () => {
       expect(sectionContent).toBeVisible();
     });
   });
-
-
 
   describe('with interface present', () => {
     beforeEach(() => {
@@ -142,18 +148,18 @@ describe('Settings SectionPageItem', () => {
     });
   });
 
-  describe('with dependsOnNoneInterface', () => {
+  describe('with unlessInterface', () => {
     beforeEach(() => {
+      useStripes.mockClear().mockReturnValue({ hasInterface: () => true });
       sectionPageItem = renderSectionPageItem({
         setting: {
           route: 'some-route',
           label: <FormattedMessage id="foo" />,
           component: <div />,
           perm: 'permission',
-          dependsOnNoneInterface: 'goats'
+          unlessInterface: 'goats'
         },
         path: 'funky-chicken',
-        hasInterface: () => true
       });
     });
 
@@ -167,18 +173,18 @@ describe('Settings SectionPageItem', () => {
     });
   });
 
-  describe('with no interface of dependsOnNoneInterface', () => {
+  describe('with no interface of unlessInterface', () => {
     beforeEach(() => {
+      useStripes.mockClear().mockReturnValue({ hasInterface: () => false });
       sectionPageItem = renderSectionPageItem({
         setting: {
           route: 'some-route',
           label: <FormattedMessage id="foo" />,
           component: <div />,
           perm: 'permission',
-          dependsOnNoneInterface: 'goats'
+          unlessInterface: 'goats'
         },
         path: 'funky-chicken',
-        hasInterface: () => false
       });
     });
 
