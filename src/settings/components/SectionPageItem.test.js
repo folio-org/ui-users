@@ -6,6 +6,7 @@ import {
 } from '@folio/jest-config-stripes/testing-library/react';
 import { createMemoryHistory } from 'history';
 import { FormattedMessage } from 'react-intl';
+import { useStripes } from '@folio/stripes/core';
 
 import '__mock__';
 import SectionPageItem from './SectionPageItem';
@@ -24,6 +25,14 @@ const renderSectionPageItem = ({ setting, path }) => {
 
 describe('Settings SectionPageItem', () => {
   let sectionPageItem;
+  beforeAll(() => {
+    useStripes.mockClear().mockReturnValue({ hasInterface: () => false });
+  });
+
+  afterAll(() => {
+    jest.clearAllMocks();
+    cleanup();
+  });
 
   describe('vanilla', () => {
     beforeEach(() => {
@@ -46,8 +55,6 @@ describe('Settings SectionPageItem', () => {
       expect(sectionContent).toBeVisible();
     });
   });
-
-
 
   describe('with interface present', () => {
     beforeEach(() => {
@@ -138,6 +145,56 @@ describe('Settings SectionPageItem', () => {
       const sectionContent = container.querySelector('[data-test-sectionpageitem]');
       expect(container).toBeVisible();
       expect(sectionContent).toBeNull();
+    });
+  });
+
+  describe('with unlessInterface', () => {
+    beforeEach(() => {
+      useStripes.mockClear().mockReturnValue({ hasInterface: () => true });
+      sectionPageItem = renderSectionPageItem({
+        setting: {
+          route: 'some-route',
+          label: <FormattedMessage id="foo" />,
+          component: <div />,
+          perm: 'permission',
+          unlessInterface: 'goats'
+        },
+        path: 'funky-chicken',
+      });
+    });
+
+    afterEach(cleanup);
+
+    it('should not be rendered', () => {
+      const { container } = sectionPageItem;
+      const sectionContent = container.querySelector('[data-test-sectionpageitem]');
+      expect(container).toBeVisible();
+      expect(sectionContent).toBeNull();
+    });
+  });
+
+  describe('with no interface of unlessInterface', () => {
+    beforeEach(() => {
+      useStripes.mockClear().mockReturnValue({ hasInterface: () => false });
+      sectionPageItem = renderSectionPageItem({
+        setting: {
+          route: 'some-route',
+          label: <FormattedMessage id="foo" />,
+          component: <div />,
+          perm: 'permission',
+          unlessInterface: 'goats'
+        },
+        path: 'funky-chicken',
+      });
+    });
+
+    afterEach(cleanup);
+
+    it('should be rendered', () => {
+      const { container } = sectionPageItem;
+      const sectionContent = container.querySelector('[data-test-sectionpageitem]');
+      expect(container).toBeVisible();
+      expect(sectionContent).not.toBeNull();
     });
   });
 });
