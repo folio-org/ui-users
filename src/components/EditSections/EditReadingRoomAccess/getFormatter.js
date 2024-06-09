@@ -4,7 +4,7 @@ import { Field } from 'react-final-form';
 import { cloneDeep } from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 
-import { Selection, TextArea } from '@folio/stripes/components';
+import { Select, TextArea } from '@folio/stripes/components';
 
 import { rraColumns, READING_ROOM_ACCESS_OPTIONS } from './constants';
 
@@ -35,13 +35,14 @@ export const getFormatter = (form) => {
           aria-label={`${rraColumns.ACCESS}-${rowIndex}`}
           render={({ input }) => {
             return (
-              <Selection
+              <Select
                 ariaLabel="reading-room access"
                 dataOptions={READING_ROOM_ACCESS_OPTIONS}
                 id="reading-room-access-select"
+                defaultValue={record.access}
                 value={record.access}
-                onChange={(val) => {
-                  updateRecord(record, val, input.name);
+                onChange={(e) => {
+                  updateRecord(record, e.target.value, input.name);
                 }}
               />
             );
