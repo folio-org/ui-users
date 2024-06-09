@@ -9,20 +9,23 @@ import { Selection, TextArea } from '@folio/stripes/components';
 import { rraColumns, READING_ROOM_ACCESS_OPTIONS } from './constants';
 
 export const getFormatter = (form) => {
-  const updateRecord = (record, val, name, rowIndex) => {
-    const fieldState = form.getFieldState('readingRoomsAccessList');
-    if (fieldState?.value && fieldState.value[rowIndex]) {
-      form.change(`readingRoomsAccessList[${rowIndex}][${name}]`, val);
+  const updateRecord = (record, val, name) => {
+    const rraFormList = form.getFieldState('readingRoomsAccessList')?.value;
+    const isRecordInRRAList = rraFormList?.find((field) => field?.readingRoomId === record?.readingRoomId);
+    if (rraFormList?.length && isRecordInRRAList) {
+      const recordIndex = rraFormList.findIndex((field) => field?.readingRoomId === record?.readingRoomId);
+      form.change(`readingRoomsAccessList[${recordIndex}][${name}]`, val);
     } else {
       const clonedRecord = cloneDeep(record);
       clonedRecord[name] = val;
       if (!clonedRecord.id) {
         clonedRecord.id = uuidv4();
       }
-      form.change(`readingRoomsAccessList[${rowIndex}]`, clonedRecord);
+      form.change(`readingRoomsAccessList[${rraFormList?.length || 0}]`, clonedRecord);
     }
   };
 
+  // remove rowIndex below ..
   return ({
     [rraColumns.ACCESS] : Object.assign(
       ({ rowIndex, ...record }) => (
@@ -38,7 +41,7 @@ export const getFormatter = (form) => {
                 id="reading-room-access-select"
                 value={record.access}
                 onChange={(val) => {
-                  updateRecord(record, val, input.name, rowIndex);
+                  updateRecord(record, val, input.name);
                 }}
               />
             );
@@ -61,7 +64,7 @@ export const getFormatter = (form) => {
               marginBottom0
               value={record?.notes}
               onChange={(e) => {
-                updateRecord(record, e.target.value, input.name, rowIndex);
+                updateRecord(record, e.target.value, input.name);
               }}
             />
           )}

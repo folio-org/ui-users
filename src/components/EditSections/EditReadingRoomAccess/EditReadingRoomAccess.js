@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { cloneDeep, noop, orderBy } from 'lodash';
+import { OnChange } from 'react-final-form-listeners';
 
 import {
   Accordion,
   Badge,
   Headline,
-  Loading,
   MultiColumnList,
 } from '@folio/stripes/components';
 
@@ -39,7 +39,6 @@ const EditReadingRoomAccess = ({
     direction: sortTypes.ASC,
   };
   const [sortedRecordsDetails, setSortedRecordsDetails] = useState(sortInitialState);
-  const [sortedRecordsIsLoading, setSortedRecordsIsLoading] = useState(false);
 
   useEffect(() => {
     const unregisterReadingRoomAccessList = form.registerField('readingRoomsAccessList', noop, { initialValue: [] });
@@ -54,29 +53,20 @@ const EditReadingRoomAccess = ({
       ...prev,
       data: orderBy(formData, [data => data[prev.order]?.toLowerCase()], prev.direction)
     }));
-  }, [formData, form]);
+  }, [formData]);
 
-  const onSort = (e, meta) => {
-    setSortedRecordsIsLoading(true);
-    const recordDetails = cloneDeep(sortedRecordsDetails);
-    const updatedRecords = form.getFieldState('readingRoomsAccessList').value;
-
-    updatedRecords?.forEach(updatedRecord => {
-      const index = recordDetails?.data?.findIndex(record => record.readingRoomId === updatedRecord.readingRoomId);
-      if (index !== -1) {
-        recordDetails.data[index] = updatedRecord;
-      }
-    });
-
-    setSortedRecordsDetails(
-      getReadingRoomSortedData(e, meta, recordDetails)
-    );
-  // setState callback, use Transition
+  const updateSortedRecordDetails = (updatedRRAFormValues) => {
+    if (updatedRRAFormValues?.length) {
+      const recordDetails = cloneDeep(sortedRecordsDetails);
+      updatedRRAFormValues?.forEach(updatedRecord => {
+        const index = recordDetails?.data?.findIndex(record => record.readingRoomId === updatedRecord.readingRoomId);
+        if (index !== -1) {
+          recordDetails.data[index] = updatedRecord;
+        }
+      });
+      setSortedRecordsDetails(recordDetails);
+    }
   };
-
-  useEffect(() => {
-    setSortedRecordsIsLoading(false);
-  }, [sortedRecordsDetails]);
 
   return (
     <Accordion
@@ -86,19 +76,25 @@ const EditReadingRoomAccess = ({
       label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.readingRoom.readingRoomAccess" /></Headline>}
       displayWhenClosed={<Badge>{formData.length}</Badge>}
     >
-      { sortedRecordsIsLoading ? <Loading /> :
+      <OnChange name="readingRoomsAccessList">
+        {(updatedRRAFormValues) => {
+          updateSortedRecordDetails(updatedRRAFormValues);
+        }}
+      </OnChange>
       <MultiColumnList
         striped
-        contentData={sortedRecordsDetails?.data}
+        contentData={sortedRecordsDetails?.data || []}
         columnMapping={columnMapping}
         visibleColumns={visibleColumns}
         formatter={getFormatter(form)}
         columnWidths={columnWidths}
         sortOrder={sortedRecordsDetails.order}
         sortDirection={`${sortedRecordsDetails.direction}ending`}
-        onHeaderClick={onSort}
+        onHeaderClick={(e, meta) => setSortedRecordsDetails(
+          getReadingRoomSortedData(e, meta, sortedRecordsDetails)
+        )}
         sortedColumn={sortedRecordsDetails.order}
-      /> }
+      />
     </Accordion>
   );
 };
