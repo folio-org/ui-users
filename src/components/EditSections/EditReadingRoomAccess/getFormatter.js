@@ -9,15 +9,14 @@ import { Select, TextArea } from '@folio/stripes/components';
 import { rraColumns, READING_ROOM_ACCESS_OPTIONS } from './constants';
 
 export const getFormatter = (form) => {
-  const updateRecord = (record, val, name) => {
+  const updateRecord = (record, inputValue, name) => {
     const rraFormList = form.getFieldState('readingRoomsAccessList')?.value;
-    const isRecordInRRAList = rraFormList?.find((field) => field?.readingRoomId === record?.readingRoomId);
-    if (rraFormList?.length && isRecordInRRAList) {
-      const recordIndex = rraFormList.findIndex((field) => field?.readingRoomId === record?.readingRoomId);
-      form.change(`readingRoomsAccessList[${recordIndex}][${name}]`, val);
+    const recordIndexInRRAList = rraFormList?.findIndex((field) => field?.readingRoomId === record?.readingRoomId);
+    if (rraFormList?.length && recordIndexInRRAList !== -1) {
+      form.change(`readingRoomsAccessList[${recordIndexInRRAList}][${name}]`, inputValue);
     } else {
       const clonedRecord = cloneDeep(record);
-      clonedRecord[name] = val;
+      clonedRecord[name] = inputValue;
       if (!clonedRecord.id) {
         clonedRecord.id = uuidv4();
       }
@@ -25,7 +24,6 @@ export const getFormatter = (form) => {
     }
   };
 
-  // remove rowIndex below ..
   return ({
     [rraColumns.ACCESS] : Object.assign(
       ({ rowIndex, ...record }) => (

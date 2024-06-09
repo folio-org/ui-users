@@ -145,4 +145,15 @@ describe('EditReadingRoomAccess', () => {
     fireEvent.change(accessSelectField, { target: { value: 'NOT_ALLOWED' } });
     await waitFor(() => expect(props.form.change).toHaveBeenCalled());
   });
+
+  it('should sort the records by default by room name', () => {
+    renderEditReadingRoomAccess(props);
+    expect(document.querySelectorAll('[class^="mclCell"]')[1].innerHTML).toBe('abc');
+  });
+
+  it('should sort the records by room name when name column header is clicked', () => {
+    renderEditReadingRoomAccess(props);
+    fireEvent.click(document.getElementById('clickable-list-column-readingroomname'));
+    expect(document.querySelectorAll('[class^="mclCell"]')[1].innerHTML).toBe('rr-4');
+  });
 });

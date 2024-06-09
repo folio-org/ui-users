@@ -83,7 +83,7 @@ const EditReadingRoomAccess = ({
       </OnChange>
       <MultiColumnList
         striped
-        contentData={sortedRecordsDetails?.data || []}
+        contentData={sortedRecordsDetails.data}
         columnMapping={columnMapping}
         visibleColumns={visibleColumns}
         formatter={getFormatter(form)}
