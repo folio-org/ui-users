@@ -6,6 +6,7 @@ import { runAxeTest } from '@folio/stripes-testing';
 
 import renderWithRouter from 'helpers/renderWithRouter';
 import '../../../../test/jest/__mock__/matchMedia.mock';
+import '../../../../test/jest/__mock__/reactFinalFormListeners.mock';
 
 import EditReadingRoomAccess from './EditReadingRoomAccess';
 
