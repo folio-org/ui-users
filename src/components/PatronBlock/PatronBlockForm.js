@@ -322,7 +322,6 @@ class PatronBlockForm extends React.Component {
                       <Field
                         name="expirationDate"
                         component={Datepicker}
-                        dateFormat="YYYY-MM-DD"
                         label={<FormattedMessage id="ui-users.blocks.form.label.date" />}
                         backendDateStandard="YYYY-MM-DD"
                         timeZone="UTC"

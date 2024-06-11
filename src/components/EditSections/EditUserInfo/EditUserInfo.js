@@ -347,9 +347,9 @@ class EditUserInfo extends React.Component {
                 </Col>
                 <Col xs={12} md={3}>
                   <Field
+                    backendDateStandard="YYYY-MM-DD"
                     component={Datepicker}
                     label={<FormattedMessage id="ui-users.expirationDate" />}
-                    dateFormat="YYYY-MM-DD"
                     defaultValue={initialValues.expirationDate}
                     name="expirationDate"
                     id="adduser_expirationdate"
