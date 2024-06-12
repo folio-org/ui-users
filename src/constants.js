@@ -18,6 +18,7 @@ export const itemStatuses = {
 
 export const loanStatuses = {
   CLOSED: 'Closed',
+  OPEN: 'Open',
 };
 
 export const accountStatuses = {
