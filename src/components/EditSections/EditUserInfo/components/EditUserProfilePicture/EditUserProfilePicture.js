@@ -23,7 +23,7 @@ import { getRotatedImage, createImage } from './utils/canvasUtils';
 import {
   ACCEPTED_IMAGE_TYPES,
   PROFILE_PIC_API,
-  PROFILE_PIC_DEFAULT_MAX_SIZE,
+  PROFILE_PIC_DEFAULT_MAX_SIZE_IN_MB,
 } from '../../../../../constants';
 
 const ORIENTATION_TO_ANGLE = {
@@ -110,7 +110,7 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal, profilePictu
   };
 
   const onFileChange = async (e) => {
-    const maxFileSize = profilePictureMaxFileSize || PROFILE_PIC_DEFAULT_MAX_SIZE;
+    const maxFileSize = profilePictureMaxFileSize || PROFILE_PIC_DEFAULT_MAX_SIZE_IN_MB;
     const maxFileSizeInBytes = maxFileSize * 1024 * 1024;
     if (maxFileSizeInBytes && e.target.files?.length > 0) {
       if (e.target.files[0].size > maxFileSizeInBytes) {

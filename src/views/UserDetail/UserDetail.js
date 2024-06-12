@@ -49,6 +49,7 @@ import {
   UserAccounts,
   UserAffiliations,
   UserServicePoints,
+  ReadingRoomAccess,
 } from '../../components/UserDetailSections';
 import HelperApp from '../../components/HelperApp';
 import IfConsortium from '../../components/IfConsortium';
@@ -58,13 +59,15 @@ import {
   getFullName,
   isAffiliationsEnabled,
   isDcbUser,
+  isPatronUser,
+  isStaffUser,
+  isShadowUser,
 } from '../../components/util';
 import RequestFeeFineBlockButtons from '../../components/RequestFeeFineBlockButtons';
 import { departmentsShape } from '../../shapes';
 import ErrorPane from '../../components/ErrorPane';
 import LostItemsLink from '../../components/LostItemsLink';
 import IfConsortiumPermission from '../../components/IfConsortiumPermission';
-import { USER_TYPES } from '../../constants';
 import ActionMenuEditButton from './components/ActionMenuEditButton';
 import ActionMenuDeleteButton from './components/ActionMenuDeleteButton';
 import OpenTransactionModal from './components/OpenTransactionModal';
@@ -124,6 +127,9 @@ class UserDetail extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
       suppressEdit: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      userReadingRoomPermissions: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }),
@@ -196,6 +202,7 @@ class UserDetail extends React.Component {
         servicePointsSection: false,
         notesAccordion: false,
         customFields: false,
+        readingRoomAccessSection: false,
       },
     };
 
@@ -431,7 +438,7 @@ class UserDetail extends React.Component {
     const feeFineActions = get(resources, ['feefineactions', 'records'], []);
     const accounts = get(resources, ['accounts', 'records'], []);
     const loans = get(resources, ['loanRecords', 'records'], []);
-    const isShadowUser = user?.type === USER_TYPES.SHADOW;
+    const isShadowUserType = isShadowUser(user);
     const isVirtualPatron = isDcbUser(user);
 
     const feesFinesReportData = {
@@ -453,13 +460,13 @@ class UserDetail extends React.Component {
     if (showActionMenu && !isVirtualPatron) {
       return (
         <>
-          {!isShadowUser && (
+          {!isShadowUserType && (
             <IfInterface name="feesfines">
               <RequestFeeFineBlockButtons
                 barcode={barcode}
                 onToggle={onToggle}
                 userId={this.props.match.params.id}
-                disabled={isShadowUser}
+                disabled={isShadowUserType}
               />
             </IfInterface>
           )}
@@ -470,7 +477,7 @@ class UserDetail extends React.Component {
             goToEdit={this.goToEdit}
             editButton={this.editButton}
           />
-          {!isShadowUser && <LostItemsLink />}
+          {!isShadowUserType && <LostItemsLink />}
           <IfInterface name="feesfines">
             <ExportFeesFinesReportButton
               feesFinesReportData={feesFinesReportData}
@@ -627,9 +634,12 @@ class UserDetail extends React.Component {
     const accounts = resources?.accounts;
     const isAffiliationsVisible = isAffiliationsEnabled(user);
 
-    const isShadowUser = user?.type === USER_TYPES.SHADOW;
     const isVirtualPatron = isDcbUser(user);
-    const showPatronBlocksSection = hasPatronBlocksPermissions && !isShadowUser;
+    const isShadowUserType = isShadowUser(user);
+    const showPatronBlocksSection = hasPatronBlocksPermissions && !isShadowUserType;
+
+    const displayReadingRoomAccessAccordion = isPatronUser(user) || isStaffUser(user);
+    const readingRoomPermissions = resources?.userReadingRoomPermissions;
 
     if (this.userNotFound()) {
       return (
@@ -767,7 +777,22 @@ class UserDetail extends React.Component {
                   noCustomFieldsFoundLabel={<FormattedMessage id="ui-users.custom.noCustomFieldsFound" />}
                 />
                 {
-                  !isShadowUser && (
+                  displayReadingRoomAccessAccordion && (
+                    <IfInterface name="reading-room-patron-permission">
+                      <IfPermission perm="ui-users.view-reading-room-access">
+                        <ReadingRoomAccess
+                          accordionId="readingRoomAccessSection"
+                          onToggle={this.handleSectionToggle}
+                          expanded={sections.readingRoomAccessSection}
+                          readingRoomPermissions={readingRoomPermissions}
+                        />
+                      </IfPermission>
+                    </IfInterface>
+                  )
+                }
+
+                {
+                  !isShadowUserType && (
                     <>
                       <IfPermission perm="proxiesfor.collection.get">
                         <ProxyPermissions

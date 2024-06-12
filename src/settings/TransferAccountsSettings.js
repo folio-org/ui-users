@@ -4,11 +4,13 @@ import {
   injectIntl,
   FormattedMessage,
 } from 'react-intl';
+
 import {
   Label,
 } from '@folio/stripes/components';
 import { ControlledVocab } from '@folio/stripes/smart-components';
-import { stripesConnect } from '@folio/stripes/core';
+import { stripesConnect, TitleManager } from '@folio/stripes/core';
+
 import { validate } from '../components/util';
 import { Owners } from './FeeFinesTable';
 
@@ -91,29 +93,33 @@ class TransferAccountsSettings extends React.Component {
     const hasDeletePerm = stripes.hasPerm('transfers.item.delete');
 
     return (
-      <this.connectedControlledVocab
-        {...this.props}
-        baseUrl="transfers"
-        columnMapping={columnMapping}
-        hiddenFields={['numberOfObjects']}
-        id="settings-transfers"
-        label={formatMessage({ id: 'ui-users.transfers.label' })}
-        labelSingular={label}
-        nameKey="transfer"
-        objectLabel=""
-        preCreateHook={preCreateHook}
-        records="transfers"
-        rowFilter={<Owners dataOptions={owners} onChange={this.onChangeOwner} />}
-        rowFilterFunction={(item) => (item.ownerId === ownerId)}
-        sortby="accountName"
-        validate={(item, index, items) => validate(item, index, items, 'accountName', label)}
-        visibleFields={['accountName', 'desc']}
-        canCreate={hasCreatePerm}
-        actionSuppressor={{
-          edit: _ => !hasEditPerm,
-          delete: _ => !hasDeletePerm,
-        }}
-      />
+      <TitleManager
+        record={formatMessage({ id: 'ui-users.settings.transferAccounts' })}
+      >
+        <this.connectedControlledVocab
+          {...this.props}
+          baseUrl="transfers"
+          columnMapping={columnMapping}
+          hiddenFields={['numberOfObjects']}
+          id="settings-transfers"
+          label={formatMessage({ id: 'ui-users.transfers.label' })}
+          labelSingular={label}
+          nameKey="transfer"
+          objectLabel=""
+          preCreateHook={preCreateHook}
+          records="transfers"
+          rowFilter={<Owners dataOptions={owners} onChange={this.onChangeOwner} />}
+          rowFilterFunction={(item) => (item.ownerId === ownerId)}
+          sortby="accountName"
+          validate={(item, index, items) => validate(item, index, items, 'accountName', label)}
+          visibleFields={['accountName', 'desc']}
+          canCreate={hasCreatePerm}
+          actionSuppressor={{
+            edit: _ => !hasEditPerm,
+            delete: _ => !hasDeletePerm,
+          }}
+        />
+      </TitleManager>
     );
   }
 }

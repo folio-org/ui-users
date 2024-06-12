@@ -8,7 +8,7 @@ import {
   isEmpty,
 } from 'lodash';
 
-import { stripesConnect } from '@folio/stripes/core';
+import { stripesConnect, TitleManager } from '@folio/stripes/core';
 import { Settings } from '@folio/stripes/smart-components';
 
 import Limits from './patronBlocks/Limits/Limits';
@@ -66,6 +66,7 @@ class LimitsSettings extends Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }).isRequired,
     }),
+    intl: PropTypes.object,
   };
 
   static defaultProps = {
@@ -88,7 +89,8 @@ class LimitsSettings extends Component {
         groups: {
           records: groups,
         }
-      }
+      },
+      intl: { formatMessage },
     } = this.props;
     const routes = [];
 
@@ -99,13 +101,19 @@ class LimitsSettings extends Component {
       } = group;
       const renderLimits = () => {
         return (
-          <Limits
-            key={id}
-            patronGroupId={id}
-            patronGroup={patronGroup}
-            patronBlockConditions={this.getPatronBlockConditions()}
-            patronBlockLimits={this.getPatronBlockLimits()}
-          />
+          <TitleManager
+            prefix={`${formatMessage({ id: 'ui-users.settings.users.title' })} - `}
+            page={formatMessage({ id: 'ui-users.settings.limits' })}
+            record={patronGroup}
+          >
+            <Limits
+              key={id}
+              patronGroupId={id}
+              patronGroup={patronGroup}
+              patronBlockConditions={this.getPatronBlockConditions()}
+              patronBlockLimits={this.getPatronBlockLimits()}
+            />
+          </TitleManager>
         );
       };
 
@@ -127,15 +135,21 @@ class LimitsSettings extends Component {
   }
 
   render() {
-    if (!this.shouldRenderSettings()) return null;
+    const { intl: { formatMessage } } = this.props;
 
     return (
-      <Settings
-        {...this.props}
-        navPaneWidth="fill"
-        paneTitle={<FormattedMessage id="ui-users.settings.limits" />}
-        pages={this.getPatronGroupsPages()}
-      />
+      <TitleManager
+        record={formatMessage({ id: 'ui-users.settings.limits' })}
+      >
+        {this.shouldRenderSettings() ?
+          <Settings
+            {...this.props}
+            navPaneWidth="fill"
+            paneTitle={<FormattedMessage id="ui-users.settings.limits" />}
+            pages={this.getPatronGroupsPages()}
+          /> :
+          null}
+      </TitleManager>
     );
   }
 }

@@ -6,7 +6,7 @@ import {
 
 import { NoValue } from '@folio/stripes/components';
 import { ControlledVocab } from '@folio/stripes/smart-components';
-import { useStripes } from '@folio/stripes/core';
+import { useStripes, TitleManager } from '@folio/stripes/core';
 import { getSourceSuppressor } from '@folio/stripes/util';
 
 import { RECORD_SOURCE } from '../constants';
@@ -45,31 +45,35 @@ const DepartmentsSettings = () => {
   const hasCreatePerm = stripes.hasPerm('ui-users.settings.departments.create');
 
   return (
-    <ConnectedControlledVocab
-      canCreate={hasCreatePerm}
-      stripes={stripes}
-      baseUrl="departments"
-      records="departments"
-      label={formatMessage({ id: 'ui-users.settings.departments' })}
-      labelSingular={formatMessage({ id: 'ui-users.settings.department' })}
-      objectLabel={<FormattedMessage id="ui-users.settings.departments.users" />}
-      visibleFields={['name', 'code']}
-      columnMapping={{
-        name: formatMessage({ id: 'ui-users.settings.departments.name' }),
-        code: formatMessage({ id: 'ui-users.settings.departments.code' }),
-      }}
-      nameKey="department"
-      id="departments"
-      sortby="name"
-      formatter={{
-        numberOfObjects: item => item.usageNumber || <NoValue />,
-      }}
-      validate={validate}
-      actionSuppressor={{
-        delete: item => !hasDeletePerm || item.usageNumber || suppress(item),
-        edit: (item) => !hasEditPerm || suppress(item),
-      }}
-    />
+    <TitleManager
+      record={formatMessage({ id: 'ui-users.settings.departments' })}
+    >
+      <ConnectedControlledVocab
+        canCreate={hasCreatePerm}
+        stripes={stripes}
+        baseUrl="departments"
+        records="departments"
+        label={formatMessage({ id: 'ui-users.settings.departments' })}
+        labelSingular={formatMessage({ id: 'ui-users.settings.department' })}
+        objectLabel={<FormattedMessage id="ui-users.settings.departments.users" />}
+        visibleFields={['name', 'code']}
+        columnMapping={{
+          name: formatMessage({ id: 'ui-users.settings.departments.name' }),
+          code: formatMessage({ id: 'ui-users.settings.departments.code' }),
+        }}
+        nameKey="department"
+        id="departments"
+        sortby="name"
+        formatter={{
+          numberOfObjects: item => item.usageNumber || <NoValue />,
+        }}
+        validate={validate}
+        actionSuppressor={{
+          delete: item => !hasDeletePerm || item.usageNumber || suppress(item),
+          edit: (item) => !hasEditPerm || suppress(item),
+        }}
+      />
+    </TitleManager>
   );
 };
 

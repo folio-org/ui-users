@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Callout } from '@folio/stripes/components';
 import { injectIntl, FormattedMessage } from 'react-intl';
-import { stripesConnect } from '@folio/stripes/core';
+import { stripesConnect, TitleManager } from '@folio/stripes/core';
 
 import CommentRequiredForm from './CommentRequiredForm';
 
@@ -42,6 +42,7 @@ class CommentRequiredSettings extends React.Component {
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired
     }).isRequired,
+    intl: PropTypes.object,
   };
 
   componentDidMount() {
@@ -87,8 +88,8 @@ class CommentRequiredSettings extends React.Component {
   }
 
   render() {
+    const { intl: { formatMessage } } = this.props;
     const hasLoadedComment = _.get(this.props.resources, ['commentRequired', 'hasLoaded'], false);
-    if (hasLoadedComment === false) return <div />;
 
     const settings = _.get(this.props.resources, ['commentRequired', 'records', 0], {});
     const initialValues = {
@@ -100,15 +101,21 @@ class CommentRequiredSettings extends React.Component {
     const viewOnly = !this.props.stripes.hasPerm('ui-users.settings.comments.all');
 
     return (
-      <div className={css.fullWidth}>
-        <CommentRequiredForm
-          {...this.props}
-          initialValues={initialValues}
-          onSubmit={(values) => { this.onSave(values); }}
-          viewOnly={viewOnly}
-        />
-        <Callout ref={(ref) => { this.callout = ref; }} />
-      </div>
+      <TitleManager
+        record={formatMessage({ id: 'ui-users.settings.commentRequired' })}
+      >
+        {(hasLoadedComment === false) ?
+          <div /> :
+          <div className={css.fullWidth}>
+            <CommentRequiredForm
+              {...this.props}
+              initialValues={initialValues}
+              onSubmit={(values) => { this.onSave(values); }}
+              viewOnly={viewOnly}
+            />
+            <Callout ref={(ref) => { this.callout = ref; }} />
+          </div>}
+      </TitleManager>
     );
   }
 }

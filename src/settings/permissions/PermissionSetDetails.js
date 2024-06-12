@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import {
   KeyValue,
@@ -11,6 +11,7 @@ import {
   ExpandAllButton,
   Headline
 } from '@folio/stripes/components';
+import { TitleManager } from '@folio/stripes/core';
 import { ViewMetaData } from '@folio/stripes/smart-components';
 
 import RenderPermissions from '../../components/RenderPermissions';
@@ -23,6 +24,7 @@ class PermissionSetDetails extends React.Component {
     }).isRequired,
     initialValues: PropTypes.object,
     tenantId: PropTypes.string,
+    intl: PropTypes.object,
   };
 
   constructor(props) {
@@ -58,12 +60,15 @@ class PermissionSetDetails extends React.Component {
   }
 
   render() {
-    const { initialValues: selectedSet, tenantId } = this.props;
+    const { initialValues: selectedSet, tenantId, intl: { formatMessage } } = this.props;
     const { sections } = this.state;
     const untitledPermissionSetMessage = <FormattedMessage id="ui-users.permissions.untitledPermissionSet" />;
-
     return (
-      <div>
+      <TitleManager
+        prefix={`${formatMessage({ id: 'ui-users.settings.users.title' })} - `}
+        page={formatMessage({ id: 'ui-users.settings.permissionSet' })}
+        record={selectedSet.displayName}
+      >
         <Row end="xs">
           <Col xs>
             <ExpandAllButton
@@ -125,9 +130,9 @@ class PermissionSetDetails extends React.Component {
           permissionSetId={selectedSet.id}
           tenantId={tenantId}
         />
-      </div>
+      </TitleManager>
     );
   }
 }
 
-export default PermissionSetDetails;
+export default injectIntl(PermissionSetDetails);
