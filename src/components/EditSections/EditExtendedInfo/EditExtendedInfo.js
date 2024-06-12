@@ -119,7 +119,7 @@ class EditExtendedInfo extends Component {
             <Field
               component={Datepicker}
               label={<FormattedMessage id="ui-users.extended.dateEnrolled" />}
-              dateFormat="YYYY-MM-DD"
+              backendDateStandard="YYYY-MM-DD"
               name="enrollmentDate"
               id="adduser_enrollmentdate"
               validate={validateMinDate('ui-users.errors.extended.dateEnrolled')}
@@ -146,7 +146,6 @@ class EditExtendedInfo extends Component {
             <Field
               component={Datepicker}
               label={<FormattedMessage id="ui-users.extended.birthDate" />}
-              dateFormat="YYYY-MM-DD"
               name="personal.dateOfBirth"
               id="adduser_dateofbirth"
               timeZone="UTC"

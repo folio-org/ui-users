@@ -181,7 +181,7 @@ class ProxyEditItem extends React.Component {
                   <Field
                     component={Datepicker}
                     label={<FormattedMessage id="ui-users.expirationDate" />}
-                    dateFormat="YYYY-MM-DD"
+                    backendDateStandard="YYYY-MM-DD"
                     name={`${name}.proxy.expirationDate`}
                     validate={validateMinDate('ui-users.errors.expirationDate')}
                   />
