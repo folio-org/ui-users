@@ -461,16 +461,6 @@ class AccountsHistory extends React.Component {
       'dueDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),
       'returnedDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' }),
     };
-    const columnMenu = (
-      <MenuSection
-        id="sectionShowColumns"
-        label={intl.formatMessage({ id: 'ui-users.showColumns' })}
-      >
-        <ul>
-          {this.renderCheckboxList(columnMapping)}
-        </ul>
-      </MenuSection>
-    );
     const selectedAccounts = this.state.selectedAccounts.map(a => this.accounts.find(ac => ac.id === a.id) || {});
     const feeFineActions = resources?.comments?.records || [];
     const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
@@ -555,7 +545,14 @@ class AccountsHistory extends React.Component {
               </Icon>
             </Button>
           </MenuSection>
-          {columnMenu}
+          <MenuSection
+            id="sectionShowColumns"
+            label={intl.formatMessage({ id: 'ui-users.showColumns' })}
+          >
+            <ul>
+              {this.renderCheckboxList(columnMapping)}
+            </ul>
+          </MenuSection>
         </>
       );
     } else {

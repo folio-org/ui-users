@@ -43,6 +43,7 @@ import FeeFineReport from '../../components/data/reports/FeeFineReport';
 import {
   itemStatuses,
   refundClaimReturned,
+  loanStatuses,
 } from '../../constants';
 
 import css from './AccountDetails.css';
@@ -325,13 +326,14 @@ feeFineActions
       resources,
       itemDetails
     } = this.props;
-
+    const relatedLoan = (resources?.loans?.records || []).filter((loan) => loan.id === account.loanId);
     const feeFineActions = resources?.feefineactions?.records || [];
     const isAccountsPending = resources?.accounts?.isPending ?? true;
     const isActionsPending = resources?.accountActions?.isPending ?? true;
     const allFeeFineActions = resources?.feefineactions?.records || [];
-    const isClaimReturnedItem = (itemDetails?.statusItemName === itemStatuses.CLAIMED_RETURNED);
-
+    const isClaimReturnedItem = itemDetails?.statusItemName === itemStatuses.CLAIMED_RETURNED;
+    const isLoanOpened = relatedLoan[0]?.status?.name === loanStatuses.OPEN;
+    const isMenuButtonDisabled = isActionsPending || isAccountsPending || (isClaimReturnedItem && isLoanOpened);
     const disabled = account.remaining === 0;
     const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
     const waiveButtonDisabled = !this.props.stripes.hasPerm('ui-users.manual_waive');
@@ -348,7 +350,7 @@ feeFineActions
           <Button
             id="payAccountActionsHistory"
             buttonStyle="dropdownItem"
-            disabled={disabled || payButtonDisabled || isActionsPending || isAccountsPending || isClaimReturnedItem}
+            disabled={disabled || payButtonDisabled || isMenuButtonDisabled}
             onClick={this.pay}
           >
             <Icon icon="cart">
@@ -358,7 +360,7 @@ feeFineActions
           <Button
             id="waiveAccountActionsHistory"
             buttonStyle="dropdownItem"
-            disabled={disabled || waiveButtonDisabled || isActionsPending || isAccountsPending || isClaimReturnedItem}
+            disabled={disabled || waiveButtonDisabled || isMenuButtonDisabled}
             onClick={this.waive}
           >
             <Icon icon="cancel">
@@ -368,7 +370,7 @@ feeFineActions
           <Button
             id="refundAccountActionsHistory"
             buttonStyle="dropdownItem"
-            disabled={!refundAllowed || buttonDisabled || isActionsPending || isAccountsPending || isClaimReturnedItem}
+            disabled={!refundAllowed || buttonDisabled || isMenuButtonDisabled}
             onClick={this.refund}
           >
             <Icon icon="replace">
@@ -378,7 +380,7 @@ feeFineActions
           <Button
             id="transferAccountActionsHistory"
             buttonStyle="dropdownItem"
-            disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending || isClaimReturnedItem}
+            disabled={disabled || buttonDisabled || isMenuButtonDisabled}
             onClick={this.transfer}
           >
             <Icon icon="transfer">
@@ -388,7 +390,7 @@ feeFineActions
           <Button
             id="errorAccountActionsHistory"
             buttonStyle="dropdownItem"
-            disabled={disabled || buttonDisabled || isActionsPending || isAccountsPending || !cancelAllowed || isClaimReturnedItem}
+            disabled={disabled || buttonDisabled || !cancelAllowed || isMenuButtonDisabled}
             onClick={this.error}
           >
             <Icon icon="trash">

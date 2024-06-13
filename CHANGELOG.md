@@ -21,6 +21,8 @@
 * Make dependency on mod-reading-rooms optional. Refs UIU-3146.
 * Make Reading Room Filter case insensitive. Refs UIU-3150.
 * Improve UX of Reading Room Access accordion selection box in user profile edit. Refs UIU-3151.
+* Set Users date format in all date input fields as per Session Locale Settings. Refs UIU-2879.
+* Make unblocked fee-fine actions if item is claimed returned and loan is closed. Refs UIU-3125.
 * Add the possibility to use "pay" and "waive" fee/fine permissions separately. Refs UIU-3109.
 
 ## [10.1.1](https://github.com/folio-org/ui-users/tree/v10.1.1) (2024-05-07)
