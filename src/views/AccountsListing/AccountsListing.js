@@ -442,13 +442,36 @@ class AccountsHistory extends React.Component {
     history.push(`/users/${params.id}/charge`);
   }
 
-  getActionMenu = renderColumnsMenu => () => {
+  getActionMenu = () => {
     const {
       resources,
       intl,
     } = this.props;
+    const columnMapping = {
+      'metadata.createdDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' }),
+      'metadata.updatedDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' }),
+      'feeFineType': intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' }),
+      'amount': intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' }),
+      'remaining': intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' }),
+      'paymentStatus.name': intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' }),
+      'feeFineOwner': intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' }),
+      'title': intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' }),
+      'barcode': intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' }),
+      'callNumber': intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' }),
+      'dueDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),
+      'returnedDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' }),
+    };
+    const columnMenu = (
+      <MenuSection
+        id="sectionShowColumns"
+        label={intl.formatMessage({ id: 'ui-users.showColumns' })}
+      >
+        <ul>
+          {this.renderCheckboxList(columnMapping)}
+        </ul>
+      </MenuSection>
+    );
     const selectedAccounts = this.state.selectedAccounts.map(a => this.accounts.find(ac => ac.id === a.id) || {});
-
     const feeFineActions = resources?.comments?.records || [];
     const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
     const waiveButtonDisabled = !this.props.stripes.hasPerm('ui-users.manual_waive');
@@ -532,7 +555,7 @@ class AccountsHistory extends React.Component {
               </Icon>
             </Button>
           </MenuSection>
-          {renderColumnsMenu}
+          {columnMenu}
         </>
       );
     } else {
@@ -570,32 +593,6 @@ class AccountsHistory extends React.Component {
     const filters = filterState(this.queryParam('f'));
     const selectedAccounts = this.state.selectedAccounts.map(a => accounts.find(ac => ac.id === a.id) || {});
     const userOwned = (user && user.id === (allAccounts[0] || {}).userId);
-
-    const columnMapping = {
-      'metadata.createdDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' }),
-      'metadata.updatedDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' }),
-      'feeFineType': intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' }),
-      'amount': intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' }),
-      'remaining': intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' }),
-      'paymentStatus.name': intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' }),
-      'feeFineOwner': intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' }),
-      'title': intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' }),
-      'barcode': intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' }),
-      'callNumber': intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' }),
-      'dueDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),
-      'returnedDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' }),
-    };
-
-    const columnMenu = (
-      <MenuSection
-        id="sectionShowColumns"
-        label={intl.formatMessage({ id: 'ui-users.showColumns' })}
-      >
-        <ul>
-          {this.renderCheckboxList(columnMapping)}
-        </ul>
-      </MenuSection>
-    );
 
     const header = (
       <Row style={{ width: '100%' }}>
@@ -696,7 +693,7 @@ class AccountsHistory extends React.Component {
               />
             </div>
           )}
-          actionMenu={this.getActionMenu(columnMenu)}
+          actionMenu={this.getActionMenu}
         >
           <Paneset>
             <Filters

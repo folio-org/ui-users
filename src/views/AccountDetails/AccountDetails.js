@@ -319,7 +319,7 @@ class AccountDetails extends React.Component {
   };
 
 feeFineActions
-  getActionMenu = () => () => {
+  getActionMenu = () => {
     const {
       account,
       resources,
@@ -572,7 +572,7 @@ feeFineActions
               {(msg) => `${msg} - ${getFullName(user)} (${_.upperFirst(patron.group)}) `}
             </FormattedMessage>
           )}
-          actionMenu={this.getActionMenu()}
+          actionMenu={this.getActionMenu}
         >
           <Row>
             <Col xs={1.5}>
