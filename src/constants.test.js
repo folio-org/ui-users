@@ -22,7 +22,7 @@ describe('Constants', () => {
     expect(Object.keys(itemStatuses).length).toEqual(4);
   });
   test('loanStatuses', () => {
-    expect(Object.keys(loanStatuses).length).toEqual(1);
+    expect(Object.keys(loanStatuses).length).toEqual(2);
   });
   test('accountStatuses', () => {
     expect(Object.keys(accountStatuses).length).toEqual(2);
