@@ -91,6 +91,8 @@ const ReadingRoomAccess = (props) => {
     );
   };
 
+  const { data: sortedData, order: sortOrder, direction: sortDirection } = sortedRecordsDetails;
+
   return (
     <Accordion
       id={accordionId}
@@ -115,16 +117,16 @@ const ReadingRoomAccess = (props) => {
       <MultiColumnList
         striped
         data-testid="reading-room-access-mcl"
-        contentData={sortedRecordsDetails.data}
+        contentData={sortedData}
         columnMapping={columnMapping}
         visibleColumns={visibleColumns}
         formatter={getFormatter(lastUpdatedDetails)}
-        sortOrder={sortedRecordsDetails.order}
-        sortDirection={`${sortedRecordsDetails.direction}ending`}
+        sortOrder={sortOrder}
+        sortDirection={`${sortDirection}ending`}
         onHeaderClick={(e, meta) => setSortedRecordsDetails(
           getReadingRoomSortedData(e, meta, sortedRecordsDetails)
         )}
-        sortedColumn={sortedRecordsDetails.order}
+        sortedColumn={sortOrder}
       />
     </Accordion>
   );

@@ -236,12 +236,12 @@ export const isAValidImageUrl = async (url) => {
   }
 };
 
-export const getReadingRoomSortedData = (e, meta, recordDetails) => {
+export const getReadingRoomSortedData = (e, meta, { data, order, direction }) => {
   let newSortDirection = sortTypes.ASC;
-  if (recordDetails.order === meta.name) {
-    newSortDirection = recordDetails.direction === sortTypes.ASC ? sortTypes.DESC : sortTypes.ASC;
+  if (order === meta.name) {
+    newSortDirection = direction === sortTypes.ASC ? sortTypes.DESC : sortTypes.ASC;
   }
-  const sortedData = orderBy(recordDetails.data,
+  const sortedData = orderBy(data,
     [sortedRecord => sortedRecord[meta.name]?.toLowerCase()], newSortDirection);
 
   return {

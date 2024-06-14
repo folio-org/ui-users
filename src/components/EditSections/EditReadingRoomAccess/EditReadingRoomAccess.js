@@ -16,6 +16,8 @@ import { getFormatter } from './getFormatter';
 import { sortTypes } from '../../../constants';
 import { getReadingRoomSortedData } from '../../util/util';
 
+const rraList = 'readingRoomsAccessList';
+
 const EditReadingRoomAccess = ({
   expanded,
   onToggle,
@@ -41,7 +43,7 @@ const EditReadingRoomAccess = ({
   const [sortedRecordsDetails, setSortedRecordsDetails] = useState(sortInitialState);
 
   useEffect(() => {
-    const unregisterReadingRoomAccessList = form.registerField('readingRoomsAccessList', noop, { initialValue: [] });
+    const unregisterReadingRoomAccessList = form.registerField(rraList, noop, { initialValue: [] });
     return () => {
       unregisterReadingRoomAccessList();
     };
@@ -68,6 +70,8 @@ const EditReadingRoomAccess = ({
     }
   };
 
+  const { data: sortedData, order: sortOrder, direction: sortDirection } = sortedRecordsDetails;
+
   return (
     <Accordion
       open={expanded}
@@ -76,24 +80,24 @@ const EditReadingRoomAccess = ({
       label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.readingRoom.readingRoomAccess" /></Headline>}
       displayWhenClosed={<Badge>{formData.length}</Badge>}
     >
-      <OnChange name="readingRoomsAccessList">
+      <OnChange name={rraList}>
         {(updatedRRAFormValues) => {
           updateSortedRecordDetails(updatedRRAFormValues);
         }}
       </OnChange>
       <MultiColumnList
         striped
-        contentData={sortedRecordsDetails.data}
+        contentData={sortedData}
         columnMapping={columnMapping}
         visibleColumns={visibleColumns}
         formatter={getFormatter(form)}
         columnWidths={columnWidths}
-        sortOrder={sortedRecordsDetails.order}
-        sortDirection={`${sortedRecordsDetails.direction}ending`}
+        sortOrder={sortOrder}
+        sortDirection={`${sortDirection}ending`}
         onHeaderClick={(e, meta) => setSortedRecordsDetails(
           getReadingRoomSortedData(e, meta, sortedRecordsDetails)
         )}
-        sortedColumn={sortedRecordsDetails.order}
+        sortedColumn={sortOrder}
       />
     </Accordion>
   );

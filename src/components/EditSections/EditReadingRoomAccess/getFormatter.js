@@ -10,17 +10,17 @@ import { rraColumns, READING_ROOM_ACCESS_OPTIONS } from './constants';
 
 export const getFormatter = (form) => {
   const updateRecord = (record, inputValue, name) => {
-    const rraFormList = form.getFieldState('readingRoomsAccessList')?.value;
-    const recordIndexInRRAList = rraFormList?.findIndex((field) => field?.readingRoomId === record?.readingRoomId);
-    if (rraFormList?.length && recordIndexInRRAList !== -1) {
-      form.change(`readingRoomsAccessList[${recordIndexInRRAList}][${name}]`, inputValue);
+    const rraList = form.getFieldState('readingRoomsAccessList')?.value;
+    const recordIndex = rraList?.findIndex((field) => field?.readingRoomId === record?.readingRoomId);
+    if (rraList?.length && recordIndex !== -1) {
+      form.change(`readingRoomsAccessList[${recordIndex}][${name}]`, inputValue);
     } else {
       const clonedRecord = cloneDeep(record);
       clonedRecord[name] = inputValue;
       if (!clonedRecord.id) {
         clonedRecord.id = uuidv4();
       }
-      form.change(`readingRoomsAccessList[${rraFormList?.length || 0}]`, clonedRecord);
+      form.change(`readingRoomsAccessList[${rraList?.length || 0}]`, clonedRecord);
     }
   };
 
