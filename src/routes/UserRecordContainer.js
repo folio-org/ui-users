@@ -189,13 +189,8 @@ class UserRecordContainer extends React.Component {
       type: 'okapi',
       // eslint-disable-next-line consistent-return
       path: (queryParams, pathComponents, resourceData, config, props) => {
-        const selUser = resourceData?.sel_user?.records[0];
-        const isCurrentUserUpdatedAsSelUser = selUser?.id === pathComponents?.id;
-        const fetchUserReadingRoomsAccess = isCurrentUserUpdatedAsSelUser &&
-        (isStaffUser(selUser) || isPatronUser(selUser)) &&
-        props.stripes.hasInterface('reading-room-patron-permission') &&
-        props.stripes.hasPerm('reading-room.patron-permission.item.get') &&
-        pathComponents.id;
+        const fetchUserReadingRoomsAccess = props.stripes.hasInterface('reading-room-patron-permission') &&
+          props.stripes.hasPerm('reading-room.patron-permission.item.get');
 
         if (fetchUserReadingRoomsAccess) {
           return `reading-room-patron-permission/${pathComponents.id}`;

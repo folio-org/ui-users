@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { cloneDeep, noop, orderBy } from 'lodash';
@@ -57,7 +57,7 @@ const EditReadingRoomAccess = ({
     }));
   }, [formData]);
 
-  const updateSortedRecordDetails = (updatedRRAFormValues) => {
+  const updateSortedRecordDetails = useCallback((updatedRRAFormValues) => {
     if (updatedRRAFormValues?.length) {
       const recordDetails = cloneDeep(sortedRecordsDetails);
       updatedRRAFormValues?.forEach(updatedRecord => {
@@ -68,7 +68,7 @@ const EditReadingRoomAccess = ({
       });
       setSortedRecordsDetails(recordDetails);
     }
-  };
+  }, [sortedRecordsDetails]);
 
   const { data: sortedData, order: sortOrder, direction: sortDirection } = sortedRecordsDetails;
 
@@ -77,7 +77,11 @@ const EditReadingRoomAccess = ({
       open={expanded}
       id={accordionId}
       onToggle={onToggle}
-      label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.readingRoom.readingRoomAccess" /></Headline>}
+      label={
+        <Headline size="large" tag="h3">
+          <FormattedMessage id="ui-users.readingRoom.readingRoomAccess" />
+        </Headline>
+      }
       displayWhenClosed={<Badge>{formData.length}</Badge>}
     >
       <OnChange name={rraList}>
