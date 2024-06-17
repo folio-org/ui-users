@@ -85,6 +85,7 @@ class UserEdit extends React.Component {
       },
       username: '',
       type: '',
+      preferredEmailCommunication: [],
     };
 
     if (!match.params.id) return initialFormValues;
@@ -243,6 +244,9 @@ class UserEdit extends React.Component {
     user.personal.addresses = toUserAddresses(user.personal.addresses); // eslint-disable-line no-param-reassign
     user.personal.email = user.personal.email?.trim();
     user.departments = compact(user.departments);
+    user.preferredEmailCommunication = user.preferredEmailCommunication?.map(
+      (prefEmailComm) => prefEmailComm.value
+    );
 
     const { proxies, sponsors, permissions, servicePoints, preferredServicePoint } = user;
 

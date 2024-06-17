@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   FormattedMessage,
   injectIntl,
@@ -12,11 +12,18 @@ import {
   Col,
   Accordion,
   Headline,
+  MultiSelection,
 } from '@folio/stripes/components';
 import { AddressEditList } from '@folio/stripes/smart-components';
 
 import { toAddressTypeOptions } from '../../data/converters/address_type';
 import contactTypes from '../../data/static/contactTypes';
+
+const prefEmailCommDataOptions = [
+  { label: 'Programs', value: 'Programs' },
+  { label: 'Services', value: 'Service' },
+  { label: 'Support', value: 'Support' }
+];
 
 const EditContactInfo = ({
   expanded,
@@ -24,9 +31,20 @@ const EditContactInfo = ({
   accordionId,
   addressTypes,
   preferredContactTypeId,
+  preferredEmailCommunication,
   intl,
   disabled,
 }) => {
+  const [preferredEmailCommData, setPreferredEmailCommData] = useState([]);
+
+  useEffect(() => {
+    const prefEmailCommLabeledData = prefEmailCommDataOptions.filter(
+      option => preferredEmailCommunication.includes(option.value)
+    );
+    setPreferredEmailCommData(prefEmailCommLabeledData);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const contactTypeOptions = (contactTypes || []).map(g => {
     return (
       <FormattedMessage key={g.id} id={g.desc}>
@@ -107,6 +125,21 @@ const EditContactInfo = ({
           </Field>
         </Col>
       </Row>
+      <Row>
+        <Col xs={12} md={3}>
+          <Field
+            component={MultiSelection}
+            label={<FormattedMessage id="ui-users.contact.preferredEmailCommunication" />}
+            id="adduser_preferredEmailCommunication"
+            name="preferredEmailCommunication"
+            dataOptions={prefEmailCommDataOptions}
+            fullWidth
+            aria-required="true"
+            disabled={disabled}
+            initialValue={preferredEmailCommData}
+          />
+        </Col>
+      </Row>
       <br />
       <AddressEditList
         name="personal.addresses"
@@ -125,6 +158,9 @@ EditContactInfo.propTypes = {
   accordionId: PropTypes.string.isRequired,
   addressTypes: PropTypes.arrayOf(PropTypes.object),
   preferredContactTypeId: PropTypes.string,
+  preferredEmailCommunication: PropTypes.arrayOf(
+    PropTypes.oneOfType([PropTypes.string, PropTypes.object])
+  ),
   intl: PropTypes.object.isRequired,
   disabled: PropTypes.bool,
 };

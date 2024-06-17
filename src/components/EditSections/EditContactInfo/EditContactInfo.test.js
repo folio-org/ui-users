@@ -8,6 +8,25 @@ import EditContactInfo from './EditContactInfo';
 
 jest.unmock('@folio/stripes/components');
 
+jest.mock('@folio/stripes/components', () => ({
+  ...jest.requireActual('@folio/stripes/components'),
+  MultiSelection: jest.fn(({ children, dataOptions }) => (
+    <div>
+      <select multiple>
+        {dataOptions.forEach((option, i) => (
+          <option
+            value={option.value}
+            key={option.id || `option-${i}`}
+          >
+            {option.label}
+          </option>
+        ))}
+      </select>
+      {children}
+    </div>
+  )),
+}));
+
 const onSubmit = jest.fn();
 
 const arrayMutators = {
@@ -65,7 +84,8 @@ const props = {
   preferredContactTypeId: '001',
   intl: {
     formatMessage : jest.fn()
-  }
+  },
+  preferredEmailCommunication: ['Programs', 'Support'],
 };
 
 describe('Render Edit contact Information component', () => {

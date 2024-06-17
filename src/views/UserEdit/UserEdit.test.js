@@ -32,6 +32,7 @@ const userFormData = {
       }
     }
   ],
+  preferredEmailCommunication: ['Programs', 'Support'],
 };
 
 jest.mock('@folio/stripes/components', () => ({

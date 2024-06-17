@@ -298,6 +298,7 @@
   "contact.phone": "Phone",
   "contact.mobilePhone": "Mobile phone",
   "contact.preferredContact": "Preferred contact",
+  "contact.preferredEmailCommunication": "Preferred email communications",
   "contact.selectContactType": "Select contact type",
   "contact.selectAddressType": "Select address type",
   "contact.addressTypes": "Address Types",

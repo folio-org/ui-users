@@ -23,7 +23,7 @@
 * Improve UX of Reading Room Access accordion selection box in user profile edit. Refs UIU-3151.
 * Set Users date format in all date input fields as per Session Locale Settings. Refs UIU-2879.
 * Make unblocked fee-fine actions if item is claimed returned and loan is closed. Refs UIU-3125.
-
+* Add the 'Preferred email communication' field in the Contact information accordion of the user profile. Refs UIU-3152.
 ## [10.1.1](https://github.com/folio-org/ui-users/tree/v10.1.1) (2024-05-07)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.1.0...v10.1.1)
 

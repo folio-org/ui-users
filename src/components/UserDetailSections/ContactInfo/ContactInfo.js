@@ -56,6 +56,14 @@ const ContactInfo = ({
           />
         </Col>
       </Row>
+      <Row>
+        <Col xs={12}>
+          <KeyValue
+            label={<FormattedMessage id="ui-users.contact.preferredEmailCommunication" />}
+            value={_.get(user, ['preferredEmailCommunication'], '-').join(', ')}
+          />
+        </Col>
+      </Row>
       <br />
       <Row>
         <Col xs={12}>
