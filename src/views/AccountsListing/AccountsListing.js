@@ -21,7 +21,10 @@ import {
   Row,
   Callout,
 } from '@folio/stripes/components';
-import { stripesShape } from '@folio/stripes/core';
+import {
+  stripesShape,
+  IfPermission,
+} from '@folio/stripes/core';
 import css from './AccountsListing.css';
 
 import { getFullName, isRefundAllowed, localizeCurrencyAmount } from '../../components/util';
@@ -431,19 +434,43 @@ class AccountsHistory extends React.Component {
     });
   }
 
-  getActionMenu = renderColumnsMenu => () => {
+  createFeeFine = () => {
     const {
-      match: { params },
+      history,
+      match: {
+        params,
+      },
+    } = this.props;
+
+    history.push(`/users/${params.id}/charge`);
+  }
+
+  getActionMenu = () => {
+    const {
       resources,
       intl,
     } = this.props;
+    const columnMapping = {
+      'metadata.createdDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' }),
+      'metadata.updatedDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' }),
+      'feeFineType': intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' }),
+      'amount': intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' }),
+      'remaining': intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' }),
+      'paymentStatus.name': intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' }),
+      'feeFineOwner': intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' }),
+      'title': intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' }),
+      'barcode': intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' }),
+      'callNumber': intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' }),
+      'dueDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),
+      'returnedDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' }),
+    };
     const selectedAccounts = this.state.selectedAccounts.map(a => this.accounts.find(ac => ac.id === a.id) || {});
-
     const feeFineActions = resources?.comments?.records || [];
-    const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
     const canRefund = selectedAccounts.some((a) => isRefundAllowed(a, feeFineActions));
+    const showActionMenu = this.props.stripes.hasPerm('ui-users.feesfines.actions.all') ||
+      this.props.stripes.hasPerm('ui-users.manual_waive') ||
+      this.props.stripes.hasPerm('ui-users.manual_pay');
 
-    const showActionMenu = this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
     if (showActionMenu) {
       return (
         <>
@@ -451,74 +478,90 @@ class AccountsHistory extends React.Component {
             label={intl.formatMessage({ id: 'ui-users.actions' })}
             id="actions-menu-section"
           >
-            <Button
-              id="open-closed-all-charge-button"
-              buttonStyle="dropdownItem"
-              marginBottom0
-              disabled={buttonDisabled}
-              to={`/users/${params.id}/charge`}
-            >
-              <Icon icon="plus-sign">
-                <FormattedMessage id="ui-users.accounts.button.new" />
-              </Icon>
-            </Button>
-            <Button
-              id="open-closed-all-pay-button"
-              buttonStyle="dropdownItem"
-              marginBottom0
-              disabled={!((this.state.actions.regularpayment === true) && (buttonDisabled === false))}
-              onClick={() => { this.onChangeActions({ regular: true }); }}
-            >
-              <Icon icon="cart">
-                <FormattedMessage id="ui-users.accounts.history.button.pay" />
-              </Icon>
-            </Button>
-            <Button
-              id="open-closed-all-wave-button"
-              marginBottom0
-              disabled={!((this.state.actions.waive === true) && (buttonDisabled === false))}
-              buttonStyle="dropdownItem"
-              onClick={() => { this.onChangeActions({ waiveMany: true }); }}
-            >
-              <Icon icon="cancel">
-                <FormattedMessage id="ui-users.accounts.history.button.waive" />
-              </Icon>
-            </Button>
-            <Button
-              id="open-closed-all-refund-button"
-              marginBottom0
-              disabled={!((this.state.actions.refund === true) && (buttonDisabled === false) && (canRefund === true))}
-              buttonStyle="dropdownItem"
-              onClick={() => { this.onChangeActions({ refundMany: true }); }}
-            >
-              <Icon icon="replace">
-                <FormattedMessage id="ui-users.accounts.history.button.refund" />
-              </Icon>
-            </Button>
-            <Button
-              id="open-closed-all-transfer-button"
-              marginBottom0
-              disabled={!((this.state.actions.transfer === true) && (buttonDisabled === false))}
-              buttonStyle="dropdownItem"
-              onClick={() => { this.onChangeActions({ transferMany: true }); }}
-            >
-              <Icon icon="transfer">
-                <FormattedMessage id="ui-users.accounts.history.button.transfer" />
-              </Icon>
-            </Button>
-            <Button
-              id="fee-fine-report-export-button"
-              marginBottom0
-              disabled={_.isEmpty(feeFineActions)}
-              buttonStyle="dropdownItem"
-              onClick={this.generateFeesFinesReport}
-            >
-              <Icon icon="download">
-                <FormattedMessage id="ui-users.export.button" />
-              </Icon>
-            </Button>
+            <IfPermission perm="ui-users.feesfines.actions.all">
+              <Button
+                id="open-closed-all-charge-button"
+                buttonStyle="dropdownItem"
+                marginBottom0
+                onClick={this.createFeeFine}
+              >
+                <Icon icon="plus-sign">
+                  <FormattedMessage id="ui-users.accounts.button.new" />
+                </Icon>
+              </Button>
+            </IfPermission>
+            <IfPermission perm="ui-users.manual_pay">
+              <Button
+                id="open-closed-all-pay-button"
+                buttonStyle="dropdownItem"
+                marginBottom0
+                disabled={!this.state.actions.regularpayment}
+                onClick={() => { this.onChangeActions({ regular: true }); }}
+              >
+                <Icon icon="cart">
+                  <FormattedMessage id="ui-users.accounts.history.button.pay" />
+                </Icon>
+              </Button>
+            </IfPermission>
+            <IfPermission perm="ui-users.manual_waive">
+              <Button
+                id="open-closed-all-wave-button"
+                marginBottom0
+                disabled={!this.state.actions.waive}
+                buttonStyle="dropdownItem"
+                onClick={() => { this.onChangeActions({ waiveMany: true }); }}
+              >
+                <Icon icon="cancel">
+                  <FormattedMessage id="ui-users.accounts.history.button.waive" />
+                </Icon>
+              </Button>
+            </IfPermission>
+            <IfPermission perm="ui-users.feesfines.actions.all">
+              <Button
+                id="open-closed-all-refund-button"
+                marginBottom0
+                disabled={!((this.state.actions.refund === true) && (canRefund === true))}
+                buttonStyle="dropdownItem"
+                onClick={() => { this.onChangeActions({ refundMany: true }); }}
+              >
+                <Icon icon="replace">
+                  <FormattedMessage id="ui-users.accounts.history.button.refund" />
+                </Icon>
+              </Button>
+              <Button
+                id="open-closed-all-transfer-button"
+                marginBottom0
+                disabled={!this.state.actions.transfer}
+                buttonStyle="dropdownItem"
+                onClick={() => { this.onChangeActions({ transferMany: true }); }}
+              >
+                <Icon icon="transfer">
+                  <FormattedMessage id="ui-users.accounts.history.button.transfer" />
+                </Icon>
+              </Button>
+              <Button
+                id="fee-fine-report-export-button"
+                marginBottom0
+                disabled={_.isEmpty(feeFineActions)}
+                buttonStyle="dropdownItem"
+                onClick={this.generateFeesFinesReport}
+              >
+                <Icon icon="download">
+                  <FormattedMessage id="ui-users.export.button" />
+                </Icon>
+              </Button>
+            </IfPermission>
           </MenuSection>
-          {renderColumnsMenu}
+          <IfPermission perm="ui-users.feesfines.actions.all">
+            <MenuSection
+              id="sectionShowColumns"
+              label={intl.formatMessage({ id: 'ui-users.showColumns' })}
+            >
+              <ul>
+                {this.renderCheckboxList(columnMapping)}
+              </ul>
+            </MenuSection>
+          </IfPermission>
         </>
       );
     } else {
@@ -556,32 +599,6 @@ class AccountsHistory extends React.Component {
     const filters = filterState(this.queryParam('f'));
     const selectedAccounts = this.state.selectedAccounts.map(a => accounts.find(ac => ac.id === a.id) || {});
     const userOwned = (user && user.id === (allAccounts[0] || {}).userId);
-
-    const columnMapping = {
-      'metadata.createdDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.created' }),
-      'metadata.updatedDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.updated' }),
-      'feeFineType': intl.formatMessage({ id: 'ui-users.accounts.history.columns.type' }),
-      'amount': intl.formatMessage({ id: 'ui-users.accounts.history.columns.amount' }),
-      'remaining': intl.formatMessage({ id: 'ui-users.accounts.history.columns.remaining' }),
-      'paymentStatus.name': intl.formatMessage({ id: 'ui-users.accounts.history.columns.status' }),
-      'feeFineOwner': intl.formatMessage({ id: 'ui-users.accounts.history.columns.owner' }),
-      'title': intl.formatMessage({ id: 'ui-users.accounts.history.columns.title' }),
-      'barcode': intl.formatMessage({ id: 'ui-users.accounts.history.columns.barcode' }),
-      'callNumber': intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' }),
-      'dueDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),
-      'returnedDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' }),
-    };
-
-    const columnMenu = (
-      <MenuSection
-        id="sectionShowColumns"
-        label={intl.formatMessage({ id: 'ui-users.showColumns' })}
-      >
-        <ul>
-          {this.renderCheckboxList(columnMapping)}
-        </ul>
-      </MenuSection>
-    );
 
     const header = (
       <Row style={{ width: '100%' }}>
@@ -682,7 +699,7 @@ class AccountsHistory extends React.Component {
               />
             </div>
           )}
-          actionMenu={this.getActionMenu(columnMenu)}
+          actionMenu={this.getActionMenu}
         >
           <Paneset>
             <Filters

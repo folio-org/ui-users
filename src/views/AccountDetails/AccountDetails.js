@@ -320,7 +320,7 @@ class AccountDetails extends React.Component {
   };
 
 feeFineActions
-  getActionMenu = () => () => {
+  getActionMenu = () => {
     const {
       account,
       resources,
@@ -335,76 +335,82 @@ feeFineActions
     const isLoanOpened = relatedLoan[0]?.status?.name === loanStatuses.OPEN;
     const isMenuButtonDisabled = isActionsPending || isAccountsPending || (isClaimReturnedItem && isLoanOpened);
     const disabled = account.remaining === 0;
-    const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
     const refundAllowed = isRefundAllowed(account, feeFineActions);
     const cancelAllowed = isCancelAllowed(account);
-
-    const showActionMenu = this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
+    const showActionMenu = this.props.stripes.hasPerm('ui-users.feesfines.actions.all') ||
+      this.props.stripes.hasPerm('ui-users.manual_pay') ||
+      this.props.stripes.hasPerm('ui-users.manual_waive');
 
     if (showActionMenu) {
       return (
         <div data-test-actions-menu>
-          <Button
-            id="payAccountActionsHistory"
-            buttonStyle="dropdownItem"
-            disabled={disabled || buttonDisabled || isMenuButtonDisabled}
-            onClick={this.pay}
-          >
-            <Icon icon="cart">
-              <FormattedMessage id="ui-users.accounts.history.button.pay" />
-            </Icon>
-          </Button>
-          <Button
-            id="waiveAccountActionsHistory"
-            buttonStyle="dropdownItem"
-            disabled={disabled || buttonDisabled || isMenuButtonDisabled}
-            onClick={this.waive}
-          >
-            <Icon icon="cancel">
-              <FormattedMessage id="ui-users.accounts.history.button.waive" />
-            </Icon>
-          </Button>
-          <Button
-            id="refundAccountActionsHistory"
-            buttonStyle="dropdownItem"
-            disabled={!refundAllowed || buttonDisabled || isMenuButtonDisabled}
-            onClick={this.refund}
-          >
-            <Icon icon="replace">
-              <FormattedMessage id="ui-users.accounts.history.button.refund" />
-            </Icon>
-          </Button>
-          <Button
-            id="transferAccountActionsHistory"
-            buttonStyle="dropdownItem"
-            disabled={disabled || buttonDisabled || isMenuButtonDisabled}
-            onClick={this.transfer}
-          >
-            <Icon icon="transfer">
-              <FormattedMessage id="ui-users.accounts.history.button.transfer" />
-            </Icon>
-          </Button>
-          <Button
-            id="errorAccountActionsHistory"
-            buttonStyle="dropdownItem"
-            disabled={disabled || buttonDisabled || !cancelAllowed || isMenuButtonDisabled}
-            onClick={this.error}
-          >
-            <Icon icon="trash">
-              <FormattedMessage id="ui-users.accounts.button.error" />
-            </Icon>
-          </Button>
-          <Button
-            id="exportAccountActionsHistoryReport"
-            buttonStyle="dropdownItem"
-            data-test-export-account-actions-history-report
-            disabled={_.isEmpty(allFeeFineActions)}
-            onClick={this.generateFeesFinesReport}
-          >
-            <Icon icon="download">
-              <FormattedMessage id="ui-users.export.button" />
-            </Icon>
-          </Button>
+          <IfPermission perm="ui-users.manual_pay">
+            <Button
+              id="payAccountActionsHistory"
+              buttonStyle="dropdownItem"
+              disabled={disabled || isMenuButtonDisabled}
+              onClick={this.pay}
+            >
+              <Icon icon="cart">
+                <FormattedMessage id="ui-users.accounts.history.button.pay" />
+              </Icon>
+            </Button>
+          </IfPermission>
+          <IfPermission perm="ui-users.manual_waive">
+            <Button
+              id="waiveAccountActionsHistory"
+              buttonStyle="dropdownItem"
+              disabled={disabled || isMenuButtonDisabled}
+              onClick={this.waive}
+            >
+              <Icon icon="cancel">
+                <FormattedMessage id="ui-users.accounts.history.button.waive" />
+              </Icon>
+            </Button>
+          </IfPermission>
+          <IfPermission perm="ui-users.feesfines.actions.all">
+            <Button
+              id="refundAccountActionsHistory"
+              buttonStyle="dropdownItem"
+              disabled={!refundAllowed || isMenuButtonDisabled}
+              onClick={this.refund}
+            >
+              <Icon icon="replace">
+                <FormattedMessage id="ui-users.accounts.history.button.refund" />
+              </Icon>
+            </Button>
+            <Button
+              id="transferAccountActionsHistory"
+              buttonStyle="dropdownItem"
+              disabled={disabled || isMenuButtonDisabled}
+              onClick={this.transfer}
+            >
+              <Icon icon="transfer">
+                <FormattedMessage id="ui-users.accounts.history.button.transfer" />
+              </Icon>
+            </Button>
+            <Button
+              id="errorAccountActionsHistory"
+              buttonStyle="dropdownItem"
+              disabled={disabled || !cancelAllowed || isMenuButtonDisabled}
+              onClick={this.error}
+            >
+              <Icon icon="trash">
+                <FormattedMessage id="ui-users.accounts.button.error" />
+              </Icon>
+            </Button>
+            <Button
+              id="exportAccountActionsHistoryReport"
+              buttonStyle="dropdownItem"
+              data-test-export-account-actions-history-report
+              disabled={_.isEmpty(allFeeFineActions)}
+              onClick={this.generateFeesFinesReport}
+            >
+              <Icon icon="download">
+                <FormattedMessage id="ui-users.export.button" />
+              </Icon>
+            </Button>
+          </IfPermission>
         </div>
       );
     } else {
@@ -571,7 +577,7 @@ feeFineActions
               {(msg) => `${msg} - ${getFullName(user)} (${_.upperFirst(patron.group)}) `}
             </FormattedMessage>
           )}
-          actionMenu={this.getActionMenu()}
+          actionMenu={this.getActionMenu}
         >
           <Row>
             <Col xs={1.5}>
