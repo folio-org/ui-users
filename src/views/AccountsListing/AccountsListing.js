@@ -21,7 +21,10 @@ import {
   Row,
   Callout,
 } from '@folio/stripes/components';
-import { stripesShape } from '@folio/stripes/core';
+import {
+  stripesShape,
+  IfPermission,
+} from '@folio/stripes/core';
 import css from './AccountsListing.css';
 
 import { getFullName, isRefundAllowed, localizeCurrencyAmount } from '../../components/util';
@@ -463,9 +466,6 @@ class AccountsHistory extends React.Component {
     };
     const selectedAccounts = this.state.selectedAccounts.map(a => this.accounts.find(ac => ac.id === a.id) || {});
     const feeFineActions = resources?.comments?.records || [];
-    const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
-    const waiveButtonDisabled = !this.props.stripes.hasPerm('ui-users.manual_waive');
-    const payButtonDisabled = !this.props.stripes.hasPerm('ui-users.manual_pay');
     const canRefund = selectedAccounts.some((a) => isRefundAllowed(a, feeFineActions));
     const showActionMenu = this.props.stripes.hasPerm('ui-users.feesfines.actions.all') ||
       this.props.stripes.hasPerm('ui-users.manual_waive') ||
@@ -478,81 +478,90 @@ class AccountsHistory extends React.Component {
             label={intl.formatMessage({ id: 'ui-users.actions' })}
             id="actions-menu-section"
           >
-            <Button
-              id="open-closed-all-charge-button"
-              buttonStyle="dropdownItem"
-              marginBottom0
-              disabled={buttonDisabled}
-              onClick={this.createFeeFine}
-            >
-              <Icon icon="plus-sign">
-                <FormattedMessage id="ui-users.accounts.button.new" />
-              </Icon>
-            </Button>
-            <Button
-              id="open-closed-all-pay-button"
-              buttonStyle="dropdownItem"
-              marginBottom0
-              disabled={!((this.state.actions.regularpayment === true) && !payButtonDisabled)}
-              onClick={() => { this.onChangeActions({ regular: true }); }}
-            >
-              <Icon icon="cart">
-                <FormattedMessage id="ui-users.accounts.history.button.pay" />
-              </Icon>
-            </Button>
-            <Button
-              id="open-closed-all-wave-button"
-              marginBottom0
-              disabled={!((this.state.actions.waive === true) && !waiveButtonDisabled)}
-              buttonStyle="dropdownItem"
-              onClick={() => { this.onChangeActions({ waiveMany: true }); }}
-            >
-              <Icon icon="cancel">
-                <FormattedMessage id="ui-users.accounts.history.button.waive" />
-              </Icon>
-            </Button>
-            <Button
-              id="open-closed-all-refund-button"
-              marginBottom0
-              disabled={!((this.state.actions.refund === true) && (buttonDisabled === false) && (canRefund === true))}
-              buttonStyle="dropdownItem"
-              onClick={() => { this.onChangeActions({ refundMany: true }); }}
-            >
-              <Icon icon="replace">
-                <FormattedMessage id="ui-users.accounts.history.button.refund" />
-              </Icon>
-            </Button>
-            <Button
-              id="open-closed-all-transfer-button"
-              marginBottom0
-              disabled={!((this.state.actions.transfer === true) && (buttonDisabled === false))}
-              buttonStyle="dropdownItem"
-              onClick={() => { this.onChangeActions({ transferMany: true }); }}
-            >
-              <Icon icon="transfer">
-                <FormattedMessage id="ui-users.accounts.history.button.transfer" />
-              </Icon>
-            </Button>
-            <Button
-              id="fee-fine-report-export-button"
-              marginBottom0
-              disabled={_.isEmpty(feeFineActions) || buttonDisabled}
-              buttonStyle="dropdownItem"
-              onClick={this.generateFeesFinesReport}
-            >
-              <Icon icon="download">
-                <FormattedMessage id="ui-users.export.button" />
-              </Icon>
-            </Button>
+            <IfPermission perm="ui-users.feesfines.actions.all">
+              <Button
+                id="open-closed-all-charge-button"
+                buttonStyle="dropdownItem"
+                marginBottom0
+                onClick={this.createFeeFine}
+              >
+                <Icon icon="plus-sign">
+                  <FormattedMessage id="ui-users.accounts.button.new" />
+                </Icon>
+              </Button>
+            </IfPermission>
+            <IfPermission perm="ui-users.manual_pay">
+              <Button
+                id="open-closed-all-pay-button"
+                buttonStyle="dropdownItem"
+                marginBottom0
+                disabled={!this.state.actions.regularpayment}
+                onClick={() => { this.onChangeActions({ regular: true }); }}
+              >
+                <Icon icon="cart">
+                  <FormattedMessage id="ui-users.accounts.history.button.pay" />
+                </Icon>
+              </Button>
+            </IfPermission>
+            <IfPermission perm="ui-users.manual_waive">
+              <Button
+                id="open-closed-all-wave-button"
+                marginBottom0
+                disabled={!this.state.actions.waive}
+                buttonStyle="dropdownItem"
+                onClick={() => { this.onChangeActions({ waiveMany: true }); }}
+              >
+                <Icon icon="cancel">
+                  <FormattedMessage id="ui-users.accounts.history.button.waive" />
+                </Icon>
+              </Button>
+            </IfPermission>
+            <IfPermission perm="ui-users.feesfines.actions.all">
+              <Button
+                id="open-closed-all-refund-button"
+                marginBottom0
+                disabled={!((this.state.actions.refund === true) && (canRefund === true))}
+                buttonStyle="dropdownItem"
+                onClick={() => { this.onChangeActions({ refundMany: true }); }}
+              >
+                <Icon icon="replace">
+                  <FormattedMessage id="ui-users.accounts.history.button.refund" />
+                </Icon>
+              </Button>
+              <Button
+                id="open-closed-all-transfer-button"
+                marginBottom0
+                disabled={!this.state.actions.transfer}
+                buttonStyle="dropdownItem"
+                onClick={() => { this.onChangeActions({ transferMany: true }); }}
+              >
+                <Icon icon="transfer">
+                  <FormattedMessage id="ui-users.accounts.history.button.transfer" />
+                </Icon>
+              </Button>
+              <Button
+                id="fee-fine-report-export-button"
+                marginBottom0
+                disabled={_.isEmpty(feeFineActions)}
+                buttonStyle="dropdownItem"
+                onClick={this.generateFeesFinesReport}
+              >
+                <Icon icon="download">
+                  <FormattedMessage id="ui-users.export.button" />
+                </Icon>
+              </Button>
+            </IfPermission>
           </MenuSection>
-          <MenuSection
-            id="sectionShowColumns"
-            label={intl.formatMessage({ id: 'ui-users.showColumns' })}
-          >
-            <ul>
-              {this.renderCheckboxList(columnMapping)}
-            </ul>
-          </MenuSection>
+          <IfPermission perm="ui-users.feesfines.actions.all">
+            <MenuSection
+              id="sectionShowColumns"
+              label={intl.formatMessage({ id: 'ui-users.showColumns' })}
+            >
+              <ul>
+                {this.renderCheckboxList(columnMapping)}
+              </ul>
+            </MenuSection>
+          </IfPermission>
         </>
       );
     } else {
