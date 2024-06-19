@@ -13,8 +13,6 @@ import {
 import { departmentsShape } from '../shapes';
 import { MAX_RECORDS } from '../constants';
 
-import { isStaffUser, isPatronUser } from '../components/util';
-
 class UserRecordContainer extends React.Component {
   static manifest = Object.freeze({
     query: {},

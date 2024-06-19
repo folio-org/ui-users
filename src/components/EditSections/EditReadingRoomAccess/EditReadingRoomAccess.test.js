@@ -87,7 +87,6 @@ const props = {
       }
     },
     {
-      'id': 'fe1d83dc-e3f9-4e57-aa2c-0b245ae7eb19',
       'userId': '2205005b-ca51-4a04-87fd-938eefa8f6de',
       'readingRoomId': '754c6287-892c-4484-941a-23e050fc8888',
       'readingRoomName': 'abc',
@@ -147,15 +146,18 @@ describe('EditReadingRoomAccess', () => {
     await waitFor(() => expect(props.form.change).toHaveBeenCalled());
   });
 
-  it('should sort the records by default by room name', () => {
+  it('should sort the records by default in asc order by room name', () => {
     renderEditReadingRoomAccess(props);
     expect(document.querySelectorAll('[class^="mclCell"]')[1].innerHTML).toBe('abc');
   });
 
-  it('should sort the records by room name when name column header is clicked', () => {
+  it('should sort the records by room name in desc order when name column header is clicked', () => {
     renderEditReadingRoomAccess(props);
     fireEvent.click(document.getElementById('clickable-list-column-readingroomname'));
     expect(document.querySelectorAll('[class^="mclCell"]')[1].innerHTML).toBe('rr-4');
+
+    fireEvent.click(document.getElementById('clickable-list-column-readingroomname'));
+    expect(document.querySelectorAll('[class^="mclCell"]')[1].innerHTML).toBe('abc');
   });
 
   it('should update access and sort the records by room name', async () => {
