@@ -18,12 +18,7 @@ import { AddressEditList } from '@folio/stripes/smart-components';
 
 import { toAddressTypeOptions } from '../../data/converters/address_type';
 import contactTypes from '../../data/static/contactTypes';
-
-const prefEmailCommDataOptions = [
-  { label: 'Programs', value: 'Programs' },
-  { label: 'Services', value: 'Service' },
-  { label: 'Support', value: 'Support' }
-];
+import { preferredEmailCommunicationOptions } from './constants';
 
 const EditContactInfo = ({
   expanded,
@@ -38,13 +33,12 @@ const EditContactInfo = ({
   const [preferredEmailCommData, setPreferredEmailCommData] = useState([]);
 
   useEffect(() => {
-    const prefEmailCommLabeledData = prefEmailCommDataOptions.filter(
+    const prefEmailCommLabeledData = preferredEmailCommunicationOptions.filter(
       option => preferredEmailCommunication.includes(option.value)
     );
     setPreferredEmailCommData(prefEmailCommLabeledData);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   const contactTypeOptions = (contactTypes || []).map(g => {
     return (
       <FormattedMessage key={g.id} id={g.desc}>
@@ -130,9 +124,9 @@ const EditContactInfo = ({
           <Field
             component={MultiSelection}
             label={<FormattedMessage id="ui-users.contact.preferredEmailCommunication" />}
-            id="adduser_preferredEmailCommunication"
+            id="adduserPreferredEmailCommunication"
             name="preferredEmailCommunication"
-            dataOptions={prefEmailCommDataOptions}
+            dataOptions={preferredEmailCommunicationOptions}
             fullWidth
             aria-required="true"
             disabled={disabled}

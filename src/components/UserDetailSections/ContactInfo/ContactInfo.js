@@ -7,7 +7,8 @@ import {
   Col,
   Accordion,
   KeyValue,
-  Headline
+  Headline,
+  NoValue,
 } from '@folio/stripes/components';
 
 import UserAddresses from '../../UserAddresses';
@@ -22,7 +23,7 @@ const ContactInfo = ({
   addresses,
 }) => {
   const preferredContact = contactTypes.find(g => g.id === _.get(user, ['personal', 'preferredContactTypeId'], '')) || { type: '' };
-
+  const preferredEmailCommunication = _.get(user, ['preferredEmailCommunication'], <NoValue />).join(', ');
   return (
     <Accordion
       open={expanded}
@@ -60,7 +61,7 @@ const ContactInfo = ({
         <Col xs={12}>
           <KeyValue
             label={<FormattedMessage id="ui-users.contact.preferredEmailCommunication" />}
-            value={_.get(user, ['preferredEmailCommunication'], '-').join(', ')}
+            value={preferredEmailCommunication}
           />
         </Col>
       </Row>
