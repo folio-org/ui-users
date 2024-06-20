@@ -8,7 +8,7 @@ export const preferredEmailCommunicationOptions = [
   },
   {
     label: (<FormattedMessage id="ui-users.contact.preferredEmailCommunication.services" />),
-    value: 'Service'
+    value: 'Services'
   },
   {
     label: (<FormattedMessage id="ui-users.contact.preferredEmailCommunication.support" />),

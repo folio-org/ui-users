@@ -16,7 +16,11 @@ import {
   FormattedDate,
   FormattedTime,
 } from '@folio/stripes/components';
-import { stripesConnect, stripesShape } from '@folio/stripes/core';
+import {
+  stripesConnect,
+  stripesShape,
+  IfPermission,
+} from '@folio/stripes/core';
 
 import {
   itemStatuses,
@@ -412,8 +416,6 @@ class ViewFeesFines extends React.Component {
       refund: !isRefundAllowed(a, feeFineActions),
     };
 
-    // disable ellipses menu actions based on permissions
-    const buttonDisabled = !this.props.stripes.hasPerm('ui-users.feesfines.actions.all');
     const isClaimReturnedItem = loan?.item?.status?.name === itemStatuses.CLAIMED_RETURNED;
     const isLoanOpened = loan?.status?.name === loanStatuses.OPEN;
     const isMenuButtonDisabled = isClaimReturnedItem && isLoanOpened;
@@ -425,25 +427,31 @@ class ViewFeesFines extends React.Component {
         usePortal
       >
         <DropdownMenu id="ellipsis-drop-down">
-          <this.MenuButton disabled={isDisabled.pay || buttonDisabled || isMenuButtonDisabled} account={a} action="pay">
-            <FormattedMessage id="ui-users.accounts.history.button.pay" />
-          </this.MenuButton>
-          <this.MenuButton disabled={isDisabled.waive || buttonDisabled || isMenuButtonDisabled} account={a} action="waive">
-            <FormattedMessage id="ui-users.accounts.history.button.waive" />
-          </this.MenuButton>
-          <this.MenuButton disabled={isDisabled.refund || buttonDisabled || isMenuButtonDisabled} account={a} action="refund">
-            <FormattedMessage id="ui-users.accounts.history.button.refund" />
-          </this.MenuButton>
-          <this.MenuButton disabled={isDisabled.transfer || buttonDisabled || isMenuButtonDisabled} account={a} action="transfer">
-            <FormattedMessage id="ui-users.accounts.history.button.transfer" />
-          </this.MenuButton>
-          <this.MenuButton disabled={isDisabled.error || buttonDisabled || isMenuButtonDisabled} account={a} action="cancel">
-            <FormattedMessage id="ui-users.accounts.button.error" />
-          </this.MenuButton>
-          <hr />
-          <this.MenuButton disabled={isDisabled.loan || buttonDisabled} account={a} action="loanDetails">
-            <FormattedMessage id={loanText} />
-          </this.MenuButton>
+          <IfPermission perm="ui-users.manual_pay">
+            <this.MenuButton disabled={isDisabled.pay || isMenuButtonDisabled} account={a} action="pay">
+              <FormattedMessage id="ui-users.accounts.history.button.pay" />
+            </this.MenuButton>
+          </IfPermission>
+          <IfPermission perm="ui-users.manual_waive">
+            <this.MenuButton disabled={isDisabled.waive || isMenuButtonDisabled} account={a} action="waive">
+              <FormattedMessage id="ui-users.accounts.history.button.waive" />
+            </this.MenuButton>
+          </IfPermission>
+          <IfPermission perm="ui-users.feesfines.actions.all">
+            <this.MenuButton disabled={isDisabled.refund || isMenuButtonDisabled} account={a} action="refund">
+              <FormattedMessage id="ui-users.accounts.history.button.refund" />
+            </this.MenuButton>
+            <this.MenuButton disabled={isDisabled.transfer || isMenuButtonDisabled} account={a} action="transfer">
+              <FormattedMessage id="ui-users.accounts.history.button.transfer" />
+            </this.MenuButton>
+            <this.MenuButton disabled={isDisabled.error || isMenuButtonDisabled} account={a} action="cancel">
+              <FormattedMessage id="ui-users.accounts.button.error" />
+            </this.MenuButton>
+            <hr />
+            <this.MenuButton disabled={isDisabled.loan} account={a} action="loanDetails">
+              <FormattedMessage id={loanText} />
+            </this.MenuButton>
+          </IfPermission>
         </DropdownMenu>
       </Dropdown>
     );

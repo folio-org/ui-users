@@ -179,6 +179,9 @@ class UserEdit extends React.Component {
     user.personal.addresses = toUserAddresses(user.personal.addresses);
     user.personal.email = user.personal.email.trim();
     user.departments = compact(user.departments);
+    user.preferredEmailCommunication = user.preferredEmailCommunication?.map(
+      (prefEmailComm) => prefEmailComm.value
+    );
     this.deleteEmptyFields(user);
 
     mutator.records.POST(user)
@@ -269,7 +272,6 @@ class UserEdit extends React.Component {
     const prevActive = prevUser.active;
 
     const formattedCustomFieldsPayload = this.formatCustomFieldsPayload(data.customFields);
-
     data.customFields = formattedCustomFieldsPayload;
 
     // if active has been changed manually on the form

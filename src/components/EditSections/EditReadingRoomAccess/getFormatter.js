@@ -9,17 +9,18 @@ import { Select, TextArea } from '@folio/stripes/components';
 import { rraColumns, READING_ROOM_ACCESS_OPTIONS } from './constants';
 
 export const getFormatter = (form) => {
-  const updateRecord = (record, val, name, rowIndex) => {
-    const fieldState = form.getFieldState('readingRoomsAccessList');
-    if (fieldState?.value && fieldState.value[rowIndex]) {
-      form.change(`readingRoomsAccessList[${rowIndex}][${name}]`, val);
+  const updateRecord = (record, inputValue, name) => {
+    const rraList = form.getFieldState('readingRoomsAccessList')?.value;
+    const recordIndex = rraList?.findIndex((field) => field?.readingRoomId === record?.readingRoomId);
+    if (rraList?.length && recordIndex !== -1) {
+      form.change(`readingRoomsAccessList[${recordIndex}][${name}]`, inputValue);
     } else {
       const clonedRecord = cloneDeep(record);
-      clonedRecord[name] = val;
+      clonedRecord[name] = inputValue;
       if (!clonedRecord.id) {
         clonedRecord.id = uuidv4();
       }
-      form.change(`readingRoomsAccessList[${rowIndex}]`, clonedRecord);
+      form.change(`readingRoomsAccessList[${rraList?.length || 0}]`, clonedRecord);
     }
   };
 
@@ -37,8 +38,9 @@ export const getFormatter = (form) => {
                 dataOptions={READING_ROOM_ACCESS_OPTIONS}
                 id="reading-room-access-select"
                 defaultValue={record.access}
+                value={record.access}
                 onChange={(e) => {
-                  updateRecord(record, e.target.value, input.name, rowIndex);
+                  updateRecord(record, e.target.value, input.name);
                 }}
               />
             );
@@ -61,7 +63,7 @@ export const getFormatter = (form) => {
               marginBottom0
               value={record?.notes}
               onChange={(e) => {
-                updateRecord(record, e.target.value, input.name, rowIndex);
+                updateRecord(record, e.target.value, input.name);
               }}
             />
           )}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
@@ -18,6 +18,7 @@ import { rraColumns, DEFAULT_SORT_ORDER } from './constant';
 import { sortTypes } from '../../../constants';
 import { getFormatter } from './getFormatter';
 import css from './ReadingRoomAccess.css';
+import { getReadingRoomSortedData } from '../../util/util';
 
 const ReadingRoomAccess = (props) => {
   const {
@@ -61,20 +62,6 @@ const ReadingRoomAccess = (props) => {
     }));
   };
 
-  const onSort = (e, meta) => {
-    let newSortDirection = sortTypes.ASC;
-    if (sortedRecordsDetails.order === meta.name) {
-      newSortDirection = sortedRecordsDetails.direction === sortTypes.ASC ? sortTypes.DESC : sortTypes.ASC;
-    }
-    const sortedData = orderBy(sortedRecordsDetails.data, [meta.name], newSortDirection);
-
-    setSortedRecordsDetails({
-      data: sortedData,
-      order: meta.name,
-      direction: newSortDirection
-    });
-  };
-
   const renderName = (usr) => {
     const lastName = get(usr, ['personal', 'lastName'], '');
     const firstName = get(usr, ['personal', 'firstName'], '');
@@ -104,6 +91,8 @@ const ReadingRoomAccess = (props) => {
     );
   };
 
+  const { data: sortedData, order: sortOrder, direction: sortDirection } = sortedRecordsDetails;
+
   return (
     <Accordion
       id={accordionId}
@@ -128,14 +117,16 @@ const ReadingRoomAccess = (props) => {
       <MultiColumnList
         striped
         data-testid="reading-room-access-mcl"
-        contentData={sortedRecordsDetails.data}
+        contentData={sortedData}
         columnMapping={columnMapping}
         visibleColumns={visibleColumns}
         formatter={getFormatter(lastUpdatedDetails)}
-        sortOrder={sortedRecordsDetails.order}
-        sortDirection={`${sortedRecordsDetails.direction}ending`}
-        onHeaderClick={onSort}
-        sortedColumn={sortedRecordsDetails.order}
+        sortOrder={sortOrder}
+        sortDirection={`${sortDirection}ending`}
+        onHeaderClick={(e, meta) => setSortedRecordsDetails(
+          getReadingRoomSortedData(e, meta, sortedRecordsDetails)
+        )}
+        sortedColumn={sortOrder}
       />
     </Accordion>
   );

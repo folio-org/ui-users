@@ -6,6 +6,8 @@ export const rraColumns = {
   NOTES: 'notes',
 };
 
+export const DEFAULT_SORT_ORDER = rraColumns.READING_ROOM_NAME;
+
 export const READING_ROOM_ACCESS_OPTIONS = [
   {
     label: (<FormattedMessage id="ui-users.readingRoom.allowed" />),
