@@ -1180,5 +1180,5 @@
     "readingRoom.allowed": "Povoleno",
     "readingRoom.notAllowed": "Nepovoleno",
     "readingRoom.metaSection.lastUpdatedDetails": "{date} podle {name}",
-    "settings.users.title": "Users settings"
+    "settings.users.title": "Nastavení uživatelů"
 }

@@ -3,7 +3,7 @@
     "data.contactTypes.mail": "Correo (Dirección principal)",
     "data.contactTypes.textMessage": "Mensaje de texto",
     "data.loanActionMap.checkedOut": "Prestado",
-    "data.loanActionMap.checkedIn": "Registrado",
+    "data.loanActionMap.checkedIn": "Devuelto",
     "data.loanActionMap.renewed": "Renovado",
     "data.loanActionMap.source": "Fuente",
     "data.loanActionMap.holdRequested": "Retención solicitada",
