@@ -5,27 +5,9 @@ import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
 import renderWithRouter from 'helpers/renderWithRouter';
 import EditContactInfo from './EditContactInfo';
+import '__mock__/matchMedia.mock';
 
 jest.unmock('@folio/stripes/components');
-
-jest.mock('@folio/stripes/components', () => ({
-  ...jest.requireActual('@folio/stripes/components'),
-  MultiSelection: jest.fn(({ children, dataOptions }) => (
-    <div>
-      <select multiple>
-        {dataOptions.forEach((option, i) => (
-          <option
-            value={option.value}
-            key={option.id || `option-${i}`}
-          >
-            {option.label}
-          </option>
-        ))}
-      </select>
-      {children}
-    </div>
-  )),
-}));
 
 const onSubmit = jest.fn();
 
@@ -91,12 +73,13 @@ describe('Render Edit contact Information component', () => {
   it('Must be rendered', () => {
     renderEditContactInfo(props);
     expect(screen.getByText('AddressEditList')).toBeInTheDocument();
+    expect(screen.getAllByLabelText('ui-users.contact.preferredEmailCommunication')[0]).toBeInTheDocument();
   });
 
   it('Must be rendered', async () => {
     renderEditContactInfo(props);
 
-    const emailInput = screen.getByRole('textbox', { name: /email/i });
+    const emailInput = screen.getAllByRole('textbox', { name: /email/i })[0];
 
     await userEvent.type(emailInput, 'Test@gmail.com');
     expect(emailInput.value).toBe('Test@gmail.com');
@@ -105,7 +88,7 @@ describe('Render Edit contact Information component', () => {
   it('should render with disabled fields', () => {
     renderEditContactInfo({ ...props, disabled: true });
 
-    expect(screen.getByRole('textbox', { name: /email/i })).toBeDisabled();
+    expect(screen.getAllByRole('textbox', { name: /email/i })[0]).toBeDisabled();
     expect(screen.getByRole('textbox', { name: /mobilePhone/i })).toBeDisabled();
     expect(screen.getByLabelText('ui-users.contact.phone')).toBeDisabled();
   });
