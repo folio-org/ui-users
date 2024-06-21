@@ -85,7 +85,6 @@ const props = {
   intl: {
     formatMessage : jest.fn()
   },
-  preferredEmailCommunication: ['Programs', 'Support'],
 };
 
 describe('Render Edit contact Information component', () => {

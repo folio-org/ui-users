@@ -63,7 +63,7 @@ class UserEdit extends React.Component {
   }
 
   getPrefEmailCommunicationFormValue(prefEmailComm) {
-    return prefEmailComm.every(item => typeof item === 'string') ?
+    return prefEmailComm?.every(item => typeof item === 'string') ?
       prefEmailComm?.map(a => {
         return preferredEmailCommunicationOptions.find(b => b.value === a);
       }) : prefEmailComm;
