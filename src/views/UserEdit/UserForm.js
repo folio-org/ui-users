@@ -400,7 +400,6 @@ class UserForm extends React.Component {
                     accordionId="contactInfo"
                     addressTypes={formData.addressTypes}
                     preferredContactTypeId={initialValues.preferredContactTypeId}
-                    preferredEmailCommunication={initialValues.preferredEmailCommunication}
                     disabled={isShadowUser}
                   />
                   <EditCustomFieldsRecord

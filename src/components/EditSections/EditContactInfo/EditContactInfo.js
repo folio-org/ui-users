@@ -26,20 +26,9 @@ const EditContactInfo = ({
   accordionId,
   addressTypes,
   preferredContactTypeId,
-  preferredEmailCommunication,
   intl,
   disabled,
 }) => {
-  const [preferredEmailCommData, setPreferredEmailCommData] = useState([]);
-
-  useEffect(() => {
-    const prefEmailCommLabeledData = preferredEmailCommunicationOptions.filter(
-      option => preferredEmailCommunication.includes(option.value)
-    );
-    setPreferredEmailCommData(prefEmailCommLabeledData);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const contactTypeOptions = (contactTypes || []).map(g => {
     return (
       <FormattedMessage key={g.id} id={g.desc}>
@@ -130,7 +119,6 @@ const EditContactInfo = ({
             dataOptions={preferredEmailCommunicationOptions}
             fullWidth
             disabled={disabled}
-            initialValue={preferredEmailCommData}
           />
         </Col>
       </Row>
@@ -152,9 +140,6 @@ EditContactInfo.propTypes = {
   accordionId: PropTypes.string.isRequired,
   addressTypes: PropTypes.arrayOf(PropTypes.object),
   preferredContactTypeId: PropTypes.string,
-  preferredEmailCommunication: PropTypes.arrayOf(
-    PropTypes.oneOfType([PropTypes.string, PropTypes.object])
-  ),
   intl: PropTypes.object.isRequired,
   disabled: PropTypes.bool,
 };

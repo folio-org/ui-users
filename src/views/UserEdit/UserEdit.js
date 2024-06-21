@@ -30,6 +30,7 @@ import {
   deliveryFulfillmentValues,
 } from '../../constants';
 import { resourcesLoaded, showErrorCallout } from './UserEditHelpers';
+import { preferredEmailCommunicationOptions } from '../../components/EditSections/EditContactInfo/constants';
 
 class UserEdit extends React.Component {
   static propTypes = {
@@ -61,6 +62,13 @@ class UserEdit extends React.Component {
     return selUser.find(u => u.id === id);
   }
 
+  getPrefEmailCommunicationFormValue(prefEmailComm) {
+    return prefEmailComm.every(item => typeof item === 'string') ?
+      prefEmailComm?.map(a => {
+        return preferredEmailCommunicationOptions.find(b => b.value === a);
+      }) : prefEmailComm;
+  }
+
   getUserFormValues() {
     const {
       getProxies,
@@ -88,6 +96,8 @@ class UserEdit extends React.Component {
       preferredEmailCommunication: [],
     };
 
+    // console.log('initialFormValues', initialFormValues);
+
     if (!match.params.id) return initialFormValues;
 
     const user = this.getUser();
@@ -98,6 +108,7 @@ class UserEdit extends React.Component {
     }
 
     userFormValues.personal.addresses = getFormAddressList(get(user, 'personal.addresses', []));
+    userFormValues.preferredEmailCommunication = this.getPrefEmailCommunicationFormValue(userFormValues.preferredEmailCommunication);
 
     return {
       ...userFormValues,
@@ -172,7 +183,7 @@ class UserEdit extends React.Component {
     });
   };
 
-  formatPreferredEmailCommunication(prefEmailComm) {
+  formatPrefEmailCommPayload(prefEmailComm) {
     return prefEmailComm?.map(
       (EmailComm) => EmailComm.value
     );
@@ -185,7 +196,7 @@ class UserEdit extends React.Component {
     user.personal.addresses = toUserAddresses(user.personal.addresses);
     user.personal.email = user.personal.email.trim();
     user.departments = compact(user.departments);
-    user.preferredEmailCommunication = this.formatPreferredEmailCommunication(user.preferredEmailCommunication);
+    user.preferredEmailCommunication = this.formatPrefEmailCommPayload(user.preferredEmailCommunication);
     this.deleteEmptyFields(user);
 
     mutator.records.POST(user)
@@ -251,7 +262,7 @@ class UserEdit extends React.Component {
     user.personal.addresses = toUserAddresses(user.personal.addresses); // eslint-disable-line no-param-reassign
     user.personal.email = user.personal.email?.trim();
     user.departments = compact(user.departments);
-    user.preferredEmailCommunication = this.formatPreferredEmailCommunication(user.preferredEmailCommunication);
+    user.preferredEmailCommunication = this.formatPrefEmailCommPayload(user.preferredEmailCommunication);
 
     const { proxies, sponsors, permissions, servicePoints, preferredServicePoint } = user;
 
