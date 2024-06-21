@@ -96,8 +96,6 @@ class UserEdit extends React.Component {
       preferredEmailCommunication: [],
     };
 
-    // console.log('initialFormValues', initialFormValues);
-
     if (!match.params.id) return initialFormValues;
 
     const user = this.getUser();
