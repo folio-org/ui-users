@@ -39,6 +39,7 @@ const EditContactInfo = ({
     setPreferredEmailCommData(prefEmailCommLabeledData);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   const contactTypeOptions = (contactTypes || []).map(g => {
     return (
       <FormattedMessage key={g.id} id={g.desc}>
@@ -128,7 +129,6 @@ const EditContactInfo = ({
             name="preferredEmailCommunication"
             dataOptions={preferredEmailCommunicationOptions}
             fullWidth
-            aria-required="true"
             disabled={disabled}
             initialValue={preferredEmailCommData}
           />

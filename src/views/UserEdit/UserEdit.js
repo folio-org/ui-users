@@ -172,6 +172,12 @@ class UserEdit extends React.Component {
     });
   };
 
+  formatPreferredEmailCommunication(prefEmailComm) {
+    return prefEmailComm?.map(
+      (EmailComm) => EmailComm.value
+    );
+  }
+
   create = ({ requestPreferences, ...userFormData }) => {
     const { mutator, history, location: { search } } = this.props;
     const userData = cloneDeep(userFormData);
@@ -179,9 +185,7 @@ class UserEdit extends React.Component {
     user.personal.addresses = toUserAddresses(user.personal.addresses);
     user.personal.email = user.personal.email.trim();
     user.departments = compact(user.departments);
-    user.preferredEmailCommunication = user.preferredEmailCommunication?.map(
-      (prefEmailComm) => prefEmailComm.value
-    );
+    user.preferredEmailCommunication = this.formatPreferredEmailCommunication(user.preferredEmailCommunication);
     this.deleteEmptyFields(user);
 
     mutator.records.POST(user)
@@ -247,9 +251,7 @@ class UserEdit extends React.Component {
     user.personal.addresses = toUserAddresses(user.personal.addresses); // eslint-disable-line no-param-reassign
     user.personal.email = user.personal.email?.trim();
     user.departments = compact(user.departments);
-    user.preferredEmailCommunication = user.preferredEmailCommunication?.map(
-      (prefEmailComm) => prefEmailComm.value
-    );
+    user.preferredEmailCommunication = this.formatPreferredEmailCommunication(user.preferredEmailCommunication);
 
     const { proxies, sponsors, permissions, servicePoints, preferredServicePoint } = user;
 
