@@ -179,18 +179,20 @@ describe('Owner settings', () => {
   // fill out form elements
   // click the "save" button
   // wait for the "save" button to disappear
-  it.skip('Create and edit functionality', async () => {
+  it('Create and edit functionality', async () => {
     renderOwnerSettings(propData);
 
     const newButton = screen.getByRole('button', { name: 'stripes-core.button.new' });
     await userEvent.click(newButton);
-    await waitFor(() => {
-      expect(screen.getByText('stripes-core.button.save')).toBeInTheDocument();
-      expect(document.querySelector('[name="items[0].owner"]')).toBeInTheDocument();
-    });
+
+    expect(screen.queryByText('stripes-core.button.save')).toBeInTheDocument();
+    expect(document.querySelector('[name="items[0].owner"]')).toBeInTheDocument();
 
     await userEvent.type(document.querySelector('[name="items[0].owner"]'), 'tesst');
+    await userEvent.type(document.querySelector('[name="items[0].desc"]'), 'tesst desc');
     await userEvent.click(document.querySelector('[id="multiselect-option-list-owner-service-point"] li:first-child'));
+
+    expect(document.querySelector('[name="items[0].owner"]').value).toBe('tesst');
     await userEvent.click(screen.getByText('stripes-core.button.save'));
 
     await waitFor(() => {
