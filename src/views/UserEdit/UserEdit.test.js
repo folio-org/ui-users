@@ -77,7 +77,10 @@ describe('UserEdit', () => {
     },
     resources: {
       selUser: {
-        records: [{ id: 'userId' }],
+        records: [{
+          id: 'userId',
+          preferredEmailCommunication: ['Programs', 'Support']
+        }],
       },
       patronGroups: {
         records: [],
