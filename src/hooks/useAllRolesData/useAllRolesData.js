@@ -8,7 +8,7 @@ function useAllRolesData() {
   const [namespace] = useNamespace();
 
   return useQuery([namespace, 'user-roles'], () => {
-    return ky.get(`roles?limit=${stripes.config.maxUnpagedResourceCount}`).json();
+    return ky.get(`roles?limit=${stripes.config.maxUnpagedResourceCount}&query=cql.allRecords=1 sortby name`).json();
   });
 }
 
