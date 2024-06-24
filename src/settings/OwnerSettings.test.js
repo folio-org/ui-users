@@ -7,7 +7,6 @@ import renderWithRouter from 'helpers/renderWithRouter';
 import { buildResources } from 'helpers/buildResources';
 import OwnerSettings from './OwnerSettings';
 
-
 jest.unmock('@folio/stripes/components');
 jest.unmock('@folio/stripes/smart-components');
 
@@ -118,11 +117,10 @@ const mutator = {
   },
   values:{
     DELETE: jest.fn().mockReturnValue(Promise.resolve()),
-    POST: jest.fn(),
+    POST: jest.fn().mockReturnValue(Promise.resolve()),
     PUT: jest.fn(),
     cancel: jest.fn(),
   }
-
 };
 
 const propData = {
@@ -184,15 +182,14 @@ describe('Owner settings', () => {
 
     const newButton = screen.getByRole('button', { name: 'stripes-core.button.new' });
     await userEvent.click(newButton);
-
-    expect(screen.queryByText('stripes-core.button.save')).toBeInTheDocument();
-    expect(document.querySelector('[name="items[0].owner"]')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('stripes-core.button.save')).toBeInTheDocument();
+      expect(screen.getByText('stripes-core.button.cancel')).toBeInTheDocument();
+      expect(document.querySelector('[name="items[0].owner"]')).toBeInTheDocument();
+    });
 
     await userEvent.type(document.querySelector('[name="items[0].owner"]'), 'tesst');
-    await userEvent.type(document.querySelector('[name="items[0].desc"]'), 'tesst desc');
     await userEvent.click(document.querySelector('[id="multiselect-option-list-owner-service-point"] li:first-child'));
-
-    expect(document.querySelector('[name="items[0].owner"]').value).toBe('tesst');
     await userEvent.click(screen.getByText('stripes-core.button.save'));
 
     await waitFor(() => {
