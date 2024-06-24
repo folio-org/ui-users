@@ -70,7 +70,7 @@ const props = {
 };
 
 describe('Render Edit contact Information component', () => {
-  it('should render Adress List', () => {
+  it('should render Address List', () => {
     renderEditContactInfo(props);
     expect(screen.getByText('AddressEditList')).toBeInTheDocument();
   });
