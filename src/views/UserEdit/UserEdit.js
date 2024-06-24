@@ -181,11 +181,9 @@ class UserEdit extends React.Component {
     });
   };
 
-  formatPrefEmailCommPayload(prefEmailComm) {
-    return prefEmailComm?.map(
-      (EmailComm) => EmailComm.value
-    );
-  }
+  formatPrefEmailCommPayload = prefEmailComm => (
+    prefEmailComm?.map(option => option.value)
+  )
 
   create = ({ requestPreferences, ...userFormData }) => {
     const { mutator, history, location: { search } } = this.props;
@@ -281,8 +279,8 @@ class UserEdit extends React.Component {
     const today = moment().endOf('day');
     const curActive = user.active;
     const prevActive = prevUser.active;
-
     const formattedCustomFieldsPayload = this.formatCustomFieldsPayload(data.customFields);
+
     data.customFields = formattedCustomFieldsPayload;
 
     // if active has been changed manually on the form

@@ -70,13 +70,17 @@ const props = {
 };
 
 describe('Render Edit contact Information component', () => {
-  it('Must be rendered', () => {
+  it('should render Adress List', () => {
     renderEditContactInfo(props);
     expect(screen.getByText('AddressEditList')).toBeInTheDocument();
+  });
+
+  it('should render Preferred Email Communication field', () => {
+    renderEditContactInfo(props);
     expect(screen.getAllByLabelText('ui-users.contact.preferredEmailCommunication')[0]).toBeInTheDocument();
   });
 
-  it('Must be rendered', async () => {
+  it('should render email field', async () => {
     renderEditContactInfo(props);
 
     const emailInput = screen.getAllByRole('textbox', { name: /email/i })[0];
@@ -102,6 +106,6 @@ describe('Render Edit contact Information component', () => {
     expect(screen.getAllByRole('textbox', { name: /email/i })[0]).toBeDisabled();
     expect(screen.getByRole('textbox', { name: /mobilePhone/i })).toBeDisabled();
     expect(screen.getByLabelText('ui-users.contact.phone')).toBeDisabled();
-    expect(document.querySelector('[id="adduserPreferredEmailCommunication-input"]'));
+    expect(document.querySelector('[id="adduserPreferredEmailCommunication-input"]')).toBeDisabled();
   });
 });
