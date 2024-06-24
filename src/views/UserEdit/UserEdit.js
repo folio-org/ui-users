@@ -30,6 +30,7 @@ import {
   deliveryFulfillmentValues,
 } from '../../constants';
 import { resourcesLoaded, showErrorCallout } from './UserEditHelpers';
+import { preferredEmailCommunicationOptions } from '../../components/EditSections/EditContactInfo/constants';
 
 class UserEdit extends React.Component {
   static propTypes = {
@@ -61,6 +62,13 @@ class UserEdit extends React.Component {
     return selUser.find(u => u.id === id);
   }
 
+  getPrefEmailCommunicationFormValue(prefEmailComm) {
+    return prefEmailComm?.every(item => typeof item === 'string') ?
+      prefEmailComm?.map(a => {
+        return preferredEmailCommunicationOptions.find(b => b.value === a);
+      }) : prefEmailComm;
+  }
+
   getUserFormValues() {
     const {
       getProxies,
@@ -85,6 +93,7 @@ class UserEdit extends React.Component {
       },
       username: '',
       type: '',
+      preferredEmailCommunication: [],
     };
 
     if (!match.params.id) return initialFormValues;
@@ -97,6 +106,7 @@ class UserEdit extends React.Component {
     }
 
     userFormValues.personal.addresses = getFormAddressList(get(user, 'personal.addresses', []));
+    userFormValues.preferredEmailCommunication = this.getPrefEmailCommunicationFormValue(userFormValues.preferredEmailCommunication);
 
     return {
       ...userFormValues,
@@ -171,6 +181,10 @@ class UserEdit extends React.Component {
     });
   };
 
+  formatPrefEmailCommPayload = prefEmailComm => (
+    prefEmailComm?.map(option => option.value)
+  )
+
   create = ({ requestPreferences, ...userFormData }) => {
     const { mutator, history, location: { search } } = this.props;
     const userData = cloneDeep(userFormData);
@@ -178,6 +192,7 @@ class UserEdit extends React.Component {
     user.personal.addresses = toUserAddresses(user.personal.addresses);
     user.personal.email = user.personal.email.trim();
     user.departments = compact(user.departments);
+    user.preferredEmailCommunication = this.formatPrefEmailCommPayload(user.preferredEmailCommunication);
     this.deleteEmptyFields(user);
 
     mutator.records.POST(user)
@@ -243,6 +258,7 @@ class UserEdit extends React.Component {
     user.personal.addresses = toUserAddresses(user.personal.addresses); // eslint-disable-line no-param-reassign
     user.personal.email = user.personal.email?.trim();
     user.departments = compact(user.departments);
+    user.preferredEmailCommunication = this.formatPrefEmailCommPayload(user.preferredEmailCommunication);
 
     const { proxies, sponsors, permissions, servicePoints, preferredServicePoint } = user;
 
@@ -263,7 +279,6 @@ class UserEdit extends React.Component {
     const today = moment().endOf('day');
     const curActive = user.active;
     const prevActive = prevUser.active;
-
     const formattedCustomFieldsPayload = this.formatCustomFieldsPayload(data.customFields);
 
     data.customFields = formattedCustomFieldsPayload;

@@ -32,6 +32,7 @@ const userFormData = {
       }
     }
   ],
+  preferredEmailCommunication: ['Programs', 'Support'],
 };
 
 jest.mock('@folio/stripes/components', () => ({
@@ -76,7 +77,10 @@ describe('UserEdit', () => {
     },
     resources: {
       selUser: {
-        records: [{ id: 'userId' }],
+        records: [{
+          id: 'userId',
+          preferredEmailCommunication: ['Programs', 'Support']
+        }],
       },
       patronGroups: {
         records: [],

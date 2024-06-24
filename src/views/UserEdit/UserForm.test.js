@@ -35,6 +35,7 @@ const user = {
   type: USER_TYPES.STAFF,
   proxies: [],
   sponsors: [],
+  preferredEmailCommunication: [],
 };
 
 const defaultProps = {

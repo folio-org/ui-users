@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   FormattedMessage,
   injectIntl,
@@ -12,11 +11,13 @@ import {
   Col,
   Accordion,
   Headline,
+  MultiSelection,
 } from '@folio/stripes/components';
 import { AddressEditList } from '@folio/stripes/smart-components';
 
 import { toAddressTypeOptions } from '../../data/converters/address_type';
 import contactTypes from '../../data/static/contactTypes';
+import { preferredEmailCommunicationOptions } from './constants';
 
 const EditContactInfo = ({
   expanded,
@@ -105,6 +106,19 @@ const EditContactInfo = ({
             </FormattedMessage>
             {contactTypeOptions}
           </Field>
+        </Col>
+      </Row>
+      <Row>
+        <Col xs={12} md={3}>
+          <Field
+            component={MultiSelection}
+            label={<FormattedMessage id="ui-users.contact.preferredEmailCommunication" />}
+            id="adduserPreferredEmailCommunication"
+            name="preferredEmailCommunication"
+            dataOptions={preferredEmailCommunicationOptions}
+            fullWidth
+            disabled={disabled}
+          />
         </Col>
       </Row>
       <br />
