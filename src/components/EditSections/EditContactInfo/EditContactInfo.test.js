@@ -5,6 +5,7 @@ import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
 import renderWithRouter from 'helpers/renderWithRouter';
 import EditContactInfo from './EditContactInfo';
+import '__mock__/matchMedia.mock';
 
 jest.unmock('@folio/stripes/components');
 
@@ -65,29 +66,46 @@ const props = {
   preferredContactTypeId: '001',
   intl: {
     formatMessage : jest.fn()
-  }
+  },
 };
 
 describe('Render Edit contact Information component', () => {
-  it('Must be rendered', () => {
+  it('should render Address List', () => {
     renderEditContactInfo(props);
     expect(screen.getByText('AddressEditList')).toBeInTheDocument();
   });
 
-  it('Must be rendered', async () => {
+  it('should render Preferred Email Communication field', () => {
+    renderEditContactInfo(props);
+    expect(screen.getAllByLabelText('ui-users.contact.preferredEmailCommunication')[0]).toBeInTheDocument();
+  });
+
+  it('should render email field', async () => {
     renderEditContactInfo(props);
 
-    const emailInput = screen.getByRole('textbox', { name: /email/i });
+    const emailInput = screen.getAllByRole('textbox', { name: /email/i })[0];
 
     await userEvent.type(emailInput, 'Test@gmail.com');
     expect(emailInput.value).toBe('Test@gmail.com');
   });
 
+  it('should set Preferred Email Communication input field value on selection', async () => {
+    renderEditContactInfo(props);
+    const prefEmailCommInput = document.querySelector('[id="multi-value-status-adduserPreferredEmailCommunication"]');
+    expect(prefEmailCommInput).toHaveTextContent('0 items selected');
+
+    await userEvent.click(document.querySelector('[id="adduserPreferredEmailCommunication-main-item-1"]'));
+    await userEvent.click(document.querySelector('[id="adduserPreferredEmailCommunication-main-item-2"]'));
+
+    expect(prefEmailCommInput).toHaveTextContent('2 items selected');
+  });
+
   it('should render with disabled fields', () => {
     renderEditContactInfo({ ...props, disabled: true });
 
-    expect(screen.getByRole('textbox', { name: /email/i })).toBeDisabled();
+    expect(screen.getAllByRole('textbox', { name: /email/i })[0]).toBeDisabled();
     expect(screen.getByRole('textbox', { name: /mobilePhone/i })).toBeDisabled();
     expect(screen.getByLabelText('ui-users.contact.phone')).toBeDisabled();
+    expect(document.querySelector('[id="adduserPreferredEmailCommunication-input"]')).toBeDisabled();
   });
 });
