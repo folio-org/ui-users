@@ -85,11 +85,23 @@ describe('Render Edit contact Information component', () => {
     expect(emailInput.value).toBe('Test@gmail.com');
   });
 
+  it('should set Preferred Email Communication input field value on selection', async () => {
+    renderEditContactInfo(props);
+    const prefEmailCommInput = document.querySelector('[id="multi-value-status-adduserPreferredEmailCommunication"]');
+    expect(prefEmailCommInput).toHaveTextContent('0 items selected');
+
+    await userEvent.click(document.querySelector('[id="adduserPreferredEmailCommunication-main-item-1"]'));
+    await userEvent.click(document.querySelector('[id="adduserPreferredEmailCommunication-main-item-2"]'));
+
+    expect(prefEmailCommInput).toHaveTextContent('2 items selected');
+  });
+
   it('should render with disabled fields', () => {
     renderEditContactInfo({ ...props, disabled: true });
 
     expect(screen.getAllByRole('textbox', { name: /email/i })[0]).toBeDisabled();
     expect(screen.getByRole('textbox', { name: /mobilePhone/i })).toBeDisabled();
     expect(screen.getByLabelText('ui-users.contact.phone')).toBeDisabled();
+    expect(document.querySelector('[id="adduserPreferredEmailCommunication-input"]'));
   });
 });
