@@ -64,6 +64,7 @@ import {
   isShadowUser,
 } from '../../components/util';
 import RequestFeeFineBlockButtons from '../../components/RequestFeeFineBlockButtons';
+import PrintLibraryCardButton from '../../components/PrintLibraryCardButton';
 import { departmentsShape } from '../../shapes';
 import ErrorPane from '../../components/ErrorPane';
 import LostItemsLink from '../../components/LostItemsLink';
@@ -485,6 +486,7 @@ class UserDetail extends React.Component {
               callout={this.callout}
             />
           </IfInterface>
+          <PrintLibraryCardButton />
           <ActionMenuDeleteButton
             handleDeleteClick={this.handleDeleteClick}
             id={this.props.match.params.id}

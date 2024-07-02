@@ -27,6 +27,7 @@
 * Use showing/hiding approach for fee/fine action buttons. Refs UIU-3156.
 * Support sorting for each column in the Reading Room Access accordion in User Profile Edit. Refs UIU-3132.
 * Add the 'Preferred email communication' field in the Contact information accordion of the user profile. Refs UIU-3152.
+* Add the 'Print Library Card' action in the Action Menu of User app. Refs UIU-3159.
 
 ## [10.1.1](https://github.com/folio-org/ui-users/tree/v10.1.1) (2024-05-07)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.1.0...v10.1.1)
