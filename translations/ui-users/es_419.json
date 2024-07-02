@@ -1180,5 +1180,10 @@
     "readingRoom.allowed": "Permitido",
     "readingRoom.notAllowed": "No autorizado",
     "readingRoom.metaSection.lastUpdatedDetails": "{date} por {name}",
-    "settings.users.title": "Configuración de usuarios"
+    "settings.users.title": "Configuración de usuarios",
+    "contact.preferredEmailCommunication": "Preferred email communications",
+    "contact.preferredEmailCommunication.programs": "Programs",
+    "contact.preferredEmailCommunication.services": "Services",
+    "contact.preferredEmailCommunication.support": "Support",
+    "printLibraryCard": "Print library card"
 }
