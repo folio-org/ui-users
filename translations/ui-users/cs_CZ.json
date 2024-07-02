@@ -1180,5 +1180,10 @@
     "readingRoom.allowed": "Povoleno",
     "readingRoom.notAllowed": "Nepovoleno",
     "readingRoom.metaSection.lastUpdatedDetails": "{date} podle {name}",
-    "settings.users.title": "Nastavení uživatelů"
+    "settings.users.title": "Nastavení uživatelů",
+    "contact.preferredEmailCommunication": "Preferred email communications",
+    "contact.preferredEmailCommunication.programs": "Programy",
+    "contact.preferredEmailCommunication.services": "Services",
+    "contact.preferredEmailCommunication.support": "Support",
+    "printLibraryCard": "Print library card"
 }
