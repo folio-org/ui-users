@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 
 import { useStripes, useOkapiKy } from '@folio/stripes/core';
+import { useAllRolesData } from '../../hooks';
 
 const withUserRoles = (WrappedComponent) => (props) => {
   const { okapi, config } = useStripes();
   // eslint-disable-next-line react/prop-types
   const userId = props.match.params.id;
   const [assignedRoleIds, setAssignedRoleIds] = useState([]);
+
+  const { data: allRolesData, isLoading: isAllRolesDataLoading } = useAllRolesData();
 
   const searchParams = {
     limit: config.maxUnpagedResourceCount,
@@ -21,16 +24,26 @@ const withUserRoles = (WrappedComponent) => (props) => {
   });
 
   useEffect(() => {
-    api.get(
-      'roles/users', { searchParams },
-    )
-      .json()
-      .then(data => setAssignedRoleIds(data.userRoles.map(({ roleId }) => roleId)))
-      // eslint-disable-next-line no-console
-      .catch(console.error);
-    // Only userId can be changed dynamically
+    if (!isAllRolesDataLoading) {
+      api.get(
+        'roles/users', { searchParams },
+      )
+        .json()
+        .then(data => {
+          const assignedRoles = data.userRoles.map(({ roleId }) => {
+            const foundUserRole = allRolesData?.roles?.find(role => roleId === role.id);
+
+            return { name: foundUserRole?.name, id: foundUserRole?.id };
+          }).sort((a, b) => a.name.localeCompare(b.name)).map(r => r.id);
+
+          setAssignedRoleIds(assignedRoles);
+        })
+        // eslint-disable-next-line no-console
+        .catch(console.error);
+      // Only userId can be changed dynamically
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId]);
+  }, [userId, isAllRolesDataLoading]);
 
   const updateUserRoles = (roleIds) => api.put(
     `roles/users/${userId}`, { json: {

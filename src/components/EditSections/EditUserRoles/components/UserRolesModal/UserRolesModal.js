@@ -71,7 +71,14 @@ export default function UserRolesModal({ isOpen,
   };
 
   const handleSaveClick = () => {
-    changeUserRoles(assignedRoleIds);
+    const sortedAlphabetically = assignedRoleIds
+      .map(id => {
+        const foundRole = allRolesData?.roles?.find(role => role.id === id);
+        return { name: foundRole?.name, id: foundRole?.id };
+      })
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map(r => r.id);
+    changeUserRoles(sortedAlphabetically);
     onClose();
   };
 

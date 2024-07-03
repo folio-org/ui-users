@@ -6,21 +6,22 @@ import PropTypes from 'prop-types';
 import { useStripes } from '@folio/stripes/core';
 import { isEmpty } from 'lodash';
 import { FieldArray } from 'react-final-form-arrays';
-import { OnChange } from 'react-final-form-listeners';
 import { useUserTenantRoles, useAllRolesData } from '../../../hooks';
 import UserRolesModal from './components/UserRolesModal/UserRolesModal';
 import { filtersConfig } from './helpers';
 
-function EditUserRoles({ match, accordionId, form:{ change }, initialValues }) {
+function EditUserRoles({ match, accordionId, form:{ change, getFieldState } }) {
   const [isOpen, setIsOpen] = useState(false);
   const [unassignModalOpen, setUnassignModalOpen] = useState(false);
-  const [assignedRoleIds, setAssignedRoleIds] = useState(initialValues.assignedRoleIds);
   const { okapi } = useStripes();
   const intl = useIntl();
   const userId = match.params.id;
 
+  const assignedRoleIds = getFieldState('assignedRoleIds')?.value || [];
+
   const { userRoles, isLoading } = useUserTenantRoles({ userId, tenantId: okapi.tenant });
-  const { data: allRolesData } = useAllRolesData();
+
+  const { data: allRolesData, isLoading: isAllRolesDataLoading } = useAllRolesData();
 
   const changeUserRoles = (roleIds) => {
     change('assignedRoleIds', roleIds);
@@ -32,14 +33,14 @@ function EditUserRoles({ match, accordionId, form:{ change }, initialValues }) {
   };
 
   const listItemsData = useMemo(() => {
-    if (isEmpty(assignedRoleIds)) return [];
+    if (isEmpty(assignedRoleIds) || isAllRolesDataLoading) return [];
 
     return assignedRoleIds.map(roleId => {
       const foundUserRole = allRolesData?.roles?.find(role => roleId === role.id);
 
       return { name: foundUserRole?.name, id: foundUserRole?.id };
     });
-  }, [assignedRoleIds, allRolesData]);
+  }, [assignedRoleIds, isAllRolesDataLoading]);
 
   const unassignAllMessage = <FormattedMessage
     id="ui-users.roles.modal.unassignAll.label"
@@ -48,6 +49,7 @@ function EditUserRoles({ match, accordionId, form:{ change }, initialValues }) {
 
   const renderRoleComponent = (fields) => (_, index) => {
     if (isEmpty(fields.value)) return null;
+    // console.log(fields.value, 'FIELES>value');
 
     const roleId = fields.value[index];
     const role = allRolesData?.roles?.find(r => roleId === r.id);
@@ -124,12 +126,6 @@ function EditUserRoles({ match, accordionId, form:{ change }, initialValues }) {
         cancelLabel={<FormattedMessage id="ui-users.no" />}
         confirmLabel={<FormattedMessage id="ui-users.yes" />}
       />
-      <OnChange name="assignedRoleIds">
-        {(userAssignedRoleIds) => {
-          const userRoleIds = isEmpty(userAssignedRoleIds) ? [] : userAssignedRoleIds;
-          setAssignedRoleIds(userRoleIds);
-        }}
-      </OnChange>
     </div>
   );
 }
@@ -138,7 +134,6 @@ EditUserRoles.propTypes = {
   match: PropTypes.shape({ params: { id: PropTypes.string } }),
   accordionId: PropTypes.string,
   form: PropTypes.object.isRequired,
-  initialValues: PropTypes.object.isRequired
 };
 
 export default withRouter(EditUserRoles);
