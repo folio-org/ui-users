@@ -74,7 +74,7 @@ const useUserTenantRoles = (
   });
 
   return {
-    userRoles: roles?.sort((a, b) => a.name.localeCompare(b.name)) || [],
+    userRoles: roles || [],
     isFetching,
     isLoading,
     refetch
