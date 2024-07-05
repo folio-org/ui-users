@@ -21,7 +21,7 @@ function EditUserRoles({ match, accordionId, form:{ change, getFieldState } }) {
 
   const { userRoles, isLoading } = useUserTenantRoles({ userId, tenantId: okapi.tenant });
 
-  const { data: allRolesData, isLoading: isAllRolesDataLoading } = useAllRolesData();
+  const { isLoading: isAllRolesDataLoading, allRolesMapStructure } = useAllRolesData();
 
   const changeUserRoles = (roleIds) => {
     change('assignedRoleIds', roleIds);
@@ -36,11 +36,11 @@ function EditUserRoles({ match, accordionId, form:{ change, getFieldState } }) {
     if (isEmpty(assignedRoleIds) || isAllRolesDataLoading) return [];
 
     return assignedRoleIds.map(roleId => {
-      const foundUserRole = allRolesData?.roles?.find(role => roleId === role.id);
+      const foundUserRole = allRolesMapStructure.get(roleId);
 
       return { name: foundUserRole?.name, id: foundUserRole?.id };
     });
-  }, [assignedRoleIds, isAllRolesDataLoading]);
+  }, [assignedRoleIds, isAllRolesDataLoading, allRolesMapStructure]);
 
   const unassignAllMessage = <FormattedMessage
     id="ui-users.roles.modal.unassignAll.label"
@@ -49,10 +49,9 @@ function EditUserRoles({ match, accordionId, form:{ change, getFieldState } }) {
 
   const renderRoleComponent = (fields) => (_, index) => {
     if (isEmpty(fields.value)) return null;
-    // console.log(fields.value, 'FIELES>value');
 
     const roleId = fields.value[index];
-    const role = allRolesData?.roles?.find(r => roleId === r.id);
+    const role = allRolesMapStructure.get(roleId);
 
     if (!role) return null;
     return (

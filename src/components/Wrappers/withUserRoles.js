@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { useStripes, useOkapiKy } from '@folio/stripes/core';
 import { useAllRolesData } from '../../hooks';
@@ -23,27 +23,30 @@ const withUserRoles = (WrappedComponent) => (props) => {
     }
   });
 
+  const setAssignedRoleIdsOnLoad = useCallback((data) => {
+    const assignedRoles = data.userRoles.map(({ roleId }) => {
+      const foundUserRole = allRolesData?.roles?.find(role => roleId === role.id);
+
+      return { name: foundUserRole?.name, id: foundUserRole?.id };
+    }).sort((a, b) => a.name.localeCompare(b.name)).map(r => r.id);
+
+    setAssignedRoleIds(assignedRoles);
+  }, [allRolesData]);
+
   useEffect(() => {
     if (!isAllRolesDataLoading) {
       api.get(
         'roles/users', { searchParams },
       )
         .json()
-        .then(data => {
-          const assignedRoles = data.userRoles.map(({ roleId }) => {
-            const foundUserRole = allRolesData?.roles?.find(role => roleId === role.id);
-
-            return { name: foundUserRole?.name, id: foundUserRole?.id };
-          }).sort((a, b) => a.name.localeCompare(b.name)).map(r => r.id);
-
-          setAssignedRoleIds(assignedRoles);
-        })
+        .then(setAssignedRoleIdsOnLoad)
         // eslint-disable-next-line no-console
         .catch(console.error);
-      // Only userId can be changed dynamically
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId, isAllRolesDataLoading]);
+  },
+  // Adding api, searchParams to deps causes infinite callback call. Listed deps are enough to track changes.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  [userId, isAllRolesDataLoading, setAssignedRoleIdsOnLoad]);
 
   const updateUserRoles = (roleIds) => api.put(
     `roles/users/${userId}`, { json: {

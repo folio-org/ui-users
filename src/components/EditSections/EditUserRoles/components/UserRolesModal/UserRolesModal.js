@@ -21,7 +21,7 @@ export default function UserRolesModal({ isOpen,
   const [assignedRoleIds, setAssignedRoleIds] = useState([]);
   const { filters, onChangeFilter, onClearFilter, resetFilters } = useRolesModalFilters();
 
-  const { data: allRolesData } = useAllRolesData();
+  const { data: allRolesData, allRolesMapStructure } = useAllRolesData();
 
   useEffect(() => {
     setAssignedRoleIds(initialRoleIds);
@@ -73,7 +73,7 @@ export default function UserRolesModal({ isOpen,
   const handleSaveClick = () => {
     const sortedAlphabetically = assignedRoleIds
       .map(id => {
-        const foundRole = allRolesData?.roles?.find(role => role.id === id);
+        const foundRole = allRolesMapStructure.get(id);
         return { name: foundRole?.name, id: foundRole?.id };
       })
       .sort((a, b) => a.name.localeCompare(b.name))
