@@ -45,6 +45,13 @@ const mockAllRolesData = {
       { id: '3', name: 'simple role' }
     ]
   },
+  isLoading: false,
+  allRolesMapStructure: new Map([
+    ['1', { id: '1', name: 'test role' }],
+    ['2', { id: '2', name: 'admin role' }],
+    ['3', { id: '3', name: 'simple role' }]
+  ]),
+  isSuccess: true
 };
 const mockChangeFunction = jest.fn();
 
