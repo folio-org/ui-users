@@ -486,7 +486,10 @@ class UserDetail extends React.Component {
               callout={this.callout}
             />
           </IfInterface>
-          <PrintLibraryCardButton />
+          <PrintLibraryCardButton
+            user={user}
+            patronGroup={patronGroup?.group}
+          />
           <ActionMenuDeleteButton
             handleDeleteClick={this.handleDeleteClick}
             id={this.props.match.params.id}
