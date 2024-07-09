@@ -286,6 +286,11 @@ describe('UserDetail', () => {
       expect(screen.getByRole('button', { name: 'ui-users.details.checkDelete' })).toBeVisible();
     });
 
+    test('should render print library card button in action menu ', async () => {
+      renderUserDetail(stripes);
+      expect(screen.getByRole('button', { name: 'ui-users.printLibraryCard' })).toBeVisible();
+    });
+
     describe('click checkDelete button', () => {
       beforeEach(async () => {
         renderUserDetail(stripes);
