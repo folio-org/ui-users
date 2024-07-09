@@ -1,6 +1,6 @@
-import {useCallback } from 'react';
+import { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { cloneDeep } from 'lodash';
 import moment from 'moment';
 
@@ -11,35 +11,34 @@ import {
   exportToCsv,
 } from '@folio/stripes/components';
 
-const onlyFields = (intl) => [
+const onlyFields = () => [
   {
-    label: intl.formatMessage({ id: 'ui-users.information.barcode' }),
+    label: <FormattedMessage id="ui-users.information.barcode" />,
     value: 'barcode'
   },
   {
-    label: intl.formatMessage({ id: 'ui-users.information.firstName' }),
+    label: <FormattedMessage id="ui-users.information.firstName" />,
     value: 'personal.firstName'
   },
   {
-    label: intl.formatMessage({ id: 'ui-users.information.middleName' }),
+    label: <FormattedMessage id="ui-users.information.middleName" />,
     value: 'personal.middleName'
   },
   {
-    label: intl.formatMessage({ id: 'ui-users.information.lastName' }),
+    label: <FormattedMessage id="ui-users.information.lastName" />,
     value: 'personal.lastName'
   },
   {
-    label: intl.formatMessage({ id: 'ui-users.information.patronGroup' }),
+    label: <FormattedMessage id="ui-users.information.patronGroup" />,
     value: 'patronGroup'
   },
   {
-    label: intl.formatMessage({ id: 'ui-users.information.expirationDate' }),
+    label: <FormattedMessage id="ui-users.information.expirationDate" />,
     value: 'expirationDate'
   },
 ];
 
 const PrintLibraryCardButton = ({ user, patronGroup }) => {
-  const intl = useIntl();
   const callout = useCallout();
 
   const updateUserForExport = useCallback(() => {
@@ -53,7 +52,7 @@ const PrintLibraryCardButton = ({ user, patronGroup }) => {
 
   const exportUserDetails = () => {
     const exportOptions = {
-      onlyFields: onlyFields(intl),
+      onlyFields,
       filename: `${user.barcode}`
     };
     const data = [updateUserForExport()];
