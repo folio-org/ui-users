@@ -30,7 +30,7 @@
     ],
     "okapiInterfaces": {
       "add-info": "0.1",
-      "users": "16.0 16.1",
+      "users": "16.0 16.1 16.2",
       "configuration": "2.0",
       "permissions": "5.6",
       "login": "7.3",

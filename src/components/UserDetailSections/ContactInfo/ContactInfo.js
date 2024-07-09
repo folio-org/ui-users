@@ -15,6 +15,7 @@ import UserAddresses from '../../UserAddresses';
 import contactTypes from '../../data/static/contactTypes';
 
 const ContactInfo = ({
+  stripes,
   expanded,
   onToggle,
   accordionId,
@@ -23,7 +24,9 @@ const ContactInfo = ({
   addresses,
 }) => {
   const preferredContact = contactTypes.find(g => g.id === _.get(user, ['personal', 'preferredContactTypeId'], '')) || { type: '' };
-  const preferredEmailCommunication = _.get(user, ['preferredEmailCommunication'], <NoValue />).join(', ');
+  const preferredEmailCommunication = _.get(user, ['preferredEmailCommunication'])?.join(',') || <NoValue />;
+  const displayPreferredEmailCommunication = Boolean(stripes.hasInterface('users', '16.2'));
+
   return (
     <Accordion
       open={expanded}
@@ -57,14 +60,18 @@ const ContactInfo = ({
           />
         </Col>
       </Row>
-      <Row>
-        <Col xs={12}>
-          <KeyValue
-            label={<FormattedMessage id="ui-users.contact.preferredEmailCommunication" />}
-            value={preferredEmailCommunication}
-          />
-        </Col>
-      </Row>
+      {
+        displayPreferredEmailCommunication && (
+        <Row>
+          <Col xs={12}>
+            <KeyValue
+              label={<FormattedMessage id="ui-users.contact.preferredEmailCommunication" />}
+              value={preferredEmailCommunication}
+            />
+          </Col>
+        </Row>
+        )
+      }
       <br />
       <Row>
         <Col xs={12}>
@@ -86,6 +93,9 @@ ContactInfo.propTypes = {
   user: PropTypes.object,
   addressTypes: PropTypes.arrayOf(PropTypes.object),
   addresses: PropTypes.arrayOf(PropTypes.object),
+  stripes: PropTypes.shape({
+    hasInterface: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 export default ContactInfo;
