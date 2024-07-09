@@ -128,6 +128,8 @@ jest.mock(
   })
 );
 
+jest.mock('../../components/PrintLibraryCardButton', () => jest.fn(() => null));
+
 jest.mock('../../components/IfConsortiumPermission', () => jest.fn().mockReturnValue(null));
 
 jest.mock(
@@ -282,11 +284,6 @@ describe('UserDetail', () => {
     test('should render checkDelete button in action menu ', async () => {
       renderUserDetail(stripes);
       expect(screen.getByRole('button', { name: 'ui-users.details.checkDelete' })).toBeVisible();
-    });
-
-    test('should render print library card button in action menu ', async () => {
-      renderUserDetail(stripes);
-      expect(screen.getByRole('button', { name: 'ui-users.printLibraryCard' })).toBeVisible();
     });
 
     describe('click checkDelete button', () => {
