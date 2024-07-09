@@ -10,14 +10,12 @@ import { useUserTenantRoles, useAllRolesData } from '../../../hooks';
 import UserRolesModal from './components/UserRolesModal/UserRolesModal';
 import { filtersConfig } from './helpers';
 
-function EditUserRoles({ match, accordionId, form:{ change, getFieldState } }) {
+function EditUserRoles({ match, accordionId, form:{ change }, assignedRoleIds }) {
   const [isOpen, setIsOpen] = useState(false);
   const [unassignModalOpen, setUnassignModalOpen] = useState(false);
   const { okapi } = useStripes();
   const intl = useIntl();
   const userId = match.params.id;
-
-  const assignedRoleIds = getFieldState('assignedRoleIds')?.value || [];
 
   const { userRoles, isLoading } = useUserTenantRoles({ userId, tenantId: okapi.tenant });
 
@@ -133,6 +131,7 @@ EditUserRoles.propTypes = {
   match: PropTypes.shape({ params: { id: PropTypes.string } }),
   accordionId: PropTypes.string,
   form: PropTypes.object.isRequired,
+  assignedRoleIds: PropTypes.arrayOf(PropTypes.string)
 };
 
 export default withRouter(EditUserRoles);

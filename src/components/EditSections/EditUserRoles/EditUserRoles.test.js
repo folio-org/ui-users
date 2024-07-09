@@ -87,8 +87,8 @@ const propsData = {
   accordionId: 'user-roles',
   form: {
     change: mockChangeFunction,
-    getFieldState: () => ({ value: ['1', '2'] }),
   },
+  assignedRoleIds: ['1', '2']
 };
 
 describe('EditUserRoles Component', () => {

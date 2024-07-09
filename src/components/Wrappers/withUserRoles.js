@@ -9,7 +9,7 @@ const withUserRoles = (WrappedComponent) => (props) => {
   const userId = props.match.params.id;
   const [assignedRoleIds, setAssignedRoleIds] = useState([]);
 
-  const { data: allRolesData, isLoading: isAllRolesDataLoading } = useAllRolesData();
+  const { isLoading: isAllRolesDataLoading, allRolesMapStructure } = useAllRolesData();
 
   const searchParams = {
     limit: config.maxUnpagedResourceCount,
@@ -25,13 +25,13 @@ const withUserRoles = (WrappedComponent) => (props) => {
 
   const setAssignedRoleIdsOnLoad = useCallback((data) => {
     const assignedRoles = data.userRoles.map(({ roleId }) => {
-      const foundUserRole = allRolesData?.roles?.find(role => roleId === role.id);
+      const foundUserRole = allRolesMapStructure.get(roleId);
 
       return { name: foundUserRole?.name, id: foundUserRole?.id };
     }).sort((a, b) => a.name.localeCompare(b.name)).map(r => r.id);
 
     setAssignedRoleIds(assignedRoles);
-  }, [allRolesData]);
+  }, [allRolesMapStructure]);
 
   useEffect(() => {
     if (!isAllRolesDataLoading) {
