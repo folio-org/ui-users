@@ -131,32 +131,35 @@ describe('PrintLibraryCard', () => {
     });
 
     describe('when user has profile picture - url for profile picture link in user personal details', () => {
+      const props = {
+        user: {
+          active: true,
+          type: 'staff',
+          personal: {
+            firstName: 'firstName',
+            lastName: 'lastName',
+            profilePictureLink: 'profilePictureLink',
+          },
+          patronGroup: 'patronGroupId'
+        },
+        patronGroup: 'patronGroup',
+      };
+
       beforeEach(() => {
         useProfilePicture
           .mockClear()
           .mockReturnValue({ profilePictureData: 'profilePictureData' });
-
-        const props = {
-          user: {
-            active: true,
-            type: 'staff',
-            personal: {
-              firstName: 'firstName',
-              lastName: 'lastName',
-              profilePictureLink: 'profilePictureLink',
-            },
-            patronGroup: 'patronGroupId'
-          },
-          patronGroup: 'patronGroup',
-        };
-        render(<PrintLibraryCardButton {...props} />);
       });
 
       it('should display print library card button', () => {
+        render(<PrintLibraryCardButton {...props} />);
+
         expect(screen.getByText('ui-users.printLibraryCard')).toBeInTheDocument();
       });
 
       it('should export CSV file', async () => {
+        render(<PrintLibraryCardButton {...props} />);
+
         const printLibraryCardButton = screen.getByTestId('print-library-card');
         await userEvent.click(printLibraryCardButton);
 
@@ -173,11 +176,41 @@ describe('PrintLibraryCard', () => {
         global.navigator.msSaveBlob = jest.fn();
         const spy = jest.spyOn(global.navigator, 'msSaveBlob');
 
+        render(<PrintLibraryCardButton {...props} />);
+
         const printLibraryCardButton = screen.getByTestId('print-library-card');
         await userEvent.click(printLibraryCardButton);
 
 
         await waitFor(() => expect(spy).toHaveBeenCalled());
+
+        spy.mockRestore();
+      });
+
+      it('should display callout when export user pp jpg file fails', async () => {
+        sendCallout.mockClear();
+        useCallout.mockClear().mockReturnValue({ sendCallout });
+        exportToCsv
+          .mockClear()
+          .mockImplementationOnce(() => {
+            throw new Error('Fetch failed');
+          });
+        global.fetch = jest.fn(() => Promise.resolve({
+          ok: false,
+          blob: () => Promise.resolve(new Blob(['image data'], { type: 'image/jpeg' })),
+        }));
+        global.URL.createObjectURL = jest.fn();
+        global.Blob = jest.fn();
+        global.navigator.msSaveBlob = jest.fn();
+        const spy = jest.spyOn(global.navigator, 'msSaveBlob');
+
+        render(<PrintLibraryCardButton {...props} />);
+
+        const printLibraryCardButton = screen.getByTestId('print-library-card');
+        await userEvent.click(printLibraryCardButton);
+
+
+        await waitFor(() => expect(sendCallout).toHaveBeenCalled());
 
         spy.mockRestore();
       });
