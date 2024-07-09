@@ -4,6 +4,7 @@ import ppData from 'fixtures/userProfilePicture';
 
 import { exportToCsv } from '@folio/stripes/components';
 import { useProfilePicture } from '@folio/stripes/smart-components';
+import { useCallout } from '@folio/stripes/core';
 
 import PrintLibraryCardButton from './PrintLibraryCardButton';
 
@@ -19,38 +20,63 @@ jest.mock('@folio/stripes/smart-components', () => ({
 }));
 
 describe('PrintLibraryCard', () => {
+  const sendCallout = jest.fn();
+
   describe('when user is active and type is patron or staff', () => {
     describe('when user do not have profile picture', () => {
+      const props = {
+        user: {
+          expirationDate: '2024-07-09T23:59:59.000+00:00',
+          active: true,
+          type: 'staff',
+          personal: {
+            firstName: 'firstName',
+            lastName: 'lastName',
+          },
+          patronGroup: 'patronGroupId'
+        },
+        patronGroup: 'patronGroup',
+      };
+
       beforeEach(() => {
         useProfilePicture
           .mockClear()
           .mockReturnValue({ profilePictureData: 'profilePictureData' });
-
-        const props = {
-          user: {
-            expirationDate: '2024-07-09T23:59:59.000+00:00',
-            active: true,
-            type: 'staff',
-            personal: {
-              firstName: 'firstName',
-              lastName: 'lastName',
-            },
-            patronGroup: 'patronGroupId'
-          },
-          patronGroup: 'patronGroup',
-        };
-        render(<PrintLibraryCardButton {...props} />);
       });
 
       it('should display print library card button', () => {
+        render(<PrintLibraryCardButton {...props} />);
+
         expect(screen.getByText('ui-users.printLibraryCard')).toBeInTheDocument();
       });
 
       it('should export CSV file', async () => {
+        render(<PrintLibraryCardButton {...props} />);
+
         const printLibraryCardButton = screen.getByTestId('print-library-card');
         await userEvent.click(printLibraryCardButton);
 
         await waitFor(() => expect(exportToCsv).toHaveBeenCalled());
+      });
+
+      describe('when exportToCSV throws and error', () => {
+        beforeEach(() => {
+          sendCallout.mockClear();
+          useCallout.mockClear().mockReturnValue({ sendCallout });
+          exportToCsv
+            .mockClear()
+            .mockImplementationOnce(() => {
+              throw new Error('Fetch failed');
+            });
+          render(<PrintLibraryCardButton {...props} />);
+        });
+
+        it('should call show callout', async () => {
+          const printLibraryCardButton = screen.getByTestId('print-library-card');
+          await userEvent.click(printLibraryCardButton);
+
+          await waitFor(() => expect(sendCallout).toHaveBeenCalled());
+        });
       });
     });
 
@@ -112,7 +138,6 @@ describe('PrintLibraryCard', () => {
 
         const props = {
           user: {
-            expirationDate: '2024-07-09T23:59:59.000+00:00',
             active: true,
             type: 'staff',
             personal: {
