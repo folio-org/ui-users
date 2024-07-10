@@ -71,6 +71,7 @@ describe('UserEdit', () => {
   let props = {
     stripes: {
       hasPerm: jest.fn().mockReturnValue(true),
+      hasInterface: jest.fn().mockReturnValue(true),
       okapi: {
         tenant: 'tenantId',
       },

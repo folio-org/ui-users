@@ -67,6 +67,9 @@ const props = {
   intl: {
     formatMessage : jest.fn()
   },
+  stripes: {
+    hasInterface: jest.fn().mockReturnValue(true),
+  },
 };
 
 describe('Render Edit contact Information component', () => {

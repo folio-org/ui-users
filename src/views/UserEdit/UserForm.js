@@ -401,6 +401,7 @@ class UserForm extends React.Component {
                     addressTypes={formData.addressTypes}
                     preferredContactTypeId={initialValues.preferredContactTypeId}
                     disabled={isShadowUser}
+                    stripes={stripes}
                   />
                   <EditCustomFieldsRecord
                     formName="userForm"
