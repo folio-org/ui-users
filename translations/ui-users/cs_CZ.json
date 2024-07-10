@@ -1181,9 +1181,9 @@
     "readingRoom.notAllowed": "Nepovoleno",
     "readingRoom.metaSection.lastUpdatedDetails": "{date} podle {name}",
     "settings.users.title": "Nastavení uživatelů",
-    "contact.preferredEmailCommunication": "Preferred email communications",
+    "contact.preferredEmailCommunication": "Preferovaná e-mailová komunikace",
     "contact.preferredEmailCommunication.programs": "Programy",
-    "contact.preferredEmailCommunication.services": "Services",
-    "contact.preferredEmailCommunication.support": "Support",
+    "contact.preferredEmailCommunication.services": "Služby",
+    "contact.preferredEmailCommunication.support": "Podpora",
     "printLibraryCard": "Print library card"
 }
