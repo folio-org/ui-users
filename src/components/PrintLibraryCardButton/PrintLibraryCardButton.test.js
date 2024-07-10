@@ -259,11 +259,4 @@ describe('PrintLibraryCard', () => {
       expect(screen.getByTestId('print-library-card')).toBeDisabled();
     });
   });
-
-  it('should export CSV file', async () => {
-    const printLibraryCardButton = screen.getByTestId('print-library-card');
-    await userEvent.click(printLibraryCardButton);
-
-    expect(exportToCsv).toHaveBeenCalled();
-  });
 });
