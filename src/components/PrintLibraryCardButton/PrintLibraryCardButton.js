@@ -13,29 +13,29 @@ import { useProfilePicture } from '@folio/stripes/smart-components';
 import { isPatronUser, isStaffUser, base64ToBlob, isAValidUUID } from '../util';
 
 
-const onlyFields = () => [
+const onlyFields = (intl) => [
   {
-    label: <FormattedMessage id="ui-users.information.barcode" />,
+    label: intl.formatMessage({ id: 'ui-users.information.barcode' }),
     value: 'barcode'
   },
   {
-    label: <FormattedMessage id="ui-users.information.firstName" />,
+    label: intl.formatMessage({ id: 'ui-users.information.firstName' }),
     value: 'personal.firstName'
   },
   {
-    label: <FormattedMessage id="ui-users.information.middleName" />,
+    label: intl.formatMessage({ id: 'ui-users.information.middleName' }),
     value: 'personal.middleName'
   },
   {
-    label: <FormattedMessage id="ui-users.information.lastName" />,
+    label: intl.formatMessage({ id: 'ui-users.information.lastName' }),
     value: 'personal.lastName'
   },
   {
-    label: <FormattedMessage id="ui-users.information.patronGroup" />,
+    label: intl.formatMessage({ id: 'ui-users.information.patronGroup' }),
     value: 'patronGroup'
   },
   {
-    label: <FormattedMessage id="ui-users.information.expirationDate" />,
+    label: intl.formatMessage({ id: 'ui-users.information.expirationDate' }),
     value: 'expirationDate'
   },
 ];
