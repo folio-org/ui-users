@@ -103,8 +103,8 @@ function EditUserRoles({ match, accordionId, form:{ change }, initialValues }) {
       >
         <Row>
           {renderUserRoles()}
-          <Button data-testId="add-roles-button" onClick={() => setIsOpen(true)}><FormattedMessage id="ui-users.roles.addRoles" /></Button>
-          <Button data-testId="unassign-all-roles-button" disabled={isEmpty(listItemsData)} onClick={() => setUnassignModalOpen(true)}><FormattedMessage id="ui-users.roles.unassignAllRoles" /></Button>
+          <Button data-testid="add-roles-button" onClick={() => setIsOpen(true)}><FormattedMessage id="ui-users.roles.addRoles" /></Button>
+          <Button data-testid="unassign-all-roles-button" disabled={isEmpty(listItemsData)} onClick={() => setUnassignModalOpen(true)}><FormattedMessage id="ui-users.roles.unassignAllRoles" /></Button>
         </Row>
       </Accordion>
       <UserRolesModal
