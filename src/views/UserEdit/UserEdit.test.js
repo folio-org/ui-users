@@ -400,6 +400,24 @@ describe('UserEdit', () => {
       expect(props.updateServicePoints).toHaveBeenCalled();
     });
 
+    it('should save the user updates when the users interfaces is not 16.2', async () => {
+      const alteredProps = {
+        ...props,
+        stripes: {
+          ...props.stripes,
+          hasInterface: jest.fn().mockReturnValue(0),
+        }
+      };
+
+      renderWithRouter(<UserEdit {...alteredProps} />);
+      await UserForm.mock.calls[0][0].onSubmit(userFormData);
+
+      expect(props.mutator.requestPreferences.POST).toHaveBeenCalled();
+      expect(props.updateProxies).toHaveBeenCalled();
+      expect(props.updateSponsors).toHaveBeenCalled();
+      expect(props.updateServicePoints).toHaveBeenCalled();
+    });
+
     describe('when user has user profile edit', () => {
       it('should update permissions when user has "ui-users.editperms" permissions', async () => {
         props = {
