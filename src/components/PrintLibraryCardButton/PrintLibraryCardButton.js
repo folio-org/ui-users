@@ -1,8 +1,7 @@
 import { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { cloneDeep } from 'lodash';
-import moment from 'moment';
 
 import { useCallout } from '@folio/stripes/core';
 import {
@@ -14,35 +13,38 @@ import { useProfilePicture } from '@folio/stripes/smart-components';
 import { isPatronUser, isStaffUser, base64ToBlob, isAValidUUID } from '../util';
 
 
-const onlyFields = () => [
+const onlyFields = (intl) => [
   {
-    label: <FormattedMessage id="ui-users.information.barcode" />,
+    label: intl.formatMessage({ id: 'ui-users.information.barcode' }),
     value: 'barcode'
   },
   {
-    label: <FormattedMessage id="ui-users.information.firstName" />,
+    label: intl.formatMessage({ id: 'ui-users.information.firstName' }),
     value: 'personal.firstName'
   },
   {
-    label: <FormattedMessage id="ui-users.information.middleName" />,
+    label: intl.formatMessage({ id: 'ui-users.information.middleName' }),
     value: 'personal.middleName'
   },
   {
-    label: <FormattedMessage id="ui-users.information.lastName" />,
+    label: intl.formatMessage({ id: 'ui-users.information.lastName' }),
     value: 'personal.lastName'
   },
   {
-    label: <FormattedMessage id="ui-users.information.patronGroup" />,
+    label: intl.formatMessage({ id: 'ui-users.information.patronGroup' }),
     value: 'patronGroup'
   },
   {
-    label: <FormattedMessage id="ui-users.information.expirationDate" />,
+    label: intl.formatMessage({ id: 'ui-users.information.expirationDate' }),
     value: 'expirationDate'
   },
 ];
+const dateFormat = { year: 'numeric', month: 'numeric', day: 'numeric' };
 
 const PrintLibraryCardButton = ({ user, patronGroup }) => {
   const callout = useCallout();
+  const intl = useIntl();
+  const { formatDate } = intl;
   const { personal: { profilePictureLink }, active } = user;
   const isPatronOrStaffUser = isPatronUser(user) || isStaffUser(user);
   const disabled = !active || !isPatronOrStaffUser;
@@ -54,9 +56,9 @@ const PrintLibraryCardButton = ({ user, patronGroup }) => {
     const modifiedUser = cloneDeep(user);
     modifiedUser.patronGroup = patronGroup;
     modifiedUser.personal.firstName = personal.preferredFirstName || personal.firstName;
-    modifiedUser.expirationDate = expirationDate ? moment(expirationDate).format('MM/DD/YYYY') : '';
+    modifiedUser.expirationDate = expirationDate ? formatDate(expirationDate, dateFormat) : '';
     return modifiedUser;
-  }, [user, patronGroup]);
+  }, [user, patronGroup, formatDate]);
 
   const showCallout = () => {
     callout.sendCallout({
@@ -67,7 +69,7 @@ const PrintLibraryCardButton = ({ user, patronGroup }) => {
 
   const exportUserDetails = () => {
     const exportOptions = {
-      onlyFields,
+      onlyFields: onlyFields(intl),
       filename: `Patron_${user.barcode}`
     };
     const data = [updateUserForExport()];
