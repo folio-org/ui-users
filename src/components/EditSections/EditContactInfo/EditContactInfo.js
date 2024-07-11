@@ -51,7 +51,7 @@ const EditContactInfo = ({
     },
   };
 
-  const displaypreferredEmailCommunications = Boolean(stripes.hasInterface('users', '16.2'));
+  const displayPreferredEmailCommunications = Boolean(stripes.hasInterface('users', '16.2'));
 
   return (
     <Accordion
