@@ -112,7 +112,7 @@ const EditContactInfo = ({
         </Col>
       </Row>
       {
-        displaypreferredEmailCommunications && (
+        displayPreferredEmailCommunications && (
           <Row>
             <Col xs={12} md={3}>
               <Field
