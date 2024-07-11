@@ -30,6 +30,7 @@
 * Add the 'Print Library Card' action in the Action Menu of User app. Refs UIU-3159.
 * Export user details for library card printing. Refs UIU-3163.
 * Export profile picture for library card printing. Refs UIU-3160.
+* Bump up users okapi interface to 16.2. Refs UIU-3170.
 
 ## [10.1.1](https://github.com/folio-org/ui-users/tree/v10.1.1) (2024-05-07)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.1.0...v10.1.1)

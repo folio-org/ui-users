@@ -27,6 +27,7 @@ const EditContactInfo = ({
   preferredContactTypeId,
   intl,
   disabled,
+  stripes,
 }) => {
   const contactTypeOptions = (contactTypes || []).map(g => {
     return (
@@ -49,6 +50,8 @@ const EditContactInfo = ({
       },
     },
   };
+
+  const displayPreferredEmailCommunications = Boolean(stripes.hasInterface('users', '16.2'));
 
   return (
     <Accordion
@@ -108,19 +111,23 @@ const EditContactInfo = ({
           </Field>
         </Col>
       </Row>
-      <Row>
-        <Col xs={12} md={3}>
-          <Field
-            component={MultiSelection}
-            label={<FormattedMessage id="ui-users.contact.preferredEmailCommunication" />}
-            id="adduserPreferredEmailCommunication"
-            name="preferredEmailCommunication"
-            dataOptions={preferredEmailCommunicationOptions}
-            fullWidth
-            disabled={disabled}
-          />
-        </Col>
-      </Row>
+      {
+        displayPreferredEmailCommunications && (
+          <Row>
+            <Col xs={12} md={3}>
+              <Field
+                component={MultiSelection}
+                label={<FormattedMessage id="ui-users.contact.preferredEmailCommunication" />}
+                id="adduserPreferredEmailCommunication"
+                name="preferredEmailCommunication"
+                dataOptions={preferredEmailCommunicationOptions}
+                fullWidth
+                disabled={disabled}
+              />
+            </Col>
+          </Row>
+        )
+      }
       <br />
       <AddressEditList
         name="personal.addresses"
@@ -141,6 +148,7 @@ EditContactInfo.propTypes = {
   preferredContactTypeId: PropTypes.string,
   intl: PropTypes.object.isRequired,
   disabled: PropTypes.bool,
+  stripes: PropTypes.object.isRequired,
 };
 
 export default injectIntl(EditContactInfo);
