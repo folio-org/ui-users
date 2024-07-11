@@ -3,7 +3,13 @@ import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import UserRolesModal from './UserRolesModal';
 
 jest.mock('../../../../../hooks', () => {
-  const mockAllRolesData = { data:{ roles: [{ id: '1', name: 'testRole' }, { id: '4', name: 'testRole4' }, { id: '3', name: 'testRole3' }] } };
+  const mockAllRolesData = { data:{ roles: [{ id: '1', name: 'testRole' },
+    { id: '4', name: 'AAtestRole4' },
+    { id: '3', name: 'testRole3' }] },
+  allRolesMapStructure: new Map([['1', { id: '1', name: 'testRole' }],
+    ['4', { id: '4', name: 'AAtestRole4' }],
+    ['3', { id: '3', name: 'testRole3' }]]) };
+
   return { ...jest.requireActual('../../../../../hooks'),
     useAllRolesData: jest.fn().mockReturnValue(mockAllRolesData) };
 });
@@ -23,7 +29,7 @@ describe('UserRoleModal', () => {
     const { getByText } = await waitFor(() => renderComponent({ isOpen: true, onClose: mockOnClose, assignedRoles: mockAssignedRoles, initialRoleIds: ['1'], setAssignedRolesIds:jest.fn() }));
 
     expect(getByText('testRole')).toBeInTheDocument();
-    expect(getByText('testRole4')).toBeInTheDocument();
+    expect(getByText('AAtestRole4')).toBeInTheDocument();
     expect(getByText('testRole3')).toBeInTheDocument();
   });
 
@@ -118,5 +124,17 @@ describe('UserRoleModal', () => {
     const expandButton = document.querySelector('[data-test-expand-filter-pane-button="true"]');
     await userEvent.click(expandButton);
     expect(getByText('stripes-smart-components.hideSearchPane')).toBeInTheDocument();
+  });
+
+  it('should sort objects alphabetically, extract ids after sorting and call changeUserRoles function with that ids', async () => {
+    const mockChangeUserRoles = jest.fn();
+    const { getByRole } = renderComponent({ isOpen: true,
+      onClose: mockOnClose,
+      assignedRoles: mockAssignedRoles,
+      initialRoleIds: ['1', '4'],
+      changeUserRoles:mockChangeUserRoles });
+    const submitButton = getByRole('button', { name: 'stripes-components.saveAndClose' });
+    await userEvent.click(submitButton);
+    expect(mockChangeUserRoles).toHaveBeenCalledWith(['4', '1']);
   });
 });

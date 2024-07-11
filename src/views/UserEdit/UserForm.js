@@ -475,7 +475,7 @@ class UserForm extends React.Component {
                           setButtonRef={this.setButtonRef}
                         /> : <EditUserRoles
                           form={form}
-                          initialValues={initialValues}
+                          assignedRoleIds={form.getFieldState('assignedRoleIds')?.value || []}
                           accordionId="userRoles"
                         />
                       }

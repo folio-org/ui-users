@@ -46,7 +46,8 @@
 * Add edit user roles accordion on edit role modal view. Refs UIU-3021.
 * Wire up with API ability to assign/unassign user roles in UserForm. Refs UIU-3124.
 * Fix filter issues in user roles modal. Refs UIU-3124.
-* Suppress Settings > Users > Permission sets when `roles` interface is present. Refs UIU-3105.     
+* Suppress Settings > Users > Permission sets when `roles` interface is present. Refs UIU-3105.
+* Sort user roles alphabetically in `EditUserRoles` and `UserRolesModal` components. Refs UIU-3145.     
 
 ## [10.1.0](https://github.com/folio-org/ui-users/tree/v10.1.0) (2024-03-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.4...v10.1.0)
