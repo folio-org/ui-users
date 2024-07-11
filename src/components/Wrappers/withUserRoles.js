@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { useStripes, useOkapiKy } from '@folio/stripes/core';
+import { useAllRolesData } from '../../hooks';
 
 const withUserRoles = (WrappedComponent) => (props) => {
   const { okapi, config } = useStripes();
   // eslint-disable-next-line react/prop-types
   const userId = props.match.params.id;
   const [assignedRoleIds, setAssignedRoleIds] = useState([]);
+
+  const { isLoading: isAllRolesDataLoading, allRolesMapStructure } = useAllRolesData();
 
   const searchParams = {
     limit: config.maxUnpagedResourceCount,
@@ -20,17 +23,30 @@ const withUserRoles = (WrappedComponent) => (props) => {
     }
   });
 
+  const setAssignedRoleIdsOnLoad = useCallback((data) => {
+    const assignedRoles = data.userRoles.map(({ roleId }) => {
+      const foundUserRole = allRolesMapStructure.get(roleId);
+
+      return { name: foundUserRole?.name, id: foundUserRole?.id };
+    }).sort((a, b) => a.name.localeCompare(b.name)).map(r => r.id);
+
+    setAssignedRoleIds(assignedRoles);
+  }, [allRolesMapStructure]);
+
   useEffect(() => {
-    api.get(
-      'roles/users', { searchParams },
-    )
-      .json()
-      .then(data => setAssignedRoleIds(data.userRoles.map(({ roleId }) => roleId)))
-      // eslint-disable-next-line no-console
-      .catch(console.error);
-    // Only userId can be changed dynamically
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId]);
+    if (!isAllRolesDataLoading) {
+      api.get(
+        'roles/users', { searchParams },
+      )
+        .json()
+        .then(setAssignedRoleIdsOnLoad)
+        // eslint-disable-next-line no-console
+        .catch(console.error);
+    }
+  },
+  // Adding api, searchParams to deps causes infinite callback call. Listed deps are enough to track changes.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  [userId, isAllRolesDataLoading, setAssignedRoleIdsOnLoad]);
 
   const updateUserRoles = (roleIds) => api.put(
     `roles/users/${userId}`, { json: {
