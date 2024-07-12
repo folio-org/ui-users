@@ -101,6 +101,7 @@ const props = {
   stripes: {
     connect: (Component) => Component,
     timezone: 'USA/TestTimeZone',
+    locale: 'en-US',
     hasInterface: () => true,
     hasPerm: () => true,
   },
