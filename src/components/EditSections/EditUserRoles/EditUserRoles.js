@@ -1,23 +1,20 @@
 import React, { useMemo, useState } from 'react';
-import { Accordion, Headline, Badge, Row, Col, List, Button, Icon, Loading, ConfirmationModal } from '@folio/stripes/components';
+import { Accordion, Headline, Badge, Row, Col, List, Button, Icon, ConfirmationModal } from '@folio/stripes/components';
 import { useIntl, FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
-import { useStripes } from '@folio/stripes/core';
 import { isEmpty } from 'lodash';
 import { FieldArray } from 'react-final-form-arrays';
-import { useUserTenantRoles, useAllRolesData } from '../../../hooks';
+import { OnChange } from 'react-final-form-listeners';
+import { useAllRolesData } from '../../../hooks';
 import UserRolesModal from './components/UserRolesModal/UserRolesModal';
 import { filtersConfig } from './helpers';
 
-function EditUserRoles({ match, accordionId, form:{ change }, assignedRoleIds }) {
+function EditUserRoles({ accordionId, form:{ change }, initialValues }) {
   const [isOpen, setIsOpen] = useState(false);
   const [unassignModalOpen, setUnassignModalOpen] = useState(false);
-  const { okapi } = useStripes();
+  const [assignedRoleIds, setAssignedRoleIds] = useState(initialValues.assignedRoleIds);
   const intl = useIntl();
-  const userId = match.params.id;
-
-  const { userRoles, isLoading } = useUserTenantRoles({ userId, tenantId: okapi.tenant });
 
   const { isLoading: isAllRolesDataLoading, allRolesMapStructure } = useAllRolesData();
 
@@ -98,7 +95,7 @@ function EditUserRoles({ match, accordionId, form:{ change }, assignedRoleIds })
       <Accordion
         label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.roles.userRoles" /></Headline>}
         id={accordionId}
-        displayWhenClosed={isLoading ? <Loading /> : <Badge>{userRoles.length}</Badge>}
+        displayWhenClosed={<Badge>{assignedRoleIds.length}</Badge>}
       >
         <Row>
           {renderUserRoles()}
@@ -108,7 +105,6 @@ function EditUserRoles({ match, accordionId, form:{ change }, assignedRoleIds })
       </Accordion>
       <UserRolesModal
         filtersConfig={filtersConfig}
-        assignedRoles={userRoles}
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         initialRoleIds={assignedRoleIds}
@@ -123,6 +119,12 @@ function EditUserRoles({ match, accordionId, form:{ change }, assignedRoleIds })
         cancelLabel={<FormattedMessage id="ui-users.no" />}
         confirmLabel={<FormattedMessage id="ui-users.yes" />}
       />
+      <OnChange name="assignedRoleIds">
+        {(userAssignedRoleIds) => {
+          const userRoleIds = isEmpty(userAssignedRoleIds) ? [] : userAssignedRoleIds;
+          setAssignedRoleIds(userRoleIds);
+        }}
+      </OnChange>
     </div>
   );
 }
@@ -131,7 +133,7 @@ EditUserRoles.propTypes = {
   match: PropTypes.shape({ params: { id: PropTypes.string } }),
   accordionId: PropTypes.string,
   form: PropTypes.object.isRequired,
-  assignedRoleIds: PropTypes.arrayOf(PropTypes.string)
+  initialValues: PropTypes.object.isRequired
 };
 
 export default withRouter(EditUserRoles);

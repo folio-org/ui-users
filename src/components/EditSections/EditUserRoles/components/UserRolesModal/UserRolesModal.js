@@ -13,7 +13,6 @@ import useRolesModalFilters from './useRolesModalFilters';
 
 export default function UserRolesModal({ isOpen,
   onClose,
-  assignedRoles,
   changeUserRoles,
   initialRoleIds }) {
   const [filterPaneIsVisible, setFilterPaneIsVisible] = useState(true);
@@ -65,7 +64,6 @@ export default function UserRolesModal({ isOpen,
   const getFilterConfigGroups = () => [filtersConfig].map(({ filter, ...filterConfig }) => (filterConfig));
 
   const resetSearchForm = () => {
-    setAssignedRoleIds(assignedRoles.map(role => role.id));
     setSubmittedSearchTerm('');
     resetFilters();
   };

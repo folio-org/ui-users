@@ -43,7 +43,6 @@ describe('UserRoleModal', () => {
   it('should select/unselect all roles, and ', async () => {
     renderComponent({ isOpen: true,
       onClose: mockOnClose,
-      assignedRoles: mockAssignedRoles,
       initialRoleIds: ['1'],
       changeUserRoles:jest.fn() });
 
@@ -64,7 +63,6 @@ describe('UserRoleModal', () => {
   it('should show assigned roles only', async () => {
     const { queryByText } = renderComponent({ isOpen: true,
       onClose: mockOnClose,
-      assignedRoles: mockAssignedRoles,
       initialRoleIds: ['1'],
       changeUserRoles:jest.fn() });
 
@@ -79,7 +77,6 @@ describe('UserRoleModal', () => {
   it('should show unassigned roles only', async () => {
     const { getAllByRole } = renderComponent({ isOpen: true,
       onClose: mockOnClose,
-      assignedRoles: mockAssignedRoles,
       initialRoleIds: ['1'],
       changeUserRoles:jest.fn() });
 
@@ -101,7 +98,6 @@ describe('UserRoleModal', () => {
 
     renderComponent({ isOpen: true,
       onClose: mockOnClose,
-      assignedRoles: mockAssignedRoles,
       initialRoleIds: ['1'],
       changeUserRoles:jest.fn() });
 
@@ -113,7 +109,6 @@ describe('UserRoleModal', () => {
   it('should toggle filters pane', async () => {
     const { getByText } = renderComponent({ isOpen: true,
       onClose: mockOnClose,
-      assignedRoles: mockAssignedRoles,
       initialRoleIds: ['1'],
       changeUserRoles:jest.fn() });
 
@@ -130,7 +125,6 @@ describe('UserRoleModal', () => {
     const mockChangeUserRoles = jest.fn();
     const { getByRole } = renderComponent({ isOpen: true,
       onClose: mockOnClose,
-      assignedRoles: mockAssignedRoles,
       initialRoleIds: ['1', '4'],
       changeUserRoles:mockChangeUserRoles });
     const submitButton = getByRole('button', { name: 'stripes-components.saveAndClose' });

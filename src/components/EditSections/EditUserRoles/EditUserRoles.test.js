@@ -9,11 +9,10 @@ import {
 import { Form } from 'react-final-form';
 import EditUserRoles from './EditUserRoles';
 
-import { useAllRolesData, useUserTenantRoles } from '../../../hooks';
+import { useAllRolesData } from '../../../hooks';
 
 jest.mock('../../../hooks', () => ({
   ...jest.requireActual('../../../hooks'),
-  useUserTenantRoles: jest.fn(),
   useAllRolesData: jest.fn()
 }));
 
@@ -88,19 +87,15 @@ const propsData = {
   form: {
     change: mockChangeFunction,
   },
-  assignedRoleIds: ['1', '2']
+  initialValues: {
+    assignedRoleIds: ['1', '2'],
+  },
 };
 
 describe('EditUserRoles Component', () => {
   beforeEach(() => {
     useStripes.mockClear().mockReturnValue(STRIPES);
     useAllRolesData.mockClear().mockReturnValue(mockAllRolesData);
-    useUserTenantRoles.mockClear().mockReturnValue({
-      isFetching: false,
-      userRoles: [{ id: '1', name: 'test role' },
-        { id: '2', name: 'admin role' }
-      ]
-    });
   });
   afterEach(cleanup);
 
