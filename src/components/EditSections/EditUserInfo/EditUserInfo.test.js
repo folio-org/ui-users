@@ -101,6 +101,7 @@ const props = {
   stripes: {
     connect: (Component) => Component,
     timezone: 'USA/TestTimeZone',
+    locale: 'en-US',
     hasInterface: () => true,
     hasPerm: () => true,
   },
@@ -157,6 +158,16 @@ describe('Render Edit User Information component', () => {
     renderEditUserInfo(props);
     await userEvent.click(screen.getByText('ui-users.information.recalculate.expirationDate'));
     expect(changeMock).toHaveBeenCalled();
+  });
+  it('should handle empty expiration date correctly', () => {
+    renderEditUserInfo({
+      ...props,
+      initialValues: {
+        ...props.initialValues,
+        expirationDate: '',
+      }
+    });
+    expect(screen.getByLabelText('ui-users.expirationDate')).not.toHaveValue();
   });
   it('Confirm click must change form values', async () => {
     renderEditUserInfo(props);
