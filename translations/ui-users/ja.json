@@ -1182,8 +1182,8 @@
     "readingRoom.metaSection.lastUpdatedDetails": "{date} by {name}",
     "settings.users.title": "Users settings",
     "contact.preferredEmailCommunication": "Preferred email communications",
-    "contact.preferredEmailCommunication.programs": "Programs",
-    "contact.preferredEmailCommunication.services": "Services",
-    "contact.preferredEmailCommunication.support": "Support",
+    "contact.preferredEmailCommunication.programs": "プログラム",
+    "contact.preferredEmailCommunication.services": "サービス",
+    "contact.preferredEmailCommunication.support": "サポート",
     "printLibraryCard": "Print library card"
 }
