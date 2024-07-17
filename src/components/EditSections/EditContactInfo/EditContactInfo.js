@@ -51,6 +51,16 @@ const EditContactInfo = ({
     },
   };
 
+  const prefEmailCommFilterOptions = (filterText, list) => {
+    // escape special characters in filter text, so they won't be interpreted by RegExp
+    const escapedFilterText = filterText?.replace(/[#-.]|[[-^]|[?|{}]/g, '\\$&');
+
+    const filterRegExp = new RegExp(`^${escapedFilterText}`, 'i');
+    const renderedItems = filterText ? list.filter(item => item.value?.search(filterRegExp) !== -1) : list;
+    const exactMatch = filterText ? (renderedItems.filter(item => item.value === filterText).length === 1) : false;
+    return { renderedItems, exactMatch };
+  };
+
   const displayPreferredEmailCommunications = Boolean(stripes.hasInterface('users', '16.2'));
 
   return (
@@ -123,6 +133,7 @@ const EditContactInfo = ({
                 dataOptions={preferredEmailCommunicationOptions}
                 fullWidth
                 disabled={disabled}
+                filter={prefEmailCommFilterOptions}
               />
             </Col>
           </Row>
