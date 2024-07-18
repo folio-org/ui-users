@@ -24,7 +24,7 @@ const ContactInfo = ({
   addresses,
 }) => {
   const preferredContact = contactTypes.find(g => g.id === _.get(user, ['personal', 'preferredContactTypeId'], '')) || { type: '' };
-  const preferredEmailCommunication = _.get(user, ['preferredEmailCommunication'])?.join(',') || <NoValue />;
+  const preferredEmailCommunication = _.get(user, ['preferredEmailCommunication'])?.join(', ') || <NoValue />;
   const displayPreferredEmailCommunication = Boolean(stripes.hasInterface('users', '16.2'));
 
   return (

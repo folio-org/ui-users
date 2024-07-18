@@ -103,6 +103,15 @@ describe('Render Edit contact Information component', () => {
     expect(prefEmailCommInput).toHaveTextContent('2 items selected');
   });
 
+  it('should update Preferred Email Communication input field value on user input', async () => {
+    renderEditContactInfo(props);
+    const prefEmailCommInputField = document.querySelector('[id="adduserPreferredEmailCommunication-input"]');
+    expect(prefEmailCommInputField).toHaveValue('');
+
+    await userEvent.type(prefEmailCommInputField, 'Prog');
+    expect(prefEmailCommInputField).toHaveValue('Prog');
+  });
+
   it('should render with disabled fields', () => {
     renderEditContactInfo({ ...props, disabled: true });
 

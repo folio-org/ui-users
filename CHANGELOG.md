@@ -32,6 +32,7 @@
 * Export profile picture for library card printing. Refs UIU-3160.
 * Bump up users okapi interface to 16.2. Refs UIU-3170.
 * Fix wrong format of user expiration date in User Edit. Refs UIU-3169.
+* Filter options on user input in "Preferred email communications" field in User Edit. Refs UIU-3173.
 
 ## [10.1.1](https://github.com/folio-org/ui-users/tree/v10.1.1) (2024-05-07)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.1.0...v10.1.1)
