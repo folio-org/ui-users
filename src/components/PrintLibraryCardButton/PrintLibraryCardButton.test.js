@@ -138,7 +138,7 @@ describe('PrintLibraryCard', () => {
           personal: {
             firstName: 'firstName',
             lastName: 'lastName',
-            profilePictureLink: 'profilePictureLink',
+            profilePictureLink: 'https://www.colorado.edu/libraries/sites/default/files/styles/square/public/article-thumbnail/folio_cropped.jpg?itok=_rnTg5jr',
           },
           patronGroup: 'patronGroupId'
         },
@@ -166,7 +166,7 @@ describe('PrintLibraryCard', () => {
         await waitFor(() => expect(exportToCsv).toHaveBeenCalled());
       });
 
-      it('should export user pp jpg file', async () => {
+      it('should not export user pp jpg file', async () => {
         global.fetch = jest.fn(() => Promise.resolve({
           ok: true,
           blob: () => Promise.resolve(new Blob(['image data'], { type: 'image/jpeg' })),
@@ -182,35 +182,7 @@ describe('PrintLibraryCard', () => {
         await userEvent.click(printLibraryCardButton);
 
 
-        await waitFor(() => expect(spy).toHaveBeenCalled());
-
-        spy.mockRestore();
-      });
-
-      it('should display callout when export user pp jpg file fails', async () => {
-        sendCallout.mockClear();
-        useCallout.mockClear().mockReturnValue({ sendCallout });
-        exportToCsv
-          .mockClear()
-          .mockImplementationOnce(() => {
-            throw new Error('Fetch failed');
-          });
-        global.fetch = jest.fn(() => Promise.resolve({
-          ok: false,
-          blob: () => Promise.resolve(new Blob(['image data'], { type: 'image/jpeg' })),
-        }));
-        global.URL.createObjectURL = jest.fn();
-        global.Blob = jest.fn();
-        global.navigator.msSaveBlob = jest.fn();
-        const spy = jest.spyOn(global.navigator, 'msSaveBlob');
-
-        render(<PrintLibraryCardButton {...props} />);
-
-        const printLibraryCardButton = screen.getByTestId('print-library-card');
-        await userEvent.click(printLibraryCardButton);
-
-
-        await waitFor(() => expect(sendCallout).toHaveBeenCalled());
+        await waitFor(() => expect(spy).not.toHaveBeenCalled());
 
         spy.mockRestore();
       });

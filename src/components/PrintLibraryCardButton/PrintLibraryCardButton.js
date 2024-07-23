@@ -10,33 +10,38 @@ import {
   exportToCsv,
 } from '@folio/stripes/components';
 import { useProfilePicture } from '@folio/stripes/smart-components';
-import { isPatronUser, isStaffUser, base64ToBlob, isAValidUUID } from '../util';
+import { isPatronUser, isStaffUser, base64ToBlob, isAValidUUID, isAValidURL } from '../util';
+import { USER_INFO } from '../../constants';
 
-
-const onlyFields = (intl) => [
+const { BARCODE, FIRST_NAME, LAST_NAME, MIDDLE_NAME, PATRON_GROUP, EXPIRATION_DATE, PROFILE_PICTURE_LINK } = USER_INFO;
+const profilePictureField = {
+  label: 'Profile Picture Link ',
+  value: PROFILE_PICTURE_LINK
+};
+const onlyFields = [
   {
-    label: intl.formatMessage({ id: 'ui-users.information.barcode' }),
-    value: 'barcode'
+    label: 'Barcode',
+    value: BARCODE
   },
   {
-    label: intl.formatMessage({ id: 'ui-users.information.firstName' }),
-    value: 'personal.firstName'
+    label: 'First Name',
+    value: FIRST_NAME
   },
   {
-    label: intl.formatMessage({ id: 'ui-users.information.middleName' }),
-    value: 'personal.middleName'
+    label: 'Middle Name',
+    value: MIDDLE_NAME
   },
   {
-    label: intl.formatMessage({ id: 'ui-users.information.lastName' }),
-    value: 'personal.lastName'
+    label: 'Last Name',
+    value: LAST_NAME
   },
   {
-    label: intl.formatMessage({ id: 'ui-users.information.patronGroup' }),
-    value: 'patronGroup'
+    label: 'Patron Group',
+    value: PATRON_GROUP
   },
   {
-    label: intl.formatMessage({ id: 'ui-users.information.expirationDate' }),
-    value: 'expirationDate'
+    label: 'Expiration Date',
+    value: EXPIRATION_DATE
   },
 ];
 const dateFormat = { year: 'numeric', month: 'numeric', day: 'numeric' };
@@ -67,9 +72,17 @@ const PrintLibraryCardButton = ({ user, patronGroup }) => {
     });
   };
 
+  const getOnlyFields = useCallback(() => {
+    const fields = [...onlyFields];
+    if (profilePictureLink && isAValidURL(profilePictureLink)) {
+      fields.push(profilePictureField);
+    }
+    return fields;
+  }, [profilePictureLink]);
+
   const exportUserDetails = () => {
     const exportOptions = {
-      onlyFields: onlyFields(intl),
+      onlyFields: getOnlyFields(),
       filename: `Patron_${user.barcode}`
     };
     const data = [updateUserForExport()];
@@ -121,27 +134,9 @@ const PrintLibraryCardButton = ({ user, patronGroup }) => {
     }
   };
 
-  const exportProfPicFromExtUrl = async () => {
-    try {
-      const response = await fetch(profilePictureLink);
-
-      if (!response.ok) {
-        throw new Error(`Failed to fetch image: ${response.statusText}`);
-      }
-
-      const blob = await response.blob();
-      downloadImage(blob);
-    } catch (error) {
-      console.error('Error downloading the image:', error); // eslint-disable-line no-console
-      showCallout();
-    }
-  };
-
   const exportUserProfilePicture = () => {
     if (isAValidUUID(profilePictureLink)) {
       exportUserProfPicFromBase64String();
-    } else {
-      exportProfPicFromExtUrl();
     }
   };
 
