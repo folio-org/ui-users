@@ -14,7 +14,7 @@ import { isPatronUser, isStaffUser, base64ToBlob, isAValidUUID, isAValidURL } fr
 import { USER_INFO } from '../../constants';
 
 const { BARCODE, FIRST_NAME, LAST_NAME, MIDDLE_NAME, PATRON_GROUP, EXPIRATION_DATE, PROFILE_PICTURE_LINK } = USER_INFO;
-const profileFilePictureField = {
+const profilePictureField = {
   label: 'Profile Picture Link ',
   value: PROFILE_PICTURE_LINK
 };
@@ -75,7 +75,7 @@ const PrintLibraryCardButton = ({ user, patronGroup }) => {
   const getOnlyFields = useCallback(() => {
     const fields = [...onlyFields];
     if (profilePictureLink && isAValidURL(profilePictureLink)) {
-      fields.push(profileFilePictureField);
+      fields.push(profilePictureField);
     }
     return fields;
   }, [profilePictureLink]);
