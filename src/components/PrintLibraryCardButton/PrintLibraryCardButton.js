@@ -10,32 +10,31 @@ import {
   exportToCsv,
 } from '@folio/stripes/components';
 import { useProfilePicture } from '@folio/stripes/smart-components';
-import { isPatronUser, isStaffUser, base64ToBlob, isAValidUUID } from '../util';
+import { isPatronUser, isStaffUser, base64ToBlob, isAValidUUID, isAValidURL } from '../util';
 
-
-const onlyFields = (intl) => [
+const onlyFields = [
   {
-    label: intl.formatMessage({ id: 'ui-users.information.barcode' }),
+    label: 'Barcode',
     value: 'barcode'
   },
   {
-    label: intl.formatMessage({ id: 'ui-users.information.firstName' }),
+    label: 'First Name',
     value: 'personal.firstName'
   },
   {
-    label: intl.formatMessage({ id: 'ui-users.information.middleName' }),
+    label: 'Middle Name',
     value: 'personal.middleName'
   },
   {
-    label: intl.formatMessage({ id: 'ui-users.information.lastName' }),
+    label: 'Last Name',
     value: 'personal.lastName'
   },
   {
-    label: intl.formatMessage({ id: 'ui-users.information.patronGroup' }),
+    label: 'Patron Group',
     value: 'patronGroup'
   },
   {
-    label: intl.formatMessage({ id: 'ui-users.information.expirationDate' }),
+    label: 'Expiration Date',
     value: 'expirationDate'
   },
 ];
@@ -66,10 +65,22 @@ const PrintLibraryCardButton = ({ user, patronGroup }) => {
       type: 'error',
     });
   };
+  const getOnlyFields = useCallback(() => {
+    if (profilePictureLink && isAValidURL(profilePictureLink)) {
+      return onlyFields.push(
+        {
+          label: 'Profile Picture Link ',
+          value: 'personal.profilePictureLink'
+        }
+      );
+    } else {
+      return onlyFields;
+    }
+  }, [profilePictureLink]);
 
   const exportUserDetails = () => {
     const exportOptions = {
-      onlyFields: onlyFields(intl),
+      onlyFields: getOnlyFields(),
       filename: `Patron_${user.barcode}`
     };
     const data = [updateUserForExport()];
@@ -121,27 +132,9 @@ const PrintLibraryCardButton = ({ user, patronGroup }) => {
     }
   };
 
-  const exportProfPicFromExtUrl = async () => {
-    try {
-      const response = await fetch(profilePictureLink);
-
-      if (!response.ok) {
-        throw new Error(`Failed to fetch image: ${response.statusText}`);
-      }
-
-      const blob = await response.blob();
-      downloadImage(blob);
-    } catch (error) {
-      console.error('Error downloading the image:', error); // eslint-disable-line no-console
-      showCallout();
-    }
-  };
-
   const exportUserProfilePicture = () => {
     if (isAValidUUID(profilePictureLink)) {
       exportUserProfPicFromBase64String();
-    } else {
-      exportProfPicFromExtUrl();
     }
   };
 
