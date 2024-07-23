@@ -374,12 +374,16 @@ export const READING_ROOM_ACCESS = {
 export const USER_INFO = {
   FIRST_NAME: 'personal.firstName',
   MIDDLE_NAME: 'personal.middleName',
+  LAST_NAME: 'personal.lastName',
   MOBILE_PHONE: 'personal.mobilePhone',
   PHONE: 'personal.phone',
   PREFERRED_FIRST_NAME: 'personal.preferredFirstName',
   BARCODE: 'barcode',
   EXTERNAL_SYSTEM_ID: 'externalSystemId',
   USERNAME: 'username',
+  PATRON_GROUP: 'patronGroup',
+  EXPIRATION_DATE: 'expirationDate',
+  PROFILE_PICTURE_LINK: 'personal.profilePictureLink'
 };
 
 export const USER_FIELDS_TO_CHECK = [USER_INFO.FIRST_NAME, USER_INFO.MIDDLE_NAME,

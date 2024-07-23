@@ -165,6 +165,27 @@ describe('PrintLibraryCard', () => {
 
         await waitFor(() => expect(exportToCsv).toHaveBeenCalled());
       });
+
+      it('should not export user pp jpg file', async () => {
+        global.fetch = jest.fn(() => Promise.resolve({
+          ok: true,
+          blob: () => Promise.resolve(new Blob(['image data'], { type: 'image/jpeg' })),
+        }));
+        global.URL.createObjectURL = jest.fn();
+        global.Blob = jest.fn();
+        global.navigator.msSaveBlob = jest.fn();
+        const spy = jest.spyOn(global.navigator, 'msSaveBlob');
+
+        render(<PrintLibraryCardButton {...props} />);
+
+        const printLibraryCardButton = screen.getByTestId('print-library-card');
+        await userEvent.click(printLibraryCardButton);
+
+
+        await waitFor(() => expect(spy).not.toHaveBeenCalled());
+
+        spy.mockRestore();
+      });
     });
   });
 

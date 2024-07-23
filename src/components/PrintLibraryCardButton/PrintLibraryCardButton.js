@@ -11,31 +11,37 @@ import {
 } from '@folio/stripes/components';
 import { useProfilePicture } from '@folio/stripes/smart-components';
 import { isPatronUser, isStaffUser, base64ToBlob, isAValidUUID, isAValidURL } from '../util';
+import { USER_INFO } from '../../constants';
 
+const { BARCODE, FIRST_NAME, LAST_NAME, MIDDLE_NAME, PATRON_GROUP, EXPIRATION_DATE, PROFILE_PICTURE_LINK } = USER_INFO;
+const profileFilePictureField = {
+  label: 'Profile Picture Link ',
+  value: PROFILE_PICTURE_LINK
+};
 const onlyFields = [
   {
     label: 'Barcode',
-    value: 'barcode'
+    value: BARCODE
   },
   {
     label: 'First Name',
-    value: 'personal.firstName'
+    value: FIRST_NAME
   },
   {
     label: 'Middle Name',
-    value: 'personal.middleName'
+    value: MIDDLE_NAME
   },
   {
     label: 'Last Name',
-    value: 'personal.lastName'
+    value: LAST_NAME
   },
   {
     label: 'Patron Group',
-    value: 'patronGroup'
+    value: PATRON_GROUP
   },
   {
     label: 'Expiration Date',
-    value: 'expirationDate'
+    value: EXPIRATION_DATE
   },
 ];
 const dateFormat = { year: 'numeric', month: 'numeric', day: 'numeric' };
@@ -65,17 +71,13 @@ const PrintLibraryCardButton = ({ user, patronGroup }) => {
       type: 'error',
     });
   };
+
   const getOnlyFields = useCallback(() => {
+    const fields = [...onlyFields];
     if (profilePictureLink && isAValidURL(profilePictureLink)) {
-      return onlyFields.push(
-        {
-          label: 'Profile Picture Link ',
-          value: 'personal.profilePictureLink'
-        }
-      );
-    } else {
-      return onlyFields;
+      fields.push(profileFilePictureField);
     }
+    return fields;
   }, [profilePictureLink]);
 
   const exportUserDetails = () => {
