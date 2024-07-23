@@ -33,9 +33,9 @@ const ORIENTATION_TO_ANGLE = {
 };
 
 const COMPRESSION_OPTIONS = {
-  quality: 0.8,
-  maxWidth: 100,
-  maxHeight: 100,
+  quality: 0.9,
+  maxWidth: 300,
+  maxHeight: 300,
   checkOrientation: false,
 };
 
