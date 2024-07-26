@@ -11,6 +11,10 @@ import {
 } from '../../hooks';
 import UserForm, { validate } from './UserForm';
 
+jest.mock('@folio/stripes/smart-components', () => ({
+  ...jest.requireActual('@folio/stripes/smart-components'),
+  EditCustomFieldsRecord: jest.fn(() => 'EditCustomFieldsRecord'),
+}));
 jest.mock(
   '../../components/EditSections',
   () => ({
@@ -18,6 +22,7 @@ jest.mock(
     EditExtendedInfo: jest.fn(() => <div>EditExtendedInfo accordion</div>),
     EditProxy: jest.fn(() => <div>EditProxy accordion</div>),
     EditServicePoints: jest.fn(() => <div>EditServicePoints accordion</div>),
+    EditReadingRoomAccess: jest.fn(() => <div>EditReadingRoomAccess</div>),
     EditUserInfo: jest.fn(() => <div>EditUserInfo accordion</div>),
     EditUserRoles: jest.fn(() => <div>EditUserRoles accordion</div>)
   })

@@ -10,9 +10,6 @@ import {
 } from '@folio/stripes/core';
 
 import consortia from '../../../test/jest/fixtures/consortia';
-import {
-  MAX_RECORDS,
-} from '../../constants';
 import useConsortiumPermissions from './useConsortiumPermissions';
 
 jest.mock('@folio/stripes/core', () => ({
@@ -35,14 +32,6 @@ const user = { id: 'userId' };
 const consortium = {
   ...consortia[0],
   centralTenantId: 'mobius',
-};
-
-const response = {
-  id: 'userPermissionId',
-  permissions: [
-    { subPermissions: ['users.view'] },
-    { subPermissions: ['consortia.view'] },
-  ],
 };
 
 describe('useConsortiumPermissions with users-keycloak', () => {
