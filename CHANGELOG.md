@@ -12,6 +12,12 @@
 * Fix "Total paid amount" value that set as "$NaN" on "Refund fee/fine" modal. Refs UIU-3094.
 * Validate image url provided as external url for user profile picture. Refs UIU-3080.
 * Import and use ProfilePicture Component from stripes/smart-components. Refs UIU-3104.
+* Show Roles assigned to users. Refs UIU-3110.
+* Add edit user roles accordion on edit role modal view. Refs UIU-3021.
+* Wire up with API ability to assign/unassign user roles in UserForm. Refs UIU-3124.
+* Fix filter issues in user roles modal. Refs UIU-3124.
+* Suppress Settings > Users > Permission sets when `roles` interface is present. Refs UIU-3105.
+* Sort user roles alphabetically in `EditUserRoles` and `UserRolesModal` components. Refs UIU-3145.     
 * Rename isDCBItem function name to isDcbItem. Refs UIU-3020.
 * *BREAKING* Add new okapi interface reading-room-patron-permission. Create new permission 'Users: Can view reading room access'. Refs UIU-3116.
 * Create new permission 'Users: Can view, and edit reading room access'. Refs UIU-3117.
@@ -90,6 +96,11 @@
 * Profile Pictures - basic error handling. Refs UIU-3070.
 * Add optional chaining in `AddServicePointModal` in order to safely access `assignedServicePoints` from props. Refs UIU-3069.
 * Fix lint issues. Refs UIU-3072.
+* Leverage `users-keycloak` interface endpoints for user data when available.
+* Fix problem with `Reset password email sent` , application points to  bl-users endpoint, even if `users-keycloak` interface provided. Refs UIU-3031.
+* Add `users-keycloak` permissions. Refs UIU-3068.
+* Omit permissions accordions and queries when `roles` interface is present. Refs UIU-3061, UIU-3062.
+* Retrieve user's central-tenant permission from `users-keycloak` endpoints when available. Refs UIU-3054.
 * Leverage `users-keycloak` interface endpoints for user data when available.
 * Fix problem with `Reset password email sent` , application points to  bl-users endpoint, even if `users-keycloak` interface provided. Refs UIU-3031.
 * Add `users-keycloak` permissions. Refs UIU-3068.

@@ -297,11 +297,7 @@ class UserEdit extends React.Component {
       updateUserRoles(user.assignedRoleIds);
     }
 
-    if (stripes.hasInterface('roles')) {
-      updateUserRoles(user.assignedRoleIds);
-    }
-
-    const data = omit(user, ['creds', 'proxies', 'sponsors', 'permissions', 'servicePoints', 'preferredServicePoint', 'readingRoomsAccessList']);
+    const data = omit(user, ['creds', 'proxies', 'sponsors', 'permissions', 'servicePoints', 'preferredServicePoint']);
     const today = moment().endOf('day');
     const curActive = user.active;
     const prevActive = prevUser.active;

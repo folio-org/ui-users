@@ -11,18 +11,18 @@ import {
 } from '../../hooks';
 import UserForm, { validate } from './UserForm';
 
-jest.mock('@folio/stripes/smart-components', () => ({
-  ...jest.requireActual('@folio/stripes/smart-components'),
-  EditCustomFieldsRecord: jest.fn(() => 'EditCustomFieldsRecord'),
-}));
-jest.mock('../../components/EditSections', () => ({
-  EditUserInfo: jest.fn(() => 'EditUserInfo'),
-  EditExtendedInfo: jest.fn(() => 'EditExtendedInfo'),
-  EditContactInfo: jest.fn(() => 'EditContactInfo'),
-  EditProxy: jest.fn(() => 'EditProxy'),
-  EditServicePoints: jest.fn(() => 'EditServicePoints'),
-  EditReadingRoomAccess: jest.fn(() => 'EditReadingRoomAccess'),
-}));
+jest.mock(
+  '../../components/EditSections',
+  () => ({
+    EditContactInfo: jest.fn(() => <div>EditContactInfo accordion</div>),
+    EditExtendedInfo: jest.fn(() => <div>EditExtendedInfo accordion</div>),
+    EditProxy: jest.fn(() => <div>EditProxy accordion</div>),
+    EditServicePoints: jest.fn(() => <div>EditServicePoints accordion</div>),
+    EditUserInfo: jest.fn(() => <div>EditUserInfo accordion</div>),
+    EditUserRoles: jest.fn(() => <div>EditUserRoles accordion</div>)
+  })
+);
+
 jest.mock('../../components/PermissionsAccordion/components/PermissionsModal', () => 'PermissionsModal');
 jest.mock('../../hooks', () => ({
   ...jest.requireActual('../../hooks'),
@@ -34,16 +34,6 @@ jest.mock(
   './TenantsPermissionsAccordion',
   () => jest.fn(() => <div>TenantsPermissionsAccordion accordion</div>),
 );
-const user = {
-  id: 'user-id',
-  personal: {
-    firstName: 'Luke',
-  },
-  type: USER_TYPES.STAFF,
-  proxies: [],
-  sponsors: [],
-  preferredEmailCommunication: [],
-};
 
 const STRIPES = {
   connect: (Component) => Component,
