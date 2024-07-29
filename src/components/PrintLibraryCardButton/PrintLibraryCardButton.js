@@ -151,7 +151,6 @@ const PrintLibraryCardButton = ({ user, patronGroup }) => {
   *    and user has one image against his profile
   ************************************************************************* */
   const handlePrintLibraryCard = () => {
-    console.log('handlePrintLibraryCard ================>');
     exportUserDetails();
     if (profilePictureLink) exportUserProfilePicture();
   };

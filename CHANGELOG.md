@@ -35,6 +35,7 @@
 * Filter options on user input in "Preferred email communications" field in User Edit. Refs UIU-3173.
 * Export user details CSV file enhancements. Refs UIU-3175.
 * Improve User Profile Picture quality. Refs UIU-3177.
+* Update expiration date format in export user details. Refs UIU-3174.
 
 ## [10.1.1](https://github.com/folio-org/ui-users/tree/v10.1.1) (2024-05-07)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.1.0...v10.1.1)
