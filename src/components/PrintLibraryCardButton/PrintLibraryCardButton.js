@@ -55,7 +55,7 @@ const PrintLibraryCardButton = ({ user, patronGroup }) => {
 
   const { profilePictureData } = useProfilePicture({ profilePictureId: profilePictureLink, isProfilePictureAUUID: isAValidUUID(profilePictureLink) });
 
-  const formatDateExpirationDate = useCallback(() => {
+  const formatExpirationDate = useCallback(() => {
     const dateParts = formatDateToParts(expirationDate);
     const date = ['day', 'month', 'year'].map(p => dateParts.filter(dp => dp.type === p)[0].value).join('/');
     return date;
@@ -65,9 +65,9 @@ const PrintLibraryCardButton = ({ user, patronGroup }) => {
     const modifiedUser = cloneDeep(user);
     modifiedUser.patronGroup = patronGroup;
     modifiedUser.personal.firstName = personal.preferredFirstName || personal.firstName;
-    modifiedUser.expirationDate = expirationDate ? formatDateExpirationDate() : '';
+    modifiedUser.expirationDate = expirationDate ? formatExpirationDate() : '';
     return modifiedUser;
-  }, [user, patronGroup, personal.preferredFirstName, personal.firstName, expirationDate, formatDateExpirationDate]);
+  }, [user, patronGroup, personal.preferredFirstName, personal.firstName, expirationDate, formatExpirationDate]);
 
   const showCallout = () => {
     callout.sendCallout({
