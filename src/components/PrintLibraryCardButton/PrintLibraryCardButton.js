@@ -44,29 +44,33 @@ const onlyFields = [
     value: EXPIRATION_DATE
   },
 ];
-const dateFormat = { year: 'numeric', month: 'numeric', day: 'numeric' };
 const ERROR = 'error';
 const SUCCESS = 'success';
 
 const PrintLibraryCardButton = ({ user, patronGroup }) => {
   const callout = useCallout();
   const intl = useIntl();
-  const { formatDate } = intl;
-  const { personal: { profilePictureLink }, active } = user;
+  const { formatDateToParts } = intl;
+  const { personal: { profilePictureLink }, active, expirationDate, personal } = user;
   const isPatronOrStaffUser = isPatronUser(user) || isStaffUser(user);
   const disabled = !active || !isPatronOrStaffUser;
   const isProfilePicAValidUUID = profilePictureLink && isAValidUUID(profilePictureLink);
 
   const { profilePictureData } = useProfilePicture({ profilePictureId: profilePictureLink, isProfilePictureAUUID: isAValidUUID(profilePictureLink) });
 
+  const formatExpirationDate = useCallback(() => {
+    const dateParts = formatDateToParts(expirationDate);
+    const date = ['day', 'month', 'year'].map(p => dateParts.filter(dp => dp.type === p)[0].value).join('/');
+    return date;
+  }, [expirationDate, formatDateToParts]);
+
   const updateUserForExport = useCallback(() => {
-    const { personal, expirationDate } = user;
     const modifiedUser = cloneDeep(user);
     modifiedUser.patronGroup = patronGroup;
     modifiedUser.personal.firstName = personal.preferredFirstName || personal.firstName;
-    modifiedUser.expirationDate = expirationDate ? formatDate(expirationDate, dateFormat) : '';
+    modifiedUser.expirationDate = expirationDate ? formatExpirationDate() : '';
     return modifiedUser;
-  }, [user, patronGroup, formatDate]);
+  }, [user, patronGroup, personal.preferredFirstName, personal.firstName, expirationDate, formatExpirationDate]);
 
   const showCallout = (type) => {
     const successMessage = type === SUCCESS && (
