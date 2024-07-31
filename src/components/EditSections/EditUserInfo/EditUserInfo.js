@@ -105,18 +105,6 @@ class EditUserInfo extends React.Component {
     return get(selectedPatronGroup, 'expirationOffsetInDays', '');
   };
 
-  parseExpirationDate = (expirationDate) => {
-    const {
-      stripes: {
-        timezone,
-      },
-    } = this.props;
-
-    return expirationDate
-      ? moment.tz(expirationDate, timezone).endOf('day').format()
-      : expirationDate;
-  };
-
   render() {
     const {
       patronGroups,
@@ -354,21 +342,8 @@ class EditUserInfo extends React.Component {
                     defaultValue={initialValues.expirationDate}
                     name="expirationDate"
                     id="adduser_expirationdate"
-                    parse={this.parseExpirationDate}
                     disabled={disabled}
                     validate={validateMinDate('ui-users.errors.personal.dateOfBirth')}
-                    format={
-                      v => {
-                        return v ?
-                          intl.formatDate(v,
-                            {
-                              year:'numeric',
-                              month:'numeric',
-                              day:'numeric',
-                              locale: stripes?.locale,
-                            }) : v;
-                      }
-                     }
                   />
                   {checkShowRecalculateButton() && (
                     <Button
