@@ -105,18 +105,6 @@ class EditUserInfo extends React.Component {
     return get(selectedPatronGroup, 'expirationOffsetInDays', '');
   };
 
-  parseExpirationDate = (expirationDate) => {
-    const {
-      stripes: {
-        timezone,
-      },
-    } = this.props;
-
-    return expirationDate
-      ? moment.tz(expirationDate, timezone).endOf('day').format()
-      : expirationDate;
-  };
-
   render() {
     const {
       patronGroups,
