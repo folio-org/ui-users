@@ -36,7 +36,7 @@
 * Export user details CSV file enhancements. Refs UIU-3175.
 * Improve User Profile Picture quality. Refs UIU-3177.
 * Update expiration date format in export user details. Refs UIU-3174.
-* Remove parser prop on expiration date field on user edit UI. Refs UIU-3181.
+* Do not parse or format value of expiration date field on user edit UI. Refs UIU-3181.
 
 ## [10.1.1](https://github.com/folio-org/ui-users/tree/v10.1.1) (2024-05-07)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.1.0...v10.1.1)
