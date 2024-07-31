@@ -354,21 +354,8 @@ class EditUserInfo extends React.Component {
                     defaultValue={initialValues.expirationDate}
                     name="expirationDate"
                     id="adduser_expirationdate"
-                    parse={this.parseExpirationDate}
                     disabled={disabled}
                     validate={validateMinDate('ui-users.errors.personal.dateOfBirth')}
-                    format={
-                      v => {
-                        return v ?
-                          intl.formatDate(v,
-                            {
-                              year:'numeric',
-                              month:'numeric',
-                              day:'numeric',
-                              locale: stripes?.locale,
-                            }) : v;
-                      }
-                     }
                   />
                   {checkShowRecalculateButton() && (
                     <Button
