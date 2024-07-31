@@ -438,12 +438,11 @@ class UserDetail extends React.Component {
     const patronGroup = this.getPatronGroup(user);
     const feeFineActions = get(resources, ['feefineactions', 'records'], []);
     const accounts = get(resources, ['accounts', 'records'], []);
-    const { personal: { profilePictureLink } } = user;
     const loans = get(resources, ['loanRecords', 'records'], []);
     const settings = resources?.settings?.records || [];
     const isShadowUserType = isShadowUser(user);
     const isVirtualPatron = isDcbUser(user);
-    const displayPrintLibraryCardButton = Boolean(settings.length) && settings[0].enabled && profilePictureLink;
+    const isProfilePictureFeatureEnabled = Boolean(settings.length) && settings[0].enabled;
 
     const feesFinesReportData = {
       user,
@@ -490,7 +489,7 @@ class UserDetail extends React.Component {
             />
           </IfInterface>
           {
-            displayPrintLibraryCardButton && (
+            isProfilePictureFeatureEnabled && (
               <PrintLibraryCardButton
                 user={user}
                 patronGroup={patronGroup?.group}

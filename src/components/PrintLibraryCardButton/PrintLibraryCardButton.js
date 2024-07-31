@@ -53,7 +53,7 @@ const PrintLibraryCardButton = ({ user, patronGroup }) => {
   const { formatDateToParts } = intl;
   const { personal: { profilePictureLink }, active, expirationDate, personal } = user;
   const isPatronOrStaffUser = isPatronUser(user) || isStaffUser(user);
-  const disabled = !active || !isPatronOrStaffUser;
+  const disabled = !active || !isPatronOrStaffUser || !profilePictureLink;
   const isProfilePicAValidUUID = profilePictureLink && isAValidUUID(profilePictureLink);
 
   const { profilePictureData } = useProfilePicture({ profilePictureId: profilePictureLink, isProfilePictureAUUID: isAValidUUID(profilePictureLink) });
