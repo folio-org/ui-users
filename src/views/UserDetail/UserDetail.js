@@ -439,10 +439,10 @@ class UserDetail extends React.Component {
     const feeFineActions = get(resources, ['feefineactions', 'records'], []);
     const accounts = get(resources, ['accounts', 'records'], []);
     const loans = get(resources, ['loanRecords', 'records'], []);
-    const settings = resources?.settings?.records || [];
+    const settings = resources?.settings?.records;
     const isShadowUserType = isShadowUser(user);
     const isVirtualPatron = isDcbUser(user);
-    const isProfilePictureFeatureEnabled = Boolean(settings.length) && settings[0].enabled;
+    const isProfilePictureFeatureEnabled = Boolean(settings?.length) && settings[0].enabled;
 
     const feesFinesReportData = {
       user,
