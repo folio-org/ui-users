@@ -29,7 +29,6 @@
       }
     ],
     "okapiInterfaces": {
-      "add-info": "0.1",
       "users": "16.0 16.1 16.2",
       "configuration": "2.0",
       "permissions": "5.6",
@@ -45,6 +44,7 @@
       "feesfines": "16.1 17.0 18.0 19.0",
       "loan-policy-storage": "1.0 2.0",
       "loan-storage": "4.0 5.0 6.0 7.0",
+      "add-info": "0.1",
       "notes": "2.0 3.0",
       "request-storage": "2.5 3.0 4.0 5.0 6.0",
       "batch-print": "1.0",

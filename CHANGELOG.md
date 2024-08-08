@@ -37,6 +37,7 @@
 * Improve User Profile Picture quality. Refs UIU-3177.
 * Update expiration date format in export user details. Refs UIU-3174.
 * Success message toast for user details export for library card printing. Refs UIU-3171.
+* The interface used for adding patron/staff notes to loans is now optional, and the relevant code guarded with `<IfInterface>`. Fixes UIU-3182.
 
 ## [10.1.1](https://github.com/folio-org/ui-users/tree/v10.1.1) (2024-05-07)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.1.0...v10.1.1)
