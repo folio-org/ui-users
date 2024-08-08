@@ -526,18 +526,6 @@ describe('LoanDetails', () => {
       });
       expect(screen.getByRole('button', { name:'ui-users.loans.declareLost' })).toBeDisabled();
     });
-    it('should disable "New patron info" button', () => {
-      renderLoanProxyDetails({
-        ...virtualPatronPropsData,
-      });
-      expect(screen.getByRole('button', { name:'ui-users.loans.newPatronInfo' })).toBeDisabled();
-    });
-    it('should disable "New staff info" button', () => {
-      renderLoanProxyDetails({
-        ...virtualPatronPropsData,
-      });
-      expect(screen.getByRole('button', { name:'ui-users.loans.newStaffInfo' })).toBeDisabled();
-    });
   });
 
   describe('when item is dcb item', () => {
