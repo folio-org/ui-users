@@ -75,8 +75,9 @@ class EditUserInfo extends React.Component {
   setRecalculatedExpirationDate = (startCalcToday) => {
     const { form: { change } } = this.props;
     const recalculatedDate = this.calculateNewExpirationDate(startCalcToday);
+    const parsedRecalculatedDate = this.parseExpirationDate(recalculatedDate);
 
-    change('expirationDate', recalculatedDate);
+    change('expirationDate', parsedRecalculatedDate);
     this.setState({ showRecalculateModal: false });
   }
 
@@ -111,7 +112,7 @@ class EditUserInfo extends React.Component {
     } = this.props;
 
     return expirationDate
-      ? moment.tz(expirationDate, timezone).endOf('day').format()
+      ? moment.tz(expirationDate, timezone).endOf('day').toDate().toISOString()
       : expirationDate;
   };
 
