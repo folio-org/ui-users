@@ -92,13 +92,10 @@ class EditUserInfo extends React.Component {
     const now = Date.now();
     const offsetOfSelectedPatronGroup = this.state.selectedPatronGroup ? this.getPatronGroupOffset() : '';
 
-    let recalculatedDate;
-    if (startCalcToday || initialValues.expirationDate === undefined || expirationDate <= now) {
-      recalculatedDate = (moment().add(offsetOfSelectedPatronGroup, 'd').locale(locale).format('L'));
-    } else {
-      recalculatedDate = (moment(expirationDate).add(offsetOfSelectedPatronGroup, 'd').locale(locale).format('L'));
-    }
-    return recalculatedDate;
+    const shouldRecalculateFromToday = startCalcToday || initialValues.expirationDate === undefined || expirationDate <= now;
+    const baseDate = shouldRecalculateFromToday ? moment() : moment(expirationDate);
+
+    return baseDate.add(offsetOfSelectedPatronGroup, 'd').locale(locale).format('L');
   }
 
   getPatronGroupOffset = () => {
