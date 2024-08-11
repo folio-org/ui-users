@@ -87,15 +87,16 @@ class EditUserInfo extends React.Component {
   }
 
   calculateNewExpirationDate = (startCalcToday) => {
-    const { initialValues } = this.props;
+    const { initialValues, stripes: { locale } } = this.props;
     const expirationDate = new Date(initialValues.expirationDate);
     const now = Date.now();
     const offsetOfSelectedPatronGroup = this.state.selectedPatronGroup ? this.getPatronGroupOffset() : '';
+
     let recalculatedDate;
     if (startCalcToday || initialValues.expirationDate === undefined || expirationDate <= now) {
-      recalculatedDate = (moment().add(offsetOfSelectedPatronGroup, 'd').format('YYYY-MM-DD'));
+      recalculatedDate = (moment().add(offsetOfSelectedPatronGroup, 'd').locale(locale).format('L'));
     } else {
-      recalculatedDate = (moment(expirationDate).add(offsetOfSelectedPatronGroup, 'd').format('YYYY-MM-DD'));
+      recalculatedDate = (moment(expirationDate).add(offsetOfSelectedPatronGroup, 'd').locale(locale).format('L'));
     }
     return recalculatedDate;
   }
@@ -348,7 +349,6 @@ class EditUserInfo extends React.Component {
                 </Col>
                 <Col xs={12} md={3}>
                   <Field
-                    backendDateStandard="YYYY-MM-DD"
                     component={Datepicker}
                     label={<FormattedMessage id="ui-users.expirationDate" />}
                     defaultValue={initialValues.expirationDate}
@@ -357,18 +357,6 @@ class EditUserInfo extends React.Component {
                     parse={this.parseExpirationDate}
                     disabled={disabled}
                     validate={validateMinDate('ui-users.errors.personal.dateOfBirth')}
-                    format={
-                      v => {
-                        return v ?
-                          intl.formatDate(v,
-                            {
-                              year:'numeric',
-                              month:'numeric',
-                              day:'numeric',
-                              locale: stripes?.locale,
-                            }) : v;
-                      }
-                     }
                   />
                   {checkShowRecalculateButton() && (
                     <Button
