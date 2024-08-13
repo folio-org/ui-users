@@ -64,6 +64,7 @@ import {
   isShadowUser,
 } from '../../components/util';
 import RequestFeeFineBlockButtons from '../../components/RequestFeeFineBlockButtons';
+import PrintLibraryCardButton from '../../components/PrintLibraryCardButton';
 import { departmentsShape } from '../../shapes';
 import ErrorPane from '../../components/ErrorPane';
 import LostItemsLink from '../../components/LostItemsLink';
@@ -438,8 +439,10 @@ class UserDetail extends React.Component {
     const feeFineActions = get(resources, ['feefineactions', 'records'], []);
     const accounts = get(resources, ['accounts', 'records'], []);
     const loans = get(resources, ['loanRecords', 'records'], []);
+    const settings = resources?.settings?.records;
     const isShadowUserType = isShadowUser(user);
     const isVirtualPatron = isDcbUser(user);
+    const isProfilePictureFeatureEnabled = Boolean(settings?.length) && settings[0].enabled;
 
     const feesFinesReportData = {
       user,
@@ -485,6 +488,14 @@ class UserDetail extends React.Component {
               callout={this.callout}
             />
           </IfInterface>
+          {
+            isProfilePictureFeatureEnabled && (
+              <PrintLibraryCardButton
+                user={user}
+                patronGroup={patronGroup?.group}
+              />
+            )
+          }
           <ActionMenuDeleteButton
             handleDeleteClick={this.handleDeleteClick}
             id={this.props.match.params.id}

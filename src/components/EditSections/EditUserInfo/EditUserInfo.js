@@ -39,6 +39,7 @@ class EditUserInfo extends React.Component {
     patronGroups: PropTypes.arrayOf(PropTypes.object),
     stripes: PropTypes.shape({
       timezone: PropTypes.string.isRequired,
+      locale: PropTypes.string.isRequired,
       store: PropTypes.shape({
         dispatch: PropTypes.func.isRequired,
         getState: PropTypes.func,
@@ -356,6 +357,18 @@ class EditUserInfo extends React.Component {
                     parse={this.parseExpirationDate}
                     disabled={disabled}
                     validate={validateMinDate('ui-users.errors.personal.dateOfBirth')}
+                    format={
+                      v => {
+                        return v ?
+                          intl.formatDate(v,
+                            {
+                              year:'numeric',
+                              month:'numeric',
+                              day:'numeric',
+                              locale: stripes?.locale,
+                            }) : v;
+                      }
+                     }
                   />
                   {checkShowRecalculateButton() && (
                     <Button

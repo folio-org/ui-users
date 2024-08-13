@@ -186,14 +186,19 @@ class UserEdit extends React.Component {
   )
 
   create = ({ requestPreferences, ...userFormData }) => {
-    const { mutator, history, location: { search } } = this.props;
+    const { mutator, history, location: { search }, stripes } = this.props;
     const userData = cloneDeep(userFormData);
     const user = { ...userData, id: uuidv4() };
     user.personal.addresses = toUserAddresses(user.personal.addresses);
     user.personal.email = user.personal.email.trim();
     user.departments = compact(user.departments);
-    user.preferredEmailCommunication = this.formatPrefEmailCommPayload(user.preferredEmailCommunication);
     this.deleteEmptyFields(user);
+
+    if (stripes.hasInterface('users', '16.2')) {
+      user.preferredEmailCommunication = this.formatPrefEmailCommPayload(user.preferredEmailCommunication);
+    } else {
+      delete user.preferredEmailCommunication;
+    }
 
     mutator.records.POST(user)
       .then(() => {
@@ -258,7 +263,12 @@ class UserEdit extends React.Component {
     user.personal.addresses = toUserAddresses(user.personal.addresses); // eslint-disable-line no-param-reassign
     user.personal.email = user.personal.email?.trim();
     user.departments = compact(user.departments);
-    user.preferredEmailCommunication = this.formatPrefEmailCommPayload(user.preferredEmailCommunication);
+
+    if (stripes.hasInterface('users', '16.2')) {
+      user.preferredEmailCommunication = this.formatPrefEmailCommPayload(user.preferredEmailCommunication);
+    } else {
+      delete user.preferredEmailCommunication;
+    }
 
     const { proxies, sponsors, permissions, servicePoints, preferredServicePoint } = user;
 

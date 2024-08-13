@@ -128,6 +128,8 @@ jest.mock(
   })
 );
 
+jest.mock('../../components/PrintLibraryCardButton', () => jest.fn(() => null));
+
 jest.mock('../../components/IfConsortiumPermission', () => jest.fn().mockReturnValue(null));
 
 jest.mock(

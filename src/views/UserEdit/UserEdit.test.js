@@ -67,14 +67,17 @@ jest.mock('../../components/EditSections', () => ({
   EditServicePoints: jest.fn(() => null),
 }));
 
+const stripes = {
+  hasPerm: jest.fn().mockReturnValue(true),
+  hasInterface: () => true,
+  okapi: {
+    tenant: 'tenantId',
+  },
+};
+
 describe('UserEdit', () => {
   let props = {
-    stripes: {
-      hasPerm: jest.fn().mockReturnValue(true),
-      okapi: {
-        tenant: 'tenantId',
-      },
-    },
+    stripes,
     resources: {
       selUser: {
         records: [{
@@ -391,6 +394,18 @@ describe('UserEdit', () => {
     it('should handle user updates', async () => {
       renderWithRouter(<UserEdit {...props} />);
 
+      await UserForm.mock.calls[0][0].onSubmit(userFormData);
+
+      expect(props.mutator.requestPreferences.POST).toHaveBeenCalled();
+      expect(props.updateProxies).toHaveBeenCalled();
+      expect(props.updateSponsors).toHaveBeenCalled();
+      expect(props.updateServicePoints).toHaveBeenCalled();
+    });
+
+    it('should save the user updates when the users interfaces is not 16.2', async () => {
+      stripes.hasInterface = jest.fn().mockReturnValue(false);
+
+      renderWithRouter(<UserEdit {...props} />);
       await UserForm.mock.calls[0][0].onSubmit(userFormData);
 
       expect(props.mutator.requestPreferences.POST).toHaveBeenCalled();

@@ -35,7 +35,7 @@
     "loans.details.claimedReturned": "Supostamente devolvido",
     "loans.details.loanPolicy": "Política de empréstimos",
     "loans.details.lost": "Perdido",
-    "loans.details.borrower": "Usuário que está emprestando",
+    "loans.details.borrower": "Usuário com empréstimo",
     "loans.details.renewalCount": "No. de renovações",
     "loans.details.proxyBorrower": "Usuário por procuração",
     "permissions.empty": "Nenhuma permissão encontrada",
@@ -1180,5 +1180,10 @@
     "readingRoom.allowed": "Permitido",
     "readingRoom.notAllowed": "Não permitido",
     "readingRoom.metaSection.lastUpdatedDetails": "{date} por {name}",
-    "settings.users.title": "Configurações de usuários"
+    "settings.users.title": "Configurações de usuários",
+    "contact.preferredEmailCommunication": "Comunicações preferenciais por e-mail",
+    "contact.preferredEmailCommunication.programs": "Programas",
+    "contact.preferredEmailCommunication.services": "Serviços",
+    "contact.preferredEmailCommunication.support": "Suporte",
+    "printLibraryCard": "Imprimir cartão da biblioteca"
 }

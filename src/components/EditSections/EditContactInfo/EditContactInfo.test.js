@@ -67,6 +67,9 @@ const props = {
   intl: {
     formatMessage : jest.fn()
   },
+  stripes: {
+    hasInterface: jest.fn().mockReturnValue(true),
+  },
 };
 
 describe('Render Edit contact Information component', () => {
@@ -98,6 +101,15 @@ describe('Render Edit contact Information component', () => {
     await userEvent.click(document.querySelector('[id="adduserPreferredEmailCommunication-main-item-2"]'));
 
     expect(prefEmailCommInput).toHaveTextContent('2 items selected');
+  });
+
+  it('should update Preferred Email Communication input field value on user input', async () => {
+    renderEditContactInfo(props);
+    const prefEmailCommInputField = document.querySelector('[id="adduserPreferredEmailCommunication-input"]');
+    expect(prefEmailCommInputField).toHaveValue('');
+
+    await userEvent.type(prefEmailCommInputField, 'Prog');
+    expect(prefEmailCommInputField).toHaveValue('Prog');
   });
 
   it('should render with disabled fields', () => {

@@ -27,6 +27,17 @@
 * Use showing/hiding approach for fee/fine action buttons. Refs UIU-3156.
 * Support sorting for each column in the Reading Room Access accordion in User Profile Edit. Refs UIU-3132.
 * Add the 'Preferred email communication' field in the Contact information accordion of the user profile. Refs UIU-3152.
+* Add the 'Print Library Card' action in the Action Menu of User app. Refs UIU-3159.
+* Export user details for library card printing. Refs UIU-3163.
+* Export profile picture for library card printing. Refs UIU-3160.
+* Bump up users okapi interface to 16.2. Refs UIU-3170.
+* Fix wrong format of user expiration date in User Edit. Refs UIU-3169.
+* Filter options on user input in "Preferred email communications" field in User Edit. Refs UIU-3173.
+* Export user details CSV file enhancements. Refs UIU-3175.
+* Improve User Profile Picture quality. Refs UIU-3177.
+* Update expiration date format in export user details. Refs UIU-3174.
+* Success message toast for user details export for library card printing. Refs UIU-3171.
+* The interface used for adding patron/staff notes to loans is now optional, and the relevant code guarded with `<IfInterface>`. Fixes UIU-3182.
 
 ## [10.1.1](https://github.com/folio-org/ui-users/tree/v10.1.1) (2024-05-07)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.1.0...v10.1.1)
