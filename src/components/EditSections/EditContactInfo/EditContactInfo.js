@@ -25,6 +25,7 @@ const EditContactInfo = ({
   accordionId,
   addressTypes,
   preferredContactTypeId,
+  addressTypeId,
   intl,
   disabled,
   stripes,
@@ -47,6 +48,7 @@ const EditContactInfo = ({
         fullWidth: true,
         autoFocus: true,
         placeholder: intl.formatMessage({ id: 'ui-users.contact.selectAddressType' }),
+        defaultValue: { addressTypeId },
       },
     },
   };
@@ -157,6 +159,7 @@ EditContactInfo.propTypes = {
   accordionId: PropTypes.string.isRequired,
   addressTypes: PropTypes.arrayOf(PropTypes.object),
   preferredContactTypeId: PropTypes.string,
+  addressTypeId: PropTypes.string,
   intl: PropTypes.object.isRequired,
   disabled: PropTypes.bool,
   stripes: PropTypes.object.isRequired,
