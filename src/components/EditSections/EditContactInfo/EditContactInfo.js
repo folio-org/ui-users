@@ -48,7 +48,7 @@ const EditContactInfo = ({
         fullWidth: true,
         autoFocus: true,
         placeholder: intl.formatMessage({ id: 'ui-users.contact.selectAddressType' }),
-        defaultValue: { addressTypeId },
+        defaultValue: addressTypeId,
       },
     },
   };
