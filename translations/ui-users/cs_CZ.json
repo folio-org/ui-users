@@ -1115,9 +1115,9 @@
     "permission.settings.general.view": "Nastavení (Uživatelé): Může zobrazit obecné položky",
     "permission.settings.patron-blocks.view": "Nastavení (Uživatelé): Může zobrazit všechny položky blokace čtenářů",
     "permission.settings.feefines.view": "Nastavení (Uživatelé): Může zobrazit položky týkající se poplatků/pokut",
-    "loans.lastReminderNumber": "{count, number} {count, plural, one {poplatek za připomenutí} other {poplatky za připomenutí}}",
+    "loans.lastReminderNumber": "{count, number} {count, plural, one {poplatek za upomínku} other {poplatky za upomínky}}",
     "reports.feeFineExplanation": "Vysvětlení poplatku/pokuty",
-    "reports.includesReminderFees": "Zahrnuje poplatek za připomenutí",
+    "reports.includesReminderFees": "Zahrnuje poplatek za upomínku",
     "permissions.assignedUsers": "Přiřazení uživatelé",
     "permissions.assignedUsers.name": "Jméno",
     "permissions.assignedUsers.patronGroup": "Kategorie čtenáře",
@@ -1134,7 +1134,7 @@
     "information.userType.shadow": "Stín",
     "information.userType.system": "Systém",
     "userType": "Typ uživatele",
-    "data.loanActionMap.reminderFee": "Poplatek za připomenutí",
+    "data.loanActionMap.reminderFee": "Poplatek za upomínku",
     "actionMenu.patronNoticePrintJobs": "Zobrazit tiskové úlohy s upozorněním pro čtenáře (PDF)",
     "permission.view-patron-notice-print-jobs": "Uživatelé: Zobrazení tiskových úloh s upozorněním pro čtenáře",
     "permission.remove-patron-notice-print-jobs": "Uživatelé: Zobrazení a odstranění tiskových úloh s upozorněním pro čtenáře",
@@ -1160,7 +1160,7 @@
     "information.change.userType.modal.label": "Měníte typ uživatele?",
     "information.change.userType.modal.confirm": "Potvrdit",
     "information.change.userType.modal.text": "Provedením této změny se aktualizují pobočky uživatele a oprávnění, která jsou pro tyto pobočky uděleny po kliknutí na Uložit a zavřít. Tuto akci nelze snadno vrátit zpět, k vrácení výsledných změn byste museli ručně aktualizovat pobočky a oprávnění uživatele. Chcete pokračovat?",
-    "information.profilePicture.localFile.modal.previewAndEdit": "Náhled a úpravit",
+    "information.profilePicture.localFile.modal.previewAndEdit": "Náhled a úpravy",
     "information.profilePicture.localFile.modal.zoom": "Zvětšit",
     "information.profilePicture.localFile.modal.rotate": "Otočit",
     "information.profilePicture.localFile.maxFileSize.error": "Velikost fotografie přesahuje limit {maxFileSize}MB. Vyberte prosím fotografii o velikosti {maxFileSize}MB nebo méně.",
@@ -1185,5 +1185,7 @@
     "contact.preferredEmailCommunication.programs": "Programy",
     "contact.preferredEmailCommunication.services": "Služby",
     "contact.preferredEmailCommunication.support": "Podpora",
-    "printLibraryCard": "Print library card"
+    "printLibraryCard": "Vytisknout čtenářský průkaz",
+    "printLibraryCard.successMessage.withLocallyUploadedProfilePicture": "Export dokončen. Profilový obrázek je exportovaný v samostatném souboru.",
+    "printLibraryCard.successMessage.withExternallyLinkedProfilePicture": "Export dokončen. Adresa URL profilového obrázku je zahrnutá v exportovaném souboru."
 }
