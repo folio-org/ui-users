@@ -39,6 +39,7 @@
 * Success message toast for user details export for library card printing. Refs UIU-3171.
 * The interface used for adding patron/staff notes to loans is now optional, and the relevant code guarded with `<IfInterface>`. Fixes UIU-3182.
 * Fix date selection in "Expiration Date" Field after clearing expiration date field. Refs UIU-3176.
+* Populate the 'Address Type' Field in UserEdit and UserInfo Screen on user creation via edge module. Refs UIU-3180.
 
 ## [10.1.1](https://github.com/folio-org/ui-users/tree/v10.1.1) (2024-05-07)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.1.0...v10.1.1)
