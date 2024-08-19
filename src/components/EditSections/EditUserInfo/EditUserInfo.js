@@ -75,8 +75,9 @@ class EditUserInfo extends React.Component {
   setRecalculatedExpirationDate = (startCalcToday) => {
     const { form: { change } } = this.props;
     const recalculatedDate = this.calculateNewExpirationDate(startCalcToday);
+    const parsedRecalculatedDate = this.parseExpirationDate(recalculatedDate);
 
-    change('expirationDate', recalculatedDate);
+    change('expirationDate', parsedRecalculatedDate);
     this.setState({ showRecalculateModal: false });
   }
 
@@ -87,17 +88,15 @@ class EditUserInfo extends React.Component {
   }
 
   calculateNewExpirationDate = (startCalcToday) => {
-    const { initialValues } = this.props;
+    const { initialValues, stripes: { locale } } = this.props;
     const expirationDate = new Date(initialValues.expirationDate);
     const now = Date.now();
     const offsetOfSelectedPatronGroup = this.state.selectedPatronGroup ? this.getPatronGroupOffset() : '';
-    let recalculatedDate;
-    if (startCalcToday || initialValues.expirationDate === undefined || expirationDate <= now) {
-      recalculatedDate = (moment().add(offsetOfSelectedPatronGroup, 'd').format('YYYY-MM-DD'));
-    } else {
-      recalculatedDate = (moment(expirationDate).add(offsetOfSelectedPatronGroup, 'd').format('YYYY-MM-DD'));
-    }
-    return recalculatedDate;
+
+    const shouldRecalculateFromToday = startCalcToday || initialValues.expirationDate === undefined || expirationDate <= now;
+    const baseDate = shouldRecalculateFromToday ? moment() : moment(expirationDate);
+
+    return baseDate.add(offsetOfSelectedPatronGroup, 'd').locale(locale).format('L');
   }
 
   getPatronGroupOffset = () => {
@@ -113,7 +112,7 @@ class EditUserInfo extends React.Component {
     } = this.props;
 
     return expirationDate
-      ? moment.tz(expirationDate, timezone).endOf('day').format()
+      ? moment.tz(expirationDate, timezone).endOf('day').toDate().toISOString()
       : expirationDate;
   };
 
@@ -348,7 +347,6 @@ class EditUserInfo extends React.Component {
                 </Col>
                 <Col xs={12} md={3}>
                   <Field
-                    backendDateStandard="YYYY-MM-DD"
                     component={Datepicker}
                     label={<FormattedMessage id="ui-users.expirationDate" />}
                     defaultValue={initialValues.expirationDate}
@@ -357,18 +355,6 @@ class EditUserInfo extends React.Component {
                     parse={this.parseExpirationDate}
                     disabled={disabled}
                     validate={validateMinDate('ui-users.errors.personal.dateOfBirth')}
-                    format={
-                      v => {
-                        return v ?
-                          intl.formatDate(v,
-                            {
-                              year:'numeric',
-                              month:'numeric',
-                              day:'numeric',
-                              locale: stripes?.locale,
-                            }) : v;
-                      }
-                     }
                   />
                   {checkShowRecalculateButton() && (
                     <Button

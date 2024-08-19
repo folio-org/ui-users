@@ -30,7 +30,7 @@ import {
   DropdownMenu,
   FormattedTime,
 } from '@folio/stripes/components';
-import { IfPermission, stripesConnect } from '@folio/stripes/core';
+import { IfPermission, IfInterface, stripesConnect } from '@folio/stripes/core';
 import { effectiveCallNumber } from '@folio/stripes/util';
 
 import PatronBlockModalWithOverrideModal from '../../components/PatronBlock/PatronBlockModalWithOverrideModal';
@@ -619,24 +619,26 @@ class LoanDetails extends React.Component {
                     <FormattedMessage id="ui-users.loans.declareLost" />
                   </Button>
                 </IfPermission>
-                <IfPermission perm="ui-users.loans.add-patron-info">
-                  <Button
-                    data-test-new-patron-info-button
-                    disabled={isVirtualPatron}
-                    onClick={() => addInfo(loan, 'patron')}
-                  >
-                    <FormattedMessage id="ui-users.loans.newPatronInfo" />
-                  </Button>
-                </IfPermission>
-                <IfPermission perm="ui-users.loans.add-staff-info">
-                  <Button
-                    data-test-new-staff-info-button
-                    disabled={isVirtualPatron}
-                    onClick={() => addInfo(loan, 'staff')}
-                  >
-                    <FormattedMessage id="ui-users.loans.newStaffInfo" />
-                  </Button>
-                </IfPermission>
+                <IfInterface name="add-info">
+                  <IfPermission perm="ui-users.loans.add-patron-info">
+                    <Button
+                      data-test-new-patron-info-button
+                      disabled={isVirtualPatron}
+                      onClick={() => addInfo(loan, 'patron')}
+                    >
+                      <FormattedMessage id="ui-users.loans.newPatronInfo" />
+                    </Button>
+                  </IfPermission>
+                  <IfPermission perm="ui-users.loans.add-staff-info">
+                    <Button
+                      data-test-new-staff-info-button
+                      disabled={isVirtualPatron}
+                      onClick={() => addInfo(loan, 'staff')}
+                    >
+                      <FormattedMessage id="ui-users.loans.newStaffInfo" />
+                    </Button>
+                  </IfPermission>
+                </IfInterface>
               </span>
             </Row>
             <Row>

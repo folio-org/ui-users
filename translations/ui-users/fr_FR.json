@@ -1185,5 +1185,7 @@
     "contact.preferredEmailCommunication.programs": "Programmes",
     "contact.preferredEmailCommunication.services": "Services",
     "contact.preferredEmailCommunication.support": "Support",
-    "printLibraryCard": "Imprimer une carte de bibliothèque"
+    "printLibraryCard": "Imprimer une carte de bibliothèque",
+    "printLibraryCard.successMessage.withLocallyUploadedProfilePicture": "Export complete. Profile picture exported in separate file.",
+    "printLibraryCard.successMessage.withExternallyLinkedProfilePicture": "Export complete. Profile picture URL included in exported file."
 }

@@ -2,7 +2,10 @@ import _ from 'lodash';
 import { hashCode } from 'hashcode';
 
 function toListAddress(addr) {
-  if (addr.id) return { ...addr };
+  if (addr.id) {
+    const { addressTypeId, ...rest } = addr;
+    return { ...rest, addressType: addressTypeId };
+  }
 
   const country = (addr.countryId) ? addr.countryId : '';
   const id = hashCode().value(addr).toString();

@@ -439,8 +439,10 @@ class UserDetail extends React.Component {
     const feeFineActions = get(resources, ['feefineactions', 'records'], []);
     const accounts = get(resources, ['accounts', 'records'], []);
     const loans = get(resources, ['loanRecords', 'records'], []);
+    const settings = resources?.settings?.records;
     const isShadowUserType = isShadowUser(user);
     const isVirtualPatron = isDcbUser(user);
+    const isProfilePictureFeatureEnabled = Boolean(settings?.length) && settings[0].enabled;
 
     const feesFinesReportData = {
       user,
@@ -486,10 +488,14 @@ class UserDetail extends React.Component {
               callout={this.callout}
             />
           </IfInterface>
-          <PrintLibraryCardButton
-            user={user}
-            patronGroup={patronGroup?.group}
-          />
+          {
+            isProfilePictureFeatureEnabled && (
+              <PrintLibraryCardButton
+                user={user}
+                patronGroup={patronGroup?.group}
+              />
+            )
+          }
           <ActionMenuDeleteButton
             handleDeleteClick={this.handleDeleteClick}
             id={this.props.match.params.id}
