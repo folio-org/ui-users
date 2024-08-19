@@ -1185,5 +1185,7 @@
     "contact.preferredEmailCommunication.programs": "计划",
     "contact.preferredEmailCommunication.services": "服务",
     "contact.preferredEmailCommunication.support": "支持",
-    "printLibraryCard": "Print library card"
+    "printLibraryCard": "打印图书馆卡",
+    "printLibraryCard.successMessage.withLocallyUploadedProfilePicture": "导出完成。个人资料图片已导出至单独文件。",
+    "printLibraryCard.successMessage.withExternallyLinkedProfilePicture": "导出完成。个人资料图片 URL 包含在导出的文件中。"
 }
