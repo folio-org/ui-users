@@ -56,6 +56,8 @@ class OpenLoans extends React.Component {
     };
     this.columnOverflow = { ' ': true };
     this.permissions = { allRequests: 'ui-users.requests.all' };
+    // column header for column with checkboxes that facilitate multi selection, need not be interactive
+    this.nonInteractiveHeaders = ['  '];
   }
 
   onSort = (e, meta) => {
@@ -162,6 +164,7 @@ class OpenLoans extends React.Component {
           onRowClick={this.onRowClick}
           onHeaderClick={this.onSort}
           rowUpdater={this.rowUpdater}
+          nonInteractiveHeaders={this.nonInteractiveHeaders}
         />
       </div>
     );
