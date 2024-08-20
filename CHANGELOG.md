@@ -41,6 +41,7 @@
 * Fix date selection in "Expiration Date" Field after clearing expiration date field. Refs UIU-3176.
 * Populate the 'Address Type' Field in UserEdit and UserInfo Screen on user creation via edge module. Refs UIU-3180.
 * Mark check box column header as non interactive. Refs UIU-2940.
+* Populate 'State/Prov./Region', 'Zip/Postal Code', 'Country' Fields on user creation via edge module. Refs UIU-3188.
 
 ## [10.1.1](https://github.com/folio-org/ui-users/tree/v10.1.1) (2024-05-07)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.1.0...v10.1.1)

@@ -3,8 +3,14 @@ import { hashCode } from 'hashcode';
 
 function toListAddress(addr) {
   if (addr.id) {
-    const { addressTypeId, ...rest } = addr;
-    return { ...rest, addressType: addressTypeId };
+    const { addressTypeId, postalCode, countryId, region, ...rest } = addr;
+    return {
+      ...rest,
+      addressType: addressTypeId,
+      zipCode: postalCode,
+      country: countryId,
+      stateRegion: region,
+    };
   }
 
   const country = (addr.countryId) ? addr.countryId : '';
