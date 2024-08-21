@@ -33,7 +33,6 @@ const searchFields = [
   'externalSystemId="%{query}*"',
   'customFields="%{query}*"'
 ];
-const compileQuery = template(`(${searchFields.join(' or ')})`, { interpolate: /%{([\s\S]+?)}/g });
 
 /*
   Some of the special characters that are allowed while creating a tag are  "", \, *, ?
@@ -68,6 +67,10 @@ const escapeSpecialCharactersInTagFilters = (queryParams, resourceData) => {
 export function buildQuery(queryParams, pathComponents, resourceData, logger, props) {
   const customFilterConfig = buildFilterConfig(queryParams.filters);
   const newResourceData = escapeSpecialCharactersInTagFilters(queryParams, resourceData);
+
+  const compileQuery = props.stripes.hasInterface('users', '16.3') ?
+    template('keywords="%{query}*"', { interpolate: /%{([\s\S]+?)}/g }) :
+    template(`(${searchFields.join(' or ')})`, { interpolate: /%{([\s\S]+?)}/g });
 
   return makeQueryFunction(
     'cql.allRecords=1',
