@@ -9,7 +9,7 @@ describe('getFormAddressList', () => {
     expect(getFormAddressList([])).toEqual([]);
   });
 
-  test('maps object fields correctly when they lack "id" property', () => {
+  test('should map object fields correctly when they lack "id" property', () => {
     const expected = [
       {
         addressLine1: 'a.al1',
@@ -69,6 +69,8 @@ describe('getFormAddressList', () => {
         addressLine1: 'a.al1',
         addressLine2: 'a.al2',
         city: 'a.city',
+        primaryAddress: 2,
+        primary: 2,
         stateRegion: 'a.region',
         zipCode: 'a.postalCode',
         addressType: 'a.addressTypeId',
@@ -79,6 +81,8 @@ describe('getFormAddressList', () => {
         addressLine1: 'b.al1',
         addressLine2: 'b.al2',
         city: 'b.city',
+        primaryAddress: 1,
+        primary: 1,
         stateRegion: 'b.region',
         zipCode: 'b.postalCode',
         addressType: 'b.addressTypeId',
@@ -91,6 +95,7 @@ describe('getFormAddressList', () => {
         addressLine1: 'a.al1',
         addressLine2: 'a.al2',
         city: 'a.city',
+        primaryAddress: 2,
         region: 'a.region',
         postalCode: 'a.postalCode',
         addressTypeId: 'a.addressTypeId',
@@ -101,6 +106,7 @@ describe('getFormAddressList', () => {
         addressLine1: 'b.al1',
         addressLine2: 'b.al2',
         city: 'b.city',
+        primaryAddress: 1,
         region: 'b.region',
         postalCode: 'b.postalCode',
         addressTypeId: 'b.addressTypeId',

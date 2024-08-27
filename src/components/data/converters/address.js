@@ -14,10 +14,8 @@ function toListAddress(addr) {
     zipCode: addr.postalCode,
     country,
     addressType: addr.addressTypeId,
-    ...(!addr.id && {
-      primaryAddress: addr.primaryAddress,
-      primary: addr.primaryAddress,
-    }),
+    primaryAddress: addr.primaryAddress,
+    primary: addr.primaryAddress,
   };
 }
 
