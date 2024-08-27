@@ -63,18 +63,26 @@ describe('getFormAddressList', () => {
   });
 
 
-  test('returns objects as-is if they contain "id" property', () => {
+  test('should map object fields correctly when they contain "id" property', () => {
     const expected = [
       {
         addressLine1: 'a.al1',
         addressLine2: 'a.al2',
-        postalCode: 'a.postalCode',
+        city: 'a.city',
+        stateRegion: 'a.region',
+        zipCode: 'a.postalCode',
+        addressType: 'a.addressTypeId',
+        country: 'a.countryId',
         id: 'a.id',
       },
       {
         addressLine1: 'b.al1',
         addressLine2: 'b.al2',
-        postalCode: 'b.postalCode',
+        city: 'b.city',
+        stateRegion: 'b.region',
+        zipCode: 'b.postalCode',
+        addressType: 'b.addressTypeId',
+        country: '',
         id: 'b.id',
       }
     ];
@@ -82,13 +90,20 @@ describe('getFormAddressList', () => {
       {
         addressLine1: 'a.al1',
         addressLine2: 'a.al2',
+        city: 'a.city',
+        region: 'a.region',
         postalCode: 'a.postalCode',
+        addressTypeId: 'a.addressTypeId',
+        countryId: 'a.countryId',
         id: 'a.id',
       },
       {
         addressLine1: 'b.al1',
         addressLine2: 'b.al2',
+        city: 'b.city',
+        region: 'b.region',
         postalCode: 'b.postalCode',
+        addressTypeId: 'b.addressTypeId',
         id: 'b.id',
       },
     ];

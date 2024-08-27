@@ -2,31 +2,22 @@ import _ from 'lodash';
 import { hashCode } from 'hashcode';
 
 function toListAddress(addr) {
-  if (addr.id) {
-    const { addressTypeId, postalCode, countryId, region, ...rest } = addr;
-    return {
-      ...rest,
-      addressType: addressTypeId,
-      zipCode: postalCode,
-      country: countryId,
-      stateRegion: region,
-    };
-  }
-
   const country = (addr.countryId) ? addr.countryId : '';
-  const id = hashCode().value(addr).toString();
+  const addressId = addr.id || hashCode().value(addr).toString();
 
   return {
-    id,
+    id: addressId,
     addressLine1: addr.addressLine1,
     addressLine2: addr.addressLine2,
     city: addr.city,
-    primaryAddress: addr.primaryAddress,
-    primary: addr.primaryAddress,
     stateRegion: addr.region,
     zipCode: addr.postalCode,
     country,
     addressType: addr.addressTypeId,
+    ...(!addr.id && {
+      primaryAddress: addr.primaryAddress,
+      primary: addr.primaryAddress,
+    }),
   };
 }
 
