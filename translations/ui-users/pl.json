@@ -1171,7 +1171,7 @@
     "permission.view-reading-room-access": "Users: Can view reading room access",
     "permission.edit-reading-room-access": "Users: Can view, and edit reading room access",
     "information.userType.dcb": "DCB",
-    "readingRoom.readingRoomAccess": "Reading room access",
+    "readingRoom.readingRoomAccess": "Dostęp do czytelni",
     "readingRoom.access": "Access",
     "readingRoom.name": "Name",
     "readingRoom.note": "Note",
