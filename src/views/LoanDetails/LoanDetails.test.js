@@ -263,6 +263,22 @@ const propsData = {
   markAsMissing: markAsMissingMock,
 };
 
+const claimedReturnedPropsData = {
+  ...propsData,
+  loan: {
+    ...okapiOpenLoan,
+    action: 'claimedReturned',
+    item: {
+      ...okapiOpenLoan.item,
+      status: {
+        ...okapiOpenLoan.item.status,
+        name: 'Claimed returned'
+      }
+    },
+    claimedReturnedDate: '2024-09-01T05:28:23.628+00:00',
+  }
+};
+
 const renderLoanProxyDetails = (props1) => renderWithRouter(<LoanDetails {...props1} />);
 
 describe('LoanDetails', () => {
@@ -304,12 +320,12 @@ describe('LoanDetails', () => {
       });
       expect(screen.getAllByText('ui-users.loans.claimReturned')).toBeTruthy();
     });
-    it.skip('When props ID and proxy ID are same with claims', () => {
+    it('When props ID and proxy ID are same with claims', () => {
       mockGetLodash.mockReset();
       mockGetLodash.mockImplementation((item, item2) => {
         return item2.includes('contributors') ? undefined : 'Claimed returned';
       });
-      const { getByText, getAllByText } = renderLoanProxyDetails(propsData);
+      const { getByText, getAllByText } = renderLoanProxyDetails(claimedReturnedPropsData);
 
       userEvent.click(getAllByText('ui-users.loans.declareLost')[0]);
       userEvent.click(getAllByText('ui-users.loans.declareLost')[1]);
@@ -323,7 +339,7 @@ describe('LoanDetails', () => {
       userEvent.click(getByText('Close Button'));
       expect(screen.getAllByText('ui-users.loans.markAsMissing')).toBeTruthy();
     });
-    it.skip('Fee Fine Else Condition More than 1 loanAccountActions with Amount 0', () => {
+    it('Fee Fine Else Condition More than 1 loanAccountActions with Amount 0', () => {
       mockGetLodash.mockReset();
       mockGetLodash.mockImplementation(() => {
         return 'Claimed returned';
@@ -333,7 +349,7 @@ describe('LoanDetails', () => {
         return true;
       });
       const updatedPropsData = {
-        ...propsData,
+        ...claimedReturnedPropsData,
         loanAccountActions: [
           { acc: 0, amount: 0 },
           { acc: 0, amount: 0 },
@@ -344,7 +360,7 @@ describe('LoanDetails', () => {
       userEvent.click(screen.queryAllByRole('button')[9]);
       expect(screen.getAllByText('ui-users.loans.markAsMissing')).toBeTruthy();
     });
-    it.skip('Fee Fine Else Condition More than 1 loanAccountActions', () => {
+    it('Fee Fine Else Condition More than 1 loanAccountActions', () => {
       mockGetLodash.mockReset();
       mockGetLodash.mockImplementation(() => {
         return 'Claimed returned';
@@ -354,7 +370,7 @@ describe('LoanDetails', () => {
         return true;
       });
       const updatedPropsData = {
-        ...propsData,
+        ...claimedReturnedPropsData,
         loanAccountActions: [{}, {}],
       };
       renderLoanProxyDetails(updatedPropsData);
@@ -362,7 +378,7 @@ describe('LoanDetails', () => {
       userEvent.click(screen.queryAllByRole('button')[9]);
       expect(screen.getAllByText('ui-users.loans.markAsMissing')).toBeTruthy();
     });
-    it.skip('Fee Fine Else Condition More than 1 loanAccountActions with open item', () => {
+    it('Fee Fine Else Condition More than 1 loanAccountActions with open item', () => {
       mockGetLodash.mockReset();
       mockGetLodash.mockImplementation(() => {
         return 'Claimed returned';
@@ -371,13 +387,13 @@ describe('LoanDetails', () => {
       mockAccounts.mockImplementation((item1, item2) => {
         return item2 === 'open';
       });
-      const updatedPropsData = { ...propsData, loanAccountActions: [{}, {}] };
+      const updatedPropsData = { ...claimedReturnedPropsData, loanAccountActions: [{}, {}] };
       renderLoanProxyDetails(updatedPropsData);
 
       userEvent.click(screen.queryAllByRole('button')[5]);
       expect(screen.getAllByText('ui-users.loans.markAsMissing')).toBeTruthy();
     });
-    it.skip('Fee Fine Else Condition More than 1 loanAccountActions with new loan', () => {
+    it('Fee Fine Else Condition More than 1 loanAccountActions with new loan', () => {
       mockGetLodash.mockReset();
       mockGetLodash.mockImplementation(() => {
         return 'Claimed returned';
@@ -387,7 +403,7 @@ describe('LoanDetails', () => {
         return false;
       });
       let updatedPropsData = {
-        ...propsData,
+        ...claimedReturnedPropsData,
         loanAccountActions: [{}, {}],
       };
       renderLoanProxyDetails(updatedPropsData);
