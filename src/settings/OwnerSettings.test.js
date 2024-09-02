@@ -177,7 +177,7 @@ describe('Owner settings', () => {
   // fill out form elements
   // click the "save" button
   // wait for the "save" button to disappear
-  it('Create functionality in component', async () => {
+  it('should create new Owner Settings', async () => {
     renderOwnerSettings(propData);
 
     const newButton = screen.getByRole('button', { name: 'stripes-core.button.new' });
@@ -197,7 +197,7 @@ describe('Owner settings', () => {
     });
   });
 
-  it('Edit functionality in component', async () => {
+  it('should edit existing Owner Settings', async () => {
     renderOwnerSettings(propData);
 
     await userEvent.click(document.querySelector('[id="clickable-edit-settings-owners-0"]'));
