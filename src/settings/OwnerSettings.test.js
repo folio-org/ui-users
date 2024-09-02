@@ -118,7 +118,7 @@ const mutator = {
   values:{
     DELETE: jest.fn().mockReturnValue(Promise.resolve()),
     POST: jest.fn().mockReturnValue(Promise.resolve()),
-    PUT: jest.fn(),
+    PUT: jest.fn().mockReturnValue(Promise.resolve()),
     cancel: jest.fn(),
   }
 };
@@ -177,7 +177,7 @@ describe('Owner settings', () => {
   // fill out form elements
   // click the "save" button
   // wait for the "save" button to disappear
-  it('Create and edit functionality', async () => {
+  it('Create functionality in component', async () => {
     renderOwnerSettings(propData);
 
     const newButton = screen.getByRole('button', { name: 'stripes-core.button.new' });
@@ -190,6 +190,26 @@ describe('Owner settings', () => {
 
     await userEvent.type(document.querySelector('[name="items[0].owner"]'), 'tesst');
     await userEvent.click(document.querySelector('[id="multiselect-option-list-owner-service-point"] li:first-child'));
+    await userEvent.click(screen.getByText('stripes-core.button.save'));
+
+    await waitFor(() => {
+      expect(screen.queryByText('stripes-core.button.save')).not.toBeInTheDocument();
+    });
+  });
+
+  it('Edit functionality in component', async () => {
+    renderOwnerSettings(propData);
+
+    await userEvent.click(document.querySelector('[id="clickable-edit-settings-owners-0"]'));
+    await waitFor(() => {
+      expect(screen.getByText('stripes-core.button.save')).toBeInTheDocument();
+      expect(screen.getByText('stripes-core.button.cancel')).toBeInTheDocument();
+      expect(document.querySelector('[name="items[0].owner"]')).toHaveValue('test');
+      expect(document.querySelector('[name="items[0].desc"]')).toHaveValue('');
+    });
+
+    await userEvent.type(document.querySelector('[name="items[0].desc"]'), 'edited desc');
+    await userEvent.type(document.querySelector('[name="items[0].owner"]'), 'edited test');
     await userEvent.click(screen.getByText('stripes-core.button.save'));
 
     await waitFor(() => {
