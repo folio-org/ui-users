@@ -893,7 +893,7 @@
     "details.checkDelete.confirmation": "Aucune opération en cours pour l'utilisateur <strong>{name}</strong>. <p>Êtes-vous sûr de vouloir supprimer cet utilisateur ?</p>",
     "details.openTransactions": "Transactions ouvertes",
     "details.openTransactions.info": "L'utilisateur <strong>{name}</strong> a les transactions ouvertes suivantes :",
-    "details.openTransactions.resolve": "Please resolve the transactions to proceed to delete the user.",
+    "details.openTransactions.resolve": "Veuillez résoudre les opérations en cours afin de procéder à la suppression de l'utilisateur.",
     "details.openLoans": "Prêts en cours",
     "details.openRequests": "Réservations en cours",
     "details.openFeesFines": "Frais/amendes en cours",
