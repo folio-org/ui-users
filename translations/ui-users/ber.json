@@ -110,7 +110,7 @@
     "expirationDate": "Expiration date",
     "by": "by",
     "delete": "Delete",
-    "edit": "Edit",
+    "edit": "Bewerken",
     "description": "Description",
     "renew": "Renew",
     "closedLoansCount": "{count, number} {count, plural, one {closed loan} other {closed loans}}",
