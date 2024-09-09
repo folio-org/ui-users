@@ -1,5 +1,10 @@
 # Change history for ui-users
 
+## [10.1.2](https://github.com/folio-org/ui-users/tree/v10.1.2) (2024-09-05)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v10.1.1...v10.1.2)
+
+* Use keywords CQL field for keyword user search. Refs UIU-3184.
+
 ## [10.1.1](https://github.com/folio-org/ui-users/tree/v10.1.1) (2024-05-07)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.1.0...v10.1.1)
 
