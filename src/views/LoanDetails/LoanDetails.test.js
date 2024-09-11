@@ -425,48 +425,56 @@ describe('LoanDetails', () => {
     });
   });
 
-  describe('Render LoanDetails component with loanAccountActions', () => {
+  describe('when loanAccountActions are provided', () => {
     beforeEach(() => {
       mockAccounts.mockReset();
       mockAccounts.mockImplementation(() => true);
     });
-    it('should display "Fees/fines incurred" value when there are multiple "Open" loanAccountActions', () => {
-      const updatedPropsData = {
-        ...propsData,
-        loanAccountActions: [
-          { amount: 1, status: { name: 'Open' } },
-          { amount: 4, status: { name: 'Open' } },
-        ],
-      };
-      renderLoanDetails(updatedPropsData);
-      expect(screen.getByText('ui-users.loans.details.fineIncurred')).toBeInTheDocument();
-      expect(screen.getByTestId('fee-fine-details-link')).toHaveTextContent('$5.00');
+    describe('when there are multiple "Open" loanAccountActions', () => {
+      it('should display "Fees/fines incurred" with the correct total value', () => {
+        const updatedPropsData = {
+          ...propsData,
+          loanAccountActions: [
+            { amount: 1, status: { name: 'Open' } },
+            { amount: 4, status: { name: 'Open' } },
+          ],
+        };
+        renderLoanDetails(updatedPropsData);
+        expect(screen.getByText('ui-users.loans.details.fineIncurred')).toBeInTheDocument();
+        expect(screen.getByTestId('fee-fine-details-link')).toHaveTextContent('$5.00');
+      });
     });
-    it('should not display "Fees/fines incurred" value when more than 1 loanAccountActions with total fee-fine Amount 0', () => {
-      const updatedPropsData = {
-        ...propsData,
-        loanAccountActions: [
-          { amount: 0 },
-          { amount: 0 },
-        ],
-      };
-      renderLoanDetails(updatedPropsData);
-      expect(screen.getByText('ui-users.loans.details.fineIncurred')).toBeInTheDocument();
-      expect(screen.queryByTestId('fee-fine-details-link')).not.toBeInTheDocument();
+
+    describe('when multiple loanAccountActions have a total fee-fine amount of 0', () => {
+      it('should not display "Fees/fines incurred" value', () => {
+        const updatedPropsData = {
+          ...propsData,
+          loanAccountActions: [
+            { amount: 0 },
+            { amount: 0 },
+          ],
+        };
+        renderLoanDetails(updatedPropsData);
+        expect(screen.getByText('ui-users.loans.details.fineIncurred')).toBeInTheDocument();
+        expect(screen.queryByTestId('fee-fine-details-link')).not.toBeInTheDocument();
+      });
     });
-    it('should display "Fee Fine Suspended claim returned" status correctly', () => {
-      const updatedPropsData = {
-        ...propsData,
-        loanAccountActions: [
-          {
-            amount: 1,
-            paymentStatus: { name: 'Suspended claim returned' }
-          },
-        ],
-      };
-      renderLoanDetails(updatedPropsData);
-      expect(screen.getByText('ui-users.loans.details.fineIncurred')).toBeInTheDocument();
-      expect(screen.getByText('ui-users.accounts.suspended')).toBeInTheDocument();
+
+    describe('when a loanAccountAction has a "Suspended claim returned" payment status', () => {
+      it('should display "Fee Fine Suspended claim returned" status correctly', () => {
+        const updatedPropsData = {
+          ...propsData,
+          loanAccountActions: [
+            {
+              amount: 1,
+              paymentStatus: { name: 'Suspended claim returned' }
+            },
+          ],
+        };
+        renderLoanDetails(updatedPropsData);
+        expect(screen.getByText('ui-users.loans.details.fineIncurred')).toBeInTheDocument();
+        expect(screen.getByText('ui-users.accounts.suspended')).toBeInTheDocument();
+      });
     });
   });
 

@@ -116,9 +116,9 @@ const mutator = {
     cancel: jest.fn(),
   },
   values:{
-    DELETE: jest.fn().mockReturnValue(Promise.resolve()),
-    POST: jest.fn().mockReturnValue(Promise.resolve()),
-    PUT: jest.fn().mockReturnValue(Promise.resolve()),
+    DELETE: jest.fn().mockResolvedValue(),
+    POST: jest.fn().mockResolvedValue(),
+    PUT: jest.fn().mockResolvedValue(),
     cancel: jest.fn(),
   }
 };
