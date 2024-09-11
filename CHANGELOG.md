@@ -41,10 +41,14 @@
 * Fix date selection in "Expiration Date" Field after clearing expiration date field. Refs UIU-3176.
 * Populate the 'Address Type' Field in UserEdit and UserInfo Screen on user creation via edge module. Refs UIU-3180.
 * Mark check box column header as non interactive. Refs UIU-2940.
-* Use keywords CQL field for keyword user search. Refs UIU-3184.
 * Populate 'State/Prov./Region', 'Zip/Postal Code', 'Country' Fields on user creation via edge module. Refs UIU-3188.
 * Fix issue when slash character in item barcode creates 404 error when adding fee/fine at check in. Refs UIU-3193.
 * Fix skipped test cases in LoanDetails.test.js and OwnerSettings.test.js. Refs UIU-3085.
+
+## [10.1.2](https://github.com/folio-org/ui-users/tree/v10.1.2) (2024-09-05)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v10.1.1...v10.1.2)
+
+* Use keywords CQL field for keyword user search. Refs UIU-3184.
 
 ## [10.1.1](https://github.com/folio-org/ui-users/tree/v10.1.1) (2024-05-07)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.1.0...v10.1.1)
