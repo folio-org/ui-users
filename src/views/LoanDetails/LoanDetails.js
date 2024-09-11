@@ -217,7 +217,7 @@ class LoanDetails extends React.Component {
     const valueDisplay = stripes.hasPerm('ui-users.feesfines.view')
       ?
         <button
-          data-test-fee-fine-details-link
+          data-testid="fee-fine-details-link"
           className={css.feefineButton}
           onClick={(e) => this.feefinedetails(e)}
           type="button"
@@ -554,6 +554,7 @@ class LoanDetails extends React.Component {
                 {isClaimedReturnedItem &&
                   <Dropdown
                     id="resolve-claim-menu"
+                    data-testid="resolve-claim-dropdown"
                     label={<FormattedMessage id="ui-users.loans.resolveClaim" />}
                     buttonProps={{ buttonStyle: 'primary' }}
                   >
