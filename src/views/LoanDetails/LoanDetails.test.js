@@ -279,16 +279,16 @@ const claimedReturnedPropsData = {
   }
 };
 
-const renderLoanProxyDetails = (props1) => renderWithRouter(<LoanDetails {...props1} />);
+const renderLoanDetails = (props) => renderWithRouter(<LoanDetails {...props} />);
 
 describe('LoanDetails', () => {
-  describe('Render LoanProxyDetails component', () => {
+  describe('Render LoanDetails component', () => {
     it('When props ID and proxy ID are same with Loan Missing', () => {
       mockGetLodash.mockReset();
       mockGetLodash.mockImplementation(() => {
         return 'Lost and paid';
       });
-      renderLoanProxyDetails({
+      renderLoanDetails({
         ...propsData,
         loanIsMissing: true,
       });
@@ -300,7 +300,7 @@ describe('LoanDetails', () => {
         return 'Lost and paid';
       });
 
-      const { getByText } = renderLoanProxyDetails({
+      const { getByText } = renderLoanDetails({
         ...propsData,
         loanIsMissing: false,
       });
@@ -314,105 +314,22 @@ describe('LoanDetails', () => {
       mockGetLodash.mockImplementation(() => {
         return '';
       });
-      renderLoanProxyDetails({
+      renderLoanDetails({
         ...propsData,
         loanIsMissing: false,
       });
       expect(screen.getAllByText('ui-users.loans.claimReturned')).toBeTruthy();
     });
-    it('When props ID and proxy ID are same with claims', () => {
-      mockGetLodash.mockReset();
-      mockGetLodash.mockImplementation((item, item2) => {
-        return item2.includes('contributors') ? undefined : 'Claimed returned';
-      });
-      const { getByText, getAllByText } = renderLoanProxyDetails(claimedReturnedPropsData);
-
-      userEvent.click(getAllByText('ui-users.loans.declareLost')[0]);
-      userEvent.click(getAllByText('ui-users.loans.declareLost')[1]);
-      userEvent.click(screen.queryAllByRole('button')[0]);
-      userEvent.click(screen.queryAllByRole('button')[5]);
-      userEvent.click(screen.queryAllByRole('button')[11]);
-      userEvent.click(getByText('ui-users.loans.markAsMissing'));
-      userEvent.click(getByText('Cancel Form'));
-      userEvent.click(getByText('Reset Form'));
-      userEvent.click(getByText('Submit Form'));
-      userEvent.click(getByText('Close Button'));
-      expect(screen.getAllByText('ui-users.loans.markAsMissing')).toBeTruthy();
+    it('should render Component when loan item is "Checked out"', () => {
+      renderLoanDetails(propsData);
+      expect(screen.getByText('ui-users.loans.claimReturned')).toBeInTheDocument();
     });
-    it('Fee Fine Else Condition More than 1 loanAccountActions with Amount 0', () => {
-      mockGetLodash.mockReset();
-      mockGetLodash.mockImplementation(() => {
-        return 'Claimed returned';
-      });
-      mockAccounts.mockReset();
-      mockAccounts.mockImplementation(() => {
-        return true;
-      });
-      const updatedPropsData = {
-        ...claimedReturnedPropsData,
-        loanAccountActions: [
-          { acc: 0, amount: 0 },
-          { acc: 0, amount: 0 },
-        ],
-      };
-      renderLoanProxyDetails(updatedPropsData);
-      userEvent.click(screen.queryAllByRole('button')[5]);
-      userEvent.click(screen.queryAllByRole('button')[9]);
-      expect(screen.getAllByText('ui-users.loans.markAsMissing')).toBeTruthy();
-    });
-    it('Fee Fine Else Condition More than 1 loanAccountActions', () => {
-      mockGetLodash.mockReset();
-      mockGetLodash.mockImplementation(() => {
-        return 'Claimed returned';
-      });
-      mockAccounts.mockReset();
-      mockAccounts.mockImplementation(() => {
-        return true;
-      });
-      const updatedPropsData = {
-        ...claimedReturnedPropsData,
-        loanAccountActions: [{}, {}],
-      };
-      renderLoanProxyDetails(updatedPropsData);
-      userEvent.click(screen.queryAllByRole('button')[5]);
-      userEvent.click(screen.queryAllByRole('button')[9]);
-      expect(screen.getAllByText('ui-users.loans.markAsMissing')).toBeTruthy();
-    });
-    it('Fee Fine Else Condition More than 1 loanAccountActions with open item', () => {
-      mockGetLodash.mockReset();
-      mockGetLodash.mockImplementation(() => {
-        return 'Claimed returned';
-      });
-      mockAccounts.mockReset();
-      mockAccounts.mockImplementation((item1, item2) => {
-        return item2 === 'open';
-      });
-      const updatedPropsData = { ...claimedReturnedPropsData, loanAccountActions: [{}, {}] };
-      renderLoanProxyDetails(updatedPropsData);
-
-      userEvent.click(screen.queryAllByRole('button')[5]);
-      expect(screen.getAllByText('ui-users.loans.markAsMissing')).toBeTruthy();
-    });
-    it('Fee Fine Else Condition More than 1 loanAccountActions with new loan', () => {
-      mockGetLodash.mockReset();
-      mockGetLodash.mockImplementation(() => {
-        return 'Claimed returned';
-      });
-      mockAccounts.mockReset();
-      mockAccounts.mockImplementation(() => {
-        return false;
-      });
-      let updatedPropsData = {
-        ...claimedReturnedPropsData,
-        loanAccountActions: [{}, {}],
-      };
-      renderLoanProxyDetails(updatedPropsData);
-      updatedPropsData = {
-        ...updatedPropsData,
-        loan: { ...updatedPropsData.loan, item: { status: { name: 'new' } } },
-      };
-      userEvent.click(screen.queryAllByRole('button')[5]);
-      expect(screen.getAllByText('ui-users.loans.markAsMissing')).toBeTruthy();
+    it('should load component with options when loan item is "Claimed returned"', () => {
+      renderLoanDetails(claimedReturnedPropsData);
+      expect(screen.getByTestId('resolve-claim-dropdown')).toBeInTheDocument();
+      expect(screen.getAllByText('ui-users.loans.declareLost')[0]).toBeInTheDocument();
+      expect(screen.getAllByText('ui-users.loans.declareLost')[1]).toBeInTheDocument();
+      expect(screen.getByText('ui-users.loans.markAsMissing')).toBeInTheDocument();
     });
     it('Component is loading with out policies', () => {
       mockGetLodash.mockReset();
@@ -430,7 +347,7 @@ describe('LoanDetails', () => {
           '985fd5a1-3634-4b0d-8c13-0d4fcf0b8afa': false,
         },
       };
-      renderLoanProxyDetails(updatedPropsData);
+      renderLoanDetails(updatedPropsData);
       expect(screen.getAllByText('ui-users.loans.history')).toBeTruthy();
     });
     it('Component is loading with close modal', () => {
@@ -449,7 +366,7 @@ describe('LoanDetails', () => {
           '985fd5a1-3634-4b0d-8c13-0d4fcf0b8afa': false,
         },
       };
-      renderLoanProxyDetails(updatedPropsData);
+      renderLoanDetails(updatedPropsData);
       expect(screen.getAllByText('Close Modal')).toBeTruthy();
     });
     it('Component is loading with declared lost', () => {
@@ -474,7 +391,7 @@ describe('LoanDetails', () => {
           }
         ],
       };
-      renderLoanProxyDetails(updatedPropsData);
+      renderLoanDetails(updatedPropsData);
       expect(screen.getAllByText('ui-users.loans.details.borrower')).toBeTruthy();
     });
     it('Component is loading with age', () => {
@@ -501,10 +418,55 @@ describe('LoanDetails', () => {
           }
         ],
       };
-      const { getAllByText } = renderLoanProxyDetails(updatedPropsData);
+      const { getAllByText } = renderLoanDetails(updatedPropsData);
       userEvent.click(getAllByText('Close Modal')[0]);
       userEvent.click(screen.getAllByRole('button')[1]);
       expect(screen.getAllByText('Close Modal')).toBeTruthy();
+    });
+  });
+
+  describe('Render LoanDetails component with loanAccountActions', () => {
+    beforeEach(() => {
+      mockAccounts.mockReset();
+      mockAccounts.mockImplementation(() => true);
+    });
+    it('should display "Fees/fines incurred" value when there are multiple "Open" loanAccountActions', () => {
+      const updatedPropsData = {
+        ...propsData,
+        loanAccountActions: [
+          { amount: 1, status: { name: 'Open' } },
+          { amount: 4, status: { name: 'Open' } },
+        ],
+      };
+      renderLoanDetails(updatedPropsData);
+      expect(screen.getByText('ui-users.loans.details.fineIncurred')).toBeInTheDocument();
+      expect(screen.getByTestId('fee-fine-details-link')).toHaveTextContent('$5.00');
+    });
+    it('should not display "Fees/fines incurred" value when more than 1 loanAccountActions with total fee-fine Amount 0', () => {
+      const updatedPropsData = {
+        ...propsData,
+        loanAccountActions: [
+          { amount: 0 },
+          { amount: 0 },
+        ],
+      };
+      renderLoanDetails(updatedPropsData);
+      expect(screen.getByText('ui-users.loans.details.fineIncurred')).toBeInTheDocument();
+      expect(screen.queryByTestId('fee-fine-details-link')).not.toBeInTheDocument();
+    });
+    it('should display "Fee Fine Suspended claim returned" status correctly', () => {
+      const updatedPropsData = {
+        ...propsData,
+        loanAccountActions: [
+          {
+            amount: 1,
+            paymentStatus: { name: 'Suspended claim returned' }
+          },
+        ],
+      };
+      renderLoanDetails(updatedPropsData);
+      expect(screen.getByText('ui-users.loans.details.fineIncurred')).toBeInTheDocument();
+      expect(screen.getByText('ui-users.accounts.suspended')).toBeInTheDocument();
     });
   });
 
@@ -518,26 +480,26 @@ describe('LoanDetails', () => {
     };
 
     it('should disable Renew button', () => {
-      renderLoanProxyDetails({
+      renderLoanDetails({
         ...virtualPatronPropsData,
       });
       expect(screen.getByRole('button', { name:'ui-users.renew' })).toBeDisabled();
     });
 
     it('should disable "Claim returned" button', () => {
-      renderLoanProxyDetails({
+      renderLoanDetails({
         ...virtualPatronPropsData,
       });
       expect(screen.getByRole('button', { name:'ui-users.loans.claimReturned' })).toBeDisabled();
     });
     it('should disable "Change due date" button', () => {
-      renderLoanProxyDetails({
+      renderLoanDetails({
         ...virtualPatronPropsData,
       });
       expect(screen.getByRole('button', { name:'stripes-smart-components.cddd.changeDueDate' })).toBeDisabled();
     });
     it('should disable "Declare lost" button', () => {
-      renderLoanProxyDetails({
+      renderLoanDetails({
         ...virtualPatronPropsData,
       });
       expect(screen.getByRole('button', { name:'ui-users.loans.declareLost' })).toBeDisabled();
@@ -560,7 +522,7 @@ describe('LoanDetails', () => {
     };
 
     it('render item title not as a link but as text', () => {
-      renderLoanProxyDetails({
+      renderLoanDetails({
         ...virtualItemPropsData,
       });
 
@@ -569,7 +531,7 @@ describe('LoanDetails', () => {
     });
 
     it('render item barcode as text', () => {
-      renderLoanProxyDetails({
+      renderLoanDetails({
         ...virtualItemPropsData,
       });
 
