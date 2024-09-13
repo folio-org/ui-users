@@ -102,7 +102,7 @@ jobs:
           retention-days: 30
 
       - name: Publish Jest coverage report
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: jest-coverage-report
