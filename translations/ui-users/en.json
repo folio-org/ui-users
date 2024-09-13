@@ -428,6 +428,8 @@
   "save": "Save",
   "edit": "Edit",
   "printLibraryCard": "Print library card",
+  "printLibraryCard.successMessage.withLocallyUploadedProfilePicture": "Export complete. Profile picture exported in separate file.",
+  "printLibraryCard.successMessage.withExternallyLinkedProfilePicture": "Export complete. Profile picture URL included in exported file.",  
   "okay": "OK",
   "cancel": "Cancel",
   "description": "Description",

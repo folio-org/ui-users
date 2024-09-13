@@ -28,7 +28,7 @@ const props = {
     addressLine2: 'TestLine2',
     stateRegion: 'State',
     zipCode: '1',
-    addressType: 'AddressType',
+    addressType: 'home',
     city: 'city',
     country: 'country'
   }]

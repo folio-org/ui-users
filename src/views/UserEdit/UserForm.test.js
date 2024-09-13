@@ -35,6 +35,19 @@ jest.mock('../../hooks', () => ({
   useUserTenantPermissions: jest.fn(),
 }));
 
+const user = {
+  id: 'user-id',
+  personal: {
+    firstName: 'Luke',
+    addresses: [{
+      addressTypeId: 'c42be2ab-c3fd-486c-a1fe-9e5ea0f10989',
+    }]
+  },
+  type: USER_TYPES.STAFF,
+  proxies: [],
+  sponsors: [],
+  preferredEmailCommunication: [],
+};
 jest.mock(
   './TenantsPermissionsAccordion',
   () => jest.fn(() => <div>TenantsPermissionsAccordion accordion</div>),
