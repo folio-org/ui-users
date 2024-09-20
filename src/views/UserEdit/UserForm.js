@@ -34,6 +34,7 @@ import {
   EditProxy,
   EditServicePoints,
   EditReadingRoomAccess,
+  EditUserRoles,
 } from '../../components/EditSections';
 import { getFullName } from '../../components/util';
 import RequestFeeFineBlockButtons from '../../components/RequestFeeFineBlockButtons';
@@ -105,6 +106,7 @@ class UserForm extends React.Component {
     form: PropTypes.object, // provided by final-form
     intl: PropTypes.object,
     profilePictureConfig: PropTypes.object.isRequired,
+    assignedRoleIds: PropTypes.arrayOf(PropTypes.string),
   };
 
   static defaultProps = {
@@ -299,6 +301,19 @@ class UserForm extends React.Component {
     }
   }
 
+  /**
+   * showPermissionsAccordion
+   * Return true unless the `roles` interface is present; then return false.
+   * When `roles` is present, this indicates access management is handled
+   * by keycloak; thus, roles, policies, and capabilites are used to manage
+   * access, not the legacy permissions system.
+   *
+   * @returns boolean true unless the `roles` interface is present
+   */
+  showPermissionsAccordion = () => {
+    return !this.props.stripes.hasInterface('roles');
+  };
+
   render() {
     const {
       initialValues,
@@ -370,6 +385,7 @@ class UserForm extends React.Component {
                     servicePoints: false,
                     customFields: true,
                     readingRoomAccess: false,
+                    userRoles: false
                   }}
                 >
                   <EditUserInfo
@@ -438,12 +454,19 @@ class UserForm extends React.Component {
                           fullName={fullName}
                         />
                       )
-                     }
-                      <TenantsPermissionsAccordion
-                        form={form}
-                        initialValues={initialValues}
-                        setButtonRef={this.setButtonRef}
-                      />
+                      }
+                      {
+                      this.showPermissionsAccordion() ?
+                        <TenantsPermissionsAccordion
+                          form={form}
+                          initialValues={initialValues}
+                          setButtonRef={this.setButtonRef}
+                        /> : <EditUserRoles
+                          form={form}
+                          initialValues={initialValues}
+                          accordionId="userRoles"
+                        />
+                      }
                       <EditServicePoints
                         accordionId="servicePoints"
                         setButtonRef={this.setButtonRef}

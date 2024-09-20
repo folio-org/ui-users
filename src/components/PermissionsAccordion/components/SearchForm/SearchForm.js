@@ -12,7 +12,7 @@ import {
 
 import css from './SearchForm.css';
 
-const SearchForm = (props) => {
+export default function SearchForm(props) {
   const {
     onSubmitSearch,
     onChangeFilter,
@@ -79,23 +79,10 @@ const SearchForm = (props) => {
       />
     </form>
   );
-};
+}
 
 SearchForm.propTypes = {
-  config: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.node.isRequired,
-      name: PropTypes.string.isRequired,
-      cql: PropTypes.string.isRequired,
-      values: PropTypes.arrayOf(
-        PropTypes.shape({
-          name: PropTypes.string.isRequired,
-          displayName: PropTypes.element.isRequired,
-          value: PropTypes.bool.isRequired,
-        }).isRequired,
-      ).isRequired,
-    })
-  ).isRequired,
+  config: PropTypes.object.isRequired,
   filters: PropTypes.object.isRequired,
   onSubmitSearch: PropTypes.func.isRequired,
   onChangeFilter: PropTypes.func.isRequired,
@@ -103,4 +90,3 @@ SearchForm.propTypes = {
   resetSearchForm: PropTypes.func.isRequired,
 };
 
-export default SearchForm;

@@ -147,7 +147,8 @@ jest.mock('@folio/stripes/core', () => {
     stripesConnect,
     useCallout: jest.fn(() => ({ sendCallout: jest.fn() })),
     useStripes: jest.fn(() => STRIPES),
-    useOkapiKy: jest.fn(() => {}),
+    useOkapiKy: jest.fn(() => ({ extend: jest.fn() })),
+    useChunkedCQLFetch: jest.fn(),
     useNamespace: jest.fn(() => ['@folio/users']),
     withOkapiKy: jest.fn((Component) => (props) => <Component {...props} />),
     withStripes:

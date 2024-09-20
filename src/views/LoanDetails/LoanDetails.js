@@ -310,7 +310,7 @@ class LoanDetails extends React.Component {
       const formattedValue = `${titleTodisplay} (${get(this.loan, ['item', 'materialType', 'name'])})`;
       return (
         <KeyValue
-          data-testId="item-title"
+          data-testid="item-title"
           label={<FormattedMessage id="ui-users.loans.columns.title" />}
           value={
             isVirtualItem ?
@@ -665,7 +665,7 @@ class LoanDetails extends React.Component {
               </Col>
               <Col xs={2}>
                 <KeyValue
-                  data-testId="item-barcode"
+                  data-testid="item-barcode"
                   label={<FormattedMessage id="ui-users.loans.columns.barcode" />}
                   value={this.showBarcode(loan)}
                 />

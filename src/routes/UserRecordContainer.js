@@ -19,17 +19,27 @@ class UserRecordContainer extends React.Component {
     permUserId: {},   // ID of the current permissions user record (see UserEdit.js)
     selUser: {
       type: 'okapi',
-      path: 'users/:{id}',
+      path: (queryParams, pathComponents, resourceData, config, props) => {
+        if (props.stripes.hasInterface('users-keycloak')) {
+          return `users-keycloak/users/${pathComponents.id}`;
+        }
+        return `users/${pathComponents.id}`;
+      },
       clear: false,
       shouldRefresh: (resource, action, refresh) => {
-        const { path } = action.meta;
-        return refresh || (path && path.match(/link/));
+        const { path, name } = action.meta;
+        return (name && name !== 'resetPassword') && (refresh || (path && path.match(/link/)));
       },
       throwErrors: false,
     },
     delUser: {
       type: 'okapi',
-      path: 'bl-users/by-id/:{id}',
+      path: (queryParams, pathComponents, resourceData, config, props) => {
+        if (props.stripes.hasInterface('users-keycloak')) {
+          return `users-keycloak/users/${pathComponents.id}`;
+        }
+        return `bl-users/by-id/${pathComponents.id}`;
+      },
       fetch: false,
     },
     // As the transaction check spans multiple modules the checks need to be done in mod-users-bl
@@ -115,7 +125,12 @@ class UserRecordContainer extends React.Component {
     records: {
       type: 'okapi',
       records: 'users',
-      path: 'users',
+      path: (queryParams, pathComponents, resourceData, config, props) => {
+        if (props.stripes.hasInterface('users-keycloak')) {
+          return 'users-keycloak/users';
+        }
+        return 'users';
+      },
       fetch: false,
     },
     creds: {
@@ -127,9 +142,19 @@ class UserRecordContainer extends React.Component {
       type: 'okapi',
       throwErrors: false,
       POST: {
-        path: 'perms/users',
+        path: (queryParams, pathComponents, resourceData, config, props) => {
+          if (props.stripes.hasInterface('roles')) {
+            return undefined;
+          }
+          return 'perms/users';
+        }
       },
-      path: 'perms/users/:{id}',
+      path: (queryParams, pathComponents, resourceData, config, props) => {
+        if (props.stripes.hasInterface('roles')) {
+          return undefined;
+        }
+        return 'perms/users/:{id}';
+      },
       params: { full: 'true', indexField: 'userId' },
     },
     // NOTE: 'indexField', used as a parameter in the userPermissions paths,
@@ -143,22 +168,47 @@ class UserRecordContainer extends React.Component {
       resourceShouldRefresh: true,
       DELETE: {
         pk: 'permissionName',
-        path: 'perms/users/:{id}/permissions',
+        path: (queryParams, pathComponents, resourceData, config, props) => {
+          if (props.stripes.hasInterface('roles')) {
+            return undefined;
+          }
+          return 'perms/users/:{id}/permissions';
+        },
         params: { indexField: 'userId' },
       },
       GET: {
-        path: 'perms/users/:{id}/permissions',
+        path: (queryParams, pathComponents, resourceData, config, props) => {
+          if (props.stripes.hasInterface('roles')) {
+            return undefined;
+          }
+          return 'perms/users/:{id}/permissions';
+        },
         params: { full: 'true', indexField: 'userId' },
       },
       PUT: {
-        path: 'perms/users/%{permUserId}',
+        path: (queryParams, pathComponents, resourceData, config, props) => {
+          if (props.stripes.hasInterface('roles')) {
+            return undefined;
+          }
+          return 'perms/users/%{permUserId}';
+        },
       },
-      path: 'perms/users/:{id}/permissions',
+      path: (queryParams, pathComponents, resourceData, config, props) => {
+        if (props.stripes.hasInterface('roles')) {
+          return undefined;
+        }
+        return 'perms/users/:{id}/permissions';
+      },
       params: { indexField: 'userId' },
     },
     settings: {
       type: 'okapi',
-      path: 'users/configurations/entry',
+      path: (queryParams, pathComponents, resourceData, config, props) => {
+        if (props.stripes.hasInterface('users', '16.1')) {
+          return 'users/configurations/entry';
+        }
+        return null;
+      },
     },
     requestPreferences: {
       type: 'okapi',

@@ -38,7 +38,9 @@
     },
     "optionalOkapiInterfaces": {
       "actual-cost-record-storage": "0.4",
+      "add-info": "0.1",
       "automated-patron-blocks": "0.1",
+      "batch-print": "1.0",
       "circulation": "9.0 10.0 11.0 12.0 13.0 14.0",
       "consortia": "1.0",
       "feesfines": "16.1 17.0 18.0 19.0",
@@ -47,8 +49,9 @@
       "add-info": "0.1",
       "notes": "2.0 3.0",
       "request-storage": "2.5 3.0 4.0 5.0 6.0",
-      "batch-print": "1.0",
-      "reading-room-patron-permission": "1.0"
+      "reading-room-patron-permission": "1.0",
+      "roles": "1.0",
+      "users-keycloak": "1.0"
     },
     "permissionSets": [
       {
@@ -73,6 +76,8 @@
           "addresstypes.collection.get",
           "users.collection.get",
           "users.item.get",
+          "users-keycloak.collection.get",
+          "users-keycloak.item.get",
           "usergroups.collection.get",
           "configuration.entries.collection.get",
           "user-settings.custom-fields.collection.get",
@@ -92,6 +97,7 @@
           "ui-users.view",
           "users-bl.item.put",
           "users.item.put",
+          "users-keycloak.item.put",
           "tags.collection.get",
           "tags.item.post",
           "circulation-storage.request-preferences.item.post",
@@ -125,6 +131,7 @@
           "ui-users.edit",
           "users-bl.item.post",
           "users.item.post",
+          "users-keycloak.item.post",
           "perms.users.item.post",
           "login.item.post"
         ],
@@ -420,7 +427,8 @@
           "payments.item.delete",
           "payments.item.post",
           "payments.item.put",
-          "users.collection.get"
+          "users.collection.get",
+          "users-keycloak.collection.get"
         ],
         "visible": true
       },
@@ -863,7 +871,8 @@
           "login.credentials-existence.get",
           "ui-users.view",
           "ui-users.edit",
-          "users-bl.password-reset-link.generate"
+          "users-bl.password-reset-link.generate",
+          "users-keycloak.password-reset-link.generate"
         ],
         "visible": true
       },

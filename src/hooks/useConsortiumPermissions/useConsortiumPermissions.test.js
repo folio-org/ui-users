@@ -64,6 +64,7 @@ describe('useConsortiumPermissions', () => {
     mockGet.mockClear();
     useOkapiKy.mockClear().mockReturnValue(kyMock);
     useStripes.mockClear().mockReturnValue({
+      hasInterface: () => (false),
       user: {
         user: { ...user, consortium },
       }

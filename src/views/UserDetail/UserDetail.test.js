@@ -119,10 +119,12 @@ jest.mock(
     ContactInfo: jest.fn(() => null),
     ProxyPermissions: jest.fn(() => null),
     PatronBlock: jest.fn(() => null),
-    UserPermissions: jest.fn(() => null),
+    UserPermissions: jest.fn(() => <div>Permissions accordion</div>),
+    UserRoles: jest.fn(() => <div>Roles accordion</div>),
     UserLoans: jest.fn(() => null),
     UserRequests: jest.fn(() => null),
     UserAccounts: jest.fn(() => null),
+    UserAffiliations: jest.fn(() => null),
     UserServicePoints: jest.fn(() => null),
     ReadingRoomAccess: jest.fn(() => null),
   })
@@ -284,6 +286,84 @@ describe('UserDetail', () => {
     test('should render checkDelete button in action menu ', async () => {
       renderUserDetail(stripes);
       expect(screen.getByRole('button', { name: 'ui-users.details.checkDelete' })).toBeVisible();
+    });
+
+    describe('when roles interface is absent', () => {
+      it('shows permissions accordion', async () => {
+        stripes.hasInterface = () => false;
+        renderUserDetail(stripes);
+        expect(screen.getByText('Permissions accordion')).toBeTruthy();
+      });
+    });
+
+    describe('when roles interface is present', () => {
+      it('shows roles accordion', async () => {
+        stripes.hasInterface = () => true;
+        renderUserDetail(stripes);
+        expect(screen.queryByText('Permissions accordion')).not.toBeTruthy();
+        expect(screen.getByText('Roles accordion')).toBeTruthy();
+      });
+
+      it('omits permissions accordion', async () => {
+        stripes.hasInterface = (i) => {
+          return (i === 'roles');
+        };
+
+        renderUserDetail(stripes);
+        expect(screen.queryByText('Permissions accordion')).toBeFalsy();
+      });
+    });
+
+    describe('when roles interface is absent', () => {
+      it('shows permissions accordion', async () => {
+        stripes.hasInterface = () => false;
+        renderUserDetail(stripes);
+        expect(screen.getByText('Permissions accordion')).toBeTruthy();
+      });
+    });
+
+    describe('when roles interface is present', () => {
+      it('shows roles accordion', async () => {
+        stripes.hasInterface = () => true;
+        renderUserDetail(stripes);
+        expect(screen.queryByText('Permissions accordion')).not.toBeTruthy();
+        expect(screen.getByText('Roles accordion')).toBeTruthy();
+      });
+
+      it('omits permissions accordion', async () => {
+        stripes.hasInterface = (i) => {
+          return (i === 'roles');
+        };
+
+        renderUserDetail(stripes);
+        expect(screen.queryByText('Permissions accordion')).toBeFalsy();
+      });
+    });
+
+    describe('when roles interface is absent', () => {
+      it('shows permissions accordion', async () => {
+        stripes.hasInterface = () => false;
+        renderUserDetail(stripes);
+        expect(screen.getByText('Permissions accordion')).toBeTruthy();
+      });
+    });
+
+    describe('when roles interface is present', () => {
+      it('shows roles accordion', async () => {
+        stripes.hasInterface = () => true;
+        renderUserDetail(stripes);
+        expect(screen.queryByText('Permissions accordion')).not.toBeTruthy();
+        expect(screen.getByText('Roles accordion')).toBeTruthy();
+      });
+
+      it('omits permissions accordion', async () => {
+        stripes.hasInterface = (i) => {
+          return (i === 'roles');
+        };
+
+        renderUserDetail(stripes);
+        expect(screen.queryByText('Permissions accordion')).toBeFalsy();
+      });
     });
 
     describe('click checkDelete button', () => {
