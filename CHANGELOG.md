@@ -17,7 +17,7 @@
 * Wire up with API ability to assign/unassign user roles in UserForm. Refs UIU-3124.
 * Fix filter issues in user roles modal. Refs UIU-3124.
 * Suppress Settings > Users > Permission sets when `roles` interface is present. Refs UIU-3105.
-* Sort user roles alphabetically in `EditUserRoles` and `UserRolesModal` components. Refs UIU-3145.     
+* Sort user roles alphabetically in `EditUserRoles` and `UserRolesModal` components. Refs UIU-3145.
 * Rename isDCBItem function name to isDcbItem. Refs UIU-3020.
 * *BREAKING* Add new okapi interface reading-room-patron-permission. Create new permission 'Users: Can view reading room access'. Refs UIU-3116.
 * Create new permission 'Users: Can view, and edit reading room access'. Refs UIU-3117.
@@ -51,6 +51,11 @@
 * Populate 'State/Prov./Region', 'Zip/Postal Code', 'Country' Fields on user creation via edge module. Refs UIU-3188.
 * Fix issue when slash character in item barcode creates 404 error when adding fee/fine at check in. Refs UIU-3193.
 * Fix skipped test cases in LoanDetails.test.js and OwnerSettings.test.js. Refs UIU-3085.
+* Leverage `users-keycloak` interface endpoints for user data when available.
+* Fix problem with `Reset password email sent` , application points to  bl-users endpoint, even if `users-keycloak` interface provided. Refs UIU-3031.
+* Add `users-keycloak` permissions. Refs UIU-3068.
+* Omit permissions accordions and queries when `roles` interface is present. Refs UIU-3061, UIU-3062.
+* Retrieve user's central-tenant permission from `users-keycloak` endpoints when available. Refs UIU-3054.
 
 ## [10.1.2](https://github.com/folio-org/ui-users/tree/v10.1.2) (2024-09-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.1.1...v10.1.2)
@@ -61,12 +66,6 @@
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.1.0...v10.1.1)
 
 * Allow override for reminder fees with renewal blocked. Refs UICIRC-1077.
-* Show Roles assigned to users. Refs UIU-3110.
-* Add edit user roles accordion on edit role modal view. Refs UIU-3021.    
-* Wire up with API ability to assign/unassign user roles in UserForm. Refs UIU-3124.
-* Fix filter issues in user roles modal. Refs UIU-3124.
-* Suppress Settings > Users > Permission sets when `roles` interface is present. Refs UIU-3105.
-* Sort user roles alphabetically in `EditUserRoles` and `UserRolesModal` components. Refs UIU-3145.     
 
 ## [10.1.0](https://github.com/folio-org/ui-users/tree/v10.1.0) (2024-03-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.4...v10.1.0)
@@ -109,11 +108,6 @@
 * Profile Pictures - basic error handling. Refs UIU-3070.
 * Add optional chaining in `AddServicePointModal` in order to safely access `assignedServicePoints` from props. Refs UIU-3069.
 * Fix lint issues. Refs UIU-3072.
-* Leverage `users-keycloak` interface endpoints for user data when available.
-* Fix problem with `Reset password email sent` , application points to  bl-users endpoint, even if `users-keycloak` interface provided. Refs UIU-3031.
-* Add `users-keycloak` permissions. Refs UIU-3068.
-* Omit permissions accordions and queries when `roles` interface is present. Refs UIU-3061, UIU-3062.
-* Retrieve user's central-tenant permission from `users-keycloak` endpoints when available. Refs UIU-3054.
 
 ## [10.0.4](https://github.com/folio-org/ui-users/tree/v10.0.4) (2023-11-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.0.3...v10.0.4)
