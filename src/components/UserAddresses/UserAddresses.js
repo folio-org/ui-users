@@ -76,6 +76,7 @@ class UserAddresses extends React.Component {
           dataOptions: toAddressTypeOptions(addressTypes),
           fullWidth: true,
           placeholder: intl.formatMessage({ id: 'ui-users.contact.selectAddressType' }),
+          defaultValue: addresses[0]?.addressType,
         },
       },
     };

@@ -10,7 +10,7 @@ import {
   exportToCsv,
 } from '@folio/stripes/components';
 import { useProfilePicture } from '@folio/stripes/smart-components';
-import { isPatronUser, isStaffUser, base64ToBlob, isAValidUUID, isAValidURL } from '../util';
+import { isPatronUser, isStaffUser, base64ToBlob, isAValidUUID } from '../util';
 import { USER_INFO } from '../../constants';
 
 const { BARCODE, FIRST_NAME, LAST_NAME, MIDDLE_NAME, PATRON_GROUP, EXPIRATION_DATE, PROFILE_PICTURE_LINK } = USER_INFO;
@@ -44,41 +44,54 @@ const onlyFields = [
     value: EXPIRATION_DATE
   },
 ];
-const dateFormat = { year: 'numeric', month: 'numeric', day: 'numeric' };
+const ERROR = 'error';
+const SUCCESS = 'success';
 
 const PrintLibraryCardButton = ({ user, patronGroup }) => {
   const callout = useCallout();
   const intl = useIntl();
-  const { formatDate } = intl;
-  const { personal: { profilePictureLink }, active } = user;
+  const { formatDateToParts } = intl;
+  const { personal: { profilePictureLink }, active, expirationDate, personal } = user;
   const isPatronOrStaffUser = isPatronUser(user) || isStaffUser(user);
-  const disabled = !active || !isPatronOrStaffUser;
+  const disabled = !active || !isPatronOrStaffUser || !profilePictureLink;
+  const isProfilePicAValidUUID = profilePictureLink && isAValidUUID(profilePictureLink);
 
   const { profilePictureData } = useProfilePicture({ profilePictureId: profilePictureLink, isProfilePictureAUUID: isAValidUUID(profilePictureLink) });
 
+  const formatExpirationDate = useCallback(() => {
+    const dateParts = formatDateToParts(expirationDate);
+    const date = ['day', 'month', 'year'].map(p => dateParts.filter(dp => dp.type === p)[0].value).join('/');
+    return date;
+  }, [expirationDate, formatDateToParts]);
+
   const updateUserForExport = useCallback(() => {
-    const { personal, expirationDate } = user;
     const modifiedUser = cloneDeep(user);
     modifiedUser.patronGroup = patronGroup;
     modifiedUser.personal.firstName = personal.preferredFirstName || personal.firstName;
-    modifiedUser.expirationDate = expirationDate ? formatDate(expirationDate, dateFormat) : '';
+    modifiedUser.expirationDate = expirationDate ? formatExpirationDate() : '';
     return modifiedUser;
-  }, [user, patronGroup, formatDate]);
+  }, [user, patronGroup, personal.preferredFirstName, personal.firstName, expirationDate, formatExpirationDate]);
 
-  const showCallout = () => {
+  const showCallout = (type) => {
+    const successMessage = type === SUCCESS && (
+      isProfilePicAValidUUID ?
+        <FormattedMessage id="ui-users.printLibraryCard.successMessage.withLocallyUploadedProfilePicture" /> :
+        <FormattedMessage id="ui-users.printLibraryCard.successMessage.withExternallyLinkedProfilePicture" />
+    );
+    const message = type === ERROR ? <FormattedMessage id="ui-users.errors.generic" /> : successMessage;
     callout.sendCallout({
-      message: <FormattedMessage id="ui-users.errors.generic" />,
-      type: 'error',
+      message,
+      type,
     });
   };
 
   const getOnlyFields = useCallback(() => {
     const fields = [...onlyFields];
-    if (profilePictureLink && isAValidURL(profilePictureLink)) {
+    if (profilePictureLink && !isProfilePicAValidUUID) {
       fields.push(profilePictureField);
     }
     return fields;
-  }, [profilePictureLink]);
+  }, [isProfilePicAValidUUID, profilePictureLink]);
 
   const exportUserDetails = () => {
     const exportOptions = {
@@ -87,12 +100,7 @@ const PrintLibraryCardButton = ({ user, patronGroup }) => {
     };
     const data = [updateUserForExport()];
 
-    try {
-      exportToCsv(data, exportOptions);
-    } catch (error) {
-      console.error('Error downloading the csv:', error); // eslint-disable-line no-console
-      showCallout();
-    }
+    exportToCsv(data, exportOptions);
   };
 
   const downloadImage = (blob) => {
@@ -124,20 +132,9 @@ const PrintLibraryCardButton = ({ user, patronGroup }) => {
     }
   };
 
-  const exportUserProfPicFromBase64String = () => {
-    try {
-      const blob = base64ToBlob(profilePictureData, 'image/png');
-      downloadImage(blob);
-    } catch (error) {
-      console.error('Error downloading the image:', error); // eslint-disable-line no-console
-      showCallout();
-    }
-  };
-
   const exportUserProfilePicture = () => {
-    if (isAValidUUID(profilePictureLink)) {
-      exportUserProfPicFromBase64String();
-    }
+    const blob = base64ToBlob(profilePictureData, 'image/png');
+    downloadImage(blob);
   };
 
   /* ************************************************************************
@@ -147,8 +144,16 @@ const PrintLibraryCardButton = ({ user, patronGroup }) => {
   *    and user has one image against his profile
   ************************************************************************* */
   const handlePrintLibraryCard = () => {
-    exportUserDetails();
-    if (profilePictureLink) exportUserProfilePicture();
+    try {
+      exportUserDetails();
+      if (isProfilePicAValidUUID) {
+        exportUserProfilePicture();
+      }
+      showCallout(SUCCESS);
+    } catch (e) {
+      console.error('Error downloading the image:', e); // eslint-disable-line no-console
+      showCallout(ERROR);
+    }
   };
 
   return (

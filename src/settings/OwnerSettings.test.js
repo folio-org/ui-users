@@ -7,7 +7,6 @@ import renderWithRouter from 'helpers/renderWithRouter';
 import { buildResources } from 'helpers/buildResources';
 import OwnerSettings from './OwnerSettings';
 
-
 jest.unmock('@folio/stripes/components');
 jest.unmock('@folio/stripes/smart-components');
 
@@ -117,12 +116,11 @@ const mutator = {
     cancel: jest.fn(),
   },
   values:{
-    DELETE: jest.fn().mockReturnValue(Promise.resolve()),
-    POST: jest.fn(),
-    PUT: jest.fn(),
+    DELETE: jest.fn().mockResolvedValue(),
+    POST: jest.fn().mockResolvedValue(),
+    PUT: jest.fn().mockResolvedValue(),
     cancel: jest.fn(),
   }
-
 };
 
 const propData = {
@@ -179,18 +177,39 @@ describe('Owner settings', () => {
   // fill out form elements
   // click the "save" button
   // wait for the "save" button to disappear
-  it.skip('Create and edit functionality', async () => {
+  it('should create new Owner Settings', async () => {
     renderOwnerSettings(propData);
 
     const newButton = screen.getByRole('button', { name: 'stripes-core.button.new' });
     await userEvent.click(newButton);
     await waitFor(() => {
       expect(screen.getByText('stripes-core.button.save')).toBeInTheDocument();
+      expect(screen.getByText('stripes-core.button.cancel')).toBeInTheDocument();
       expect(document.querySelector('[name="items[0].owner"]')).toBeInTheDocument();
     });
 
     await userEvent.type(document.querySelector('[name="items[0].owner"]'), 'tesst');
     await userEvent.click(document.querySelector('[id="multiselect-option-list-owner-service-point"] li:first-child'));
+    await userEvent.click(screen.getByText('stripes-core.button.save'));
+
+    await waitFor(() => {
+      expect(screen.queryByText('stripes-core.button.save')).not.toBeInTheDocument();
+    });
+  });
+
+  it('should edit existing Owner Settings', async () => {
+    renderOwnerSettings(propData);
+
+    await userEvent.click(document.querySelector('[id="clickable-edit-settings-owners-0"]'));
+    await waitFor(() => {
+      expect(screen.getByText('stripes-core.button.save')).toBeInTheDocument();
+      expect(screen.getByText('stripes-core.button.cancel')).toBeInTheDocument();
+      expect(document.querySelector('[name="items[0].owner"]')).toHaveValue('test');
+      expect(document.querySelector('[name="items[0].desc"]')).toHaveValue('');
+    });
+
+    await userEvent.type(document.querySelector('[name="items[0].desc"]'), 'edited desc');
+    await userEvent.type(document.querySelector('[name="items[0].owner"]'), 'edited test');
     await userEvent.click(screen.getByText('stripes-core.button.save'));
 
     await waitFor(() => {
