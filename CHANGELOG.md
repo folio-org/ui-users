@@ -63,7 +63,6 @@
 * Allow override for reminder fees with renewal blocked. Refs UICIRC-1077.
 * Show Roles assigned to users. Refs UIU-3110.
 * Add edit user roles accordion on edit role modal view. Refs UIU-3021.    
-* Add edit user roles accordion on edit role modal view. Refs UIU-3021.
 * Wire up with API ability to assign/unassign user roles in UserForm. Refs UIU-3124.
 * Fix filter issues in user roles modal. Refs UIU-3124.
 * Suppress Settings > Users > Permission sets when `roles` interface is present. Refs UIU-3105.
@@ -110,51 +109,6 @@
 * Profile Pictures - basic error handling. Refs UIU-3070.
 * Add optional chaining in `AddServicePointModal` in order to safely access `assignedServicePoints` from props. Refs UIU-3069.
 * Fix lint issues. Refs UIU-3072.
-* Leverage `users-keycloak` interface endpoints for user data when available.
-* Fix problem with `Reset password email sent` , application points to  bl-users endpoint, even if `users-keycloak` interface provided. Refs UIU-3031.
-* Add `users-keycloak` permissions. Refs UIU-3068.
-* Omit permissions accordions and queries when `roles` interface is present. Refs UIU-3061, UIU-3062.
-* Retrieve user's central-tenant permission from `users-keycloak` endpoints when available. Refs UIU-3054.
-* Leverage `users-keycloak` interface endpoints for user data when available.
-* Fix problem with `Reset password email sent` , application points to  bl-users endpoint, even if `users-keycloak` interface provided. Refs UIU-3031.
-* Add `users-keycloak` permissions. Refs UIU-3068.
-* Omit permissions accordions and queries when `roles` interface is present. Refs UIU-3061, UIU-3062.
-* Retrieve user's central-tenant permission from `users-keycloak` endpoints when available. Refs UIU-3054.
-* Leverage `users-keycloak` interface endpoints for user data when available.
-* Fix problem with `Reset password email sent` , application points to  bl-users endpoint, even if `users-keycloak` interface provided. Refs UIU-3031.
-* Add `users-keycloak` permissions. Refs UIU-3068.
-* Omit permissions accordions and queries when `roles` interface is present. Refs UIU-3061, UIU-3062.
-* Retrieve user's central-tenant permission from `users-keycloak` endpoints when available. Refs UIU-3054.
-* Leverage `users-keycloak` interface endpoints for user data when available.
-* Fix problem with `Reset password email sent` , application points to  bl-users endpoint, even if `users-keycloak` interface provided. Refs UIU-3031.
-* Add `users-keycloak` permissions. Refs UIU-3068.
-* Omit permissions accordions and queries when `roles` interface is present. Refs UIU-3061, UIU-3062.
-* Retrieve user's central-tenant permission from `users-keycloak` endpoints when available. Refs UIU-3054.
-* Leverage `users-keycloak` interface endpoints for user data when available.
-* Fix problem with `Reset password email sent` , application points to  bl-users endpoint, even if `users-keycloak` interface provided. Refs UIU-3031.
-* Add `users-keycloak` permissions. Refs UIU-3068.
-* Omit permissions accordions and queries when `roles` interface is present. Refs UIU-3061, UIU-3062.
-* Retrieve user's central-tenant permission from `users-keycloak` endpoints when available. Refs UIU-3054.
-* Leverage `users-keycloak` interface endpoints for user data when available.
-* Fix problem with `Reset password email sent` , application points to  bl-users endpoint, even if `users-keycloak` interface provided. Refs UIU-3031.
-* Add `users-keycloak` permissions. Refs UIU-3068.
-* Omit permissions accordions and queries when `roles` interface is present. Refs UIU-3061, UIU-3062.
-* Retrieve user's central-tenant permission from `users-keycloak` endpoints when available. Refs UIU-3054.
-* Leverage `users-keycloak` interface endpoints for user data when available.
-* Fix problem with `Reset password email sent` , application points to  bl-users endpoint, even if `users-keycloak` interface provided. Refs UIU-3031.
-* Add `users-keycloak` permissions. Refs UIU-3068.
-* Omit permissions accordions and queries when `roles` interface is present. Refs UIU-3061, UIU-3062.
-* Retrieve user's central-tenant permission from `users-keycloak` endpoints when available. Refs UIU-3054.
-* Leverage `users-keycloak` interface endpoints for user data when available.
-* Fix problem with `Reset password email sent` , application points to  bl-users endpoint, even if `users-keycloak` interface provided. Refs UIU-3031.
-* Add `users-keycloak` permissions. Refs UIU-3068.
-* Omit permissions accordions and queries when `roles` interface is present. Refs UIU-3061, UIU-3062.
-* Retrieve user's central-tenant permission from `users-keycloak` endpoints when available. Refs UIU-3054.
-* Leverage `users-keycloak` interface endpoints for user data when available.
-* Fix problem with `Reset password email sent` , application points to  bl-users endpoint, even if `users-keycloak` interface provided. Refs UIU-3031.
-* Add `users-keycloak` permissions. Refs UIU-3068.
-* Omit permissions accordions and queries when `roles` interface is present. Refs UIU-3061, UIU-3062.
-* Retrieve user's central-tenant permission from `users-keycloak` endpoints when available. Refs UIU-3054.
 * Leverage `users-keycloak` interface endpoints for user data when available.
 * Fix problem with `Reset password email sent` , application points to  bl-users endpoint, even if `users-keycloak` interface provided. Refs UIU-3031.
 * Add `users-keycloak` permissions. Refs UIU-3068.
