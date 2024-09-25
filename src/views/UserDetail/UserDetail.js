@@ -234,19 +234,6 @@ class UserDetail extends React.Component {
     return !this.props.stripes.hasInterface('roles');
   };
 
-  /**
-   * showPermissionsAccordion
-   * Return true unless the `roles` interface is present; then return false.
-   * When `roles` is present, this indicates access management is handled
-   * by keycloak; thus, roles, policies, and capabilites are used to manage
-   * access, not the legacy permissions system.
-   *
-   * @returns boolean true unless the `roles` interface is present
-   */
-  showPermissionsAccordion = () => {
-    return !this.props.stripes.hasInterface('roles');
-  };
-
   getUser = () => {
     const { resources, match: { params: { id } } } = this.props;
     const selUser = (resources.selUser || {}).records || [];
