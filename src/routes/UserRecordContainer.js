@@ -153,7 +153,7 @@ class UserRecordContainer extends React.Component {
         if (props.stripes.hasInterface('roles')) {
           return undefined;
         }
-        return 'perms/users/:{id}';
+        return `perms/users/${pathComponents.id}`;
       },
       params: { full: 'true', indexField: 'userId' },
     },
@@ -172,7 +172,7 @@ class UserRecordContainer extends React.Component {
           if (props.stripes.hasInterface('roles')) {
             return undefined;
           }
-          return 'perms/users/:{id}/permissions';
+          return `perms/users/${pathComponents.id}/permissions`;
         },
         params: { indexField: 'userId' },
       },
@@ -181,7 +181,7 @@ class UserRecordContainer extends React.Component {
           if (props.stripes.hasInterface('roles')) {
             return undefined;
           }
-          return 'perms/users/:{id}/permissions';
+          return `perms/users/${pathComponents.id}/permissions`;
         },
         params: { full: 'true', indexField: 'userId' },
       },
@@ -190,14 +190,14 @@ class UserRecordContainer extends React.Component {
           if (props.stripes.hasInterface('roles')) {
             return undefined;
           }
-          return 'perms/users/%{permUserId}';
+          return 'perms/users';
         },
       },
       path: (queryParams, pathComponents, resourceData, config, props) => {
         if (props.stripes.hasInterface('roles')) {
           return undefined;
         }
-        return 'perms/users/:{id}/permissions';
+        return `perms/users/${pathComponents.id}/permissions`;
       },
       params: { indexField: 'userId' },
     },
