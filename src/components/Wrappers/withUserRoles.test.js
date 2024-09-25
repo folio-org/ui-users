@@ -19,7 +19,7 @@ const mockStripes = {
   },
   config: {
     maxUnpagedResourceCount: 1000,
-  }
+  },
 };
 
 const mockRolesData = {
