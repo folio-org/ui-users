@@ -34,7 +34,8 @@ const withUserRoles = (WrappedComponent) => (props) => {
   }, [allRolesMapStructure]);
 
   useEffect(() => {
-    if (!isAllRolesDataLoading) {
+    // eslint-disable-next-line react/prop-types
+    if (props.stripes.hasInterface('roles') && !isAllRolesDataLoading) {
       api.get(
         'roles/users', { searchParams },
       )

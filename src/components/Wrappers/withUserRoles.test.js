@@ -58,7 +58,7 @@ describe('withUserRoles HOC', () => {
 
   it('fetches and sets assigned role ids on mount and assignedRoleIds passed to wrapped component correctly', async () => {
     const ComponentWithUserRoles = withUserRoles(WrappedComponent);
-    const { getByTestId } = render(<ComponentWithUserRoles match={{ params: { id: 'user1' } }} />);
+    const { getByTestId } = render(<ComponentWithUserRoles match={{ params: { id: 'user1' } }} stripes={{ hasInterface: jest.fn().mockReturnValue(true) }} />);
 
     await waitFor(() => expect(getByTestId('assigned-role-ids')).toHaveTextContent('role1, role2'));
   });

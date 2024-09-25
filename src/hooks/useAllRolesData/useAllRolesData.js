@@ -20,7 +20,7 @@ function useAllRolesData() {
   const [namespace] = useNamespace();
 
   const { data, isLoading, isSuccess } = useQuery([namespace, 'user-roles'], () => {
-    return ky.get(`roles?limit=${stripes.config.maxUnpagedResourceCount}&query=cql.allRecords=1 sortby name`).json();
+    return stripes.hasInterface('roles') && ky.get(`roles?limit=${stripes.config.maxUnpagedResourceCount}&query=cql.allRecords=1 sortby name`).json();
   });
 
   const allRolesMapStructure = useMemo(() => {
