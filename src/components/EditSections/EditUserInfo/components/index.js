@@ -3,3 +3,4 @@ export { default as DeleteProfilePictureModal } from './DeleteProfilePictureModa
 export { default as ExternalLinkModal } from './ExternalLinkModal';
 export { default as EditUserProfilePicture } from './EditUserProfilePicture';
 export { default as LocalFileModal } from './LocalFileModal';
+export { default as WebCamModal } from './WebCamModal';

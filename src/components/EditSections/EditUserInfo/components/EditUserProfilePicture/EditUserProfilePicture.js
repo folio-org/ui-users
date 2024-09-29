@@ -19,6 +19,7 @@ import { isAValidURL } from '../../../../util/util';
 import ExternalLinkModal from '../ExternalLinkModal';
 import DeleteProfilePictureModal from '../DeleteProfilePictureModal';
 import LocalFileModal from '../LocalFileModal';
+import WebCamModal from '../WebCamModal';
 import { getRotatedImage, createImage } from './utils/canvasUtils';
 import {
   ACCEPTED_IMAGE_TYPES,
@@ -42,6 +43,7 @@ const COMPRESSION_OPTIONS = {
 const EditUserProfilePicture = ({ profilePictureId, form, personal, profilePictureMaxFileSize }) => {
   const [profilePictureLink, setProfilePictureLink] = useState(profilePictureId);
   const [externalLinkModalOpen, setExternalLinkModalOpen] = useState(false);
+  const [webCamModalOpen, setWebCamModalOpen] = useState(false);
   const [deleteProfilePictureModalOpen, setDeleteProfilePictureModalOpen] = useState(false);
   const [isProfilePictureDeleted, setIsProfilePictureDeleted] = useState(false);
   const [disableDeleteButton, setDisableDeleteButton] = useState(false);
@@ -228,11 +230,27 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal, profilePictu
     }
   };
 
+  const toggleWebCamModal = useCallback(() => {
+    console.log('=========> toggleWebCamModal ============>');
+    setWebCamModalOpen(prev => !prev);
+  }, []);
+
   const renderMenu = () => (
     <DropdownMenu
       aria-label="profile picture action menu"
       role="menu"
     >
+      <Button
+        // data-testid="localFile"
+        buttonStyle="dropdownItem"
+        // disabled={isProfilePictureDeleted}
+        onClick={toggleWebCamModal}
+      >
+        {/* <Icon icon="profile">
+          {intl.formatMessage({ id: 'ui-users.information.profilePicture.localFile' })}
+        </Icon> */}
+        Take a pic
+      </Button>
       <Button
         data-testid="localFile"
         buttonStyle="dropdownItem"
@@ -292,6 +310,14 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal, profilePictu
             label={intl.formatMessage({ id: 'ui-users.information.profilePicture.update' })}
             placement="bottom-end"
             renderMenu={renderMenu}
+          />
+        )
+      }
+      {
+        webCamModalOpen && (
+          <WebCamModal
+            open={webCamModalOpen}
+            onClose={toggleWebCamModal}
           />
         )
       }
