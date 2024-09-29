@@ -1187,5 +1187,19 @@
     "contact.preferredEmailCommunication.support": "支持",
     "printLibraryCard": "打印图书馆卡",
     "printLibraryCard.successMessage.withLocallyUploadedProfilePicture": "导出完成。个人资料图片已导出至单独文件。",
-    "printLibraryCard.successMessage.withExternallyLinkedProfilePicture": "导出完成。个人资料图片 URL 包含在导出的文件中。"
+    "printLibraryCard.successMessage.withExternallyLinkedProfilePicture": "导出完成。个人资料图片 URL 包含在导出的文件中。",
+    "roles.userRoles": "User roles",
+    "roles.empty": "No user roles found",
+    "roles.deleteRole": "Delete user role",
+    "roles.addRoles": "Add user roles",
+    "roles.unassignAllRoles": "Unassign all user roles",
+    "roles.modal.assigned": "Assigned",
+    "roles.modal.unassigned": "Unassigned",
+    "roles.modal.list.pane.subheader": "{amount} roles found",
+    "roles.modal.search.resetAll": "Reset all",
+    "roles.modal.unassignAll.header": "Unassign all user roles",
+    "roles.modal.unassignAll.label": "You are unassigning all user roles <strong>{roles}</strong> <p><strong>Are you sure?</strong></p>",
+    "roles.modal.search.header": "Search & filter",
+    "roles.modal.filter.status.label": "Role assigment status",
+    "roles.modal.header": "Select user roles"
 }
