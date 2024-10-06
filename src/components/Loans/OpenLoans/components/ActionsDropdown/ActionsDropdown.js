@@ -23,6 +23,7 @@ import {
 } from '../../../../util';
 
 import { itemStatuses } from '../../../../../constants';
+import PrintToPDFWrapper from '../PrintToPDFWrapper/PrintToPDFWrapper';
 
 class ActionsDropdown extends React.Component {
   static propTypes = {
@@ -118,6 +119,24 @@ class ActionsDropdown extends React.Component {
               <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />
             </Button>
           }
+        </IfPermission>
+        <IfPermission perm="ui-users.loans.view">
+          {!isVirtualUser && (
+            <PrintToPDFWrapper entities={[loan]}>
+              {(print) => (
+                <Button
+                  buttonStyle="dropdownItem"
+                  data-test-dropdown-content-print-due-date-button
+                  onClick={(e) => {
+                    print();
+                    onToggle(e);
+                  }}
+                >
+                  <FormattedMessage id="ui-users.loans.details.printDueDateReceipt" />
+                </Button>
+              )}
+            </PrintToPDFWrapper>
+          )}
         </IfPermission>
         <IfPermission perm="ui-users.loans.declare-item-lost">
           { itemStatusName !== itemStatuses.DECLARED_LOST && !isVirtualUser &&

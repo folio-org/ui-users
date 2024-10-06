@@ -1,6 +1,7 @@
 import React from 'react';
 import { get } from 'lodash';
 import {
+  Checkbox,
   FormattedDate,
   FormattedTime,
 } from '@folio/stripes/components';
@@ -29,12 +30,11 @@ export default function getListDataFormatter(
     '  ' : {
       key : '  ',
       formatter: loan => (
-        <input
+        <Checkbox
           checked={isLoanChecked(loan.id)}
           onClick={e => toggleItem(e, loan)}
           onChange={e => toggleItem(e, loan)}
-          type="checkbox"
-          aria-label={formatMessage({ id: 'ui-users.loans.rows.select' })}
+          ariaLabel={formatMessage({ id: 'ui-users.loans.rows.select' })}
         />
       ),
     },

@@ -6,6 +6,7 @@ import { createMemoryHistory } from 'history';
 import '__mock__/currencyData.mock';
 import loans from 'fixtures/openLoans';
 
+import { QueryClient, QueryClientProvider } from 'react-query';
 import OpenLoans from './OpenLoans';
 import {
   nav,
@@ -48,7 +49,13 @@ const props = {
   possibleColumns: columns,
 };
 
-const renderOpenLoans = (extraProps = {}) => render(<OpenLoans {...props} {...extraProps} />);
+const queryClient = new QueryClient();
+
+const renderOpenLoans = (extraProps = {}) => render(
+  <QueryClientProvider client={queryClient}>
+    <OpenLoans {...props} {...extraProps} />
+  </QueryClientProvider>
+);
 
 afterEach(() => jest.clearAllMocks());
 

@@ -28,7 +28,7 @@ describe('BlockTemplateForm', () => {
     handleSubmit: jest.fn(),
     initialValues: {
       id: '1',
-      name: 'Test Block Template',
+      name: 'Test Block PrintTemplate',
       blockTemplate: {
         borrowing: true,
         renewals: true,
@@ -50,7 +50,7 @@ describe('BlockTemplateForm', () => {
   });
 
   it('should display the correct pane title', () => {
-    const paneTitle = screen.getByText('ui-users.edit: Test Block Template');
+    const paneTitle = screen.getByText('ui-users.edit: Test Block PrintTemplate');
     expect(paneTitle).toBeInTheDocument();
   });
 
@@ -67,9 +67,9 @@ describe('BlockTemplateForm', () => {
   });
   it('name input field is required', async () => {
     const nameInput = screen.getByLabelText(/ui-users.manualBlockTemplates.templateName */i);
-    expect(nameInput).toHaveValue('Test Block Template');
+    expect(nameInput).toHaveValue('Test Block PrintTemplate');
     await userEvent.type(nameInput, ' Enter Something');
-    expect(nameInput).toHaveValue('Test Block Template Enter Something');
+    expect(nameInput).toHaveValue('Test Block PrintTemplate Enter Something');
     const ConfirmationButton = screen.getByRole('button', { name: 'Confirmation' });
     await userEvent.click(ConfirmationButton);
     const saveButton = screen.getByRole('button', { name: /saveAndClose/ });

@@ -46,7 +46,6 @@
       "feesfines": "16.1 17.0 18.0 19.0",
       "loan-policy-storage": "1.0 2.0",
       "loan-storage": "4.0 5.0 6.0 7.0",
-      "add-info": "0.1",
       "notes": "2.0 3.0",
       "request-storage": "2.5 3.0 4.0 5.0 6.0",
       "reading-room-patron-permission": "1.0",
@@ -773,6 +772,7 @@
           "circulation-storage.loans-history.collection.get",
           "circulation-storage.circulation-rules.get",
           "circulation-storage.fixed-due-date-schedules.collection.get",
+          "circulation-storage.staff-slips.collection.get",
           "accounts.collection.get",
           "comments.collection.get"
         ],
@@ -1130,10 +1130,14 @@
     "regenerator-runtime": "^0.13.9"
   },
   "dependencies": {
+    "@testing-library/react": "^16.0.1",
+    "@testing-library/react-hooks": "^8.0.1",
     "compressorjs": "^1.2.1",
+    "dompurify": "^3.1.7",
     "final-form-set-field-data": "^1.0.2",
     "get-orientation": "^1.1.2",
     "hashcode": "^1.0.3",
+    "html-to-react": "^1.7.0",
     "jspdf": "^2.3.1",
     "jspdf-autotable": "^3.5.14",
     "lodash": "^4.17.4",
@@ -1145,6 +1149,7 @@
     "react-final-form-arrays": "^3.1.0",
     "react-final-form-listeners": "^1.0.3",
     "react-router-prop-types": "^1.0.4",
+    "react-to-print": "^3.0.1",
     "uuid": "^9.0.0"
   },
   "peerDependencies": {

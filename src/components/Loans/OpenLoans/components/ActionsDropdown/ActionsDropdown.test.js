@@ -1,16 +1,17 @@
+import { QueryClient, QueryClientProvider } from 'react-query';
+
 import { screen, fireEvent } from '@folio/jest-config-stripes/testing-library/react';
 
 import renderWithRouter from 'helpers/renderWithRouter';
 
 import { IfPermission } from '@folio/stripes/core';
-
 import okapiCurrentUser from 'fixtures/okapiCurrentUser';
+
 import okapiOpenLoan from 'fixtures/openLoan';
 
 import buildStripes from '__mock__/stripes.mock';
 
 import ActionsDropdown from './ActionsDropdown';
-
 import {
   itemStatuses,
   DCB,
@@ -18,6 +19,7 @@ import {
   DCB_HOLDINGS_RECORD_ID,
   DCB_INSTANCE_ID,
 } from '../../../../../constants';
+import useStaffSlips from "../../../../../hooks/useStaffSlips";
 
 const mockHandleOptionsChange = jest.fn();
 
@@ -31,11 +33,19 @@ jest.mock('../../../../util', () => {
   };
 });
 
+jest.mock('../../../../../hooks/useStaffSlips');
+
 beforeEach(() => {
   mockHandleOptionsChange.mockClear();
 });
 
-const renderActionsDropdown = (props) => renderWithRouter(<ActionsDropdown {...props} />);
+const queryClient = new QueryClient();
+
+const renderActionsDropdown = (props) => renderWithRouter(
+  <QueryClientProvider client={queryClient}>
+    <ActionsDropdown {...props} />
+  </QueryClientProvider>
+);
 
 const props = {
   stripes: buildStripes({ hasPerm: jest.fn().mockReturnValue(true) }),
@@ -52,6 +62,17 @@ const props = {
 describe('ActoinsDropdown component', () => {
   beforeEach(() => {
     IfPermission.mockImplementation(({ children }) => children);
+
+    useStaffSlips.mockReturnValue({
+      staffSlips: [
+        {
+          "id": "0b52bca7-db17-4e91-a740-7872ed6d7323",
+          "name": "Due date receipt",
+          "active": true,
+          "template": "<p>template values</p>"
+        }
+      ]
+    })
   });
 
   it('renders properly', () => {

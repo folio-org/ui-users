@@ -3,6 +3,7 @@ import { screen, waitFor, within } from '@folio/jest-config-stripes/testing-libr
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import { createMemoryHistory } from 'history';
 import renderWithRouter from 'helpers/renderWithRouter';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import { nav } from '../../util';
 import ViewFeesFines from './ViewFeesFines';
 
@@ -147,7 +148,13 @@ const defaultProps = {
   selectedAccounts: [{ id: 1 }, { id: 2 }],
 };
 
-const renderViewFeesFines = (props) => renderWithRouter(<ViewFeesFines {...props} />);
+const queryClient = new QueryClient();
+
+const renderViewFeesFines = (props) => renderWithRouter(
+  <QueryClientProvider client={queryClient}>
+    <ViewFeesFines {...props} />
+  </QueryClientProvider>
+);
 
 describe('ViewFeesFines', () => {
   beforeEach(() => {
