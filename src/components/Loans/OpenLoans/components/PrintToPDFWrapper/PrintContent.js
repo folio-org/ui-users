@@ -5,7 +5,7 @@ import PrintTemplate from './PrintTemplate';
 
 
 const PrintContent = ({
-  dataSource = [],
+  dataSource,
   templateFn,
   contentRef,
 }) => {

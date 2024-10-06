@@ -3,6 +3,7 @@ import get from 'lodash/get';
 import { useIntl } from 'react-intl';
 import { escape } from 'lodash';
 import { useReactToPrint } from 'react-to-print';
+
 import useStaffSlips from '../useStaffSlips';
 import { SLIPS_TYPES } from '../useStaffSlips/useStaffSlips';
 import { formatDateAndTime } from '../../components/util';
