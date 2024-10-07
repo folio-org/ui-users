@@ -19,12 +19,7 @@ class UserRecordContainer extends React.Component {
     permUserId: {},   // ID of the current permissions user record (see UserEdit.js)
     selUser: {
       type: 'okapi',
-      path: (queryParams, pathComponents, resourceData, config, props) => {
-        if (props.stripes.hasInterface('users-keycloak')) {
-          return `users-keycloak/users/${pathComponents.id}`;
-        }
-        return `users/${pathComponents.id}`;
-      },
+      path: 'users/:{id}',
       clear: false,
       shouldRefresh: (resource, action, refresh) => {
         const { path, name } = action.meta;
@@ -34,12 +29,7 @@ class UserRecordContainer extends React.Component {
     },
     delUser: {
       type: 'okapi',
-      path: (queryParams, pathComponents, resourceData, config, props) => {
-        if (props.stripes.hasInterface('users-keycloak')) {
-          return `users-keycloak/users/${pathComponents.id}`;
-        }
-        return `bl-users/by-id/${pathComponents.id}`;
-      },
+      path: 'bl-users/by-id/:{id}',
       fetch: false,
     },
     // As the transaction check spans multiple modules the checks need to be done in mod-users-bl
@@ -125,12 +115,7 @@ class UserRecordContainer extends React.Component {
     records: {
       type: 'okapi',
       records: 'users',
-      path: (queryParams, pathComponents, resourceData, config, props) => {
-        if (props.stripes.hasInterface('users-keycloak')) {
-          return 'users-keycloak/users';
-        }
-        return 'users';
-      },
+      path: 'users',
       fetch: false,
     },
     creds: {
