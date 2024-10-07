@@ -19,7 +19,7 @@ import {
   DCB_HOLDINGS_RECORD_ID,
   DCB_INSTANCE_ID,
 } from '../../../../../constants';
-import useStaffSlips from "../../../../../hooks/useStaffSlips";
+import useStaffSlips from '../../../../../hooks/useStaffSlips';
 
 const mockHandleOptionsChange = jest.fn();
 
@@ -66,10 +66,10 @@ describe('ActoinsDropdown component', () => {
     useStaffSlips.mockReturnValue({
       staffSlips: [
         {
-          "id": "0b52bca7-db17-4e91-a740-7872ed6d7323",
-          "name": "Due date receipt",
-          "active": true,
-          "template": "<p>template values</p>"
+          id: '0b52bca7-db17-4e91-a740-7872ed6d7323',
+          name: 'Due date receipt',
+          active: true,
+          template: '<p>template values</p>'
         }
       ]
     })
