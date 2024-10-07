@@ -1130,8 +1130,6 @@
     "regenerator-runtime": "^0.13.9"
   },
   "dependencies": {
-    "@testing-library/react": "^16.0.1",
-    "@testing-library/react-hooks": "^8.0.1",
     "compressorjs": "^1.2.1",
     "dompurify": "^3.1.7",
     "final-form-set-field-data": "^1.0.2",
