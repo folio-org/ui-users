@@ -72,7 +72,7 @@ describe('ActoinsDropdown component', () => {
           template: '<p>template values</p>'
         }
       ]
-    })
+    });
   });
 
   it('renders properly', () => {
