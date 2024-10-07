@@ -614,13 +614,15 @@ class LoanDetails extends React.Component {
                 <IfPermission perm="ui-users.loans.view">
                   <PrintToPDFWrapper entities={[loan]}>
                     {(print) => (
-                      <Button
-                        data-test-print-button
-                        buttonStyle="primary"
-                        onClick={print}
-                      >
-                        <FormattedMessage id="ui-users.loans.details.printDueDateReceipt" />
-                      </Button>
+                      <span className={css.printButtonWrap}>
+                        <Button
+                          data-test-print-button
+                          buttonStyle="primary"
+                          onClick={print}
+                        >
+                          <FormattedMessage id="ui-users.loans.details.printDueDateReceipt" />
+                        </Button>
+                      </span>
                     )}
                   </PrintToPDFWrapper>
                 </IfPermission>
