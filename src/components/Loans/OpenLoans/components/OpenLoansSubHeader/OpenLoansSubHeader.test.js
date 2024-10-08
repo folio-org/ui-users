@@ -1,3 +1,5 @@
+import { QueryClient, QueryClientProvider } from 'react-query';
+
 import okapiCurrentUser from 'fixtures/okapiCurrentUser';
 import {
   screen,
@@ -19,7 +21,13 @@ jest.mock('../../../../../components/Loans/OpenLoans/components/PrintToPDFWrappe
   return <div>{children()}</div>;
 });
 
-const renderOpenLoansSubHeader = (props) => renderWithRouter(<OpenLoansSubHeader {...props} />);
+const queryClient = new QueryClient();
+
+const renderOpenLoansSubHeader = (props) => renderWithRouter(
+  <QueryClientProvider client={queryClient}>
+    <OpenLoansSubHeader {...props} />
+  </QueryClientProvider>
+);
 
 const buildRecords = jest.fn();
 const openBulkClaimReturnedModal = jest.fn();
