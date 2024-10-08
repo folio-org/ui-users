@@ -56,6 +56,8 @@
 * Omit permissions accordions and queries when `roles` interface is present. Refs UIU-3061, UIU-3062.
 * Retrieve user's central-tenant permission from `users-keycloak` endpoints when available. Refs UIU-3054.
 * Revert conditional use of the `users-keycloak` interface in UserRecordContainer. Refs UIU-3102.
+* Open loans: Print Due date receipt for single open loans. Refs UIU-3208.
+* Open loans: Print Due date receipt for multiple open loans. Refs UIU-3209.
 
 ## [10.1.2](https://github.com/folio-org/ui-users/tree/v10.1.2) (2024-09-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.1.1...v10.1.2)

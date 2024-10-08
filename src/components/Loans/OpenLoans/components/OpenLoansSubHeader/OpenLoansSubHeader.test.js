@@ -15,6 +15,9 @@ import {
 import OpenLoansSubHeader from './OpenLoansSubHeader';
 
 jest.unmock('@folio/stripes/components');
+jest.mock('../../../../../components/Loans/OpenLoans/components/PrintToPDFWrapper', () => ({ children }) => {
+  return <div>{children()}</div>;
+});
 
 const renderOpenLoansSubHeader = (props) => renderWithRouter(<OpenLoansSubHeader {...props} />);
 
@@ -118,6 +121,7 @@ describe('Given OpenLoansSubHeader', () => {
     expect(screen.getByRole('button', { name: 'ui-users.renew' })).toBeDefined();
     expect(screen.getByRole('button', { name: 'ui-users.loans.claimReturned' })).toBeDefined();
     expect(screen.getByRole('button', { name: 'stripes-smart-components.cddd.changeDueDate' })).toBeDefined();
+    expect(screen.getByRole('button', { name: 'ui-users.loans.details.printDueDateReceipt' })).toBeDefined();
     expect(screen.getByRole('button', { name: 'stripes-components.exportToCsv' })).toBeDefined();
   });
 
@@ -184,7 +188,7 @@ describe('Given OpenLoansSubHeader', () => {
   });
 
   describe('when there are selected loans and user is active', () => {
-    it('should enable Renew, Claim returned, and Change due date buttons', () => {
+    it('should enable Renew, Claim returned, Print due date receipt, and Change due date buttons', () => {
       const alteredProps = {
         ...props,
         checkedLoans: nonEmptyCheckedLoans,
@@ -200,6 +204,7 @@ describe('Given OpenLoansSubHeader', () => {
       expect(screen.getByRole('button', { name: 'ui-users.renew' })).toBeEnabled();
       expect(screen.getByRole('button', { name: 'ui-users.loans.claimReturned' })).toBeEnabled();
       expect(screen.getByRole('button', { name: 'stripes-smart-components.cddd.changeDueDate' })).toBeEnabled();
+      expect(screen.getByRole('button', { name: 'ui-users.loans.details.printDueDateReceipt' })).toBeEnabled();
     });
   });
 

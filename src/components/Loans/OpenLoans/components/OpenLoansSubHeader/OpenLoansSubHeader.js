@@ -16,6 +16,7 @@ import {
 } from '@folio/stripes/components';
 
 import ActionsBar from '../../../components/ActionsBar/ActionsBar';
+import PrintToPDFWrapper from '../PrintToPDFWrapper';
 import { itemStatuses } from '../../../../../constants';
 import {
   hasEveryLoanItemStatus,
@@ -26,6 +27,7 @@ import {
 } from '../../../../util';
 
 import css from './OpenLoansSubHeader.css';
+import detailsCss from '../../../../../views/LoanDetails/LoanDetails.css';
 
 // For convenience of enabling or disabling buttons for similar item states,
 // this groups together all the relevant item statuses for items that are
@@ -123,6 +125,7 @@ const OpenLoansSubHeader = ({
   const onlyLostyItemsSelected = hasAnyLoanItemStatus(checkedLoans, lostItemStatuses);
   const isUserActive = checkUserActive(user);
   const isVirtualUser = isDcbUser(user);
+  const checkedLoansArray = Object.values(checkedLoans);
 
   return (
     <ActionsBar
@@ -194,6 +197,21 @@ const OpenLoansSubHeader = ({
               >
                 {intl.formatMessage({ id: 'stripes-smart-components.cddd.changeDueDate' })}
               </Button>
+            </IfPermission>
+            <IfPermission perm="ui-users.loans.view">
+              <PrintToPDFWrapper entities={checkedLoansArray}>
+                {(print) => (
+                  <span className={detailsCss.printButtonWrap}>
+                    <Button
+                      id="print-all"
+                      disabled={noSelectedLoans}
+                      onClick={print}
+                    >
+                      {intl.formatMessage({ id: 'ui-users.loans.details.printDueDateReceipt' })}
+                    </Button>
+                  </span>
+                )}
+              </PrintToPDFWrapper>
             </IfPermission>
             <ExportCsv
               data={recordsToCSV}
