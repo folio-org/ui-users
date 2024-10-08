@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen } from '@folio/jest-config-stripes/testing-library/react';
 import PrintToPDFWrapper from './PrintToPDFWrapper';
 import PrintContent from './PrintContent';
 import usePrintData from '../../../../../hooks/usePrintData';
