@@ -1,14 +1,9 @@
-import {
-  screen,
-  waitFor,
-} from '@folio/jest-config-stripes/testing-library/react';
-import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
+import { screen } from '@folio/jest-config-stripes/testing-library/react';
 import '../../test/jest/__mock__';
+
 import renderWithRouter from 'helpers/renderWithRouter';
 
 import PatronPreRegistrationRecordsContainer from './PatronPreRegistrationRecordsContainer';
-
-jest.mock('../views/PatronsPreRegistrationListContainer/PatronsPreRegistrationList', () => jest.fn(() => <div>PatronsPreRegistrationList</div>));
 
 jest.mock('history', () => {
   return {
@@ -47,6 +42,6 @@ const renderPatronPreRegistrationRecordsContainer = (extraProps) => renderWithRo
 describe('PatronPreRegistrationRecordsContainer', () => {
   it('should render', () => {
     renderPatronPreRegistrationRecordsContainer();
-    expect(screen.getByText('PatronsPreRegistrationList')).toBeInTheDocument();
+    expect(screen.getByText('ui-users.stagingRecords.list.searchResults')).toBeInTheDocument();
   });
 });
