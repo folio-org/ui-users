@@ -11,7 +11,7 @@ import {
 } from 'react-intl';
 
 import { stripesShape } from '@folio/stripes/core';
-import { NoValue } from '@folio/stripes/components';
+import { Checkbox, NoValue } from '@folio/stripes/components';
 
 import {
   getLoanLastReminderNumber,
@@ -154,11 +154,10 @@ class OpenLoansWithStaticData extends React.Component {
           } = this.props;
 
           columnMapping[key] = (
-            <input
-              type="checkbox"
+            <Checkbox
               checked={allChecked}
               name="check-all"
-              aria-label={formatMessage({ id: 'ui-users.loans.selectAllLoans' })}
+              ariaLabel={formatMessage({ id: 'ui-users.loans.selectAllLoans' })}
               onChange={toggleAll}
             />
           );

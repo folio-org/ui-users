@@ -5,6 +5,7 @@ import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import okapiOpenLoan from 'fixtures/openLoan';
 import okapiCurrentUser from 'fixtures/okapiCurrentUser';
 import renderWithRouter from 'helpers/renderWithRouter';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import LoanDetails from './LoanDetails';
 import {
   DCB_INSTANCE_ID,
@@ -58,6 +59,7 @@ jest.mock('@folio/stripes/smart-components', () => ({
       );
     }),
 }));
+jest.mock('../../components/Loans/OpenLoans/components/PrintToPDFWrapper', () => ({ children }) => <div>{children}</div>);
 jest.mock('@folio/stripes/util', () => ({
   effectiveCallNumber: jest.fn().mockReturnValue(3),
 }));
@@ -279,7 +281,13 @@ const claimedReturnedPropsData = {
   }
 };
 
-const renderLoanDetails = (props) => renderWithRouter(<LoanDetails {...props} />);
+const queryClient = new QueryClient();
+
+const renderLoanDetails = (props) => renderWithRouter(
+  <QueryClientProvider client={queryClient}>
+    <LoanDetails {...props} />
+  </QueryClientProvider>
+);
 
 describe('LoanDetails', () => {
   describe('Render LoanDetails component', () => {

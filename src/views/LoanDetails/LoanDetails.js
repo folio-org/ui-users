@@ -56,6 +56,7 @@ import {
 } from '../../components/Wrappers';
 import loanActionMap from '../../components/data/static/loanActionMap';
 import LoanProxyDetails from './LoanProxyDetails';
+import PrintToPDFWrapper from '../../components/Loans/OpenLoans/components/PrintToPDFWrapper';
 
 import css from './LoanDetails.css';
 
@@ -609,6 +610,21 @@ class LoanDetails extends React.Component {
                   >
                     <FormattedMessage id="stripes-smart-components.cddd.changeDueDate" />
                   </Button>
+                </IfPermission>
+                <IfPermission perm="ui-users.loans.view">
+                  <PrintToPDFWrapper entities={[loan]}>
+                    {(print) => (
+                      <span className={css.printButtonWrap}>
+                        <Button
+                          data-test-print-button
+                          buttonStyle="primary"
+                          onClick={print}
+                        >
+                          <FormattedMessage id="ui-users.loans.details.printDueDateReceipt" />
+                        </Button>
+                      </span>
+                    )}
+                  </PrintToPDFWrapper>
                 </IfPermission>
                 <IfPermission perm="ui-users.loans.declare-item-lost">
                   <Button
