@@ -45,6 +45,7 @@ import CashDrawerReconciliationReportPDF from '../../components/data/reports/cas
 import CashDrawerReconciliationReportCSV from '../../components/data/reports/cashDrawerReconciliationReportCSV';
 import FinancialTransactionsReport from '../../components/data/reports/FinancialTransactionsReport';
 import LostItemsLink from '../../components/LostItemsLink';
+import LinkToPatronPreRegistrations from '../../components/LinkToPatronPreRegistrations';
 import PatronNoticePrintJobsLink from '../../components/PatronNoticePrintJobsLink';
 import Filters from './Filters';
 
@@ -293,6 +294,7 @@ class UserSearch extends React.Component {
             </PaneMenu>
           </IfPermission>
           <LostItemsLink />
+          <LinkToPatronPreRegistrations />
           <PatronNoticePrintJobsLink />
         </MenuSection>
         <MenuSection
@@ -778,6 +780,7 @@ class UserSearch extends React.Component {
                                   onChangeIndex={getSearchHandlers().query}
                                   marginBottom0
                                   data-test-user-search-input
+                                  // onClear={resetAll}
                                 />
                               )}
                             </FormattedMessage>

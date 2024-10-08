@@ -9,3 +9,4 @@ export { default as AccountsListing } from './AccountsListing/AccountsListing';
 export { default as NoteCreatePage } from './Notes/NoteCreatePage';
 export { default as NoteEditPage } from './Notes/NoteEditPage';
 export { default as NoteViewPage } from './Notes/NoteViewPage';
+export { default as PatronsPreRegistrationList } from './PatronsPreRegistrationListContainer/PatronsPreRegistrationListContainer';
