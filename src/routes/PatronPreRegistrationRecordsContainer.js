@@ -69,9 +69,7 @@ const PatronPreRegistrationRecordsContainer = ({
   );
 };
 
-// #TODO: currently implementing the below with users API, replace it with new staging api
 PatronPreRegistrationRecordsContainer.manifest = {
-  // initializedFilterConfig: { initialValue: false },
   resultCount: { initialValue: 0 },
   resultOffset: { initialValue: 0 },
   [PATRON_PREREGISTRATION_RECORDS_NAME]: {
@@ -91,7 +89,6 @@ PatronPreRegistrationRecordsContainer.manifest = {
             'lastName': 'personal.lastName',
             'middleName': 'personal.middleName',
             'preferredFirsName': 'personal.preferredFirstName',
-            // 'name': 'personal.firstName personal.lastName personal.middleName personal.preferredFirstName',
             'email': 'personal.email',
           },
           '',

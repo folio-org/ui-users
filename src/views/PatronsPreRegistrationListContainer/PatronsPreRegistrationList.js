@@ -13,7 +13,6 @@ const PatronsPreRegistrationList = ({
 }) => {
   const intl = useIntl();
 
-  // #TODO: add formatter for other columns after GET api for staging records is available
   const preRegistrationsListFormatter = () => ({
     [COLUMNS_NAME.ACTION]: () => (
       <Button
