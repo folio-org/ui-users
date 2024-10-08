@@ -11,6 +11,12 @@
 * Fix "Total paid amount" value that set as "$NaN" on "Refund fee/fine" modal. Refs UIU-3094.
 * Validate image url provided as external url for user profile picture. Refs UIU-3080.
 * Import and use ProfilePicture Component from stripes/smart-components. Refs UIU-3104.
+* Show Roles assigned to users. Refs UIU-3110.
+* Add edit user roles accordion on edit role modal view. Refs UIU-3021.
+* Wire up with API ability to assign/unassign user roles in UserForm. Refs UIU-3124.
+* Fix filter issues in user roles modal. Refs UIU-3124.
+* Suppress Settings > Users > Permission sets when `roles` interface is present. Refs UIU-3105.
+* Sort user roles alphabetically in `EditUserRoles` and `UserRolesModal` components. Refs UIU-3145.
 * Rename isDCBItem function name to isDcbItem. Refs UIU-3020.
 * *BREAKING* Add new okapi interface reading-room-patron-permission. Create new permission 'Users: Can view reading room access'. Refs UIU-3116.
 * Create new permission 'Users: Can view, and edit reading room access'. Refs UIU-3117.
@@ -43,6 +49,13 @@
 * Mark check box column header as non interactive. Refs UIU-2940.
 * Populate 'State/Prov./Region', 'Zip/Postal Code', 'Country' Fields on user creation via edge module. Refs UIU-3188.
 * Fix issue when slash character in item barcode creates 404 error when adding fee/fine at check in. Refs UIU-3193.
+* Fix skipped test cases in LoanDetails.test.js and OwnerSettings.test.js. Refs UIU-3085.
+* Leverage `users-keycloak` interface endpoints for user data when available.
+* Fix problem with `Reset password email sent` , application points to  bl-users endpoint, even if `users-keycloak` interface provided. Refs UIU-3031.
+* Add `users-keycloak` permissions. Refs UIU-3068.
+* Omit permissions accordions and queries when `roles` interface is present. Refs UIU-3061, UIU-3062.
+* Retrieve user's central-tenant permission from `users-keycloak` endpoints when available. Refs UIU-3054.
+* Revert conditional use of the `users-keycloak` interface in UserRecordContainer. Refs UIU-3102.
 * Add action button for searching patrons pre registration records. Refs UIU-3219.
 * Display patrons pre registration records results. Refs UIU-3222
 

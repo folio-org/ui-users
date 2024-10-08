@@ -217,7 +217,7 @@ class LoanDetails extends React.Component {
     const valueDisplay = stripes.hasPerm('ui-users.feesfines.view')
       ?
         <button
-          data-test-fee-fine-details-link
+          data-testid="fee-fine-details-link"
           className={css.feefineButton}
           onClick={(e) => this.feefinedetails(e)}
           type="button"
@@ -310,7 +310,7 @@ class LoanDetails extends React.Component {
       const formattedValue = `${titleTodisplay} (${get(this.loan, ['item', 'materialType', 'name'])})`;
       return (
         <KeyValue
-          data-testId="item-title"
+          data-testid="item-title"
           label={<FormattedMessage id="ui-users.loans.columns.title" />}
           value={
             isVirtualItem ?
@@ -554,6 +554,7 @@ class LoanDetails extends React.Component {
                 {isClaimedReturnedItem &&
                   <Dropdown
                     id="resolve-claim-menu"
+                    data-testid="resolve-claim-dropdown"
                     label={<FormattedMessage id="ui-users.loans.resolveClaim" />}
                     buttonProps={{ buttonStyle: 'primary' }}
                   >
@@ -664,7 +665,7 @@ class LoanDetails extends React.Component {
               </Col>
               <Col xs={2}>
                 <KeyValue
-                  data-testId="item-barcode"
+                  data-testid="item-barcode"
                   label={<FormattedMessage id="ui-users.loans.columns.barcode" />}
                   value={this.showBarcode(loan)}
                 />

@@ -16,24 +16,11 @@ const userFormData = {
     tenantId: [{ permissionName: 'users.item.get' }],
     testTenant: [{ permissionName: 'users.item.get' }],
   },
-  readingRoomsAccessList: [
-    {
-      'id': '2205004b-ca51-4a14-87fd-938eefa8f5df',
-      'userId': '2205005b-ca51-4a04-87fd-938eefa8f6de',
-      'readingRoomId': 'ea7ac988-ede1-466b-968c-46a770333b14',
-      'readingRoomName': 'rr-4',
-      'access': 'ALLOWED',
-      'notes': 'Allowed for this reading room...',
-      'metadata': {
-        'createdDate': '2024-05-15 18:39:31',
-        'createdByUserId': '21457ab5-4635-4e56-906a-908f05e9233b',
-        'updatedDate': '2024-05-15 18:40:27',
-        'updatedByUserId': '21457ab5-4635-4e56-906a-908f05e9233b'
-      }
-    }
-  ],
-  preferredEmailCommunication: ['Programs', 'Support'],
 };
+
+jest.mock('../../components/Wrappers/withUserRoles', () => (Component) => {
+  return Component;
+});
 
 jest.mock('@folio/stripes/components', () => ({
   ...jest.requireActual('@folio/stripes/components'),
@@ -77,7 +64,13 @@ const stripes = {
 
 describe('UserEdit', () => {
   let props = {
-    stripes,
+    stripes: {
+      hasPerm: jest.fn().mockReturnValue(true),
+      hasInterface: jest.fn().mockReturnValue(true),
+      okapi: {
+        tenant: 'tenantId',
+      },
+    },
     resources: {
       selUser: {
         records: [{
@@ -114,6 +107,7 @@ describe('UserEdit', () => {
     updateProxies: jest.fn(),
     updateSponsors: jest.fn(),
     updateServicePoints: jest.fn(),
+    updateUserRoles:jest.fn(),
     getUserServicePoints: jest.fn(),
     getPreferredServicePoint: jest.fn(),
     mutator: {

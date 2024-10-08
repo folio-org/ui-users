@@ -1,0 +1,13 @@
+@import "@folio/stripes-components/lib/variables";
+
+.searchField {
+  margin-bottom: calc(var(--control-margin-bottom) / 2);
+}
+
+.resetButton {
+   padding: 0 3px;
+}
+
+.searchGroupWrap {
+  margin-bottom: calc(var(--control-margin-bottom) / 2);
+}

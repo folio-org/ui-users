@@ -31,6 +31,7 @@ import {
 } from '../../constants';
 import { resourcesLoaded, showErrorCallout } from './UserEditHelpers';
 import { preferredEmailCommunicationOptions } from '../../components/EditSections/EditContactInfo/constants';
+import withUserRoles from '../../components/Wrappers/withUserRoles';
 
 class UserEdit extends React.Component {
   static propTypes = {
@@ -48,6 +49,9 @@ class UserEdit extends React.Component {
     mutator: PropTypes.object,
     getProxies: PropTypes.func,
     getSponsors: PropTypes.func,
+    // assignedRoleIds, updateUserRoles comes from withUserRoles HOC
+    updateUserRoles: PropTypes.func,
+    assignedRoleIds: PropTypes.arrayOf(PropTypes.string),
   }
 
   static contextType = CalloutContext;
@@ -75,6 +79,7 @@ class UserEdit extends React.Component {
       getSponsors,
       getPreferredServicePoint,
       getUserServicePoints,
+      assignedRoleIds,
       match,
     } = this.props;
 
@@ -114,6 +119,7 @@ class UserEdit extends React.Component {
       proxies: getProxies(),
       sponsors: getSponsors(),
       servicePoints: getUserServicePoints(),
+      assignedRoleIds,
       requestPreferences: {
         ...initialFormValues.requestPreferences,
         ...get(this.props.resources, 'requestPreferences.records[0].requestPreferences[0]', {})
@@ -124,6 +130,7 @@ class UserEdit extends React.Component {
   getUserFormData() {
     const {
       resources,
+      assignedRoleIds
     } = this.props;
     const formData = getRecordObject(
       resources,
@@ -134,7 +141,7 @@ class UserEdit extends React.Component {
       'userReadingRoomPermissions'
     );
 
-    return formData;
+    return { ...formData, assignedRoleIds };
   }
 
   createRequestPreferences = (requestPreferencesData, userId) => {
@@ -234,6 +241,7 @@ class UserEdit extends React.Component {
       updateProxies,
       updateSponsors,
       updateServicePoints,
+      updateUserRoles,
       mutator,
       history,
       resources,
@@ -245,6 +253,7 @@ class UserEdit extends React.Component {
       stripes,
     } = this.props;
 
+    const propertiesToOmit = ['creds', 'proxies', 'sponsors', 'permissions', 'servicePoints', 'preferredServicePoint'];
     const user = cloneDeep(userFormData);
     const prevUser = resources?.selUser?.records?.[0] ?? {};
 
@@ -285,7 +294,13 @@ class UserEdit extends React.Component {
       updateServicePoints(servicePoints, preferredServicePoint);
     }
 
-    const data = omit(user, ['creds', 'proxies', 'sponsors', 'permissions', 'servicePoints', 'preferredServicePoint', 'readingRoomsAccessList']);
+    if (stripes.hasInterface('roles')) {
+      updateUserRoles(user.assignedRoleIds);
+    } else {
+      propertiesToOmit.push('assignedRoleIds');
+    }
+
+    const data = omit(user, propertiesToOmit);
     const today = moment().endOf('day');
     const curActive = user.active;
     const prevActive = prevUser.active;
@@ -466,9 +481,10 @@ class UserEdit extends React.Component {
         history={history}
         stripes={this.props.stripes}
         profilePictureConfig={profilePictureConfig}
+        assignedRoleIds={this.props.assignedRoleIds}
       />
     );
   }
 }
 
-export default withOkapiKy(UserEdit);
+export default withOkapiKy(withUserRoles(UserEdit));
