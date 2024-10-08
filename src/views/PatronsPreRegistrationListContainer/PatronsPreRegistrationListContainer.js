@@ -30,7 +30,7 @@ const PatronsPreRegistrationListContainer = ({
   const intl = useIntl();
   const [isSearchPaneVisible, setIsSearchPaneVisible] = useState(true);
   const query = queryGetter ? queryGetter() || {} : {};
-  const count = source ? source.totalCount() : 0;
+  const count = data?.length || 0;
   const emptyMessage = source
     ? <NoResultsMessage
         source={source}

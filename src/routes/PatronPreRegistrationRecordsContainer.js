@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { get } from 'lodash';
 
 import { stripesConnect } from '@folio/stripes/core';
@@ -21,8 +21,6 @@ const PatronPreRegistrationRecordsContainer = ({
   stripes,
 }) => {
   const history = useHistory();
-  const location = useLocation;
-  const { pathname, search } = location;
   const source = new StripesConnectedSource({ resources, mutator }, stripes.logger, PATRON_PREREGISTRATION_RECORDS_NAME);
   const data = get(resources, `${PATRON_PREREGISTRATION_RECORDS_NAME}.records`, []);
 
@@ -51,11 +49,7 @@ const PatronPreRegistrationRecordsContainer = ({
   };
 
   const onClose = () => {
-    if (location.pathname) {
-      history.push(`${pathname}${search}`);
-    } else {
-      history.push('/users?sort=name');
-    }
+    history.push('/users?sort=name');
   };
 
   return (
@@ -70,6 +64,7 @@ const PatronPreRegistrationRecordsContainer = ({
 };
 
 PatronPreRegistrationRecordsContainer.manifest = {
+  query: { initialValue: {} },
   resultCount: { initialValue: 0 },
   resultOffset: { initialValue: 0 },
   [PATRON_PREREGISTRATION_RECORDS_NAME]: {

@@ -3,6 +3,8 @@ import {
   render,
 } from '@folio/jest-config-stripes/testing-library/react';
 
+import preRegistrationRecords from 'fixtures/preRegistrationRecords';
+
 import { MultiColumnList } from '@folio/stripes/components';
 
 import PatronsPreRegistrationList from './PatronsPreRegistrationList';
@@ -33,41 +35,7 @@ describe('PatronsPreRegistrationList', () => {
     const props = {
       ...defaultProps,
       totalCount: 1,
-      data: [
-        {
-          'id': 'd717f710-ddf3-4208-9784-f443b74c40cd',
-          'active': true,
-          'generalInfo': {
-            'firstName': 'new-record-2',
-            'preferredFirstName': 'New Record',
-            'middleName': '',
-            'lastName': 'new-record-2'
-          },
-          'addressInfo': {
-            'addressLine0': '123 Main St',
-            'addressLine1': 'Apt 4B',
-            'city': 'Metropolis',
-            'province': 'NY',
-            'zip': '12345',
-            'country': 'USA'
-          },
-          'contactInfo': {
-            'phone': '555-123456',
-            'mobilePhone': '555-5678',
-            'email': 'new-record-2@test.com'
-          },
-          'preferredEmailCommunication': [
-            'Support',
-            'Programs'
-          ],
-          'metadata': {
-            'createdDate': '2024-04-29T13:29:41.711+00:00',
-            'createdByUserId': '6d8a6bf2-5b5f-4168-aa2f-5c4e67b4b65c',
-            'updatedDate': '2024-04-29T13:29:41.711+00:00',
-            'updatedByUserId': '6d8a6bf2-5b5f-4168-aa2f-5c4e67b4b65c'
-          }
-        }
-      ],
+      data: preRegistrationRecords,
     };
 
     render(<PatronsPreRegistrationList {...defaultProps} {...props} />);

@@ -11,6 +11,14 @@ import PatronsPreRegistrationListContainer from './PatronsPreRegistrationListCon
 
 jest.unmock('@folio/stripes/components');
 jest.mock('./PatronsPreRegistrationList', () => jest.fn(() => <div>PatronsPreRegistrationList</div>));
+jest.mock('@folio/stripes/components', () => ({
+  ...jest.requireActual('@folio/stripes/components'),
+  SearchField: jest.fn((props) => (
+    <input
+      {...props}
+    />
+  )),
+}));
 
 const defaultProps = {
   queryGetter: jest.fn(),
@@ -37,8 +45,9 @@ describe('PatronsPreRegistrationListContainer', () => {
 
   it('should toggle search pane', async () => {
     renderComponent();
+    expect(screen.getByText('ui-users.stagingRecords.list.search')).toBeInTheDocument();
     const collapseButton = document.querySelector('[icon="caret-left"]');
-    userEvent.click(collapseButton);
+    await userEvent.click(collapseButton);
     await waitFor(() => expect(screen.queryByText('ui-users.stagingRecords.list.search')).toBeNull());
   });
 
@@ -52,7 +61,7 @@ describe('PatronsPreRegistrationListContainer', () => {
     await waitFor(() => expect(resetButton).toBeDisabled());
   });
 
-  it('should render the search results appropriately', () => {
+  it('should render PatronsPreRegistrationList component', () => {
     const props = {
       ...defaultProps,
       source: {

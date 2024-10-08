@@ -68,7 +68,7 @@ const PatronsPreRegistrationList = ({
 PatronsPreRegistrationList.propTypes = {
   isEmptyMessage: PropTypes.node.isRequired,
   totalCount: PropTypes.number.isRequired,
-  data: PropTypes.object.isRequired,
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
   onNeedMoreData: PropTypes.func.isRequired,
 };
 

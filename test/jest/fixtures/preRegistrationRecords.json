@@ -1,0 +1,36 @@
+[
+  {
+    "id": "58fcba1e-87d2-4ae7-a0a3-36d2425837c2",
+    "isEmailVerified": true,
+    "status": "TIER-1",
+    "generalInfo": {
+      "firstName": "new-record-1",
+      "preferredFirstName": "New Record",
+      "middleName": "",
+      "lastName": "new-record-1"
+    },
+    "addressInfo": {
+      "addressLine0": "123 Main St",
+      "addressLine1": "Apt 4B",
+      "city": "Metropolis",
+      "province": "NY",
+      "zip": "12345",
+      "country": "USA"
+    },
+    "contactInfo": {
+      "phone": "555-123456",
+      "mobilePhone": "555-5678",
+      "email": "new-record-1@test.com"
+    },
+    "preferredEmailCommunication": [
+      "Support",
+      "Programs"
+    ],
+    "metadata": {
+      "createdDate": "2024-04-29T13:29:41.711+00:00",
+      "createdByUserId": "6d8a6bf2-5b5f-4168-aa2f-5c4e67b4b65c",
+      "updatedDate": "2024-04-29T13:29:41.711+00:00",
+      "updatedByUserId": "6d8a6bf2-5b5f-4168-aa2f-5c4e67b4b65c"
+    }
+  }
+]

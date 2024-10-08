@@ -780,7 +780,6 @@ class UserSearch extends React.Component {
                                   onChangeIndex={getSearchHandlers().query}
                                   marginBottom0
                                   data-test-user-search-input
-                                  // onClear={resetAll}
                                 />
                               )}
                             </FormattedMessage>
