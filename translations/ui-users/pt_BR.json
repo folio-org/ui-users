@@ -1187,5 +1187,20 @@
     "contact.preferredEmailCommunication.support": "Suporte",
     "printLibraryCard": "Imprimir cartão da biblioteca",
     "printLibraryCard.successMessage.withLocallyUploadedProfilePicture": "Exportação concluída. Foto do perfil exportada em arquivo separado.",
-    "printLibraryCard.successMessage.withExternallyLinkedProfilePicture": "Exportação concluída. URL da foto do perfil incluída no arquivo exportado."
+    "printLibraryCard.successMessage.withExternallyLinkedProfilePicture": "Exportação concluída. URL da foto do perfil incluída no arquivo exportado.",
+    "roles.userRoles": "Funções do usuário",
+    "roles.empty": "Nenhuma função de usuário encontrada",
+    "roles.deleteRole": "Excluir função de usuário",
+    "roles.addRoles": "Adicionar funções de usuário",
+    "roles.unassignAllRoles": "Cancelar a atribuição de todas as funções de usuário",
+    "roles.modal.assigned": "Atribuído",
+    "roles.modal.unassigned": "Não atribuído",
+    "roles.modal.list.pane.subheader": "{amount} funções encontradas",
+    "roles.modal.search.resetAll": "Reiniciar tudo",
+    "roles.modal.unassignAll.header": "Cancelar a atribuição de todas as funções de usuário",
+    "roles.modal.unassignAll.label": "Você está cancelando a atribuição de todas as funções de usuário <strong>{roles}</strong> <p><strong>Tem certeza?</strong></p>",
+    "roles.modal.search.header": "Buscar e filtrar",
+    "roles.modal.filter.status.label": "Status de atribuição de função",
+    "roles.modal.header": "Selecionar funções de usuário",
+    "loans.details.printDueDateReceipt": "Imprimir recibo de data de vencimento"
 }
