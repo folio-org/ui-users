@@ -1187,5 +1187,20 @@
     "contact.preferredEmailCommunication.support": "支持",
     "printLibraryCard": "打印图书馆卡",
     "printLibraryCard.successMessage.withLocallyUploadedProfilePicture": "导出完成。个人资料图片已导出至单独文件。",
-    "printLibraryCard.successMessage.withExternallyLinkedProfilePicture": "导出完成。个人资料图片 URL 包含在导出的文件中。"
+    "printLibraryCard.successMessage.withExternallyLinkedProfilePicture": "导出完成。个人资料图片 URL 包含在导出的文件中。",
+    "roles.userRoles": "用户角色",
+    "roles.empty": "未找到用户角色",
+    "roles.deleteRole": "删除用户角色",
+    "roles.addRoles": "添加用户角色",
+    "roles.unassignAllRoles": "取消分配所有用户角色",
+    "roles.modal.assigned": "已分配",
+    "roles.modal.unassigned": "未分配",
+    "roles.modal.list.pane.subheader": "找到{amount}个角色",
+    "roles.modal.search.resetAll": "全部重置",
+    "roles.modal.unassignAll.header": "取消分配所有用户角色",
+    "roles.modal.unassignAll.label": "正在取消分配所有用户角色<strong> {roles} </strong> <p> <strong>确定吗？ </strong> </p>",
+    "roles.modal.search.header": "搜索和筛选",
+    "roles.modal.filter.status.label": "角色分配状态",
+    "roles.modal.header": "选择用户角色",
+    "loans.details.printDueDateReceipt": "Print due date receipt"
 }
