@@ -4,6 +4,7 @@ import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
 import renderWithRouter from 'helpers/renderWithRouter';
 import loans from 'fixtures/openLoans';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import OpenLoansWithStaticData from './OpenLoansWithStaticData';
 
 jest.unmock('@folio/stripes/components');
@@ -13,7 +14,13 @@ const mockToggleColumn = jest.fn();
 const showChangeDueDateDialogMock = jest.fn();
 const toCsvMock = jest.fn();
 
-const renderOpenLoansWithStaticData = (props) => renderWithRouter(<OpenLoansWithStaticData {...props} />);
+const queryClient = new QueryClient();
+
+const renderOpenLoansWithStaticData = (props) => renderWithRouter(
+  <QueryClientProvider client={queryClient}>
+    <OpenLoansWithStaticData {...props} />
+  </QueryClientProvider>
+);
 const STRIPES = {
   connect: (Component) => Component,
   config: {},
