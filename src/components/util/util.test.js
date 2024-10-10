@@ -474,6 +474,20 @@ describe('isDcbItem ', () => {
     };
     expect(isDcbItem(item)).toBeFalsy();
   });
+
+  describe('should return false if the record is sparsely populated', () => {
+    it('handles missing instanceId', () => {
+      const item = {
+      };
+      expect(isDcbItem(item)).toBeFalsy();
+    });
+    it('handles missing instanceId', () => {
+      const item = {
+        instanceId: DCB_INSTANCE_ID,
+      };
+      expect(isDcbItem(item)).toBeFalsy();
+    });
+  });
 });
 
 describe('isAValidImageUrl', () => {
