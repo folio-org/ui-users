@@ -618,6 +618,7 @@ class LoanDetails extends React.Component {
                         <Button
                           data-test-print-button
                           buttonStyle="primary"
+                          disabled={buttonDisabled}
                           onClick={print}
                         >
                           <FormattedMessage id="ui-users.loans.details.printDueDateReceipt" />
