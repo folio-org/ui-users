@@ -58,6 +58,7 @@
 * Revert conditional use of the `users-keycloak` interface in UserRecordContainer. Refs UIU-3102.
 * Open loans: Print Due date receipt for single open loans. Refs UIU-3208.
 * Open loans: Print Due date receipt for multiple open loans. Refs UIU-3209.
+* Update `notes` to `v4.0`. Refs UIU-3229.
 * Loan details: Print Due date receipt. Refs UIU-3210.
 
 ## [10.1.2](https://github.com/folio-org/ui-users/tree/v10.1.2) (2024-09-05)
