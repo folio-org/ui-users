@@ -1,14 +1,17 @@
-import { screen } from '@folio/jest-config-stripes/testing-library/react';
+import { render, screen, fireEvent } from '@folio/jest-config-stripes/testing-library/react';
 
-import { createMemoryHistory } from 'history';
-
-import renderWithRouter from 'helpers/renderWithRouter';
 import preRegistrationRecords from 'fixtures/preRegistrationRecords';
 import buildStripes from '__mock__/stripes.mock';
+
+import { createMemoryHistory } from 'history';
+import { MemoryRouter, useHistory } from 'react-router-dom';
+
+import { StripesConnectedSource } from '@folio/stripes/smart-components';
 
 import PatronPreRegistrationRecordsContainer from './PatronPreRegistrationRecordsContainer';
 
 jest.unmock('@folio/stripes/components');
+jest.unmock('@folio/stripes/smart-components');
 jest.mock('@folio/stripes/components', () => ({
   ...jest.requireActual('@folio/stripes/components'),
   SearchField: jest.fn((props) => (
@@ -16,6 +19,19 @@ jest.mock('@folio/stripes/components', () => ({
       {...props}
     />
   )),
+}));
+jest.mock('../views/PatronsPreRegistrationListContainer/PatronsPreRegistrationListContainer', () => {
+  return jest.fn(({ onClose, onNeedMoreData }) => (
+    <div data-testid="mock-PatronsPreRegistrationListContainer">
+      Mocked component PatronsPreRegistrationListContainer
+      <button data-testid="close-button" type="button" onClick={onClose}>close</button>
+      <button data-testid="need-more-button" type="button" onClick={() => onNeedMoreData(100, 1)}>Need more</button>
+    </div>
+  ));
+});
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useHistory: jest.fn(),
 }));
 
 const history = createMemoryHistory();
@@ -31,29 +47,72 @@ const props = {
   mutator: {
     patronPreRegistrationRecords:{
       GET: jest.fn(),
-    }
+    },
+    resultOffset: 100
   },
   stripes: buildStripes(),
   history,
 };
-const renderPatronPreRegistrationRecordsContainer = (extraProps) => renderWithRouter(
-  <PatronPreRegistrationRecordsContainer {...props} {...extraProps} />
+
+const renderPatronPreRegistrationRecordsContainer = (alteredProps) => render(
+  <MemoryRouter>
+    <PatronPreRegistrationRecordsContainer {...props} {...alteredProps} />
+  </MemoryRouter>
 );
 
 describe('PatronPreRegistrationRecordsContainer', () => {
+  let mockHistory;
+  let mockSource;
+
+  beforeEach(() => {
+    // Set up the mock history object
+    mockHistory = { push: jest.fn() };
+    useHistory.mockReturnValue(mockHistory);
+
+    // Mock the StripesConnectedSource instance
+    mockSource = {
+      fetchOffset: jest.fn(),
+      fetchMore: jest.fn(),
+    };
+
+    jest.spyOn(StripesConnectedSource.prototype, 'fetchOffset').mockImplementation(mockSource.fetchOffset);
+    jest.spyOn(StripesConnectedSource.prototype, 'fetchMore').mockImplementation(mockSource.fetchMore);
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should render', () => {
     renderPatronPreRegistrationRecordsContainer();
-    expect(screen.getByText('ui-users.stagingRecords.list.searchResults')).toBeInTheDocument();
+    expect(screen.getByTestId('mock-PatronsPreRegistrationListContainer')).toBeInTheDocument();
   });
 
-  it('should display search field', () => {
+  it('should call onClose method', () => {
     renderPatronPreRegistrationRecordsContainer();
-    expect(screen.getByPlaceholderText('ui-users.stagingRecords.search.placeholder')).toBeDefined();
+    fireEvent.click(screen.getByTestId('close-button'));
+
+    expect(mockHistory.push).toHaveBeenCalledWith('/users?sort=name');
   });
 
-  it('should focus on search box', () => {
+  it('should call onNeedMoreData method', () => {
     renderPatronPreRegistrationRecordsContainer();
-    const input = document.getElementsByTagName('input')[0];
-    expect(input).toHaveFocus();
+    fireEvent.click(screen.getByTestId('need-more-button'));
+
+    expect(mockSource.fetchOffset).toHaveBeenCalledWith(1);
+  });
+
+  it('should call onNeedMoreData method', () => {
+    const alteredProps = {
+      ...props,
+      mutator: {
+        ...props.mutator,
+        resultOffset: 0
+      },
+    };
+    renderPatronPreRegistrationRecordsContainer(alteredProps);
+    fireEvent.click(screen.getByTestId('need-more-button'));
+
+    expect(mockSource.fetchMore).toHaveBeenCalledWith(100);
   });
 });
