@@ -26,11 +26,13 @@ describe('PatronsPreRegistrationList', () => {
   it('should be called with correct props', () => {
     const expectedProps = {
       autosize: true,
-      contentData: [],
+      contentData: preRegistrationRecords,
       id: 'PatronsPreRegistrationsList',
       pageAmount: 100,
       pagingType: 'prev-next',
-      totalCount: 0
+      totalCount: 1,
+      columnMapping: expect.any(Object),
+      formatter: expect.any(Object),
     };
     const props = {
       ...defaultProps,

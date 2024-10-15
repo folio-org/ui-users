@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { MultiColumnList, Button } from '@folio/stripes/components';
-import { useIntl } from 'react-intl';
+import { useIntl, FormattedMessage } from 'react-intl';
 import { get, noop } from 'lodash';
 
 import { visibleColumns, columnMapping, COLUMNS_NAME } from './constants';
@@ -17,9 +17,9 @@ const PatronsPreRegistrationList = ({
     [COLUMNS_NAME.ACTION]: () => (
       <Button
         type="button"
-        onClick={noop} // this will be updated in the scop of next ticket
+        onClick={noop} // #TODO this will be updated in the scope of next ticket
       >
-        New
+        <FormattedMessage id="stripes-components.addNew" />
       </Button>
     ),
     [COLUMNS_NAME.FIRST_NAME]: user => get(user, ['generalInfo', 'firstName']),

@@ -88,7 +88,7 @@ const PatronsPreRegistrationListContainer = ({
                 isSearchPaneVisible && (
                   <Pane
                     id="preRegistrationsRecordsSearchPane"
-                    defaultWidth="15%"
+                    defaultWidth="22%"
                     paneTitle={<FormattedMessage id="ui-users.stagingRecords.list.search" />}
                     lastMenu={
                       <PaneMenu>
@@ -98,7 +98,7 @@ const PatronsPreRegistrationListContainer = ({
                   >
                     <form onSubmit={onSubmitSearch}>
                       <SearchField
-                        aria-label="Staging records search"
+                        aria-label={intl.formatMessage({ id: 'ui-users.stagingRecords.search.label' })}
                         autoFocus
                         autoComplete="off"
                         id="stagingRecordsSearch"

@@ -1209,6 +1209,7 @@
   "roles.modal.header": "Select user roles",
   "stagingRecords.list.search": "Search",
   "stagingRecords.search.placeholder": "Search by name or email",
+  "stagingRecords.search.label": "Staging records search",
   "stagingRecords.list.searchResults": "Patron registration record results",
   "stagingRecords.list.columnNames.action": "Action",
   "stagingRecords.list.columnNames.firstName": "First name",
