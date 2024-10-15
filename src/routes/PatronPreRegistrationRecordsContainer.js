@@ -78,7 +78,7 @@ PatronPreRegistrationRecordsContainer.manifest = {
       params: {
         query: makeQueryFunction(
           'cql.allRecords=1',
-          '(keywords="%{query.query}*")',
+          '(keywords="%{query.query}*") AND status == "TIER-2"',
           {
             'firstName': 'personal.firstName',
             'lastName': 'personal.lastName',
