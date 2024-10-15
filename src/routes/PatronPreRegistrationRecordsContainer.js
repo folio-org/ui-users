@@ -1,4 +1,3 @@
-import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { get } from 'lodash';
@@ -23,14 +22,6 @@ const PatronPreRegistrationRecordsContainer = ({
   const history = useHistory();
   const source = new StripesConnectedSource({ resources, mutator }, stripes.logger, PATRON_PREREGISTRATION_RECORDS_NAME);
   const data = get(resources, `${PATRON_PREREGISTRATION_RECORDS_NAME}.records`, []);
-
-  const searchField = useRef(null);
-
-  useEffect(() => {
-    if (searchField.current) {
-      searchField.current.focus();
-    }
-  }, []);
 
   const queryGetter = () => {
     return get(resources, 'query', {});
