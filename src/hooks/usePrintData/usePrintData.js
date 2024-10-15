@@ -24,7 +24,7 @@ export const mapEntityToTemplate = (entity, type, formatTime) => {
       'borrower.preferredFirstName': get(entity, 'borrower.preferredFirstName'),
       'borrower.middleName': get(entity, 'borrower.middleName'),
       'borrower.lastName': get(entity, 'borrower.lastName'),
-      'borrower.patronGroup': get(entity, 'borrower.patronGroup'),
+      'borrower.patronGroup': get(entity, 'patronGroupAtCheckout.name'),
       'item.title': get(entity, 'item.title'),
       'item.primaryContributor': get(entity, 'item.primaryContributor'),
       'loan.dueDate': formatDateAndTime(get(entity, 'dueDate'), formatTime),

@@ -61,6 +61,7 @@
 * Update `notes` to `v4.0`. Refs UIU-3229.
 * Loan details: Print Due date receipt. Refs UIU-3210.
 * Open loans: `isDcbItem()` must tolerate sparse data. Refs UIU-3230.
+* Replace "borrower.patronGroup" token on "patronGroupAtCheckout.name" to show name in slip print. Refs UIU-3228.
 
 ## [10.1.2](https://github.com/folio-org/ui-users/tree/v10.1.2) (2024-09-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.1.1...v10.1.2)
