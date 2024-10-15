@@ -27,7 +27,7 @@ import contactTypes from '../../components/data/static/contactTypes';
 import {
   OKAPI_TENANT_HEADER,
   USER_FIELDS_TO_CHECK,
-  deliveryFulfillmentValues,
+  deliveryFulfillmentValues, KEYCLOAK_USER_EXISTANCE,
 } from '../../constants';
 import { resourcesLoaded, showErrorCallout } from './UserEditHelpers';
 import { preferredEmailCommunicationOptions } from '../../components/EditSections/EditContactInfo/constants';
@@ -52,6 +52,10 @@ class UserEdit extends React.Component {
     // assignedRoleIds, updateUserRoles comes from withUserRoles HOC
     updateUserRoles: PropTypes.func,
     assignedRoleIds: PropTypes.arrayOf(PropTypes.string),
+    checkUserInKeycloak: PropTypes.func,
+    setIsKeycloakUser: PropTypes.func,
+    isKeycloakUser: PropTypes.bool,
+    submitCreateKeycloakUser: PropTypes.func,
   }
 
   static contextType = CalloutContext;
@@ -241,7 +245,6 @@ class UserEdit extends React.Component {
       updateProxies,
       updateSponsors,
       updateServicePoints,
-      updateUserRoles,
       mutator,
       history,
       resources,
@@ -251,9 +254,10 @@ class UserEdit extends React.Component {
         search,
       },
       stripes,
+      checkUserInKeycloak
     } = this.props;
 
-    const propertiesToOmit = ['creds', 'proxies', 'sponsors', 'permissions', 'servicePoints', 'preferredServicePoint'];
+    const propertiesToOmit = ['creds', 'proxies', 'sponsors', 'permissions', 'servicePoints', 'preferredServicePoint', 'assignedRoleIds'];
     const user = cloneDeep(userFormData);
     const prevUser = resources?.selUser?.records?.[0] ?? {};
 
@@ -294,12 +298,6 @@ class UserEdit extends React.Component {
       updateServicePoints(servicePoints, preferredServicePoint);
     }
 
-    if (stripes.hasInterface('roles')) {
-      updateUserRoles(user.assignedRoleIds);
-    } else {
-      propertiesToOmit.push('assignedRoleIds');
-    }
-
     const data = omit(user, propertiesToOmit);
     const today = moment().endOf('day');
     const curActive = user.active;
@@ -318,10 +316,25 @@ class UserEdit extends React.Component {
 
     mutator.selUser
       .PUT(data).then(() => {
-        history.push({
-          pathname: params.id ? `/users/preview/${params.id}` : '/users',
-          search,
-          state,
+        if (!stripes.hasInterface('roles')) {
+          history.push({
+            pathname: params.id ? `/users/preview/${params.id}` : '/users',
+            search,
+            state,
+          });
+          return;
+        }
+        checkUserInKeycloak().then(userKeycloakStatus => {
+          if (userKeycloakStatus === KEYCLOAK_USER_EXISTANCE.exist) {
+            history.push({
+              pathname: params.id ? `/users/preview/${params.id}` : '/users',
+              search,
+              state,
+            });
+          }
+          if (userKeycloakStatus === KEYCLOAK_USER_EXISTANCE.nonExist) {
+            this.props.setIsKeycloakUser(false);
+          }
         });
       })
       .catch((e) => showErrorCallout(e, this.context.sendCallout));
@@ -442,6 +455,10 @@ class UserEdit extends React.Component {
       resources,
       location,
       match: { params },
+      isKeycloakUser,
+      checkUserInKeycloak,
+      submitCreateKeycloakUser,
+      updateUserRoles
     } = this.props;
 
     const profilePictureConfig = get(resources, 'settings.records[0]');
@@ -482,6 +499,10 @@ class UserEdit extends React.Component {
         stripes={this.props.stripes}
         profilePictureConfig={profilePictureConfig}
         assignedRoleIds={this.props.assignedRoleIds}
+        isKeycloakUser={isKeycloakUser}
+        checkUserInKeycloak={checkUserInKeycloak}
+        submitCreateKeycloakUser={submitCreateKeycloakUser}
+        updateUserRoles={updateUserRoles}
       />
     );
   }

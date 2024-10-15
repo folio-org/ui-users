@@ -21,7 +21,7 @@ import {
   AccordionStatus,
   HasCommand,
   expandAllSections,
-  collapseAllSections
+  collapseAllSections, ConfirmationModal
 } from '@folio/stripes/components';
 import { EditCustomFieldsRecord } from '@folio/stripes/smart-components';
 import stripesFinalForm from '@folio/stripes/final-form';
@@ -107,6 +107,10 @@ class UserForm extends React.Component {
     intl: PropTypes.object,
     profilePictureConfig: PropTypes.object.isRequired,
     assignedRoleIds: PropTypes.arrayOf(PropTypes.string),
+    isKeycloakUser: PropTypes.bool,
+    checkUserInKeycloak: PropTypes.func,
+    submitCreateKeycloakUser: PropTypes.func,
+    updateUserRoles: PropTypes.func,
   };
 
   static defaultProps = {
@@ -314,6 +318,13 @@ class UserForm extends React.Component {
     return !this.props.stripes.hasInterface('roles');
   };
 
+  handleConfirmCreateKeycloakUser = async () => {
+    const { submitCreateKeycloakUser, updateUserRoles, form, onCancel } = this.props;
+    await submitCreateKeycloakUser();
+    await updateUserRoles(form.getState().values.assignedRoleIds);
+    onCancel();
+  }
+
   render() {
     const {
       initialValues,
@@ -325,8 +336,8 @@ class UserForm extends React.Component {
       form,
       uniquenessValidator,
       profilePictureConfig,
+      isKeycloakUser
     } = this.props;
-
     const selectedPatronGroup = form.getFieldState('patronGroup')?.value;
     const firstMenu = this.getAddFirstMenu();
     const footer = this.getPaneFooter();
@@ -496,6 +507,17 @@ class UserForm extends React.Component {
               });
             }}
           />
+          <IfInterface name="roles">
+            <ConfirmationModal
+              id="JIT-user"
+              heading="Keycloak user record"
+              message={`This operation will create new records in Keycloak for the ${getFullName(form.getState().values)}`}
+              onConfirm={this.handleConfirmCreateKeycloakUser}
+              onCancel={onCancel}
+              open={!isKeycloakUser}
+              confirmLabel="Confirm"
+            />
+          </IfInterface>
         </form>
       </HasCommand>
     );
