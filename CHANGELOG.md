@@ -63,6 +63,7 @@
 * Open loans: `isDcbItem()` must tolerate sparse data. Refs UIU-3230.
 * *BREAKING* Add new okapi interface staging-users. Add action button for searching patrons pre registration records. Refs UIU-3219.
 * Display patrons pre registration records results. Refs UIU-3222
+* Create new permission 'Users: Can view patron preregistration data'. Refs UIU-3221.
 
 ## [10.1.2](https://github.com/folio-org/ui-users/tree/v10.1.2) (2024-09-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.1.1...v10.1.2)

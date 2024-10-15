@@ -29,6 +29,9 @@ const defaultProps = {
   },
   data: [],
   onNeedMoreData: jest.fn(),
+  stripes: {
+    hasPerm: jest.fn().mockReturnValue(false),
+  }
 };
 const renderComponent = (props) => renderWithRouter(<PatronsPreRegistrationListContainer {...defaultProps} {...props} />);
 

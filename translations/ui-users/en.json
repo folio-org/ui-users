@@ -1110,6 +1110,7 @@
   "permission.remove-patron-notice-print-jobs": "Users: View and remove patron notice print jobs",
   "permission.view-reading-room-access": "Users: Can view reading room access",
   "permission.edit-reading-room-access": "Users: Can view, and edit reading room access",
+  "permission.patron-pre-registrations-view": "Users: Can view patron preregistration data",
   "bulkClaimReturned.item.title": "Title",
   "bulkClaimReturned.preConfirm": "Confirm claim returned",
   "bulkClaimReturned.postConfirm": "Claim returned confirmation",

@@ -25,7 +25,8 @@ const PatronsPreRegistrationListContainer = ({
   onClose,
   source,
   data,
-  onNeedMoreData
+  onNeedMoreData,
+  stripes,
 }) => {
   const intl = useIntl();
   const [isSearchPaneVisible, setIsSearchPaneVisible] = useState(true);
@@ -80,7 +81,7 @@ const PatronsPreRegistrationListContainer = ({
           searchValue,
           resetAll,
         }) => {
-          const isResetButtonDisabled = !searchValue.query;
+          const isResetButtonDisabled = !searchValue.query && !stripes.hasPerm('ui-users.patron-pre-registrations-view');
 
           return (
             <Paneset id="patronsPreRegistrationRecordsPaneSet">
@@ -168,7 +169,8 @@ PatronsPreRegistrationListContainer.propTypes = {
   onClose: PropTypes.func.isRequired,
   queryGetter: PropTypes.func.isRequired,
   source: PropTypes.object.isRequired,
-  data: PropTypes.object.isRequired
+  data: PropTypes.object.isRequired,
+  stripes: PropTypes.object.isRequired,
 };
 
 export default PatronsPreRegistrationListContainer;

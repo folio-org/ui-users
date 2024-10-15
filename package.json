@@ -1087,6 +1087,15 @@
           "reading-room.patron-permission.item.put"
         ],
         "visible": true
+      },
+      {
+        "permissionName": "ui-users.patron-pre-registrations-view",
+        "displayName": "Users: Can view patron preregistration data",
+        "subPermissions": [
+          "module.users.enabled",
+          "staging-users.collection.get"
+        ],
+        "visible": true
       }
     ]
   },
