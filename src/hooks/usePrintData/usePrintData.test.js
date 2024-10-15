@@ -86,6 +86,9 @@ describe('mapEntityToTemplate', () => {
         primaryContributor: 'F. Scott Fitzgerald',
       },
       dueDate: '2024-10-10T12:00:00Z',
+      patronGroupAtCheckout: {
+        name: 'facility'
+      }
     };
 
     // Mock `formatDateAndTime` to return a formatted date
@@ -98,7 +101,7 @@ describe('mapEntityToTemplate', () => {
       'borrower.preferredFirstName': 'Janie',
       'borrower.middleName': 'A.',
       'borrower.lastName': 'Doe',
-      'borrower.patronGroup': 'Regular',
+      'borrower.patronGroup': 'facility',
       'item.title': 'The Great Gatsby',
       'item.primaryContributor': 'F. Scott Fitzgerald',
       'loan.dueDate': 'October 10, 2024',
