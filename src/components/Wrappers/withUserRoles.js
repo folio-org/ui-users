@@ -11,8 +11,8 @@ const withUserRoles = (WrappedComponent) => (props) => {
   const userId = props.match.params.id;
   const [assignedRoleIds, setAssignedRoleIds] = useState([]);
   const [isCreateKeycloakUserConfirmationOpen, setIsCreateKeycloakUserConfirmationOpen] = useState(false);
-  const { sendCallout } = useCallout();
-  const sendErrorCallout = error => showErrorCallout(error, sendCallout);
+  const callout = useCallout();
+  const sendErrorCallout = error => showErrorCallout(error, callout.sendCallout);
 
   const { mutateAsync: createKeycloakUser } = useCreateAuthUserKeycloak(sendErrorCallout, { tenantId: okapi.tenant });
 

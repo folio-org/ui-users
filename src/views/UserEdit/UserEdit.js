@@ -19,6 +19,7 @@ import {
   withOkapiKy,
 } from '@folio/stripes/core';
 
+import isEqual from 'lodash/isEqual';
 import { getRecordObject } from '../../components/util';
 
 import UserForm from './UserForm';
@@ -242,19 +243,30 @@ class UserEdit extends React.Component {
     mutator.userReadingRoomPermissions.PUT(payload);
   }
 
+  onCompleteEdit = () => {
+    const {
+      match: { params },
+      history,
+      location: {
+        state,
+        search,
+      },
+    } = this.props;
+    history.push({
+      pathname: params.id ? `/users/preview/${params.id}` : '/users',
+      search,
+      state,
+    });
+  }
+
   update({ requestPreferences, readingRoomsAccessList, ...userFormData }) {
     const {
       updateProxies,
       updateSponsors,
       updateServicePoints,
+      updateUserRoles,
       mutator,
-      history,
       resources,
-      match: { params },
-      location: {
-        state,
-        search,
-      },
       stripes,
       checkUserInKeycloak
     } = this.props;
@@ -319,20 +331,16 @@ class UserEdit extends React.Component {
     mutator.selUser
       .PUT(data).then(() => {
         if (!stripes.hasInterface('roles')) {
-          history.push({
-            pathname: params.id ? `/users/preview/${params.id}` : '/users',
-            search,
-            state,
-          });
+          this.onCompleteEdit();
           return;
         }
         checkUserInKeycloak().then(userKeycloakStatus => {
           if (userKeycloakStatus === KEYCLOAK_USER_EXISTANCE.exist) {
-            history.push({
-              pathname: params.id ? `/users/preview/${params.id}` : '/users',
-              search,
-              state,
-            });
+            if (isEqual(user.assignedRoleIds, this.props.assignedRoleIds)) {
+              this.onCompleteEdit();
+            } else {
+              updateUserRoles(user.assignedRoleIds).then(this.onCompleteEdit);
+            }
           }
           if (userKeycloakStatus === KEYCLOAK_USER_EXISTANCE.nonExist) {
             this.props.setIsCreateKeycloakUserConfirmationOpen(true);
@@ -487,13 +495,7 @@ class UserEdit extends React.Component {
         formData={formData}
         initialValues={this.getUserFormValues()} // values are strictly values...if we're editing (id param present) pull in existing values.
         onSubmit={onSubmit}
-        onCancel={() => {
-          history.push({
-            pathname: params.id ? `/users/preview/${params.id}` : '/users',
-            state: location.state,
-            search: location.search,
-          });
-        }}
+        onCancel={this.onCompleteEdit}
         uniquenessValidator={this.props.mutator.uniquenessValidator}
         match={this.props.match}
         location={location}
