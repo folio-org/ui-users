@@ -215,7 +215,14 @@ class UsersRouting extends React.Component {
               <Route path={`${base}/:id/patronblocks/create`} component={Routes.PatronBlockContainer} />
               <Route path={`${base}/create`} component={Routes.UserEditContainer} />
               <Route path={`${base}/lost-items`} component={Routes.LostItemsContainer} />
-              <Route path={`${base}/pre-registration-records`} component={Routes.PatronPreRegistrationRecordsContainer} />
+              <Route
+                path={`${base}/pre-registration-records`} 
+                render={props => (
+                  <IfPermission perm="ui-users.patron-pre-registrations-view">
+                    <Routes.PatronPreRegistrationRecordsContainer {...props} />
+                  </IfPermission>
+                )}
+              />
               <Route path={`${base}/patron-notice-print-jobs`} component={Routes.PatronNoticePrintJobsContainer} />
               <Route path={`${base}/:id/edit`} component={Routes.UserEditContainer} />
               <Route path={`${base}/view/:id`} component={Routes.UserDetailFullscreenContainer} />
