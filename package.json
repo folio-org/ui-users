@@ -1093,6 +1093,7 @@
         "displayName": "Users: Can view patron preregistration data",
         "subPermissions": [
           "module.users.enabled",
+          "ui-users.view",
           "staging-users.collection.get"
         ],
         "visible": true
