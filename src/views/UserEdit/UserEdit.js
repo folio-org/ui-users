@@ -49,12 +49,14 @@ class UserEdit extends React.Component {
     mutator: PropTypes.object,
     getProxies: PropTypes.func,
     getSponsors: PropTypes.func,
-    // assignedRoleIds, updateUserRoles comes from withUserRoles HOC
+    /* assignedRoleIds, updateUserRoles,checkUserInKeycloak, setIsCreateKeycloakUserConfirmationOpen,
+    isCreateKeycloakUserConfirmationOpen,submitCreateKeycloakUser comes from withUserRoles HOC
+    */
     updateUserRoles: PropTypes.func,
     assignedRoleIds: PropTypes.arrayOf(PropTypes.string),
     checkUserInKeycloak: PropTypes.func,
-    setIsKeycloakUser: PropTypes.func,
-    isKeycloakUser: PropTypes.bool,
+    setIsCreateKeycloakUserConfirmationOpen: PropTypes.func,
+    isCreateKeycloakUserConfirmationOpen: PropTypes.bool,
     submitCreateKeycloakUser: PropTypes.func,
   }
 
@@ -333,7 +335,7 @@ class UserEdit extends React.Component {
             });
           }
           if (userKeycloakStatus === KEYCLOAK_USER_EXISTANCE.nonExist) {
-            this.props.setIsKeycloakUser(false);
+            this.props.setIsCreateKeycloakUserConfirmationOpen(true);
           }
         });
       })
@@ -455,7 +457,7 @@ class UserEdit extends React.Component {
       resources,
       location,
       match: { params },
-      isKeycloakUser,
+      isCreateKeycloakUserConfirmationOpen,
       checkUserInKeycloak,
       submitCreateKeycloakUser,
       updateUserRoles
@@ -499,7 +501,7 @@ class UserEdit extends React.Component {
         stripes={this.props.stripes}
         profilePictureConfig={profilePictureConfig}
         assignedRoleIds={this.props.assignedRoleIds}
-        isKeycloakUser={isKeycloakUser}
+        isCreateKeycloakUserConfirmationOpen={isCreateKeycloakUserConfirmationOpen}
         checkUserInKeycloak={checkUserInKeycloak}
         submitCreateKeycloakUser={submitCreateKeycloakUser}
         updateUserRoles={updateUserRoles}

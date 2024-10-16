@@ -1206,5 +1206,7 @@
   "roles.modal.unassignAll.label": "You are unassigning all user roles <strong>{roles}</strong> <p><strong>Are you sure?</strong></p>",
   "roles.modal.search.header": "Search & filter",
   "roles.modal.filter.status.label": "Role assigment status",
-  "roles.modal.header": "Select user roles"
+  "roles.modal.header": "Select user roles",
+  "keycloak.modal.confirmationHeading": "Keycloak user record",
+  "keycloak.modal.creation": "This operation will create new records in Keycloak for the <b>{user}</b>"
 }

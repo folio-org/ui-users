@@ -107,7 +107,7 @@ class UserForm extends React.Component {
     intl: PropTypes.object,
     profilePictureConfig: PropTypes.object.isRequired,
     assignedRoleIds: PropTypes.arrayOf(PropTypes.string),
-    isKeycloakUser: PropTypes.bool,
+    isCreateKeycloakUserConfirmationOpen: PropTypes.bool,
     checkUserInKeycloak: PropTypes.func,
     submitCreateKeycloakUser: PropTypes.func,
     updateUserRoles: PropTypes.func,
@@ -336,7 +336,7 @@ class UserForm extends React.Component {
       form,
       uniquenessValidator,
       profilePictureConfig,
-      isKeycloakUser
+      isCreateKeycloakUserConfirmationOpen
     } = this.props;
     const selectedPatronGroup = form.getFieldState('patronGroup')?.value;
     const firstMenu = this.getAddFirstMenu();
@@ -510,12 +510,12 @@ class UserForm extends React.Component {
           <IfInterface name="roles">
             <ConfirmationModal
               id="JIT-user"
-              heading="Keycloak user record"
-              message={`This operation will create new records in Keycloak for the ${getFullName(form.getState().values)}`}
+              heading={<FormattedMessage id="ui-users.keycloak.modal.confirmationHeading" />}
+              message={<FormattedMessage id="ui-users.keycloak.modal.creation" values={{ user:getFullName(form.getState().values) }} />}
               onConfirm={this.handleConfirmCreateKeycloakUser}
               onCancel={onCancel}
-              open={!isKeycloakUser}
-              confirmLabel="Confirm"
+              open={isCreateKeycloakUserConfirmationOpen}
+              confirmLabel={<FormattedMessage id="stripes-core.button.confirm" />}
             />
           </IfInterface>
         </form>

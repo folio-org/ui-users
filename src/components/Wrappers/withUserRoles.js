@@ -10,7 +10,7 @@ const withUserRoles = (WrappedComponent) => (props) => {
   // eslint-disable-next-line react/prop-types
   const userId = props.match.params.id;
   const [assignedRoleIds, setAssignedRoleIds] = useState([]);
-  const [isKeycloakUser, setIsKeycloakUser] = useState(true);
+  const [isCreateKeycloakUserConfirmationOpen, setIsCreateKeycloakUserConfirmationOpen] = useState(false);
   const { sendCallout } = useCallout();
   const sendErrorCallout = error => showErrorCallout(error, sendCallout);
 
@@ -89,8 +89,8 @@ const withUserRoles = (WrappedComponent) => (props) => {
     updateUserRoles={updateUserRoles}
     checkUserInKeycloak={checkUserInKeycloak}
     submitCreateKeycloakUser={submitCreateKeycloakUser}
-    isKeycloakUser={isKeycloakUser}
-    setIsKeycloakUser={setIsKeycloakUser}
+    isCreateKeycloakUserConfirmationOpen={isCreateKeycloakUserConfirmationOpen}
+    setIsCreateKeycloakUserConfirmationOpen={setIsCreateKeycloakUserConfirmationOpen}
   />;
 };
 
