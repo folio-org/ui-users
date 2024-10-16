@@ -9,4 +9,3 @@ export { default as useUserTenantRoles } from './useUserTenantRoles';
 export { default as useLocalizedCurrency } from './useLocalizedCurrency';
 export { default as useAllRolesData } from './useAllRolesData';
 export { default as useCreateAuthUserKeycloak } from './useCreateAuthUserKeycloak';
-export { default as useErrorCallout } from './useErrorCallout';

@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { useStripes, useOkapiKy } from '@folio/stripes/core';
-import { useAllRolesData, useErrorCallout, useCreateAuthUserKeycloak } from '../../hooks';
+import { useStripes, useOkapiKy, useCallout } from '@folio/stripes/core';
+import { useAllRolesData, useCreateAuthUserKeycloak } from '../../hooks';
 import { KEYCLOAK_USER_EXISTANCE } from '../../constants';
+import { showErrorCallout } from '../../views/UserEdit/UserEditHelpers';
 
 const withUserRoles = (WrappedComponent) => (props) => {
   const { okapi, config } = useStripes();
@@ -10,7 +11,8 @@ const withUserRoles = (WrappedComponent) => (props) => {
   const userId = props.match.params.id;
   const [assignedRoleIds, setAssignedRoleIds] = useState([]);
   const [isKeycloakUser, setIsKeycloakUser] = useState(true);
-  const { sendErrorCallout } = useErrorCallout();
+  const { sendCallout } = useCallout();
+  const sendErrorCallout = error => showErrorCallout(error, sendCallout);
 
   const { mutateAsync: createKeycloakUser } = useCreateAuthUserKeycloak(sendErrorCallout, { tenantId: okapi.tenant });
 
