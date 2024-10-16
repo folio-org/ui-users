@@ -1086,6 +1086,15 @@
           "reading-room.patron-permission.item.put"
         ],
         "visible": true
+      },
+      {
+        "permissionName": "ui-users.patron-pre-registrations-merge",
+        "displayName": "Users: Can merge patron preregistration data",
+        "subPermissions": [
+          "staging-users.item.put",
+          "perms.users.item.post"
+        ],
+        "visible": true
       }
     ]
   },
