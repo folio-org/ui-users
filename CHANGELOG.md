@@ -58,7 +58,12 @@
 * Revert conditional use of the `users-keycloak` interface in UserRecordContainer. Refs UIU-3102.
 * Open loans: Print Due date receipt for single open loans. Refs UIU-3208.
 * Open loans: Print Due date receipt for multiple open loans. Refs UIU-3209.
+* Update `notes` to `v4.0`. Refs UIU-3229.
 * Loan details: Print Due date receipt. Refs UIU-3210.
+* Open loans: `isDcbItem()` must tolerate sparse data. Refs UIU-3230.
+* *BREAKING* Add new okapi interface staging-users. Add action button for searching patrons pre registration records. Refs UIU-3219.
+* Display patrons pre registration records results. Refs UIU-3222
+* Create new permission 'Users: Can view patron preregistration data'. Refs UIU-3221.
 * Confirmation dialog when JIT AuthUser creation is required. Refs UIU-3192.
 
 ## [10.1.2](https://github.com/folio-org/ui-users/tree/v10.1.2) (2024-09-05)

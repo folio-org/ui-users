@@ -34,6 +34,7 @@
       "permissions": "5.6",
       "login": "7.3",
       "users-bl": "6.1",
+      "staging-users": "1.0",
       "tags": "1.0"
     },
     "optionalOkapiInterfaces": {
@@ -46,7 +47,7 @@
       "feesfines": "16.1 17.0 18.0 19.0",
       "loan-policy-storage": "1.0 2.0",
       "loan-storage": "4.0 5.0 6.0 7.0",
-      "notes": "2.0 3.0",
+      "notes": "4.0",
       "request-storage": "2.5 3.0 4.0 5.0 6.0",
       "reading-room-patron-permission": "1.0",
       "roles": "1.0",
@@ -1084,6 +1085,16 @@
           "ui-users.edit",
           "ui-users.view-reading-room-access",
           "reading-room.patron-permission.item.put"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.patron-pre-registrations-view",
+        "displayName": "Users: Can view patron preregistration data",
+        "subPermissions": [
+          "module.users.enabled",
+          "ui-users.view",
+          "staging-users.collection.get"
         ],
         "visible": true
       }
