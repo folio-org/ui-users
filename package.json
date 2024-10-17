@@ -1089,7 +1089,7 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.patron-pre-registrations-execute",
+        "permissionName": "ui-users.patron-pre-registrations.execute",
         "displayName": "Users: Can merge patron preregistration data",
         "description": "Edits existing user or creates new user, based on staging record",
         "subPermissions": [
