@@ -1,4 +1,9 @@
 import {
+  QueryClient,
+  QueryClientProvider,
+} from 'react-query';
+
+import {
   screen,
   render,
 } from '@folio/jest-config-stripes/testing-library/react';
@@ -7,7 +12,13 @@ import preRegistrationRecords from 'fixtures/preRegistrationRecords';
 
 import { MultiColumnList } from '@folio/stripes/components';
 
+import { useUserDuplicatesCheck } from './hooks';
 import PatronsPreRegistrationList from './PatronsPreRegistrationList';
+
+jest.mock('./hooks', () => ({
+  ...jest.requireActual('./hooks'),
+  useUserDuplicatesCheck: jest.fn(),
+}));
 
 const defaultProps = {
   data: [],
@@ -16,9 +27,33 @@ const defaultProps = {
   onNeedMoreData: jest.fn(),
 };
 
+const handleDuplicationsCheck = jest.fn(() => ({
+  checkDuplicates: () => false,
+}));
+
+const queryClient = new QueryClient();
+const wrapper = ({ children }) => (
+  <QueryClientProvider client={queryClient}>
+    {children}
+  </QueryClientProvider>
+);
+
+const renderComponent = (props = {}) => render(
+  <PatronsPreRegistrationList
+    {...defaultProps}
+    {...props}
+  />,
+  { wrapper },
+);
+
 describe('PatronsPreRegistrationList', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    useUserDuplicatesCheck.mockReturnValue({ handle: handleDuplicationsCheck });
+  });
+
   it('should render the component', () => {
-    render(<PatronsPreRegistrationList {...defaultProps} />);
+    renderComponent();
 
     expect(screen.getByTestId('PatronsPreRegistrationsList')).toBeVisible();
   });
@@ -40,7 +75,7 @@ describe('PatronsPreRegistrationList', () => {
       data: preRegistrationRecords,
     };
 
-    render(<PatronsPreRegistrationList {...defaultProps} {...props} />);
+    renderComponent(props);
     expect(MultiColumnList).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
   });
 });
