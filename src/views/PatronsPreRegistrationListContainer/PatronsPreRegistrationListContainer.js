@@ -168,7 +168,7 @@ PatronsPreRegistrationListContainer.propTypes = {
   onClose: PropTypes.func.isRequired,
   queryGetter: PropTypes.func.isRequired,
   source: PropTypes.object.isRequired,
-  data: PropTypes.object.isRequired
+  data: PropTypes.object.isRequired,
 };
 
 export default PatronsPreRegistrationListContainer;

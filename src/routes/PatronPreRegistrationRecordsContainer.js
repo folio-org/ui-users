@@ -50,6 +50,7 @@ const PatronPreRegistrationRecordsContainer = ({
       onNeedMoreData={onNeedMoreData}
       source={source}
       data={data}
+      stripes={stripes}
     />
   );
 };
