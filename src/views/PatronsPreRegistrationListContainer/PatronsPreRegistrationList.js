@@ -1,9 +1,21 @@
+import get from 'lodash/get';
 import PropTypes from 'prop-types';
-import { MultiColumnList, Button } from '@folio/stripes/components';
-import { useIntl, FormattedMessage } from 'react-intl';
-import { get, noop } from 'lodash';
+import {
+  useIntl,
+  FormattedMessage,
+} from 'react-intl';
 
-import { visibleColumns, columnMapping, COLUMNS_NAME } from './constants';
+import {
+  MultiColumnList,
+  Button,
+} from '@folio/stripes/components';
+
+import {
+  visibleColumns,
+  columnMapping,
+  COLUMNS_NAME,
+} from './constants';
+import { useNewRecordHandler } from './hooks';
 
 const PatronsPreRegistrationList = ({
   data,
@@ -13,11 +25,18 @@ const PatronsPreRegistrationList = ({
 }) => {
   const intl = useIntl();
 
+  const {
+    handle,
+    isLoading,
+  } = useNewRecordHandler();
+
   const preRegistrationsListFormatter = () => ({
-    [COLUMNS_NAME.ACTION]: () => (
+    [COLUMNS_NAME.ACTION]: (user) => (
       <Button
         type="button"
-        onClick={noop} // #TODO this will be updated in the scope of next ticket
+        disabled={isLoading}
+        onClick={() => handle(user)}
+        marginBottom0
       >
         <FormattedMessage id="stripes-components.addNew" />
       </Button>
