@@ -183,10 +183,4 @@ UserRolesModal.propTypes = {
   onClose: PropTypes.func.isRequired,
   initialRoleIds: PropTypes.arrayOf(PropTypes.string),
   changeUserRoles: PropTypes.func.isRequired,
-  assignedRoles: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired
-    })
-  ).isRequired,
 };

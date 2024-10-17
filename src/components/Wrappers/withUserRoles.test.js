@@ -5,11 +5,15 @@ import withUserRoles from './withUserRoles';
 import { useAllRolesData } from '../../hooks';
 
 jest.mock('@folio/stripes/core', () => ({
+  useCallout: jest.fn(() => ({ sendCallout: jest.fn() })),
   useStripes: jest.fn(),
   useOkapiKy: jest.fn(),
 }));
 
 jest.mock('../../hooks', () => ({
+  useCreateAuthUserKeycloak: jest.fn(() => ({
+    mutateAsync: jest.fn()
+  })),
   useAllRolesData: jest.fn(),
 }));
 

@@ -1,13 +1,20 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { useStripes, useOkapiKy } from '@folio/stripes/core';
-import { useAllRolesData } from '../../hooks';
+import { useStripes, useOkapiKy, useCallout } from '@folio/stripes/core';
+import { useAllRolesData, useCreateAuthUserKeycloak } from '../../hooks';
+import { KEYCLOAK_USER_EXISTANCE } from '../../constants';
+import { showErrorCallout } from '../../views/UserEdit/UserEditHelpers';
 
 const withUserRoles = (WrappedComponent) => (props) => {
   const { okapi, config } = useStripes();
   // eslint-disable-next-line react/prop-types
   const userId = props.match.params.id;
   const [assignedRoleIds, setAssignedRoleIds] = useState([]);
+  const [isCreateKeycloakUserConfirmationOpen, setIsCreateKeycloakUserConfirmationOpen] = useState(false);
+  const callout = useCallout();
+  const sendErrorCallout = error => showErrorCallout(error, callout.sendCallout);
+
+  const { mutateAsync: createKeycloakUser } = useCreateAuthUserKeycloak(sendErrorCallout, { tenantId: okapi.tenant });
 
   const { isLoading: isAllRolesDataLoading, allRolesMapStructure } = useAllRolesData();
 
@@ -42,7 +49,7 @@ const withUserRoles = (WrappedComponent) => (props) => {
         .json()
         .then(setAssignedRoleIdsOnLoad)
         // eslint-disable-next-line no-console
-        .catch(console.error);
+        .catch(sendErrorCallout);
     }
   },
   // Adding api, searchParams to deps causes infinite callback call. Listed deps are enough to track changes.
@@ -56,13 +63,34 @@ const withUserRoles = (WrappedComponent) => (props) => {
     } },
   ).json()
   // eslint-disable-next-line no-console
-    .catch(console.error);
+    .catch(sendErrorCallout);
+
+  const checkUserInKeycloak = async () => {
+    try {
+      await api.get(`users-keycloak/auth-users/${userId}`);
+      return KEYCLOAK_USER_EXISTANCE.exist;
+    } catch (error) {
+      if (error?.response?.status === 404) {
+        return KEYCLOAK_USER_EXISTANCE.nonExist;
+      }
+      sendErrorCallout(error);
+      return KEYCLOAK_USER_EXISTANCE.error;
+    }
+  };
+
+  const submitCreateKeycloakUser = async () => {
+    await createKeycloakUser(userId);
+  };
 
   return <WrappedComponent
     {...props}
     assignedRoleIds={assignedRoleIds}
     setAssignedRoleIds={setAssignedRoleIds}
     updateUserRoles={updateUserRoles}
+    checkUserInKeycloak={checkUserInKeycloak}
+    submitCreateKeycloakUser={submitCreateKeycloakUser}
+    isCreateKeycloakUserConfirmationOpen={isCreateKeycloakUserConfirmationOpen}
+    setIsCreateKeycloakUserConfirmationOpen={setIsCreateKeycloakUserConfirmationOpen}
   />;
 };
 

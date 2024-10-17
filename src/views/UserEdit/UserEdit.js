@@ -19,6 +19,7 @@ import {
   withOkapiKy,
 } from '@folio/stripes/core';
 
+import isEqual from 'lodash/isEqual';
 import { getRecordObject } from '../../components/util';
 
 import UserForm from './UserForm';
@@ -27,7 +28,7 @@ import contactTypes from '../../components/data/static/contactTypes';
 import {
   OKAPI_TENANT_HEADER,
   USER_FIELDS_TO_CHECK,
-  deliveryFulfillmentValues,
+  deliveryFulfillmentValues, KEYCLOAK_USER_EXISTANCE,
 } from '../../constants';
 import { resourcesLoaded, showErrorCallout } from './UserEditHelpers';
 import { preferredEmailCommunicationOptions } from '../../components/EditSections/EditContactInfo/constants';
@@ -49,9 +50,15 @@ class UserEdit extends React.Component {
     mutator: PropTypes.object,
     getProxies: PropTypes.func,
     getSponsors: PropTypes.func,
-    // assignedRoleIds, updateUserRoles comes from withUserRoles HOC
+    /* assignedRoleIds, updateUserRoles,checkUserInKeycloak, setIsCreateKeycloakUserConfirmationOpen,
+    isCreateKeycloakUserConfirmationOpen,submitCreateKeycloakUser comes from withUserRoles HOC
+    */
     updateUserRoles: PropTypes.func,
     assignedRoleIds: PropTypes.arrayOf(PropTypes.string),
+    checkUserInKeycloak: PropTypes.func,
+    setIsCreateKeycloakUserConfirmationOpen: PropTypes.func,
+    isCreateKeycloakUserConfirmationOpen: PropTypes.bool,
+    submitCreateKeycloakUser: PropTypes.func,
   }
 
   static contextType = CalloutContext;
@@ -236,24 +243,32 @@ class UserEdit extends React.Component {
     mutator.userReadingRoomPermissions.PUT(payload);
   }
 
+  onCompleteEdit = () => {
+    const {
+      match: { params },
+      history,
+      location: {
+        state,
+        search,
+      },
+    } = this.props;
+    history.push({
+      pathname: params.id ? `/users/preview/${params.id}` : '/users',
+      search,
+      state,
+    });
+  }
+
   update({ requestPreferences, readingRoomsAccessList, ...userFormData }) {
     const {
       updateProxies,
       updateSponsors,
       updateServicePoints,
-      updateUserRoles,
-      mutator,
-      history,
       resources,
-      match: { params },
-      location: {
-        state,
-        search,
-      },
       stripes,
     } = this.props;
 
-    const propertiesToOmit = ['creds', 'proxies', 'sponsors', 'permissions', 'servicePoints', 'preferredServicePoint'];
+    const propertiesToOmit = ['creds', 'proxies', 'sponsors', 'permissions', 'servicePoints', 'preferredServicePoint', 'assignedRoleIds'];
     const user = cloneDeep(userFormData);
     const prevUser = resources?.selUser?.records?.[0] ?? {};
 
@@ -294,12 +309,6 @@ class UserEdit extends React.Component {
       updateServicePoints(servicePoints, preferredServicePoint);
     }
 
-    if (stripes.hasInterface('roles')) {
-      updateUserRoles(user.assignedRoleIds);
-    } else {
-      propertiesToOmit.push('assignedRoleIds');
-    }
-
     const data = omit(user, propertiesToOmit);
     const today = moment().endOf('day');
     const curActive = user.active;
@@ -316,15 +325,49 @@ class UserEdit extends React.Component {
       data.active = (moment(user.expirationDate).endOf('day').isSameOrAfter(today));
     }
 
-    mutator.selUser
-      .PUT(data).then(() => {
-        history.push({
-          pathname: params.id ? `/users/preview/${params.id}` : '/users',
-          search,
-          state,
-        });
-      })
-      .catch((e) => showErrorCallout(e, this.context.sendCallout));
+    this.updateUserData(data, user);
+  }
+
+  async updateUserData(data, user) {
+    const { mutator, stripes, checkUserInKeycloak, setIsCreateKeycloakUserConfirmationOpen } = this.props;
+    try {
+      await mutator.selUser.PUT(data);
+
+      if (!stripes.hasInterface('roles')) {
+        this.onCompleteEdit();
+        return;
+      }
+
+      const userKeycloakStatus = await checkUserInKeycloak();
+
+      /* KEYCLOAK_USER_EXISTENCE was introduced to indicate whether a user exists in Keycloak.
+      While we typically determine a user's existence based on a 404 error code, there are cases where a 403 or other error codes may occur.
+       */
+
+      switch (userKeycloakStatus) {
+        case KEYCLOAK_USER_EXISTANCE.exist:
+          await this.handleKeycloakUserExists(user);
+          break;
+        case KEYCLOAK_USER_EXISTANCE.nonExist:
+          setIsCreateKeycloakUserConfirmationOpen(true);
+          break;
+        default:
+          break;
+      }
+    } catch (e) {
+      showErrorCallout(e, this.context.sendCallout);
+    }
+  }
+
+  async handleKeycloakUserExists(user) {
+    const { assignedRoleIds } = user;
+
+    if (isEqual(assignedRoleIds, this.props.assignedRoleIds)) {
+      this.onCompleteEdit();
+      return;
+    }
+    await this.props.updateUserRoles(assignedRoleIds);
+    this.onCompleteEdit();
   }
 
   async updatePermissions(userId, permissionsMap = {}) {
@@ -436,12 +479,21 @@ class UserEdit extends React.Component {
     }
   }
 
+  confirmCreateKeycloakUser = async (form) => {
+    const { submitCreateKeycloakUser, updateUserRoles } = this.props;
+    await submitCreateKeycloakUser();
+    await updateUserRoles(form.getState().values.assignedRoleIds);
+    this.onCompleteEdit();
+  }
+
   render() {
     const {
       history,
       resources,
       location,
       match: { params },
+      isCreateKeycloakUserConfirmationOpen,
+      setIsCreateKeycloakUserConfirmationOpen
     } = this.props;
 
     const profilePictureConfig = get(resources, 'settings.records[0]');
@@ -468,20 +520,16 @@ class UserEdit extends React.Component {
         formData={formData}
         initialValues={this.getUserFormValues()} // values are strictly values...if we're editing (id param present) pull in existing values.
         onSubmit={onSubmit}
-        onCancel={() => {
-          history.push({
-            pathname: params.id ? `/users/preview/${params.id}` : '/users',
-            state: location.state,
-            search: location.search,
-          });
-        }}
+        onCancel={this.onCompleteEdit}
         uniquenessValidator={this.props.mutator.uniquenessValidator}
         match={this.props.match}
         location={location}
         history={history}
         stripes={this.props.stripes}
         profilePictureConfig={profilePictureConfig}
-        assignedRoleIds={this.props.assignedRoleIds}
+        isCreateKeycloakUserConfirmationOpen={isCreateKeycloakUserConfirmationOpen}
+        onCancelKeycloakConfirmation={() => setIsCreateKeycloakUserConfirmationOpen(false)}
+        confirmCreateKeycloakUser={this.confirmCreateKeycloakUser}
       />
     );
   }
