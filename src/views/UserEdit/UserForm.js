@@ -111,6 +111,7 @@ class UserForm extends React.Component {
     checkUserInKeycloak: PropTypes.func,
     submitCreateKeycloakUser: PropTypes.func,
     updateUserRoles: PropTypes.func,
+    onCancelKeycloakConfirmation: PropTypes.func,
   };
 
   static defaultProps = {
@@ -336,7 +337,8 @@ class UserForm extends React.Component {
       form,
       uniquenessValidator,
       profilePictureConfig,
-      isCreateKeycloakUserConfirmationOpen
+      isCreateKeycloakUserConfirmationOpen,
+      onCancelKeycloakConfirmation
     } = this.props;
     const selectedPatronGroup = form.getFieldState('patronGroup')?.value;
     const firstMenu = this.getAddFirstMenu();
@@ -513,7 +515,7 @@ class UserForm extends React.Component {
               heading={<FormattedMessage id="ui-users.keycloak.modal.confirmationHeading" />}
               message={<FormattedMessage id="ui-users.keycloak.modal.creation" values={{ user:getFullName(form.getState().values) }} />}
               onConfirm={this.handleConfirmCreateKeycloakUser}
-              onCancel={onCancel}
+              onCancel={onCancelKeycloakConfirmation}
               open={isCreateKeycloakUserConfirmationOpen}
               confirmLabel={<FormattedMessage id="stripes-core.button.confirm" />}
             />

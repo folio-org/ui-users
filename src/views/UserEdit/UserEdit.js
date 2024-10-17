@@ -264,11 +264,8 @@ class UserEdit extends React.Component {
       updateProxies,
       updateSponsors,
       updateServicePoints,
-      updateUserRoles,
-      mutator,
       resources,
       stripes,
-      checkUserInKeycloak
     } = this.props;
 
     const propertiesToOmit = ['creds', 'proxies', 'sponsors', 'permissions', 'servicePoints', 'preferredServicePoint', 'assignedRoleIds'];
@@ -328,26 +325,45 @@ class UserEdit extends React.Component {
       data.active = (moment(user.expirationDate).endOf('day').isSameOrAfter(today));
     }
 
-    mutator.selUser
-      .PUT(data).then(() => {
-        if (!stripes.hasInterface('roles')) {
-          this.onCompleteEdit();
-          return;
-        }
-        checkUserInKeycloak().then(userKeycloakStatus => {
-          if (userKeycloakStatus === KEYCLOAK_USER_EXISTANCE.exist) {
-            if (isEqual(user.assignedRoleIds, this.props.assignedRoleIds)) {
-              this.onCompleteEdit();
-            } else {
-              updateUserRoles(user.assignedRoleIds).then(this.onCompleteEdit);
-            }
-          }
-          if (userKeycloakStatus === KEYCLOAK_USER_EXISTANCE.nonExist) {
-            this.props.setIsCreateKeycloakUserConfirmationOpen(true);
-          }
-        });
-      })
-      .catch((e) => showErrorCallout(e, this.context.sendCallout));
+    this.updateUserData(data, user);
+  }
+
+  async updateUserData(data, user) {
+    const { mutator, stripes, checkUserInKeycloak, setIsCreateKeycloakUserConfirmationOpen } = this.props;
+    try {
+      await mutator.selUser.PUT(data);
+
+      if (!stripes.hasInterface('roles')) {
+        this.onCompleteEdit();
+        return;
+      }
+
+      const userKeycloakStatus = await checkUserInKeycloak();
+
+      switch (userKeycloakStatus) {
+        case KEYCLOAK_USER_EXISTANCE.exist:
+          await this.handleKeycloakUserExists(user);
+          break;
+        case KEYCLOAK_USER_EXISTANCE.nonExist:
+          setIsCreateKeycloakUserConfirmationOpen(true);
+          break;
+        default:
+          break;
+      }
+    } catch (e) {
+      showErrorCallout(e, this.context.sendCallout);
+    }
+  }
+
+  async handleKeycloakUserExists(user) {
+    const { assignedRoleIds } = user;
+
+    if (isEqual(assignedRoleIds, this.props.assignedRoleIds)) {
+      this.onCompleteEdit();
+      return;
+    }
+    await this.props.updateUserRoles(assignedRoleIds);
+    this.onCompleteEdit();
   }
 
   async updatePermissions(userId, permissionsMap = {}) {
@@ -468,7 +484,8 @@ class UserEdit extends React.Component {
       isCreateKeycloakUserConfirmationOpen,
       checkUserInKeycloak,
       submitCreateKeycloakUser,
-      updateUserRoles
+      updateUserRoles,
+      setIsCreateKeycloakUserConfirmationOpen
     } = this.props;
 
     const profilePictureConfig = get(resources, 'settings.records[0]');
@@ -507,6 +524,7 @@ class UserEdit extends React.Component {
         checkUserInKeycloak={checkUserInKeycloak}
         submitCreateKeycloakUser={submitCreateKeycloakUser}
         updateUserRoles={updateUserRoles}
+        onCancelKeycloakConfirmation={() => setIsCreateKeycloakUserConfirmationOpen(false)}
       />
     );
   }
