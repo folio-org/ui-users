@@ -1,6 +1,10 @@
+import { FormattedMessage } from 'react-intl';
+
 const PatronPreRegistrationRecordsDuplicates = () => {
   return (
-    <div>Hello duplicates</div>
+    <div>
+      <FormattedMessage id="ui-users.stagingRecords.duplicates.results.paneTitle" />
+    </div>
   );
 };
 
