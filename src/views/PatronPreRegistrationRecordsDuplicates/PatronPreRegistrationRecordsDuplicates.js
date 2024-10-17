@@ -1,5 +1,5 @@
 export const PatronPreRegistrationRecordsDuplicates = () => {
   return (
-    <>Hello duplicates</>
+    <div>Hello duplicates</div>
   );
 };
