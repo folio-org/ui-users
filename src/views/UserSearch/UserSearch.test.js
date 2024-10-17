@@ -1,5 +1,6 @@
 import React from 'react';
 import { screen } from '@folio/jest-config-stripes/testing-library/react';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
 import renderWithRouter from 'helpers/renderWithRouter';
 import '../../../test/jest/__mock__/matchMedia.mock';
@@ -18,6 +19,9 @@ jest.mock('@folio/stripes/smart-components', () => {
     useCustomFields: jest.fn(() => [[customField]]),
   };
 });
+jest.mock('../../components/LinkToPatronPreRegistrations', () => {
+  return () => <div>LinkToPatronPreRegistrations</div>;
+});
 
 const defaultProps = {
   mutator: {},
@@ -28,6 +32,7 @@ const defaultProps = {
   },
   stripes: {
     hasInterface: jest.fn(),
+    hasPerm: () => true,
   },
   location: {},
   history: {},
@@ -47,6 +52,20 @@ const renderComponent = (props) => renderWithRouter(<UserSearch {...defaultProps
 describe('UserSearch', () => {
   it('should render component', () => {
     renderComponent();
-    expect(screen.getByText('ui-users.status')).toBeTruthy();
+    expect(screen.getByText('ui-users.userSearchResults')).toBeInTheDocument();
+  });
+
+  it('should render actions menu', () => {
+    renderComponent();
+    expect(screen.getByText('ui-users.actions')).toBeInTheDocument();
+  });
+
+  it('should display "Search patron preregistration records"', async () => {
+    renderComponent();
+    const actionsButton = screen.getByText('ui-users.actions');
+
+    await userEvent.click(actionsButton);
+
+    expect(screen.getByText('LinkToPatronPreRegistrations')).toBeInTheDocument();
   });
 });
