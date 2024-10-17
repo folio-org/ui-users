@@ -2,9 +2,9 @@ import noop from 'lodash/noop';
 import { useMutation } from 'react-query';
 import { useHistory } from 'react-router-dom';
 
-import { useUserDuplicatesCheck } from './useUserDuplicatesCheck';
+import useUserDuplicatesCheck from './useUserDuplicatesCheck';
 
-export const useNewRecordHandler = () => {
+const useNewRecordHandler = () => {
   const history = useHistory();
   const { checkDuplicates } = useUserDuplicatesCheck();
 
@@ -31,3 +31,5 @@ export const useNewRecordHandler = () => {
     isLoading,
   };
 };
+
+export default useNewRecordHandler;

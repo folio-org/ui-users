@@ -1,1 +1,2 @@
-export { getPatronDuplicatesQuery } from './getPatronDuplicatesQuery';
+// eslint-disable-next-line import/prefer-default-export
+export { default as getPatronDuplicatesQuery } from './getPatronDuplicatesQuery';
