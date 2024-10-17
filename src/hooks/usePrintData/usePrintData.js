@@ -17,14 +17,15 @@ export function buildTemplate(template = '') {
   };
 }
 
-export const mapEntityToTemplate = (entity, type, formatTime) => {
+export const mapEntityToTemplate = (entity, type, formatTime, patronGroup) => {
   if (type === SLIPS_TYPES.DUE_DATE) {
     return {
       'borrower.firstName': get(entity, 'borrower.firstName'),
       'borrower.preferredFirstName': get(entity, 'borrower.preferredFirstName'),
       'borrower.middleName': get(entity, 'borrower.middleName'),
       'borrower.lastName': get(entity, 'borrower.lastName'),
-      'borrower.patronGroup': get(entity, 'patronGroupAtCheckout.name'),
+      'borrower.patronGroup': get(entity, 'borrower.patronGroup') === patronGroup?.id ? patronGroup.group : undefined,
+
       'item.title': get(entity, 'item.title'),
       'item.primaryContributor': get(entity, 'item.primaryContributor'),
       'loan.dueDate': formatDateAndTime(get(entity, 'dueDate'), formatTime),
@@ -34,7 +35,7 @@ export const mapEntityToTemplate = (entity, type, formatTime) => {
   return entity;
 };
 
-const usePrintData = (entities = [], type = SLIPS_TYPES.DUE_DATE) => {
+const usePrintData = (entities = [], type = SLIPS_TYPES.DUE_DATE, patronGroup = {}) => {
   const { formatTime } = useIntl();
   const { staffSlips } = useStaffSlips();
   const contentRef = useRef(null);
@@ -42,7 +43,7 @@ const usePrintData = (entities = [], type = SLIPS_TYPES.DUE_DATE) => {
 
   const template = useMemo(() => staffSlips.find(slip => slip.name === type)?.template, [staffSlips, type]);
 
-  const dataSource = useMemo(() => entities.map(entity => mapEntityToTemplate(entity, type, formatTime)), [entities, type, formatTime]);
+  const dataSource = useMemo(() => entities.map(entity => mapEntityToTemplate(entity, type, formatTime, patronGroup)), [entities, type, formatTime, patronGroup]);
 
   const templateFn = useMemo(() => buildTemplate(template), [template]);
 

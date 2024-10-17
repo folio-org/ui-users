@@ -25,6 +25,7 @@ export default function getListDataFormatter(
   getContributorslist,
   feeFineCount,
   user,
+  patronGroup
 ) {
   return {
     '  ' : {
@@ -149,6 +150,7 @@ export default function getListDataFormatter(
             <ActionsDropdown
               stripes={stripes}
               loan={loan}
+              patronGroup={patronGroup}
               requestQueue={requestQueue}
               itemRequestCount={itemRequestCount}
               disableFeeFineDetails={disableFeeFineDetails}
