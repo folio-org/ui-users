@@ -79,7 +79,7 @@ describe('mapEntityToTemplate', () => {
         preferredFirstName: 'Janie',
         middleName: 'A.',
         lastName: 'Doe',
-        patronGroup: 'Regular',
+        patronGroup: '1234',
       },
       item: {
         title: 'The Great Gatsby',
@@ -94,7 +94,10 @@ describe('mapEntityToTemplate', () => {
     // Mock `formatDateAndTime` to return a formatted date
     formatDateAndTime.mockReturnValue('October 10, 2024');
 
-    const result = mapEntityToTemplate(entity, SLIPS_TYPES.DUE_DATE, 'short');
+    const result = mapEntityToTemplate(entity, SLIPS_TYPES.DUE_DATE, 'short', {
+      group: 'facility',
+      id: '1234'
+    });
 
     expect(result).toEqual({
       'borrower.firstName': 'Jane',
