@@ -24,9 +24,9 @@ const useUserDuplicatesCheck = (options = {}) => {
         limit: 1,
       };
 
-      const { users } = await ky.get(USERS_API, { searchParams }).json();
+      const { totalRecords } = await ky.get(USERS_API, { searchParams }).json();
 
-      return users.length > 0;
+      return totalRecords > 0;
     }
   });
 

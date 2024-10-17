@@ -17,6 +17,24 @@ import {
 } from './constants';
 import { useNewRecordHandler } from './hooks';
 
+const ActionColumn = ({ user }) => {
+  const {
+    handle,
+    isLoading,
+  } = useNewRecordHandler();
+
+  return (
+    <Button
+      type="button"
+      disabled={isLoading}
+      onClick={() => handle(user)}
+      marginBottom0
+    >
+      <FormattedMessage id="stripes-components.addNew" />
+    </Button>
+  );
+};
+
 const PatronsPreRegistrationList = ({
   data,
   isEmptyMessage,
@@ -25,22 +43,8 @@ const PatronsPreRegistrationList = ({
 }) => {
   const intl = useIntl();
 
-  const {
-    handle,
-    isLoading,
-  } = useNewRecordHandler();
-
   const preRegistrationsListFormatter = () => ({
-    [COLUMNS_NAME.ACTION]: (user) => (
-      <Button
-        type="button"
-        disabled={isLoading}
-        onClick={() => handle(user)}
-        marginBottom0
-      >
-        <FormattedMessage id="stripes-components.addNew" />
-      </Button>
-    ),
+    [COLUMNS_NAME.ACTION]: (user) => <ActionColumn user={user} />,
     [COLUMNS_NAME.FIRST_NAME]: user => get(user, ['generalInfo', 'firstName']),
     [COLUMNS_NAME.LAST_NAME]: user => get(user, ['generalInfo', 'lastName']),
     [COLUMNS_NAME.MIDDLE_NAME]: user => get(user, ['generalInfo', 'middleName']),
@@ -82,6 +86,10 @@ const PatronsPreRegistrationList = ({
       visibleColumns={visibleColumns}
     />
   );
+};
+
+ActionColumn.propTypes = {
+  user: PropTypes.isRequired,
 };
 
 PatronsPreRegistrationList.propTypes = {

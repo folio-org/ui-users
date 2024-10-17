@@ -6,7 +6,10 @@ import {
 import { renderHook } from '@folio/jest-config-stripes/testing-library/react';
 import { useOkapiKy } from '@folio/stripes/core';
 
-import { USER_TYPES, USERS_API } from '../../../constants';
+import {
+  USER_TYPES,
+  USERS_API,
+} from '../../../constants';
 import useUserDuplicatesCheck from './useUserDuplicatesCheck';
 
 const queryClient = new QueryClient();
@@ -22,7 +25,7 @@ describe('useUserDuplicatesCheck', () => {
   beforeEach(() => {
     kyMock = {
       get: jest.fn().mockReturnValue({
-        json: jest.fn().mockResolvedValue({ users: [] }),
+        json: jest.fn().mockResolvedValue({ totalRecords: 0 }),
       }),
     };
     useOkapiKy.mockReturnValue(kyMock);
@@ -58,7 +61,7 @@ describe('useUserDuplicatesCheck', () => {
     const email = 'test@example.com';
 
     kyMock.get.mockReturnValueOnce({
-      json: jest.fn().mockResolvedValue({ users: [{ id: '1' }] }),
+      json: jest.fn().mockResolvedValue({ totalRecords: 2 }),
     });
 
     const { result } = renderHook(() => useUserDuplicatesCheck(), { wrapper });
