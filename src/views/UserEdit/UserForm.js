@@ -112,6 +112,7 @@ class UserForm extends React.Component {
     submitCreateKeycloakUser: PropTypes.func,
     updateUserRoles: PropTypes.func,
     onCancelKeycloakConfirmation: PropTypes.func,
+    confirmCreateKeycloakUser: PropTypes.func,
   };
 
   static defaultProps = {
@@ -320,10 +321,7 @@ class UserForm extends React.Component {
   };
 
   handleConfirmCreateKeycloakUser = async () => {
-    const { submitCreateKeycloakUser, updateUserRoles, form, onCancel } = this.props;
-    await submitCreateKeycloakUser();
-    await updateUserRoles(form.getState().values.assignedRoleIds);
-    onCancel();
+    await this.props.confirmCreateKeycloakUser(this.props.form);
   }
 
   render() {

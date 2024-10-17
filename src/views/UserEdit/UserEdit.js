@@ -475,6 +475,13 @@ class UserEdit extends React.Component {
     }
   }
 
+  async confirmCreateKeycloakUser(form) {
+    const { submitCreateKeycloakUser, updateUserRoles } = this.props;
+    await submitCreateKeycloakUser();
+    await updateUserRoles(form.getState().values.assignedRoleIds);
+    this.onCompleteEdit();
+  }
+
   render() {
     const {
       history,
@@ -525,6 +532,7 @@ class UserEdit extends React.Component {
         submitCreateKeycloakUser={submitCreateKeycloakUser}
         updateUserRoles={updateUserRoles}
         onCancelKeycloakConfirmation={() => setIsCreateKeycloakUserConfirmationOpen(false)}
+        confirmCreateKeycloakUser={this.confirmCreateKeycloakUser}
       />
     );
   }
