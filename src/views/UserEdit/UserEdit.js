@@ -340,6 +340,10 @@ class UserEdit extends React.Component {
 
       const userKeycloakStatus = await checkUserInKeycloak();
 
+      /* KEYCLOAK_USER_EXISTENCE was introduced to indicate whether a user exists in Keycloak.
+      While we typically determine a user's existence based on a 404 error code, there are cases where a 403 or other error codes may occur.
+       */
+
       switch (userKeycloakStatus) {
         case KEYCLOAK_USER_EXISTANCE.exist:
           await this.handleKeycloakUserExists(user);
@@ -475,7 +479,7 @@ class UserEdit extends React.Component {
     }
   }
 
-  async confirmCreateKeycloakUser(form) {
+  confirmCreateKeycloakUser = async (form) => {
     const { submitCreateKeycloakUser, updateUserRoles } = this.props;
     await submitCreateKeycloakUser();
     await updateUserRoles(form.getState().values.assignedRoleIds);
@@ -489,9 +493,6 @@ class UserEdit extends React.Component {
       location,
       match: { params },
       isCreateKeycloakUserConfirmationOpen,
-      checkUserInKeycloak,
-      submitCreateKeycloakUser,
-      updateUserRoles,
       setIsCreateKeycloakUserConfirmationOpen
     } = this.props;
 
@@ -526,11 +527,7 @@ class UserEdit extends React.Component {
         history={history}
         stripes={this.props.stripes}
         profilePictureConfig={profilePictureConfig}
-        assignedRoleIds={this.props.assignedRoleIds}
         isCreateKeycloakUserConfirmationOpen={isCreateKeycloakUserConfirmationOpen}
-        checkUserInKeycloak={checkUserInKeycloak}
-        submitCreateKeycloakUser={submitCreateKeycloakUser}
-        updateUserRoles={updateUserRoles}
         onCancelKeycloakConfirmation={() => setIsCreateKeycloakUserConfirmationOpen(false)}
         confirmCreateKeycloakUser={this.confirmCreateKeycloakUser}
       />
