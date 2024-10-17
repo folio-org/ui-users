@@ -21,10 +21,9 @@ const useNewRecordHandler = () => {
   } = useMutation({
     mutationFn: checkDuplicates,
     onSuccess: (hasDuplicates, user) => {
-      return hasDuplicates
-        ? handleDuplicates(user, history)
-        // TODO: https://folio-org.atlassian.net/browse/UIU-3223
-        : noop();
+      const handleSuccess = hasDuplicates ? handleDuplicates : noop;
+
+      handleSuccess(user, history);
     },
   });
 

@@ -17,13 +17,20 @@ import {
 } from './constants';
 import { useNewRecordHandler } from './hooks';
 
-const ActionColumn = ({ user }) => {
+const PatronsPreRegistrationList = ({
+  data,
+  isEmptyMessage,
+  totalCount,
+  onNeedMoreData
+}) => {
+  const intl = useIntl();
+
   const {
     handle,
     isLoading,
   } = useNewRecordHandler();
 
-  return (
+  const renderActionColumn = (user) => (
     <Button
       type="button"
       disabled={isLoading}
@@ -33,18 +40,9 @@ const ActionColumn = ({ user }) => {
       <FormattedMessage id="stripes-components.addNew" />
     </Button>
   );
-};
-
-const PatronsPreRegistrationList = ({
-  data,
-  isEmptyMessage,
-  totalCount,
-  onNeedMoreData
-}) => {
-  const intl = useIntl();
 
   const preRegistrationsListFormatter = () => ({
-    [COLUMNS_NAME.ACTION]: (user) => <ActionColumn user={user} />,
+    [COLUMNS_NAME.ACTION]: renderActionColumn,
     [COLUMNS_NAME.FIRST_NAME]: user => get(user, ['generalInfo', 'firstName']),
     [COLUMNS_NAME.LAST_NAME]: user => get(user, ['generalInfo', 'lastName']),
     [COLUMNS_NAME.MIDDLE_NAME]: user => get(user, ['generalInfo', 'middleName']),
@@ -86,10 +84,6 @@ const PatronsPreRegistrationList = ({
       visibleColumns={visibleColumns}
     />
   );
-};
-
-ActionColumn.propTypes = {
-  user: PropTypes.isRequired,
 };
 
 PatronsPreRegistrationList.propTypes = {
