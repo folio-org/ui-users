@@ -1,1 +1,1 @@
-export { PatronPreRegistrationRecordsDuplicates } from './PatronPreRegistrationRecordsDuplicates';
+export { default } from './PatronPreRegistrationRecordsDuplicates';
