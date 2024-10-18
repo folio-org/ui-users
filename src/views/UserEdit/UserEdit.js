@@ -49,9 +49,15 @@ class UserEdit extends React.Component {
     mutator: PropTypes.object,
     getProxies: PropTypes.func,
     getSponsors: PropTypes.func,
-    // assignedRoleIds, updateUserRoles comes from withUserRoles HOC
-    updateUserRoles: PropTypes.func,
+    /* assignedRoleIds, updateUserRoles,checkUserInKeycloak, setIsCreateKeycloakUserConfirmationOpen,
+    isCreateKeycloakUserConfirmationOpen,submitCreateKeycloakUser comes from withUserRoles HOC
+    */
     assignedRoleIds: PropTypes.arrayOf(PropTypes.string),
+    setAssignedRoleIds: PropTypes.func,
+    isCreateKeycloakUserConfirmationOpen: PropTypes.bool,
+    initialAssignedRoleIds: PropTypes.arrayOf(PropTypes.string),
+    checkAndHandleKeycloakAuthUser: PropTypes.func,
+    confirmCreateKeycloakUser: PropTypes.func
   }
 
   static contextType = CalloutContext;
@@ -79,7 +85,7 @@ class UserEdit extends React.Component {
       getSponsors,
       getPreferredServicePoint,
       getUserServicePoints,
-      assignedRoleIds,
+      initialAssignedRoleIds,
       match,
     } = this.props;
 
@@ -119,7 +125,7 @@ class UserEdit extends React.Component {
       proxies: getProxies(),
       sponsors: getSponsors(),
       servicePoints: getUserServicePoints(),
-      assignedRoleIds,
+      assignedRoleIds: initialAssignedRoleIds,
       requestPreferences: {
         ...initialFormValues.requestPreferences,
         ...get(this.props.resources, 'requestPreferences.records[0].requestPreferences[0]', {})
@@ -236,20 +242,28 @@ class UserEdit extends React.Component {
     mutator.userReadingRoomPermissions.PUT(payload);
   }
 
+  onCompleteEdit = () => {
+    const {
+      match: { params },
+      history,
+      location: {
+        state,
+        search,
+      },
+    } = this.props;
+    history.push({
+      pathname: params.id ? `/users/preview/${params.id}` : '/users',
+      search,
+      state,
+    });
+  }
+
   update({ requestPreferences, readingRoomsAccessList, ...userFormData }) {
     const {
       updateProxies,
       updateSponsors,
       updateServicePoints,
-      updateUserRoles,
-      mutator,
-      history,
       resources,
-      match: { params },
-      location: {
-        state,
-        search,
-      },
       stripes,
     } = this.props;
 
@@ -294,10 +308,6 @@ class UserEdit extends React.Component {
       updateServicePoints(servicePoints, preferredServicePoint);
     }
 
-    if (stripes.hasInterface('roles')) {
-      updateUserRoles(user.assignedRoleIds);
-    }
-
     const data = omit(user, propertiesToOmit);
     const today = moment().endOf('day');
     const curActive = user.active;
@@ -314,15 +324,23 @@ class UserEdit extends React.Component {
       data.active = (moment(user.expirationDate).endOf('day').isSameOrAfter(today));
     }
 
-    mutator.selUser
-      .PUT(data).then(() => {
-        history.push({
-          pathname: params.id ? `/users/preview/${params.id}` : '/users',
-          search,
-          state,
-        });
-      })
-      .catch((e) => showErrorCallout(e, this.context.sendCallout));
+    this.updateUserData(data, user);
+  }
+
+  async updateUserData(data) {
+    const { mutator, stripes } = this.props;
+    try {
+      await mutator.selUser.PUT(data);
+
+      if (!stripes.hasInterface('roles')) {
+        this.onCompleteEdit();
+        return;
+      }
+
+      await this.props.checkAndHandleKeycloakAuthUser(this.onCompleteEdit);
+    } catch (e) {
+      showErrorCallout(e, this.context.sendCallout);
+    }
   }
 
   async updatePermissions(userId, permissionsMap = {}) {
@@ -440,6 +458,9 @@ class UserEdit extends React.Component {
       resources,
       location,
       match: { params },
+      isCreateKeycloakUserConfirmationOpen,
+      setAssignedRoleIds,
+      assignedRoleIds
     } = this.props;
 
     const profilePictureConfig = get(resources, 'settings.records[0]');
@@ -466,20 +487,18 @@ class UserEdit extends React.Component {
         formData={formData}
         initialValues={this.getUserFormValues()} // values are strictly values...if we're editing (id param present) pull in existing values.
         onSubmit={onSubmit}
-        onCancel={() => {
-          history.push({
-            pathname: params.id ? `/users/preview/${params.id}` : '/users',
-            state: location.state,
-            search: location.search,
-          });
-        }}
+        onCancel={this.onCompleteEdit}
         uniquenessValidator={this.props.mutator.uniquenessValidator}
         match={this.props.match}
         location={location}
         history={history}
         stripes={this.props.stripes}
         profilePictureConfig={profilePictureConfig}
-        assignedRoleIds={this.props.assignedRoleIds}
+        isCreateKeycloakUserConfirmationOpen={isCreateKeycloakUserConfirmationOpen}
+        onCancelKeycloakConfirmation={this.onCompleteEdit}
+        confirmCreateKeycloakUser={() => this.props.confirmCreateKeycloakUser(this.onCompleteEdit)}
+        setAssignedRoleIds={setAssignedRoleIds}
+        assignedRoleIds={assignedRoleIds}
       />
     );
   }

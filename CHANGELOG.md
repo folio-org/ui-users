@@ -67,6 +67,7 @@
 * Omit `assignedRoleIds` field on edit user. Refs UIU-3233. 
 * Review existing FOLIO user records on duplicates view. Refs UIU-3224.
 * Create new permission 'Users: Can merge patron preregistration data'. Refs UIU-3237.
+* Confirmation dialog when JIT AuthUser creation is required. Refs UIU-3192.
 
 ## [10.1.2](https://github.com/folio-org/ui-users/tree/v10.1.2) (2024-09-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.1.1...v10.1.2)
