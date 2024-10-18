@@ -48,8 +48,7 @@ const mockKy = {
 
 const WrappedComponent = ({ assignedRoleIds,
   setAssignedRoleIds,
-  checkAndHandleKeycloakAuthUser,
-  closeKeycloakConfirmationDialog, confirmCreateKeycloakUser }) => (
+  checkAndHandleKeycloakAuthUser, confirmCreateKeycloakUser }) => (
     <div data-testid="assigned-role-ids">{assignedRoleIds.join(', ')}
       <button
         type="submit"
@@ -67,7 +66,6 @@ const WrappedComponent = ({ assignedRoleIds,
           })}
         >Confirm
         </button>
-        <button type="button" onClick={closeKeycloakConfirmationDialog} data-testid="cancel" id="cancel">Cancel</button>
       </div>
     </div>
 );
@@ -97,20 +95,12 @@ describe('withUserRoles HOC', () => {
     await userEvent.click(getByTestId('submit-form'));
   });
 
-  it('close confirmation dialog', async () => {
-    const ComponentWithUserRoles = withUserRoles(WrappedComponent);
-    const { getByTestId } = render(<ComponentWithUserRoles match={{ params: { id: 'user1' } }} stripes={{ hasInterface: jest.fn().mockReturnValue(true) }} />);
-
-    await userEvent.click(getByTestId('cancel'));
-  });
-
-  it('submit form changing user role ids and cancel confirmation dialog', async () => {
+  it('submit form changing user role ids', async () => {
     const ComponentWithUserRoles = withUserRoles(WrappedComponent);
     const { getByTestId } = render(<ComponentWithUserRoles match={{ params: { id: 'user1' } }} stripes={{ hasInterface: jest.fn().mockReturnValue(true) }} />);
 
     await userEvent.click(getByTestId('assignRoles'));
     await userEvent.click(getByTestId('submit-form'));
-    await userEvent.click(getByTestId('cancel'));
   });
 
   it('submit form after changing user role ids', async () => {

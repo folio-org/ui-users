@@ -54,7 +54,6 @@ class UserEdit extends React.Component {
     */
     assignedRoleIds: PropTypes.arrayOf(PropTypes.string),
     setAssignedRoleIds: PropTypes.func,
-    closeKeycloakConfirmationDialog: PropTypes.func,
     isCreateKeycloakUserConfirmationOpen: PropTypes.bool,
     initialAssignedRoleIds: PropTypes.arrayOf(PropTypes.string),
     checkAndHandleKeycloakAuthUser: PropTypes.func,
@@ -460,7 +459,6 @@ class UserEdit extends React.Component {
       location,
       match: { params },
       isCreateKeycloakUserConfirmationOpen,
-      closeKeycloakConfirmationDialog,
       setAssignedRoleIds,
       assignedRoleIds
     } = this.props;
@@ -497,7 +495,7 @@ class UserEdit extends React.Component {
         stripes={this.props.stripes}
         profilePictureConfig={profilePictureConfig}
         isCreateKeycloakUserConfirmationOpen={isCreateKeycloakUserConfirmationOpen}
-        onCancelKeycloakConfirmation={closeKeycloakConfirmationDialog}
+        onCancelKeycloakConfirmation={this.onCompleteEdit}
         confirmCreateKeycloakUser={() => this.props.confirmCreateKeycloakUser(this.onCompleteEdit)}
         setAssignedRoleIds={setAssignedRoleIds}
         assignedRoleIds={assignedRoleIds}

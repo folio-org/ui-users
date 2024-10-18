@@ -113,16 +113,12 @@ const withUserRoles = (WrappedComponent) => (props) => {
     await updateUserRoles(assignedRoleIds);
     onFinish();
   };
-  const closeKeycloakConfirmationDialog = () => {
-    setIsCreateKeycloakUserConfirmationOpen(false);
-  };
 
   return <WrappedComponent
     {...props}
     assignedRoleIds={assignedRoleIds}
     setAssignedRoleIds={setAssignedRoleIds}
     isCreateKeycloakUserConfirmationOpen={isCreateKeycloakUserConfirmationOpen}
-    closeKeycloakConfirmationDialog={closeKeycloakConfirmationDialog}
     initialAssignedRoleIds={initialAssignedRoleIds}
     checkAndHandleKeycloakAuthUser={checkAndHandleKeycloakAuthUser}
     confirmCreateKeycloakUser={confirmCreateKeycloakUser}
