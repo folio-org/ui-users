@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { useStripes, useOkapiKy, useCallout } from '@folio/stripes/core';
+import isEqual from 'lodash/isEqual';
 import { useAllRolesData, useCreateAuthUserKeycloak } from '../../hooks';
 import { KEYCLOAK_USER_EXISTANCE } from '../../constants';
 import { showErrorCallout } from '../../views/UserEdit/UserEditHelpers';
@@ -10,6 +11,7 @@ const withUserRoles = (WrappedComponent) => (props) => {
   // eslint-disable-next-line react/prop-types
   const userId = props.match.params.id;
   const [assignedRoleIds, setAssignedRoleIds] = useState([]);
+  const [initialAssignedRoleIds, setInitialAssignedRoleIds] = useState([]);
   const [isCreateKeycloakUserConfirmationOpen, setIsCreateKeycloakUserConfirmationOpen] = useState(false);
   const callout = useCallout();
   const sendErrorCallout = error => showErrorCallout(error, callout.sendCallout);
@@ -38,6 +40,7 @@ const withUserRoles = (WrappedComponent) => (props) => {
     }).sort((a, b) => a.name.localeCompare(b.name)).map(r => r.id);
 
     setAssignedRoleIds(assignedRoles);
+    setInitialAssignedRoleIds(assignedRoles);
   }, [allRolesMapStructure]);
 
   useEffect(() => {
@@ -82,15 +85,47 @@ const withUserRoles = (WrappedComponent) => (props) => {
     await createKeycloakUser(userId);
   };
 
+  const handleKeycloakUserExists = async (onFinish) => {
+    if (isEqual(assignedRoleIds, initialAssignedRoleIds)) {
+      onFinish();
+      return;
+    }
+    await updateUserRoles(assignedRoleIds);
+    onFinish();
+  };
+
+  const checkAndHandleKeycloakAuthUser = async (onFinish) => {
+    const userKeycloakStatus = await checkUserInKeycloak();
+    switch (userKeycloakStatus) {
+      case KEYCLOAK_USER_EXISTANCE.exist:
+        await handleKeycloakUserExists(onFinish);
+        break;
+      case KEYCLOAK_USER_EXISTANCE.nonExist:
+        setIsCreateKeycloakUserConfirmationOpen(true);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const confirmCreateKeycloakUser = async (onFinish) => {
+    await submitCreateKeycloakUser();
+    await updateUserRoles(assignedRoleIds);
+    onFinish();
+  };
+  const closeKeycloakConfirmationDialog = () => {
+    setIsCreateKeycloakUserConfirmationOpen(false);
+  };
+
   return <WrappedComponent
     {...props}
     assignedRoleIds={assignedRoleIds}
     setAssignedRoleIds={setAssignedRoleIds}
-    updateUserRoles={updateUserRoles}
-    checkUserInKeycloak={checkUserInKeycloak}
-    submitCreateKeycloakUser={submitCreateKeycloakUser}
     isCreateKeycloakUserConfirmationOpen={isCreateKeycloakUserConfirmationOpen}
-    setIsCreateKeycloakUserConfirmationOpen={setIsCreateKeycloakUserConfirmationOpen}
+    closeKeycloakConfirmationDialog={closeKeycloakConfirmationDialog}
+    initialAssignedRoleIds={initialAssignedRoleIds}
+    checkAndHandleKeycloakAuthUser={checkAndHandleKeycloakAuthUser}
+    confirmCreateKeycloakUser={confirmCreateKeycloakUser}
   />;
 };
 

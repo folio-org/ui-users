@@ -19,7 +19,6 @@ import {
   withOkapiKy,
 } from '@folio/stripes/core';
 
-import isEqual from 'lodash/isEqual';
 import { getRecordObject } from '../../components/util';
 
 import UserForm from './UserForm';
@@ -28,7 +27,7 @@ import contactTypes from '../../components/data/static/contactTypes';
 import {
   OKAPI_TENANT_HEADER,
   USER_FIELDS_TO_CHECK,
-  deliveryFulfillmentValues, KEYCLOAK_USER_EXISTANCE,
+  deliveryFulfillmentValues,
 } from '../../constants';
 import { resourcesLoaded, showErrorCallout } from './UserEditHelpers';
 import { preferredEmailCommunicationOptions } from '../../components/EditSections/EditContactInfo/constants';
@@ -53,12 +52,13 @@ class UserEdit extends React.Component {
     /* assignedRoleIds, updateUserRoles,checkUserInKeycloak, setIsCreateKeycloakUserConfirmationOpen,
     isCreateKeycloakUserConfirmationOpen,submitCreateKeycloakUser comes from withUserRoles HOC
     */
-    updateUserRoles: PropTypes.func,
     assignedRoleIds: PropTypes.arrayOf(PropTypes.string),
-    checkUserInKeycloak: PropTypes.func,
-    setIsCreateKeycloakUserConfirmationOpen: PropTypes.func,
+    setAssignedRoleIds: PropTypes.func,
+    closeKeycloakConfirmationDialog: PropTypes.func,
     isCreateKeycloakUserConfirmationOpen: PropTypes.bool,
-    submitCreateKeycloakUser: PropTypes.func,
+    initialAssignedRoleIds: PropTypes.arrayOf(PropTypes.string),
+    checkAndHandleKeycloakAuthUser: PropTypes.func,
+    confirmCreateKeycloakUser: PropTypes.func
   }
 
   static contextType = CalloutContext;
@@ -86,7 +86,7 @@ class UserEdit extends React.Component {
       getSponsors,
       getPreferredServicePoint,
       getUserServicePoints,
-      assignedRoleIds,
+      initialAssignedRoleIds,
       match,
     } = this.props;
 
@@ -126,7 +126,7 @@ class UserEdit extends React.Component {
       proxies: getProxies(),
       sponsors: getSponsors(),
       servicePoints: getUserServicePoints(),
-      assignedRoleIds,
+      assignedRoleIds: initialAssignedRoleIds,
       requestPreferences: {
         ...initialFormValues.requestPreferences,
         ...get(this.props.resources, 'requestPreferences.records[0].requestPreferences[0]', {})
@@ -328,8 +328,8 @@ class UserEdit extends React.Component {
     this.updateUserData(data, user);
   }
 
-  async updateUserData(data, user) {
-    const { mutator, stripes, checkUserInKeycloak, setIsCreateKeycloakUserConfirmationOpen } = this.props;
+  async updateUserData(data) {
+    const { mutator, stripes } = this.props;
     try {
       await mutator.selUser.PUT(data);
 
@@ -338,36 +338,10 @@ class UserEdit extends React.Component {
         return;
       }
 
-      const userKeycloakStatus = await checkUserInKeycloak();
-
-      /* KEYCLOAK_USER_EXISTENCE was introduced to indicate whether a user exists in Keycloak.
-      While we typically determine a user's existence based on a 404 error code, there are cases where a 403 or other error codes may occur.
-       */
-
-      switch (userKeycloakStatus) {
-        case KEYCLOAK_USER_EXISTANCE.exist:
-          await this.handleKeycloakUserExists(user);
-          break;
-        case KEYCLOAK_USER_EXISTANCE.nonExist:
-          setIsCreateKeycloakUserConfirmationOpen(true);
-          break;
-        default:
-          break;
-      }
+      await this.props.checkAndHandleKeycloakAuthUser(this.onCompleteEdit);
     } catch (e) {
       showErrorCallout(e, this.context.sendCallout);
     }
-  }
-
-  async handleKeycloakUserExists(user) {
-    const { assignedRoleIds } = user;
-
-    if (isEqual(assignedRoleIds, this.props.assignedRoleIds)) {
-      this.onCompleteEdit();
-      return;
-    }
-    await this.props.updateUserRoles(assignedRoleIds);
-    this.onCompleteEdit();
   }
 
   async updatePermissions(userId, permissionsMap = {}) {
@@ -479,13 +453,6 @@ class UserEdit extends React.Component {
     }
   }
 
-  confirmCreateKeycloakUser = async (form) => {
-    const { submitCreateKeycloakUser, updateUserRoles } = this.props;
-    await submitCreateKeycloakUser();
-    await updateUserRoles(form.getState().values.assignedRoleIds);
-    this.onCompleteEdit();
-  }
-
   render() {
     const {
       history,
@@ -493,7 +460,9 @@ class UserEdit extends React.Component {
       location,
       match: { params },
       isCreateKeycloakUserConfirmationOpen,
-      setIsCreateKeycloakUserConfirmationOpen
+      closeKeycloakConfirmationDialog,
+      setAssignedRoleIds,
+      assignedRoleIds
     } = this.props;
 
     const profilePictureConfig = get(resources, 'settings.records[0]');
@@ -528,8 +497,10 @@ class UserEdit extends React.Component {
         stripes={this.props.stripes}
         profilePictureConfig={profilePictureConfig}
         isCreateKeycloakUserConfirmationOpen={isCreateKeycloakUserConfirmationOpen}
-        onCancelKeycloakConfirmation={() => setIsCreateKeycloakUserConfirmationOpen(false)}
-        confirmCreateKeycloakUser={this.confirmCreateKeycloakUser}
+        onCancelKeycloakConfirmation={closeKeycloakConfirmationDialog}
+        confirmCreateKeycloakUser={() => this.props.confirmCreateKeycloakUser(this.onCompleteEdit)}
+        setAssignedRoleIds={setAssignedRoleIds}
+        assignedRoleIds={assignedRoleIds}
       />
     );
   }

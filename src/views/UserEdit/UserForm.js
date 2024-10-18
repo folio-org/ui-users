@@ -109,6 +109,8 @@ class UserForm extends React.Component {
     isCreateKeycloakUserConfirmationOpen: PropTypes.bool,
     onCancelKeycloakConfirmation: PropTypes.func,
     confirmCreateKeycloakUser: PropTypes.func,
+    setAssignedRoleIds: PropTypes.func,
+    assignedRoleIds: PropTypes.arrayOf(PropTypes.string),
   };
 
   static defaultProps = {
@@ -470,7 +472,8 @@ class UserForm extends React.Component {
                           setButtonRef={this.setButtonRef}
                         /> : <EditUserRoles
                           form={form}
-                          initialValues={initialValues}
+                          setAssignedRoleIds={this.props.setAssignedRoleIds}
+                          assignedRoleIds={this.props.assignedRoleIds}
                           accordionId="userRoles"
                         />
                       }

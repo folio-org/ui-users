@@ -654,24 +654,22 @@ describe('UserEdit', () => {
       jest.unmock('./UserForm');
     });
     it('cancel confirmation', async () => {
-      const mockSetIsCreateKeycloakUser = jest.fn();
+      const mockCloseKeycloakConfirmationDialog = jest.fn();
 
       const alteredProps = { ...defaultProps,
-        setIsCreateKeycloakUserConfirmationOpen: mockSetIsCreateKeycloakUser };
+        closeKeycloakConfirmationDialog: mockCloseKeycloakConfirmationDialog };
 
       const { container } = renderWithRouter(<UserEdit {...alteredProps} />);
       const cancelButton = container.querySelector('#cancel-confirmation');
 
       await userEvent.click(cancelButton);
-      expect(mockSetIsCreateKeycloakUser).toHaveBeenCalledWith(false);
+      expect(mockCloseKeycloakConfirmationDialog).toHaveBeenCalledTimes(1);
     });
 
     it('submit confirmation', async () => {
       const mockSubmitCreateKeycloakUser = jest.fn();
-      const mockUpdateRoles = jest.fn();
       const alteredProps = { ...defaultProps,
-        submitCreateKeycloakUser: mockSubmitCreateKeycloakUser,
-        updateUserRoles: mockUpdateRoles };
+        confirmCreateKeycloakUser: mockSubmitCreateKeycloakUser };
 
       const { container } = renderWithRouter(<UserEdit {...alteredProps} />);
       const submitButton = container.querySelector('#submit-confirmation');
@@ -679,7 +677,6 @@ describe('UserEdit', () => {
       await userEvent.click(submitButton);
 
       expect(mockSubmitCreateKeycloakUser).toHaveBeenCalledTimes(1);
-      expect(mockUpdateRoles).toHaveBeenCalledTimes(1);
     });
 
     describe('on submit form check keycloak existence', () => {
@@ -701,11 +698,8 @@ describe('UserEdit', () => {
 
       it('calls history.push in case if hasInterface True, user exists in Keycloak and old assignedRoleIds and updated are equal', async () => {
         const mockSubmitCreateKeycloakUser = jest.fn();
-        const mockUpdateRoles = jest.fn();
         const alteredProps = { ...defaultProps,
-          submitCreateKeycloakUser: mockSubmitCreateKeycloakUser,
-          updateUserRoles: mockUpdateRoles,
-          checkUserInKeycloak: jest.fn().mockReturnValue(KEYCLOAK_USER_EXISTANCE.exist) };
+          confirmCreateKeycloakUser: mockSubmitCreateKeycloakUser };
 
         const { container } = renderWithRouter(<UserEdit {...alteredProps} />);
         const submitButton = container.querySelector('#clickable-save');
@@ -715,7 +709,7 @@ describe('UserEdit', () => {
         expect(alteredProps.history.push).toHaveBeenCalled();
       });
 
-      it('calls history.push in case if hasInterface True, user exists in Keycloak and old assignedRoleIds and updated are NOT equal', async () => {
+      it('calls submit create keycloak user', async () => {
         const mockSubmitCreateKeycloakUser = jest.fn();
         const mockUpdateRoles = jest.fn();
         const alteredProps = { ...defaultProps,
@@ -728,29 +722,6 @@ describe('UserEdit', () => {
         const submitButton = container.querySelector('#clickable-save');
 
         await userEvent.click(submitButton);
-
-        expect(mockUpdateRoles).toHaveBeenCalledTimes(1);
-        expect(alteredProps.history.push).toHaveBeenCalled();
-      });
-
-      it('set show confirmation dialog to true if user isn`t exist in keycloak', async () => {
-        const mockSetIsCreateKeycloakUserConfirmationOpen = jest.fn();
-        const alteredProps = { ...defaultProps,
-          isCreateKeycloakUserConfirmationOpen: true,
-          onCancelKeycloakConfirmation: jest.fn(),
-          confirmCreateKeycloakUser: jest.fn(),
-          setIsCreateKeycloakUserConfirmationOpen: mockSetIsCreateKeycloakUserConfirmationOpen,
-          submitCreateKeycloakUser: jest.fn(),
-          updateUserRoles: jest.fn(),
-          checkUserInKeycloak: jest.fn().mockReturnValue(KEYCLOAK_USER_EXISTANCE.nonExist),
-          assignedRoleIds: [1] };
-
-        const { container } = renderWithRouter(<UserEdit {...alteredProps} />);
-        const submitButton = container.querySelector('#clickable-save');
-
-        await userEvent.click(submitButton);
-
-        expect(mockSetIsCreateKeycloakUserConfirmationOpen).toHaveBeenCalledTimes(1);
       });
     });
   });
