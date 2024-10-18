@@ -562,7 +562,6 @@ describe('UserEdit', () => {
       const { container } = renderWithRouter(<UserEdit {...alteredProps} />);
       const cancelButton = container.querySelector('#clickable-cancel');
       await userEvent.click(cancelButton);
-      console.log(alteredProps);
       expect(alteredProps.history.push).toHaveBeenCalled();
     });
   });
@@ -654,16 +653,11 @@ describe('UserEdit', () => {
       jest.unmock('./UserForm');
     });
     it('cancel confirmation', async () => {
-      const mockCloseKeycloakConfirmationDialog = jest.fn();
-
-      const alteredProps = { ...defaultProps,
-        closeKeycloakConfirmationDialog: mockCloseKeycloakConfirmationDialog };
-
-      const { container } = renderWithRouter(<UserEdit {...alteredProps} />);
+      const { container } = renderWithRouter(<UserEdit {...defaultProps} />);
       const cancelButton = container.querySelector('#cancel-confirmation');
 
       await userEvent.click(cancelButton);
-      expect(mockCloseKeycloakConfirmationDialog).toHaveBeenCalledTimes(1);
+      expect(defaultProps.history.push).toHaveBeenCalled();
     });
 
     it('submit confirmation', async () => {
