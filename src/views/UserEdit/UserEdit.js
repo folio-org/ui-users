@@ -253,7 +253,7 @@ class UserEdit extends React.Component {
       stripes,
     } = this.props;
 
-    const propertiesToOmit = ['creds', 'proxies', 'sponsors', 'permissions', 'servicePoints', 'preferredServicePoint'];
+    const propertiesToOmit = ['creds', 'proxies', 'sponsors', 'permissions', 'servicePoints', 'preferredServicePoint', 'assignedRoleIds'];
     const user = cloneDeep(userFormData);
     const prevUser = resources?.selUser?.records?.[0] ?? {};
 
@@ -296,8 +296,6 @@ class UserEdit extends React.Component {
 
     if (stripes.hasInterface('roles')) {
       updateUserRoles(user.assignedRoleIds);
-    } else {
-      propertiesToOmit.push('assignedRoleIds');
     }
 
     const data = omit(user, propertiesToOmit);

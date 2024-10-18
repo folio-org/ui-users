@@ -64,6 +64,7 @@
 * *BREAKING* Add new okapi interface staging-users. Add action button for searching patrons pre registration records. Refs UIU-3219.
 * Display patrons pre registration records results. Refs UIU-3222
 * Create new permission 'Users: Can view patron preregistration data'. Refs UIU-3221.
+* Omit `assignedRoleIds` field on edit user. Refs UIU-3233. 
 * Review existing FOLIO user records on duplicates view. Refs UIU-3224.
 
 ## [10.1.2](https://github.com/folio-org/ui-users/tree/v10.1.2) (2024-09-05)
