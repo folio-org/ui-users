@@ -1,18 +1,23 @@
 import noop from 'lodash/noop';
 import { useMutation } from 'react-query';
-import { useHistory } from 'react-router-dom';
+import {
+  useHistory,
+  useLocation,
+} from 'react-router-dom';
 
 import useUserDuplicatesCheck from './useUserDuplicatesCheck';
 
-const handleDuplicates = (user, history) => {
+const handleDuplicates = (user, history, location) => {
   history.push({
     pathname: '/users/pre-registration-records/duplicates',
     search: `?email=${user?.contactInfo?.email}`,
+    state: { search: location.search },
   });
 };
 
 const useNewRecordHandler = () => {
   const history = useHistory();
+  const location = useLocation();
   const { checkDuplicates } = useUserDuplicatesCheck();
 
   const {
@@ -21,9 +26,13 @@ const useNewRecordHandler = () => {
   } = useMutation({
     mutationFn: checkDuplicates,
     onSuccess: (hasDuplicates, user) => {
-      const handleSuccess = hasDuplicates ? handleDuplicates : noop;
+      const handleSuccess = () => (
+        hasDuplicates
+          ? handleDuplicates(user, history, location)
+          : noop()
+      );
 
-      handleSuccess(user, history);
+      handleSuccess();
     },
   });
 

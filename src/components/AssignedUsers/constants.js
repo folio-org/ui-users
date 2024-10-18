@@ -13,8 +13,6 @@ export const COLUMN_WIDTH = {
   groupName: '50%',
 };
 
-export const USERS_API = 'users';
-export const GROUPS_API = 'groups';
 export const PERMISSIONS_API = 'perms/users';
 
 export const CHUNK_SIZE = 25;
