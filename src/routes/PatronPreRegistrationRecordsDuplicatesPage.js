@@ -1,7 +1,9 @@
 import { PatronPreRegistrationRecordsDuplicates } from '../views';
 
-export const PatronPreRegistrationRecordsDuplicatesPage = () => {
+const PatronPreRegistrationRecordsDuplicatesPage = () => {
   return (
     <PatronPreRegistrationRecordsDuplicates />
   );
 };
+
+export default PatronPreRegistrationRecordsDuplicatesPage;

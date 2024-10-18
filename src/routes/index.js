@@ -9,6 +9,6 @@ export { default as LoansListingContainer } from './LoansListingContainer';
 export { default as LoanDetailContainer } from './LoanDetailContainer';
 export { default as AccountDetailsContainer } from './AccountDetailsContainer';
 export { default as LostItemsContainer } from './LostItemsContainer';
-export { PatronPreRegistrationRecordsDuplicatesPage } from './PatronPreRegistrationRecordsDuplicatesPage';
+export { default as PatronPreRegistrationRecordsDuplicatesPage } from './PatronPreRegistrationRecordsDuplicatesPage';
 export { default as PatronPreRegistrationRecordsContainer } from './PatronPreRegistrationRecordsContainer';
 export { default as PatronNoticePrintJobsContainer } from './PatronNoticePrintJobsContainer';
