@@ -1209,6 +1209,8 @@
   "roles.modal.search.header": "Search & filter",
   "roles.modal.filter.status.label": "Role assigment status",
   "roles.modal.header": "Select user roles",
+  "stagingRecords.duplicates.results.paneTitle": "Existing FOLIO user records",
+  "stagingRecords.duplicates.results.warning": "Please review existing FOLIO user records. Merging a preregistration record will replace corresponding fields in the FOLIO user record. Updates cannot be reverted.",
   "stagingRecords.list.search": "Search",
   "stagingRecords.search.placeholder": "Search by name or email",
   "stagingRecords.search.label": "Staging records search",
