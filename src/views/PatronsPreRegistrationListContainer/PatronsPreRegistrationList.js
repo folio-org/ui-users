@@ -1,9 +1,21 @@
+import get from 'lodash/get';
 import PropTypes from 'prop-types';
-import { MultiColumnList, Button } from '@folio/stripes/components';
-import { useIntl, FormattedMessage } from 'react-intl';
-import { get, noop } from 'lodash';
+import {
+  useIntl,
+  FormattedMessage,
+} from 'react-intl';
 
-import { visibleColumns, columnMapping, COLUMNS_NAME } from './constants';
+import {
+  MultiColumnList,
+  Button,
+} from '@folio/stripes/components';
+
+import {
+  visibleColumns,
+  columnMapping,
+  COLUMNS_NAME,
+} from './constants';
+import { useNewRecordHandler } from './hooks';
 
 const PatronsPreRegistrationList = ({
   data,
@@ -13,15 +25,24 @@ const PatronsPreRegistrationList = ({
 }) => {
   const intl = useIntl();
 
+  const {
+    handle,
+    isLoading,
+  } = useNewRecordHandler();
+
+  const renderActionColumn = (user) => (
+    <Button
+      type="button"
+      disabled={isLoading}
+      onClick={() => handle(user)}
+      marginBottom0
+    >
+      <FormattedMessage id="stripes-components.addNew" />
+    </Button>
+  );
+
   const preRegistrationsListFormatter = () => ({
-    [COLUMNS_NAME.ACTION]: () => (
-      <Button
-        type="button"
-        onClick={noop} // #TODO this will be updated in the scope of next ticket
-      >
-        <FormattedMessage id="stripes-components.addNew" />
-      </Button>
-    ),
+    [COLUMNS_NAME.ACTION]: renderActionColumn,
     [COLUMNS_NAME.FIRST_NAME]: user => get(user, ['generalInfo', 'firstName']),
     [COLUMNS_NAME.LAST_NAME]: user => get(user, ['generalInfo', 'lastName']),
     [COLUMNS_NAME.MIDDLE_NAME]: user => get(user, ['generalInfo', 'middleName']),
