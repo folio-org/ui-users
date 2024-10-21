@@ -1,3 +1,4 @@
+import debounce from 'lodash/debounce';
 import PropTypes from 'prop-types';
 import {
   useLayoutEffect,
@@ -31,7 +32,7 @@ const PatronPreRegistrationRecordsDuplicates = ({
   useLayoutEffect(() => {
     const observedElement = listWrapperRef.current;
 
-    const resizeObserver = new ResizeObserver((entries) => {
+    const resizeObserver = new ResizeObserver(debounce((entries) => {
       if (!entries.length) return;
 
       const { target } = entries[0];
@@ -41,7 +42,7 @@ const PatronPreRegistrationRecordsDuplicates = ({
 
         setWrapperHeight(listWrapperRef.current.parentElement.clientHeight - target.offsetTop - paddingBottom);
       }
-    });
+    }, 100));
 
     if (observedElement) {
       resizeObserver.observe(observedElement);

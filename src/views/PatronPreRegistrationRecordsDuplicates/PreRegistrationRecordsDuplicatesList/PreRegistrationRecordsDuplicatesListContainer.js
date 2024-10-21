@@ -1,3 +1,4 @@
+import noop from 'lodash/noop';
 import PropTypes from 'prop-types';
 
 import { usePatronGroups } from '../../../hooks';
@@ -15,7 +16,8 @@ const PreRegistrationRecordsDuplicatesListContainer = ({
     patronGroups,
   } = usePatronGroups({ enabled: Boolean(email) });
 
-  const onMerge = () => console.log('merge');
+  // TODO: https://folio-org.atlassian.net/browse/UIU-3225
+  const onMerge = () => noop();
 
   return (
     <PreRegistrationRecordsDuplicatesList
