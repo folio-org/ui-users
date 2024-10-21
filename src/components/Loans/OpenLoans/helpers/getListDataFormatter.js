@@ -25,7 +25,7 @@ export default function getListDataFormatter(
   getContributorslist,
   feeFineCount,
   user,
-  patronGroup
+  patronGroup = {}
 ) {
   return {
     '  ' : {
