@@ -57,6 +57,7 @@ const props = {
   match: { params: { id: 'mock-match-params-id' } },
   intl: { formatMessage : jest.fn() },
   user: okapiCurrentUser,
+  patronGroup: {},
 };
 
 describe('ActoinsDropdown component', () => {

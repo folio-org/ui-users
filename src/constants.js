@@ -393,3 +393,9 @@ export const USER_FIELDS_TO_CHECK = [USER_INFO.FIRST_NAME, USER_INFO.MIDDLE_NAME
   USER_INFO.BARCODE, USER_INFO.EXTERNAL_SYSTEM_ID, USER_INFO.USERNAME];
 
 export const PATRON_PREREGISTRATION_RECORDS_NAME = 'patronPreRegistrationRecords';
+
+export const KEYCLOAK_USER_EXISTANCE = {
+  exist: 'exist',
+  nonExist: 'nonExist',
+  error: 'error',
+};

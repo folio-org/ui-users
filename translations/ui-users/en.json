@@ -1229,5 +1229,7 @@
   "stagingRecords.list.columnNames.emailVerification": "Email verification",
   "stagingRecords.activated": "Activated",
   "stagingRecords.notActivated": "Not activated",
-  "stagingRecords.merge": "Merge"
+  "stagingRecords.merge": "Merge",
+  "keycloak.modal.confirmationHeading": "Keycloak user record",
+  "keycloak.modal.creation": "This operation will create new record in Keycloak for <b>{user}</b>"
 }

@@ -4,6 +4,7 @@ import renderWithRouter from 'helpers/renderWithRouter';
 
 import UserForm from './UserForm';
 import UserEdit from './UserEdit';
+import { KEYCLOAK_USER_EXISTANCE } from '../../constants';
 
 const userFormData = {
   requestPreferences: {},
@@ -26,15 +27,28 @@ jest.mock('@folio/stripes/components', () => ({
   ...jest.requireActual('@folio/stripes/components'),
   LoadingView: () => 'LoadingView',
 }));
-jest.mock('./UserForm', () => jest.fn(({ onSubmit, onCancel }) => {
+jest.mock('./UserForm', () => jest.fn(({ onSubmit, onCancel, onCancelKeycloakConfirmation, confirmCreateKeycloakUser }) => {
   return (
     <>
-      <div>UserForm </div>
+      <div>UserForm</div>
       <button type="button" id="clickable-cancel" onClick={onCancel}>
         Cancel Form
       </button>
       <button type="button" id="clickable-save" onClick={() => onSubmit(userFormData)}>
         Submit Form
+      </button>
+
+      <button type="button" id="cancel-confirmation" onClick={onCancelKeycloakConfirmation}>
+        Cancel confirmation
+      </button>
+      <button
+        type="button"
+        id="submit-confirmation"
+        onClick={() => confirmCreateKeycloakUser({ getState: jest.fn().mockReturnValue({ values: {
+          assignedRoleIds: []
+        } }) })}
+      >
+        Submit Confirmation
       </button>
     </>
   );
@@ -549,6 +563,160 @@ describe('UserEdit', () => {
       const cancelButton = container.querySelector('#clickable-cancel');
       await userEvent.click(cancelButton);
       expect(alteredProps.history.push).toHaveBeenCalled();
+    });
+  });
+
+  describe('Keycloak confirmation modal', () => {
+    const defaultProps = {
+      stripes: {
+        hasPerm: jest.fn().mockReturnValue(true),
+        okapi: {
+          tenant: 'tenantId',
+        },
+        hasInterface: jest.fn().mockReturnValue(true),
+      },
+      resources: {
+        selUser: {
+          records: [{ id: 'userId' }],
+        },
+        patronGroups: {
+          records: [],
+        },
+        perms: {
+          records: [{ id: 'permUserRecordId' }],
+        },
+        addressTypes: {
+          records: [],
+        },
+        servicePoints: {
+          records: [],
+        },
+        departments: {
+          records: [],
+        },
+        userReadingRoomPermissions: {
+          records: []
+        },
+      },
+      history: {
+        push: jest.fn(),
+      },
+      location: {
+        pathname: '/users/userId/edit',
+        search: '?filters=active.active',
+        state: undefined,
+      },
+      match: { params: { id: 'userId' } },
+      updateProxies: jest.fn(),
+      updateSponsors: jest.fn(),
+      updateServicePoints: jest.fn(),
+      getUserServicePoints: jest.fn(),
+      getPreferredServicePoint: jest.fn(),
+      mutator: {
+        records: {
+          POST: jest
+            .fn()
+            .mockResolvedValue(jest.fn().mockResolvedValue({ result: [] })),
+        },
+        perms: {
+          POST: jest.fn().mockResolvedValue({ data: {} }),
+          PUT: jest.fn().mockResolvedValue({ data: {} }),
+        },
+        permissions: {
+          POST: jest.fn().mockResolvedValue({ data: {} }),
+          PUT: jest.fn().mockResolvedValue({ data: {} }),
+        },
+        requestPreferences: {
+          POST: jest.fn().mockResolvedValue({ data: {} }),
+          PUT: jest.fn().mockResolvedValue({ data: {} }),
+        },
+        selUser: {
+          PUT: jest.fn().mockResolvedValue({ data: {} }),
+        },
+        permUserId: '2',
+      },
+      getProxies: jest.fn(),
+      getSponsors: jest.fn(),
+      okapiKy: {
+        extend: jest.fn(() => props.okapiKy),
+        get: jest.fn(() => ({ json: () => Promise.resolve() })),
+        post: jest.fn(() => ({ json: () => Promise.resolve({}) })),
+        put: jest.fn(() => ({ json: () => Promise.resolve({}) })),
+      },
+      isCreateKeycloakUserConfirmationOpen: true,
+      submitCreateKeycloakUser: jest.fn(),
+      onCancelKeycloakConfirmation: jest.fn(),
+      confirmCreateKeycloakUser: jest.fn(),
+      setIsCreateKeycloakUserConfirmationOpen: jest.fn(),
+    };
+    beforeEach(() => {
+      jest.unmock('./UserForm');
+    });
+    it('cancel confirmation', async () => {
+      const { container } = renderWithRouter(<UserEdit {...defaultProps} />);
+      const cancelButton = container.querySelector('#cancel-confirmation');
+
+      await userEvent.click(cancelButton);
+      expect(defaultProps.history.push).toHaveBeenCalled();
+    });
+
+    it('submit confirmation', async () => {
+      const mockSubmitCreateKeycloakUser = jest.fn();
+      const alteredProps = { ...defaultProps,
+        confirmCreateKeycloakUser: mockSubmitCreateKeycloakUser };
+
+      const { container } = renderWithRouter(<UserEdit {...alteredProps} />);
+      const submitButton = container.querySelector('#submit-confirmation');
+
+      await userEvent.click(submitButton);
+
+      expect(mockSubmitCreateKeycloakUser).toHaveBeenCalledTimes(1);
+    });
+
+    describe('on submit form check keycloak existence', () => {
+      it('calls history.push in case if hasInterface is FALSE', async () => {
+        const mockSubmitCreateKeycloakUser = jest.fn();
+        const mockUpdateRoles = jest.fn();
+        const alteredProps = { ...defaultProps,
+          stripes: { ...defaultProps.stripes, hasInterface: jest.fn().mockReturnValue(false) },
+          submitCreateKeycloakUser: mockSubmitCreateKeycloakUser,
+          updateUserRoles: mockUpdateRoles };
+
+        const { container } = renderWithRouter(<UserEdit {...alteredProps} />);
+        const submitButton = container.querySelector('#clickable-save');
+
+        await userEvent.click(submitButton);
+
+        expect(alteredProps.history.push).toHaveBeenCalled();
+      });
+
+      it('calls history.push in case if hasInterface True, user exists in Keycloak and old assignedRoleIds and updated are equal', async () => {
+        const mockSubmitCreateKeycloakUser = jest.fn();
+        const alteredProps = { ...defaultProps,
+          confirmCreateKeycloakUser: mockSubmitCreateKeycloakUser };
+
+        const { container } = renderWithRouter(<UserEdit {...alteredProps} />);
+        const submitButton = container.querySelector('#clickable-save');
+
+        await userEvent.click(submitButton);
+
+        expect(alteredProps.history.push).toHaveBeenCalled();
+      });
+
+      it('calls submit create keycloak user', async () => {
+        const mockSubmitCreateKeycloakUser = jest.fn();
+        const mockUpdateRoles = jest.fn();
+        const alteredProps = { ...defaultProps,
+          submitCreateKeycloakUser: mockSubmitCreateKeycloakUser,
+          updateUserRoles: mockUpdateRoles,
+          checkUserInKeycloak: jest.fn().mockReturnValue(KEYCLOAK_USER_EXISTANCE.exist),
+          assignedRoleIds: [1, 2, 3] };
+
+        const { container } = renderWithRouter(<UserEdit {...alteredProps} />);
+        const submitButton = container.querySelector('#clickable-save');
+
+        await userEvent.click(submitButton);
+      });
     });
   });
 });

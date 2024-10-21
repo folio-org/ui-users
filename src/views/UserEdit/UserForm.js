@@ -21,7 +21,7 @@ import {
   AccordionStatus,
   HasCommand,
   expandAllSections,
-  collapseAllSections
+  collapseAllSections, ConfirmationModal
 } from '@folio/stripes/components';
 import { EditCustomFieldsRecord } from '@folio/stripes/smart-components';
 import stripesFinalForm from '@folio/stripes/final-form';
@@ -106,6 +106,10 @@ class UserForm extends React.Component {
     form: PropTypes.object, // provided by final-form
     intl: PropTypes.object,
     profilePictureConfig: PropTypes.object.isRequired,
+    isCreateKeycloakUserConfirmationOpen: PropTypes.bool,
+    onCancelKeycloakConfirmation: PropTypes.func,
+    confirmCreateKeycloakUser: PropTypes.func,
+    setAssignedRoleIds: PropTypes.func,
     assignedRoleIds: PropTypes.arrayOf(PropTypes.string),
   };
 
@@ -314,6 +318,10 @@ class UserForm extends React.Component {
     return !this.props.stripes.hasInterface('roles');
   };
 
+  handleConfirmCreateKeycloakUser = async () => {
+    await this.props.confirmCreateKeycloakUser(this.props.form);
+  }
+
   render() {
     const {
       initialValues,
@@ -325,8 +333,9 @@ class UserForm extends React.Component {
       form,
       uniquenessValidator,
       profilePictureConfig,
+      isCreateKeycloakUserConfirmationOpen,
+      onCancelKeycloakConfirmation
     } = this.props;
-
     const selectedPatronGroup = form.getFieldState('patronGroup')?.value;
     const firstMenu = this.getAddFirstMenu();
     const footer = this.getPaneFooter();
@@ -463,7 +472,8 @@ class UserForm extends React.Component {
                           setButtonRef={this.setButtonRef}
                         /> : <EditUserRoles
                           form={form}
-                          initialValues={initialValues}
+                          setAssignedRoleIds={this.props.setAssignedRoleIds}
+                          assignedRoleIds={this.props.assignedRoleIds}
                           accordionId="userRoles"
                         />
                       }
@@ -496,6 +506,17 @@ class UserForm extends React.Component {
               });
             }}
           />
+          <IfInterface name="roles">
+            <ConfirmationModal
+              id="JIT-user"
+              heading={<FormattedMessage id="ui-users.keycloak.modal.confirmationHeading" />}
+              message={<FormattedMessage id="ui-users.keycloak.modal.creation" values={{ user:getFullName(form.getState().values) }} />}
+              onConfirm={this.handleConfirmCreateKeycloakUser}
+              onCancel={onCancelKeycloakConfirmation}
+              open={isCreateKeycloakUserConfirmationOpen}
+              confirmLabel={<FormattedMessage id="stripes-core.button.confirm" />}
+            />
+          </IfInterface>
         </form>
       </HasCommand>
     );

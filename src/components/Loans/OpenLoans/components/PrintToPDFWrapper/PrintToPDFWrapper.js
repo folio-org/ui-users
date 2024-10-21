@@ -9,8 +9,9 @@ const PrintToPDFWrapper = ({
   children,
   entities = [],
   type,
+  patronGroup = {}
 }) => {
-  const { templateFn, dataSource, reactToPrintFn, handleRef } = usePrintData(entities, type);
+  const { templateFn, dataSource, reactToPrintFn, handleRef } = usePrintData(entities, type, patronGroup);
 
 
   return (
@@ -30,6 +31,7 @@ PrintToPDFWrapper.propTypes = {
   children: PropTypes.func.isRequired,
   entities: PropTypes.arrayOf(PropTypes.object),
   type: PropTypes.string,
+  patronGroup: PropTypes.object,
 };
 
 export default PrintToPDFWrapper;
