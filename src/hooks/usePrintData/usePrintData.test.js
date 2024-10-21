@@ -79,26 +79,32 @@ describe('mapEntityToTemplate', () => {
         preferredFirstName: 'Janie',
         middleName: 'A.',
         lastName: 'Doe',
-        patronGroup: 'Regular',
+        patronGroup: '1234',
       },
       item: {
         title: 'The Great Gatsby',
         primaryContributor: 'F. Scott Fitzgerald',
       },
       dueDate: '2024-10-10T12:00:00Z',
+      patronGroupAtCheckout: {
+        name: 'facility'
+      }
     };
 
     // Mock `formatDateAndTime` to return a formatted date
     formatDateAndTime.mockReturnValue('October 10, 2024');
 
-    const result = mapEntityToTemplate(entity, SLIPS_TYPES.DUE_DATE, 'short');
+    const result = mapEntityToTemplate(entity, SLIPS_TYPES.DUE_DATE, 'short', {
+      group: 'facility',
+      id: '1234'
+    });
 
     expect(result).toEqual({
       'borrower.firstName': 'Jane',
       'borrower.preferredFirstName': 'Janie',
       'borrower.middleName': 'A.',
       'borrower.lastName': 'Doe',
-      'borrower.patronGroup': 'Regular',
+      'borrower.patronGroup': 'facility',
       'item.title': 'The Great Gatsby',
       'item.primaryContributor': 'F. Scott Fitzgerald',
       'loan.dueDate': 'October 10, 2024',
