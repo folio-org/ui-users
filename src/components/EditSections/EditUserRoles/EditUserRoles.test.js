@@ -72,11 +72,11 @@ const arrayMutators = {
 const renderEditRolesAccordion = (props) => {
   const component = () => <EditUserRoles {...props} />;
   return renderWithRouter(<Form
+    initialValues={{ assignedRoleIds: ['1', '2'] }}
     id="form-user"
     mutators={{
       ...arrayMutators
     }}
-    initialValues={{ assignedRoleIds: ['1', '2'] }}
     render={component}
     onSubmit={jest.fn()}
   />);
@@ -87,9 +87,8 @@ const propsData = {
   form: {
     change: mockChangeFunction,
   },
-  initialValues: {
-    assignedRoleIds: ['1', '2'],
-  },
+  assignedRoleIds: ['1', '2', '3'],
+  setAssignedRoleIds: jest.fn(),
 };
 
 describe('EditUserRoles Component', () => {

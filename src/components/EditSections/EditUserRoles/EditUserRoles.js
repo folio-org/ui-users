@@ -10,10 +10,9 @@ import { useAllRolesData } from '../../../hooks';
 import UserRolesModal from './components/UserRolesModal/UserRolesModal';
 import { filtersConfig } from './helpers';
 
-function EditUserRoles({ accordionId, form:{ change }, initialValues }) {
+function EditUserRoles({ accordionId, form:{ change }, setAssignedRoleIds, assignedRoleIds }) {
   const [isOpen, setIsOpen] = useState(false);
   const [unassignModalOpen, setUnassignModalOpen] = useState(false);
-  const [assignedRoleIds, setAssignedRoleIds] = useState(initialValues.assignedRoleIds);
   const intl = useIntl();
 
   const { isLoading: isAllRolesDataLoading, allRolesMapStructure } = useAllRolesData();
@@ -133,7 +132,8 @@ EditUserRoles.propTypes = {
   match: PropTypes.shape({ params: { id: PropTypes.string } }),
   accordionId: PropTypes.string,
   form: PropTypes.object.isRequired,
-  initialValues: PropTypes.object.isRequired
+  assignedRoleIds: PropTypes.arrayOf(PropTypes.string).isRequired,
+  setAssignedRoleIds: PropTypes.func.isRequired,
 };
 
 export default withRouter(EditUserRoles);

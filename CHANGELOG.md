@@ -61,7 +61,14 @@
 * Update `notes` to `v4.0`. Refs UIU-3229.
 * Loan details: Print Due date receipt. Refs UIU-3210.
 * Open loans: `isDcbItem()` must tolerate sparse data. Refs UIU-3230.
-* "borrower.patronGroup" print patron group's name based on id. Refs UIU-3228.
+* *BREAKING* Add new okapi interface staging-users. Add action button for searching patrons pre registration records. Refs UIU-3219.
+* Display patrons pre registration records results. Refs UIU-3222
+* Create new permission 'Users: Can view patron preregistration data'. Refs UIU-3221.
+* Omit `assignedRoleIds` field on edit user. Refs UIU-3233. 
+* Review existing FOLIO user records on duplicates view. Refs UIU-3224.
+* Create new permission 'Users: Can merge patron preregistration data'. Refs UIU-3237.
+* Confirmation dialog when JIT AuthUser creation is required. Refs UIU-3192.
+*  "borrower.patronGroup" print patron group's name based on id. Refs UIU-3228.
 
 ## [10.1.2](https://github.com/folio-org/ui-users/tree/v10.1.2) (2024-09-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.1.1...v10.1.2)

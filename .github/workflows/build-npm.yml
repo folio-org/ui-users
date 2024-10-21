@@ -87,7 +87,7 @@ jobs:
         run: cat module-descriptor.json
 
       - name: Upload event file
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Event File
           path: ${{ github.event_path }}
@@ -95,7 +95,7 @@ jobs:
 
       - name: Upload Jest results
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: jest-test-results
           path: ${{ env.JEST_JUNIT_OUTPUT_DIR }}/*.xml

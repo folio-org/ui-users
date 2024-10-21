@@ -34,6 +34,7 @@
       "permissions": "5.6",
       "login": "7.3",
       "users-bl": "6.1",
+      "staging-users": "1.0",
       "tags": "1.0"
     },
     "optionalOkapiInterfaces": {
@@ -1084,6 +1085,26 @@
           "ui-users.edit",
           "ui-users.view-reading-room-access",
           "reading-room.patron-permission.item.put"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.patron-pre-registrations.execute",
+        "displayName": "Users: Can merge patron preregistration data",
+        "description": "Edits existing user or creates new user, based on pre-registration record",
+        "subPermissions": [
+          "staging-users.item.put",
+          "perms.users.item.post"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.patron-pre-registrations.view",
+        "displayName": "Users: Can view patron preregistration data",
+        "subPermissions": [
+          "module.users.enabled",
+          "ui-users.view",
+          "staging-users.collection.get"
         ],
         "visible": true
       }
