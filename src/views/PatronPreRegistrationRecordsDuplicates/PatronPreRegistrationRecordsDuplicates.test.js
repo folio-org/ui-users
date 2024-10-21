@@ -2,8 +2,13 @@ import { screen } from '@folio/jest-config-stripes/testing-library/react';
 
 import renderWithRouter from 'helpers/renderWithRouter';
 
-import { usePatronGroups, useUsersQuery } from '../../hooks';
+import {
+  usePatronGroups,
+  useUsersQuery,
+} from '../../hooks';
 import PatronPreRegistrationRecordsDuplicates from './PatronPreRegistrationRecordsDuplicates';
+
+jest.unmock('@folio/stripes/components');
 
 jest.mock('../../hooks', () => ({
   ...jest.requireActual('../../hooks'),
