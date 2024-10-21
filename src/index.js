@@ -218,7 +218,7 @@ class UsersRouting extends React.Component {
               <Route
                 path={`${base}/pre-registration-records`}
                 render={props => (
-                  <IfPermission perm="ui-users.patron-pre-registrations-view">
+                  <IfPermission perm="ui-users.patron-pre-registrations.view">
                     <Routes.PatronPreRegistrationRecordsContainer {...props} />
                   </IfPermission>
                 )}
