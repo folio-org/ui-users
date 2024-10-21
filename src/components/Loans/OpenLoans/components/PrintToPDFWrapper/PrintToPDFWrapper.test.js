@@ -63,7 +63,7 @@ describe('PrintToPDFWrapper', () => {
       </PrintToPDFWrapper>
     );
 
-    expect(usePrintData).toHaveBeenCalledWith([], 'test-type');
+    expect(usePrintData).toHaveBeenCalledWith([], 'test-type', {});
 
     expect(screen.getByTestId('print-content-mock')).toBeInTheDocument();
   });

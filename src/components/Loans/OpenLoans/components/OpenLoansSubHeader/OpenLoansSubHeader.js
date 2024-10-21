@@ -51,6 +51,7 @@ const OpenLoansSubHeader = ({
   toggleColumn,
   user,
   visibleColumns,
+  patronGroup
 }) => {
   const intl = useIntl();
 
@@ -199,7 +200,7 @@ const OpenLoansSubHeader = ({
               </Button>
             </IfPermission>
             <IfPermission perm="ui-users.loans.view">
-              <PrintToPDFWrapper entities={checkedLoansArray}>
+              <PrintToPDFWrapper entities={checkedLoansArray} patronGroup={patronGroup}>
                 {(print) => (
                   <span className={detailsCss.printButtonWrap}>
                     <Button
@@ -237,6 +238,7 @@ OpenLoansSubHeader.propTypes = {
   toggleColumn: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
   visibleColumns: PropTypes.arrayOf(PropTypes.object).isRequired,
+  patronGroup: PropTypes.object.isRequired,
 };
 
 export default OpenLoansSubHeader;
