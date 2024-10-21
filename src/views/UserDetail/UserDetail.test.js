@@ -423,4 +423,50 @@ describe('UserDetail', () => {
       expect(screen.queryByText('Actions')).toBeNull();
     });
   });
+
+  describe('when user close users view', () => {
+    const history = { push: jest.fn() };
+
+    beforeEach(() => {
+      Object.defineProperty(document, 'referrer', { value: '', configurable: true });
+      history.push.mockClear();
+    });
+
+    it('should navigate to the referrer from location state which opened the view', async () => {
+      const location = {
+        state: {
+          referrer: '/route',
+        }
+      };
+
+      renderUserDetail(stripes, { history, location });
+
+      await userEvent.click(screen.getByTestId('close-pane'));
+
+      expect(history.push).toHaveBeenCalledWith(location.state.referrer);
+    });
+
+    it('should navigate to the referrer that opened view in a new tab', async () => {
+      const location = {};
+      const route = '/referrer-route';
+
+      renderUserDetail(stripes, { history, location });
+
+      Object.defineProperty(document, 'referrer', { value: `${global.location.origin}${route}` });
+
+      await userEvent.click(screen.getByTestId('close-pane'));
+
+      expect(history.push).toHaveBeenCalledWith(route);
+    });
+
+    it('should navigate to users list by default', async () => {
+      const location = { search: '?query=test' };
+
+      renderUserDetail(stripes, { history, location });
+
+      await userEvent.click(screen.getByTestId('close-pane'));
+
+      expect(history.push).toHaveBeenCalledWith(`/users${location.search}`);
+    });
+  });
 });
