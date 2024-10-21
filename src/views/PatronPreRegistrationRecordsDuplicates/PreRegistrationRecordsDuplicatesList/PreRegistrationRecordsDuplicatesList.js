@@ -86,6 +86,7 @@ const PreRegistrationRecordsDuplicatesList = ({
   return (
     <MultiColumnList
       id="patron-user-duplicates-list"
+      autosize
       virtualize
       isLoading={isLoading}
       columnMapping={COLUMN_MAPPING}

@@ -44,7 +44,7 @@ const useUsersQuery = (params = {}, options = {}) => {
     isFetched,
   } = useQuery({
     queryKey: ['users', namespace, tenantId, query, limit, offset],
-    queryFn: async ({ signal }) => ky.get(USERS_API, { searchParams, signal }).json(),
+    queryFn: ({ signal }) => ky.get(USERS_API, { searchParams, signal }).json(),
     enabled,
     ...queryOptions,
   });
