@@ -11,7 +11,12 @@ const useStagingUserMutation = () => {
     mutateAsync: mergeOrCreateUser,
     isLoading,
   } = useMutation({
-    mutationFn: ({ user }) => ky.post(`${PATRON_PREREGISTRATIONS_API}/${user.id}/mergeOrCreateUser`).json(),
+    mutationFn: ({ stagingUserId, userId }) => {
+      return ky.put(
+        `${PATRON_PREREGISTRATIONS_API}/${stagingUserId}/mergeOrCreateUser`,
+        { searchParams: { userId } },
+      ).json();
+    },
   });
 
   return {

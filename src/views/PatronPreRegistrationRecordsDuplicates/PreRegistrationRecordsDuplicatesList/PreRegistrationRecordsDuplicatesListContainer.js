@@ -3,10 +3,7 @@ import { useCallback } from 'react';
 import { useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import {
-  useCallout,
-  useStripes,
-} from '@folio/stripes/core';
+import { useCallout } from '@folio/stripes/core';
 
 import {
   usePatronGroups,
@@ -23,7 +20,6 @@ const PreRegistrationRecordsDuplicatesListContainer = ({
   const intl = useIntl();
   const history = useHistory();
   const callout = useCallout();
-  const stripes = useStripes();
 
   const {
     isLoading: isPatronGroupsLoading,
@@ -35,20 +31,21 @@ const PreRegistrationRecordsDuplicatesListContainer = ({
     isLoading: isMutating,
   } = useStagingUserMutation();
 
-  const onMerge = useCallback((user) => {
-    return mergeOrCreateUser({ user })
-      .then(({ id }) => {
-        stripes.logger.log('hello'); //
+  const onMerge = useCallback(({ id }) => {
+    return mergeOrCreateUser({ stagingUserId: user?.id, userId: id })
+      .then(({ userId }) => {
         callout.sendCallout({
           message: intl.formatMessage(
             { id: 'ui-users.stagingRecords.duplicates.results.merge.success' },
             { name: 'QWERTY' },
           ),
         });
-        history.push(`/users/view/${id}`);
+        history.replace({
+          pathname: `/users/view/${userId}`,
+        });
       })
       .catch((error) => {
-        stripes.logger.log(error);
+        console.error(error); // eslint-disable-line no-console
 
         callout.sendCallout({
           message: intl.formatMessage({ id: 'ui-users.errors.generic' }),
@@ -56,7 +53,13 @@ const PreRegistrationRecordsDuplicatesListContainer = ({
           timeout: 0,
         });
       });
-  }, [callout, history, intl, mergeOrCreateUser, stripes.logger]);
+  }, [
+    callout,
+    history,
+    intl,
+    mergeOrCreateUser,
+    user?.id,
+  ]);
 
   return (
     <PreRegistrationRecordsDuplicatesList

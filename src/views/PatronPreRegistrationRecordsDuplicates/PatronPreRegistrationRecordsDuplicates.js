@@ -30,7 +30,7 @@ const PatronPreRegistrationRecordsDuplicates = ({
 
   const {
     isFetched,
-    isLoading: isUsersLoading,
+    isFetching,
     users,
     totalRecords,
   } = useUsersQuery(
@@ -100,7 +100,7 @@ const PatronPreRegistrationRecordsDuplicates = ({
           style={{ height: wrapperHeight }}
         >
           <PreRegistrationRecordsDuplicatesList
-            isLoading={isLoading || isUsersLoading}
+            isLoading={isLoading || isFetching}
             user={user}
             users={users}
             totalRecords={totalRecords}
