@@ -114,6 +114,7 @@ const props = {
   toggleColumn,
   user: okapiCurrentUser,
   visibleColumns,
+  patronGroup: {}
 };
 
 describe('Given OpenLoansSubHeader', () => {

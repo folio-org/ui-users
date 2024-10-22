@@ -38,6 +38,7 @@ class ActionsDropdown extends React.Component {
     }),
     intl: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
+    patronGroup: PropTypes.object.isRequired,
   };
 
   renderMenu = ({ onToggle }) => {
@@ -50,6 +51,7 @@ class ActionsDropdown extends React.Component {
       disableFeeFineDetails,
       match: { params },
       user,
+      patronGroup
     } = this.props;
 
     const itemStatusName = loan?.item?.status?.name;
@@ -122,7 +124,7 @@ class ActionsDropdown extends React.Component {
         </IfPermission>
         <IfPermission perm="ui-users.loans.view">
           {!isVirtualUser && (
-            <PrintToPDFWrapper entities={[loan]}>
+            <PrintToPDFWrapper entities={[loan]} patronGroup={patronGroup}>
               {(print) => (
                 <Button
                   buttonStyle="dropdownItem"

@@ -612,7 +612,7 @@ class LoanDetails extends React.Component {
                   </Button>
                 </IfPermission>
                 <IfPermission perm="ui-users.loans.view">
-                  <PrintToPDFWrapper entities={[loan]}>
+                  <PrintToPDFWrapper entities={[loan]} patronGroup={patronGroup}>
                     {(print) => (
                       <span className={css.printButtonWrap}>
                         <Button
