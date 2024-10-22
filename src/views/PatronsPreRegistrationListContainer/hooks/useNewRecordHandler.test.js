@@ -8,7 +8,7 @@ import {
 
 import useNewRecordHandler from './useNewRecordHandler';
 import useUserDuplicatesCheck from './useUserDuplicatesCheck';
-import useCreateNewUser from './useCreateNewUser';
+import useCreateNewUser from './useProcessPreRegisteredUser';
 
 jest.mock('react-query', () => ({
   useMutation: jest.fn(),
@@ -24,16 +24,16 @@ jest.mock('./useCreateNewUser', () => jest.fn());
 describe('useNewRecordHandler', () => {
   let mockHistoryPush;
   let mockCheckDuplicates;
-  let mockCreateUser;
+  let mockHandlePreRegisteredUser;
 
   beforeEach(() => {
     mockHistoryPush = jest.fn();
     mockCheckDuplicates = jest.fn();
-    mockCreateUser = jest.fn();
+    mockHandlePreRegisteredUser = jest.fn();
 
     useHistory.mockReturnValue({ push: mockHistoryPush });
     useUserDuplicatesCheck.mockReturnValue({ checkDuplicates: mockCheckDuplicates });
-    useCreateNewUser.mockReturnValue({ createUser: mockCreateUser });
+    useCreateNewUser.mockReturnValue({ handlePreRegisteredUser: mockHandlePreRegisteredUser });
 
     useMutation.mockImplementation(({ mutationFn, onSuccess }) => ({
       mutateAsync: async (user) => {
@@ -66,6 +66,6 @@ describe('useNewRecordHandler', () => {
       await result.current.handle({ contactInfo: { email: 'test@example.com' } });
     });
 
-    expect(mockCreateUser).toHaveBeenCalled();
+    expect(mockHandlePreRegisteredUser).toHaveBeenCalled();
   });
 });

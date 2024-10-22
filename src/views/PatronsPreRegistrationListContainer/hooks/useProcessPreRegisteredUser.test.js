@@ -3,13 +3,13 @@ import {
   QueryClientProvider,
 } from 'react-query';
 import { useHistory } from 'react-router-dom';
-
 import { renderHook, waitFor } from '@folio/jest-config-stripes/testing-library/react';
-import preRegistrationRecords from 'fixtures/preRegistrationRecords';
+
 import { useOkapiKy, useCallout } from '@folio/stripes/core';
+import preRegistrationRecords from 'fixtures/preRegistrationRecords';
 
 import { PATRON_PREREGISTRATIONS_API } from '../../../constants';
-import useCreateNewUser from './useCreateNewUser';
+import useProcessPreRegisteredUser from './useProcessPreRegisteredUser';
 
 jest.mock('react-router-dom', () => ({
   useHistory: jest.fn(),
@@ -27,8 +27,9 @@ const wrapper = ({ children }) => (
 );
 
 const stagingUser = preRegistrationRecords[0];
+const putPath = `${PATRON_PREREGISTRATIONS_API}/${stagingUser.id}/mergeOrCreateUser`;
 
-describe('useCreateNewUser', () => {
+describe('useProcessPreRegisteredUser', () => {
   let kyMock;
   let mockHistoryPush;
   const sendCallout = jest.fn();
@@ -52,25 +53,34 @@ describe('useCreateNewUser', () => {
   });
 
   it('should call create user', async () => {
-    const { result } = renderHook(() => useCreateNewUser(), { wrapper });
-    await result.current.createUser(stagingUser);
+    const { result } = renderHook(() => useProcessPreRegisteredUser(), { wrapper });
+    await result.current.handlePreRegisteredUser(stagingUser);
 
-    expect(kyMock.put).toHaveBeenCalledWith(`${PATRON_PREREGISTRATIONS_API}/${stagingUser.id}/mergeOrCreateUser`);
+    expect(kyMock.put).toHaveBeenCalledWith(putPath);
   });
 
   it('should create permission user after creating user record', async () => {
-    const { result } = renderHook(() => useCreateNewUser(), { wrapper });
-    await result.current.createUser(stagingUser);
+    const { result } = renderHook(() => useProcessPreRegisteredUser(), { wrapper });
+    await result.current.handlePreRegisteredUser(stagingUser);
 
-    expect(kyMock.put).toHaveBeenCalledWith(`${PATRON_PREREGISTRATIONS_API}/${stagingUser.id}/mergeOrCreateUser`);
+    expect(kyMock.put).toHaveBeenCalledWith(putPath);
     expect(kyMock.post).toHaveBeenCalled();
   });
 
-  it('should route to new created user detail page', async () => {
-    const { result } = renderHook(() => useCreateNewUser(), { wrapper });
-    await result.current.createUser(stagingUser);
+  it('should display success callout on creating a new FOLIO user from staging user', async () => {
+    const { result } = renderHook(() => useProcessPreRegisteredUser(), { wrapper });
+    await result.current.handlePreRegisteredUser(stagingUser);
 
-    expect(kyMock.put).toHaveBeenCalledWith(`${PATRON_PREREGISTRATIONS_API}/${stagingUser.id}/mergeOrCreateUser`);
+    expect(kyMock.put).toHaveBeenCalledWith(putPath);
+    expect(kyMock.post).toHaveBeenCalled();
+    expect(sendCallout).toHaveBeenCalled();
+  });
+
+  it('should route to new created user detail page', async () => {
+    const { result } = renderHook(() => useProcessPreRegisteredUser(), { wrapper });
+    await result.current.handlePreRegisteredUser(stagingUser);
+
+    expect(kyMock.put).toHaveBeenCalledWith(putPath);
     expect(kyMock.post).toHaveBeenCalled();
     expect(mockHistoryPush).toHaveBeenCalled();
   });
@@ -85,8 +95,8 @@ describe('useCreateNewUser', () => {
     useOkapiKy.mockReturnValue(kyMock);
     const consoleErrorMock = jest.spyOn(console, 'error').mockImplementation(() => {});
 
-    const { result } = renderHook(() => useCreateNewUser(), { wrapper });
-    await result.current.createUser(stagingUser);
+    const { result } = renderHook(() => useProcessPreRegisteredUser(), { wrapper });
+    await result.current.handlePreRegisteredUser(stagingUser);
 
     await waitFor(() => {
       expect(sendCallout).toHaveBeenCalled();
