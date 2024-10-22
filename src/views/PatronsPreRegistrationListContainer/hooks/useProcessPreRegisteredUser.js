@@ -21,7 +21,7 @@ const getFullName = (user) => {
 };
 
 // this hook is used to create a new user from pre-registration record
-const useCreateNewUser = () => {
+const useProcessPreRegisteredUser = () => {
   const callout = useCallout();
   const history = useHistory();
   const ky = useOkapiKy();
@@ -89,4 +89,4 @@ const useCreateNewUser = () => {
   };
 };
 
-export default useCreateNewUser;
+export default useProcessPreRegisteredUser;

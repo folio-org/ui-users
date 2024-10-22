@@ -19,7 +19,7 @@ jest.mock('react-router-dom', () => ({
 }));
 
 jest.mock('./useUserDuplicatesCheck', () => jest.fn());
-jest.mock('./useCreateNewUser', () => jest.fn());
+jest.mock('./useProcessPreRegisteredUser', () => jest.fn());
 
 describe('useNewRecordHandler', () => {
   let mockHistoryPush;

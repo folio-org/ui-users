@@ -2,7 +2,7 @@ import { useMutation } from 'react-query';
 import { useHistory } from 'react-router-dom';
 
 import useUserDuplicatesCheck from './useUserDuplicatesCheck';
-import useCreateNewUser from './useProcessPreRegisteredUser';
+import useProcessPreRegisteredUser from './useProcessPreRegisteredUser';
 
 const handleDuplicates = (user, history) => {
   history.push({
@@ -14,7 +14,7 @@ const handleDuplicates = (user, history) => {
 const useNewRecordHandler = () => {
   const history = useHistory();
   const { checkDuplicates } = useUserDuplicatesCheck();
-  const { handlePreRegisteredUser } = useCreateNewUser();
+  const { handlePreRegisteredUser } = useProcessPreRegisteredUser();
 
   const {
     mutateAsync: handle,
