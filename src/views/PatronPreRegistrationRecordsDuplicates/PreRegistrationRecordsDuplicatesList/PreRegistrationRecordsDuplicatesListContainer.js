@@ -6,15 +6,15 @@ import { usePatronGroups } from '../../../hooks';
 import PreRegistrationRecordsDuplicatesList from './PreRegistrationRecordsDuplicatesList';
 
 const PreRegistrationRecordsDuplicatesListContainer = ({
-  email,
   isLoading,
   totalRecords,
+  user,
   users,
 }) => {
   const {
     isLoading: isPatronGroupsLoading,
     patronGroups,
-  } = usePatronGroups({ enabled: Boolean(email) });
+  } = usePatronGroups({ enabled: Boolean(user?.id) });
 
   // TODO: https://folio-org.atlassian.net/browse/UIU-3225
   const onMerge = () => noop();
@@ -31,9 +31,9 @@ const PreRegistrationRecordsDuplicatesListContainer = ({
 };
 
 PreRegistrationRecordsDuplicatesListContainer.propTypes = {
-  email: PropTypes.string,
   isLoading: PropTypes.bool,
   totalRecords: PropTypes.number,
+  user: PropTypes.object,
   users: PropTypes.arrayOf(PropTypes.object),
 };
 

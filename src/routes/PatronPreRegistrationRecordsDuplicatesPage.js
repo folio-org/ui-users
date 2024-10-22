@@ -1,14 +1,24 @@
 import {
   useHistory,
   useLocation,
+  useParams,
 } from 'react-router-dom';
 
+import { useStagingUsersQuery } from '../hooks';
 import { PatronPreRegistrationRecordsDuplicates } from '../views';
 
 export const PatronPreRegistrationRecordsDuplicatesPage = () => {
+  const { id: stagingUserId } = useParams();
   const history = useHistory();
   const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
+
+  const {
+    isLoading,
+    users,
+  } = useStagingUsersQuery(
+    { query: `id=="${stagingUserId}"` },
+    { enabled: Boolean(stagingUserId) },
+  );
 
   const onClose = () => {
     history.push({
@@ -19,8 +29,9 @@ export const PatronPreRegistrationRecordsDuplicatesPage = () => {
 
   return (
     <PatronPreRegistrationRecordsDuplicates
-      email={searchParams.get('email')}
+      user={users[0]}
       onClose={onClose}
+      isLoading={isLoading}
     />
   );
 };

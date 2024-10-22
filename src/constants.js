@@ -339,6 +339,7 @@ export const CONSORTIA_USER_TENANTS_API = 'user-tenants';
 export const GROUPS_API = 'groups';
 export const PROFILE_PIC_API = 'users/profile-picture';
 export const USERS_API = 'users';
+export const PATRON_PREREGISTRATIONS_API = 'staging-users';
 
 export const RECORD_SOURCE = {
   CONSORTIUM: 'consortium',

@@ -10,4 +10,5 @@ export { default as useLocalizedCurrency } from './useLocalizedCurrency';
 export { default as useAllRolesData } from './useAllRolesData';
 export { default as useCreateAuthUserKeycloak } from './useCreateAuthUserKeycloak';
 export { default as usePatronGroups } from './usePatronGroups';
+export { default as useStagingUsersQuery } from './useStagingUsersQuery';
 export { default as useUsersQuery } from './useUsersQuery';

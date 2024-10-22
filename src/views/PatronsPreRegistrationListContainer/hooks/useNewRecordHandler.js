@@ -9,8 +9,7 @@ import useUserDuplicatesCheck from './useUserDuplicatesCheck';
 
 const handleDuplicates = (user, history, location) => {
   history.push({
-    pathname: '/users/pre-registration-records/duplicates',
-    search: `?email=${user?.contactInfo?.email}`,
+    pathname: `/users/pre-registration-records/duplicates/${user.id}`,
     state: { search: location.search },
   });
 };

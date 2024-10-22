@@ -19,11 +19,24 @@ import { getPatronDuplicatesQuery } from '../../utils';
 import PreRegistrationRecordsDuplicatesList from './PreRegistrationRecordsDuplicatesList';
 
 const PatronPreRegistrationRecordsDuplicates = ({
-  email,
+  isLoading,
+  user,
   onClose,
 }) => {
   const [wrapperHeight, setWrapperHeight] = useState();
   const listWrapperRef = useRef(null);
+
+  const email = user?.contactInfo?.email;
+
+  const {
+    isFetched,
+    isLoading: isUsersLoading,
+    users,
+    totalRecords,
+  } = useUsersQuery(
+    { query: getPatronDuplicatesQuery({ email }) },
+    { enabled: Boolean(email) },
+  );
 
   /*
     * Adjust the height of the list wrapper to fill the available space
@@ -54,16 +67,6 @@ const PatronPreRegistrationRecordsDuplicates = ({
       }
     };
   }, []);
-
-  const {
-    isFetched,
-    isLoading,
-    users,
-    totalRecords,
-  } = useUsersQuery(
-    { query: getPatronDuplicatesQuery({ email }) },
-    { enabled: Boolean(email) },
-  );
 
   const paneSub = isFetched
     ? (
@@ -97,8 +100,8 @@ const PatronPreRegistrationRecordsDuplicates = ({
           style={{ height: wrapperHeight }}
         >
           <PreRegistrationRecordsDuplicatesList
-            isLoading={isLoading}
-            email={email}
+            isLoading={isLoading || isUsersLoading}
+            user={user}
             users={users}
             totalRecords={totalRecords}
           />
@@ -109,8 +112,9 @@ const PatronPreRegistrationRecordsDuplicates = ({
 };
 
 PatronPreRegistrationRecordsDuplicates.propTypes = {
-  email: PropTypes.string,
+  isLoading: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
+  user: PropTypes.object,
 };
 
 export default PatronPreRegistrationRecordsDuplicates;
