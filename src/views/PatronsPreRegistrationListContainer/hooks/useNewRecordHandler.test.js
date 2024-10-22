@@ -8,7 +8,7 @@ import {
 
 import useNewRecordHandler from './useNewRecordHandler';
 import useUserDuplicatesCheck from './useUserDuplicatesCheck';
-import useCreateNewUser from './useProcessPreRegisteredUser';
+import useProcessPreRegisteredUser from './useProcessPreRegisteredUser';
 
 jest.mock('react-query', () => ({
   useMutation: jest.fn(),
@@ -33,7 +33,7 @@ describe('useNewRecordHandler', () => {
 
     useHistory.mockReturnValue({ push: mockHistoryPush });
     useUserDuplicatesCheck.mockReturnValue({ checkDuplicates: mockCheckDuplicates });
-    useCreateNewUser.mockReturnValue({ handlePreRegisteredUser: mockHandlePreRegisteredUser });
+    useProcessPreRegisteredUser.mockReturnValue({ handlePreRegisteredUser: mockHandlePreRegisteredUser });
 
     useMutation.mockImplementation(({ mutationFn, onSuccess }) => ({
       mutateAsync: async (user) => {

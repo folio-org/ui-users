@@ -82,25 +82,87 @@ describe('useProcessPreRegisteredUser', () => {
 
     expect(kyMock.put).toHaveBeenCalledWith(putPath);
     expect(kyMock.post).toHaveBeenCalled();
-    expect(mockHistoryPush).toHaveBeenCalled();
+    expect(sendCallout).toHaveBeenCalled();
+    expect(mockHistoryPush).toHaveBeenCalledWith({ 'pathname': '/users/view/1234' });
   });
 
-  it('should display error callout', async () => {
-    kyMock = {
-      put: jest.fn().mockReturnValue({
-        json: jest.fn().mockRejectedValueOnce(new Error('error'))
-      }),
-      post: jest.fn(),
-    };
-    useOkapiKy.mockReturnValue(kyMock);
-    const consoleErrorMock = jest.spyOn(console, 'error').mockImplementation(() => {});
+  describe('when create user fails', () => {
+    let consoleErrorMock;
+    beforeEach(() => {
+      kyMock = {
+        put: jest.fn().mockReturnValue({
+          json: jest.fn().mockRejectedValueOnce(new Error('error'))
+        }),
+        post: jest.fn(),
+      };
+      useOkapiKy.mockReturnValue(kyMock);
+      consoleErrorMock = jest.spyOn(console, 'error').mockImplementation(() => {});
+    });
 
-    const { result } = renderHook(() => useProcessPreRegisteredUser(), { wrapper });
-    await result.current.handlePreRegisteredUser(stagingUser);
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
 
-    await waitFor(() => {
-      expect(sendCallout).toHaveBeenCalled();
-      expect(consoleErrorMock).toHaveBeenCalled();
+    it('should display error callout', async () => {
+      const { result } = renderHook(() => useProcessPreRegisteredUser(), { wrapper });
+      await result.current.handlePreRegisteredUser(stagingUser);
+
+      await waitFor(() => {
+        expect(sendCallout).toHaveBeenCalledWith(expect.objectContaining({ type: 'error' }));
+        expect(consoleErrorMock).toHaveBeenCalled();
+      });
+    });
+
+    it('should not re-route to user detail view', async () => {
+      const { result } = renderHook(() => useProcessPreRegisteredUser(), { wrapper });
+      await result.current.handlePreRegisteredUser(stagingUser);
+
+      await waitFor(() => {
+        expect(sendCallout).toHaveBeenCalledWith(expect.objectContaining({ type: 'error' }));
+        expect(consoleErrorMock).toHaveBeenCalled();
+        expect(mockHistoryPush).not.toHaveBeenCalled();
+      });
+    });
+  });
+
+  describe('when create permission user fails', () => {
+    let consoleErrorMock;
+    beforeEach(() => {
+      kyMock = {
+        post: jest.fn().mockReturnValue({
+          json: jest.fn().mockRejectedValueOnce(new Error('error'))
+        }),
+        put: jest.fn().mockReturnValue({
+          json: jest.fn().mockResolvedValue({ userId: '1234' }),
+        }),
+      };
+      useOkapiKy.mockReturnValue(kyMock);
+      consoleErrorMock = jest.spyOn(console, 'error').mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it('should display error callout', async () => {
+      const { result } = renderHook(() => useProcessPreRegisteredUser(), { wrapper });
+      await result.current.handlePreRegisteredUser(stagingUser);
+
+      await waitFor(() => {
+        expect(sendCallout).toHaveBeenCalledWith(expect.objectContaining({ type: 'error' }));
+        expect(consoleErrorMock).toHaveBeenCalled();
+      });
+    });
+
+    it('should re-route to user detail view', async () => {
+      const { result } = renderHook(() => useProcessPreRegisteredUser(), { wrapper });
+      await result.current.handlePreRegisteredUser(stagingUser);
+
+      await waitFor(() => {
+        expect(sendCallout).toHaveBeenCalledWith(expect.objectContaining({ type: 'error' }));
+        expect(consoleErrorMock).toHaveBeenCalled();
+        expect(mockHistoryPush).toHaveBeenCalled();
+      });
     });
   });
 });
