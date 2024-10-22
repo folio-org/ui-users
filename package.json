@@ -1094,7 +1094,8 @@
         "description": "Edits existing user or creates new user, based on pre-registration record",
         "subPermissions": [
           "staging-users.item.put",
-          "perms.users.item.post"
+          "perms.users.item.post",
+          "ui-users.edit"
         ],
         "visible": true
       },

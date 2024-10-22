@@ -1,8 +1,8 @@
-import noop from 'lodash/noop';
 import { useMutation } from 'react-query';
 import { useHistory } from 'react-router-dom';
 
 import useUserDuplicatesCheck from './useUserDuplicatesCheck';
+import useCreateNewUser from './useCreateNewUser';
 
 const handleDuplicates = (user, history) => {
   history.push({
@@ -14,6 +14,7 @@ const handleDuplicates = (user, history) => {
 const useNewRecordHandler = () => {
   const history = useHistory();
   const { checkDuplicates } = useUserDuplicatesCheck();
+  const { createUser } = useCreateNewUser();
 
   const {
     mutateAsync: handle,
@@ -21,7 +22,7 @@ const useNewRecordHandler = () => {
   } = useMutation({
     mutationFn: checkDuplicates,
     onSuccess: (hasDuplicates, user) => {
-      const handleSuccess = hasDuplicates ? handleDuplicates : noop;
+      const handleSuccess = hasDuplicates ? handleDuplicates : createUser;
 
       handleSuccess(user, history);
     },
