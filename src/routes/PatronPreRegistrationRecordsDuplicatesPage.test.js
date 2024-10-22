@@ -9,6 +9,7 @@ import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import renderWithRouter from 'helpers/renderWithRouter';
 import {
   usePatronGroups,
+  useStagingUsersQuery,
   useUsersQuery,
 } from '../hooks';
 import { PatronPreRegistrationRecordsDuplicatesPage } from './PatronPreRegistrationRecordsDuplicatesPage';
@@ -24,6 +25,7 @@ jest.mock('react-virtualized-auto-sizer', () => ({ children }) => children({ hei
 jest.mock('../hooks', () => ({
   ...jest.requireActual('../hooks'),
   usePatronGroups: jest.fn(),
+  useStagingUsersQuery: jest.fn(),
   useUsersQuery: jest.fn(),
 }));
 
@@ -55,6 +57,20 @@ describe('PatronPreRegistrationRecordsDuplicatesPage', () => {
         id: '3684a786-6671-4268-8ed0-9db82ebca60b',
         group: 'test',
       }],
+    });
+    useStagingUsersQuery.mockReturnValue({
+      users: [{
+        id: '11997fe2-785c-418f-9739-de1d08ffc84b',
+        isEmailVerified: true,
+        status: 'TIER-2',
+        generalInfo: {
+          firstName: 'John',
+          lastName: 'Galt'
+        },
+        contactInfo: {
+          email: 'ex@mp.le'
+        },
+      }]
     });
     useUsersQuery.mockReturnValue({
       users: [{

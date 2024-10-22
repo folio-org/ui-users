@@ -28,7 +28,7 @@ describe('useStagingUsersQuery', () => {
   const mockKy = {
     get: jest.fn(() => ({
       json: jest.fn(() => Promise.resolve({
-        users: [{ id: '1', name: 'Test User' }],
+        staging_users: [{ id: '1', name: 'Test User' }],
         totalRecords: 1,
       })),
     })),
