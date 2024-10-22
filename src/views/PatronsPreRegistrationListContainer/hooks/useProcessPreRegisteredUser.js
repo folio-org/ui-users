@@ -75,7 +75,7 @@ const useProcessPreRegisteredUser = () => {
           await createPermissionUser(userId);
         })
         .catch((error) => {
-          handleError(error, callout);
+          handleError(error);
         })
         .finally(() => {
           if (newUserId) navigateToUserView(history, newUserId);
