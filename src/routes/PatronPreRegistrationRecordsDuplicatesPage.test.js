@@ -5,6 +5,7 @@ import {
 
 import { screen } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
+import { useOkapiKy } from '@folio/stripes/core';
 import { getFullName } from '@folio/stripes/util';
 
 import renderWithRouter from 'helpers/renderWithRouter';
@@ -15,8 +16,6 @@ import {
   useUsersQuery,
 } from '../hooks';
 import { PatronPreRegistrationRecordsDuplicatesPage } from './PatronPreRegistrationRecordsDuplicatesPage';
-import { useOkapiKy } from '@folio/stripes/core';
-import { get } from 'lodash';
 
 jest.unmock('@folio/stripes/components');
 

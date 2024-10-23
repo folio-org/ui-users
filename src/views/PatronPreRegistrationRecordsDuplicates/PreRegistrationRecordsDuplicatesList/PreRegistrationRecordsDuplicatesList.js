@@ -21,7 +21,7 @@ import { getFullName } from '@folio/stripes/util';
 
 import css from '../../UserSearch/UserSearch.css';
 
-const getResultsFormatter = ({ onMerge, patronGroups, location }) => {
+const getResultsFormatter = ({ onMerge, patronGroups, location, isLoading }) => {
   const getRowURL = (userId) => {
     return {
       pathname: `/users/view/${userId}`,
@@ -40,6 +40,7 @@ const getResultsFormatter = ({ onMerge, patronGroups, location }) => {
       <Layout className="full flex centerContent">
         <Button
           onClick={() => onMerge(user)}
+          disabled={isLoading}
           marginBottom0
         >
           <FormattedMessage id="ui-users.stagingRecords.merge" />
@@ -103,7 +104,7 @@ const PreRegistrationRecordsDuplicatesList = ({
       isLoading={isLoading}
       columnMapping={COLUMN_MAPPING}
       contentData={users}
-      formatter={getResultsFormatter({ onMerge, patronGroups, location })}
+      formatter={getResultsFormatter({ onMerge, patronGroups, location, isLoading })}
       totalCount={totalRecords}
       visibleColumns={visibleColumns}
       interactive={false}
