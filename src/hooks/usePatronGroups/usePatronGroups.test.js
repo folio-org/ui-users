@@ -20,7 +20,7 @@ const wrapper = ({ children }) => (
 
 const usergroups = [{ id: 'ug-1' }];
 
-describe('useUserAffiliations', () => {
+describe('usePatronGroups', () => {
   const mockGet = jest.fn(() => ({
     json: () => Promise.resolve({ usergroups }),
   }));
