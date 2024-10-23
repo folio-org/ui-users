@@ -3,9 +3,13 @@ import { useCallback } from 'react';
 import { useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import { useCallout } from '@folio/stripes/core';
+import {
+  useCallout,
+  useOkapiKy,
+} from '@folio/stripes/core';
 import { getFullName } from '@folio/stripes/util';
 
+import { USERS_API } from '../../../constants';
 import {
   usePatronGroups,
   useStagingUserMutation,
@@ -18,6 +22,7 @@ const PreRegistrationRecordsDuplicatesListContainer = ({
   user: stagingUser,
   users,
 }) => {
+  const ky = useOkapiKy();
   const intl = useIntl();
   const history = useHistory();
   const callout = useCallout();
@@ -32,9 +37,10 @@ const PreRegistrationRecordsDuplicatesListContainer = ({
     isLoading: isMutating,
   } = useStagingUserMutation();
 
-  const onMerge = useCallback((user) => {
-    return mergeOrCreateUser({ stagingUserId: stagingUser?.id, userId: user.id })
-      .then(({ userId }) => {
+  const onMerge = useCallback((existingUser) => {
+    return mergeOrCreateUser({ stagingUserId: stagingUser?.id, userId: existingUser.id })
+      .then(({ userId }) => ky.get(`${USERS_API}/${userId}`).json())
+      .then((user) => {
         const name = getFullName(user).trim() || user.username;
         callout.sendCallout({
           message: intl.formatMessage(
@@ -43,7 +49,7 @@ const PreRegistrationRecordsDuplicatesListContainer = ({
           ),
         });
         history.replace({
-          pathname: `/users/view/${userId}`,
+          pathname: `/users/view/${user.id}`,
         });
       })
       .catch((error) => {
@@ -58,6 +64,7 @@ const PreRegistrationRecordsDuplicatesListContainer = ({
   }, [
     callout,
     history,
+    ky,
     intl,
     mergeOrCreateUser,
     stagingUser?.id,

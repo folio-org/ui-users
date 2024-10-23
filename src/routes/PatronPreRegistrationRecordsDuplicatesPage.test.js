@@ -15,6 +15,8 @@ import {
   useUsersQuery,
 } from '../hooks';
 import { PatronPreRegistrationRecordsDuplicatesPage } from './PatronPreRegistrationRecordsDuplicatesPage';
+import { useOkapiKy } from '@folio/stripes/core';
+import { get } from 'lodash';
 
 jest.unmock('@folio/stripes/components');
 
@@ -38,8 +40,10 @@ const renderComponent = (props = {}) => renderWithRouter(
   />
 );
 
-
 describe('PatronPreRegistrationRecordsDuplicatesPage', () => {
+  const kyMock = {
+    get: jest.fn(() => ({ json: () => Promise.resolve({ id: 'userId' }) })),
+  };
   const pushMock = jest.fn();
   const replaceMock = jest.fn();
   const mergeOrCreateUser = jest.fn(() => Promise.resolve({ userId: 'userId' }));
@@ -59,6 +63,7 @@ describe('PatronPreRegistrationRecordsDuplicatesPage', () => {
       },
     });
 
+    useOkapiKy.mockReturnValue(kyMock);
     usePatronGroups.mockReturnValue({
       patronGroups: [{
         id: '3684a786-6671-4268-8ed0-9db82ebca60b',
