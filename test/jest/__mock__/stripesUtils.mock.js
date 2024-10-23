@@ -6,4 +6,5 @@ jest.mock('@folio/stripes/util', () => ({
   getHeaderWithCredentials: jest.fn(() => ({
     headers: {}
   })),
+  getFullName: jest.fn(),
 }));

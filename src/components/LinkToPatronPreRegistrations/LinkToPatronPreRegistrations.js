@@ -12,7 +12,7 @@ const LinkToPatronPreRegistrations = () => {
   const history = useHistory();
 
   return (
-    <IfPermission perm="ui-users.patron-pre-registrations-view">
+    <IfPermission perm="ui-users.patron-pre-registrations.view">
       <Button
         to={{
           pathname: '/users/pre-registration-records',
