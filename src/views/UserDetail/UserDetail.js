@@ -360,13 +360,26 @@ class UserDetail extends React.Component {
     return `/users/${params.id}/edit${search}`;
   }
 
+  getLocationReferrer = () => {
+    const { location } = this.props;
+
+    return (
+      location.state?.referrer || (
+        // Check if the referrer is from the same origin
+        document.referrer.startsWith(window.location.origin)
+          ? document.referrer.replace(window.location.origin, '')
+          : null
+      )
+    );
+  }
+
   onClose = () => {
     const {
       history,
-      location
+      location,
     } = this.props;
 
-    history.push(`/users${location.search}`);
+    history.push(this.getLocationReferrer() || `/users${location.search}`);
   }
 
   getPatronGroup(user) {

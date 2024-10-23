@@ -162,10 +162,18 @@ jest.mock('@folio/stripes/components', () => ({
   // destructure appIcon and dismissible so they aren't incorrectly
   // applied as DOM attributes via ...rest.
   // eslint-disable-next-line no-unused-vars
-  Pane: jest.fn(({ children, className, defaultWidth, paneTitle, firstMenu, lastMenu, actionMenu, appIcon, dismissible, ...rest }) => {
+  Pane: jest.fn(({ children, className, defaultWidth, paneTitle, firstMenu, lastMenu, actionMenu, appIcon, dismissible, onClose, ...rest }) => {
     return (
       <div className={className} {...rest} style={{ width: defaultWidth }}>
         <div>
+          {dismissible && (
+            <button
+              type="button"
+              data-testid="close-pane"
+              label="Close"
+              onClick={onClose}
+            />
+          )}
           {firstMenu ?? null}
           {paneTitle}
           {actionMenu ? actionMenu({ onToggle: jest.fn() }) : null}

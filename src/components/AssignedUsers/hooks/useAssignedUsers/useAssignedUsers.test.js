@@ -6,7 +6,11 @@ import {
 
 import { useOkapiKy } from '@folio/stripes/core';
 
-import { GROUPS_API, PERMISSIONS_API, USERS_API } from '../../constants';
+import {
+  GROUPS_API,
+  USERS_API,
+} from '../../../../constants';
+import { PERMISSIONS_API } from '../../constants';
 import { batchRequest } from '../utils';
 import useAssignedUsers from './useAssignedUsers';
 

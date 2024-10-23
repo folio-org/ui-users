@@ -8,9 +8,11 @@ import {
 
 import {
   GROUPS_API,
+  USERS_API,
+} from '../../../../constants';
+import {
   MAX_RECORDS,
   PERMISSIONS_API,
-  USERS_API,
 } from '../../constants';
 import {
   batchRequest,
