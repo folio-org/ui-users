@@ -805,7 +805,7 @@ class UserDetail extends React.Component {
                 {
                   displayReadingRoomAccessAccordion && (
                     <IfInterface name="reading-room-patron-permission">
-                      <IfPermission perm="ui-users.view-reading-room-access">
+                      <IfPermission perm="ui-users.reading-room-access.view">
                         <ReadingRoomAccess
                           accordionId="readingRoomAccessSection"
                           onToggle={this.handleSectionToggle}
