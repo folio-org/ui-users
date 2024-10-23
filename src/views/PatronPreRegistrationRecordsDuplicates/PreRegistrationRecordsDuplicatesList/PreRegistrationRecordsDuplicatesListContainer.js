@@ -4,6 +4,7 @@ import { useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
 import { useCallout } from '@folio/stripes/core';
+import { getFullName } from '@folio/stripes/util';
 
 import {
   usePatronGroups,
@@ -14,7 +15,7 @@ import PreRegistrationRecordsDuplicatesList from './PreRegistrationRecordsDuplic
 const PreRegistrationRecordsDuplicatesListContainer = ({
   isLoading,
   totalRecords,
-  user,
+  user: stagingUser,
   users,
 }) => {
   const intl = useIntl();
@@ -24,20 +25,21 @@ const PreRegistrationRecordsDuplicatesListContainer = ({
   const {
     isLoading: isPatronGroupsLoading,
     patronGroups,
-  } = usePatronGroups({ enabled: Boolean(user?.id) });
+  } = usePatronGroups({ enabled: Boolean(stagingUser?.id) });
 
   const {
     mergeOrCreateUser,
     isLoading: isMutating,
   } = useStagingUserMutation();
 
-  const onMerge = useCallback(({ id }) => {
-    return mergeOrCreateUser({ stagingUserId: user?.id, userId: id })
+  const onMerge = useCallback((user) => {
+    return mergeOrCreateUser({ stagingUserId: stagingUser?.id, userId: user.id })
       .then(({ userId }) => {
+        const name = getFullName(user).trim() || user.username;
         callout.sendCallout({
           message: intl.formatMessage(
-            { id: 'ui-users.stagingRecords.duplicates.results.merge.success' },
-            { name: 'QWERTY' },
+            { id: 'ui-users.stagingUser.createUser' },
+            { name },
           ),
         });
         history.replace({
@@ -58,7 +60,7 @@ const PreRegistrationRecordsDuplicatesListContainer = ({
     history,
     intl,
     mergeOrCreateUser,
-    user?.id,
+    stagingUser?.id,
   ]);
 
   return (
