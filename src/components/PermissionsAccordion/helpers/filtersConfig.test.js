@@ -17,7 +17,7 @@ const permissions = [
     'moduleName' : 'folio_agreements',
     'moduleVersion' : '8.0.1000774'
   }, {
-    'permissionName' : 'ui-checkout.viewFeeFines',
+    'permissionName' : 'ui-checkout.viewFeeFines.view',
     'displayName' : 'Check out: View fees/fines',
     'id' : '87a3f1b3-1e0a-4a4e-84de-31d417398257',
     'description' : 'Entire set of permissions needed to view fees/fines',
@@ -32,7 +32,7 @@ const permissions = [
     'moduleName' : 'folio_checkout',
     'moduleVersion' : '7.0.1000575'
   }, {
-    'permissionName' : 'ui-checkout.viewRequests',
+    'permissionName' : 'ui-checkout.viewRequests.view',
     'displayName' : '',
     'id' : '607d641c-b67f-42a9-aee3-c440616133fa',
     'description' : 'Entire set of permissions needed to view requests',
