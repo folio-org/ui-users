@@ -1070,7 +1070,7 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.view-reading-room-access",
+        "permissionName": "ui-users.reading-room-access.view",
         "displayName": "Users: Can view reading room access",
         "subPermissions": [
           "ui-users.view",
@@ -1079,11 +1079,11 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.edit-reading-room-access",
+        "permissionName": "ui-users.reading-room-access.edit",
         "displayName": "Users: Can view, and edit reading room access",
         "subPermissions": [
           "ui-users.edit",
-          "ui-users.view-reading-room-access",
+          "ui-users.reading-room-access.view",
           "reading-room.patron-permission.item.put"
         ],
         "visible": true

@@ -15,6 +15,11 @@ import { MultiColumnList } from '@folio/stripes/components';
 import { useUserDuplicatesCheck } from './hooks';
 import PatronsPreRegistrationList from './PatronsPreRegistrationList';
 
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useLocation: () => ({ search: '' }),
+}));
+
 jest.mock('./hooks', () => ({
   ...jest.requireActual('./hooks'),
   useUserDuplicatesCheck: jest.fn(),

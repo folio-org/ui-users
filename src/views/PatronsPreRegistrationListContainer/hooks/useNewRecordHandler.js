@@ -1,18 +1,22 @@
 import { useMutation } from 'react-query';
-import { useHistory } from 'react-router-dom';
+import {
+  useHistory,
+  useLocation,
+} from 'react-router-dom';
 
 import useUserDuplicatesCheck from './useUserDuplicatesCheck';
 import useProcessPreRegisteredUser from './useProcessPreRegisteredUser';
 
-const handleDuplicates = (user, history) => {
+const handleDuplicates = (user, history, location) => {
   history.push({
-    pathname: '/users/pre-registration-records/duplicates',
-    search: `?email=${user?.contactInfo?.email}`,
+    pathname: `/users/pre-registration-records/duplicates/${user.id}`,
+    state: { search: location.search },
   });
 };
 
 const useNewRecordHandler = () => {
   const history = useHistory();
+  const location = useLocation();
   const { checkDuplicates } = useUserDuplicatesCheck();
   const { handlePreRegisteredUser } = useProcessPreRegisteredUser();
 
@@ -22,9 +26,13 @@ const useNewRecordHandler = () => {
   } = useMutation({
     mutationFn: checkDuplicates,
     onSuccess: (hasDuplicates, user) => {
-      const handleSuccess = hasDuplicates ? handleDuplicates : handlePreRegisteredUser;
+      const handleSuccess = () => (
+        hasDuplicates
+          ? handleDuplicates(user, history, location)
+          : handlePreRegisteredUser
+      );
 
-      handleSuccess(user, history);
+      handleSuccess();
     },
   });
 

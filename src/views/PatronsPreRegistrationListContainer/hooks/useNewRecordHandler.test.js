@@ -16,6 +16,7 @@ jest.mock('react-query', () => ({
 
 jest.mock('react-router-dom', () => ({
   useHistory: jest.fn(),
+  useLocation: jest.fn(() => ({ search: '' })),
 }));
 
 jest.mock('./useUserDuplicatesCheck', () => jest.fn());
@@ -49,12 +50,15 @@ describe('useNewRecordHandler', () => {
     const { result } = renderHook(() => useNewRecordHandler());
 
     await act(async () => {
-      await result.current.handle({ contactInfo: { email: 'test@example.com' } });
+      await result.current.handle({
+        id: 'userId',
+        contactInfo: { email: 'test@example.com' },
+      });
     });
 
     expect(mockHistoryPush).toHaveBeenCalledWith({
-      pathname: '/users/pre-registration-records/duplicates',
-      search: '?email=test@example.com',
+      pathname: '/users/pre-registration-records/duplicates/userId',
+      state: { search: '' },
     });
   });
 
