@@ -29,7 +29,7 @@ const props = {
       'moduleVersion' : '7.0.1000575',
     },
     {
-      'permissionName' : 'ui-checkout.viewRequests',
+      'permissionName' : 'ui-checkout.viewRequests.view',
       'displayName' : 'cq-ad',
       'id' : '607d641c-b67f-42a9-aee3-c440616133fa',
       'description' : 'Entire set of permissions needed to view requests',
@@ -79,7 +79,7 @@ describe('PermissionsList component', () => {
   it('checking each permission click status', () => {
     renderPermissionsList(props);
     fireEvent.click(document.querySelector('[data-permission-name="acq-admin"]'));
-    fireEvent.click(screen.getByText('ui-checkout.permission.viewRequests'));
+    fireEvent.click(screen.getByText('ui-checkout.permission.viewRequests.view'));
     expect(renderPermissionsList(props)).toBeTruthy();
   });
 });
