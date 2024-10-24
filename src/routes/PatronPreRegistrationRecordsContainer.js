@@ -9,7 +9,7 @@ import {
 } from '@folio/stripes/smart-components';
 import PatronsPreRegistrationListContainer from '../views/PatronsPreRegistrationListContainer/PatronsPreRegistrationListContainer';
 
-import { PATRON_PREREGISTRATION_RECORDS_NAME } from '../constants';
+import { PATRON_PREREGISTRATION_RECORDS_NAME, PATRON_PREREGISTRATIONS_API } from '../constants';
 
 const RESULT_COUNT_INCREMENT = 100;
 const PAGE_AMOUNT = 100;
@@ -65,7 +65,7 @@ PatronPreRegistrationRecordsContainer.manifest = {
     resultOffset: '%{resultOffset}',
     resultDensity: 'sparse',
     perRequest: PAGE_AMOUNT,
-    path: 'staging-users',
+    path: PATRON_PREREGISTRATIONS_API,
     GET: {
       params: {
         query: makeQueryFunction(

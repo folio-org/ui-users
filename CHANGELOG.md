@@ -70,6 +70,7 @@
 * Confirmation dialog when JIT AuthUser creation is required. Refs UIU-3192.
 *  "borrower.patronGroup" print patron group's name based on id. Refs UIU-3228.
 * Rename permission names of permissions "Users: Can view reading room access" and "Users: Can view, and edit reading room access".
+* Create new user record from preregistration data when no matching folio user is found. Refs UIU-3223.
 
 ## [10.1.2](https://github.com/folio-org/ui-users/tree/v10.1.2) (2024-09-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.1.1...v10.1.2)
