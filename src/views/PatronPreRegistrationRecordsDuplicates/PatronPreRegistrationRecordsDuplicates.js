@@ -19,7 +19,7 @@ import { getPatronDuplicatesQuery } from '../../utils';
 import PreRegistrationRecordsDuplicatesList from './PreRegistrationRecordsDuplicatesList';
 
 const PatronPreRegistrationRecordsDuplicates = ({
-  isLoading: isLoadingProp,
+  isLoading: isStagingUsersLoading,
   user,
   onClose,
 }) => {
@@ -77,7 +77,7 @@ const PatronPreRegistrationRecordsDuplicates = ({
     )
     : <FormattedMessage id="stripes-smart-components.searchCriteria" />;
 
-  const isLoading = isLoadingProp || isUsersFetching;
+  const isLoading = isStagingUsersLoading || isUsersFetching;
 
   return (
     <Paneset isRoot>
