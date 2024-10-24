@@ -67,16 +67,14 @@ const useProcessPreRegisteredUser = () => {
     isLoading,
     mutateAsync: handlePreRegisteredUser,
   } = useMutation({
-    mutationFn: async (user) => {
+    mutationFn: (user) => {
       let newUserId;
       mergeOrCreateUser(user)
         .then(async (userId) => {
           newUserId = userId;
           await createPermissionUser(userId);
         })
-        .catch((error) => {
-          handleError(error);
-        })
+        .catch(handleError)
         .finally(() => {
           if (newUserId) navigateToUserView(history, newUserId);
         });
