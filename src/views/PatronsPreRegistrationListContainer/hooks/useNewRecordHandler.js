@@ -29,7 +29,7 @@ const useNewRecordHandler = () => {
       const handleSuccess = () => (
         hasDuplicates
           ? handleDuplicates(user, history, location)
-          : handlePreRegisteredUser
+          : handlePreRegisteredUser(user)
       );
 
       handleSuccess();
