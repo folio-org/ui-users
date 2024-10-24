@@ -101,7 +101,7 @@ const PreRegistrationRecordsDuplicatesList = ({
       id="patron-user-duplicates-list"
       autosize
       virtualize
-      isLoading={isLoading}
+      loading={isLoading}
       columnMapping={COLUMN_MAPPING}
       contentData={users}
       formatter={getResultsFormatter({ onMerge, patronGroups, location, isLoading })}
