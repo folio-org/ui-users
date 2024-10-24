@@ -13,6 +13,7 @@ jest.unmock('@folio/stripes/components');
 jest.mock('../../hooks', () => ({
   ...jest.requireActual('../../hooks'),
   usePatronGroups: jest.fn(),
+  useStagingUserMutation: jest.fn(() => ({ mergeOrCreateUser: jest.fn() })),
   useUsersQuery: jest.fn(),
 }));
 
