@@ -9,6 +9,7 @@ import {
   MultiColumnList,
   Button,
 } from '@folio/stripes/components';
+import { useStripes } from '@folio/stripes/core';
 
 import {
   visibleColumns,
@@ -24,6 +25,7 @@ const PatronsPreRegistrationList = ({
   onNeedMoreData
 }) => {
   const intl = useIntl();
+  const stripes = useStripes();
 
   const {
     handle,
@@ -33,7 +35,7 @@ const PatronsPreRegistrationList = ({
   const renderActionColumn = (user) => (
     <Button
       type="button"
-      disabled={isLoading}
+      disabled={isLoading || !stripes.hasPerm('ui-users.patron-pre-registrations.execute')}
       onClick={() => handle(user)}
       marginBottom0
     >

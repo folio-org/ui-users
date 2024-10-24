@@ -1,4 +1,3 @@
-import noop from 'lodash/noop';
 import { useMutation } from 'react-query';
 import {
   useHistory,
@@ -6,6 +5,7 @@ import {
 } from 'react-router-dom';
 
 import useUserDuplicatesCheck from './useUserDuplicatesCheck';
+import useProcessPreRegisteredUser from './useProcessPreRegisteredUser';
 
 const handleDuplicates = (user, history, location) => {
   history.push({
@@ -18,6 +18,7 @@ const useNewRecordHandler = () => {
   const history = useHistory();
   const location = useLocation();
   const { checkDuplicates } = useUserDuplicatesCheck();
+  const { handlePreRegisteredUser } = useProcessPreRegisteredUser();
 
   const {
     mutateAsync: handle,
@@ -28,7 +29,7 @@ const useNewRecordHandler = () => {
       const handleSuccess = () => (
         hasDuplicates
           ? handleDuplicates(user, history, location)
-          : noop()
+          : handlePreRegisteredUser(user)
       );
 
       handleSuccess();

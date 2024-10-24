@@ -340,6 +340,7 @@ export const GROUPS_API = 'groups';
 export const PROFILE_PIC_API = 'users/profile-picture';
 export const USERS_API = 'users';
 export const PATRON_PREREGISTRATIONS_API = 'staging-users';
+export const PERMISSIONS_API = 'perms/users';
 
 export const RECORD_SOURCE = {
   CONSORTIUM: 'consortium',
