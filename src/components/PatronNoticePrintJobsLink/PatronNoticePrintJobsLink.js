@@ -11,7 +11,7 @@ const PatronNoticePrintJobsLink = () => {
   const history = useHistory();
 
   return (
-    <IfPermission perm="ui-users.view-patron-notice-print-jobs">
+    <IfPermission perm="ui-users.patron-notice-print-jobs.view">
       <Button
         data-testid="patronNoticePrintJobsLink"
         to={{

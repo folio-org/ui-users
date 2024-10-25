@@ -542,7 +542,7 @@ class LoanDetails extends React.Component {
           >
             <Row>
               <span>
-                <IfPermission perm="ui-users.loans.renew">
+                <IfPermission perm="ui-users.loans.renew.create">
                   <Button
                     data-test-renew-button
                     disabled={buttonDisabled || isClaimedReturnedItem || !isUserActive || isVirtualPatron}
@@ -560,7 +560,7 @@ class LoanDetails extends React.Component {
                     buttonProps={{ buttonStyle: 'primary' }}
                   >
                     <DropdownMenu data-test-resolve-claim-dropdown data-role="menu">
-                      <IfPermission perm="ui-users.loans.declare-item-lost">
+                      <IfPermission perm="ui-users.loans.declare-item-lost.execute">
                         <Button
                           buttonStyle="dropdownItem"
                           data-test-declare-lost-button
@@ -570,7 +570,7 @@ class LoanDetails extends React.Component {
                           <FormattedMessage id="ui-users.loans.declareLost" />
                         </Button>
                       </IfPermission>
-                      <IfPermission perm="ui-users.loans.declare-claimed-returned-item-as-missing">
+                      <IfPermission perm="ui-users.loans.declare-claimed-returned-item-as-missing.execute">
                         <Button
                           buttonStyle="dropdownItem"
                           data-test-dropdown-content-mark-as-missing-button
@@ -584,7 +584,7 @@ class LoanDetails extends React.Component {
                   </Dropdown>
                 }
                 {!isClaimedReturnedItem &&
-                <IfPermission perm="ui-users.loans.claim-item-returned">
+                <IfPermission perm="ui-users.loans.claim-item-returned.execute">
                   <Button
                     data-test-claim-returned-button
                     disabled={buttonDisabled || isVirtualPatron}
@@ -595,7 +595,7 @@ class LoanDetails extends React.Component {
                   </Button>
                 </IfPermission>
                 }
-                <IfPermission perm="ui-users.loans.change-due-date">
+                <IfPermission perm="ui-users.loans.change-due-date.edit">
                   <Button
                     data-test-change-due-date-button
                     disabled={
@@ -627,7 +627,7 @@ class LoanDetails extends React.Component {
                     )}
                   </PrintToPDFWrapper>
                 </IfPermission>
-                <IfPermission perm="ui-users.loans.declare-item-lost">
+                <IfPermission perm="ui-users.loans.declare-item-lost.execute">
                   <Button
                     data-test-declare-lost-button
                     disabled={declareLostInProgress || buttonDisabled || isDeclaredLostItem || isVirtualPatron}
@@ -638,7 +638,7 @@ class LoanDetails extends React.Component {
                   </Button>
                 </IfPermission>
                 <IfInterface name="add-info">
-                  <IfPermission perm="ui-users.loans.add-patron-info">
+                  <IfPermission perm="ui-users.loans.add-info.create">
                     <Button
                       data-test-new-patron-info-button
                       disabled={isVirtualPatron}
@@ -647,7 +647,7 @@ class LoanDetails extends React.Component {
                       <FormattedMessage id="ui-users.loans.newPatronInfo" />
                     </Button>
                   </IfPermission>
-                  <IfPermission perm="ui-users.loans.add-staff-info">
+                  <IfPermission perm="ui-users.loans.add-info.create">
                     <Button
                       data-test-new-staff-info-button
                       disabled={isVirtualPatron}

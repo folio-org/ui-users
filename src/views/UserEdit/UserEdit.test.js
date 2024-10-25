@@ -423,7 +423,7 @@ describe('UserEdit', () => {
     });
 
     describe('when user has user profile edit', () => {
-      it('should update permissions when user has "ui-users.editperms" permissions', async () => {
+      it('should update permissions when user has "ui-users.perms.edit" permissions', async () => {
         props = {
           ...props,
           resources: {
@@ -432,7 +432,7 @@ describe('UserEdit', () => {
               records: [
                 {
                   id: 'permUserRecordId',
-                  permissions: ['ui-users.editperms', 'ui-users.edit']
+                  permissions: ['ui-users.perms.edit', 'ui-users.edit']
                 }
               ],
             },
@@ -445,7 +445,7 @@ describe('UserEdit', () => {
         expect(props.mutator.permissions.PUT).toHaveBeenCalled();
       });
 
-      it('should not update permissions when user has "ui-users.viewperms" permission', async () => {
+      it('should not update permissions when user has "ui-users.perms.view" permission', async () => {
         props = {
           ...props,
           stripes: {

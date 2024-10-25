@@ -465,7 +465,7 @@ class ClosedLoans extends React.Component {
                 <IntlConsumer>
                   {intl => (
                     <div>
-                      <IfPermission perm="ui-users.loans.anonymize">
+                      <IfPermission perm="ui-users.loans.anonymize.execute">
                         <Button
                           marginBottom0
                           id="anonymize-all"

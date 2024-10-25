@@ -27,7 +27,7 @@ const ActionMenuDeleteButton = ({ id, suppressList, onToggle, handleDeleteClick 
   let button = <></>;
   if (!suppress) {
     button = (
-      <IfPermission perm="ui-users.delete,ui-users.opentransactions">
+      <IfPermission perm="ui-users.delete,ui-users.opentransactions.view">
         <Button
           buttonStyle="dropdownItem"
           data-test-actions-menu-check-delete

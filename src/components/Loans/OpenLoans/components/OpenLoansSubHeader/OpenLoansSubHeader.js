@@ -166,7 +166,7 @@ const OpenLoansSubHeader = ({
       contentEnd={
         !isVirtualUser && (
           <span>
-            <IfPermission perm="ui-users.loans.renew">
+            <IfPermission perm="ui-users.loans.renew.create">
               <Button
                 marginBottom0
                 id="renew-all"
@@ -179,7 +179,7 @@ const OpenLoansSubHeader = ({
                 {intl.formatMessage({ id: 'ui-users.renew' })}
               </Button>
             </IfPermission>
-            <IfPermission perm="ui-users.loans.claim-item-returned">
+            <IfPermission perm="ui-users.loans.claim-item-returned.execute">
               <Button
                 marginBottom0
                 id="bulk-claim-returned"
@@ -189,7 +189,7 @@ const OpenLoansSubHeader = ({
                 {intl.formatMessage({ id: 'ui-users.loans.claimReturned' })}
               </Button>
             </IfPermission>
-            <IfPermission perm="ui-users.loans.change-due-date">
+            <IfPermission perm="ui-users.loans.change-due-date.edit">
               <Button
                 marginBottom0
                 id="change-due-date-all"

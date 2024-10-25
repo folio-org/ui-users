@@ -54,7 +54,7 @@ class RequestFeeFineBlockButtons extends React.Component {
             </Icon>
           </Button>
         </IfPermission>
-        <IfPermission perm="ui-users.patron_blocks">
+        <IfPermission perm="ui-users.patron_blocks.all">
           <Button
             buttonStyle="dropdownItem"
             data-test-actions-menu-create-patronblocks

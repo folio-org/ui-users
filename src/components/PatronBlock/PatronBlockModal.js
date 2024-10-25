@@ -58,7 +58,7 @@ const PatronBlockModal = ({
         <Col xs={6}>
           <Row end="xs">
             <Col>
-              <IfPermission perm="ui-users.overridePatronBlock">
+              <IfPermission perm="ui-users.overridePatronBlock.execute">
                 <Button
                   data-test-open-override-modal
                   onClick={() => {

@@ -338,13 +338,13 @@ feeFineActions
     const refundAllowed = isRefundAllowed(account, feeFineActions);
     const cancelAllowed = isCancelAllowed(account);
     const showActionMenu = this.props.stripes.hasPerm('ui-users.feesfines.actions.all') ||
-      this.props.stripes.hasPerm('ui-users.manual_pay') ||
-      this.props.stripes.hasPerm('ui-users.manual_waive');
+      this.props.stripes.hasPerm('ui-users.manual_pay.execute') ||
+      this.props.stripes.hasPerm('ui-users.manual_waive.execute');
 
     if (showActionMenu) {
       return (
         <div data-test-actions-menu>
-          <IfPermission perm="ui-users.manual_pay">
+          <IfPermission perm="ui-users.manual_pay.execute">
             <Button
               id="payAccountActionsHistory"
               buttonStyle="dropdownItem"
@@ -356,7 +356,7 @@ feeFineActions
               </Icon>
             </Button>
           </IfPermission>
-          <IfPermission perm="ui-users.manual_waive">
+          <IfPermission perm="ui-users.manual_waive.execute">
             <Button
               id="waiveAccountActionsHistory"
               buttonStyle="dropdownItem"
