@@ -17,8 +17,8 @@ import {
   AppIcon,
   useStripes,
 } from '@folio/stripes/core';
-import { getFullName } from '@folio/stripes/util';
 
+import { getFullName } from '../../../utils';
 import css from '../../UserSearch/UserSearch.css';
 
 const getResultsFormatter = ({ onMerge, patronGroups, location, isLoading }) => {
@@ -47,7 +47,7 @@ const getResultsFormatter = ({ onMerge, patronGroups, location, isLoading }) => 
         </Button>
       </Layout>
     ),
-    active: user => {
+    status: user => {
       return user.active
         ? <FormattedMessage id="ui-users.active" />
         : <FormattedMessage id="ui-users.inactive" />;
@@ -73,7 +73,7 @@ const getResultsFormatter = ({ onMerge, patronGroups, location, isLoading }) => 
 const COLUMN_MAPPING = {
   action: <FormattedMessage id="ui-users.action" />,
   name: <FormattedMessage id="ui-users.information.name" />,
-  active: <FormattedMessage id="ui-users.active" />,
+  status: <FormattedMessage id="ui-users.status" />,
   barcode: <FormattedMessage id="ui-users.information.barcode" />,
   patronGroup: <FormattedMessage id="ui-users.information.patronGroup" />,
   username: <FormattedMessage id="ui-users.information.username" />,
