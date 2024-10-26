@@ -47,25 +47,13 @@ import FinancialTransactionsReport from '../../components/data/reports/Financial
 import LostItemsLink from '../../components/LostItemsLink';
 import LinkToPatronPreRegistrations from '../../components/LinkToPatronPreRegistrations';
 import PatronNoticePrintJobsLink from '../../components/PatronNoticePrintJobsLink';
+import { getFullName } from '../../utils';
 import Filters from './Filters';
 
 import css from './UserSearch.css';
 
 const VISIBLE_COLUMNS_STORAGE_KEY = 'users-visible-columns';
 const NON_TOGGLEABLE_COLUMNS = ['name'];
-
-function getFullName(user) {
-  let firstName = user?.personal?.firstName ?? '';
-  const lastName = user?.personal?.lastName ?? '';
-  const middleName = user?.personal?.middleName ?? '';
-  const preferredFirstName = user?.personal?.preferredFirstName ?? '';
-
-  if (preferredFirstName && firstName) {
-    firstName = `${preferredFirstName} (${firstName})`;
-  }
-
-  return `${lastName}${firstName ? ', ' : ' '}${firstName} ${middleName}`;
-}
 
 const rawSearchableIndexes = [
   { label: 'ui-users.index.all', value: '' },

@@ -1,4 +1,8 @@
 import PropTypes from 'prop-types';
+import {
+  memo,
+  useMemo,
+} from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useLocation } from 'react-router';
 
@@ -9,12 +13,15 @@ import {
   NoValue,
   TextLink,
 } from '@folio/stripes/components';
-import { AppIcon } from '@folio/stripes/core';
-import { getFullName } from '@folio/stripes/util';
+import {
+  AppIcon,
+  useStripes,
+} from '@folio/stripes/core';
 
+import { getFullName } from '../../../utils';
 import css from '../../UserSearch/UserSearch.css';
 
-const getResultsFormatter = ({ onMerge, patronGroups, location }) => {
+const getResultsFormatter = ({ onMerge, patronGroups, location, isLoading }) => {
   const getRowURL = (userId) => {
     return {
       pathname: `/users/view/${userId}`,
@@ -33,13 +40,14 @@ const getResultsFormatter = ({ onMerge, patronGroups, location }) => {
       <Layout className="full flex centerContent">
         <Button
           onClick={() => onMerge(user)}
+          disabled={isLoading}
           marginBottom0
         >
           <FormattedMessage id="ui-users.stagingRecords.merge" />
         </Button>
       </Layout>
     ),
-    active: user => {
+    status: user => {
       return user.active
         ? <FormattedMessage id="ui-users.active" />
         : <FormattedMessage id="ui-users.inactive" />;
@@ -65,7 +73,7 @@ const getResultsFormatter = ({ onMerge, patronGroups, location }) => {
 const COLUMN_MAPPING = {
   action: <FormattedMessage id="ui-users.action" />,
   name: <FormattedMessage id="ui-users.information.name" />,
-  active: <FormattedMessage id="ui-users.active" />,
+  status: <FormattedMessage id="ui-users.status" />,
   barcode: <FormattedMessage id="ui-users.information.barcode" />,
   patronGroup: <FormattedMessage id="ui-users.information.patronGroup" />,
   username: <FormattedMessage id="ui-users.information.username" />,
@@ -82,18 +90,23 @@ const PreRegistrationRecordsDuplicatesList = ({
   users,
 }) => {
   const location = useLocation();
+  const stripes = useStripes();
+
+  const visibleColumns = useMemo(() => {
+    return stripes.hasPerm('ui-users.patron-pre-registrations.execute') ? VISIBLE_COLUMNS : VISIBLE_COLUMNS.filter(column => column !== 'action');
+  }, [stripes]);
 
   return (
     <MultiColumnList
       id="patron-user-duplicates-list"
       autosize
       virtualize
-      isLoading={isLoading}
+      loading={isLoading}
       columnMapping={COLUMN_MAPPING}
       contentData={users}
-      formatter={getResultsFormatter({ onMerge, patronGroups, location })}
+      formatter={getResultsFormatter({ onMerge, patronGroups, location, isLoading })}
       totalCount={totalRecords}
-      visibleColumns={VISIBLE_COLUMNS}
+      visibleColumns={visibleColumns}
       interactive={false}
     />
   );
@@ -107,4 +120,4 @@ PreRegistrationRecordsDuplicatesList.propTypes = {
   users: PropTypes.arrayOf(PropTypes.object),
 };
 
-export default PreRegistrationRecordsDuplicatesList;
+export default memo(PreRegistrationRecordsDuplicatesList);

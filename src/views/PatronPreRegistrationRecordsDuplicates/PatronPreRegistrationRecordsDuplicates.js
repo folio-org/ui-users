@@ -19,7 +19,7 @@ import { getPatronDuplicatesQuery } from '../../utils';
 import PreRegistrationRecordsDuplicatesList from './PreRegistrationRecordsDuplicatesList';
 
 const PatronPreRegistrationRecordsDuplicates = ({
-  isLoading,
+  isLoading: isStagingUsersLoading,
   user,
   onClose,
 }) => {
@@ -30,7 +30,7 @@ const PatronPreRegistrationRecordsDuplicates = ({
 
   const {
     isFetched,
-    isLoading: isUsersLoading,
+    isFetching: isUsersFetching,
     users,
     totalRecords,
   } = useUsersQuery(
@@ -77,6 +77,8 @@ const PatronPreRegistrationRecordsDuplicates = ({
     )
     : <FormattedMessage id="stripes-smart-components.searchCriteria" />;
 
+  const isLoading = isStagingUsersLoading || isUsersFetching;
+
   return (
     <Paneset isRoot>
       <Pane
@@ -100,7 +102,7 @@ const PatronPreRegistrationRecordsDuplicates = ({
           style={{ height: wrapperHeight }}
         >
           <PreRegistrationRecordsDuplicatesList
-            isLoading={isLoading || isUsersLoading}
+            isLoading={isLoading}
             user={user}
             users={users}
             totalRecords={totalRecords}
