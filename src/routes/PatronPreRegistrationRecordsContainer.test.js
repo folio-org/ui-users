@@ -53,7 +53,7 @@ const props = {
   },
   stripes: {
     ...STRIPES,
-    hasPerm: jest.fn(() => true),
+    hasPerm: jest.fn().mockReturnValue(true),
   },
   history,
 };
@@ -118,5 +118,21 @@ describe('PatronPreRegistrationRecordsContainer', () => {
     fireEvent.click(screen.getByTestId('need-more-button'));
 
     expect(mockSource.fetchMore).toHaveBeenCalledWith(100);
+  });
+
+  describe('when logged in user user do not have permission to view staging records', () => {
+    it('should render NoPermissionMessage component', () => {
+      const alteredProps = {
+        ...props,
+        stripes: {
+          ...props.stripes,
+          hasPerm: jest.fn().mockReturnValue(false),
+        },
+      };
+
+      renderPatronPreRegistrationRecordsContainer(alteredProps);
+
+      expect(screen.getByText('ui-users.stagingRecords.message.noAccessToStagingRecordsPage')).toBeDefined();
+    });
   });
 });
