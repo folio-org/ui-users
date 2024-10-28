@@ -10,7 +10,7 @@ import {
 
 import PatronsPreRegistrationListContainer from '../views/PatronsPreRegistrationListContainer/PatronsPreRegistrationListContainer';
 import { PATRON_PREREGISTRATION_RECORDS_NAME, PATRON_PREREGISTRATIONS_API } from '../constants';
-import NoPermissionMessage from '../views/LostItems/NoPermissionMessage';
+import NoPermissionMessage from '../components/NoPermissionMessage';
 
 const RESULT_COUNT_INCREMENT = 100;
 const PAGE_AMOUNT = 100;

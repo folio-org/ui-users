@@ -10,10 +10,8 @@ import {
   buildUrl,
 } from '@folio/stripes/smart-components';
 
-import {
-  LostItemsListContainer,
-  NoPermissionMessage,
-} from '../views/LostItems';
+import { LostItemsListContainer } from '../views/LostItems';
+import NoPermissionMessage from '../components/NoPermissionMessage';
 import {
   ACTUAL_COST_RECORD_FIELD_NAME,
   ACTUAL_COST_RECORD_FIELD_PATH,

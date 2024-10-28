@@ -34,6 +34,7 @@ jest.mock('react-router-dom', () => ({
   useHistory: jest.fn(),
 }));
 
+const STRIPES = buildStripes();
 const history = createMemoryHistory();
 history.push = jest.fn();
 const props = {
@@ -50,7 +51,10 @@ const props = {
     },
     resultOffset: 100
   },
-  stripes: buildStripes(),
+  stripes: {
+    ...STRIPES,
+    hasPerm: jest.fn(() => true),
+  },
   history,
 };
 
