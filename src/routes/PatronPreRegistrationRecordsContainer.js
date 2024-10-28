@@ -1,24 +1,26 @@
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { get } from 'lodash';
+import { get, template } from 'lodash';
 
 import { stripesConnect } from '@folio/stripes/core';
 import {
   makeQueryFunction,
   StripesConnectedSource,
 } from '@folio/stripes/smart-components';
-import PatronsPreRegistrationListContainer from '../views/PatronsPreRegistrationListContainer/PatronsPreRegistrationListContainer';
 
+import PatronsPreRegistrationListContainer from '../views/PatronsPreRegistrationListContainer/PatronsPreRegistrationListContainer';
 import { PATRON_PREREGISTRATION_RECORDS_NAME, PATRON_PREREGISTRATIONS_API } from '../constants';
+import NoPermissionMessage from '../components/NoPermissionMessage';
 
 const RESULT_COUNT_INCREMENT = 100;
 const PAGE_AMOUNT = 100;
 
-const PatronPreRegistrationRecordsContainer = ({
-  resources,
-  mutator,
-  stripes,
-}) => {
+const PatronPreRegistrationRecordsContainer = (props) => {
+  const {
+    resources,
+    mutator,
+    stripes,
+  } = props;
   const history = useHistory();
   const source = new StripesConnectedSource({ resources, mutator }, stripes.logger, PATRON_PREREGISTRATION_RECORDS_NAME);
   const data = get(resources, `${PATRON_PREREGISTRATION_RECORDS_NAME}.records`, []);
@@ -42,6 +44,18 @@ const PatronPreRegistrationRecordsContainer = ({
   const onClose = () => {
     history.push('/users?sort=name');
   };
+
+  if (source) {
+    source.update(props, PATRON_PREREGISTRATION_RECORDS_NAME);
+  }
+
+  const hasPermission = props.stripes.hasPerm('ui-users.patron-pre-registrations.view');
+
+  if (!hasPermission) {
+    return (
+      <NoPermissionMessage id="ui-users.stagingRecords.message.noAccessToStagingRecordsPage" />
+    );
+  }
 
   return (
     <PatronsPreRegistrationListContainer
@@ -70,13 +84,13 @@ PatronPreRegistrationRecordsContainer.manifest = {
       params: {
         query: makeQueryFunction(
           'cql.allRecords=1',
-          '(keywords="%{query.query}*") AND status == "TIER-2"',
+          (parsedQuery, _, localProps) => localProps.query.query.trim().replace('*', '').split(/\s+/)
+            .map(query => template('keywords="%{query}*"', { interpolate: /%{([\s\S]+?)}/g })({ query }))
+            .join(' and ')
+            .concat(' AND status == "TIER-2"'),
           {
-            'firstName': 'personal.firstName',
-            'lastName': 'personal.lastName',
-            'middleName': 'personal.middleName',
-            'preferredFirsName': 'personal.preferredFirstName',
-            'email': 'personal.email',
+            'name': 'generalInfo.lastName generalInfo.preferredFirstName generalInfo.firstName generalInfo.middleName',
+            'email': 'contactInfo.email'
           },
           '',
           2

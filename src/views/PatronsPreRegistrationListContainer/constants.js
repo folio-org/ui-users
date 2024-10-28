@@ -2,17 +2,17 @@ import { FormattedMessage } from 'react-intl';
 
 export const COLUMNS_NAME = {
   ACTION: 'ACTION',
-  FIRST_NAME: 'personal.firstName',
-  LAST_NAME: 'personal.lastName',
-  MIDDLE_NAME: 'middleName',
-  PREFERRED_FIRST_NAME: 'personal.preferredFirstName',
-  EMAIL: 'personal.email',
-  PHONE_NUMBER: 'personal.phone',
-  MOBILE_NUMBER: 'personal.mobilePhone',
-  ADDRESS: 'address',
-  EMAIL_COMMUNICATION_PREFERENCES: 'emailCommunicationPreferences',
-  SUBMISSION_DATE: 'submissionDate',
-  EMAIL_VERIFICATION: 'emailVerification'
+  FIRST_NAME: 'generalInfo.firstName',
+  LAST_NAME: 'generalInfo.lastName',
+  MIDDLE_NAME: 'generalInfo.middleName',
+  PREFERRED_FIRST_NAME: 'generalInfo.preferredFirstName',
+  EMAIL: 'contactInfo.email',
+  PHONE_NUMBER: 'contactInfo.phone',
+  MOBILE_NUMBER: 'contactInfo.mobilePhone',
+  ADDRESS: 'addressInfo.addressLine0',
+  EMAIL_COMMUNICATION_PREFERENCES: 'preferredEmailCommunication',
+  SUBMISSION_DATE: 'metadata.updatedDate', // 'submissionDate',
+  EMAIL_VERIFICATION: 'isEmailVerified'
 };
 
 export const visibleColumns = [
