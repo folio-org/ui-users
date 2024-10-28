@@ -53,7 +53,7 @@ const PatronsPreRegistrationList = ({
     [COLUMNS_NAME.PHONE_NUMBER]: user => get(user, ['contactInfo', 'phone']),
     [COLUMNS_NAME.MOBILE_NUMBER]: user => get(user, ['contactInfo', 'mobilePhone']),
     [COLUMNS_NAME.ADDRESS]: user => {
-      const addressInfo = get(user, 'addressInfo');
+      const addressInfo = get(user, 'addressInfo', {});
       return Object.values(addressInfo).join(',');
     },
     [COLUMNS_NAME.EMAIL_COMMUNICATION_PREFERENCES]: user => get(user, ['preferredEmailCommunication']).join(','),

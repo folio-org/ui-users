@@ -363,14 +363,7 @@ class UserDetail extends React.Component {
   getLocationReferrer = () => {
     const { location } = this.props;
 
-    return (
-      location.state?.referrer || (
-        // Check if the referrer is from the same origin
-        document.referrer.startsWith(window.location.origin)
-          ? document.referrer.replace(window.location.origin, '')
-          : null
-      )
-    );
+    return location.state?.referrer;
   }
 
   onClose = () => {
