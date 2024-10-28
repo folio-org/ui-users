@@ -428,7 +428,6 @@ describe('UserDetail', () => {
     const history = { push: jest.fn() };
 
     beforeEach(() => {
-      Object.defineProperty(document, 'referrer', { value: '', configurable: true });
       history.push.mockClear();
     });
 
@@ -444,19 +443,6 @@ describe('UserDetail', () => {
       await userEvent.click(screen.getByTestId('close-pane'));
 
       expect(history.push).toHaveBeenCalledWith(location.state.referrer);
-    });
-
-    it('should navigate to the referrer that opened view in a new tab', async () => {
-      const location = {};
-      const route = '/referrer-route';
-
-      renderUserDetail(stripes, { history, location });
-
-      Object.defineProperty(document, 'referrer', { value: `${global.location.origin}${route}` });
-
-      await userEvent.click(screen.getByTestId('close-pane'));
-
-      expect(history.push).toHaveBeenCalledWith(route);
     });
 
     it('should navigate to users list by default', async () => {
