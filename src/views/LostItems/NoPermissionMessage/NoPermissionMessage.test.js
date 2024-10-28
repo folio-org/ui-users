@@ -12,7 +12,7 @@ const testIds = {
 
 describe('NoPermissionMessage', () => {
   beforeEach(() => {
-    render(<NoPermissionMessage />);
+    render(<NoPermissionMessage id="ui-users.lostItems.message.noAccessToActualCostPage" />);
   });
 
   it('should render noPermissionWrapper', () => {

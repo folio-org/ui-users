@@ -7,9 +7,10 @@ import {
   makeQueryFunction,
   StripesConnectedSource,
 } from '@folio/stripes/smart-components';
-import PatronsPreRegistrationListContainer from '../views/PatronsPreRegistrationListContainer/PatronsPreRegistrationListContainer';
 
+import PatronsPreRegistrationListContainer from '../views/PatronsPreRegistrationListContainer/PatronsPreRegistrationListContainer';
 import { PATRON_PREREGISTRATION_RECORDS_NAME, PATRON_PREREGISTRATIONS_API } from '../constants';
+import NoPermissionMessage from '../views/LostItems/NoPermissionMessage';
 
 const RESULT_COUNT_INCREMENT = 100;
 const PAGE_AMOUNT = 100;
@@ -46,6 +47,14 @@ const PatronPreRegistrationRecordsContainer = (props) => {
 
   if (source) {
     source.update(props, PATRON_PREREGISTRATION_RECORDS_NAME);
+  }
+
+  const hasPermission = props.stripes.hasPerm('ui-users.patron-pre-registrations.view');
+
+  if (!hasPermission) {
+    return (
+      <NoPermissionMessage id="ui-users.stagingRecords.message.noAccessToStagingRecordsPage" />
+    );
   }
 
   return (

@@ -41,20 +41,19 @@ const PatronsPreRegistrationList = ({
   } = useNewRecordHandler();
 
   useEffect(() => {
-    // if (!isPending) {
     setSortedRecordsDetails(prev => ({
       ...prev,
       data: orderBy(data, prev.order, prev.direction)
     }));
-    // }
   }, [data]);
 
   const renderActionColumn = (user) => (
     <Button
       type="button"
-      disabled={isLoading || !stripes.hasPerm('ui-users.patron-pre-registrations.execute')} // TODO: check with Irina for hiding the button
+      disabled={isLoading}
       onClick={() => handle(user)}
       marginBottom0
+      style={!stripes.hasPerm('ui-users.patron-pre-registrations.execute') ? { display: 'none' } : {}}
     >
       <FormattedMessage id="stripes-components.addNew" />
     </Button>

@@ -222,7 +222,7 @@ class LostItemsContainer extends React.Component {
 
     if (!hasPermission) {
       return (
-        <NoPermissionMessage />
+        <NoPermissionMessage id="ui-users.lostItems.message.noAccessToActualCostPage" />
       );
     }
 
