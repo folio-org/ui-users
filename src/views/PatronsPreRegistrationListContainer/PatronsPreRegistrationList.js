@@ -10,7 +10,7 @@ import {
   MultiColumnList,
   Button,
 } from '@folio/stripes/components';
-import { useStripes } from '@folio/stripes/core';
+import { IfPermission } from '@folio/stripes/core';
 
 import {
   visibleColumns,
@@ -27,7 +27,6 @@ const PatronsPreRegistrationList = ({
   onNeedMoreData
 }) => {
   const intl = useIntl();
-  const stripes = useStripes();
   const sortInitialState = {
     data: [],
     order: '',
@@ -48,15 +47,16 @@ const PatronsPreRegistrationList = ({
   }, [data]);
 
   const renderActionColumn = (user) => (
-    <Button
-      type="button"
-      disabled={isLoading}
-      onClick={() => handle(user)}
-      marginBottom0
-      style={!stripes.hasPerm('ui-users.patron-pre-registrations.execute') ? { display: 'none' } : {}}
-    >
-      <FormattedMessage id="stripes-components.addNew" />
-    </Button>
+    <IfPermission perm="ui-users.patron-pre-registrations.execute">
+      <Button
+        type="button"
+        disabled={isLoading}
+        onClick={() => handle(user)}
+        marginBottom0
+      >
+        <FormattedMessage id="stripes-components.addNew" />
+      </Button>
+    </IfPermission>
   );
 
   const preRegistrationsListFormatter = () => ({
