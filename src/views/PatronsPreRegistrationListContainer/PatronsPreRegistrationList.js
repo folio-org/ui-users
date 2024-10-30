@@ -63,11 +63,11 @@ const PatronsPreRegistrationList = ({
     [COLUMNS_NAME.ACTION]: renderActionColumn,
     [COLUMNS_NAME.FIRST_NAME]: user => get(user, ['generalInfo', 'firstName']),
     [COLUMNS_NAME.LAST_NAME]: user => get(user, ['generalInfo', 'lastName']),
-    [COLUMNS_NAME.MIDDLE_NAME]: user => get(user, ['generalInfo', 'middleName', '']),
-    [COLUMNS_NAME.PREFERRED_FIRST_NAME]: user => get(user, ['generalInfo', 'preferredFirstName', '']),
+    [COLUMNS_NAME.MIDDLE_NAME]: user => get(user, ['generalInfo', 'middleName'], ''),
+    [COLUMNS_NAME.PREFERRED_FIRST_NAME]: user => get(user, ['generalInfo', 'preferredFirstName'], ''),
     [COLUMNS_NAME.EMAIL]: user => get(user, ['contactInfo', 'email']),
-    [COLUMNS_NAME.PHONE_NUMBER]: user => get(user, ['contactInfo', 'phone', '']),
-    [COLUMNS_NAME.MOBILE_NUMBER]: user => get(user, ['contactInfo', 'mobilePhone', '']),
+    [COLUMNS_NAME.PHONE_NUMBER]: user => get(user, ['contactInfo', 'phone'], ''),
+    [COLUMNS_NAME.MOBILE_NUMBER]: user => get(user, ['contactInfo', 'mobilePhone'], ''),
     [COLUMNS_NAME.ADDRESS]: user => {
       const addressInfo = get(user, 'addressInfo', {});
       return Object.values(addressInfo).join(',');
