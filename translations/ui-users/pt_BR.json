@@ -1229,5 +1229,7 @@
     "stagingRecords.merge": "Mesclar",
     "permission.reading-room-access.view": "Usuários: Podem visualizar o acesso à sala de leitura",
     "permission.reading-room-access.edit": "Usuários: Podem visualizar e editar o acesso à sala de leitura",
-    "stagingUser.createUser": "Registro de usuário do FOLIO <b>{name}</b> foi criado com sucesso."
+    "stagingUser.createUser": "Registro de usuário do FOLIO <b>{name}</b> foi criado com sucesso.",
+    "stagingRecords.notLoadedMessage": "Digite uma expressão de busca para mostrar os resultados.",
+    "stagingRecords.message.noAccessToStagingRecordsPage": "O operador não tem permissão para acessar a página \"Resultado do registro de pré-cadastro de usuários\""
 }
