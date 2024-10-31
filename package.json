@@ -29,9 +29,9 @@
       }
     ],
     "okapiInterfaces": {
-      "users": "16.0 16.1 16.2",
+      "users": "16.3",
       "configuration": "2.0",
-      "permissions": "5.6",
+      "permissions": "5.7",
       "login": "7.3",
       "users-bl": "6.1",
       "staging-users": "1.0",
