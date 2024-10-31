@@ -1201,11 +1201,11 @@
     "roles.modal.filter.status.label": "Stav přiřazení role",
     "roles.modal.header": "Vybrat uživatelské role",
     "loans.details.printDueDateReceipt": "Print due date receipt",
-    "actionMenu.preRegistrationRecords": "Search patron pre-registration records",
+    "actionMenu.preRegistrationRecords": "Search patron preregistration records",
     "stagingRecords.list.search": "Search",
     "stagingRecords.search.placeholder": "Search by name or email",
     "stagingRecords.search.label": "Staging records search",
-    "stagingRecords.list.searchResults": "Patron pre-registration record results",
+    "stagingRecords.list.searchResults": "Patron preregistration record results",
     "stagingRecords.list.columnNames.action": "Action",
     "stagingRecords.list.columnNames.firstName": "First name",
     "stagingRecords.list.columnNames.lastName": "Last name",
@@ -1229,5 +1229,7 @@
     "stagingRecords.merge": "Merge",
     "permission.reading-room-access.view": "Users: Can view reading room access",
     "permission.reading-room-access.edit": "Users: Can view, and edit reading room access",
-    "stagingUser.createUser": "FOLIO user record <b>{name}</b> has been successfully created."
+    "stagingUser.createUser": "FOLIO user record <b>{name}</b> has been successfully created.",
+    "stagingRecords.notLoadedMessage": "Enter a search query to show results.",
+    "stagingRecords.message.noAccessToStagingRecordsPage": "User does not have permission to access \"Patron preregistration record results\" page"
 }
