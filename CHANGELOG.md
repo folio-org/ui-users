@@ -77,6 +77,7 @@
 * Update translations for pre registrations value. Refs UIU-3241.
 * Display a message to a user without permission on the “Patron preregistration record results” page. Refs UIU-3242.
 * Display preregistration data appropriately. Refs UIU-3247.
+* Conditionally use delete method of the `mod-users-keycloak` if `users-keycloak` interface is present in UserRecordContainer. Refs UIU-3234.
 
 ## [10.1.2](https://github.com/folio-org/ui-users/tree/v10.1.2) (2024-09-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.1.1...v10.1.2)
