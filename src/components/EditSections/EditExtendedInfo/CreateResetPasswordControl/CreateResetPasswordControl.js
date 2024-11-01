@@ -40,11 +40,9 @@ class CreateResetPasswordControl extends React.Component {
     },
     keycloakUser: {
       type: 'okapi',
-      path: (queryParams, pathComponents, resourceData, config, props) => {
-        return `users-keycloak/auth-users/${props.userId}`;
-      },
+      path: 'users-keycloak/auth-users/!{userId}',
       accumulate: true,
-      fetch: true,
+      fetch: false,
       throwErrors: false,
     }
   });
@@ -77,19 +75,22 @@ class CreateResetPasswordControl extends React.Component {
       userId,
     } = this.props;
 
+    // If using users-keycloak, we need to ensure a keycloak record exists in the back-end in order to actually reset the password.
     if (stripes.hasInterface('users-keycloak')) {
       keycloakUser
         .GET()
-        .catch((error) => {
+        .catch((response) => {
           // If user not found in keycloak, then create record before resetting password.
-          if (error.httpStatus === 404) {
+          if (response.httpStatus === 404) {
             keycloakUser.POST({ userId })
               .then(this.handleResetPassword())
+          } else { // 204 no-content response means record exists but is treated as an error by stripes-connect.
+            this.handleResetPassword();
           }
         })
+    } else {
+      this.handleResetPassword();
     }
-
-    this.handleResetPassword();
   };
 
   handleResetPassword = () => {
