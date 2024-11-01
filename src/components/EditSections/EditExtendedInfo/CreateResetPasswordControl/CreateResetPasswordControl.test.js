@@ -12,14 +12,30 @@ jest.unmock('@folio/stripes/smart-components');
 
 const renderCreateResetPasswordControl = (props) => renderWithRouter(<CreateResetPasswordControl {...props} />);
 
-const propData = (postMock, disabled = false) => {
+const resetPasswordPostMockFn = jest.fn(() => new Promise((resolve, _) => {
+  resolve({ ok: true, link: 'bl-users/password-reset/link' });
+}));
+
+const keycloakUserGetMockFn = jest.fn(() => new Promise((resolve, _) => {
+  resolve({ ok: true });
+}));
+
+const keycloakUserPostMockFn = jest.fn(() => new Promise((resolve, _) => {
+  resolve({ ok: true });
+}));
+
+const propData = (resetPasswordPostMock, keycloakUserGetMock, keycloakUserPostMock, disabled = false) => {
   return {
     email: 'testemail@email.com',
     name: 'sample',
     userId: 'testUserId123',
     mutator: {
+      keycloakUser: {
+        GET: keycloakUserGetMock,
+        POST: keycloakUserPostMock,
+      },
       resetPassword: {
-        POST: postMock,
+        POST: resetPasswordPostMock,
       }
     },
     disabled,
@@ -29,25 +45,22 @@ const propData = (postMock, disabled = false) => {
 describe('CreateResetPasswordControl component', () => {
   afterEach(cleanup);
   it('If CreateResetPasswordControl Renders', () => {
-    const mockFunc = jest.fn(() => new Promise((resolve, _) => {
-      resolve({ ok: true, link: 'bl-users/password-reset/link' });
-    }));
-    renderCreateResetPasswordControl(propData(mockFunc));
+    renderCreateResetPasswordControl(
+      propData(resetPasswordPostMockFn, keycloakUserGetMockFn, keycloakUserPostMockFn)
+    );
     expect(screen.getByText('ui-users.extended.sendResetPassword')).toBeInTheDocument();
   });
   it('If reset password must be open with copy link', async () => {
-    const mockFunc = jest.fn(() => new Promise((resolve, _) => {
-      resolve({ ok: true, link: 'bl-users/password-reset/link' });
-    }));
-    await waitFor(() => renderCreateResetPasswordControl(propData(mockFunc)));
+    await waitFor(() => renderCreateResetPasswordControl(
+      propData(resetPasswordPostMockFn, keycloakUserGetMockFn, keycloakUserPostMockFn)
+    ));
     await waitFor(() => userEvent.click(screen.getByText('ui-users.extended.sendResetPassword')));
     await waitFor(() => expect(screen.getByText('ui-users.extended.copyLink')).toBeInTheDocument());
   });
   it('should link be disabled', () => {
-    const mockFunc = jest.fn(() => new Promise((resolve, _) => {
-      resolve({ ok: true, link: 'bl-users/password-reset/link' });
-    }));
-    renderCreateResetPasswordControl(propData(mockFunc, true));
+    renderCreateResetPasswordControl(
+      propData(resetPasswordPostMockFn, keycloakUserGetMockFn, keycloakUserPostMockFn, true)
+    );
     expect(screen.getByText('ui-users.extended.sendResetPassword')).toBeDisabled();
   });
   /* Can be uncommented after the  createResetpasswordControl modal logic is reworked. Should add an assertion at the end after the results */

@@ -22,8 +22,13 @@ class CreateResetPasswordControl extends React.Component {
       resetPassword: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }).isRequired,
+      keycloakUser: PropTypes.shape({
+        GET: PropTypes.func,
+        POST: PropTypes.func,
+      }),
     }).isRequired,
     disabled: PropTypes.bool,
+    stripes: PropTypes.object.isRequired,
   };
 
   static manifest = Object.freeze({
@@ -84,9 +89,9 @@ class CreateResetPasswordControl extends React.Component {
           // If user not found in keycloak, then create record before resetting password.
           if (error.httpStatus === 404) {
             keycloakUser.POST({ userId })
-              .then(this.handleResetPassword())
+              .then(this.handleResetPassword());
           }
-        })
+        });
     }
 
     this.handleResetPassword();
