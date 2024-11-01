@@ -22,8 +22,13 @@ class CreateResetPasswordControl extends React.Component {
       resetPassword: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }).isRequired,
+      keycloakUser: PropTypes.shape({
+        GET: PropTypes.func,
+        POST: PropTypes.func,
+      }),
     }).isRequired,
     disabled: PropTypes.bool,
+    stripes: PropTypes.object.isRequired,
   };
 
   static manifest = Object.freeze({
