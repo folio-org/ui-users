@@ -52,6 +52,7 @@ class CreateResetPasswordControl extends React.Component {
     }
   });
 
+
   constructor(props) {
     super(props);
     this.state = {
@@ -88,11 +89,11 @@ class CreateResetPasswordControl extends React.Component {
           // If user not found in keycloak, then create record before resetting password.
           if (response.httpStatus === 404) {
             keycloakUser.POST({ userId })
-              .then(this.handleResetPassword())
+              .then(this.handleResetPassword());
           } else { // 204 no-content response means record exists but is treated as an error by stripes-connect.
             this.handleResetPassword();
           }
-        })
+        });
     } else {
       this.handleResetPassword();
     }
