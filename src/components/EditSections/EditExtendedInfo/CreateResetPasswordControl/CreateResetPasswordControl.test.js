@@ -39,6 +39,9 @@ const propData = (resetPasswordPostMock, keycloakUserGetMock, keycloakUserPostMo
       }
     },
     disabled,
+    stripes: {
+      hasInterface: jest.fn()
+    },
   };
 };
 
