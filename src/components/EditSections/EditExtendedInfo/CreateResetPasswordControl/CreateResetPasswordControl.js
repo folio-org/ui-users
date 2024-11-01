@@ -38,7 +38,15 @@ class CreateResetPasswordControl extends React.Component {
       fetch: false,
       throwErrors: false,
     },
-
+    keycloakUser: {
+      type: 'okapi',
+      path: (queryParams, pathComponents, resourceData, config, props) => {
+        return `users-keycloak/auth-users/${props.userId}`;
+      },
+      accumulate: true,
+      fetch: true,
+      throwErrors: false,
+    }
   });
 
   constructor(props) {
@@ -61,6 +69,30 @@ class CreateResetPasswordControl extends React.Component {
   };
 
   handleLinkClick = () => {
+    const {
+      mutator: {
+        keycloakUser,
+      },
+      stripes,
+      userId,
+    } = this.props;
+
+    if (stripes.hasInterface('users-keycloak')) {
+      keycloakUser
+        .GET()
+        .catch((error) => {
+          // If user not found in keycloak, then create record before resetting password.
+          if (error.httpStatus === 404) {
+            keycloakUser.POST({ userId })
+              .then(this.handleResetPassword())
+          }
+        })
+    }
+
+    this.handleResetPassword();
+  };
+
+  handleResetPassword = () => {
     const {
       mutator: {
         resetPassword,
