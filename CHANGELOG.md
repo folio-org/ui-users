@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## 11.0.2 IN PROGRESS
+
+* If keycloak user record doesn't exist, create it before resetting password. Refs UIU-3236.
+
 ## [11.0.1](https://github.com/folio-org/ui-users/tree/v11.1.0) (2024-11-08)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.0...v11.0.1)
 
@@ -70,7 +74,7 @@
 * *BREAKING* Add new okapi interface staging-users. Add action button for searching patrons pre registration records. Refs UIU-3219.
 * Display patrons pre registration records results. Refs UIU-3222
 * Create new permission 'Users: Can view patron preregistration data'. Refs UIU-3221.
-* Omit `assignedRoleIds` field on edit user. Refs UIU-3233. 
+* Omit `assignedRoleIds` field on edit user. Refs UIU-3233.
 * Review existing FOLIO user records on duplicates view. Refs UIU-3224.
 * Create new permission 'Users: Can merge patron preregistration data'. Refs UIU-3237.
 * Confirmation dialog when JIT AuthUser creation is required. Refs UIU-3192.
