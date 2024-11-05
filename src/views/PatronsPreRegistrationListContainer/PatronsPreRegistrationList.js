@@ -1,5 +1,6 @@
-import get from 'lodash/get';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { get, orderBy } from 'lodash';
 import {
   useIntl,
   FormattedMessage,
@@ -9,7 +10,7 @@ import {
   MultiColumnList,
   Button,
 } from '@folio/stripes/components';
-import { useStripes } from '@folio/stripes/core';
+import { IfPermission } from '@folio/stripes/core';
 
 import {
   visibleColumns,
@@ -17,6 +18,7 @@ import {
   COLUMNS_NAME,
 } from './constants';
 import { useNewRecordHandler } from './hooks';
+import { sortTypes } from '../../constants';
 
 const PatronsPreRegistrationList = ({
   data,
@@ -25,38 +27,52 @@ const PatronsPreRegistrationList = ({
   onNeedMoreData
 }) => {
   const intl = useIntl();
-  const stripes = useStripes();
+  const sortInitialState = {
+    data: [],
+    order: '',
+    direction: sortTypes.ASC,
+  };
+  const [sortedRecordsDetails, setSortedRecordsDetails] = useState(sortInitialState);
 
   const {
     handle,
     isLoading,
   } = useNewRecordHandler();
 
+  useEffect(() => {
+    setSortedRecordsDetails(prev => ({
+      ...prev,
+      data: orderBy(data, prev.order, prev.direction)
+    }));
+  }, [data]);
+
   const renderActionColumn = (user) => (
-    <Button
-      type="button"
-      disabled={isLoading || !stripes.hasPerm('ui-users.patron-pre-registrations.execute')}
-      onClick={() => handle(user)}
-      marginBottom0
-    >
-      <FormattedMessage id="stripes-components.addNew" />
-    </Button>
+    <IfPermission perm="ui-users.patron-pre-registrations.execute">
+      <Button
+        type="button"
+        disabled={isLoading}
+        onClick={() => handle(user)}
+        marginBottom0
+      >
+        <FormattedMessage id="stripes-components.addNew" />
+      </Button>
+    </IfPermission>
   );
 
   const preRegistrationsListFormatter = () => ({
     [COLUMNS_NAME.ACTION]: renderActionColumn,
     [COLUMNS_NAME.FIRST_NAME]: user => get(user, ['generalInfo', 'firstName']),
     [COLUMNS_NAME.LAST_NAME]: user => get(user, ['generalInfo', 'lastName']),
-    [COLUMNS_NAME.MIDDLE_NAME]: user => get(user, ['generalInfo', 'middleName']),
-    [COLUMNS_NAME.PREFERRED_FIRST_NAME]: user => get(user, ['generalInfo', 'preferredFirstName']),
+    [COLUMNS_NAME.MIDDLE_NAME]: user => get(user, ['generalInfo', 'middleName'], ''),
+    [COLUMNS_NAME.PREFERRED_FIRST_NAME]: user => get(user, ['generalInfo', 'preferredFirstName'], ''),
     [COLUMNS_NAME.EMAIL]: user => get(user, ['contactInfo', 'email']),
-    [COLUMNS_NAME.PHONE_NUMBER]: user => get(user, ['contactInfo', 'phone']),
-    [COLUMNS_NAME.MOBILE_NUMBER]: user => get(user, ['contactInfo', 'mobilePhone']),
+    [COLUMNS_NAME.PHONE_NUMBER]: user => get(user, ['contactInfo', 'phone'], ''),
+    [COLUMNS_NAME.MOBILE_NUMBER]: user => get(user, ['contactInfo', 'mobilePhone'], ''),
     [COLUMNS_NAME.ADDRESS]: user => {
-      const addressInfo = get(user, 'addressInfo');
+      const addressInfo = get(user, 'addressInfo', {});
       return Object.values(addressInfo).join(',');
     },
-    [COLUMNS_NAME.EMAIL_COMMUNICATION_PREFERENCES]: user => get(user, ['preferredEmailCommunication']).join(','),
+    [COLUMNS_NAME.EMAIL_COMMUNICATION_PREFERENCES]: user => get(user, ['preferredEmailCommunication'], []).join(','),
     [COLUMNS_NAME.SUBMISSION_DATE]: user => {
       const submissionDate = get(user, ['metadata', 'updatedDate']);
       return `${intl.formatDate(submissionDate)}, ${intl.formatTime(submissionDate)}`;
@@ -68,11 +84,24 @@ const PatronsPreRegistrationList = ({
     }
   });
 
+  const onSort = (e, meta) => {
+    let newSortDirection = sortTypes.ASC;
+    if (sortedRecordsDetails.order === meta.name) {
+      newSortDirection = sortedRecordsDetails.direction === sortTypes.ASC ? sortTypes.DESC : sortTypes.ASC;
+    }
+    const sortedData = orderBy(sortedRecordsDetails.data, [meta.name], newSortDirection);
+    setSortedRecordsDetails({
+      data: sortedData,
+      order: meta.name,
+      direction: newSortDirection
+    });
+  };
+
   return (
     <MultiColumnList
       autosize
       columnMapping={columnMapping}
-      contentData={data}
+      contentData={sortedRecordsDetails.data}
       fullWidth
       formatter={preRegistrationsListFormatter()}
       hasMargin
@@ -84,6 +113,12 @@ const PatronsPreRegistrationList = ({
       pageAmount={100}
       totalCount={totalCount}
       visibleColumns={visibleColumns}
+      nonInteractiveHeaders={[COLUMNS_NAME.ACTION]}
+      showSortIndicator
+      sortOrder={sortedRecordsDetails.order}
+      sortDirection={`${sortedRecordsDetails.direction}ending`}
+      onHeaderClick={onSort}
+      virtualize
     />
   );
 };

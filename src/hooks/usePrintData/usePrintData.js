@@ -12,13 +12,26 @@ export function buildTemplate(template = '') {
   return dataSource => {
     return template.replace(/{{([^{}]*)}}/g, (token, tokenName) => {
       const tokenValue = dataSource[tokenName];
-      return typeof tokenValue === 'string' || typeof tokenValue === 'number' ? escape(tokenValue) : '';
+
+      if (
+        typeof tokenValue === 'string'
+        && tokenValue.startsWith('<Barcode>')
+        && tokenValue.endsWith('</Barcode>')
+      ) {
+        return tokenValue;
+      } else if (typeof tokenValue === 'string' || typeof tokenValue === 'number') {
+        return escape(tokenValue);
+      } else {
+        return '';
+      }
     });
   };
 }
 
 export const mapEntityToTemplate = (entity, type, formatTime, patronGroup) => {
   if (type === SLIPS_TYPES.DUE_DATE) {
+    const barcode = get(entity, 'item.barcode');
+
     return {
       'borrower.firstName': get(entity, 'borrower.firstName'),
       'borrower.preferredFirstName': get(entity, 'borrower.preferredFirstName'),
@@ -28,6 +41,19 @@ export const mapEntityToTemplate = (entity, type, formatTime, patronGroup) => {
 
       'item.title': get(entity, 'item.title'),
       'item.primaryContributor': get(entity, 'item.primaryContributor'),
+      'item.allContributors': get(entity, 'item.contributors')?.map(({ name }) => name).join(', '),
+      'item.barcode': barcode,
+      'item.barcodeImage': barcode && `<Barcode>${barcode}</Barcode>`,
+      'item.callNumber': get(entity, 'item.callNumber'),
+      'item.callNumberPrefix': get(entity, 'item.callNumberComponents.prefix'),
+      'item.callNumberSuffix': get(entity, 'item.callNumberComponents.suffix'),
+      'item.copy': get(entity, 'item.copyNumber'),
+      'item.displaySummary': get(entity, 'item.displaySummary'),
+      'item.enumeration': get(entity, 'item.enumeration'),
+      'item.volume': get(entity, 'item.volume'),
+      'item.chronology': get(entity, 'item.chronology'),
+      'item.materialType': get(entity, 'item.materialType')?.name,
+
       'loan.dueDate': formatDateAndTime(get(entity, 'dueDate'), formatTime),
     };
   }

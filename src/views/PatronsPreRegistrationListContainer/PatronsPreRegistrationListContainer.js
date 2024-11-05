@@ -37,6 +37,7 @@ const PatronsPreRegistrationListContainer = ({
         searchTerm={query.query || ''}
         filterPaneIsVisible
         toggleFilterPane={noop}
+        notLoadedMessage={<FormattedMessage id="ui-users.stagingRecords.notLoadedMessage" />}
     />
     : null;
 
@@ -168,7 +169,7 @@ PatronsPreRegistrationListContainer.propTypes = {
   onClose: PropTypes.func.isRequired,
   queryGetter: PropTypes.func.isRequired,
   source: PropTypes.object.isRequired,
-  data: PropTypes.object.isRequired,
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default PatronsPreRegistrationListContainer;
