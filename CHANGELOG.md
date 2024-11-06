@@ -78,6 +78,7 @@
 * Display a message to a user without permission on the “Patron preregistration record results” page. Refs UIU-3242.
 * Display preregistration data appropriately. Refs UIU-3247.
 * Process more item tokens in due date print. Refs UIU-3239.
+* If keycloak user record doesn't exist, create it before resetting password. Refs UIU-3236.
 * Review and cleanup Module Descriptors for ui-users. Refs UIU-3214.
 
 ## [10.1.2](https://github.com/folio-org/ui-users/tree/v10.1.2) (2024-09-05)
