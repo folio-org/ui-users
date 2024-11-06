@@ -105,7 +105,7 @@ class ActionsDropdown extends React.Component {
             </Button>
           }
         </IfPermission>
-        <IfPermission perm="ui-users.loans.change-due-date.edit">
+        <IfPermission perm="ui-users.loans-due-date.edit">
           { itemStatusName !== itemStatuses.DECLARED_LOST &&
             itemStatusName !== itemStatuses.CLAIMED_RETURNED &&
             itemStatusName !== itemStatuses.AGED_TO_LOST &&

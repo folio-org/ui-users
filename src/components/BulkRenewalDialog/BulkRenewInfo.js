@@ -143,7 +143,7 @@ class BulkRenewInfo extends React.Component {
             errorMessages={errorMessages}
           />
           <Layout className="textRight">
-            <IfPermission perm="ui-users.loans.renew-override.create">
+            <IfPermission perm="ui-users.loans-renew-override.create">
               {
                 !isEmpty(overridableLoans) &&
                 <Button

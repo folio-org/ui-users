@@ -318,7 +318,7 @@ class UserSearch extends React.Component {
             </IfPermission>
           </IfInterface>
           <IfInterface name="feesfines">
-            <IfPermission perm="ui-users.cashDrawerReport.execute">
+            <IfPermission perm="ui-users.cash-drawer-report.execute">
               <Button
                 buttonStyle="dropdownItem"
                 id="cash-drawer-report"
@@ -332,7 +332,7 @@ class UserSearch extends React.Component {
                 </Icon>
               </Button>
             </IfPermission>
-            <IfPermission perm="ui-users.financialTransactionReport.execute">
+            <IfPermission perm="ui-users.financial-transaction-report.execute">
               <Button
                 buttonStyle="dropdownItem"
                 id="financial-transaction-report"
@@ -346,7 +346,7 @@ class UserSearch extends React.Component {
                 </Icon>
               </Button>
             </IfPermission>
-            <IfPermission perm="ui-users.manualProcessRefundsReport.execute">
+            <IfPermission perm="ui-users.manual-process-refunds-report.execute">
               <Button
                 buttonStyle="dropdownItem"
                 id="export-refunds-report"

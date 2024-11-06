@@ -74,7 +74,7 @@ describe('RequestFeeFineBlockButtons', () => {
 
   describe('without ui-users.feesfines.actions.all permission', () => {
     beforeEach(() => {
-      IfPermission.mockImplementation(({ perm, children }) => (perm !== 'ui-users.patron_blocks.all' ? children : null));
+      IfPermission.mockImplementation(({ perm, children }) => (perm !== 'ui-users.patron-blocks.all' ? children : null));
     });
 
     it('renders buttons without add button', () => {

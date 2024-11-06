@@ -595,7 +595,7 @@ class LoanDetails extends React.Component {
                   </Button>
                 </IfPermission>
                 }
-                <IfPermission perm="ui-users.loans.change-due-date.edit">
+                <IfPermission perm="ui-users.loans-due-date.edit">
                   <Button
                     data-test-change-due-date-button
                     disabled={

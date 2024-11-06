@@ -115,7 +115,7 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.opentransactions.view",
+        "permissionName": "ui-users.open-transactions.view",
         "displayName": "Users: Can check open transactions",
         "description": "Check if user does have any open transactions",
         "replaces": ["ui-users.opentransactions"],
@@ -167,7 +167,7 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.userservicepoints.view",
+        "permissionName": "ui-users.user-service-points.view",
         "displayName": "Users: Can view service points assigned to users",
         "description": "Also includes basic permissions to view users",
         "replaces": ["ui-users.viewuserservicepoints"],
@@ -179,7 +179,7 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.userservicepoints.edit",
+        "permissionName": "ui-users.user-service-points.edit",
         "displayName": "Users: Can assign and unassign service points to users",
         "description": "",
         "replaces": ["ui-users.edituserservicepoints"],
@@ -502,7 +502,7 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.feefineactions.all",
+        "permissionName": "ui-users.fee-fine-actions.all",
         "displayName": "Fee/Fine Details: Can create, edit and remove fee/fine actions",
         "replaces": ["ui-users.feefineactions"],
         "subPermissions": [
@@ -537,7 +537,7 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.manual_pay.execute",
+        "permissionName": "ui-users.manual-pay.execute",
         "displayName": "Fees/Fines: Can pay",
         "replaces": ["ui-users.manual_pay"],
         "subPermissions": [
@@ -553,7 +553,7 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.manual_waive.execute",
+        "permissionName": "ui-users.manual-waive.execute",
         "displayName": "Fees/Fines: Can waive",
         "replaces": ["ui-users.manual_waive"],
         "subPermissions": [
@@ -569,7 +569,7 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.manual_charge.execute",
+        "permissionName": "ui-users.manual-charge.execute",
         "displayName": "Fees/Fines: Can charge",
         "replaces": ["ui-users.manual_charge"],
         "subPermissions": [
@@ -582,7 +582,7 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.patron_blocks.all",
+        "permissionName": "ui-users.patron-blocks.all",
         "displayName": "Users: Can create, edit and remove patron blocks",
         "replaces": ["ui-users.patron_blocks"],
         "subPermissions": [
@@ -712,7 +712,7 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.loans.renew-override.create",
+        "permissionName": "ui-users.loans-renew-override.create",
         "displayName": "Users: User loans renew through override",
         "description": "Also includes backend permissions to perform loans renew through override",
         "replaces": ["ui-users.loans.renew-override"],
@@ -794,7 +794,7 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.loans.change-due-date.edit",
+        "permissionName": "ui-users.loans-due-date.edit",
         "displayName": "Users: User loans change due date",
         "description": "Also includes backend permissions to perform change due date",
         "replaces": ["ui-users.loans.change-due-date"],
@@ -952,7 +952,7 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.overridePatronBlock.execute",
+        "permissionName": "ui-users.override-patron-block.execute",
         "displayName": "User: Can override patron blocks",
         "replaces": ["ui-users.overridePatronBlock"],
         "subPermissions": [
@@ -961,7 +961,7 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.overrideItemBlock.execute",
+        "permissionName": "ui-users.override-item-block.execute",
         "displayName": "User: Can override item blocks",
         "replaces": ["ui-users.overrideItemBlock"],
         "subPermissions": [
@@ -971,7 +971,7 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.cashDrawerReport.execute",
+        "permissionName": "ui-users.cash-drawer-report.execute",
         "displayName": "Users: Create and download Cash drawer reconciliation report",
         "replaces": ["ui-users.cashDrawerReport"],
         "subPermissions": [
@@ -980,7 +980,7 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.financialTransactionReport.execute",
+        "permissionName": "ui-users.financial-transaction-report.execute",
         "displayName": "Users: Create and download Financial transaction detail report",
         "replaces": ["ui-users.financialTransactionReport"],
         "subPermissions": [
@@ -989,7 +989,7 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.manualProcessRefundsReport.execute",
+        "permissionName": "ui-users.manual-process-refunds-report.execute",
         "displayName": "Users: Create and download Refunds to process manually report",
         "replaces": ["ui-users.manualProcessRefundsReport"],
         "subPermissions": [
@@ -1000,7 +1000,7 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.lost-items.requiring-actual-cost.execute",
+        "permissionName": "ui-users.lost-items-requiring-actual-cost.execute",
         "displayName": "Users: Can process lost items requiring actual cost",
         "replaces": ["ui-users.lost-items.requiring-actual-cost"],
         "subPermissions": [

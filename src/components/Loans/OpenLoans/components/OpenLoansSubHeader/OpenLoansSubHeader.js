@@ -189,7 +189,7 @@ const OpenLoansSubHeader = ({
                 {intl.formatMessage({ id: 'ui-users.loans.claimReturned' })}
               </Button>
             </IfPermission>
-            <IfPermission perm="ui-users.loans.change-due-date.edit">
+            <IfPermission perm="ui-users.loans-due-date.edit">
               <Button
                 marginBottom0
                 id="change-due-date-all"
