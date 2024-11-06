@@ -22,8 +22,13 @@ class CreateResetPasswordControl extends React.Component {
       resetPassword: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }).isRequired,
+      keycloakUser: PropTypes.shape({
+        GET: PropTypes.func,
+        POST: PropTypes.func,
+      }),
     }).isRequired,
     disabled: PropTypes.bool,
+    stripes: PropTypes.object.isRequired,
   };
 
   static manifest = Object.freeze({
@@ -38,8 +43,15 @@ class CreateResetPasswordControl extends React.Component {
       fetch: false,
       throwErrors: false,
     },
-
+    keycloakUser: {
+      type: 'okapi',
+      path: 'users-keycloak/auth-users/!{userId}',
+      accumulate: true,
+      fetch: false,
+      throwErrors: false,
+    }
   });
+
 
   constructor(props) {
     super(props);
@@ -61,6 +73,33 @@ class CreateResetPasswordControl extends React.Component {
   };
 
   handleLinkClick = () => {
+    const {
+      mutator: {
+        keycloakUser,
+      },
+      stripes,
+      userId,
+    } = this.props;
+
+    // If using users-keycloak, we need to ensure a keycloak record exists in the back-end in order to actually reset the password.
+    if (stripes.hasInterface('users-keycloak')) {
+      keycloakUser
+        .GET()
+        .catch((response) => {
+          // If user not found in keycloak, then create record before resetting password.
+          if (response.httpStatus === 404) {
+            keycloakUser.POST({ userId })
+              .then(this.handleResetPassword());
+          } else { // 204 no-content response means record exists but is treated as an error by stripes-connect.
+            this.handleResetPassword();
+          }
+        });
+    } else {
+      this.handleResetPassword();
+    }
+  };
+
+  handleResetPassword = () => {
     const {
       mutator: {
         resetPassword,
