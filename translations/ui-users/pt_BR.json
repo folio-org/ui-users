@@ -1205,7 +1205,7 @@
     "stagingRecords.list.search": "Busca",
     "stagingRecords.search.placeholder": "Buscar por nome ou e-mail",
     "stagingRecords.search.label": "Pesquisa de registros de preparação",
-    "stagingRecords.list.searchResults": "Resultados do registro de pré-registro do usuário",
+    "stagingRecords.list.searchResults": "Resultados do registro de pré-cadastro do usuário",
     "stagingRecords.list.columnNames.action": "Ação",
     "stagingRecords.list.columnNames.firstName": "Nome",
     "stagingRecords.list.columnNames.lastName": "Sobrenome",

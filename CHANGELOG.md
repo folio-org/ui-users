@@ -1,6 +1,7 @@
 # Change history for ui-users
 
-## [11.0.0] IN PROGRESS
+## [11.0.0](https://github.com/folio-org/ui-users/tree/v11.0.0) (2024-10-31)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v10.1.2...v11.0.0)
 
 * UX consistency: Use Save & close button label stripes-component translation key. Refs UIU-3078.
 * Fix two "triangle down" icons in select element of "Copy existing fee/fine owner table entries" modal. Refs UIU-2929.
@@ -77,7 +78,8 @@
 * Display a message to a user without permission on the “Patron preregistration record results” page. Refs UIU-3242.
 * Display preregistration data appropriately. Refs UIU-3247.
 * Fix user edit without "Auth-Users" capability sets. Refs UIU-3243.
-
+* Process more item tokens in due date print. Refs UIU-3239.
+* If keycloak user record doesn't exist, create it before resetting password. Refs UIU-3236.
 
 ## [10.1.2](https://github.com/folio-org/ui-users/tree/v10.1.2) (2024-09-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.1.1...v10.1.2)
