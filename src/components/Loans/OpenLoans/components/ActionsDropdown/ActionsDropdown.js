@@ -77,7 +77,7 @@ class ActionsDropdown extends React.Component {
             )
           }
         </IfPermission>
-        <IfPermission perm="ui-users.loans.renew">
+        <IfPermission perm="ui-users.loans-renew.create">
           { isUserActive && !isVirtualUser && itemStatusName !== itemStatuses.CLAIMED_RETURNED &&
             <Button
               buttonStyle="dropdownItem"
@@ -91,7 +91,7 @@ class ActionsDropdown extends React.Component {
             </Button>
           }
         </IfPermission>
-        <IfPermission perm="ui-users.loans.claim-item-returned">
+        <IfPermission perm="ui-users.loans-claim-item-returned.execute">
           { itemStatusName !== itemStatuses.CLAIMED_RETURNED && !isVirtualUser &&
             <Button
               buttonStyle="dropdownItem"
@@ -105,7 +105,7 @@ class ActionsDropdown extends React.Component {
             </Button>
           }
         </IfPermission>
-        <IfPermission perm="ui-users.loans.change-due-date">
+        <IfPermission perm="ui-users.loans-due-date.edit">
           { itemStatusName !== itemStatuses.DECLARED_LOST &&
             itemStatusName !== itemStatuses.CLAIMED_RETURNED &&
             itemStatusName !== itemStatuses.AGED_TO_LOST &&
@@ -140,7 +140,7 @@ class ActionsDropdown extends React.Component {
             </PrintToPDFWrapper>
           )}
         </IfPermission>
-        <IfPermission perm="ui-users.loans.declare-item-lost">
+        <IfPermission perm="ui-users.loans-declare-item-lost.execute">
           { itemStatusName !== itemStatuses.DECLARED_LOST && !isVirtualUser &&
             <Button
               buttonStyle="dropdownItem"
@@ -154,7 +154,7 @@ class ActionsDropdown extends React.Component {
             </Button>
           }
         </IfPermission>
-        <IfPermission perm="ui-users.loans.declare-claimed-returned-item-as-missing">
+        <IfPermission perm="ui-users.loans-declare-claimed-returned-item-as-missing.execute">
           { itemStatusName === itemStatuses.CLAIMED_RETURNED && !isVirtualUser &&
           <Button
             buttonStyle="dropdownItem"

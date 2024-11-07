@@ -109,7 +109,7 @@ const PatronNoticePrintJobs = (props) => {
     );
   };
 
-  const actionMenu = stripes?.hasPerm('ui-users.remove-patron-notice-print-jobs') ? renderActionMenu : null;
+  const actionMenu = stripes?.hasPerm('ui-users.patron-notice-print-jobs.delete') ? renderActionMenu : null;
 
   return (
     <Pane

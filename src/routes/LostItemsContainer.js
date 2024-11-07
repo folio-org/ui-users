@@ -216,7 +216,7 @@ class LostItemsContainer extends React.Component {
   }
 
   render() {
-    const hasPermission = this.props.stripes.hasPerm('ui-users.lost-items.requiring-actual-cost');
+    const hasPermission = this.props.stripes.hasPerm('ui-users.lost-items-requiring-actual-cost.execute');
 
     if (!hasPermission) {
       return (

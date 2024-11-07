@@ -475,10 +475,10 @@ class UserDetail extends React.Component {
     };
 
     const showActionMenu = stripes.hasPerm('ui-users.edit')
-      || stripes.hasPerm('ui-users.patron_blocks')
+      || stripes.hasPerm('ui-users.patron-blocks.all')
       || stripes.hasPerm('ui-users.feesfines.actions.all')
       || stripes.hasPerm('ui-requests.all')
-      || stripes.hasPerm('ui-users.delete,ui-users.opentransactions')
+      || stripes.hasPerm('ui-users.delete,ui-users.open-transactions.view')
       || stripes.hasPerm('ui-users.profile-pictures.all');
 
     if (showActionMenu && !isVirtualPatron) {
