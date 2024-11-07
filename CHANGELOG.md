@@ -81,6 +81,7 @@
 * Fix user edit without "Auth-Users" capability sets. Refs UIU-3243.
 * Process more item tokens in due date print. Refs UIU-3239.
 * If keycloak user record doesn't exist, create it before resetting password. Refs UIU-3236.
+* Review and cleanup Module Descriptors for ui-users. Refs UIU-3214.
 
 ## [10.1.2](https://github.com/folio-org/ui-users/tree/v10.1.2) (2024-09-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.1.1...v10.1.2)

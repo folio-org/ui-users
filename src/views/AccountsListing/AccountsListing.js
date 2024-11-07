@@ -468,8 +468,8 @@ class AccountsHistory extends React.Component {
     const feeFineActions = resources?.comments?.records || [];
     const canRefund = selectedAccounts.some((a) => isRefundAllowed(a, feeFineActions));
     const showActionMenu = this.props.stripes.hasPerm('ui-users.feesfines.actions.all') ||
-      this.props.stripes.hasPerm('ui-users.manual_waive') ||
-      this.props.stripes.hasPerm('ui-users.manual_pay');
+      this.props.stripes.hasPerm('ui-users.manual-waive.execute') ||
+      this.props.stripes.hasPerm('ui-users.manual-pay.execute');
 
     if (showActionMenu) {
       return (
@@ -490,7 +490,7 @@ class AccountsHistory extends React.Component {
                 </Icon>
               </Button>
             </IfPermission>
-            <IfPermission perm="ui-users.manual_pay">
+            <IfPermission perm="ui-users.manual-pay.execute">
               <Button
                 id="open-closed-all-pay-button"
                 buttonStyle="dropdownItem"
@@ -503,7 +503,7 @@ class AccountsHistory extends React.Component {
                 </Icon>
               </Button>
             </IfPermission>
-            <IfPermission perm="ui-users.manual_waive">
+            <IfPermission perm="ui-users.manual-waive.execute">
               <Button
                 id="open-closed-all-wave-button"
                 marginBottom0
