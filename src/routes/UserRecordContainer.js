@@ -29,7 +29,12 @@ class UserRecordContainer extends React.Component {
     },
     delUser: {
       type: 'okapi',
-      path: 'bl-users/by-id/:{id}',
+      path: (queryParams, pathComponents, resourceData, config, props) => {
+        if (props.stripes.hasInterface('users-keycloak')) {
+          return `users-keycloak/users/${pathComponents.id}`;
+        }
+        return `bl-users/by-id/${pathComponents.id}`;
+      },
       fetch: false,
     },
     // As the transaction check spans multiple modules the checks need to be done in mod-users-bl
