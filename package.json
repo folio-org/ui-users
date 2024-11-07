@@ -957,7 +957,7 @@
         "displayName": "User: Can override patron blocks",
         "replaces": ["ui-users.overridePatronBlock"],
         "subPermissions": [
-          "circulation.override-patron-block"
+          "circulation.override-patron-block.post"
         ],
         "visible": true
       },
@@ -966,8 +966,8 @@
         "displayName": "User: Can override item blocks",
         "replaces": ["ui-users.overrideItemBlock"],
         "subPermissions": [
-          "circulation.override-item-limit-block",
-          "circulation.override-item-not-loanable-block"
+          "circulation.override-item-limit-block.post",
+          "circulation.override-item-not-loanable-block.post"
         ],
         "visible": true
       },
