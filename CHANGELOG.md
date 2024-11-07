@@ -4,6 +4,7 @@
 
 * If keycloak user record doesn't exist, create it before resetting password. Refs UIU-3236.
 * Conditionally use delete method of the `mod-users-keycloak` if `users-keycloak` interface is present in UserRecordContainer. Refs UIU-3234.
+* Fix user edit without "Auth-Users" capability sets. Refs UIU-3243.
 
 ## [11.0.1](https://github.com/folio-org/ui-users/tree/v11.1.0) (2024-11-08)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.0...v11.0.1)
