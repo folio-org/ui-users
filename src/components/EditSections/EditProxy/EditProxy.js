@@ -30,7 +30,7 @@ const EditProxy = (props) => {
   const values = { name: fullName };
 
   return (
-    <IfPermission perm="ui-users.proxies.edit">
+    <IfPermission perm="ui-users.proxies.all">
       <Accordion
         open={expanded}
         id={accordionId}

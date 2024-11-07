@@ -268,7 +268,7 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.proxies.edit",
+        "permissionName": "ui-users.proxies.all",
         "displayName": "Users: Can create, edit and remove proxies",
         "description": "",
         "replaces": ["ui-users.editproxies"],
@@ -701,7 +701,7 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.loans.renew.create",
+        "permissionName": "ui-users.loans-renew.create",
         "displayName": "Users: User loans renew",
         "description": "Also includes backend permissions to perform loans renew",
         "replaces": ["ui-users.loans.renew"],
@@ -722,7 +722,7 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.loans.add-info.create",
+        "permissionName": "ui-users.loans-add-info.create",
         "displayName": "Users: User loans: add staff or patron information",
         "replaces": [
           "ui-users.loans.add-patron-info",
@@ -734,7 +734,7 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.loans.declare-item-lost.execute",
+        "permissionName": "ui-users.loans-declare-item-lost.execute",
         "displayName": "Users: User loans declare lost",
         "description": "Also includes backend permissions to declare items lost",
         "replaces": ["ui-users.loans.declare-item-lost"],
@@ -748,7 +748,7 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.loans.declare-claimed-returned-item-as-missing.execute",
+        "permissionName": "ui-users.loans-declare-claimed-returned-item-as-missing.execute",
         "displayName": "Users: User loans mark claimed returned missing",
         "description": "Also includes backend permission to declare claimed returned item as missing",
         "replaces": ["ui-users.loans.declare-claimed-returned-item-as-missing"],
@@ -762,7 +762,7 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.loans.claim-item-returned.execute",
+        "permissionName": "ui-users.loans-claim-item-returned.execute",
         "displayName": "Users: User loans claim returned",
         "description": "Also includes backend permissions to claim items returned",
         "replaces": ["ui-users.loans.claim-item-returned"],
@@ -838,7 +838,7 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.loans.anonymize.execute",
+        "permissionName": "ui-users.loans-anonymize.execute",
         "displayName": "Users: User loans anonymize",
         "replaces": ["ui-users.loans.anonymize"],
         "subPermissions": [
