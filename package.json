@@ -538,8 +538,10 @@
           "comments.item.get",
           "payments.collection.get",
           "payments.item.get",
-          "accounts.check-pay.post",
-          "accounts.pay.post"
+          "feesfines.accounts.check-pay.item.post",
+          "feesfines.accounts-bulk.check-pay.item.post",
+          "feesfines.accounts.pay.item.post",
+          "feesfines.accounts-bulk.pay.item.post"
         ],
         "visible": true
       },
@@ -553,8 +555,10 @@
           "comments.item.get",
           "waives.collection.get",
           "waives.item.get",
-          "accounts.check-waive.post",
-          "accounts.waive.post"
+          "feesfines.accounts.check-waive.item.post",
+          "feesfines.accounts-bulk.check-waive.item.post",
+          "feesfines.accounts.waive.item.post",
+          "feesfines.accounts-bulk.waive.item.post"
         ],
         "visible": true
       },
@@ -682,9 +686,12 @@
           "ui-users.manual_waive",
           "accounts.check-transfer.post",
           "accounts.check-refund.post",
-          "accounts.transfer.post",
-          "accounts.cancel.post",
-          "accounts.refund.post"
+          "feesfines.accounts.transfer.item.post",
+          "feesfines.accounts-bulk.transfer.item.post",
+          "feesfines.accounts.cancel.item.post",
+          "feesfines.accounts-bulk.cancel.item.post",
+          "feesfines.accounts.refund.item.post",
+          "feesfines.accounts-bulk.refund.item.post"
         ],
         "visible": true
       },
@@ -957,7 +964,8 @@
         "permissionName": "ui-users.cashDrawerReport",
         "displayName": "Users: Create and download Cash drawer reconciliation report",
         "subPermissions": [
-          "feefine-reports.cash-drawer-reconciliation.post"
+          "feesfines.feefine-reports.cash-drawer-reconciliation.item.post",
+          "feesfines.feefine-reports.cash-drawer-reconciliation-source.item.post"
         ],
         "visible": true
       },
