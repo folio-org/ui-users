@@ -45,7 +45,7 @@ const withUserRoles = (WrappedComponent) => (props) => {
 
   useEffect(() => {
     // eslint-disable-next-line react/prop-types
-    if (props.stripes.hasInterface('roles') && !isAllRolesDataLoading) {
+    if (props.stripes.hasInterface('users-keycloak') && !isAllRolesDataLoading) {
       api.get(
         'roles/users', { searchParams },
       )
@@ -86,15 +86,15 @@ const withUserRoles = (WrappedComponent) => (props) => {
   };
 
   const handleKeycloakUserExists = async (onFinish) => {
-    if (isEqual(assignedRoleIds, initialAssignedRoleIds)) {
-      onFinish();
-      return;
-    }
     await updateUserRoles(assignedRoleIds);
     onFinish();
   };
 
   const checkAndHandleKeycloakAuthUser = async (onFinish) => {
+    if (isEqual(assignedRoleIds, initialAssignedRoleIds)) {
+      onFinish();
+      return;
+    }
     const userKeycloakStatus = await checkUserInKeycloak();
     switch (userKeycloakStatus) {
       case KEYCLOAK_USER_EXISTANCE.exist:

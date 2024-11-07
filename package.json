@@ -97,6 +97,7 @@
           "ui-users.view",
           "users-bl.item.put",
           "users.item.put",
+          "users-keycloak.item.get",
           "users-keycloak.item.put",
           "tags.collection.get",
           "tags.item.post",

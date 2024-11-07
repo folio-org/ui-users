@@ -332,7 +332,7 @@ class UserEdit extends React.Component {
     try {
       await mutator.selUser.PUT(data);
 
-      if (!stripes.hasInterface('roles')) {
+      if (!stripes.hasInterface('users-keycloak')) {
         this.onCompleteEdit();
         return;
       }
