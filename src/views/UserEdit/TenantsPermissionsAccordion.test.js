@@ -21,7 +21,6 @@ jest.mock('../../components/IfConsortium', () => jest.fn(({ children }) => <>{ch
 jest.mock('../../components/IfConsortiumPermission', () => jest.fn(({ children }) => <>{children}</>));
 jest.mock('../../hooks', () => ({
   useUserAffiliations: jest.fn(),
-  useUserTenantPermissions: jest.fn(),
 }));
 
 const unregisterFieldMock = jest.fn();

@@ -150,6 +150,7 @@ jest.mock('@folio/stripes/core', () => {
     useOkapiKy: jest.fn(() => ({ extend: jest.fn() })),
     useChunkedCQLFetch: jest.fn(),
     useNamespace: jest.fn(() => ['@folio/users']),
+    useUserTenantPermissions: jest.fn(() => ({ isFetching: false })),
     withOkapiKy: jest.fn((Component) => (props) => <Component {...props} />),
     withStripes:
       // eslint-disable-next-line react/prop-types

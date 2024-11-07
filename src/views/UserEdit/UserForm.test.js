@@ -15,10 +15,6 @@ jest.mock('@folio/stripes/smart-components', () => ({
   ...jest.requireActual('@folio/stripes/smart-components'),
   EditCustomFieldsRecord: jest.fn(() => 'EditCustomFieldsRecord'),
 }));
-jest.mock('@folio/stripes/core', () => ({
-  ...jest.requireActual,
-  useUserTenantPermissions: jest.fn()
-}));
 jest.mock(
   '../../components/EditSections',
   () => ({
@@ -35,8 +31,7 @@ jest.mock(
 jest.mock('../../components/PermissionsAccordion/components/PermissionsModal', () => 'PermissionsModal');
 jest.mock('../../hooks', () => ({
   ...jest.requireActual('../../hooks'),
-  useUserAffiliations: jest.fn(),
-  useUserTenantPermissions: jest.fn(),
+  useUserAffiliations: jest.fn()
 }));
 jest.mock(
   './TenantsPermissionsAccordion',
