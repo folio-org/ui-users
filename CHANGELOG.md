@@ -78,6 +78,7 @@
 * Display a message to a user without permission on the “Patron preregistration record results” page. Refs UIU-3242.
 * Display preregistration data appropriately. Refs UIU-3247.
 * Conditionally use delete method of the `mod-users-keycloak` if `users-keycloak` interface is present in UserRecordContainer. Refs UIU-3234.
+* Fix user edit without "Auth-Users" capability sets. Refs UIU-3243.
 * Process more item tokens in due date print. Refs UIU-3239.
 * If keycloak user record doesn't exist, create it before resetting password. Refs UIU-3236.
 
