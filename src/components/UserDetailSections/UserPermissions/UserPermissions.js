@@ -2,11 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import { useUserTenantPermissions } from '@folio/stripes/core';
 
-import {
-  useUserAffiliations,
-  useUserTenantPermissions,
-} from '../../../hooks';
+import { useUserAffiliations } from '../../../hooks';
 import RenderPermissions from '../../RenderPermissions';
 import { isAffiliationsEnabled } from '../../util';
 

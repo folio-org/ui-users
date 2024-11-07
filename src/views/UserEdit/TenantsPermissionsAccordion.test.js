@@ -5,12 +5,11 @@ import '__mock__/reactFinalFormArrays.mock';
 import '__mock__/reactFinalFormListeners.mock';
 import '__mock__/intl.mock';
 
-import { useCallout, useStripes } from '@folio/stripes/core';
+import { useCallout, useStripes, useUserTenantPermissions } from '@folio/stripes/core';
 
 import affiliations from 'fixtures/affiliations';
 import {
-  useUserAffiliations,
-  useUserTenantPermissions,
+  useUserAffiliations
 } from '../../hooks';
 import TenantsPermissionsAccordion from './TenantsPermissionsAccordion';
 

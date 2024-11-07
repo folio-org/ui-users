@@ -5,20 +5,21 @@ import '__mock__/matchMedia.mock';
 import renderWithRouter from 'helpers/renderWithRouter';
 import affiliations from 'fixtures/affiliations';
 import permissions from 'fixtures/permissions';
-import {
-  useUserAffiliations,
-  useUserTenantPermissions,
-} from '../../../hooks';
+import { useUserTenantPermissions } from '@folio/stripes/core';
+import { useUserAffiliations } from '../../../hooks';
 import IfConsortiumPermission from '../../IfConsortiumPermission';
 import UserPermissions from './UserPermissions';
 
 jest.unmock('@folio/stripes/components');
 jest.mock('../../../hooks', () => ({
-  useUserAffiliations: jest.fn(),
-  useUserTenantPermissions: jest.fn(),
+  useUserAffiliations: jest.fn()
 }));
 jest.mock('../../IfConsortium', () => jest.fn(({ children }) => <>{children}</>));
 jest.mock('../../IfConsortiumPermission', () => jest.fn());
+jest.mock('@folio/stripes/core', () => ({
+  ...jest.requireActual('@folio/stripes/core'),
+  useUserTenantPermissions: jest.fn()
+}));
 
 const STRIPES = {
   config: {},

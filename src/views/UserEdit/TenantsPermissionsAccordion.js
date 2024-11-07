@@ -11,6 +11,7 @@ import { FormattedMessage } from 'react-intl';
 import {
   useCallout,
   useStripes,
+  useUserTenantPermissions
 } from '@folio/stripes/core';
 
 import PermissionsAccordion from '../../components/PermissionsAccordion';
@@ -20,8 +21,7 @@ import {
 } from '../../components/PermissionsAccordion/helpers/filtersConfig';
 import { isAffiliationsEnabled } from '../../components/util';
 import {
-  useUserAffiliations,
-  useUserTenantPermissions,
+  useUserAffiliations
 } from '../../hooks';
 
 const errorsMap = {

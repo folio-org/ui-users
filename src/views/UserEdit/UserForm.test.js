@@ -4,16 +4,20 @@ import {
 } from '@folio/jest-config-stripes/testing-library/react';
 
 import renderWithRouter from 'helpers/renderWithRouter';
+import { useUserTenantPermissions } from '@folio/stripes/core';
 import { USER_TYPES } from '../../constants';
 import {
-  useUserAffiliations,
-  useUserTenantPermissions,
+  useUserAffiliations
 } from '../../hooks';
 import UserForm, { validate } from './UserForm';
 
 jest.mock('@folio/stripes/smart-components', () => ({
   ...jest.requireActual('@folio/stripes/smart-components'),
   EditCustomFieldsRecord: jest.fn(() => 'EditCustomFieldsRecord'),
+}));
+jest.mock('@folio/stripes/core', () => ({
+  ...jest.requireActual,
+  useUserTenantPermissions: jest.fn()
 }));
 jest.mock(
   '../../components/EditSections',
