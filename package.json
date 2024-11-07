@@ -718,7 +718,7 @@
         "description": "Also includes backend permissions to perform loans renew through override",
         "replaces": ["ui-users.loans.renew-override"],
         "subPermissions": [
-          "circulation.override-renewal-block"
+          "circulation.override-renewal-block.post"
         ],
         "visible": true
       },
