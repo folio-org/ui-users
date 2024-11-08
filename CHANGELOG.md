@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## [11.1.0](https://github.com/folio-org/ui-users/tree/v11.1.0) ()
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v11.1.0...v11.1.0)
+* Update permissions for mod-patron. Ref UIU-3259
+
 ## [11.0.0](https://github.com/folio-org/ui-users/tree/v11.0.0) (2024-10-31)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.1.2...v11.0.0)
 
