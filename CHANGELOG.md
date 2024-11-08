@@ -1,5 +1,10 @@
 # Change history for ui-users
 
+## [11.0.1](https://github.com/folio-org/ui-users/tree/v11.1.0) (2024-11-08)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.0...v11.0.1)
+
+* Process more item tokens in due date print. Refs UIU-3239.
+
 ## [11.0.0](https://github.com/folio-org/ui-users/tree/v11.0.0) (2024-10-31)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.1.2...v11.0.0)
 

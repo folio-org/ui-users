@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "11.0.0",
+  "version": "11.0.1",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -1164,6 +1164,7 @@
     "moment-timezone": "^0.5.43",
     "prop-types": "^15.5.10",
     "query-string": "^5.0.0",
+    "react-barcode": "^1.5.3",
     "react-easy-crop": "^5.0.5",
     "react-final-form": "^6.3.0",
     "react-final-form-arrays": "^3.1.0",
