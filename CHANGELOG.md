@@ -3,7 +3,7 @@
 ## [11.1.0] In progress
 
 
-## [11.0.1](https://github.com/folio-org/ui-users/tree/v11.1.0) (2024-11-08)
+## [11.0.1](https://github.com/folio-org/ui-users/tree/v11.0.1) (2024-11-08)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.0...v11.0.1)
 
 * Process more item tokens in due date print. Refs UIU-3239.
