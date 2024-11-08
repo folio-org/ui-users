@@ -158,7 +158,7 @@
         "replaces": ["ui-users.editperms"],
         "subPermissions": [
           "ui-users.edit",
-          "ui-users.viewperms",
+          "ui-users.perms.view",
           "perms.users.item.put",
           "perms.users.item.post",
           "perms.users.item.delete",
