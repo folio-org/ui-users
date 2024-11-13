@@ -186,7 +186,7 @@
         "replaces": ["ui-users.edituserservicepoints"],
         "subPermissions": [
           "ui-users.edit",
-          "ui-users.viewuserservicepoints",
+          "ui-users.user-service-points.view",
           "inventory-storage.service-points-users.item.post",
           "inventory-storage.service-points-users.item.put"
         ],
@@ -275,7 +275,7 @@
         "replaces": ["ui-users.editproxies"],
         "subPermissions": [
           "ui-users.edit",
-          "ui-users.viewproxies",
+          "ui-users.proxies.view",
           "proxiesfor.item.get",
           "proxiesfor.item.post",
           "proxiesfor.item.put",
@@ -542,8 +542,8 @@
         "displayName": "Fees/Fines: Can pay",
         "replaces": ["ui-users.manual_pay"],
         "subPermissions": [
-          "ui-users.accounts",
-          "ui-users.feefineactions",
+          "ui-users.accounts.all",
+          "ui-users.feefineactions.all",
           "comments.collection.get",
           "comments.item.get",
           "payments.collection.get",
@@ -558,8 +558,8 @@
         "displayName": "Fees/Fines: Can waive",
         "replaces": ["ui-users.manual_waive"],
         "subPermissions": [
-          "ui-users.accounts",
-          "ui-users.feefineactions",
+          "ui-users.accounts.all",
+          "ui-users.feefineactions.all",
           "comments.collection.get",
           "comments.item.get",
           "waives.collection.get",
@@ -578,7 +578,7 @@
           "owners.item.get",
           "feefines.collection.get",
           "feefines.item.get",
-          "ui-users.manual_pay"
+          "ui-users.manual-pay.execute"
         ],
         "visible": true
       },
@@ -690,9 +690,9 @@
         "displayName": "Users: Can create, edit and remove fees/fines",
         "subPermissions": [
           "ui-users.feesfines.view",
-          "ui-users.manual_charge",
-          "ui-users.manual_pay",
-          "ui-users.manual_waive",
+          "ui-users.manual-charge.execute",
+          "ui-users.manual-pay.execute",
+          "ui-users.manual-waive.execute",
           "accounts.check-transfer.post",
           "accounts.check-refund.post",
           "accounts.transfer.post",
@@ -814,8 +814,8 @@
         "description": "Also includes requests, loan-policies and accounts permissions",
         "subPermissions": [
           "ui-users.view",
-          "ui-users.loans.change-due-date",
-          "ui-users.loans.renew",
+          "ui-users.loans-due-date.edit",
+          "ui-users.loans-renew.create",
           "ui-users.loans.view",
           "circulation.loans.item.put",
           "circulation.renew-by-barcode.post",
