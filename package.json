@@ -1154,7 +1154,7 @@
   },
   "dependencies": {
     "compressorjs": "^1.2.1",
-    "dompurify": "^3.1.7",
+    "dompurify": "^3.2.0",
     "final-form-set-field-data": "^1.0.2",
     "get-orientation": "^1.1.2",
     "hashcode": "^1.0.3",
