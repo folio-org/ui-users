@@ -2,6 +2,8 @@
 
 ## [11.1.0] In progress
 
+* Correctly import from `dompurify`. Refs UIU-3267.
+
 
 ## [11.0.1](https://github.com/folio-org/ui-users/tree/v11.0.1) (2024-11-08)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.0...v11.0.1)
