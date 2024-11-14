@@ -1,6 +1,7 @@
 # Change history for ui-users
 
-## 11.0.3 IN PROGRESS
+## [11.0.3](https://github.com/folio-org/ui-users/tree/v11.0.3) (2024-11-14)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.2...v11.0.3)
 
 * Correctly import from `dompurify`. Refs UIU-3267.
 
