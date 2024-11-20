@@ -1,7 +1,7 @@
 # Change history for ui-users
 
-## [11.0.4](https://github.com/folio-org/ui-users/tree/v11.0.4) (2024-11-15)
-[Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.3...v11.0.4)
+## [11.0.6](https://github.com/folio-org/ui-users/tree/v11.0.6) (2024-11-20)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.3...v11.0.6)
 
 * Review and cleanup Module Descriptors for ui-users. Refs UIU-3214.
 * Change users interface to "16.3". Refs UIU-3275.
