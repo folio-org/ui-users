@@ -427,12 +427,12 @@ class ViewFeesFines extends React.Component {
         usePortal
       >
         <DropdownMenu id="ellipsis-drop-down">
-          <IfPermission perm="ui-users.manual_pay">
+          <IfPermission perm="ui-users.manual-pay.execute">
             <this.MenuButton disabled={isDisabled.pay || isMenuButtonDisabled} account={a} action="pay">
               <FormattedMessage id="ui-users.accounts.history.button.pay" />
             </this.MenuButton>
           </IfPermission>
-          <IfPermission perm="ui-users.manual_waive">
+          <IfPermission perm="ui-users.manual-waive.execute">
             <this.MenuButton disabled={isDisabled.waive || isMenuButtonDisabled} account={a} action="waive">
               <FormattedMessage id="ui-users.accounts.history.button.waive" />
             </this.MenuButton>

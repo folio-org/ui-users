@@ -86,7 +86,7 @@ class PatronBlock extends React.Component {
       return;
     }
 
-    const permAbled = this.props.stripes.hasPerm('ui-users.patron_blocks');
+    const permAbled = this.props.stripes.hasPerm('ui-users.patron-blocks.all');
 
     if (permAbled === true && (e.target.type !== 'button') && (e.target.tagName !== 'IMG')) {
       history.push({
@@ -176,7 +176,7 @@ class PatronBlock extends React.Component {
       sortDirection,
     } = this.state;
 
-    const buttonDisabled = this.props.stripes.hasPerm('ui-users.patron_blocks');
+    const buttonDisabled = this.props.stripes.hasPerm('ui-users.patron-blocks.all');
     const displayWhenOpen =
       <Button
         id="create-patron-block"

@@ -17,7 +17,7 @@ const LostItemsLink = () => {
   const history = useHistory();
 
   return (
-    <IfPermission perm="ui-users.lost-items.requiring-actual-cost">
+    <IfPermission perm="ui-users.lost-items-requiring-actual-cost.execute">
       <Button
         data-testid="lostItemsLink"
         to={{
