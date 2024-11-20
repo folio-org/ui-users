@@ -2,7 +2,10 @@
 
 ## [11.1.0] In progress
 
-* Correctly import from `dompurify`. Refs UIU-3267.
+## [11.0.5](https://github.com/folio-org/ui-users/tree/v11.0.5) (2024-11-20)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.3...v11.0.5)
+
+* Review and cleanup Module Descriptors for ui-users. Refs UIU-3214.
 * Change users interface to "16.3". Refs UIU-3275.
 
 ## [11.0.3](https://github.com/folio-org/ui-users/tree/v11.0.3) (2024-11-14)
@@ -99,10 +102,6 @@
 * Update translations for pre registrations value. Refs UIU-3241.
 * Display a message to a user without permission on the “Patron preregistration record results” page. Refs UIU-3242.
 * Display preregistration data appropriately. Refs UIU-3247.
-* Conditionally use delete method of the `mod-users-keycloak` if `users-keycloak` interface is present in UserRecordContainer. Refs UIU-3234.
-* Fix user edit without "Auth-Users" capability sets. Refs UIU-3243.
-* If keycloak user record doesn't exist, create it before resetting password. Refs UIU-3236.
-* Review and cleanup Module Descriptors for ui-users. Refs UIU-3214.
 
 ## [10.1.2](https://github.com/folio-org/ui-users/tree/v10.1.2) (2024-09-05)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v10.1.1...v10.1.2)
