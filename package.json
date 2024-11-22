@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "11.1.0",
+  "version": "11.1.5",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -44,7 +44,7 @@
       "batch-print": "1.0",
       "circulation": "9.0 10.0 11.0 12.0 13.0 14.0",
       "consortia": "1.0",
-      "feesfines": "19.1",
+      "feesfines": "16.1 17.0 18.0 19.0",
       "loan-policy-storage": "1.0 2.0",
       "loan-storage": "4.0 5.0 6.0 7.0",
       "notes": "4.0",
@@ -548,10 +548,8 @@
           "comments.item.get",
           "payments.collection.get",
           "payments.item.get",
-          "feesfines.accounts.check-pay.post",
-          "feesfines.accounts-bulk.check-pay.post",
-          "feesfines.accounts.pay.post",
-          "feesfines.accounts-bulk.pay.post"
+          "accounts.check-pay.post",
+          "accounts.pay.post"
         ],
         "visible": true
       },
@@ -566,10 +564,8 @@
           "comments.item.get",
           "waives.collection.get",
           "waives.item.get",
-          "feesfines.accounts.check-waive.post",
-          "feesfines.accounts-bulk.check-waive.post",
-          "feesfines.accounts.waive.post",
-          "feesfines.accounts-bulk.waive.post"
+          "accounts.check-waive.post",
+          "accounts.waive.post"
         ],
         "visible": true
       },
@@ -699,12 +695,9 @@
           "ui-users.manual_waive",
           "accounts.check-transfer.post",
           "accounts.check-refund.post",
-          "feesfines.accounts.transfer.post",
-          "feesfines.accounts-bulk.transfer.post",
-          "feesfines.accounts.cancel.post",
-          "feesfines.accounts-bulk.cancel.post",
-          "feesfines.accounts.refund.post",
-          "feesfines.accounts-bulk.refund.post"
+          "accounts.transfer.post",
+          "accounts.cancel.post",
+          "accounts.refund.post"
         ],
         "visible": true
       },
@@ -725,7 +718,7 @@
         "description": "Also includes backend permissions to perform loans renew through override",
         "replaces": ["ui-users.loans.renew-override"],
         "subPermissions": [
-          "circulation.override-renewal-block.post"
+          "circulation.override-renewal-block"
         ],
         "visible": true
       },
@@ -964,7 +957,7 @@
         "displayName": "User: Can override patron blocks",
         "replaces": ["ui-users.overridePatronBlock"],
         "subPermissions": [
-          "circulation.override-patron-block.post"
+          "circulation.override-patron-block"
         ],
         "visible": true
       },
@@ -973,8 +966,8 @@
         "displayName": "User: Can override item blocks",
         "replaces": ["ui-users.overrideItemBlock"],
         "subPermissions": [
-          "circulation.override-item-limit-block.post",
-          "circulation.override-item-not-loanable-block.post"
+          "circulation.override-item-limit-block",
+          "circulation.override-item-not-loanable-block"
         ],
         "visible": true
       },
@@ -983,8 +976,7 @@
         "displayName": "Users: Create and download Cash drawer reconciliation report",
         "replaces": ["ui-users.cashDrawerReport"],
         "subPermissions": [
-          "feesfines.feefine-reports.cash-drawer-reconciliation.item.post",
-          "feesfines.feefine-reports.cash-drawer-reconciliation-source.item.post"
+          "feefine-reports.cash-drawer-reconciliation.post"
         ],
         "visible": true
       },

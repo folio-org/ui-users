@@ -1,5 +1,4 @@
 
-import { orderBy } from 'lodash';
 import { Button, Pane, MenuSection, MultiColumnList, Checkbox, FormattedDate, FormattedTime, TextLink } from '@folio/stripes/components';
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -72,7 +71,7 @@ const PatronNoticePrintJobs = (props) => {
 
   useEffect(() => {
     const updatedRecords =
-      orderBy(records, (item) => item.created, sortOrder === DESC ? 'desc' : 'asc')
+      records
         .map(record => ({
           ...record,
           selected: !!record.selected,
