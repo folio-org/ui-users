@@ -2,6 +2,8 @@
 
 ## [11.1.0] In progress
 
+* Leverage API supported sorting of columns on pre-registrations records list. Refs UIU-3249.
+
 ## [11.0.5](https://github.com/folio-org/ui-users/tree/v11.0.5) (2024-11-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.3...v11.0.5)
 
