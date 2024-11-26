@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { act, renderHook } from '@folio/jest-config-stripes/testing-library/react';
-
+import { renderHook } from '@folio/jest-config-stripes/testing-library/react';
+import { act } from 'react';
 import {
   useChunkedCQLFetch,
   useOkapiKy,
@@ -73,11 +73,17 @@ describe('useUserTenantRoles', () => {
   });
 
   it('fetches roles assigned to a user', async () => {
-    const { result } = renderHook(() => useUserTenantRoles({ userId: 'u', tenantId: 't' }), { wrapper });
+    const props = { userId: 'u', tenantId: 't' };
+    const { result } = renderHook(() => useUserTenantRoles(props), { wrapper });
     await act(() => !result.current.isFetching);
 
     expect(result.current.isLoading).toBe(false);
     expect(result.current.userRoles).toEqual(roleData);
+    expect(useChunkedCQLFetch).toHaveBeenCalledWith(expect.objectContaining({
+      tenantId: props.tenantId,
+      ids: expect.any(Array),
+      reduceFunction: expect.any(Function),
+    }));
   });
 });
 
@@ -92,71 +98,3 @@ describe('chunkedRolesReducer', () => {
     expect(result.length).toBe(6);
   });
 });
-
-
-
-// import { renderHook, waitFor } from '@folio/jest-config-stripes/testing-library/react';
-// import {
-//   QueryClient,
-//   QueryClientProvider,
-// } from 'react-query';
-
-// import { useOkapiKy, useStripes } from '@folio/stripes/core';
-
-// import roles from 'fixtures/roles';
-// import useUserTenantRoles from './useUserTenantRoles';
-
-// const queryClient = new QueryClient();
-
-// // eslint-disable-next-line react/prop-types
-// const wrapper = ({ children }) => (
-//   <QueryClientProvider client={queryClient}>
-//     {children}
-//   </QueryClientProvider>
-// );
-
-// const response = {
-//   roles,
-//   totalRecords: roles.length,
-// };
-
-// describe('useUserTenantRoles', () => {
-//   const getMock = jest.fn(() => ({
-//     json: () => Promise.resolve(response),
-//   }));
-//   const setHeaderMock = jest.fn();
-//   const kyMock = {
-//     extend: jest.fn(({ hooks: { beforeRequest } }) => {
-//       beforeRequest.forEach(handler => handler({ headers: { set: setHeaderMock } }));
-
-//       return {
-//         get: getMock,
-//       };
-//     }),
-//   };
-
-//   beforeEach(() => {
-//     getMock.mockClear();
-
-//     useStripes.mockClear().mockReturnValue({
-//       okapi: {},
-//       config: {
-//         maxUnpagedResourceCount: 1000,
-//       }
-//     });
-//     useOkapiKy.mockClear().mockReturnValue(kyMock);
-//   });
-
-//   it('should fetch user roles for specified tenant', async () => {
-//     const options = {
-//       userId: 'userId',
-//       tenantId: 'tenantId',
-//     };
-//     const { result } = renderHook(() => useUserTenantRoles(options), { wrapper });
-
-//     await waitFor(() => !result.current.isLoading);
-
-//     expect(setHeaderMock).toHaveBeenCalledWith('X-Okapi-Tenant', options.tenantId);
-//     expect(getMock).toHaveBeenCalledWith('roles/users', expect.objectContaining({}));
-//   });
-// });
