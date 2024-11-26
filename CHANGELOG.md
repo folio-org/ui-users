@@ -2,6 +2,7 @@
 
 ## [11.1.0] In progress
 * Update permissions for mod-patron. Ref UIU-3259
+* `useUserTenantRoles` supplies `tenantId` in all its queries. Refs UIU-3279.
 
 * Leverage API supported sorting of columns on pre-registrations records list. Refs UIU-3249.
 
