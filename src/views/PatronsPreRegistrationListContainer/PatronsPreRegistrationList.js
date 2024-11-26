@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { get, orderBy } from 'lodash';
+import { get } from 'lodash';
 import {
   useIntl,
   FormattedMessage,
@@ -18,33 +17,21 @@ import {
   COLUMNS_NAME,
 } from './constants';
 import { useNewRecordHandler } from './hooks';
-import { sortTypes } from '../../constants';
 
 const PatronsPreRegistrationList = ({
   data,
   isEmptyMessage,
   totalCount,
-  onNeedMoreData
+  onNeedMoreData,
+  onSort,
+  sortOrder,
 }) => {
   const intl = useIntl();
-  const sortInitialState = {
-    data: [],
-    order: '',
-    direction: sortTypes.ASC,
-  };
-  const [sortedRecordsDetails, setSortedRecordsDetails] = useState(sortInitialState);
 
   const {
     handle,
     isLoading,
   } = useNewRecordHandler();
-
-  useEffect(() => {
-    setSortedRecordsDetails(prev => ({
-      ...prev,
-      data: orderBy(data, prev.order, prev.direction)
-    }));
-  }, [data]);
 
   const renderActionColumn = (user) => (
     <IfPermission perm="ui-users.patron-pre-registrations.execute">
@@ -84,29 +71,16 @@ const PatronsPreRegistrationList = ({
     }
   });
 
-  const onSort = (e, meta) => {
-    let newSortDirection = sortTypes.ASC;
-    if (sortedRecordsDetails.order === meta.name) {
-      newSortDirection = sortedRecordsDetails.direction === sortTypes.ASC ? sortTypes.DESC : sortTypes.ASC;
-    }
-    const sortedData = orderBy(sortedRecordsDetails.data, [meta.name], newSortDirection);
-    setSortedRecordsDetails({
-      data: sortedData,
-      order: meta.name,
-      direction: newSortDirection
-    });
-  };
-
   return (
     <MultiColumnList
-      autosize
-      columnMapping={columnMapping}
-      contentData={sortedRecordsDetails.data}
-      fullWidth
-      formatter={preRegistrationsListFormatter()}
-      hasMargin
       id="PatronsPreRegistrationsList"
       data-testid="PatronsPreRegistrationsList"
+      autosize
+      hasMargin
+      fullWidth
+      columnMapping={columnMapping}
+      contentData={data}
+      formatter={preRegistrationsListFormatter()}
       isEmptyMessage={isEmptyMessage}
       onNeedMoreData={onNeedMoreData}
       pagingType="prev-next"
@@ -115,10 +89,9 @@ const PatronsPreRegistrationList = ({
       visibleColumns={visibleColumns}
       nonInteractiveHeaders={[COLUMNS_NAME.ACTION]}
       showSortIndicator
-      sortOrder={sortedRecordsDetails.order}
-      sortDirection={`${sortedRecordsDetails.direction}ending`}
+      sortOrder={sortOrder.replace(/^-/, '').replace(/,.*/, '')}
+      sortDirection={sortOrder.startsWith('-') ? 'descending' : 'ascending'}
       onHeaderClick={onSort}
-      virtualize
     />
   );
 };
@@ -128,6 +101,8 @@ PatronsPreRegistrationList.propTypes = {
   totalCount: PropTypes.number.isRequired,
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   onNeedMoreData: PropTypes.func.isRequired,
+  sortOrder: PropTypes.string,
+  onSort: PropTypes.func.isRequired,
 };
 
 export default PatronsPreRegistrationList;
