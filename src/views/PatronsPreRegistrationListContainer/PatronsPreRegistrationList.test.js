@@ -30,6 +30,8 @@ const defaultProps = {
   isEmptyMessage: 'empty message',
   totalCount: 0,
   onNeedMoreData: jest.fn(),
+  onSort: jest.fn(),
+  sortOrder: '',
 };
 
 const handleDuplicationsCheck = jest.fn(() => ({

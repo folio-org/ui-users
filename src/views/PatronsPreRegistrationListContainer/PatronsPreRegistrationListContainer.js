@@ -30,6 +30,7 @@ const PatronsPreRegistrationListContainer = ({
   const intl = useIntl();
   const [isSearchPaneVisible, setIsSearchPaneVisible] = useState(true);
   const query = queryGetter ? queryGetter() || {} : {};
+  const sortOrder = query.sort || '';
   const count = source ? source.totalCount() : 0;
   const emptyMessage = source
     ? <NoResultsMessage
@@ -79,6 +80,7 @@ const PatronsPreRegistrationListContainer = ({
           getSearchHandlers,
           onSubmitSearch,
           searchValue,
+          onSort,
           resetAll,
         }) => {
           const isResetButtonDisabled = !searchValue.query;
@@ -153,6 +155,8 @@ const PatronsPreRegistrationListContainer = ({
                   data={data}
                   isEmptyMessage={emptyMessage}
                   totalCount={count}
+                  onSort={onSort}
+                  sortOrder={sortOrder}
                   onNeedMoreData={onNeedMoreData}
                 />
               </Pane>
