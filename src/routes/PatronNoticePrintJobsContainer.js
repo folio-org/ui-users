@@ -35,8 +35,8 @@ PatronNoticePrintJobsContainer.manifest = {
     type: 'okapi',
     path: 'print/entries',
     params: {
-      query: 'type="BATCH"',
-      sortby: 'created/sort.descending'
+      query: 'type="BATCH" sortby created/sort.descending',
+      limit: '100',
     },
     records: 'items',
     throwErrors: false,

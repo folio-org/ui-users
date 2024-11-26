@@ -1,6 +1,7 @@
 # Change history for ui-users
 
 ## [11.1.0] In progress
+* Update permissions for mod-patron. Ref UIU-3259
 
 * Leverage API supported sorting of columns on pre-registrations records list. Refs UIU-3249.
 
@@ -9,6 +10,7 @@
 
 * Review and cleanup Module Descriptors for ui-users. Refs UIU-3214.
 * Change users interface to "16.3". Refs UIU-3275.
+* Show all patron notice print jobs (not just ten random ones), in correct order. Fixes UIU-3269.
 
 ## [11.0.3](https://github.com/folio-org/ui-users/tree/v11.0.3) (2024-11-14)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.2...v11.0.3)
