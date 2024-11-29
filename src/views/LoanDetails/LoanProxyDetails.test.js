@@ -27,6 +27,7 @@ const props = (propID, proxyID) => {
     mutator: {
       proxy: {
         GET: jest.fn().mockResolvedValueOnce(proxyData),
+        reset: jest.fn(),
       },
     },
     showErrorCallout: showErrorMock,
