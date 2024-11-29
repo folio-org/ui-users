@@ -71,6 +71,7 @@ const useUserTenantRoles = (
     ids,
     queryEnabled: isSuccess,
     reduceFunction: chunkedRolesReducer,
+    tenantId,
   });
 
   return {

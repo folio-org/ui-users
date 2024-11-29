@@ -1,5 +1,12 @@
 # Change history for ui-users
 
+## [11.0.6](https://github.com/folio-org/ui-users/tree/v11.0.6) (2024-11-28)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.5...v11.0.6)
+
+* `useUserTenantRoles` supplies `tenantId` in all its queries. Refs UIU-3279.
+* Leverage API supported sorting of columns on pre-registrations records list. Refs UIU-3249.
+* Show all patron notice print jobs (not just ten random ones), in correct order. Fixes UIU-3269.
+
 ## [11.0.5](https://github.com/folio-org/ui-users/tree/v11.0.5) (2024-11-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.3...v11.0.5)
 
