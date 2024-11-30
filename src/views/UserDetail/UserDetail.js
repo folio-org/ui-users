@@ -582,7 +582,7 @@ class UserDetail extends React.Component {
         .GET().catch(() => [])
       : Promise.resolve([]);
     const automatedPatronBlocksResolver = stripes.hasInterface('automated-patron-blocks')
-      && stripes.hasPerm('automated-patron-blocks.collection.get')
+      && stripes.hasPerm('patron-blocks.automated-patron-blocks.collection.get')
       ? hasAutomatedPatronBlocks
         .GET().catch(() => [])
       : Promise.resolve([]);
@@ -645,7 +645,7 @@ class UserDetail extends React.Component {
     const servicePoints = this.props.getUserServicePoints();
     const preferredServicePoint = this.props.getPreferredServicePoint();
     const hasPatronBlocks = !!patronBlocks.length;
-    const hasPatronBlocksPermissions = stripes.hasPerm('automated-patron-blocks.collection.get') || stripes.hasPerm('manualblocks.collection.get');
+    const hasPatronBlocksPermissions = stripes.hasPerm('patron-blocks.automated-patron-blocks.collection.get') || stripes.hasPerm('manualblocks.collection.get');
     const patronGroup = this.getPatronGroup(user);
     const requestPreferences = get(resources, 'requestPreferences.records.[0].requestPreferences[0]', {});
     const allServicePoints = get(resources, 'servicePoints.records', [{}]);

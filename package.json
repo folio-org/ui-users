@@ -604,8 +604,8 @@
         "displayName": "Settings (Users): Can view patron blocks conditions",
         "subPermissions": [
           "settings.users.enabled",
-          "patron-block-conditions.collection.get",
-          "patron-block-conditions.item.get"
+          "patron-blocks.patron-block-conditions.collection.get",
+          "patron-blocks.patron-block-conditions.item.get"
         ],
         "visible": false
       },
@@ -614,7 +614,7 @@
         "displayName": "Settings (Users): Can view and edit patron blocks conditions",
         "subPermissions": [
           "ui-users.settings.conditions.view",
-          "patron-block-conditions.item.put"
+          "patron-blocks.patron-block-conditions.item.put"
         ],
         "visible": true
       },
@@ -644,8 +644,8 @@
         "displayName": "Settings (Users): Can view patron blocks limits",
         "subPermissions": [
           "ui-users.settings.conditions.view",
-          "patron-block-limits.collection.get",
-          "patron-block-limits.item.get",
+          "patron-blocks.patron-block-limits.collection.get",
+          "patron-blocks.patron-block-limits.item.get",
           "usergroups.collection.get"
         ],
         "visible": false
@@ -656,9 +656,9 @@
         "subPermissions": [
           "ui-users.settings.conditions.edit",
           "ui-users.settings.limits.view",
-          "patron-block-limits.item.post",
-          "patron-block-limits.item.put",
-          "patron-block-limits.item.delete"
+          "patron-blocks.patron-block-limits.item.post",
+          "patron-blocks.patron-block-limits.item.put",
+          "patron-blocks.patron-block-limits.item.delete"
         ],
         "visible": true
       },
@@ -697,8 +697,8 @@
           "ui-users.manual-charge.execute",
           "ui-users.manual-pay.execute",
           "ui-users.manual-waive.execute",
-          "accounts.check-transfer.post",
-          "accounts.check-refund.post",
+          "feesfines.accounts.check-transfer.post",
+          "feesfines.accounts.check-refund.post",
           "feesfines.accounts.transfer.item.post",
           "feesfines.accounts-bulk.transfer.item.post",
           "feesfines.accounts.cancel.item.post",

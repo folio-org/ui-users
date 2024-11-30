@@ -84,7 +84,7 @@ class LoansListingContainer extends React.Component {
       type: 'okapi',
       records: 'automatedPatronBlocks',
       path: 'automated-patron-blocks/:{id}?limit=2000',
-      permissionsRequired: 'automated-patron-blocks.collection.get',
+      permissionsRequired: 'patron-blocks.automated-patron-blocks.collection.get',
     },
     requests: {
       type: 'okapi',
