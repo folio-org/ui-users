@@ -21,7 +21,8 @@ const props = (propID, proxyID) => {
     id: propID,
     resources: {
       proxy: {
-        records: [{ id: proxyID }]
+        records: [{ id: proxyID }],
+        hasLoaded: true,
       }
     },
     mutator: {
@@ -57,11 +58,15 @@ describe('Render LoanProxyDetails component', () => {
     const newprops = {
       id: 'test',
       resources: {
-        proxy: null
+        proxy: {
+          records: null,
+          hasLoaded: true,
+        },
       },
       mutator: {
         proxy: {
           GET: jest.fn().mockRejectedValueOnce(),
+          reset: jest.fn(),
         },
       },
       showErrorCallout: showErrorMock,

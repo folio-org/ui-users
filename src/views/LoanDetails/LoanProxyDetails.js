@@ -22,6 +22,7 @@ class LoanProxyDetails extends React.Component {
     resources: PropTypes.shape({
       proxy: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
+        hasLoaded: PropTypes.bool,
       }),
     }),
     mutator: PropTypes.shape({
@@ -45,7 +46,6 @@ class LoanProxyDetails extends React.Component {
 
   getUserFullName() {
     const proxy = (this.props.resources.proxy || {}).records || [];
-    console.log('proxy.length: ', proxy.length);
     if (proxy.length === 1 && proxy[0].id === this.props.id) {
       return <Link to={`/users/view/${this.props.id}`}>{getFullName(proxy[0])}</Link>;
     }
