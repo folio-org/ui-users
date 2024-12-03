@@ -45,7 +45,7 @@ const withUserRoles = (WrappedComponent) => (props) => {
 
   useEffect(() => {
     // eslint-disable-next-line react/prop-types
-    if (props.stripes.hasInterface('users-keycloak') && !isAllRolesDataLoading) {
+    if (props.stripes.hasInterface('users-keycloak') && !isAllRolesDataLoading && !!userId) {
       api.get(
         'roles/users', { searchParams },
       )
