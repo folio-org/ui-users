@@ -22,11 +22,13 @@ class LoanProxyDetails extends React.Component {
     resources: PropTypes.shape({
       proxy: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
+        hasLoaded: PropTypes.bool,
       }),
     }),
     mutator: PropTypes.shape({
       proxy: PropTypes.shape({
         GET: PropTypes.func.isRequired,
+        reset: PropTypes.func.isRequired,
       }).isRequired,
     }).isRequired,
     showErrorCallout: PropTypes.func.isRequired,
@@ -34,6 +36,7 @@ class LoanProxyDetails extends React.Component {
 
   componentDidMount() {
     if (this.props.id) {
+      this.props.mutator.proxy.reset();
       this.props.mutator.proxy.GET()
         .catch(() => {
           this.props.showErrorCallout('ui-users.errors.proxyBorrowerNotFound');
@@ -51,7 +54,7 @@ class LoanProxyDetails extends React.Component {
   }
 
   render() {
-    if (this.props.id) {
+    if (this.props.id && this.props.resources.proxy.hasLoaded) {
       return <KeyValue
         label={<FormattedMessage id="ui-users.loans.details.proxyBorrower" />}
         value={this.getUserFullName()}
