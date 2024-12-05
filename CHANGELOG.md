@@ -6,7 +6,7 @@
 * Add permission to access users-keycloak delete method. Refs UIU-3282.
 * Fix issue with `Proxy borrower` field value. Refs UIU-3290.
 * Check if userId is present in withUserRoles HOC. Refs UIU-3273.
-* Add missed `circulation-storage.loans.item.get` permission. Refs UIU-3291.
+* Add missed `circulation-storage.loans.item.get`, `inventory.items.item.get` permissions. Refs UIU-3291.
 
 
 ## [11.0.7](https://github.com/folio-org/ui-users/tree/v11.0.7) (2024-11-30)
