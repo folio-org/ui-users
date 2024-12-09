@@ -87,7 +87,8 @@
           "departments.item.get",
           "users.configurations.item.get",
           "roles.users.collection.get",
-          "users-keycloak.auth-users.item.get"
+          "users-keycloak.auth-users.item.get",
+          "roles.collection.get"
         ],
         "visible": true
       },
