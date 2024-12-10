@@ -704,7 +704,8 @@
           "feesfines.accounts.cancel.item.post",
           "feesfines.accounts-bulk.cancel.item.post",
           "feesfines.accounts.refund.item.post",
-          "feesfines.accounts-bulk.refund.item.post"
+          "feesfines.accounts-bulk.refund.item.post",
+          "circulation-storage.loans.item.get"
         ],
         "visible": true
       },
