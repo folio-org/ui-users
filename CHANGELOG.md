@@ -1,18 +1,16 @@
 # Change history for ui-users
 
+## [11.0.9](https://github.com/folio-org/ui-users/tree/v11.0.9) (2024-12-13)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.8...v11.0.9)
+
+* Add permission to access users-keycloak delete method. Refs UIU-3282.
+* Check if userId is present in withUserRoles HOC. Refs UIU-3273.
+* Add missed permissions for endpoints used in withUserRoles HOC. UIU-3294.
+
 ## [11.0.8](https://github.com/folio-org/ui-users/tree/v11.0.8) (2024-12-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.7...v11.0.8)
 
 * Add missed `circulation-storage.loans.item.get`, `inventory.items.item.get` permissions. Refs UIU-3291.
-
-## [11.1.0] In progress
-* `useUserTenantRoles` supplies `tenantId` in all its queries. Refs UIU-3279.
-* Leverage API supported sorting of columns on pre-registrations records list. Refs UIU-3249.
-* Add permission to access users-keycloak delete method. Refs UIU-3282.
-* Fix issue with `Proxy borrower` field value. Refs UIU-3290.
-* Check if userId is present in withUserRoles HOC. Refs UIU-3273.
-* Add missed `circulation-storage.loans.item.get`, `inventory.items.item.get` permissions. Refs UIU-3291.
-* Add missed permissions for endpoints used in withUserRoles HOC. UIU-3294.
 
 
 ## [11.0.7](https://github.com/folio-org/ui-users/tree/v11.0.7) (2024-11-30)
@@ -27,7 +25,6 @@
 * `useUserTenantRoles` supplies `tenantId` in all its queries. Refs UIU-3279.
 * Leverage API supported sorting of columns on pre-registrations records list. Refs UIU-3249.
 * Show all patron notice print jobs (not just ten random ones), in correct order. Fixes UIU-3269.
-* Add permission to access users-keycloak delete method. Refs UIU-3282.
 
 ## [11.0.5](https://github.com/folio-org/ui-users/tree/v11.0.5) (2024-11-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.3...v11.0.5)
