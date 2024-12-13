@@ -973,7 +973,7 @@
     "lostItems.list.filters": "Search & filter",
     "lostItems.list.searchResults": "Exemplaires perdus nécessitant un coût réel",
     "lostItems.list.filters.lossType": "Loss type",
-    "lostItems.list.filters.lossType.agedToLost": "Aged to lost",
+    "lostItems.list.filters.lossType.agedToLost": "Considéré comme perdu",
     "lostItems.list.filters.lossType.declaredLost": "Déclaré perdu",
     "lostItems.list.columnName.instance.subString.ISBN": "ISBN :",
     "lostItems.list.columnName.instance.subString.loanType": "Type de prêt :",
