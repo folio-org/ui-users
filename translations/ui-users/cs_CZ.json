@@ -1201,7 +1201,7 @@
     "permission.reading-room-access.view": "Uživatelé: Mohou zobrazit přístup do čítárny",
     "permission.reading-room-access.edit": "Uživatelé: Mohou prohlížet a upravovat přístup do čítárny",
     "stagingUser.createUser": "FOLIO user record <b>{name}</b> has been successfully created.",
-    "stagingRecords.notLoadedMessage": "Enter a search query to show results.",
+    "stagingRecords.notLoadedMessage": "Zadejte vyhledávací dotaz pro zobrazení výsledků",
     "stagingRecords.message.noAccessToStagingRecordsPage": "User does not have permission to access \"Patron preregistration record results\" page",
     "permission.accounts.all": "Historie poplatků/pokut: Může vytvářet, upravovat a odstraňovat účty",
     "permission.perms.edit": "Uživatelé: Mohou uživatelům přiřazovat a zrušit přiřazení oprávnění",
