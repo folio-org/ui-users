@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "11.0.8",
+  "version": "11.0.9",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -85,7 +85,10 @@
           "user-settings.custom-fields.item.stats.get",
           "departments.collection.get",
           "departments.item.get",
-          "users.configurations.item.get"
+          "users.configurations.item.get",
+          "roles.users.collection.get",
+          "users-keycloak.auth-users.item.get",
+          "roles.collection.get"
         ],
         "visible": true
       },
@@ -102,7 +105,9 @@
           "tags.collection.get",
           "tags.item.post",
           "circulation-storage.request-preferences.item.post",
-          "circulation-storage.request-preferences.item.put"
+          "circulation-storage.request-preferences.item.put",
+          "roles.users.item.put",
+          "users-keycloak.auth-users.item.post"
         ],
         "visible": true
       },
@@ -111,7 +116,8 @@
         "displayName": "Users: Can delete user profile if user does not have any open transactions",
         "description": "Delete user when user does not have any open transactions",
         "subPermissions": [
-          "users-bl.item.delete"
+          "users-bl.item.delete",
+          "users-keycloak.item.delete"
         ],
         "visible": true
       },

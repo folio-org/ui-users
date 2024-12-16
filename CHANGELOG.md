@@ -1,9 +1,17 @@
 # Change history for ui-users
 
+## [11.0.9](https://github.com/folio-org/ui-users/tree/v11.0.9) (2024-12-13)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.8...v11.0.9)
+
+* Add permission to access users-keycloak delete method. Refs UIU-3282.
+* Check if userId is present in withUserRoles HOC. Refs UIU-3273.
+* Add missed permissions for endpoints used in withUserRoles HOC. UIU-3294.
+
 ## [11.0.8](https://github.com/folio-org/ui-users/tree/v11.0.8) (2024-12-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.7...v11.0.8)
 
 * Add missed `circulation-storage.loans.item.get`, `inventory.items.item.get` permissions. Refs UIU-3291.
+
 
 ## [11.0.7](https://github.com/folio-org/ui-users/tree/v11.0.7) (2024-11-30)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.6...v11.0.7)
