@@ -7,6 +7,7 @@
 * Fix issue with `Proxy borrower` field value. Refs UIU-3290.
 * Check if userId is present in withUserRoles HOC. Refs UIU-3273.
 * Add missed permissions for endpoints used in withUserRoles HOC. UIU-3294.
+* Add view/manage roles permissions. Refs UIU-3301.
 
 ## [11.0.8](https://github.com/folio-org/ui-users/tree/v11.0.8) (2024-12-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.7...v11.0.8)
