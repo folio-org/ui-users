@@ -4,6 +4,7 @@
 * `useUserTenantRoles` supplies `tenantId` in all its queries. Refs UIU-3279.
 * Leverage API supported sorting of columns on pre-registrations records list. Refs UIU-3249.
 * Fix issue with `Proxy borrower` field value. Refs UIU-3290.
+* Remove duplicates from the keyboard shortcut modal. Refs UIU-3026.
 
 ## [11.0.9](https://github.com/folio-org/ui-users/tree/v11.0.9) (2024-12-13)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.8...v11.0.9)

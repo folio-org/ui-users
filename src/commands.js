@@ -36,6 +36,10 @@ const commands = [
     name: 'openShortcutModal',
     label: (<FormattedMessage id="ui-users.shortcut.openShortcutModal" />),
     shortcut: 'mod+alt+k',
+  },
+  {
+    label: (<FormattedMessage id="ui-users.shortcut.expandCollapse" />),
+    shortcut: 'spacebar'
   }
 ];
 
