@@ -598,6 +598,7 @@
         "replaces": ["ui-users.patron_blocks"],
         "subPermissions": [
           "manualblocks.collection.get",
+          "manual-block-templates.collection.get",
           "manualblocks.item.delete",
           "manualblocks.item.get",
           "manualblocks.item.post",
