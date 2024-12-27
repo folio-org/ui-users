@@ -1210,7 +1210,7 @@
     "permission.fee-fine-actions.all": "Detalhes de taxas/multas: Pode criar, editar e remover ações de taxa/multa",
     "permission.loans-anonymize.execute": "Usuários: Anomnimizar empréstimos de usuário",
     "permission.loans-due-date.edit": "Usuários: Empréstimos de usuários - alterar a data de vencimento",
-    "permission.loans-claim-item-returned.execute": "Usuários: Reivindicação de empréstimos de usuários devolvida",
+    "permission.loans-claim-item-returned.execute": "Usuários: Reclamação de empréstimos de usuários devolvida",
     "permission.loans-declare-claimed-returned-item-as-missing.execute": "Usuários: Empréstimos de usuários - marcados como reivindicados, devolvidos como desaparecidos",
     "permission.loans-declare-item-lost.execute": "Usuários: declarar como perdido empréstimos de usuários",
     "permission.loans-renew-override.create": "Usuários: Renovação de empréstimos de usuários por meio de sobreposição",
