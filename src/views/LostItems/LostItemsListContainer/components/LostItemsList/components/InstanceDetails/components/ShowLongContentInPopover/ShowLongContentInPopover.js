@@ -34,8 +34,8 @@ export const getComponentText = (text, additionalText = defaultAdditionalText, c
 
 const ShowLongContentInPopover = ({
   text,
-  additionalText,
-  contentLength,
+  additionalText = defaultAdditionalText,
+  contentLength = defaultContentLength,
 }) => {
   const {
     contentText,
@@ -59,11 +59,6 @@ ShowLongContentInPopover.propTypes = {
   text: PropTypes.string.isRequired,
   additionalText: PropTypes.string,
   contentLength: PropTypes.number,
-};
-
-ShowLongContentInPopover.defaultProps = {
-  additionalText: defaultAdditionalText,
-  contentLength: defaultContentLength,
 };
 
 export default ShowLongContentInPopover;

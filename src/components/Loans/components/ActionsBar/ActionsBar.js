@@ -12,11 +12,7 @@ const propTypes = {
   contentEnd: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
 };
 
-const defaultProps = {
-  show: true,
-};
-
-const ActionsBar = ({ show, contentStart, contentEnd }) => {
+const ActionsBar = ({ show = true, contentStart, contentEnd }) => {
   if (!show) {
     return null;
   }
@@ -30,6 +26,5 @@ const ActionsBar = ({ show, contentStart, contentEnd }) => {
 };
 
 ActionsBar.propTypes = propTypes;
-ActionsBar.defaultProps = defaultProps;
 
 export default ActionsBar;

@@ -24,15 +24,11 @@ const propTypes = {
   errorMessages: PropTypes.object.isRequired,
 };
 
-const defaultProps = {
-  height: 300,
-};
-
 const BulkRenewedLoansList = (props) => {
   const {
     failedRenewals,
     successRenewals,
-    height,
+    height = 300,
     errorMessages,
     requestCounts,
     loanPolicies,
@@ -126,7 +122,6 @@ const BulkRenewedLoansList = (props) => {
   );
 };
 
-BulkRenewedLoansList.defaultProps = defaultProps;
 BulkRenewedLoansList.propTypes = propTypes;
 
 export default BulkRenewedLoansList;
