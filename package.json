@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "11.0.5",
+  "version": "11.0.9",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -613,6 +613,7 @@
         "replaces": ["ui-users.patron_blocks"],
         "subPermissions": [
           "manualblocks.collection.get",
+          "manual-block-templates.collection.get",
           "manualblocks.item.delete",
           "manualblocks.item.get",
           "manualblocks.item.post",
