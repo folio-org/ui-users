@@ -41,7 +41,7 @@ const UserRoles = (props) => {
   return (<RenderRoles
     {...props}
     heading={<FormattedMessage id="ui-users.roles.userRoles" />}
-    permToRead="roles.users.collection.get"
+    permToRead="ui-authorization-roles.users.settings.view"
     affiliations={affiliations}
     selectedAffiliation={tenantId}
     isLoading={isLoading}
