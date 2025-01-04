@@ -7,7 +7,6 @@ import {
   IfPermission,
   useStripes,
 } from '@folio/stripes/core';
-import '__mock__/stripesCore.mock';
 import { Form } from 'react-final-form';
 import EditUserRoles from './EditUserRoles';
 
