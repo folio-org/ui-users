@@ -14,7 +14,10 @@ import {
   Button,
   Headline
 } from '@folio/stripes/components';
-import { stripesConnect } from '@folio/stripes/core';
+import {
+  IfPermission,
+  stripesConnect,
+} from '@folio/stripes/core';
 
 import { isDcbUser } from '../../util';
 import css from './PatronBlock.css';
@@ -176,18 +179,18 @@ class PatronBlock extends React.Component {
       sortDirection,
     } = this.state;
 
-    const buttonDisabled = this.props.stripes.hasPerm('ui-users.patron-blocks.all');
     const displayWhenOpen =
-      <Button
-        id="create-patron-block"
-        disabled={!buttonDisabled}
-        to={{
-          pathname: `/users/${params.id}/patronblocks/create`,
-          search: location.search,
-        }}
-      >
-        <FormattedMessage id="ui-users.blocks.buttons.add" />
-      </Button>;
+      <IfPermission perm="ui-users.patron-blocks.all">
+        <Button
+          id="create-patron-block"
+          to={{
+            pathname: `/users/${params.id}/patronblocks/create`,
+            search: location.search,
+          }}
+        >
+          <FormattedMessage id="ui-users.blocks.buttons.add" />
+        </Button>
+      </IfPermission>;
     const items =
       <MultiColumnList
         id="patron-block-mcl"
@@ -217,7 +220,6 @@ class PatronBlock extends React.Component {
       >
         <Row><Col xs>{items}</Col></Row>
       </Accordion>
-
     );
   }
 }
