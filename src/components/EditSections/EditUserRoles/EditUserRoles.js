@@ -1,11 +1,12 @@
 import React, { useMemo, useState } from 'react';
-import { Accordion, Headline, Badge, Row, Col, List, Button, Icon, ConfirmationModal } from '@folio/stripes/components';
 import { useIntl, FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { isEmpty } from 'lodash';
 import { FieldArray } from 'react-final-form-arrays';
 import { OnChange } from 'react-final-form-listeners';
+import { IfPermission } from '@folio/stripes/core';
+import { Accordion, Headline, Badge, Row, Col, List, Button, Icon, ConfirmationModal } from '@folio/stripes/components';
 import { useAllRolesData } from '../../../hooks';
 import UserRolesModal from './components/UserRolesModal/UserRolesModal';
 import { filtersConfig } from './helpers';
@@ -54,16 +55,18 @@ function EditUserRoles({ accordionId, form:{ change }, setAssignedRoleIds, assig
         key={role.id}
       >
         {role.name}
-        <Button
-          buttonStyle="fieldControl"
-          align="end"
-          type="button"
-          id={`clickable-remove-user-role-${role.id}`}
-          aria-label={`${intl.formatMessage({ id:'ui-users.roles.deleteRole' })}: ${role.name}`}
-          onClick={() => fields.remove(index)}
-        >
-          <Icon icon="times-circle" />
-        </Button>
+        <IfPermission perm="ui-authorization-roles.users.settings.manage">
+          <Button
+            buttonStyle="fieldControl"
+            align="end"
+            type="button"
+            id={`clickable-remove-user-role-${role.id}`}
+            aria-label={`${intl.formatMessage({ id:'ui-users.roles.deleteRole' })}: ${role.name}`}
+            onClick={() => fields.remove(index)}
+          >
+            <Icon icon="times-circle" />
+          </Button>
+        </IfPermission>
       </li>
     );
   };
@@ -90,41 +93,45 @@ function EditUserRoles({ accordionId, form:{ change }, setAssignedRoleIds, assig
   }
 
   return (
-    <div>
-      <Accordion
-        label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.roles.userRoles" /></Headline>}
-        id={accordionId}
-        displayWhenClosed={<Badge>{assignedRoleIds.length}</Badge>}
-      >
-        <Row>
-          {renderUserRoles()}
-          <Button data-testid="add-roles-button" onClick={() => setIsOpen(true)}><FormattedMessage id="ui-users.roles.addRoles" /></Button>
-          <Button data-testid="unassign-all-roles-button" disabled={isEmpty(listItemsData)} onClick={() => setUnassignModalOpen(true)}><FormattedMessage id="ui-users.roles.unassignAllRoles" /></Button>
-        </Row>
-      </Accordion>
-      <UserRolesModal
-        filtersConfig={filtersConfig}
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        initialRoleIds={assignedRoleIds}
-        changeUserRoles={changeUserRoles}
-      />
-      <ConfirmationModal
-        open={unassignModalOpen}
-        heading={<FormattedMessage id="ui-users.roles.modal.unassignAll.header" />}
-        message={unassignAllMessage}
-        onConfirm={handleUnassignAllRoles}
-        onCancel={() => setUnassignModalOpen(false)}
-        cancelLabel={<FormattedMessage id="ui-users.no" />}
-        confirmLabel={<FormattedMessage id="ui-users.yes" />}
-      />
-      <OnChange name="assignedRoleIds">
-        {(userAssignedRoleIds) => {
-          const userRoleIds = isEmpty(userAssignedRoleIds) ? [] : userAssignedRoleIds;
-          setAssignedRoleIds(userRoleIds);
-        }}
-      </OnChange>
-    </div>
+    <IfPermission perm="ui-authorization-roles.users.settings.view">
+      <div>
+        <Accordion
+          label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.roles.userRoles" /></Headline>}
+          id={accordionId}
+          displayWhenClosed={<Badge>{assignedRoleIds.length}</Badge>}
+        >
+          <Row>
+            {renderUserRoles()}
+            <IfPermission perm="ui-authorization-roles.users.settings.manage">
+              <Button data-testid="add-roles-button" onClick={() => setIsOpen(true)}><FormattedMessage id="ui-users.roles.addRoles" /></Button>
+              <Button data-testid="unassign-all-roles-button" disabled={isEmpty(listItemsData)} onClick={() => setUnassignModalOpen(true)}><FormattedMessage id="ui-users.roles.unassignAllRoles" /></Button>
+            </IfPermission>
+          </Row>
+        </Accordion>
+        <UserRolesModal
+          filtersConfig={filtersConfig}
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+          initialRoleIds={assignedRoleIds}
+          changeUserRoles={changeUserRoles}
+        />
+        <ConfirmationModal
+          open={unassignModalOpen}
+          heading={<FormattedMessage id="ui-users.roles.modal.unassignAll.header" />}
+          message={unassignAllMessage}
+          onConfirm={handleUnassignAllRoles}
+          onCancel={() => setUnassignModalOpen(false)}
+          cancelLabel={<FormattedMessage id="ui-users.no" />}
+          confirmLabel={<FormattedMessage id="ui-users.yes" />}
+        />
+        <OnChange name="assignedRoleIds">
+          {(userAssignedRoleIds) => {
+            const userRoleIds = isEmpty(userAssignedRoleIds) ? [] : userAssignedRoleIds;
+            setAssignedRoleIds(userRoleIds);
+          }}
+        </OnChange>
+      </div>
+    </IfPermission>
   );
 }
 

@@ -4,6 +4,7 @@ import { cleanup, waitFor } from '@folio/jest-config-stripes/testing-library/rea
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import renderWithRouter from 'helpers/renderWithRouter';
 import {
+  IfPermission,
   useStripes,
 } from '@folio/stripes/core';
 import { Form } from 'react-final-form';
@@ -19,6 +20,7 @@ jest.mock('../../../hooks', () => ({
 jest.mock('@folio/stripes/core', () => ({
   ...jest.requireActual('@folio/stripes/core'),
   useStripes: jest.fn(),
+  IfPermission: jest.fn()
 }));
 
 jest.unmock('@folio/stripes/components');
@@ -95,6 +97,7 @@ describe('EditUserRoles Component', () => {
   beforeEach(() => {
     useStripes.mockClear().mockReturnValue(STRIPES);
     useAllRolesData.mockClear().mockReturnValue(mockAllRolesData);
+    IfPermission.mockImplementation(({ children }) => children);
   });
   afterEach(cleanup);
 
@@ -104,6 +107,22 @@ describe('EditUserRoles Component', () => {
     expect(getByText('test role')).toBeInTheDocument();
     expect(getByText('admin role')).toBeInTheDocument();
     expect(queryByText('simple role')).not.toBeInTheDocument();
+  });
+
+  it('hides the roles accordion when user doesn\'t have view roles permission', () => {
+    IfPermission.mockImplementation(({ perm, children }) => (perm !== 'ui-authorization-roles.users.settings.view' ? children : null));
+    const { queryByText } = renderEditRolesAccordion(propsData);
+
+    expect(queryByText('ui-users.roles.userRoles')).not.toBeInTheDocument();
+  });
+
+  it('hides the add role button when user doesn\'t have manage roles permission', () => {
+    IfPermission.mockImplementation(({ perm, children }) => (perm !== 'ui-authorization-roles.users.settings.manage' ? children : null));
+    const { getByText, queryByText } = renderEditRolesAccordion(propsData);
+
+    expect(getByText('test role')).toBeInTheDocument();
+    expect(getByText('admin role')).toBeInTheDocument();
+    expect(queryByText('ui-users.roles.addRoles')).not.toBeInTheDocument();
   });
 
   it('calls delete user role function', async () => {
