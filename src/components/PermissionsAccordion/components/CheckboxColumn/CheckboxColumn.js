@@ -9,9 +9,9 @@ import css from './CheckboxColumn.css';
 const CheckboxColumn = memo(props => {
   const {
     value,
-    checked,
+    checked = false,
     permissionName,
-    onChange,
+    onChange = noop,
   } = props;
 
   return (
@@ -37,11 +37,6 @@ CheckboxColumn.propTypes = {
   checked: PropTypes.bool,
   permissionName: PropTypes.string.isRequired,
   onChange: PropTypes.func,
-};
-
-CheckboxColumn.defaultProps = {
-  checked: false,
-  onChange: noop,
 };
 
 export default CheckboxColumn;

@@ -5,11 +5,11 @@ import { AffiliationsManagerModal } from './AffiliationsManagerModal';
 import AffiliationsManagerTrigger from './AffiliationsManagerTrigger';
 
 const AffiliationsManager = ({
-  disabled,
+  disabled = false,
   onUpdateAffiliations,
-  renderTrigger,
+  renderTrigger = AffiliationsManagerTrigger,
   userId,
-  withTrigger,
+  withTrigger = true,
 }) => {
   const [isModalOpen, toggleModal] = useToggle(!withTrigger);
 
@@ -34,12 +34,6 @@ AffiliationsManager.propTypes = {
   renderTrigger: PropTypes.func,
   userId: PropTypes.string.isRequired,
   withTrigger: PropTypes.bool,
-};
-
-AffiliationsManager.defaultProps = {
-  disabled: false,
-  renderTrigger: AffiliationsManagerTrigger,
-  withTrigger: true,
 };
 
 export default AffiliationsManager;

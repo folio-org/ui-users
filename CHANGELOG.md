@@ -6,6 +6,7 @@
 * Fix issue with `Proxy borrower` field value. Refs UIU-3290.
 * Remove duplicates from the keyboard shortcut modal. Refs UIU-3026.
 * Add sub permission `manual-block-templates.collection.get` to permission `Users: Can create, edit and remove patron blocks`. Refs UIU-3305.
+* React v19: refactor away from default props for functional components. Refs. UIU-3141.
 
 ## [11.0.9](https://github.com/folio-org/ui-users/tree/v11.0.9) (2024-12-13)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.8...v11.0.9)

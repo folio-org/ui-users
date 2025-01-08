@@ -9,7 +9,7 @@ import {
 
 import { USER_TYPES } from '../../../../../constants';
 
-const ChangeUserTypeModal = ({ onChange, initialUserType, open }) => {
+const ChangeUserTypeModal = ({ onChange, initialUserType, open = false }) => {
   const userTypeModalFooter = (
     <ModalFooter>
       <Button
@@ -45,10 +45,6 @@ ChangeUserTypeModal.propTypes = {
   onChange: PropTypes.func.isRequired,
   initialUserType: PropTypes.string.isRequired,
   open: PropTypes.bool,
-};
-
-ChangeUserTypeModal.defaultProps = {
-  open: false,
 };
 
 export default ChangeUserTypeModal;

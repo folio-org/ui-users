@@ -24,7 +24,12 @@ import AssignUsers from './AssignUsers';
 import AssignedUsersList from './AssignedUsersList';
 import { getUpdatedUsersList } from './utils';
 
-const AssignedUsersContainer = ({ permissionSetId, expanded, onToggle, tenantId }) => {
+const AssignedUsersContainer = ({
+  permissionSetId,
+  expanded = true,
+  onToggle,
+  tenantId
+}) => {
   const callout = useCallout();
   const intl = useIntl();
 
@@ -121,10 +126,6 @@ AssignedUsersContainer.propTypes = {
   onToggle: PropTypes.func.isRequired,
   permissionSetId: PropTypes.string.isRequired,
   tenantId: PropTypes.string,
-};
-
-AssignedUsersContainer.defaultProps = {
-  expanded: true,
 };
 
 export default AssignedUsersContainer;
