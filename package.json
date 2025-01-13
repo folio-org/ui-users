@@ -86,9 +86,7 @@
           "departments.collection.get",
           "departments.item.get",
           "users.configurations.item.get",
-          "roles.users.collection.get",
-          "users-keycloak.auth-users.item.get",
-          "roles.collection.get"
+          "users-keycloak.auth-users.item.get"
         ],
         "visible": true
       },
@@ -106,7 +104,6 @@
           "tags.item.post",
           "circulation-storage.request-preferences.item.post",
           "circulation-storage.request-preferences.item.put",
-          "roles.users.item.put",
           "users-keycloak.auth-users.item.post"
         ],
         "visible": true
@@ -170,6 +167,24 @@
           "perms.users.item.delete",
           "perms.users.assign.immutable",
           "perms.users.assign.mutable"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.roles.view",
+        "displayName": "Users: Can view user/role assignments",
+        "description": "Also includes basic permissions to view roles, users, patron groups",
+        "subPermissions": [
+          "ui-authorization-roles.users.settings.view"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.roles.manage",
+        "displayName": "Users: Can manage user/role assignments",
+        "description": "",
+        "subPermissions": [
+          "ui-authorization-roles.users.settings.manage"
         ],
         "visible": true
       },
@@ -598,6 +613,7 @@
         "replaces": ["ui-users.patron_blocks"],
         "subPermissions": [
           "manualblocks.collection.get",
+          "manual-block-templates.collection.get",
           "manualblocks.item.delete",
           "manualblocks.item.get",
           "manualblocks.item.post",
