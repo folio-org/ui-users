@@ -9,6 +9,7 @@
 * Hide Create block button for user without permission. Refs UIU-3300.
 * Add HTML page title to add/edit patron block page. Refs UIU-3302.
 * Update fee/fine actions column UX for accessibility. Refs UIU-3027.
+* Rename permission after BE changes. Refs UIU-3309.
 
 ## [11.0.10](https://github.com/folio-org/ui-users/tree/v11.0.10) (2025-01-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.9...v11.0.10)
