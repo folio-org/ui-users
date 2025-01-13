@@ -1,10 +1,7 @@
 # Change history for ui-users
 
 ## [11.1.0] In progress
-* `useUserTenantRoles` supplies `tenantId` in all its queries. Refs UIU-3279.
-* Leverage API supported sorting of columns on pre-registrations records list. Refs UIU-3249.
-* Fix issue with `Proxy borrower` field value. Refs UIU-3290.
-* Remove duplicates from the keyboard shortcut modal. Refs UIU-3026.
+* Rename permission after BE changes. Refs UIU-3309.
 
 ## [11.0.10](https://github.com/folio-org/ui-users/tree/v11.0.10) (2025-01-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.9...v11.0.10)
@@ -22,7 +19,6 @@
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.7...v11.0.8)
 
 * Add missed `circulation-storage.loans.item.get`, `inventory.items.item.get` permissions. Refs UIU-3291.
-
 
 ## [11.0.7](https://github.com/folio-org/ui-users/tree/v11.0.7) (2024-11-30)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.6...v11.0.7)
