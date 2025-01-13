@@ -7,6 +7,7 @@
 * Remove duplicates from the keyboard shortcut modal. Refs UIU-3026.
 * React v19: refactor away from default props for functional components. Refs. UIU-3141.
 * Hide Create block button for user without permission. Refs UIU-3300.
+* Add HTML page title to add/edit patron block page. Refs UIU-3302.
 * Update fee/fine actions column UX for accessibility. Refs UIU-3027.
 
 ## [11.0.10](https://github.com/folio-org/ui-users/tree/v11.0.10) (2025-01-10)

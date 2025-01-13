@@ -6,6 +6,7 @@ import {
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { ConfirmationModal } from '@folio/stripes/components';
+import { TitleManager } from '@folio/stripes/core';
 import PatronBlockForm from './PatronBlockForm';
 
 class PatronBlockLayer extends React.Component {
@@ -168,8 +169,12 @@ class PatronBlockLayer extends React.Component {
         {intl.formatMessage({ id: 'ui-users.blocks.message' })}
       </span> : '';
 
+    const title = params.patronblockid ? intl.formatMessage({ id: 'ui-users.title.patronBlock.edit' })
+      :
+      intl.formatMessage({ id: 'ui-users.title.patronBlock.create' });
+
     return (
-      <>
+      <TitleManager page={title}>
         <PatronBlockForm
           intl={intl}
           stripes={stripes}
@@ -190,7 +195,7 @@ class PatronBlockLayer extends React.Component {
           heading={intl.formatMessage({ id: 'ui-users.blocks.layer.heading' })}
           message={message}
         />
-      </>
+      </TitleManager>
     );
   }
 }
