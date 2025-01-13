@@ -191,7 +191,6 @@ describe('ViewFeesFines', () => {
     const checkBox = screen.getAllByRole('checkbox', { name: '' });
     userEvent.click(checkBox[1]);
     await userEvent.click(screen.queryByText(/ui-users.accounts.history.button.loanDetails/i));
-    console.log(screen.getByRole('gridcell', { name: '•••' }));
     expect(nav.onClickViewLoanActionsHistory).toBeCalled();
   });
   it('Rows should render in Descending Order of created date value and on clicking createdDate header sort order to be reversed', async () => {
