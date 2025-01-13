@@ -647,6 +647,7 @@
   "accounts.history.columns.number": "Effective call number string",
   "accounts.history.columns.status": "Payment status",
   "accounts.history.columns.due": "Due date",
+  "accounts.history.columns.actions": "Actions",
   "accounts.history.columns.returned": "Returned date",
   "accounts.history.possibleColumns.columns.created": "Date Created",
   "accounts.history.button.select": "Select columns",
