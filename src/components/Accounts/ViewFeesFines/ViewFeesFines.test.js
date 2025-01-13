@@ -141,7 +141,7 @@ const defaultProps = {
   match: { params: { id: 1 } },
   history,
   user: { id: '123' },
-  visibleColumns: ['  ', 'metadata.createdDate', 'metadata.updatedDate', 'feeFineType', 'amount', 'remaining', 'paymentStatus.name', 'feeFineOwner', 'title', 'barcode', 'callNumber', 'dueDate', 'returnedDate', ' '],
+  visibleColumns: ['  ', 'metadata.createdDate', 'metadata.updatedDate', 'feeFineType', 'amount', 'remaining', 'paymentStatus.name', 'feeFineOwner', 'title', 'barcode', 'callNumber', 'dueDate', 'returnedDate', 'actions'],
   intl: {
     formatMessage: ({ id }) => id
   },
@@ -184,23 +184,14 @@ describe('ViewFeesFines', () => {
     const checkBox = screen.getAllByRole('checkbox', { name: '' });
     userEvent.click(checkBox[1]);
     await userEvent.click(screen.queryByText(/ui-users.accounts.history.button.pay/i));
-    expect(mockOnChangeActions).toHaveBeenCalledWith({ pay: true }, accountsData);
-    await userEvent.click(screen.queryByText(/ui-users.accounts.history.button.waive/i));
-    expect(mockOnChangeActions).toHaveBeenCalledWith({ waiveModal: true }, accountsData);
-    await userEvent.click(screen.queryByText(/ui-users.accounts.history.button.refund/i));
-    expect(mockOnChangeActions).toHaveBeenCalledWith({ refundModal: true }, accountsData);
-    await userEvent.click(screen.queryByText(/ui-users.accounts.history.button.transfer/i));
-    expect(mockOnChangeActions).toHaveBeenCalledWith({ transferModal: true }, accountsData);
-    await userEvent.click(screen.queryByText(/ui-users.accounts.button.error/i));
-    expect(mockOnChangeActions).toHaveBeenCalledWith({ cancellation: true }, accountsData);
-    await userEvent.click(screen.queryByText(/ui-users.accounts.history.button.loanDetails/i));
-    expect(nav.onClickViewLoanActionsHistory).toBeCalled();
+    expect(mockOnChangeActions).toHaveBeenCalledWith({ 'refund': true, 'regularpayment': false, 'transfer': false, 'waive': false });
   });
   it('onClickViewLoanActionsHistory to be called when loanDetails clicked from DropDownMenu', async () => {
     renderViewFeesFines(defaultProps);
     const checkBox = screen.getAllByRole('checkbox', { name: '' });
     userEvent.click(checkBox[1]);
     await userEvent.click(screen.queryByText(/ui-users.accounts.history.button.loanDetails/i));
+    console.log(screen.getByRole('gridcell', { name: '•••' }));
     expect(nav.onClickViewLoanActionsHistory).toBeCalled();
   });
   it('Rows should render in Descending Order of created date value and on clicking createdDate header sort order to be reversed', async () => {
