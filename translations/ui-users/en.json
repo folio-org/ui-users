@@ -647,6 +647,7 @@
   "accounts.history.columns.number": "Effective call number string",
   "accounts.history.columns.status": "Payment status",
   "accounts.history.columns.due": "Due date",
+  "accounts.history.columns.actions": "Actions",
   "accounts.history.columns.returned": "Returned date",
   "accounts.history.possibleColumns.columns.created": "Date Created",
   "accounts.history.button.select": "Select columns",
@@ -1234,5 +1235,8 @@
   "stagingRecords.message.noAccessToStagingRecordsPage": "User does not have permission to access \"Patron preregistration record results\" page",
   "stagingUser.createUser": "FOLIO user record <b>{name}</b> has been successfully created.",
   "keycloak.modal.confirmationHeading": "Keycloak user record",
-  "keycloak.modal.creation": "This operation will create new record in Keycloak for <b>{user}</b>"
+  "keycloak.modal.creation": "This operation will create new record in Keycloak for <b>{user}</b>",
+
+  "title.patronBlock.create": "Users - Create a new patron block",
+  "title.patronBlock.edit": "Users - Edit a patron block"
 }

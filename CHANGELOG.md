@@ -3,8 +3,23 @@
 ## [11.1.0] In progress
 * `useUserTenantRoles` supplies `tenantId` in all its queries. Refs UIU-3279.
 * Leverage API supported sorting of columns on pre-registrations records list. Refs UIU-3249.
-* Add permission to access users-keycloak delete method. Refs UIU-3282.
 * Fix issue with `Proxy borrower` field value. Refs UIU-3290.
+* Remove duplicates from the keyboard shortcut modal. Refs UIU-3026.
+* React v19: refactor away from default props for functional components. Refs. UIU-3141.
+* Hide Create block button for user without permission. Refs UIU-3300.
+* Add HTML page title to add/edit patron block page. Refs UIU-3302.
+* Update fee/fine actions column UX for accessibility. Refs UIU-3027.
+* Rename permission after BE changes. Refs UIU-3309.
+
+## [11.0.10](https://github.com/folio-org/ui-users/tree/v11.0.10) (2025-01-10)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.9...v11.0.10)
+
+* Add sub permission `manual-block-templates.collection.get` to permission `Users: Can create, edit and remove patron blocks`. Refs UIU-3305.
+
+## [11.0.9](https://github.com/folio-org/ui-users/tree/v11.0.9) (2024-12-13)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.8...v11.0.9)
+
+* Add permission to access users-keycloak delete method. Refs UIU-3282.
 * Check if userId is present in withUserRoles HOC. Refs UIU-3273.
 * Add missed permissions for endpoints used in withUserRoles HOC. UIU-3294.
 * Add view/manage roles permissions. Refs UIU-3301.
@@ -19,6 +34,13 @@
 
 * Update permissions for mod-patron. Ref UIU-3259.
 * Update permission after BE permission changes. Refs UIU-3288.
+
+## [11.0.6](https://github.com/folio-org/ui-users/tree/v11.0.6) (2024-11-28)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.5...v11.0.6)
+
+* `useUserTenantRoles` supplies `tenantId` in all its queries. Refs UIU-3279.
+* Leverage API supported sorting of columns on pre-registrations records list. Refs UIU-3249.
+* Show all patron notice print jobs (not just ten random ones), in correct order. Fixes UIU-3269.
 
 ## [11.0.5](https://github.com/folio-org/ui-users/tree/v11.0.5) (2024-11-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.3...v11.0.5)

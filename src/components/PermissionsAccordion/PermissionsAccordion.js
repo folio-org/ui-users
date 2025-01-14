@@ -33,9 +33,9 @@ const PermissionsAccordion = (props) => {
   const {
     accordionId,
     affiliations,
-    disabled,
+    disabled = false,
     expanded,
-    onChangeAffiliation,
+    onChangeAffiliation = noop,
     onToggle,
     permToModify,
     permToDelete,
@@ -43,9 +43,9 @@ const PermissionsAccordion = (props) => {
     filtersConfig,
     visibleColumns,
     headlineContent,
-    excludePermissionSets,
-    initialValues: { personal },
-    isLoading,
+    excludePermissionSets = false,
+    initialValues: { personal } = {},
+    isLoading = false,
     form: { change },
     setButtonRef,
     tenantId,
@@ -308,14 +308,6 @@ PermissionsAccordion.propTypes = {
   excludePermissionSets: PropTypes.bool,
   form: PropTypes.object,
   setButtonRef: PropTypes.func
-};
-
-PermissionsAccordion.defaultProps = {
-  disabled: false,
-  excludePermissionSets: false,
-  initialValues: {},
-  isLoading: false,
-  onChangeAffiliation: noop,
 };
 
 export default stripesConnect(injectIntl(PermissionsAccordion));

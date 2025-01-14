@@ -12,7 +12,7 @@ import {
   VISIBLE_COLUMNS,
 } from './constants';
 
-const AssignedUsersList = ({ users, isFetching }) => (
+const AssignedUsersList = ({ users = [], isFetching = false }) => (
   <Row
     start="xs"
     data-test-assigned-users
@@ -32,11 +32,6 @@ const AssignedUsersList = ({ users, isFetching }) => (
 AssignedUsersList.propTypes = {
   users: PropTypes.arrayOf(PropTypes.object),
   isFetching: PropTypes.bool,
-};
-
-AssignedUsersList.defaultProps = {
-  users: [],
-  isFetching: false,
 };
 
 export default AssignedUsersList;

@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "11.0.5",
+  "version": "11.0.9",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -571,10 +571,10 @@
           "comments.item.get",
           "payments.collection.get",
           "payments.item.get",
-          "feesfines.accounts.check-pay.item.post",
-          "feesfines.accounts-bulk.check-pay.item.post",
-          "feesfines.accounts.pay.item.post",
-          "feesfines.accounts-bulk.pay.item.post"
+          "feesfines.accounts.check-pay.post",
+          "feesfines.accounts-bulk.check-pay.post",
+          "feesfines.accounts.pay.post",
+          "feesfines.accounts-bulk.pay.post"
         ],
         "visible": true
       },
@@ -589,10 +589,10 @@
           "comments.item.get",
           "waives.collection.get",
           "waives.item.get",
-          "feesfines.accounts.check-waive.item.post",
-          "feesfines.accounts-bulk.check-waive.item.post",
-          "feesfines.accounts.waive.item.post",
-          "feesfines.accounts-bulk.waive.item.post"
+          "feesfines.accounts.check-waive.post",
+          "feesfines.accounts-bulk.check-waive.post",
+          "feesfines.accounts.waive.post",
+          "feesfines.accounts-bulk.waive.post"
         ],
         "visible": true
       },
@@ -615,6 +615,7 @@
         "replaces": ["ui-users.patron_blocks"],
         "subPermissions": [
           "manualblocks.collection.get",
+          "manual-block-templates.collection.get",
           "manualblocks.item.delete",
           "manualblocks.item.get",
           "manualblocks.item.post",
@@ -722,12 +723,12 @@
           "ui-users.manual-waive.execute",
           "feesfines.accounts.check-transfer.post",
           "feesfines.accounts.check-refund.post",
-          "feesfines.accounts.transfer.item.post",
-          "feesfines.accounts-bulk.transfer.item.post",
-          "feesfines.accounts.cancel.item.post",
-          "feesfines.accounts-bulk.cancel.item.post",
-          "feesfines.accounts.refund.item.post",
-          "feesfines.accounts-bulk.refund.item.post",
+          "feesfines.accounts.transfer.post",
+          "feesfines.accounts-bulk.transfer.post",
+          "feesfines.accounts.cancel.post",
+          "feesfines.accounts-bulk.cancel.post",
+          "feesfines.accounts.refund.post",
+          "feesfines.accounts-bulk.refund.post",
           "circulation-storage.loans.item.get",
           "inventory.items.item.get"
         ],
@@ -1008,8 +1009,8 @@
         "displayName": "Users: Create and download Cash drawer reconciliation report",
         "replaces": ["ui-users.cashDrawerReport"],
         "subPermissions": [
-          "feesfines.feefine-reports.cash-drawer-reconciliation.item.post",
-          "feesfines.feefine-reports.cash-drawer-reconciliation-source.item.post"
+          "feesfines.feefine-reports.cash-drawer-reconciliation.post",
+          "feesfines.feefine-reports.cash-drawer-reconciliation-source.post"
         ],
         "visible": true
       },

@@ -249,7 +249,7 @@ class ViewFeesFines extends React.Component {
       'callNumber': f => (f.callNumber ? f.callNumber : '-'),
       'dueDate': f => (f.dueDate ? this.formatDateTime(f.dueDate) : '-'),
       'returnedDate': f => (this.getLoan(f).returnDate ? this.formatDateTime(this.getLoan(f).returnDate) : '-'),
-      ' ': f => this.renderActions(f, this.getLoan(f)),
+      'actions': f => this.renderActions(f, this.getLoan(f)),
     };
   }
 
@@ -478,6 +478,7 @@ class ViewFeesFines extends React.Component {
       'callNumber': intl.formatMessage({ id: 'ui-users.accounts.history.columns.number' }),
       'dueDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),
       'returnedDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' }),
+      'actions': intl.formatMessage({ id: 'ui-users.accounts.history.columns.actions' }),
     };
 
     return (
@@ -499,7 +500,7 @@ class ViewFeesFines extends React.Component {
           'callNumber': 110,
           'dueDate': 110,
           'returnedDate': 110,
-          ' ': 50
+          'actions': 70
         }}
         visibleColumns={this.props.visibleColumns}
         fullWidth

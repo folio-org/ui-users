@@ -99,7 +99,7 @@ const possibleColumns = [
   'callNumber',
   'dueDate',
   'returnedDate',
-  ' ',
+  'actions',
 ];
 
 class AccountsHistory extends React.Component {
