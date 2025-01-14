@@ -564,7 +564,7 @@
         "replaces": ["ui-users.manual_pay"],
         "subPermissions": [
           "ui-users.accounts.all",
-          "ui-users.feefineactions.all",
+          "ui-users.fee-fine-actions.all",
           "comments.collection.get",
           "comments.item.get",
           "payments.collection.get",
@@ -582,7 +582,7 @@
         "replaces": ["ui-users.manual_waive"],
         "subPermissions": [
           "ui-users.accounts.all",
-          "ui-users.feefineactions.all",
+          "ui-users.fee-fine-actions.all",
           "comments.collection.get",
           "comments.item.get",
           "waives.collection.get",
