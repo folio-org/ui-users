@@ -1231,5 +1231,8 @@
     "permission.lost-items-requiring-actual-cost.execute": "Użytkownicy: można przetwarzać rzeczywistą wartość zagubionych egzemplarzy",
     "permission.open-transactions.view": "Użytkownicy: można sprawdzać otwarte transakcje",
     "permission.patron-notice-print-jobs.view": "Użytkownicy: wyświetlanie zadań drukowania powiadomień czytelników",
-    "permission.patron-notice-print-jobs.delete": "Użytkownicy: wyświetlanie i usuwanie zadań drukowania powiadomień czytelników"
+    "permission.patron-notice-print-jobs.delete": "Użytkownicy: wyświetlanie i usuwanie zadań drukowania powiadomień czytelników",
+    "title.patronBlock.create": "Users - Create a new patron block",
+    "title.patronBlock.edit": "Users - Edit a patron block",
+    "accounts.history.columns.actions": "Actions"
 }

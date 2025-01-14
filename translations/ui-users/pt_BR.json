@@ -1231,5 +1231,8 @@
     "permission.lost-items-requiring-actual-cost.execute": "Usuários: Podem processar itens perdidos que exigem custo real",
     "permission.open-transactions.view": "Usuários: Podem verificar as transações em aberto",
     "permission.patron-notice-print-jobs.view": "Usuários: Exibir trabalhos de impressão de avisos ao usuário",
-    "permission.patron-notice-print-jobs.delete": "Usuários: Visualizar e remover trabalhos de impressão de avisos do usuário"
+    "permission.patron-notice-print-jobs.delete": "Usuários: Visualizar e remover trabalhos de impressão de avisos do usuário",
+    "title.patronBlock.create": "Users - Create a new patron block",
+    "title.patronBlock.edit": "Users - Edit a patron block",
+    "accounts.history.columns.actions": "Actions"
 }
