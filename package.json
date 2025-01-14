@@ -175,6 +175,7 @@
         "displayName": "Users: Can view user/role assignments",
         "description": "Also includes basic permissions to view roles, users, patron groups",
         "subPermissions": [
+          "ui-users.view",
           "ui-authorization-roles.users.settings.view"
         ],
         "visible": true
@@ -184,6 +185,7 @@
         "displayName": "Users: Can manage user/role assignments",
         "description": "",
         "subPermissions": [
+          "ui-users.view",
           "ui-authorization-roles.users.settings.manage"
         ],
         "visible": true
