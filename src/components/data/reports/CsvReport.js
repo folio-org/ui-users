@@ -1,5 +1,7 @@
 import { forOwn, get } from 'lodash';
-import { exportCsv } from '@folio/stripes/util';
+
+import { exportToCsv } from '@folio/stripes/components';
+
 import settings from './settings';
 import { reportColumns } from '../../../constants';
 import { formatDateAndTime } from '../../util';
@@ -103,7 +105,7 @@ class CsvReport {
   toCSV(records) {
     const onlyFields = this.columnsMap;
     const parsedRecords = this.parse(records);
-    exportCsv(parsedRecords, { onlyFields });
+    exportToCsv(parsedRecords, { onlyFields });
   }
 }
 

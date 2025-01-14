@@ -263,4 +263,5 @@ jest.mock('@folio/stripes/components', () => ({
       </div>
     );
   }),
+  exportToCsv: jest.fn(),
 }));

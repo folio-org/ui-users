@@ -1,4 +1,5 @@
-import { exportCsv } from '@folio/stripes/util';
+import { exportToCsv } from '@folio/stripes/components';
+
 import { refundReportColumns } from '../../../constants';
 
 class RefundsReport {
@@ -26,7 +27,7 @@ class RefundsReport {
   toCSV() {
     const parsedData = this.parse();
 
-    exportCsv(parsedData, {
+    exportToCsv(parsedData, {
       onlyFields: this.columnsMap,
       filename: 'refunds-to-process-manually'
     });

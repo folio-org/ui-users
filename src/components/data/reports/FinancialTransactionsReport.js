@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { isEmpty } from 'lodash';
 
-import { exportCsv } from '@folio/stripes/util';
+import { exportToCsv } from '@folio/stripes/components';
 
 import { financialTransactionsMainReportColumns } from '../../../constants';
 import {
@@ -199,7 +199,7 @@ class FinancialTransactionsReport {
   toCSV() {
     const parsedData = this.parse();
 
-    exportCsv(parsedData, {
+    exportToCsv(parsedData, {
       onlyFields: this.columnsMap,
       filename: this.buildDocumentName(),
     });
