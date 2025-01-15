@@ -74,7 +74,7 @@ class ClosedLoans extends React.Component {
       'item.copyNumber', 'item.contributors', 'item.holdingsRecordId', 'item.instanceId', 'item.status.name', 'item.title', 'item.materialType.name',
       'item.location.name', 'metaData.createdByUserId', 'metadata.updatedDate', 'metadata.updatedByUserId', 'loanPolicyId'];
 
-    // Map to pass into exportCsv
+    // Map to pass into exportToCsv
     this.columnHeadersMap = this.headers.map(item => {
       return {
         label: this.props.intl.formatMessage({ id: `ui-users.${item}` }),
