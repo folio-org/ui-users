@@ -1,6 +1,8 @@
 # Change history for ui-users
 
-## [11.1.0] In progress
+## [11.0.11](https://github.com/folio-org/ui-users/tree/v11.0.11) (2025-01-15)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.10...v11.0.11)
+
 * Rename permission after BE changes. Refs UIU-3309.
 
 ## [11.0.10](https://github.com/folio-org/ui-users/tree/v11.0.10) (2025-01-10)
