@@ -1231,5 +1231,8 @@
     "permission.lost-items-requiring-actual-cost.execute": "Uživatelé: Mohou zpracovávat ztracené jednotky vyžadující skutečné náklady",
     "permission.open-transactions.view": "Uživatelé: Mohou kontrolovat otevřené transakce",
     "permission.patron-notice-print-jobs.view": "Uživatelé: Zobrazení tiskových úloh s upozorněním pro čtenáře",
-    "permission.patron-notice-print-jobs.delete": "Uživatelé: Zobrazení a odstranění tiskových úloh s upozorněním pro čtenáře"
+    "permission.patron-notice-print-jobs.delete": "Uživatelé: Zobrazení a odstranění tiskových úloh s upozorněním pro čtenáře",
+    "title.patronBlock.create": "Users - Create a new patron block",
+    "title.patronBlock.edit": "Users - Edit a patron block",
+    "accounts.history.columns.actions": "Actions"
 }
