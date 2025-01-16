@@ -136,6 +136,7 @@ const EditContactInfo = ({
                 fullWidth
                 disabled={disabled}
                 filter={prefEmailCommFilterOptions}
+                itemToString={(option) => option.value}
               />
             </Col>
           </Row>
