@@ -401,3 +401,8 @@ export const KEYCLOAK_USER_EXISTANCE = {
   nonExist: 'nonExist',
   error: 'error',
 };
+
+export const NEW_FEE_FINE_FIELD_NAMES = {
+  ITEM_BARCODE: 'itemBarcode',
+  KEY_OF_ITEM_BARCODE: 'keyOfItemBarcode',
+};
