@@ -3,7 +3,7 @@ import {
   map,
 } from 'lodash';
 
-import { exportCsv } from '@folio/stripes/util';
+import { exportToCsv } from '@folio/stripes/components';
 
 import { feeFineReportColumns } from '../../../constants';
 import {
@@ -161,7 +161,7 @@ class FeeFineReport {
     const onlyFields = this.columnsMap;
     const parsedData = this.parse();
 
-    exportCsv(parsedData, {
+    exportToCsv(parsedData, {
       onlyFields,
       filename: 'export-fees-fines-spreadsheet'
     });

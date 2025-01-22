@@ -1231,5 +1231,8 @@
     "permission.lost-items-requiring-actual-cost.execute": "用户：可以处理需要实际费用的遗失单件",
     "permission.open-transactions.view": "用户：可以查看未结事务",
     "permission.patron-notice-print-jobs.view": "用户：查看读者通知打印任务",
-    "permission.patron-notice-print-jobs.delete": "用户：查看和删除读者通知打印任务"
+    "permission.patron-notice-print-jobs.delete": "用户：查看和删除读者通知打印任务",
+    "title.patronBlock.create": "Users - Create a new patron block",
+    "title.patronBlock.edit": "Users - Edit a patron block",
+    "accounts.history.columns.actions": "Actions"
 }

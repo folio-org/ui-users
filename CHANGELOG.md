@@ -9,6 +9,12 @@
 * Hide Create block button for user without permission. Refs UIU-3300.
 * Add HTML page title to add/edit patron block page. Refs UIU-3302.
 * Update fee/fine actions column UX for accessibility. Refs UIU-3027.
+* Change import of `exportToCsv` from `stripes-util` to `stripes-components`. Refs UIU-3202.
+* Provide `itemToString` to create unique `key` attributes. Refs UIU-3312.
+
+## [11.0.11](https://github.com/folio-org/ui-users/tree/v11.0.11) (2025-01-15)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.10...v11.0.11)
+
 * Rename permission after BE changes. Refs UIU-3309.
 * Permission sets detail record view: Description text marked as heading. Refs UIU-2938.
 

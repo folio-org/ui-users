@@ -1,6 +1,6 @@
 import { isEmpty } from 'lodash';
 
-import { exportCsv } from '@folio/stripes/util';
+import { exportToCsv } from '@folio/stripes/components';
 
 import { cashMainReportColumnsCSV } from '../../../constants';
 import {
@@ -120,7 +120,7 @@ class CashDrawerReconciliationReportCSV extends CashDrawerReconciliationReport {
   toCSV() {
     const parsedData = this.parse();
 
-    exportCsv(parsedData, {
+    exportToCsv(parsedData, {
       onlyFields: this.columnsMap,
       filename: this.buildDocumentName(),
     });
