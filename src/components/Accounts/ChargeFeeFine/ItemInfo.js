@@ -115,7 +115,12 @@ class ItemInfo extends React.Component {
     } = this.props;
 
     if (barcode && barcode === activeRecord.barcode && items.records.length === 0) {
-      return <FormattedMessage id="ui-users.charge.item.barcode.error" />;
+      return (
+        <FormattedMessage
+          id="ui-users.charge.item.barcode.error"
+          values={{ barcode }}
+        />
+      );
     }
 
     return undefined;
