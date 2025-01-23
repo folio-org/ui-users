@@ -406,24 +406,24 @@ class ChargeFeeFine extends React.Component {
     );
   }
 
-  onSubmitCharge = (data) => {
-    const dataToSend = _.cloneDeep(data);
+  onSubmitCharge = (dataToSend) => {
+    const data = _.cloneDeep(dataToSend);
 
-    _.unset(dataToSend, NEW_FEE_FINE_FIELD_NAMES.ITEM_BARCODE);
-    _.unset(dataToSend, NEW_FEE_FINE_FIELD_NAMES.KEY_OF_ITEM_BARCODE);
+    _.unset(data, NEW_FEE_FINE_FIELD_NAMES.ITEM_BARCODE);
+    _.unset(data, NEW_FEE_FINE_FIELD_NAMES.KEY_OF_ITEM_BARCODE);
 
-    if (dataToSend.pay) {
-      delete dataToSend.pay;
-      this.type.remaining = dataToSend.amount;
+    if (data.pay) {
+      delete data.pay;
+      this.type.remaining = data.amount;
 
-      return this.chargeAction(dataToSend)
-        .then(() => this.payAction(dataToSend))
+      return this.chargeAction(data)
+        .then(() => this.payAction(data))
         .then(() => this.goBack());
     } else {
-      delete dataToSend.pay;
+      delete data.pay;
 
-      return this.chargeAction(dataToSend)
-        .then(() => this.showCalloutMessage(dataToSend))
+      return this.chargeAction(data)
+        .then(() => this.showCalloutMessage(data))
         .then(() => this.goBack());
     }
   }

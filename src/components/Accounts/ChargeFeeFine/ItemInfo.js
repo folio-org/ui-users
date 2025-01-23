@@ -18,8 +18,18 @@ class ItemInfo extends React.Component {
     resources: PropTypes.shape({
       items: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
+        isPending: PropTypes.bool,
+      }),
+      activeRecord: PropTypes.shape({
+        barcode: PropTypes.string,
       }),
     }).isRequired,
+    mutator: PropTypes.shape({
+      activeRecord: PropTypes.shape({
+        replace: PropTypes.func,
+      }),
+    }),
+    values: PropTypes.object.isRequired,
     form: PropTypes.object.isRequired,
     onClickSelectItem: PropTypes.func,
     item: PropTypes.object,
@@ -160,13 +170,14 @@ class ItemInfo extends React.Component {
 
                 return (
                   <Field
+                    data-testid="itemBarcodeField"
                     name={NEW_FEE_FINE_FIELD_NAMES.ITEM_BARCODE}
                     key={key}
                     validate={this.validateBarcode}
                     validateFields={[]}
                   >
                     {
-                      ({input, meta}) => {
+                      ({ input, meta }) => {
                         const validationError = !isBarcodeChangedAfterValidation && meta.error;
 
                         return (
