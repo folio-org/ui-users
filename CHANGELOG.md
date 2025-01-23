@@ -17,6 +17,7 @@
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.10...v11.0.11)
 
 * Rename permission after BE changes. Refs UIU-3309.
+* Permission sets detail record view: Description text marked as heading. Refs UIU-2938.
 
 ## [11.0.10](https://github.com/folio-org/ui-users/tree/v11.0.10) (2025-01-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.9...v11.0.10)
