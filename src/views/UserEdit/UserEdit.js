@@ -459,6 +459,8 @@ class UserEdit extends React.Component {
       location,
       match: { params },
       isCreateKeycloakUserConfirmationOpen,
+      setTenantId,
+      tenantId,
       setAssignedRoleIds,
       assignedRoleIds
     } = this.props;
@@ -497,6 +499,8 @@ class UserEdit extends React.Component {
         isCreateKeycloakUserConfirmationOpen={isCreateKeycloakUserConfirmationOpen}
         onCancelKeycloakConfirmation={this.onCompleteEdit}
         confirmCreateKeycloakUser={() => this.props.confirmCreateKeycloakUser(this.onCompleteEdit)}
+        setTenantId={setTenantId}
+        tenantId={tenantId}
         setAssignedRoleIds={setAssignedRoleIds}
         assignedRoleIds={assignedRoleIds}
       />

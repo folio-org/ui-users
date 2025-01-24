@@ -10,13 +10,14 @@ const withUserRoles = (WrappedComponent) => (props) => {
   const { okapi, config } = useStripes();
   // eslint-disable-next-line react/prop-types
   const userId = props.match.params.id;
+  const [tenantId, setTenantId] = useState(okapi.tenant);
   const [assignedRoleIds, setAssignedRoleIds] = useState([]);
   const [initialAssignedRoleIds, setInitialAssignedRoleIds] = useState([]);
   const [isCreateKeycloakUserConfirmationOpen, setIsCreateKeycloakUserConfirmationOpen] = useState(false);
   const callout = useCallout();
   const sendErrorCallout = error => showErrorCallout(error, callout.sendCallout);
 
-  const { mutateAsync: createKeycloakUser } = useCreateAuthUserKeycloak(sendErrorCallout, { tenantId: okapi.tenant });
+  const { mutateAsync: createKeycloakUser } = useCreateAuthUserKeycloak(sendErrorCallout, { tenantId });
 
   const { isLoading: isAllRolesDataLoading, allRolesMapStructure } = useAllRolesData();
 
@@ -28,7 +29,7 @@ const withUserRoles = (WrappedComponent) => (props) => {
   const ky = useOkapiKy();
   const api = ky.extend({
     hooks: {
-      beforeRequest: [(req) => req.headers.set('X-Okapi-Tenant', okapi.tenant)]
+      beforeRequest: [(req) => req.headers.set('X-Okapi-Tenant', tenantId)]
     }
   });
 
@@ -57,7 +58,7 @@ const withUserRoles = (WrappedComponent) => (props) => {
   },
   // Adding api, searchParams to deps causes infinite callback call. Listed deps are enough to track changes.
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  [userId, isAllRolesDataLoading, setAssignedRoleIdsOnLoad]);
+  [userId, isAllRolesDataLoading, setAssignedRoleIdsOnLoad, tenantId]);
 
   const updateUserRoles = (roleIds) => api.put(
     `roles/users/${userId}`, { json: {
@@ -116,6 +117,8 @@ const withUserRoles = (WrappedComponent) => (props) => {
 
   return <WrappedComponent
     {...props}
+    tenantId={tenantId}
+    setTenantId={setTenantId}
     assignedRoleIds={assignedRoleIds}
     setAssignedRoleIds={setAssignedRoleIds}
     isCreateKeycloakUserConfirmationOpen={isCreateKeycloakUserConfirmationOpen}

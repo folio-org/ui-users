@@ -11,6 +11,7 @@
 * Update fee/fine actions column UX for accessibility. Refs UIU-3027.
 * Rename permission after BE changes. Refs UIU-3309.
 * Change import of `exportToCsv` from `stripes-util` to `stripes-components`. Refs UIU-3202.
+* Add ability to create/edit role assignments for all of a user's affiliations. Refs UIU-3179.
 
 ## [11.0.10](https://github.com/folio-org/ui-users/tree/v11.0.10) (2025-01-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.9...v11.0.10)

@@ -1,22 +1,41 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useIntl, FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { isEmpty } from 'lodash';
 import { FieldArray } from 'react-final-form-arrays';
 import { OnChange } from 'react-final-form-listeners';
-import { IfPermission } from '@folio/stripes/core';
+
+import { IfPermission, useStripes } from '@folio/stripes/core';
 import { Accordion, Headline, Badge, Row, Col, List, Button, Icon, ConfirmationModal } from '@folio/stripes/components';
-import { useAllRolesData } from '../../../hooks';
+
+import { useAllRolesData, useUserAffiliations } from '../../../hooks';
+import AffiliationsSelect from '../../AffiliationsSelect/AffiliationsSelect';
+import IfConsortium from '../../IfConsortium';
+import IfConsortiumPermission from '../../IfConsortiumPermission';
 import UserRolesModal from './components/UserRolesModal/UserRolesModal';
+import { isAffiliationsEnabled } from '../../util/util';
 import { filtersConfig } from './helpers';
 
-function EditUserRoles({ accordionId, form:{ change }, setAssignedRoleIds, assignedRoleIds }) {
+function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds, assignedRoleIds, setTenantId, tenantId }) {
+  const stripes = useStripes();
   const [isOpen, setIsOpen] = useState(false);
   const [unassignModalOpen, setUnassignModalOpen] = useState(false);
   const intl = useIntl();
 
-  const { isLoading: isAllRolesDataLoading, allRolesMapStructure } = useAllRolesData();
+  const {
+    affiliations,
+    isFetching: isAffiliationsFetching,
+  } = useUserAffiliations({ userId: user.id }, { enabled: isAffiliationsEnabled(user) });
+
+  const { isLoading: isAllRolesDataLoading, allRolesMapStructure, refetch } = useAllRolesData({ tenantId });
+
+  useEffect(() => {
+    if (!affiliations.some(({ tenantId: assigned }) => tenantId === assigned)) {
+      setTenantId(stripes.okapi.tenant);
+    }
+    refetch();
+  }, [affiliations, stripes.okapi.tenant, tenantId]);
 
   const changeUserRoles = (roleIds) => {
     change('assignedRoleIds', roleIds);
@@ -101,6 +120,18 @@ function EditUserRoles({ accordionId, form:{ change }, setAssignedRoleIds, assig
           displayWhenClosed={<Badge>{assignedRoleIds.length}</Badge>}
         >
           <Row>
+            <IfConsortium>
+              <IfConsortiumPermission perm="consortia.user-tenants.collection.get">
+                {Boolean(affiliations?.length) && (
+                  <AffiliationsSelect
+                    affiliations={affiliations}
+                    onChange={setTenantId}
+                    isLoading={isAllRolesDataLoading || isAffiliationsFetching}
+                    value={tenantId}
+                  />
+                )}
+              </IfConsortiumPermission>
+            </IfConsortium>
             {renderUserRoles()}
             <IfPermission perm="ui-authorization-roles.users.settings.manage">
               <Button data-testid="add-roles-button" onClick={() => setIsOpen(true)}><FormattedMessage id="ui-users.roles.addRoles" /></Button>
