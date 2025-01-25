@@ -21,7 +21,10 @@ import {
   loadServicePoints,
   deleteOptionalActionFields,
 } from '../accountFunctions';
-import { SHARED_OWNER } from '../../../constants';
+import {
+  SHARED_OWNER,
+  NEW_FEE_FINE_FIELD_NAMES,
+} from '../../../constants';
 
 class ChargeFeeFine extends React.Component {
   static propTypes = {
@@ -72,6 +75,7 @@ class ChargeFeeFine extends React.Component {
       showConfirmDialog: false,
       notify: null,
       paymentNotify: null,
+      itemBarcode: '',
     };
     this.chargeAction = this.chargeAction.bind(this);
     this.payAction = this.payAction.bind(this);
@@ -232,7 +236,10 @@ class ChargeFeeFine extends React.Component {
 
   onClickSelectItem(barcode) {
     if (barcode !== '') {
-      this.props.mutator.activeRecord.update({ barcode });
+      this.props.mutator.activeRecord.update({
+        barcode,
+        isBarcodeValidated: true,
+      });
       if ((this.props.resources.activeRecord || {}).barcode === barcode) {
         this.setState({
           lookup: true,
@@ -241,7 +248,7 @@ class ChargeFeeFine extends React.Component {
     }
   }
 
-  onChangeOwner(ownerId) {
+  onChangeOwner(ownerId, itemBarcode = '') {
     const {
       resources,
       mutator,
@@ -253,7 +260,11 @@ class ChargeFeeFine extends React.Component {
       mutator.activeRecord.update({ shared });
     }
     mutator.activeRecord.update({ ownerId });
-    this.setState({ ownerId });
+
+    this.setState({
+      ownerId,
+      itemBarcode,
+    });
   }
 
   onChangeItem(item) {
@@ -395,7 +406,12 @@ class ChargeFeeFine extends React.Component {
     );
   }
 
-  onSubmitCharge = (data) => {
+  onSubmitCharge = (dataToSend) => {
+    const data = _.cloneDeep(dataToSend);
+
+    _.unset(data, NEW_FEE_FINE_FIELD_NAMES.ITEM_BARCODE);
+    _.unset(data, NEW_FEE_FINE_FIELD_NAMES.KEY_OF_ITEM_BARCODE);
+
     if (data.pay) {
       delete data.pay;
       this.type.remaining = data.amount;
@@ -433,6 +449,7 @@ class ChargeFeeFine extends React.Component {
       ownerId,
       feeFineTypeId,
       pay,
+      itemBarcode,
     } = this.state;
     this.item = _.get(resources, ['items', 'records', [0]], {});
     const feefines = _.get(resources, ['allfeefines', 'records'], []);
@@ -461,7 +478,7 @@ class ChargeFeeFine extends React.Component {
     parseFloat(selected).toFixed(2);
     let item;
 
-    if (this.item && (loanid || barcode)) {
+    if (this.item && (loanid || barcode || !resources.activeRecord?.isBarcodeValidated)) {
       item = {
         id: this.item.id || '',
         instance: this.item.title || '',
@@ -490,7 +507,8 @@ class ChargeFeeFine extends React.Component {
       ownerId: initialOwnerId,
       notify: !!(selectedFeeFine?.chargeNoticeId || selectedOwner?.defaultChargeNoticeId),
       feeFineId: '',
-      amount: ''
+      amount: '',
+      itemBarcode,
     };
 
     const initialActionValues = {
