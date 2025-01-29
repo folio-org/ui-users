@@ -224,7 +224,7 @@ describe('UserForm', () => {
         />
       );
 
-      expect(screen.getByText('(r2/d2)')).toBeTruthy();
+      expect(screen.getByText('(r2/d2)')).toBeInTheDocument();
     });
   });
 
