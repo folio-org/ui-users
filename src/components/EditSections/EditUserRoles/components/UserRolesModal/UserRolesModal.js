@@ -14,12 +14,12 @@ import useRolesModalFilters from './useRolesModalFilters';
 export default function UserRolesModal({ isOpen,
   onClose,
   changeUserRoles,
-  initialRoleIds }) {
+  initialRoleIds,
+  tenantId }) {
   const [filterPaneIsVisible, setFilterPaneIsVisible] = useState(true);
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState('');
-  const [assignedRoleIds, setAssignedRoleIds] = useState([]);
+  const [assignedRoleIds, setAssignedRoleIds] = useState({});
   const { filters, onChangeFilter, onClearFilter, resetFilters } = useRolesModalFilters();
-
   const { data: allRolesData, allRolesMapStructure } = useAllRolesData();
 
   useEffect(() => {
@@ -39,23 +39,27 @@ export default function UserRolesModal({ isOpen,
     let filtered = cloneDeep(allRolesData.roles);
     [filtersConfig].forEach((filterData) => {
       // eslint-disable-next-line no-unused-vars
-      filtered = filterData.filter(filtered, filters, assignedRoleIds);
+      filtered = filterData.filter(filtered, filters, assignedRoleIds, tenantId);
     });
 
     return filtered.filter(role => role.name.trim().toLowerCase().includes(submittedSearchTerm.trim().toLowerCase()));
   };
 
   const toggleRole = (id) => {
-    if (assignedRoleIds.includes(id)) {
-      setAssignedRoleIds(assignedRoleIds.filter(roleId => roleId !== id));
+    if (assignedRoleIds[tenantId]?.includes(id)) {
+      setAssignedRoleIds({...assignedRoleIds, [tenantId]: assignedRoleIds[tenantId].filter(role => role !== id)});
     } else {
-      setAssignedRoleIds([...assignedRoleIds, id]);
+      setAssignedRoleIds({...assignedRoleIds, [tenantId]: assignedRoleIds[tenantId].concat(id)});
     }
   };
 
   const toggleAllRoles = (checked) => {
-    if (checked) setAssignedRoleIds(allRolesData?.roles.map(role => role.id));
-    else setAssignedRoleIds([]);
+    if (checked) {
+      setAssignedRoleIds({...assignedRoleIds, [tenantId]: allRolesData?.roles.map(role => role.id)});
+    }
+    else {
+      setAssignedRoleIds({...assignedRoleIds, [tenantId]: []});
+    }
   };
 
   const filteredRoles = getFilteredRoles();
@@ -69,7 +73,7 @@ export default function UserRolesModal({ isOpen,
   };
 
   const handleSaveClick = () => {
-    const sortedAlphabetically = assignedRoleIds
+    const sortedAlphabetically = assignedRoleIds[tenantId]
       .map(id => {
         const foundRole = allRolesMapStructure.get(id);
         return { name: foundRole?.name, id: foundRole?.id };
@@ -103,7 +107,7 @@ export default function UserRolesModal({ isOpen,
           <div>
             <FormattedMessage
               id="ui-users.permissions.modal.total"
-              values={{ count: assignedRoleIds.length }}
+              values={{ count: assignedRoleIds[tenantId]?.length }}
             />
           </div>
           <Button
@@ -170,6 +174,7 @@ export default function UserRolesModal({ isOpen,
               filteredRoles={filteredRoles}
               toggleRole={toggleRole}
               toggleAllRoles={toggleAllRoles}
+              tenantId={tenantId}
             />
           </Pane>
         </Paneset>
@@ -181,6 +186,6 @@ export default function UserRolesModal({ isOpen,
 UserRolesModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  initialRoleIds: PropTypes.arrayOf(PropTypes.string),
+  initialRoleIds: PropTypes.object,
   changeUserRoles: PropTypes.func.isRequired,
 };

@@ -52,7 +52,7 @@ class UserEdit extends React.Component {
     /* assignedRoleIds, updateUserRoles,checkUserInKeycloak, setIsCreateKeycloakUserConfirmationOpen,
     isCreateKeycloakUserConfirmationOpen,submitCreateKeycloakUser comes from withUserRoles HOC
     */
-    assignedRoleIds: PropTypes.arrayOf(PropTypes.string),
+    assignedRoleIds: PropTypes.object,
     setAssignedRoleIds: PropTypes.func,
     isCreateKeycloakUserConfirmationOpen: PropTypes.bool,
     initialAssignedRoleIds: PropTypes.arrayOf(PropTypes.string),

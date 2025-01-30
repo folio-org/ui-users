@@ -33,12 +33,13 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
   useEffect(() => {
     if (!affiliations.some(({ tenantId: assigned }) => tenantId === assigned)) {
       setTenantId(stripes.okapi.tenant);
+    } else {
+      refetch();
     }
-    refetch();
   }, [affiliations, stripes.okapi.tenant, tenantId]);
 
   const changeUserRoles = (roleIds) => {
-    change('assignedRoleIds', roleIds);
+    change(`assignedRoleIds[${tenantId}]`, roleIds);
   };
 
   const handleUnassignAllRoles = () => {
@@ -47,10 +48,10 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
   };
 
   const listItemsData = useMemo(() => {
-    if (isEmpty(assignedRoleIds) || isAllRolesDataLoading) return [];
+    if (isEmpty(assignedRoleIds[tenantId]) || isAllRolesDataLoading) return [];
 
-    return assignedRoleIds.map(roleId => {
-      const foundUserRole = allRolesMapStructure.get(roleId);
+    return assignedRoleIds[tenantId].map(i => {
+      const foundUserRole = allRolesMapStructure.get(i.roleId);
 
       return { name: foundUserRole?.name, id: foundUserRole?.id };
     });
@@ -62,9 +63,10 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
   />;
 
   const renderRoleComponent = (fields) => (_, index) => {
-    if (isEmpty(fields.value)) return null;
+    const tenantValue = fields.value[tenantId];
+    if (isEmpty(tenantValue)) return null;
 
-    const roleId = fields.value[index];
+    const roleId = tenantValue[index];
     const role = allRolesMapStructure.get(roleId);
 
     if (!role) return null;
@@ -117,7 +119,7 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
         <Accordion
           label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.roles.userRoles" /></Headline>}
           id={accordionId}
-          displayWhenClosed={<Badge>{assignedRoleIds.length}</Badge>}
+          displayWhenClosed={<Badge>{assignedRoleIds[tenantId]?.length}</Badge>}
         >
           <Row>
             <IfConsortium>
@@ -145,6 +147,7 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
           onClose={() => setIsOpen(false)}
           initialRoleIds={assignedRoleIds}
           changeUserRoles={changeUserRoles}
+          tenantId={tenantId}
         />
         <ConfirmationModal
           open={unassignModalOpen}
@@ -170,7 +173,7 @@ EditUserRoles.propTypes = {
   match: PropTypes.shape({ params: { id: PropTypes.string } }),
   accordionId: PropTypes.string,
   form: PropTypes.object.isRequired,
-  assignedRoleIds: PropTypes.arrayOf(PropTypes.string).isRequired,
+  assignedRoleIds: PropTypes.object.isRequired,
   setAssignedRoleIds: PropTypes.func.isRequired,
 };
 

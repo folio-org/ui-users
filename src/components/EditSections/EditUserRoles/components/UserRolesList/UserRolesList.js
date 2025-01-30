@@ -10,8 +10,9 @@ const visibleColumns = ['selected', 'roleName', 'status'];
 const UserRolesList = ({ assignedUserRoleIds,
   filteredRoles,
   toggleRole,
-  toggleAllRoles }) => {
-  const allChecked = filteredRoles.every(filteredRole => assignedUserRoleIds.includes(filteredRole.id));
+  toggleAllRoles,
+  tenantId }) => {
+  const allChecked = filteredRoles.every(filteredRole => assignedUserRoleIds[tenantId]?.includes(filteredRole.id));
 
   const handleToggleAllRoles = (event) => toggleAllRoles(event.target.checked);
 
@@ -45,7 +46,7 @@ const UserRolesList = ({ assignedUserRoleIds,
               permissionName={role.permissionName}
               value={role.id}
               // eslint-disable-next-line react/prop-types
-              checked={assignedUserRoleIds.includes(role.id)}
+              checked={assignedUserRoleIds[tenantId]?.includes(role.id)}
               onChange={() => toggleRole(role.id)}
             />
           ),
@@ -58,7 +59,7 @@ const UserRolesList = ({ assignedUserRoleIds,
           status: role => {
             const statusText = `ui-users.roles.modal.${
               // eslint-disable-next-line react/prop-types
-              assignedUserRoleIds.includes(role.id)
+              assignedUserRoleIds[tenantId]?.includes(role.id)
                 ? 'assigned'
                 : 'unassigned'
             }`;
@@ -72,7 +73,7 @@ const UserRolesList = ({ assignedUserRoleIds,
 };
 
 UserRolesList.propTypes = {
-  assignedUserRoleIds: PropTypes.arrayOf(PropTypes.string).isRequired,
+  assignedUserRoleIds: PropTypes.object.isRequired,
   filteredRoles: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,

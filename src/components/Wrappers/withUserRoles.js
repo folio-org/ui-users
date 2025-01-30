@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+//import { groupBy, keyBy, keys, merge, union, values } from 'lodash';
 
 import { useStripes, useOkapiKy, useCallout } from '@folio/stripes/core';
 import isEqual from 'lodash/isEqual';
@@ -11,7 +12,8 @@ const withUserRoles = (WrappedComponent) => (props) => {
   // eslint-disable-next-line react/prop-types
   const userId = props.match.params.id;
   const [tenantId, setTenantId] = useState(okapi.tenant);
-  const [assignedRoleIds, setAssignedRoleIds] = useState([]);
+  const [tenantsLoaded, setTenantsLoaded] = useState([]);
+  const [assignedRoleIds, setAssignedRoleIds] = useState({});
   const [initialAssignedRoleIds, setInitialAssignedRoleIds] = useState([]);
   const [isCreateKeycloakUserConfirmationOpen, setIsCreateKeycloakUserConfirmationOpen] = useState(false);
   const callout = useCallout();
@@ -40,13 +42,14 @@ const withUserRoles = (WrappedComponent) => (props) => {
       return { name: foundUserRole?.name, id: foundUserRole?.id };
     }).sort((a, b) => a.name.localeCompare(b.name)).map(r => r.id);
 
-    setAssignedRoleIds(assignedRoles);
-    setInitialAssignedRoleIds(assignedRoles);
+    setTenantsLoaded(tenantsLoaded.concat(tenantId));
+    setAssignedRoleIds({...assignedRoleIds, [tenantId]: assignedRoles});
+    setInitialAssignedRoleIds({...assignedRoleIds, [tenantId]: assignedRoles});
   }, [allRolesMapStructure]);
 
   useEffect(() => {
     // eslint-disable-next-line react/prop-types
-    if (props.stripes.hasInterface('users-keycloak') && !isAllRolesDataLoading && !!userId) {
+    if (props.stripes.hasInterface('users-keycloak') && !isAllRolesDataLoading && !!userId && !tenantsLoaded.includes(tenantId)) {
       api.get(
         'roles/users', { searchParams },
       )
@@ -60,14 +63,18 @@ const withUserRoles = (WrappedComponent) => (props) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   [userId, isAllRolesDataLoading, setAssignedRoleIdsOnLoad, tenantId]);
 
-  const updateUserRoles = (roleIds) => api.put(
-    `roles/users/${userId}`, { json: {
-      userId,
-      roleIds
-    } },
-  ).json()
-  // eslint-disable-next-line no-console
-    .catch(sendErrorCallout);
+  const updateUserRoles = (roleIds) => {
+    Object.keys(roleIds).forEach(async (tenantIdKey) => {
+      await api.put(
+        `roles/users/${userId}`, { json: {
+          userId,
+          roleIds: roleIds[tenantIdKey],
+        }, headers: { 'X-Okapi-Tenant': tenantIdKey } },
+      ).json()
+      // eslint-disable-next-line no-console
+      .catch(sendErrorCallout);
+    });
+  };
 
   const checkUserInKeycloak = async () => {
     try {

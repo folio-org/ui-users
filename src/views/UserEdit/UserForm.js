@@ -110,7 +110,7 @@ class UserForm extends React.Component {
     onCancelKeycloakConfirmation: PropTypes.func,
     confirmCreateKeycloakUser: PropTypes.func,
     setAssignedRoleIds: PropTypes.func,
-    assignedRoleIds: PropTypes.arrayOf(PropTypes.string),
+    assignedRoleIds: PropTypes.object
   };
 
   static defaultProps = {
