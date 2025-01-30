@@ -158,7 +158,7 @@ describe('UserForm', () => {
   });
 
 
-  describe('renders accordions', () => {
+  describe('renders accordions and other values', () => {
     const props = {
       formData: {
         patronGroups: [],
@@ -206,6 +206,25 @@ describe('UserForm', () => {
       renderWithRouter(<UserForm {...props} />);
 
       expect(screen.queryByText('EditUserRoles accordion')).toBeInTheDocument();
+    });
+
+    it('renders pronouns', () => {
+      renderWithRouter(
+        <UserForm
+          {...props}
+          initialValues={
+            {
+              ...props.initialValues,
+              personal: {
+                ...props.initialValues.personal,
+                pronouns: 'r2/d2',
+              },
+            }
+          }
+        />
+      );
+
+      expect(screen.getByText('(r2/d2)')).toBeInTheDocument();
     });
   });
 

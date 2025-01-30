@@ -29,6 +29,7 @@ import {
   isAffiliationsEnabled,
   isDcbItem,
   isAValidImageUrl,
+  getFormattedPronouns,
 } from './util';
 
 const STRIPES = {
@@ -535,6 +536,12 @@ describe('isAValidImageUrl', () => {
 
     const isValid = await isAValidImageUrl(invalidImageUrl);
     expect(isValid).toBe(false);
+  });
+});
+
+describe('getFormattedPronouns', () => {
+  it('returns formatted pronouns', () => {
+    expect(getFormattedPronouns({ personal: { pronouns: 'e2/e2' } })).toEqual('(e2/e2)');
   });
 });
 

@@ -36,6 +36,12 @@ export function getFullName(user) {
   return fullName;
 }
 
+export function getFormattedPronouns(user) {
+  const pronouns = user?.personal?.pronouns;
+
+  return pronouns ? `(${pronouns})` : undefined;
+}
+
 export const formatActionDescription = (action) => {
   return action.typeAction +
     (action.paymentMethod

@@ -429,6 +429,15 @@ class EditUserInfo extends React.Component {
                 </OnChange>
               </Field>
             </Col>
+            <Col xs={12} md={3}>
+              <Field
+                label={<FormattedMessage id="ui-users.information.pronouns" />}
+                name="personal.pronouns"
+                id="adduser_pronouns"
+                component={TextField}
+                fullWidth
+              />
+            </Col>
           </Row>
 
         </Accordion>
