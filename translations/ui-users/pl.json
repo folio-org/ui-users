@@ -1234,5 +1234,6 @@
     "permission.patron-notice-print-jobs.delete": "Użytkownicy: wyświetlanie i usuwanie zadań drukowania powiadomień czytelników",
     "title.patronBlock.create": "Użytkownicy - utwórz nową blokadę czytelnika",
     "title.patronBlock.edit": "Użytkownicy - edytuj blokadę czytelnika",
-    "accounts.history.columns.actions": "Akcje"
+    "accounts.history.columns.actions": "Akcje",
+    "charge.item.barcode.error": "No item with barcode {barcode} could be found"
 }

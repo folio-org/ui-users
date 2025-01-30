@@ -1234,5 +1234,6 @@
     "permission.patron-notice-print-jobs.delete": "Usuários: Visualizar e remover trabalhos de impressão de avisos do usuário",
     "title.patronBlock.create": "Usuários - Criar uma nova suspensão de usuário",
     "title.patronBlock.edit": "Usuários - Editar uma suspensão de usuário",
-    "accounts.history.columns.actions": "Ações"
+    "accounts.history.columns.actions": "Ações",
+    "charge.item.barcode.error": "Nenhum item com código de barras {barcode} foi encontrado"
 }

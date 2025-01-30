@@ -1234,5 +1234,6 @@
     "permission.patron-notice-print-jobs.delete": "Users: View and remove patron notice print jobs",
     "title.patronBlock.create": "Users - Create a new patron block",
     "title.patronBlock.edit": "Users - Edit a patron block",
-    "accounts.history.columns.actions": "Actions"
+    "accounts.history.columns.actions": "Actions",
+    "charge.item.barcode.error": "No item with barcode {barcode} could be found"
 }
