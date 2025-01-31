@@ -1,10 +1,10 @@
-.NameContainer {
+.nameContainer {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
 }
 
-.Pronouns {
+.pronouns {
   font-weight: normal;
   word-wrap: break-word;
 }

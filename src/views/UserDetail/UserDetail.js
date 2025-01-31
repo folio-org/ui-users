@@ -728,10 +728,10 @@ class UserDetail extends React.Component {
               <Headline
                 size="xx-large"
                 tag="h2"
-                className={css.NameContainer}
+                className={css.nameContainer}
               >
                 {getFullName(user)}
-                {pronouns && <span className={css.Pronouns}>{pronouns}</span>}
+                {pronouns && <span className={css.pronouns}>{pronouns}</span>}
               </Headline>
               <Row>
                 <Col xs={10}>

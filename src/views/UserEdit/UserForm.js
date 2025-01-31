@@ -374,11 +374,11 @@ class UserForm extends React.Component {
                 <Headline
                   size="xx-large"
                   tag="h2"
-                  className={css.NameContainer}
+                  className={css.nameContainer}
                   data-test-header-title
                 >
                   {fullName}
-                  {pronouns && <span className={css.Pronouns}>{pronouns}</span>}
+                  {pronouns && <span className={css.pronouns}>{pronouns}</span>}
                 </Headline>
               )}
               <AccordionStatus ref={this.accordionStatusRef}>
