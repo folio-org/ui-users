@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-//import { groupBy, keyBy, keys, merge, union, values } from 'lodash';
+// import { groupBy, keyBy, keys, merge, union, values } from 'lodash';
 
 import { useStripes, useOkapiKy, useCallout } from '@folio/stripes/core';
 import isEqual from 'lodash/isEqual';
@@ -43,8 +43,8 @@ const withUserRoles = (WrappedComponent) => (props) => {
     }).sort((a, b) => a.name.localeCompare(b.name)).map(r => r.id);
 
     setTenantsLoaded(tenantsLoaded.concat(tenantId));
-    setAssignedRoleIds({...assignedRoleIds, [tenantId]: assignedRoles});
-    setInitialAssignedRoleIds({...assignedRoleIds, [tenantId]: assignedRoles});
+    setAssignedRoleIds({ ...assignedRoleIds, [tenantId]: assignedRoles });
+    setInitialAssignedRoleIds({ ...assignedRoleIds, [tenantId]: assignedRoles });
   }, [allRolesMapStructure]);
 
   useEffect(() => {
@@ -64,15 +64,17 @@ const withUserRoles = (WrappedComponent) => (props) => {
   [userId, isAllRolesDataLoading, setAssignedRoleIdsOnLoad, tenantId]);
 
   const updateUserRoles = (roleIds) => {
-    Object.keys(roleIds).forEach(async (tenantIdKey) => {
-      await api.put(
+    Object.keys(roleIds).forEach((tenantIdKey) => {
+      // Using ky so we can override tenant header
+      ky.put(
         `roles/users/${userId}`, { json: {
           userId,
           roleIds: roleIds[tenantIdKey],
-        }, headers: { 'X-Okapi-Tenant': tenantIdKey } },
+        },
+        headers: { 'X-Okapi-Tenant': tenantIdKey } },
       ).json()
       // eslint-disable-next-line no-console
-      .catch(sendErrorCallout);
+        .catch(sendErrorCallout);
     });
   };
 

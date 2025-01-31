@@ -36,7 +36,7 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
     } else {
       refetch();
     }
-  }, [affiliations, stripes.okapi.tenant, tenantId]);
+  }, [affiliations, stripes.okapi.tenant, setTenantId, tenantId, refetch]);
 
   const changeUserRoles = (roleIds) => {
     change(`assignedRoleIds[${tenantId}]`, roleIds);
@@ -50,12 +50,12 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
   const listItemsData = useMemo(() => {
     if (isEmpty(assignedRoleIds[tenantId]) || isAllRolesDataLoading) return [];
 
-    return assignedRoleIds[tenantId].map(i => {
-      const foundUserRole = allRolesMapStructure.get(i.roleId);
+    return assignedRoleIds[tenantId].map(roleId => {
+      const foundUserRole = allRolesMapStructure.get(roleId);
 
       return { name: foundUserRole?.name, id: foundUserRole?.id };
     });
-  }, [assignedRoleIds, isAllRolesDataLoading, allRolesMapStructure]);
+  }, [assignedRoleIds, isAllRolesDataLoading, allRolesMapStructure, tenantId]);
 
   const unassignAllMessage = <FormattedMessage
     id="ui-users.roles.modal.unassignAll.label"
@@ -63,7 +63,7 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
   />;
 
   const renderRoleComponent = (fields) => (_, index) => {
-    const tenantValue = fields.value[tenantId];
+    const tenantValue = fields.value;
     if (isEmpty(tenantValue)) return null;
 
     const roleId = tenantValue[index];
@@ -106,7 +106,7 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
     return (
       <Col xs={12}>
         <FieldArray
-          name="assignedRoleIds"
+          name={`assignedRoleIds.${tenantId}`}
           component={renderUserRolesComponent}
         />
       </Col>
@@ -173,8 +173,11 @@ EditUserRoles.propTypes = {
   match: PropTypes.shape({ params: { id: PropTypes.string } }),
   accordionId: PropTypes.string,
   form: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
   assignedRoleIds: PropTypes.object.isRequired,
   setAssignedRoleIds: PropTypes.func.isRequired,
+  tenantId: PropTypes.string.isRequired,
+  setTenantId: PropTypes.func.isRequired
 };
 
 export default withRouter(EditUserRoles);

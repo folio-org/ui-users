@@ -47,18 +47,17 @@ export default function UserRolesModal({ isOpen,
 
   const toggleRole = (id) => {
     if (assignedRoleIds[tenantId]?.includes(id)) {
-      setAssignedRoleIds({...assignedRoleIds, [tenantId]: assignedRoleIds[tenantId].filter(role => role !== id)});
+      setAssignedRoleIds({ ...assignedRoleIds, [tenantId]: assignedRoleIds[tenantId].filter(role => role !== id) });
     } else {
-      setAssignedRoleIds({...assignedRoleIds, [tenantId]: assignedRoleIds[tenantId].concat(id)});
+      setAssignedRoleIds({ ...assignedRoleIds, [tenantId]: assignedRoleIds[tenantId].concat(id) });
     }
   };
 
   const toggleAllRoles = (checked) => {
     if (checked) {
-      setAssignedRoleIds({...assignedRoleIds, [tenantId]: allRolesData?.roles.map(role => role.id)});
-    }
-    else {
-      setAssignedRoleIds({...assignedRoleIds, [tenantId]: []});
+      setAssignedRoleIds({ ...assignedRoleIds, [tenantId]: allRolesData?.roles.map(role => role.id) });
+    } else {
+      setAssignedRoleIds({ ...assignedRoleIds, [tenantId]: [] });
     }
   };
 
@@ -188,4 +187,5 @@ UserRolesModal.propTypes = {
   onClose: PropTypes.func.isRequired,
   initialRoleIds: PropTypes.object,
   changeUserRoles: PropTypes.func.isRequired,
+  tenantId: PropTypes.string.isRequired,
 };

@@ -82,6 +82,7 @@ UserRolesList.propTypes = {
   ).isRequired,
   toggleRole: PropTypes.func.isRequired,
   toggleAllRoles: PropTypes.func.isRequired,
+  tenantId: PropTypes.string.isRequired
 };
 
 export default UserRolesList;

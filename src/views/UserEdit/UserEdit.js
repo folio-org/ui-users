@@ -10,7 +10,7 @@ import {
   find,
   omit,
   get,
-  compact,
+  compact
 } from 'lodash';
 
 import { LoadingView } from '@folio/stripes/components';
@@ -54,6 +54,8 @@ class UserEdit extends React.Component {
     */
     assignedRoleIds: PropTypes.object,
     setAssignedRoleIds: PropTypes.func,
+    tenantId: PropTypes.string,
+    setTenantId: PropTypes.func,
     isCreateKeycloakUserConfirmationOpen: PropTypes.bool,
     initialAssignedRoleIds: PropTypes.arrayOf(PropTypes.string),
     checkAndHandleKeycloakAuthUser: PropTypes.func,

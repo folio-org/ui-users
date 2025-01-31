@@ -26,6 +26,7 @@ import {
 import { EditCustomFieldsRecord } from '@folio/stripes/smart-components';
 import stripesFinalForm from '@folio/stripes/final-form';
 
+import { set } from 'lodash';
 import { USER_TYPES } from '../../constants';
 import {
   EditUserInfo,
@@ -110,7 +111,9 @@ class UserForm extends React.Component {
     onCancelKeycloakConfirmation: PropTypes.func,
     confirmCreateKeycloakUser: PropTypes.func,
     setAssignedRoleIds: PropTypes.func,
-    assignedRoleIds: PropTypes.object
+    assignedRoleIds: PropTypes.object,
+    setTenantId: PropTypes.func,
+    tenantId: PropTypes.string
   };
 
   static defaultProps = {
