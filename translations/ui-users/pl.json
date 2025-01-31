@@ -1231,5 +1231,9 @@
     "permission.lost-items-requiring-actual-cost.execute": "Użytkownicy: można przetwarzać rzeczywistą wartość zagubionych egzemplarzy",
     "permission.open-transactions.view": "Użytkownicy: można sprawdzać otwarte transakcje",
     "permission.patron-notice-print-jobs.view": "Użytkownicy: wyświetlanie zadań drukowania powiadomień czytelników",
-    "permission.patron-notice-print-jobs.delete": "Użytkownicy: wyświetlanie i usuwanie zadań drukowania powiadomień czytelników"
+    "permission.patron-notice-print-jobs.delete": "Użytkownicy: wyświetlanie i usuwanie zadań drukowania powiadomień czytelników",
+    "title.patronBlock.create": "Użytkownicy - utwórz nową blokadę czytelnika",
+    "title.patronBlock.edit": "Użytkownicy - edytuj blokadę czytelnika",
+    "accounts.history.columns.actions": "Akcje",
+    "charge.item.barcode.error": "No item with barcode {barcode} could be found"
 }

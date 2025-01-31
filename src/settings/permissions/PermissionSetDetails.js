@@ -16,6 +16,7 @@ import { ViewMetaData } from '@folio/stripes/smart-components';
 
 import RenderPermissions from '../../components/RenderPermissions';
 import AssignedUsers from '../../components/AssignedUsers';
+import css from './PermissionSetForm.css';
 
 class PermissionSetDetails extends React.Component {
   static propTypes = {
@@ -104,10 +105,12 @@ class PermissionSetDetails extends React.Component {
                   label={<FormattedMessage id="ui-users.permissions.permissionSetName" />}
                   value={_.get(selectedSet, ['displayName'], untitledPermissionSetMessage)}
                 />
-                <KeyValue
-                  label={<FormattedMessage id="ui-users.description" />}
-                  value={_.get(selectedSet, ['description'], '-')}
-                />
+                <Headline tag="h3" margin="xx-small" className={css.heading}>
+                  <FormattedMessage id="ui-users.description" />
+                </Headline>
+                <div>
+                  {_.get(selectedSet, ['description'], '-')}
+                </div>
               </section>
             </Col>
           </Row>

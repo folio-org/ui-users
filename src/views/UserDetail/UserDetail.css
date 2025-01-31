@@ -1,12 +1,3 @@
-.UserFormRoot {
-  height: 100%;
-  overflow: auto;
-}
-
-.UserFormEditIcon {
-  display: inline-block;
-}
-
 .nameContainer {
   display: flex;
   gap: 0.5rem;

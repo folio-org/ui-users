@@ -139,6 +139,9 @@ const propData = {
     ownerId: '109155d9-3b60-4a3d-a6b1-066cf1b1356b',
     metadata: { createdDate: '2022-03-01T03:22:48.262+00:00', updatedDate: '2022-03-01T03:22:48.262+00:00' },
   }],
+  resources: {
+    items: {},
+  },
 };
 
 describe('ChargeForm component', () => {

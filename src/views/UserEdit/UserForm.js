@@ -37,7 +37,7 @@ import {
   EditReadingRoomAccess,
   EditUserRoles,
 } from '../../components/EditSections';
-import { getFullName } from '../../components/util';
+import { getFormattedPronouns, getFullName } from '../../components/util';
 import RequestFeeFineBlockButtons from '../../components/RequestFeeFineBlockButtons';
 import { addressTypesShape } from '../../shapes';
 import getProxySponsorWarning from '../../components/util/getProxySponsorWarning';
@@ -343,6 +343,7 @@ class UserForm extends React.Component {
     const firstMenu = this.getAddFirstMenu();
     const footer = this.getPaneFooter();
     const fullName = getFullName(initialValues);
+    const pronouns = getFormattedPronouns(initialValues);
     const paneTitle = initialValues.id
       ? <FormattedMessage id="ui-users.edit" />
       : <FormattedMessage id="ui-users.crud.createUser" />;
@@ -376,9 +377,11 @@ class UserForm extends React.Component {
                 <Headline
                   size="xx-large"
                   tag="h2"
+                  className={css.nameContainer}
                   data-test-header-title
                 >
                   {fullName}
+                  {pronouns && <span className={css.pronouns}>{pronouns}</span>}
                 </Headline>
               )}
               <AccordionStatus ref={this.accordionStatusRef}>

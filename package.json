@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "11.0.9",
+  "version": "12.0.0",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -29,7 +29,7 @@
       }
     ],
     "okapiInterfaces": {
-      "users": "16.3",
+      "users": "16.4",
       "configuration": "2.0",
       "permissions": "5.7",
       "login": "7.3",
@@ -186,6 +186,7 @@
         "description": "",
         "subPermissions": [
           "ui-users.view",
+          "ui-users.edit",
           "ui-authorization-roles.users.settings.manage"
         ],
         "visible": true

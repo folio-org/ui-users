@@ -1231,5 +1231,9 @@
     "permission.lost-items-requiring-actual-cost.execute": "Personen: Kann verlorene Exemplare mit tatsächlichen Kosten bearbeiten",
     "permission.open-transactions.view": "Personen: Kann offene Transaktionen öffnen",
     "permission.patron-notice-print-jobs.view": "Personen: Print-Jobs für Benachrichtigungen anzeigen",
-    "permission.patron-notice-print-jobs.delete": "Personen: Print-Jobs für Benachrichtigungen anzeigen und entfernen"
+    "permission.patron-notice-print-jobs.delete": "Personen: Print-Jobs für Benachrichtigungen anzeigen und entfernen",
+    "title.patronBlock.create": "Users - Create a new patron block",
+    "title.patronBlock.edit": "Users - Edit a patron block",
+    "accounts.history.columns.actions": "Actions",
+    "charge.item.barcode.error": "No item with barcode {barcode} could be found"
 }

@@ -1231,5 +1231,9 @@
     "permission.lost-items-requiring-actual-cost.execute": "Users: Can process lost items requiring actual cost",
     "permission.open-transactions.view": "Users: Can check open transactions",
     "permission.patron-notice-print-jobs.view": "Users: View patron notice print jobs",
-    "permission.patron-notice-print-jobs.delete": "Users: View and remove patron notice print jobs"
+    "permission.patron-notice-print-jobs.delete": "Users: View and remove patron notice print jobs",
+    "title.patronBlock.create": "Users - Create a new patron block",
+    "title.patronBlock.edit": "Users - Edit a patron block",
+    "accounts.history.columns.actions": "Actions",
+    "charge.item.barcode.error": "No item with barcode {barcode} could be found"
 }

@@ -22,7 +22,10 @@ import { effectiveCallNumber } from '@folio/stripes/util';
 import UserInfo from './UserInfo';
 import FeeFineInfo from './FeeFineInfo';
 import ItemInfo from './ItemInfo';
-import { SHARED_OWNER } from '../../../constants';
+import {
+  SHARED_OWNER,
+  NEW_FEE_FINE_FIELD_NAMES,
+} from '../../../constants';
 import { formatCurrencyAmount } from '../../util';
 
 function showValidationErrors({ feeFineId, ownerId, amount }) {
@@ -62,6 +65,7 @@ class ChargeForm extends React.Component {
     handleSubmit: PropTypes.func.isRequired,
     onClickSelectItem: PropTypes.func.isRequired,
     onFindShared: PropTypes.func.isRequired,
+    values: PropTypes.object.isRequired,
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
@@ -122,9 +126,17 @@ class ChargeForm extends React.Component {
   }
 
   onChangeOwner(ownerId) {
-    const { form: { change, reset } } = this.props;
+    const {
+      form: {
+        change,
+        reset,
+      },
+      values,
+      onChangeOwner,
+    } = this.props;
+
     reset();
-    this.props.onChangeOwner(ownerId);
+    onChangeOwner(ownerId, values[NEW_FEE_FINE_FIELD_NAMES.ITEM_BARCODE]);
     let showNotify = false;
     const owner = this.props.owners.find(o => o.id === ownerId) || {};
     if (owner?.defaultChargeNoticeId) {
