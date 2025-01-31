@@ -1,0 +1,10 @@
+.NameContainer {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.Pronouns {
+  font-weight: normal;
+  word-wrap: break-word;
+}

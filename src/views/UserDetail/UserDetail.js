@@ -58,6 +58,7 @@ import { PatronBlockMessage } from '../../components/PatronBlock';
 import { getFormAddressList } from '../../components/data/converters/address';
 import {
   getFullName,
+  getFormattedPronouns,
   isAffiliationsEnabled,
   isDcbUser,
   isPatronUser,
@@ -75,6 +76,8 @@ import ActionMenuDeleteButton from './components/ActionMenuDeleteButton';
 import OpenTransactionModal from './components/OpenTransactionModal';
 import DeleteUserModal from './components/DeleteUserModal';
 import ExportFeesFinesReportButton from './components';
+
+import css from './UserDetail.css';
 
 class UserDetail extends React.Component {
   static propTypes = {
@@ -634,6 +637,7 @@ class UserDetail extends React.Component {
 
     const user = this.getUser();
     const fullNameOfUser = getFullName(user);
+    const pronouns = getFormattedPronouns(user);
     const userId = match.params.id;
 
     const addressTypes = (resources.addressTypes || {}).records || [];
@@ -724,8 +728,10 @@ class UserDetail extends React.Component {
               <Headline
                 size="xx-large"
                 tag="h2"
+                className={css.NameContainer}
               >
                 {getFullName(user)}
+                {pronouns && <span className={css.Pronouns}>{pronouns}</span>}
               </Headline>
               <Row>
                 <Col xs={10}>
