@@ -116,8 +116,6 @@ const UserInfo = (props) => {
                 value={get(user, [USER_TYPE_FIELD], '')}
               />
             </Col>
-          </Row>
-          <Row>
             <Col xs={3}>
               <KeyValue
                 label={<FormattedMessage id="ui-users.information.pronouns" />}
