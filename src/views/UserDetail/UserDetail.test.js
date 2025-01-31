@@ -42,7 +42,7 @@ const resources = {
     patronGroup:'3684a786-6671-4268-8ed0-9db82ebca60b',
     departments:[],
     proxyFor:[],
-    personal:{ lastName:'psych', firstName:'rick', email:'psych@ub.example.org', addresses:[], preferredContactTypeId:'002' },
+    personal:{ lastName:'psych', firstName:'rick', email:'psych@ub.example.org', addresses:[], preferredContactTypeId:'002', pronouns: 'xe/xe' },
     createdDate:'2021-06-03T09:56:40.796+00:00',
     updatedDate:'2021-06-03T09:56:40.796+00:00',
     metadata:{ createdDate:'2021-05-27T11:20:51.547+00:00', updatedDate:'2021-06-03T09:56:40.779+00:00', updatedByUserId:'d88b5896-fcd2-5a3b-bc63-7749a913b786' },
@@ -57,7 +57,7 @@ const resources = {
       patronGroup:'3684a786-6671-4268-8ed0-9db82ebca60b',
       departments:[],
       proxyFor:[],
-      personal:{ lastName:'psych', firstName:'rick', email:'psych@ub.example.org', addresses:[], preferredContactTypeId:'002' },
+      personal:{ lastName:'psych', firstName:'rick', email:'psych@ub.example.org', addresses:[], preferredContactTypeId:'002', pronouns: 'xe/xe' },
       createdDate:'2021-06-03T09:56:40.796+00:00',
       updatedDate:'2021-06-03T09:56:40.796+00:00',
       metadata:{ createdDate:'2021-05-27T11:20:51.547+00:00', updatedDate:'2021-06-03T09:56:40.779+00:00', updatedByUserId:'d88b5896-fcd2-5a3b-bc63-7749a913b786' },
@@ -281,6 +281,11 @@ describe('UserDetail', () => {
     test('UserDetail pane to display user full name', async () => {
       renderUserDetail(stripes);
       expect(screen.getAllByText('psych, rick').length).toBeGreaterThan(0);
+    });
+
+    test('should display user pronouns', async () => {
+      renderUserDetail(stripes);
+      expect(screen.getAllByText('(xe/xe)').length).toBeGreaterThan(0);
     });
 
     test('should render checkDelete button in action menu ', async () => {
