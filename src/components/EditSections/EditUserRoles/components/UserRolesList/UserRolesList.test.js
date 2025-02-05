@@ -4,7 +4,8 @@ import UserRolesList from './UserRolesList';
 
 jest.unmock('@folio/stripes/components');
 
-const assignedUserRoleIds = ['1', '2'];
+const tenantId = 'consortium';
+const assignedUserRoleIds = { 'consortium': ['1', '2'] };
 const filteredRoles = [{ id: '1', name: 'role1' }];
 const mockToggleRole = jest.fn();
 const mockToggleAllRoles = jest.fn();
@@ -13,7 +14,7 @@ const renderComponent = (props) => render(<UserRolesList {...props} />);
 
 describe('UserRolesList', () => {
   beforeEach(() => {
-    renderComponent({ assignedUserRoleIds, filteredRoles, toggleRole:mockToggleRole, toggleAllRoles:mockToggleAllRoles });
+    renderComponent({ assignedUserRoleIds, filteredRoles, toggleRole:mockToggleRole, toggleAllRoles:mockToggleAllRoles, tenantId });
   });
   afterAll(() => {
     cleanup();

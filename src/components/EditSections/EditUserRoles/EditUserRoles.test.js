@@ -8,13 +8,24 @@ import {
   useStripes,
 } from '@folio/stripes/core';
 import { Form } from 'react-final-form';
+import affiliations from 'fixtures/affiliations';
 import EditUserRoles from './EditUserRoles';
 
-import { useAllRolesData } from '../../../hooks';
+import {
+  useAllRolesData,
+  useConsortiumTenants,
+  useUserAffiliations
+} from '../../../hooks';
+
+
+jest.mock('../../IfConsortium', () => jest.fn(({ children }) => <>{children}</>));
+jest.mock('../../IfConsortiumPermission', () => jest.fn().mockReturnValue(null));
 
 jest.mock('../../../hooks', () => ({
   ...jest.requireActual('../../../hooks'),
-  useAllRolesData: jest.fn()
+  useAllRolesData: jest.fn(),
+  useConsortiumTenants: jest.fn(),
+  useUserAffiliations: jest.fn(),
 }));
 
 jest.mock('@folio/stripes/core', () => ({
@@ -25,10 +36,10 @@ jest.mock('@folio/stripes/core', () => ({
 
 jest.unmock('@folio/stripes/components');
 
-
 const STRIPES = {
   config: {},
   hasPerm: jest.fn().mockReturnValue(true),
+  hasInterface: jest.fn().mockReturnValue(true),
   okapi: {
     tenant: 'diku',
   },
@@ -74,7 +85,7 @@ const arrayMutators = {
 const renderEditRolesAccordion = (props) => {
   const component = () => <EditUserRoles {...props} />;
   return renderWithRouter(<Form
-    initialValues={{ assignedRoleIds: ['1', '2'] }}
+    initialValues={{ assignedRoleIds: { 'consortium': ['1', '2'] } }}
     id="form-user"
     mutators={{
       ...arrayMutators
@@ -89,12 +100,27 @@ const propsData = {
   form: {
     change: mockChangeFunction,
   },
-  assignedRoleIds: ['1', '2', '3'],
+  assignedRoleIds: { 'consortium': ['1', '2', '3'] },
   setAssignedRoleIds: jest.fn(),
+  user: {
+    id: '1'
+  },
+  setTenantId: jest.fn(),
+  tenantId: 'consortium'
 };
 
 describe('EditUserRoles Component', () => {
   beforeEach(() => {
+    useConsortiumTenants
+      .mockClear()
+      .mockReturnValue({
+        tenants: affiliations.map(({ tenantId, tenantName }) => ({ id: tenantId, name: tenantName })),
+        isLoading: false,
+      });
+    useUserAffiliations
+      .mockClear()
+      .mockReturnValue({ isLoading: false, affiliations });
+
     useStripes.mockClear().mockReturnValue(STRIPES);
     useAllRolesData.mockClear().mockReturnValue(mockAllRolesData);
     IfPermission.mockImplementation(({ children }) => children);
@@ -167,6 +193,6 @@ describe('EditUserRoles Component', () => {
     const confirmButton = document.querySelector('[data-test-confirmation-modal-confirm-button="true"]');
     await userEvent.click(confirmButton);
 
-    expect(mockChangeFunction).toHaveBeenCalledWith('assignedRoleIds', []);
+    expect(mockChangeFunction).toHaveBeenCalledWith('assignedRoleIds[consortium]', []);
   });
 });

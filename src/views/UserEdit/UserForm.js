@@ -26,7 +26,6 @@ import {
 import { EditCustomFieldsRecord } from '@folio/stripes/smart-components';
 import stripesFinalForm from '@folio/stripes/final-form';
 
-import { set } from 'lodash';
 import { USER_TYPES } from '../../constants';
 import {
   EditUserInfo,

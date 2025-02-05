@@ -45,7 +45,7 @@ const withUserRoles = (WrappedComponent) => (props) => {
     setTenantsLoaded(tenantsLoaded.concat(tenantId));
     setAssignedRoleIds({ ...assignedRoleIds, [tenantId]: assignedRoles });
     setInitialAssignedRoleIds({ ...assignedRoleIds, [tenantId]: assignedRoles });
-  }, [allRolesMapStructure]);
+  }, [allRolesMapStructure, assignedRoleIds, setAssignedRoleIds, tenantsLoaded, tenantId]);
 
   useEffect(() => {
     // eslint-disable-next-line react/prop-types

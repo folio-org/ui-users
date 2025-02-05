@@ -20,7 +20,7 @@ jest.mock('../../hooks', () => ({
 
 const mockStripes = {
   okapi: {
-    tenant: 'tenant',
+    tenant: 'consortium',
   },
   config: {
     maxUnpagedResourceCount: 1000,
@@ -36,20 +36,20 @@ const mockRolesData = {
 };
 
 const mockKy = {
+  put: jest.fn(() => ({
+    json: () => Promise.resolve(),
+  })),
   extend: () => ({
     get: jest.fn().mockImplementationOnce(() => ({
       json: () => Promise.resolve({ userRoles: [{ roleId: 'role1' }, { roleId: 'role2' }] }),
     })).mockImplementationOnce(() => Promise.resolve(true)),
-    put: jest.fn(() => ({
-      json: () => Promise.resolve(),
-    })),
   }),
 };
 
 const WrappedComponent = ({ assignedRoleIds,
   setAssignedRoleIds,
   checkAndHandleKeycloakAuthUser, confirmCreateKeycloakUser }) => (
-    <div data-testid="assigned-role-ids">{assignedRoleIds.join(', ')}
+    <div data-testid="assigned-role-ids">{assignedRoleIds.consortium?.join(', ')}
       <button
         type="submit"
         data-testid="submit-form"
@@ -57,7 +57,7 @@ const WrappedComponent = ({ assignedRoleIds,
         })}
       >Submit
       </button>
-      <button type="button" onClick={() => setAssignedRoleIds([5, 6, 7])} data-testid="assignRoles" id="cancel">Assign roles</button>
+      <button type="button" onClick={() => setAssignedRoleIds({ 'consortium': [5, 6, 7] })} data-testid="assignRoles" id="cancel">Assign roles</button>
       <div data-testid="confirmation-dialog">
         <button
           type="button"
