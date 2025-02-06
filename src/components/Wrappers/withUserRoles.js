@@ -68,7 +68,7 @@ const withUserRoles = (WrappedComponent) => (props) => {
       // Individually override header for each request.
       const putApi = ky.extend({
         hooks: {
-          beforeRequest: [(req) => req.headers.set('X-Okapi-Tenant', tenantId)]
+          beforeRequest: [(req) => req.headers.set('X-Okapi-Tenant', tenantIdKey)]
         }
       });
       putApi.put(

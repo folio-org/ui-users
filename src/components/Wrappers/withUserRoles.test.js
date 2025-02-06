@@ -36,13 +36,13 @@ const mockRolesData = {
 };
 
 const mockKy = {
-  put: jest.fn(() => ({
-    json: () => Promise.resolve(),
-  })),
   extend: () => ({
     get: jest.fn().mockImplementationOnce(() => ({
       json: () => Promise.resolve({ userRoles: [{ roleId: 'role1' }, { roleId: 'role2' }] }),
     })).mockImplementationOnce(() => Promise.resolve(true)),
+    put: jest.fn(() => ({
+      json: () => Promise.resolve(),
+    })),
   }),
 };
 

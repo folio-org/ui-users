@@ -269,7 +269,7 @@ class UserEdit extends React.Component {
       stripes,
     } = this.props;
 
-    const propertiesToOmit = ['creds', 'proxies', 'sponsors', 'permissions', 'servicePoints', 'preferredServicePoint', 'assignedRoleIds'];
+    const propertiesToOmit = ['creds', 'proxies', 'sponsors', 'permissions', 'servicePoints', 'preferredServicePoint', 'assignedRoleIds', 'initialAssignedRoleIds', 'tenantId'];
     const user = cloneDeep(userFormData);
     const prevUser = resources?.selUser?.records?.[0] ?? {};
 
