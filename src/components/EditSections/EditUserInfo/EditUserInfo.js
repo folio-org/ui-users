@@ -28,6 +28,7 @@ import validateMinDate from '../../validators/validateMinDate';
 import { ChangeUserTypeModal, EditUserProfilePicture } from './components';
 
 import css from './EditUserInfo.css';
+import { validateLength } from '../../validators/validateLength';
 
 class EditUserInfo extends React.Component {
   static propTypes = {
@@ -435,6 +436,7 @@ class EditUserInfo extends React.Component {
                 name="personal.pronouns"
                 id="adduser_pronouns"
                 component={TextField}
+                validate={validateLength('ui-users.errors.personal.pronounsCharLimit')}
                 fullWidth
               />
             </Col>
