@@ -1,3 +1,5 @@
 import { FormattedMessage } from 'react-intl';
 
-export const validateLength = (errorMessageKey, maxLen = 300) => value => (value?.length > maxLen ? <FormattedMessage id={errorMessageKey} /> : null);
+const DEFAULT_MAX_CHAR_LEN = 300;
+
+export const validateLength = (errorMessageKey, maxLen = DEFAULT_MAX_CHAR_LEN) => value => (value?.length > maxLen ? <FormattedMessage id={errorMessageKey} /> : null);
