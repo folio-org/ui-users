@@ -77,7 +77,7 @@ export default function UserRolesModal({ isOpen,
         const foundRole = allRolesMapStructure.get(id);
         return { name: foundRole?.name, id: foundRole?.id };
       })
-      .sort((a, b) => a.name.localeCompare(b.name))
+      .sort((a, b) => a.name?.localeCompare(b.name))
       .map(r => r.id);
     changeUserRoles(sortedAlphabetically);
     onClose();

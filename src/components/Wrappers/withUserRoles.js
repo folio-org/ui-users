@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react';
-// import { groupBy, keyBy, keys, merge, union, values } from 'lodash';
 
 import { useStripes, useOkapiKy, useCallout } from '@folio/stripes/core';
 import isEqual from 'lodash/isEqual';
@@ -14,14 +13,14 @@ const withUserRoles = (WrappedComponent) => (props) => {
   const [tenantId, setTenantId] = useState(okapi.tenant);
   const [tenantsLoaded, setTenantsLoaded] = useState([]);
   const [assignedRoleIds, setAssignedRoleIds] = useState({});
-  const [initialAssignedRoleIds, setInitialAssignedRoleIds] = useState([]);
+  const [initialAssignedRoleIds, setInitialAssignedRoleIds] = useState({});
   const [isCreateKeycloakUserConfirmationOpen, setIsCreateKeycloakUserConfirmationOpen] = useState(false);
   const callout = useCallout();
   const sendErrorCallout = error => showErrorCallout(error, callout.sendCallout);
 
   const { mutateAsync: createKeycloakUser } = useCreateAuthUserKeycloak(sendErrorCallout, { tenantId });
 
-  const { isLoading: isAllRolesDataLoading, allRolesMapStructure } = useAllRolesData();
+  const { isLoading: isAllRolesDataLoading, allRolesMapStructure } = useAllRolesData({ tenantId });
 
   const searchParams = {
     limit: config.maxUnpagedResourceCount,
@@ -45,7 +44,8 @@ const withUserRoles = (WrappedComponent) => (props) => {
     setTenantsLoaded(tenantsLoaded.concat(tenantId));
     setAssignedRoleIds({ ...assignedRoleIds, [tenantId]: assignedRoles });
     setInitialAssignedRoleIds({ ...assignedRoleIds, [tenantId]: assignedRoles });
-  }, [allRolesMapStructure, assignedRoleIds, setAssignedRoleIds, tenantsLoaded, tenantId]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allRolesMapStructure]);
 
   useEffect(() => {
     // eslint-disable-next-line react/prop-types
@@ -65,13 +65,19 @@ const withUserRoles = (WrappedComponent) => (props) => {
 
   const updateUserRoles = (roleIds) => {
     Object.keys(roleIds).forEach((tenantIdKey) => {
-      // Using ky so we can override tenant header
-      ky.put(
-        `roles/users/${userId}`, { json: {
-          userId,
-          roleIds: roleIds[tenantIdKey],
+      // Individually override header for each request.
+      const putApi = ky.extend({
+        hooks: {
+          beforeRequest: [(req) => req.headers.set('X-Okapi-Tenant', tenantId)]
+        }
+      });
+      putApi.put(
+        `roles/users/${userId}`, {
+          json: {
+            userId,
+            roleIds: roleIds[tenantIdKey],
+          }
         },
-        headers: { 'X-Okapi-Tenant': tenantIdKey } },
       ).json()
       // eslint-disable-next-line no-console
         .catch(sendErrorCallout);
