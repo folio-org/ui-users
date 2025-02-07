@@ -755,7 +755,7 @@
     "reports.refunds.staffMemberName": "Staff member name",
     "reports.refunds.actionTaken": "Action taken",
     "reports.refunds.modal.endDate": "Data di fine",
-    "information.recalculate.expirationDate": "Re-set",
+    "information.recalculate.expirationDate": "Reset",
     "information.recalculate.modal.text": "Library accounts with patron group <b>{group}</b> expire in <b>{offset} days</b>. Do you want to set this user’s account to expire on <b>{date}</b>?",
     "information.recalculate.modal.label": "Set expiration date?",
     "information.recalculate.will.reactivate.user": "User will reactivate after saving",
@@ -1235,5 +1235,7 @@
     "title.patronBlock.create": "Users - Create a new patron block",
     "title.patronBlock.edit": "Users - Edit a patron block",
     "accounts.history.columns.actions": "Actions",
-    "charge.item.barcode.error": "No item with barcode {barcode} could be found"
+    "charge.item.barcode.error": "No item with barcode {barcode} could be found",
+    "information.pronouns": "Pronouns",
+    "errors.personal.pronounsCharLimit": "Pronouns are limited to 300 characters"
 }
