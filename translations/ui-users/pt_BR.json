@@ -1131,7 +1131,7 @@
     "information.change.userType.modal.label": "Alterar o tipo de usuário?",
     "information.change.userType.modal.confirm": "Confirmar",
     "information.change.userType.modal.text": "Essa alteração atualizará as afiliações do usuário e as permissões concedidas a ele para essas afiliações ao clicar em Salvar e fechar. Essa ação não pode ser facilmente revertida; você precisaria atualizar manualmente as afiliações e permissões do usuário para reverter as alterações resultantes. Você gostaria de prosseguir?",
-    "information.profilePicture.localFile.modal.previewAndEdit": "Visualizar e editar",
+    "information.profilePicture.localFile.modal.previewAndEdit": "Pré-visualizar e editar",
     "information.profilePicture.localFile.modal.zoom": "Zoom",
     "information.profilePicture.localFile.modal.rotate": "Girar",
     "information.profilePicture.localFile.maxFileSize.error": "O tamanho da foto excede o limite de {maxFileSize} MB. Escolha uma foto com tamanho de {maxFileSize} MB ou menos.",
@@ -1235,5 +1235,7 @@
     "title.patronBlock.create": "Usuários - Criar uma nova suspensão de usuário",
     "title.patronBlock.edit": "Usuários - Editar uma suspensão de usuário",
     "accounts.history.columns.actions": "Ações",
-    "charge.item.barcode.error": "Nenhum item com código de barras {barcode} foi encontrado"
+    "charge.item.barcode.error": "Nenhum item com código de barras {barcode} foi encontrado",
+    "information.pronouns": "Pronomes",
+    "errors.personal.pronounsCharLimit": "Pronouns are limited to 300 characters"
 }

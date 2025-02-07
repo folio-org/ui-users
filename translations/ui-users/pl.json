@@ -1235,5 +1235,7 @@
     "title.patronBlock.create": "Użytkownicy - utwórz nową blokadę czytelnika",
     "title.patronBlock.edit": "Użytkownicy - edytuj blokadę czytelnika",
     "accounts.history.columns.actions": "Akcje",
-    "charge.item.barcode.error": "No item with barcode {barcode} could be found"
+    "charge.item.barcode.error": "No item with barcode {barcode} could be found",
+    "information.pronouns": "Pronouns",
+    "errors.personal.pronounsCharLimit": "Pronouns are limited to 300 characters"
 }
