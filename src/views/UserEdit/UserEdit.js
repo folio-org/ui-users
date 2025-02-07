@@ -10,7 +10,7 @@ import {
   find,
   omit,
   get,
-  compact,
+  compact
 } from 'lodash';
 
 import { LoadingView } from '@folio/stripes/components';
@@ -52,8 +52,10 @@ class UserEdit extends React.Component {
     /* assignedRoleIds, updateUserRoles,checkUserInKeycloak, setIsCreateKeycloakUserConfirmationOpen,
     isCreateKeycloakUserConfirmationOpen,submitCreateKeycloakUser comes from withUserRoles HOC
     */
-    assignedRoleIds: PropTypes.arrayOf(PropTypes.string),
+    assignedRoleIds: PropTypes.object,
     setAssignedRoleIds: PropTypes.func,
+    tenantId: PropTypes.string,
+    setTenantId: PropTypes.func,
     isCreateKeycloakUserConfirmationOpen: PropTypes.bool,
     initialAssignedRoleIds: PropTypes.arrayOf(PropTypes.string),
     checkAndHandleKeycloakAuthUser: PropTypes.func,
@@ -267,7 +269,7 @@ class UserEdit extends React.Component {
       stripes,
     } = this.props;
 
-    const propertiesToOmit = ['creds', 'proxies', 'sponsors', 'permissions', 'servicePoints', 'preferredServicePoint', 'assignedRoleIds'];
+    const propertiesToOmit = ['creds', 'proxies', 'sponsors', 'permissions', 'servicePoints', 'preferredServicePoint', 'assignedRoleIds', 'initialAssignedRoleIds', 'tenantId'];
     const user = cloneDeep(userFormData);
     const prevUser = resources?.selUser?.records?.[0] ?? {};
 
@@ -459,6 +461,8 @@ class UserEdit extends React.Component {
       location,
       match: { params },
       isCreateKeycloakUserConfirmationOpen,
+      setTenantId,
+      tenantId,
       setAssignedRoleIds,
       assignedRoleIds
     } = this.props;
@@ -497,6 +501,8 @@ class UserEdit extends React.Component {
         isCreateKeycloakUserConfirmationOpen={isCreateKeycloakUserConfirmationOpen}
         onCancelKeycloakConfirmation={this.onCompleteEdit}
         confirmCreateKeycloakUser={() => this.props.confirmCreateKeycloakUser(this.onCompleteEdit)}
+        setTenantId={setTenantId}
+        tenantId={tenantId}
         setAssignedRoleIds={setAssignedRoleIds}
         assignedRoleIds={assignedRoleIds}
       />

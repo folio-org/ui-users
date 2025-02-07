@@ -17,6 +17,8 @@ jest.unmock('@folio/stripes/components');
 
 const mockOnClose = jest.fn();
 const mockAssignedRoles = [{ id: '1', name: 'testRole' }];
+const tenantId = 'consortium';
+const initialRoleIds = { 'consortium': ['1'] };
 
 const renderComponent = (props = {}) => render(<div><UserRolesModal {...props} /></div>);
 
@@ -26,7 +28,7 @@ describe('UserRoleModal', () => {
     jest.clearAllMocks();
   });
   it('renders user roles modal', async () => {
-    const { getByText } = await waitFor(() => renderComponent({ isOpen: true, onClose: mockOnClose, assignedRoles: mockAssignedRoles, initialRoleIds: ['1'], setAssignedRolesIds:jest.fn() }));
+    const { getByText } = await waitFor(() => renderComponent({ isOpen: true, onClose: mockOnClose, assignedRoles: mockAssignedRoles, initialRoleIds, setAssignedRolesIds:jest.fn(), tenantId }));
 
     expect(getByText('testRole')).toBeInTheDocument();
     expect(getByText('AAtestRole4')).toBeInTheDocument();
@@ -34,7 +36,7 @@ describe('UserRoleModal', () => {
   });
 
   it('should call onClose function', async () => {
-    await waitFor(() => renderComponent({ isOpen: true, onClose: mockOnClose, assignedRoles: mockAssignedRoles, initialRoleIds: ['1'], setAssignedRolesIds:jest.fn() }));
+    await waitFor(() => renderComponent({ isOpen: true, onClose: mockOnClose, assignedRoles: mockAssignedRoles, initialRoleIds, setAssignedRolesIds:jest.fn(), tenantId }));
     await userEvent.click(document.getElementById('user-roles-modal-close-button'));
 
     expect(mockOnClose).toHaveBeenCalledTimes(1);
@@ -43,8 +45,9 @@ describe('UserRoleModal', () => {
   it('should select/unselect all roles, and ', async () => {
     renderComponent({ isOpen: true,
       onClose: mockOnClose,
-      initialRoleIds: ['1'],
-      changeUserRoles:jest.fn() });
+      initialRoleIds,
+      changeUserRoles:jest.fn(),
+      tenantId });
 
     const selectAllButton = document.querySelector('[name="selected-selectAll"]');
     await userEvent.click(selectAllButton);
@@ -64,7 +67,8 @@ describe('UserRoleModal', () => {
     const { queryByText } = renderComponent({ isOpen: true,
       onClose: mockOnClose,
       initialRoleIds: ['1'],
-      changeUserRoles:jest.fn() });
+      changeUserRoles:jest.fn(),
+      tenantId });
 
     const assignedFilterCheckbox = document.querySelector('[name="status.assigned"]');
     await userEvent.click(assignedFilterCheckbox);
@@ -77,8 +81,9 @@ describe('UserRoleModal', () => {
   it('should show unassigned roles only', async () => {
     const { getAllByRole } = renderComponent({ isOpen: true,
       onClose: mockOnClose,
-      initialRoleIds: ['1'],
-      changeUserRoles:jest.fn() });
+      initialRoleIds,
+      changeUserRoles:jest.fn(),
+      tenantId });
 
     const unassignedFilterCheckbox = document.querySelector('[name="status.unassigned"]');
     await userEvent.click(unassignedFilterCheckbox);
@@ -98,8 +103,9 @@ describe('UserRoleModal', () => {
 
     renderComponent({ isOpen: true,
       onClose: mockOnClose,
-      initialRoleIds: ['1'],
-      changeUserRoles:jest.fn() });
+      initialRoleIds,
+      changeUserRoles:jest.fn(),
+      tenantId });
 
     await userEvent.click(document.querySelector('[data-test-reset-all-button="true"]'));
 
@@ -109,8 +115,9 @@ describe('UserRoleModal', () => {
   it('should toggle filters pane', async () => {
     const { getByText } = renderComponent({ isOpen: true,
       onClose: mockOnClose,
-      initialRoleIds: ['1'],
-      changeUserRoles:jest.fn() });
+      initialRoleIds,
+      changeUserRoles:jest.fn(),
+      tenantId });
 
     const collapseButton = document.querySelector('[data-test-collapse-filter-pane-button="true"]');
     await userEvent.click(collapseButton);
@@ -125,8 +132,9 @@ describe('UserRoleModal', () => {
     const mockChangeUserRoles = jest.fn();
     const { getByRole } = renderComponent({ isOpen: true,
       onClose: mockOnClose,
-      initialRoleIds: ['1', '4'],
-      changeUserRoles:mockChangeUserRoles });
+      initialRoleIds: { 'consortium': ['1', '4'] },
+      changeUserRoles:mockChangeUserRoles,
+      tenantId });
     const submitButton = getByRole('button', { name: 'stripes-components.saveAndClose' });
     await userEvent.click(submitButton);
     expect(mockChangeUserRoles).toHaveBeenCalledWith(['4', '1']);

@@ -1,25 +1,45 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useIntl, FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { isEmpty } from 'lodash';
 import { FieldArray } from 'react-final-form-arrays';
 import { OnChange } from 'react-final-form-listeners';
-import { IfPermission } from '@folio/stripes/core';
+
+import { IfPermission, useStripes } from '@folio/stripes/core';
 import { Accordion, Headline, Badge, Row, Col, List, Button, Icon, ConfirmationModal } from '@folio/stripes/components';
-import { useAllRolesData } from '../../../hooks';
+
+import { useAllRolesData, useUserAffiliations } from '../../../hooks';
+import AffiliationsSelect from '../../AffiliationsSelect/AffiliationsSelect';
+import IfConsortium from '../../IfConsortium';
+import IfConsortiumPermission from '../../IfConsortiumPermission';
 import UserRolesModal from './components/UserRolesModal/UserRolesModal';
+import { isAffiliationsEnabled } from '../../util/util';
 import { filtersConfig } from './helpers';
 
-function EditUserRoles({ accordionId, form:{ change }, setAssignedRoleIds, assignedRoleIds }) {
+function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds, assignedRoleIds, setTenantId, tenantId }) {
+  const stripes = useStripes();
   const [isOpen, setIsOpen] = useState(false);
   const [unassignModalOpen, setUnassignModalOpen] = useState(false);
   const intl = useIntl();
 
-  const { isLoading: isAllRolesDataLoading, allRolesMapStructure } = useAllRolesData();
+  const {
+    affiliations,
+    isFetching: isAffiliationsFetching,
+  } = useUserAffiliations({ userId: user.id }, { enabled: isAffiliationsEnabled(user) });
+
+  const { isLoading: isAllRolesDataLoading, allRolesMapStructure, refetch } = useAllRolesData({ tenantId });
+
+  useEffect(() => {
+    if (!affiliations.some(({ tenantId: assigned }) => tenantId === assigned)) {
+      setTenantId(stripes.okapi.tenant);
+    } else {
+      refetch();
+    }
+  }, [affiliations, stripes.okapi.tenant, setTenantId, tenantId, refetch]);
 
   const changeUserRoles = (roleIds) => {
-    change('assignedRoleIds', roleIds);
+    change(`assignedRoleIds[${tenantId}]`, roleIds);
   };
 
   const handleUnassignAllRoles = () => {
@@ -28,14 +48,18 @@ function EditUserRoles({ accordionId, form:{ change }, setAssignedRoleIds, assig
   };
 
   const listItemsData = useMemo(() => {
-    if (isEmpty(assignedRoleIds) || isAllRolesDataLoading) return [];
+    if (isEmpty(assignedRoleIds[tenantId]) || isAllRolesDataLoading) return [];
 
-    return assignedRoleIds.map(roleId => {
+    const mappedRoleIds = [];
+    assignedRoleIds[tenantId].forEach(roleId => {
       const foundUserRole = allRolesMapStructure.get(roleId);
 
-      return { name: foundUserRole?.name, id: foundUserRole?.id };
+      if (foundUserRole) {
+        mappedRoleIds.push({ name: foundUserRole.name, id: foundUserRole.id });
+      }
     });
-  }, [assignedRoleIds, isAllRolesDataLoading, allRolesMapStructure]);
+    return !isEmpty(mappedRoleIds) ? mappedRoleIds.sort((a, b) => a.name.localeCompare(b.name)) : [];
+  }, [assignedRoleIds, isAllRolesDataLoading, allRolesMapStructure, tenantId]);
 
   const unassignAllMessage = <FormattedMessage
     id="ui-users.roles.modal.unassignAll.label"
@@ -43,9 +67,10 @@ function EditUserRoles({ accordionId, form:{ change }, setAssignedRoleIds, assig
   />;
 
   const renderRoleComponent = (fields) => (_, index) => {
-    if (isEmpty(fields.value)) return null;
+    const tenantValue = fields.value;
+    if (isEmpty(tenantValue)) return null;
 
-    const roleId = fields.value[index];
+    const roleId = tenantValue[index];
     const role = allRolesMapStructure.get(roleId);
 
     if (!role) return null;
@@ -85,7 +110,7 @@ function EditUserRoles({ accordionId, form:{ change }, setAssignedRoleIds, assig
     return (
       <Col xs={12}>
         <FieldArray
-          name="assignedRoleIds"
+          name={`assignedRoleIds.${tenantId}`}
           component={renderUserRolesComponent}
         />
       </Col>
@@ -98,9 +123,21 @@ function EditUserRoles({ accordionId, form:{ change }, setAssignedRoleIds, assig
         <Accordion
           label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.roles.userRoles" /></Headline>}
           id={accordionId}
-          displayWhenClosed={<Badge>{assignedRoleIds.length}</Badge>}
+          displayWhenClosed={<Badge>{assignedRoleIds[tenantId]?.length}</Badge>}
         >
           <Row>
+            <IfConsortium>
+              <IfConsortiumPermission perm="consortia.user-tenants.collection.get">
+                {Boolean(affiliations?.length) && (
+                  <AffiliationsSelect
+                    affiliations={affiliations}
+                    onChange={setTenantId}
+                    isLoading={isAllRolesDataLoading || isAffiliationsFetching}
+                    value={tenantId}
+                  />
+                )}
+              </IfConsortiumPermission>
+            </IfConsortium>
             {renderUserRoles()}
             <IfPermission perm="ui-authorization-roles.users.settings.manage">
               <Button data-testid="add-roles-button" onClick={() => setIsOpen(true)}><FormattedMessage id="ui-users.roles.addRoles" /></Button>
@@ -114,6 +151,7 @@ function EditUserRoles({ accordionId, form:{ change }, setAssignedRoleIds, assig
           onClose={() => setIsOpen(false)}
           initialRoleIds={assignedRoleIds}
           changeUserRoles={changeUserRoles}
+          tenantId={tenantId}
         />
         <ConfirmationModal
           open={unassignModalOpen}
@@ -139,8 +177,11 @@ EditUserRoles.propTypes = {
   match: PropTypes.shape({ params: { id: PropTypes.string } }),
   accordionId: PropTypes.string,
   form: PropTypes.object.isRequired,
-  assignedRoleIds: PropTypes.arrayOf(PropTypes.string).isRequired,
+  user: PropTypes.object.isRequired,
+  assignedRoleIds: PropTypes.object.isRequired,
   setAssignedRoleIds: PropTypes.func.isRequired,
+  tenantId: PropTypes.string.isRequired,
+  setTenantId: PropTypes.func.isRequired
 };
 
 export default withRouter(EditUserRoles);

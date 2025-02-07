@@ -15,6 +15,7 @@
 * *BREAKING* Add `pronouns` field to user edit form. Refs UIU-3119.
 * Add `pronouns` field to user view form. Refs UIU-3118.
 * Pronouns Field - add Character Limit Warning. Refs UIU-3324.
+* Add ability to create/edit role assignments for all of a user's affiliations. Refs UIU-3179.
 
 ## [11.0.11](https://github.com/folio-org/ui-users/tree/v11.0.11) (2025-01-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.10...v11.0.11)

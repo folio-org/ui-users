@@ -13,13 +13,14 @@ import { useQuery } from 'react-query';
  *  - isSuccess: A boolean indicating if the data fetch was successful.
  */
 
-function useAllRolesData() {
+function useAllRolesData(options = {}) {
+  const { tenantId } = options;
   const stripes = useStripes();
-  const ky = useOkapiKy();
+  const ky = useOkapiKy({ tenant: tenantId || stripes.okapi.tenant });
 
   const [namespace] = useNamespace();
 
-  const { data, isLoading, isSuccess } = useQuery([namespace, 'user-roles'], () => {
+  const { data, isLoading, isSuccess, refetch } = useQuery([namespace, 'user-roles'], () => {
     return ky.get(`roles?limit=${stripes.config.maxUnpagedResourceCount}&query=cql.allRecords=1 sortby name`).json();
   }, { enabled: stripes.hasInterface('roles') });
 
@@ -32,7 +33,7 @@ function useAllRolesData() {
     return rolesMap;
   }, [data]);
 
-  return { data, isLoading, allRolesMapStructure, isSuccess };
+  return { data, isLoading, allRolesMapStructure, isSuccess, refetch };
 }
 
 export default useAllRolesData;

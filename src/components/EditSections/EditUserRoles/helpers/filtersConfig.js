@@ -19,14 +19,14 @@ const filtersConfig = {
       value: false,
     },
   ],
-  filter(roles, filters, assignedRoleIds) {
+  filter(roles, filters, assignedRoleIds, tenantId) {
     const {
       [`${this.name}.${this.values[0].name}`]: showAssigned,
       [`${this.name}.${this.values[1].name}`]: showUnassigned,
     } = filters;
 
     return roles.filter(({ id }) => {
-      const rolesAssigned = assignedRoleIds.includes(id);
+      const rolesAssigned = assignedRoleIds[tenantId]?.includes(id);
 
       return (
         (showUnassigned && !rolesAssigned && !showAssigned)
