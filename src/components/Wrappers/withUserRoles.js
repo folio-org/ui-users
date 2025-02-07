@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import { useStripes, useOkapiKy, useCallout } from '@folio/stripes/core';
 import isEqual from 'lodash/isEqual';
-import { useAllRolesData, useCreateAuthUserKeycloak } from '../../hooks';
+import { useCreateAuthUserKeycloak } from '../../hooks';
 import { KEYCLOAK_USER_EXISTANCE } from '../../constants';
 import { showErrorCallout } from '../../views/UserEdit/UserEditHelpers';
 
@@ -20,8 +20,6 @@ const withUserRoles = (WrappedComponent) => (props) => {
 
   const { mutateAsync: createKeycloakUser } = useCreateAuthUserKeycloak(sendErrorCallout, { tenantId });
 
-  const { isLoading: isAllRolesDataLoading, allRolesMapStructure } = useAllRolesData({ tenantId });
-
   const searchParams = {
     limit: config.maxUnpagedResourceCount,
     query: `userId==${userId}`,
@@ -35,21 +33,17 @@ const withUserRoles = (WrappedComponent) => (props) => {
   });
 
   const setAssignedRoleIdsOnLoad = useCallback((data) => {
-    const assignedRoles = data.userRoles.map(({ roleId }) => {
-      const foundUserRole = allRolesMapStructure.get(roleId);
-
-      return { name: foundUserRole?.name, id: foundUserRole?.id };
-    }).sort((a, b) => a.name.localeCompare(b.name)).map(r => r.id);
+    const assignedRoles = data.userRoles.map(({ roleId }) => roleId);
 
     setTenantsLoaded(tenantsLoaded.concat(tenantId));
     setAssignedRoleIds({ ...assignedRoleIds, [tenantId]: assignedRoles });
     setInitialAssignedRoleIds({ ...assignedRoleIds, [tenantId]: assignedRoles });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allRolesMapStructure]);
+  }, [tenantId]);
 
   useEffect(() => {
     // eslint-disable-next-line react/prop-types
-    if (props.stripes.hasInterface('users-keycloak') && !isAllRolesDataLoading && !!userId && !tenantsLoaded.includes(tenantId)) {
+    if (props.stripes.hasInterface('users-keycloak') && !!userId && !tenantsLoaded.includes(tenantId)) {
       api.get(
         'roles/users', { searchParams },
       )
@@ -61,7 +55,7 @@ const withUserRoles = (WrappedComponent) => (props) => {
   },
   // Adding api, searchParams to deps causes infinite callback call. Listed deps are enough to track changes.
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  [userId, isAllRolesDataLoading, setAssignedRoleIdsOnLoad, tenantId]);
+  [userId, setAssignedRoleIdsOnLoad, tenantId]);
 
   const updateUserRoles = (roleIds) => {
     Object.keys(roleIds).forEach((tenantIdKey) => {

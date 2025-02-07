@@ -100,7 +100,7 @@ const propsData = {
   form: {
     change: mockChangeFunction,
   },
-  assignedRoleIds: { 'consortium': ['1', '2', '3'] },
+  assignedRoleIds: { 'consortium': ['1', '2'] },
   setAssignedRoleIds: jest.fn(),
   user: {
     id: '1'

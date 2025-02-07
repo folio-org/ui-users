@@ -50,11 +50,15 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
   const listItemsData = useMemo(() => {
     if (isEmpty(assignedRoleIds[tenantId]) || isAllRolesDataLoading) return [];
 
-    return assignedRoleIds[tenantId].map(roleId => {
+    const mappedRoleIds = [];
+    assignedRoleIds[tenantId].forEach(roleId => {
       const foundUserRole = allRolesMapStructure.get(roleId);
 
-      return { name: foundUserRole?.name, id: foundUserRole?.id };
+      if (foundUserRole) {
+        mappedRoleIds.push({ name: foundUserRole.name, id: foundUserRole.id });
+      }
     });
+    return !isEmpty(mappedRoleIds) ? mappedRoleIds.sort((a, b) => a.name.localeCompare(b.name)) : [];
   }, [assignedRoleIds, isAllRolesDataLoading, allRolesMapStructure, tenantId]);
 
   const unassignAllMessage = <FormattedMessage
