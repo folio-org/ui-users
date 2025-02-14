@@ -334,6 +334,11 @@ class LoanDetails extends React.Component {
 
   showBarcode(loan) {
     this.loan = loan;
+
+    if (!this.loan?.item) {
+      return <NoValue />;
+    }
+
     const instanceId = get(this.loan, ['item', 'instanceId'], '');
     const holdingsRecordId = get(this.loan, ['item', 'holdingsRecordId'], '');
     const itemId = get(this.loan, ['itemId'], '');
@@ -487,7 +492,7 @@ class LoanDetails extends React.Component {
     const loanStatus = get(loan, ['status', 'name'], '-');
     const overduePolicyName = get(loan, ['overdueFinePolicy', 'name'], '-');
     const lostItemPolicyName = get(loan, ['lostItemPolicy', 'name'], '-');
-    const itemStatus = get(loan, ['item', 'status', 'name'], '-');
+    const itemStatus = get(loan, ['item', 'status', 'name'], <NoValue />);
     const claimedReturnedDate = itemStatus === itemStatuses.CLAIMED_RETURNED && loan.claimedReturnedDate;
     const isClaimedReturnedItem = itemStatus === itemStatuses.CLAIMED_RETURNED;
     const isDeclaredLostItem = itemStatus === itemStatuses.DECLARED_LOST;
@@ -505,9 +510,10 @@ class LoanDetails extends React.Component {
       lostDate = get(lostAndPaidActions[0], ['declaredLostDate']);
     }
 
-    const buttonDisabled = (loanStatus && loanStatus === 'Closed');
+    const isItemAbsent = !loan?.item;
+    const buttonDisabled = (loanStatus && loanStatus === 'Closed') || isItemAbsent;
     // Number of characters to truncate the string = 77
-    const listTodisplay = (contributorsList === '-') ? '-' : (contributorsListString.length >= 77) ? `${contributorsListString.substring(0, 77)}...` : `${contributorsListString.substring(0, contributorsListString.length - 2)}`;
+    const listTodisplay = (contributorsList[0] === '-') ? <NoValue /> : (contributorsListString.length >= 77) ? `${contributorsListString.substring(0, 77)}...` : `${contributorsListString.substring(0, contributorsListString.length - 2)}`;
     const nonRenewedLabel = <FormattedMessage id="ui-users.loans.items.nonRenewed.label" />;
     const failedRenewalsSubHeading = (
       <p>
@@ -574,7 +580,7 @@ class LoanDetails extends React.Component {
                         <Button
                           buttonStyle="dropdownItem"
                           data-test-dropdown-content-mark-as-missing-button
-                          disabled={isVirtualPatron}
+                          disabled={isVirtualPatron || isItemAbsent}
                           onClick={() => markAsMissing(loan, itemRequestCount)}
                         >
                           <FormattedMessage id="ui-users.loans.markAsMissing" />
@@ -697,13 +703,13 @@ class LoanDetails extends React.Component {
               <Col xs={2}>
                 <KeyValue
                   label={<FormattedMessage id="ui-users.loans.details.location" />}
-                  value={get(loan, ['item', 'location', 'name'], '-')}
+                  value={get(loan, ['item', 'location', 'name'], <NoValue />)}
                 />
               </Col>
               <Col xs={2}>
                 <KeyValue
                   label={<FormattedMessage id="ui-users.loans.details.checkinServicePoint" />}
-                  value={get(loan, ['checkinServicePoint', 'name'], '-')}
+                  value={get(loan, ['checkinServicePoint', 'name'], <NoValue />)}
                 />
               </Col>
             </Row>

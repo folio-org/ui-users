@@ -134,7 +134,9 @@ class OpenLoansControl extends React.Component {
   toggleAll = e => {
     const { loans } = this.props;
     const checkedLoans = e.target.checked
-      ? loans.reduce((memo, loan) => Object.assign(memo, { [loan.id]: loan }), {})
+      ? loans
+        .filter(loan => loan?.item)
+        .reduce((memo, loan) => Object.assign(memo, { [loan.id]: loan }), {})
       : {};
 
     this.setState(({ allChecked }) => ({

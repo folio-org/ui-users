@@ -4,6 +4,7 @@ import {
   Checkbox,
   FormattedDate,
   FormattedTime,
+  NoValue,
 } from '@folio/stripes/components';
 
 import { effectiveCallNumber } from '@folio/stripes/util';
@@ -32,7 +33,8 @@ export default function getListDataFormatter(
       key : '  ',
       formatter: loan => (
         <Checkbox
-          checked={isLoanChecked(loan.id)}
+          disabled={!loan?.item}
+          checked={loan?.item && isLoanChecked(loan.id)}
           onClick={e => toggleItem(e, loan)}
           onChange={e => toggleItem(e, loan)}
           ariaLabel={formatMessage({ id: 'ui-users.loans.rows.select' })}
@@ -48,20 +50,20 @@ export default function getListDataFormatter(
           const titleToDisplay = (title.length >= 77) ? `${title.substring(0, 77)}...` : title;
           return `${titleToDisplay} (${get(loan, ['item', 'materialType', 'name'])})`;
         }
-        return '-';
+        return <NoValue />;
       },
       sorter: loan => get(loan, ['item', 'title'])?.toLowerCase(),
     },
     'itemStatus': {
       key: 'itemStatus',
       view: formatMessage({ id: 'ui-users.loans.columns.itemStatus' }),
-      formatter:  loan => `${get(loan, ['item', 'status', 'name'], '')}`,
+      formatter:  loan => get(loan, ['item', 'status', 'name'], <NoValue />),
       sorter: loan => get(loan, ['item', 'status', 'name'], ''),
     },
     'barcode': {
       key: 'barcode',
       view: formatMessage({ id: 'ui-users.loans.columns.barcode' }),
-      formatter: loan => get(loan, ['item', 'barcode'], ''),
+      formatter: loan => get(loan, ['item', 'barcode'], <NoValue />),
       sorter: loan => get(loan, ['item', 'barcode']),
     },
     'feefineIncurred': {
@@ -85,7 +87,7 @@ export default function getListDataFormatter(
     'callNumber': {
       key:'callNumber',
       view: formatMessage({ id: 'ui-users.loans.details.effectiveCallNumber' }),
-      formatter: loan => (<div data-test-list-call-numbers>{effectiveCallNumber(loan)}</div>),
+      formatter: loan => (<div data-test-list-call-numbers>{effectiveCallNumber(loan) || <NoValue />}</div>),
       sorter: loan => effectiveCallNumber(loan),
     },
     'loanPolicy': {
@@ -128,7 +130,7 @@ export default function getListDataFormatter(
     'location': {
       key:'location',
       view: formatMessage({ id: 'ui-users.loans.details.location' }),
-      formatter: loan => `${get(loan, ['item', 'location', 'name'], '')}`,
+      formatter: loan => `${get(loan, ['item', 'location', 'name'], <NoValue />)}`,
       sorter: loan => get(loan, ['item', 'location', 'name'], ''),
     },
     ' ': {
