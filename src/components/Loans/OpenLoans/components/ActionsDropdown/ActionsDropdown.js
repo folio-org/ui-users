@@ -68,9 +68,9 @@ class ActionsDropdown extends React.Component {
           {
             !isVirtualItem && (
               <Button
+                disabled={!loan?.item}
                 buttonStyle="dropdownItem"
                 to={itemDetailsLink}
-                disabled={!loan?.item}
               >
                 <FormattedMessage id="ui-users.itemDetails" />
               </Button>
@@ -97,8 +97,8 @@ class ActionsDropdown extends React.Component {
               buttonStyle="dropdownItem"
               data-test-dropdown-content-claim-returned-button
               onClick={e => {
-                handleOptionsChange({ loan, action:'claimReturned', itemRequestCount });
                 onToggle(e);
+                handleOptionsChange({ loan, action:'claimReturned', itemRequestCount });
               }}
             >
               <FormattedMessage id="ui-users.loans.claimReturned" />
@@ -134,7 +134,7 @@ class ActionsDropdown extends React.Component {
                     onToggle(e);
                   }}
                 >
-                  <FormattedMessage id="ui-users.loans.details.printDueDateReceipt" />
+                  printDueDateReceipt
                 </Button>
               )}
             </PrintToPDFWrapper>
