@@ -39,6 +39,9 @@ class ActionsDropdown extends React.Component {
     intl: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
     patronGroup: PropTypes.object.isRequired,
+    history: PropTypes.shape({
+      push: PropTypes.func,
+    }).isRequired,
   };
 
   renderMenu = ({ onToggle }) => {
@@ -51,7 +54,8 @@ class ActionsDropdown extends React.Component {
       disableFeeFineDetails,
       match: { params },
       user,
-      patronGroup
+      patronGroup,
+      history,
     } = this.props;
 
     const itemStatusName = loan?.item?.status?.name;
@@ -61,6 +65,13 @@ class ActionsDropdown extends React.Component {
     const isUserActive = checkUserActive(user);
     const isVirtualUser = isDcbUser(user);
     const isVirtualItem = isDcbItem(loan?.item);
+    const isItemAbsent = !loan?.item;
+    const goToItemDetails = () => {
+      history.push(itemDetailsLink);
+    };
+    const createNewFeeFine = () => {
+      history.push(getChargeFineToLoanPath(params.id, loan.id));
+    };
 
     return (
       <DropdownMenu data-role="menu">
@@ -69,8 +80,8 @@ class ActionsDropdown extends React.Component {
             !isVirtualItem && (
               <Button
                 buttonStyle="dropdownItem"
-                to={itemDetailsLink}
-                disabled={!loan?.item}
+                onClick={goToItemDetails}
+                disabled={isItemAbsent}
               >
                 <FormattedMessage id="ui-users.itemDetails" />
               </Button>
@@ -81,6 +92,7 @@ class ActionsDropdown extends React.Component {
           { isUserActive && !isVirtualUser && itemStatusName !== itemStatuses.CLAIMED_RETURNED &&
             <Button
               buttonStyle="dropdownItem"
+              disabled={isItemAbsent}
               data-test-dropdown-content-renew-button
               onClick={e => {
                 handleOptionsChange({ loan, action: 'renew' });
@@ -95,6 +107,7 @@ class ActionsDropdown extends React.Component {
           { itemStatusName !== itemStatuses.CLAIMED_RETURNED && !isVirtualUser &&
             <Button
               buttonStyle="dropdownItem"
+              disabled={isItemAbsent}
               data-test-dropdown-content-claim-returned-button
               onClick={e => {
                 handleOptionsChange({ loan, action:'claimReturned', itemRequestCount });
@@ -112,6 +125,7 @@ class ActionsDropdown extends React.Component {
             !isVirtualUser &&
             <Button
               buttonStyle="dropdownItem"
+              disabled={isItemAbsent}
               data-test-dropdown-content-change-due-date-button
               onClick={(e) => {
                 handleOptionsChange({ loan, action:'changeDueDate' });
@@ -128,6 +142,7 @@ class ActionsDropdown extends React.Component {
               {(print) => (
                 <Button
                   buttonStyle="dropdownItem"
+                  disabled={isItemAbsent}
                   data-test-dropdown-content-print-due-date-button
                   onClick={(e) => {
                     print();
@@ -144,6 +159,7 @@ class ActionsDropdown extends React.Component {
           { itemStatusName !== itemStatuses.DECLARED_LOST && !isVirtualUser &&
             <Button
               buttonStyle="dropdownItem"
+              disabled={isItemAbsent}
               data-test-dropdown-content-declare-lost-button
               onClick={e => {
                 handleOptionsChange({ loan, action:'declareLost', itemRequestCount });
@@ -158,6 +174,7 @@ class ActionsDropdown extends React.Component {
           { itemStatusName === itemStatuses.CLAIMED_RETURNED && !isVirtualUser &&
           <Button
             buttonStyle="dropdownItem"
+            disabled={isItemAbsent}
             data-test-dropdown-content-mark-as-missing-button
             onClick={e => {
               handleOptionsChange({ loan, action:'markAsMissing', itemRequestCount });
@@ -185,8 +202,8 @@ class ActionsDropdown extends React.Component {
             !isVirtualUser && (
               <Button
                 buttonStyle="dropdownItem"
-                disabled={buttonDisabled}
-                to={getChargeFineToLoanPath(params.id, loan.id)}
+                disabled={buttonDisabled || !loan?.item}
+                onClick={createNewFeeFine}
               >
                 <FormattedMessage id="ui-users.loans.newFeeFine" />
               </Button>

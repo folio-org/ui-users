@@ -1,12 +1,14 @@
 import { QueryClient, QueryClientProvider } from 'react-query';
 
-import { screen, fireEvent } from '@folio/jest-config-stripes/testing-library/react';
-
-import renderWithRouter from 'helpers/renderWithRouter';
-
+import {
+  screen,
+  fireEvent,
+  render,
+} from '@folio/jest-config-stripes/testing-library/react';
 import { IfPermission } from '@folio/stripes/core';
-import okapiCurrentUser from 'fixtures/okapiCurrentUser';
+import { Dropdown } from '@folio/stripes/components';
 
+import okapiCurrentUser from 'fixtures/okapiCurrentUser';
 import okapiOpenLoan from 'fixtures/openLoan';
 
 import buildStripes from '__mock__/stripes.mock';
@@ -23,9 +25,11 @@ import useStaffSlips from '../../../../../hooks/useStaffSlips';
 
 const mockHandleOptionsChange = jest.fn();
 
-jest.unmock('@folio/stripes/components');
 jest.unmock('@folio/stripes/smart-components');
 
+jest.mock('react-router-dom', () => ({
+  withRouter: jest.fn(component => component),
+}));
 jest.mock('../../../../util', () => {
   return {
     ...jest.requireActual('../../../../util'),
@@ -41,7 +45,7 @@ beforeEach(() => {
 
 const queryClient = new QueryClient();
 
-const renderActionsDropdown = (props) => renderWithRouter(
+const renderActionsDropdown = (props) => render(
   <QueryClientProvider client={queryClient}>
     <ActionsDropdown {...props} />
   </QueryClientProvider>
@@ -58,11 +62,36 @@ const props = {
   intl: { formatMessage : jest.fn() },
   user: okapiCurrentUser,
   patronGroup: {},
+  item: {
+    instanceId: 'instanceId',
+    holdingsRecordId: 'holdingsRecordId',
+  },
+  itemId: 'itemId',
+  history: {
+    push: jest.fn(),
+  },
+};
+
+const labelIds = {
+  itemDetailsLink: 'ui-users.itemDetails',
+  newFeeFineLink: 'ui-users.loans.newFeeFine',
 };
 
 describe('ActoinsDropdown component', () => {
   beforeEach(() => {
     IfPermission.mockImplementation(({ children }) => children);
+    Dropdown.mockImplementation(({
+      renderMenu,
+      ...rest
+    }) => (
+      <button
+        type="button"
+        aria-expanded
+        {...rest}
+      >
+        {renderMenu({ onToggle: jest.fn() })}
+      </button>
+    ));
 
     useStaffSlips.mockReturnValue({
       staffSlips: [
@@ -93,6 +122,27 @@ describe('ActoinsDropdown component', () => {
     expect(screen.queryByText('ui-users.loans.newFeeFine')).toBeInTheDocument();
     expect(screen.queryByText('ui-users.loans.feeFineDetails')).toBeInTheDocument();
     expect(screen.queryByText('ui-users.loans.details.requestQueue')).toBeInTheDocument();
+  });
+
+  it('should trigger push with item details link', () => {
+    renderActionsDropdown(props);
+
+    const itemDetailsLink = screen.queryByText(labelIds.itemDetailsLink);
+
+    fireEvent.click(itemDetailsLink);
+
+    expect(props.history.push)
+      .toHaveBeenCalledWith(`/inventory/view/${props.loan.item?.instanceId}/${props.loan.item?.holdingsRecordId}/${props.loan.itemId}`);
+  });
+
+  it('should trigger push with new fee fine link', () => {
+    renderActionsDropdown(props);
+
+    const newFeeFineLink = screen.queryByText(labelIds.newFeeFineLink);
+
+    fireEvent.click(newFeeFineLink);
+
+    expect(props.history.push).toHaveBeenCalledWith(`/users/${props.match.params.id}/charge/${props.loan.id}`);
   });
 
   describe('when loan-item-status is Claimed returned', () => {
@@ -135,7 +185,7 @@ describe('ActoinsDropdown component', () => {
     it('shows up dropdown-menu', () => {
       renderActionsDropdown(props);
 
-      const dropdownButton = screen.getByTestId('actions-dropdown-test-id').querySelector('button');
+      const dropdownButton = screen.getByTestId('actions-dropdown-test-id');
 
       fireEvent.click(dropdownButton);
       expect(dropdownButton).toHaveAttribute('aria-expanded', 'true');

@@ -16,6 +16,7 @@ import {
   ExportCsv,
   ConfirmationModal,
   FormattedTime,
+  NoValue,
 } from '@folio/stripes/components';
 import {
   IfPermission,
@@ -189,7 +190,7 @@ class ClosedLoans extends React.Component {
     const { intl: { formatMessage }, user } = this.props;
 
     return {
-      'title': loan => _.get(loan, ['item', 'title'], ''),
+      'title': loan => _.get(loan, ['item', 'title'], <NoValue />),
       'dueDate': loan => {
         return <FormattedTime
           value={loan.dueDate}
@@ -198,14 +199,14 @@ class ClosedLoans extends React.Component {
           year="numeric"
         />;
       },
-      'barcode': loan => _.get(loan, ['item', 'barcode'], ''),
+      'barcode': loan => _.get(loan, ['item', 'barcode'], <NoValue />),
       'feefineIncurred': loan => this.getFeeFine(loan),
-      'callNumber': loan => (<div data-test-list-call-numbers>{effectiveCallNumber(loan)}</div>),
+      'callNumber': loan => (<div data-test-list-call-numbers>{effectiveCallNumber(loan) || <NoValue />}</div>),
       'Contributors': (loan) => {
         const contributorsList = this.getContributorslist(loan);
         const contributorsListString = contributorsList.join(' ');
         // Truncate if no of contributors > 2
-        const listTodisplay = (contributorsList === '-') ? '-' : (contributorsList.length > 2) ? `${contributorsList[0]}, ${contributorsList[1]}...` : `${contributorsListString.substring(0, contributorsListString.length - 2)}`;
+        const listTodisplay = (contributorsList[0] === '-') ? <NoValue /> : (contributorsList.length > 2) ? `${contributorsList[0]}, ${contributorsList[1]}...` : `${contributorsListString.substring(0, contributorsListString.length - 2)}`;
         return (contributorsList.length > 2) ?
           (
             <Popover>
@@ -360,6 +361,7 @@ class ClosedLoans extends React.Component {
       stripes,
       match: { params },
       user,
+      history,
     } = this.props;
 
     const accounts = _.get(this.props.resources, ['loanAccount', 'records'], []);
@@ -368,14 +370,23 @@ class ClosedLoans extends React.Component {
     const buttonDisabled = !stripes.hasPerm('ui-users.feesfines.actions.all');
     const isVirtualUser = isDcbUser(user);
     const isVirtualItem = loan.item && isDcbItem(loan.item);
+    const isItemAbsent = !loan?.item;
+    const goToItemDetails = () => {
+      history.push(itemDetailsLink);
+    };
+    const createNewFeeFine = () => {
+      history.push(getChargeFineToLoanPath(params.id, loan.id));
+    };
+
 
     return (
       <DropdownMenu data-role="menu">
-        {itemDetailsLink && !isVirtualItem &&
+        {!isVirtualItem &&
           <IfPermission perm="inventory.items.item.get">
             <Button
+              disabled={isItemAbsent}
               buttonStyle="dropdownItem"
-              to={itemDetailsLink}
+              onClick={goToItemDetails}
             >
               <FormattedMessage id="ui-users.itemDetails" />
             </Button>
@@ -386,9 +397,9 @@ class ClosedLoans extends React.Component {
             <>
               <Button
                 data-testid="newFeeFineButton"
-                disabled={buttonDisabled}
+                disabled={buttonDisabled || isItemAbsent}
                 buttonStyle="dropdownItem"
-                to={getChargeFineToLoanPath(params.id, loan.id)}
+                onClick={createNewFeeFine}
               >
                 <FormattedMessage id="ui-users.loans.newFeeFine" />
               </Button>
