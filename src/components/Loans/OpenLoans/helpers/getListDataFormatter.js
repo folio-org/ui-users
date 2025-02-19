@@ -130,7 +130,7 @@ export default function getListDataFormatter(
     'location': {
       key:'location',
       view: formatMessage({ id: 'ui-users.loans.details.location' }),
-      formatter: loan => `${get(loan, ['item', 'location', 'name'], <NoValue />)}`,
+      formatter: loan => get(loan, ['item', 'location', 'name'], <NoValue />),
       sorter: loan => get(loan, ['item', 'location', 'name'], ''),
     },
     ' ': {
