@@ -1167,11 +1167,11 @@
     "roles.modal.list.pane.subheader": "Počet nalezených rolí {amount}",
     "roles.modal.search.resetAll": "Obnovit vše",
     "roles.modal.unassignAll.header": "Zrušit přiřazení všech uživatelských rolí",
-    "roles.modal.unassignAll.label": "You are unassigning all user roles <strong>{roles}</strong> <p><strong>Are you sure?</strong></p>",
+    "roles.modal.unassignAll.label": "Rušíte přiřazení všech uživatelských rolí <strong>{roles}</strong> <p><strong>Jste si jisti?</strong></p>",
     "roles.modal.search.header": "Vyhledat a filtrovat",
     "roles.modal.filter.status.label": "Stav přiřazení role",
     "roles.modal.header": "Vybrat uživatelské role",
-    "loans.details.printDueDateReceipt": "Print due date receipt",
+    "loans.details.printDueDateReceipt": "Tisk stvrzenky data splatnosti",
     "actionMenu.preRegistrationRecords": "Search patron preregistration records",
     "stagingRecords.list.search": "Vyhledat",
     "stagingRecords.search.placeholder": "Search by name or email",
@@ -1236,6 +1236,6 @@
     "title.patronBlock.edit": "Users - Edit a patron block",
     "accounts.history.columns.actions": "Akce",
     "charge.item.barcode.error": "No item with barcode {barcode} could be found",
-    "information.pronouns": "Pronouns",
-    "errors.personal.pronounsCharLimit": "Pronouns are limited to 300 characters"
+    "information.pronouns": "Zájmena",
+    "errors.personal.pronounsCharLimit": "Zájmena jsou omezena na 300 znaků"
 }
