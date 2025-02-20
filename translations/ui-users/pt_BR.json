@@ -755,7 +755,7 @@
     "reports.refunds.staffMemberName": "Nome do membro da equipe",
     "reports.refunds.actionTaken": "Ação realizada",
     "reports.refunds.modal.endDate": "Data final",
-    "information.recalculate.expirationDate": "Recalcular",
+    "information.recalculate.expirationDate": "Redefinir",
     "information.recalculate.modal.text": "As contas da biblioteca com o grupo de usuários <b>{group}</b> expiram em <b>{offset} dias</b>. Deseja definir a conta deste usuário para expirar em <b>{date}</b> ?",
     "information.recalculate.modal.label": "Fixar data de expiração?",
     "information.recalculate.will.reactivate.user": "O usuário irá reativar após salvar",
@@ -1237,5 +1237,5 @@
     "accounts.history.columns.actions": "Ações",
     "charge.item.barcode.error": "Nenhum item com código de barras {barcode} foi encontrado",
     "information.pronouns": "Pronomes",
-    "errors.personal.pronounsCharLimit": "Pronouns are limited to 300 characters"
+    "errors.personal.pronounsCharLimit": "Os pronomes são limitados a 300 caracteres"
 }
