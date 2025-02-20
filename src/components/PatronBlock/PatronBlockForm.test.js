@@ -4,7 +4,6 @@ import {
   screen,
   cleanup,
 } from '@folio/jest-config-stripes/testing-library/react';
-import { within } from '@folio/jest-config-stripes/testing-library/dom';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
 import renderWithRouter from 'helpers/renderWithRouter';
@@ -112,12 +111,13 @@ describe('Patron Block Form', () => {
     // click to open the Selection, then click a specific option.
     // after clicking, the way stripes-components renders a <Selection>
     // with a selected element, the selected element will be present twice.
-    await userEvent.click(screen.getByText('ui-users.blocks.form.label.template'));
+    //
+    // Update @ "@folio/stripes": "^10.0.0": double presence no longer seems to be the case
 
-    const list = screen.getByRole('listbox');
-    await userEvent.click(within(list).getByText('name2', { exact: false }));
+    await userEvent.click(screen.getByRole('button', { name: 'ui-users.blocks.form.label.template' }));
+    await userEvent.click(screen.getByText('name2', { exact: false }));
 
-    expect(screen.getAllByText('name2 (testCode2)').length).toEqual(2);
+    expect(screen.getAllByText('name2 (testCode2)').length).toEqual(1);
   });
 });
 

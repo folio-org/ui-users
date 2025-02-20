@@ -1,4 +1,4 @@
-import { render, within } from '@folio/jest-config-stripes/testing-library/react';
+import { render, within, fireEvent } from '@folio/jest-config-stripes/testing-library/react';
 
 import '__mock__/matchMedia.mock';
 
@@ -25,17 +25,17 @@ const renderAffiliationsSelect = (props = {}) => render(
 
 describe('AffiliationsSelect', () => {
   it('should render affiliation select with provided options', () => {
-    renderAffiliationsSelect();
+    const { queryAllByText } = renderAffiliationsSelect();
 
     expect(
       within(document.getElementById('test-affiliations-select'))
         .getByText(affiliations[2].tenantName)
     ).toBeInTheDocument();
+
+    fireEvent.click(document.getElementById('test-affiliations-select'));
+
     affiliations.forEach(({ tenantName, isPrimary }) => {
-      expect(
-        within(document.getElementById('sl-test-affiliations-select'))
-          .getByText(isPrimary ? `${tenantName} ui-users.affiliations.primary.label` : tenantName),
-      ).toBeInTheDocument();
+      expect(queryAllByText(isPrimary ? `${tenantName} ui-users.affiliations.primary.label` : tenantName)?.length).toBeGreaterThan(0);
     });
   });
 });

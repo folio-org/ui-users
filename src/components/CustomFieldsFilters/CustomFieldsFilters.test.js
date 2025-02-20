@@ -31,6 +31,6 @@ const renderCustomFieldsFilters = () => render(<CustomFieldsFilters {...props} /
 describe('CustomFieldsFilters', () => {
   it('renders custom filters', () => {
     renderCustomFieldsFilters();
-    expect(screen.getByRole('textbox', { name: /multi-select/i })).toBeInTheDocument();
+    expect(screen.getByRole('combobox', { name: /multi-select/i })).toBeInTheDocument();
   });
 });

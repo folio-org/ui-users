@@ -156,7 +156,6 @@ describe('OpenLoansWithStatic Data component', () => {
   it('Bulk Claim modal must be rendered', async () => {
     renderOpenLoansWithStaticData(props);
     await userEvent.click(screen.getByText('ui-users.loans.claimReturned'));
-    await userEvent.click(screen.getByText('ui-users.cancel'));
     expect(screen.getByText('ui-users.bulkClaimReturned.summary')).toBeInTheDocument();
     expect(screen.getByText('testPolicy')).toBeInTheDocument();
     expect(screen.getByText('453987605438')).toBeInTheDocument();

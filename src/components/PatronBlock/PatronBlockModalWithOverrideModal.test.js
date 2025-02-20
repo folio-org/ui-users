@@ -30,7 +30,6 @@ describe('UserPermissions component', () => {
 
   it('Checking patronBlock override Modal', () => {
     fireEvent.click(screen.getByText('ui-users.blocks.overrideButton'));
-    fireEvent.click(document.querySelector('[data-test-override-patron-block-modal-close="true"]'));
     expect(screen.getByText('ui-users.blocks.modal.overridePatronBlock.header')).toBeTruthy();
   });
 
@@ -41,6 +40,6 @@ describe('UserPermissions component', () => {
       { target: { value: 'test' } }
     );
     fireEvent.click(document.querySelector('[data-test-override-patron-block-modal-save="true"]'));
-    expect(screen.getByText('test')).toBeTruthy();
+    expect(props.onRenew).toHaveBeenCalledWith('test');
   });
 });

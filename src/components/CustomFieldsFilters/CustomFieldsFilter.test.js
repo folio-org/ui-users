@@ -24,7 +24,7 @@ const renderCustomFieldsFilter = (extraProps) => render(<CustomFieldsFilter {...
 describe('CustomFieldsFilter', () => {
   it('renders multi select filter', () => {
     renderCustomFieldsFilter({ customField: multiSelectCustomField });
-    expect(screen.getByRole('textbox', { name: /multi-select/i })).toBeInTheDocument();
+    expect(screen.getByRole('combobox', { name: /multi-select/i })).toBeInTheDocument();
   });
 
   it('renders radion button set filter', () => {
