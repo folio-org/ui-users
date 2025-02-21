@@ -16,6 +16,7 @@
 * Add `pronouns` field to user view form. Refs UIU-3118.
 * Pronouns Field - add Character Limit Warning. Refs UIU-3324.
 * Add ability to create/edit role assignments for all of a user's affiliations. Refs UIU-3179.
+* Implement support for loans without item information. Refs UIU-2531.
 * *BREAKING* Migrate stripes dependencies to their Sunflower versions. Refs UIU-3327.
 * *BREAKING* Migrate react-intl to v7. Refs UIU-3328.
 

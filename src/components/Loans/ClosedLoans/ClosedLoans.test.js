@@ -5,6 +5,7 @@ import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import { createMemoryHistory } from 'history';
 
 import { effectiveCallNumber } from '@folio/stripes/util';
+import { IfPermission } from '@folio/stripes/core';
 
 import okapiLoans from '../../../../test/jest/fixtures/openLoans';
 import okapiCurrentUser from '../../../../test/jest/fixtures/okapiCurrentUser';
@@ -14,6 +15,7 @@ import {
   calculateSortParams,
   getChargeFineToLoanPath,
   nav,
+  isDcbUser,
 } from '../../util';
 import { DCB_VIRTUAL_USER } from '../../../constants';
 
@@ -26,7 +28,8 @@ jest.mock('../../util', () => ({
     onClickViewLoanActionsHistory: jest.fn(),
     onClickViewOpenAccounts: jest.fn(),
     onClickViewClosedAccounts: jest.fn(),
-  }
+  },
+  isDcbUser: jest.fn(user => user?.type === 'dcb'),
 }));
 jest.mock('@folio/stripes/util', () => ({
   effectiveCallNumber: jest.fn(),
@@ -178,8 +181,14 @@ const props = {
   match: { params: { id: 'mock-match-params-id' } },
   intl: { formatMessage : jest.fn() },
   user: okapiCurrentUser,
-  history,
+  history: {
+    push: jest.fn(),
+  },
   location: history.location,
+};
+const labelIds = {
+  itemDetailsLink: 'ui-users.itemDetails',
+  newFeeFineLink: 'ui-users.loans.newFeeFine',
 };
 
 const renderClosedLoans = (extraProps = {}) => render(<ClosedLoans {...props} {...extraProps} />);
@@ -334,12 +343,35 @@ describe('Given ClosedLoans', () => {
   });
 
   describe('when click on newFeeFine button', () => {
-    it('fires getChargeFineToLoanPath with proper params', () => {
+    beforeEach(() => {
       renderClosedLoans(props);
 
-      fireEvent.click(screen.queryByText('ui-users.loans.newFeeFine'));
+      fireEvent.click(screen.queryByText(labelIds.newFeeFineLink));
+    });
 
+    it('fires getChargeFineToLoanPath with proper params', () => {
       expect(getChargeFineToLoanPath).toBeCalledWith('mock-match-params-id', 'b6475706-4505-4b20-9ed0-aadcda2b72ee');
+    });
+
+    it('should trigger push', () => {
+      expect(props.history.push).toHaveBeenCalled();
+    });
+  });
+
+  describe('Item details button', () => {
+    beforeEach(() => {
+      IfPermission.mockImplementation(({ children }) => {
+        return children;
+      });
+      isDcbUser.mockReturnValueOnce(false);
+      renderClosedLoans(props);
+
+      fireEvent.click(screen.queryByText(labelIds.itemDetailsLink));
+    });
+
+    it('should trigger push with item details link', () => {
+      expect(props.history.push)
+        .toHaveBeenCalledWith(`/inventory/view/${props.loans[0].item.instanceId}/${props.loans[0].item.holdingsRecordId}/${props.loans[0].itemId}`);
     });
   });
 
