@@ -167,7 +167,6 @@ describe('Owner settings', () => {
   it('Delete functionality in component', async () => {
     renderOwnerSettings(propData);
     await userEvent.click(document.querySelector('[id="clickable-delete-settings-owners-1"]'));
-    await userEvent.click(document.querySelector('[id="clickable-delete-controlled-vocab-entry-confirmation-cancel"]'));
     expect(document.querySelector('[data-test-confirmation-modal-message="true"]')).toBeTruthy();
   });
 

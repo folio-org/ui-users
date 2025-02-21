@@ -66,7 +66,7 @@ describe('Filters', () => {
 
   it('Checking clear Group', () => {
     renderFilters(initialProps);
-    fireEvent.click(screen.getAllByLabelText('Clear selected filters for "ui-users.departments"')[0]);
+    fireEvent.click(screen.getAllByRole('button', { name: 'stripes-components.filterGroups.clearFilterSetLabel' })[0]);
     expect(stateMock).toHaveBeenCalled();
   });
 

@@ -98,10 +98,9 @@ describe('Render Edit contact Information component', () => {
     const prefEmailCommInput = document.querySelector('[id="multi-value-status-adduserPreferredEmailCommunication"]');
     expect(prefEmailCommInput).toHaveTextContent('0 items selected');
 
-    await userEvent.click(document.querySelector('[id="adduserPreferredEmailCommunication-main-item-1"]'));
-    await userEvent.click(document.querySelector('[id="adduserPreferredEmailCommunication-main-item-2"]'));
+    await userEvent.click(screen.getByText('ui-users.contact.preferredEmailCommunication.programs'));
 
-    expect(prefEmailCommInput).toHaveTextContent('2 items selected');
+    expect(prefEmailCommInput).toHaveTextContent('1 item selected');
   });
 
   it('should update Preferred Email Communication input field value on user input', async () => {

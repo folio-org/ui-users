@@ -101,8 +101,7 @@ describe('AffiliationsManager', () => {
         await userEvent.click(await screen.findByText('ui-users.affiliations.manager.filter.assignment.assigned'));
 
         expect(await screen.findAllByRole('row')).toHaveLength((affiliations.length - 3));
-
-        await userEvent.click(await screen.findByLabelText(/Clear selected filters for/));
+        await userEvent.click(await screen.findByLabelText('stripes-components.filterGroups.clearFilterSetLabel'));
 
         expect(await screen.findAllByRole('row')).toHaveLength(affiliations.length);
       });

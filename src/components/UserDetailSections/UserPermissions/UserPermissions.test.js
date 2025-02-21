@@ -77,6 +77,7 @@ describe('UserPermissions component', () => {
       expect(screen.getByText('ui-agreements.permission.agreements.edit')).toBeInTheDocument();
       expect(screen.getByText('ui-agreements.permission.agreements.delete')).toBeInTheDocument();
 
+      await userEvent.click(screen.getByRole('button', { name: 'ui-users.affiliations.select.label Snapshot' }));
       await userEvent.click(screen.getByText(affiliations[1].tenantName));
 
       expect(screen.queryByText('ui-agreements.permission.agreements.edit')).not.toBeInTheDocument();
