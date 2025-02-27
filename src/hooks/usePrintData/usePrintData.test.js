@@ -84,6 +84,12 @@ describe('mapEntityToTemplate', () => {
       item: {
         title: 'The Great Gatsby',
         primaryContributor: 'F. Scott Fitzgerald',
+        accessionNumber: 'PV-R5937',
+        administrativeNotes: ['Very fragile', 'Once belonged to Hillare Belloc'],
+        datesOfPublication: ['1925', '1942'],
+        editions: ['1st', '3rd'],
+        physicalDescriptions: ['printed on vellum', 'bound in snow-leopard hide'],
+        instanceHrid: 'ins000012368',
       },
       dueDate: '2024-10-10T12:00:00Z',
       patronGroupAtCheckout: {
@@ -107,6 +113,13 @@ describe('mapEntityToTemplate', () => {
       'borrower.patronGroup': 'facility',
       'item.title': 'The Great Gatsby',
       'item.primaryContributor': 'F. Scott Fitzgerald',
+      'item.accessionNumber': 'PV-R5937',
+      'item.administrativeNotes': 'Very fragile/Once belonged to Hillare Belloc',
+      'item.datesOfPublication': '1925/1942',
+      'item.editions': '1st/3rd',
+      'item.physicalDescriptions': 'printed on vellum/bound in snow-leopard hide',
+      'item.instanceHrid': 'ins000012368',
+      'item.instanceHridImage': '<Barcode>ins000012368</Barcode>',
       'loan.dueDate': 'October 10, 2024',
     });
   });
@@ -152,6 +165,7 @@ describe('usePrintData', () => {
         },
         item: {
           title: 'ABBA',
+          instanceHrid: 'ins000012367',
         },
         dueDate: '2024-10-10T12:00:00Z',
       },
@@ -168,6 +182,8 @@ describe('usePrintData', () => {
         'borrower.patronGroup': undefined,
         'item.title': 'ABBA',
         'item.primaryContributor': undefined,
+        'item.instanceHrid': 'ins000012367',
+        'item.instanceHridImage': '<Barcode>ins000012367</Barcode>',
         'loan.dueDate': 'formatted date',
       },
     ]);
