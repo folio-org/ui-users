@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useQueryClient } from 'react-query';
 
-import { useStripes, useOkapiKy, useCallout } from '@folio/stripes/core';
+import { useNamespace, useStripes, useOkapiKy, useCallout } from '@folio/stripes/core';
 import isEqual from 'lodash/isEqual';
 import { useCreateAuthUserKeycloak } from '../../hooks';
 import { KEYCLOAK_USER_EXISTANCE } from '../../constants';
@@ -8,6 +9,8 @@ import { showErrorCallout } from '../../views/UserEdit/UserEditHelpers';
 
 const withUserRoles = (WrappedComponent) => (props) => {
   const { okapi, config } = useStripes();
+  const queryClient = useQueryClient();
+  const [affiliationRolesNamespace] = useNamespace({ key: 'user-affiliation-roles' });
   // eslint-disable-next-line react/prop-types
   const userId = props.match.params.id;
   const [tenantId, setTenantId] = useState(okapi.tenant);
@@ -72,7 +75,10 @@ const withUserRoles = (WrappedComponent) => (props) => {
             roleIds: roleIds[tenantIdKey],
           }
         },
-      ).json()
+      ).json().
+        then(async () => {
+          await queryClient.invalidateQueries(affiliationRolesNamespace);
+        })
       // eslint-disable-next-line no-console
         .catch(sendErrorCallout);
     });
