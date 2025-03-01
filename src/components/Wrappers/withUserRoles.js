@@ -75,8 +75,8 @@ const withUserRoles = (WrappedComponent) => (props) => {
             roleIds: roleIds[tenantIdKey],
           }
         },
-      ).json().
-        then(async () => {
+      ).json()
+        .then(async () => {
           await queryClient.invalidateQueries(affiliationRolesNamespace);
         })
       // eslint-disable-next-line no-console
