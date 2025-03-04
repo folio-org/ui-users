@@ -213,9 +213,10 @@ export const isPatronUser = (user) => user?.type === USER_TYPES.PATRON;
 export const isDcbUser = (user) => user?.type === USER_TYPES.DCB;
 export const isStaffUser = (user) => user?.type === USER_TYPES.STAFF;
 export const isShadowUser = (user) => user?.type === USER_TYPES.SHADOW;
+export const isSystemUser = (user) => user?.type === USER_TYPES.SYSTEM;
 
 export const isAffiliationsEnabled = (user) => {
-  return !isPatronUser(user) && !isDcbUser(user);
+  return !isPatronUser(user) && !isDcbUser(user) && !isSystemUser(user);
 };
 
 export const isDcbItem = (item) => item?.instanceId === DCB_INSTANCE_ID && item?.holdingsRecordId === DCB_HOLDINGS_RECORD_ID;

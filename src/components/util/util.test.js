@@ -436,10 +436,9 @@ describe('isAffiliationsEnabled', () => {
     expect(isAffiliationsEnabled({ type: USER_TYPES.DCB })).toBeFalsy();
   });
 
-  it('should return \'true\' if a user type is other than \'patron\' and \'dcb\'', () => {
+  it('should return \'true\' if a user type is other than \'patron\' and \'dcb\' and \'system\'', () => {
     expect(isAffiliationsEnabled({ type: USER_TYPES.SHADOW })).toBeTruthy();
     expect(isAffiliationsEnabled({ type: USER_TYPES.STAFF })).toBeTruthy();
-    expect(isAffiliationsEnabled({ type: USER_TYPES.SYSTEM })).toBeTruthy();
   });
 });
 
