@@ -1236,6 +1236,6 @@
     "title.patronBlock.edit": "Użytkownicy - edytuj blokadę czytelnika",
     "accounts.history.columns.actions": "Akcje",
     "charge.item.barcode.error": "No item with barcode {barcode} could be found",
-    "information.pronouns": "Pronouns",
+    "information.pronouns": "Zaimki",
     "errors.personal.pronounsCharLimit": "Zaimki są ograniczone do 300 znaków"
 }
