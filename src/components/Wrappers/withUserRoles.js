@@ -61,7 +61,7 @@ const withUserRoles = (WrappedComponent) => (props) => {
   [userId, setAssignedRoleIdsOnLoad, tenantId]);
 
   const updateUserRoles = (roleIds) => {
-    Object.keys(roleIds).forEach((tenantIdKey) => {
+    Object.keys(roleIds).forEach(async (tenantIdKey) => {
       // Individually override header for each request.
       const putApi = ky.extend({
         hooks: {
@@ -76,10 +76,8 @@ const withUserRoles = (WrappedComponent) => (props) => {
           }
         },
       ).json()
-        .then(async () => {
-          await queryClient.invalidateQueries(affiliationRolesNamespace);
-        })
-      // eslint-disable-next-line no-console
+        .then(await queryClient.invalidateQueries(affiliationRolesNamespace))
+        // eslint-disable-next-line no-console
         .catch(sendErrorCallout);
     });
   };
