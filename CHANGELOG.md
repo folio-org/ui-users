@@ -22,6 +22,7 @@
 * New fields are included when printing a due-date receipt, e.g. `{{item.physicalDescriptions}}`. Fixes UIU-3332.
 * Hide an affiliation accordion for system users. Refs UIU-3308.
 * Ensure user detail page updates with latest roles after adding/removing roles. Refs UIU-3333.
+* Fix "Preferred email communications" `itemToString` error. Refs UIU-3335.
 
 ## [11.0.11](https://github.com/folio-org/ui-users/tree/v11.0.11) (2025-01-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.10...v11.0.11)
