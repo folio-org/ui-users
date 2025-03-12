@@ -1,12 +1,18 @@
 import React from 'react';
 import { cleanup, render, waitFor } from '@folio/jest-config-stripes/testing-library/react';
-import { useStripes, useOkapiKy } from '@folio/stripes/core';
+import { useStripes, useOkapiKy, useNamespace } from '@folio/stripes/core';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import withUserRoles from './withUserRoles';
 import { useAllRolesData } from '../../hooks';
+import { useQueryClient } from 'react-query';
+
+jest.mock('react-query', () => ({
+  useQueryClient: jest.fn(() => ({ invalidateQueries: jest.fn() })),
+}));
 
 jest.mock('@folio/stripes/core', () => ({
   useCallout: jest.fn(() => ({ sendCallout: jest.fn() })),
+  useNamespace: jest.fn(() => ['test-namespace']),
   useStripes: jest.fn(),
   useOkapiKy: jest.fn(),
 }));
