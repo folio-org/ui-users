@@ -21,6 +21,7 @@
 * *BREAKING* Migrate react-intl to v7. Refs UIU-3328.
 * New fields are included when printing a due-date receipt, e.g. `{{item.physicalDescriptions}}`. Fixes UIU-3332.
 * Hide an affiliation accordion for system users. Refs UIU-3308.
+* When viewing the detail page for a reminder fee, show the returned date (if any) of the associated loan. Fixes UIU-3187.
 
 ## [11.0.11](https://github.com/folio-org/ui-users/tree/v11.0.11) (2025-01-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.10...v11.0.11)
