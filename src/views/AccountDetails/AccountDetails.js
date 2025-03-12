@@ -686,9 +686,9 @@ feeFineActions
               <KeyValue
                 label={<FormattedMessage id="ui-users.details.field.returnedate" />}
                 value={
-                  account.returnedDate
+                  loan[0]?.returnDate
                     ? <FormattedTime
-                        value={account.returnedDate}
+                        value={loan[0]?.returnDate}
                         day="numeric"
                         month="numeric"
                         year="numeric"
