@@ -1,8 +1,7 @@
 import React from 'react';
 import { cleanup, render, waitFor } from '@folio/jest-config-stripes/testing-library/react';
-import { useStripes, useOkapiKy, useNamespace } from '@folio/stripes/core';
+import { useStripes, useOkapiKy } from '@folio/stripes/core';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
-import { useQueryClient } from 'react-query';
 import withUserRoles from './withUserRoles';
 import { useAllRolesData } from '../../hooks';
 
