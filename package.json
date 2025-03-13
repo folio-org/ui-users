@@ -1218,7 +1218,7 @@
     "hashcode": "^1.0.3",
     "html-to-react": "^1.7.0",
     "jspdf": "^3.0.0",
-    "jspdf-autotable": "^3.5.14",
+    "jspdf-autotable": "^5.0.2",
     "lodash": "^4.17.4",
     "moment-timezone": "^0.5.43",
     "prop-types": "^15.5.10",
