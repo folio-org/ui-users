@@ -1,6 +1,8 @@
 # Change history for ui-users
 
-## [12.0.0] In progress
+## [12.0.0](https://github.com/folio-org/ui-users/tree/v12.0.0) (2025-03-13)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.11...v12.0.0)
+
 * `useUserTenantRoles` supplies `tenantId` in all its queries. Refs UIU-3279.
 * Leverage API supported sorting of columns on pre-registrations records list. Refs UIU-3249.
 * Fix issue with `Proxy borrower` field value. Refs UIU-3290.
