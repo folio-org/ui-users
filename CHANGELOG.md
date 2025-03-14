@@ -3,7 +3,7 @@
 ## [12.0.1] In Progress
 
 * Fix bug where save button is not always enabled when saving roles to multiple affiliations. Refs UIU-3331.
-
+* Fix detail page not immediately updated after editing user roles. Refs UIU-3333.
 
 ## [12.0.0](https://github.com/folio-org/ui-users/tree/v12.0.0) (2025-03-13)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.11...v12.0.0)
@@ -32,7 +32,6 @@
 * Add fallback / optional chaining guard for "Preferred email communications" `itemToString` prop for when `option` is `null` or `undefined`. Refs UIU-3335.
 * When viewing the detail page for a reminder fee, show the returned date (if any) of the associated loan. Fixes UIU-3187.
 * *BREAKING* Upgrade plugin-find-user to v8. Refs UIU-3342.
-
 
 ## [11.0.11](https://github.com/folio-org/ui-users/tree/v11.0.11) (2025-01-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.10...v11.0.11)
