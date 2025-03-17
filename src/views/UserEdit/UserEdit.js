@@ -57,7 +57,7 @@ class UserEdit extends React.Component {
     tenantId: PropTypes.string,
     setTenantId: PropTypes.func,
     isCreateKeycloakUserConfirmationOpen: PropTypes.bool,
-    initialAssignedRoleIds: PropTypes.arrayOf(PropTypes.string),
+    initialAssignedRoleIds: PropTypes.object,
     checkAndHandleKeycloakAuthUser: PropTypes.func,
     confirmCreateKeycloakUser: PropTypes.func
   }

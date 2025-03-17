@@ -1,10 +1,9 @@
 import React from 'react';
 import { cleanup, render, waitFor } from '@folio/jest-config-stripes/testing-library/react';
-import { useStripes, useOkapiKy, useNamespace } from '@folio/stripes/core';
+import { useStripes, useOkapiKy } from '@folio/stripes/core';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import withUserRoles from './withUserRoles';
-import { useAllRolesData } from '../../hooks';
-import { useQueryClient } from 'react-query';
+import { useAllRolesData, useUserAffiliationRoles } from '../../hooks';
 
 jest.mock('react-query', () => ({
   useQueryClient: jest.fn(() => ({ invalidateQueries: jest.fn() })),
@@ -22,6 +21,7 @@ jest.mock('../../hooks', () => ({
     mutateAsync: jest.fn()
   })),
   useAllRolesData: jest.fn(),
+  useUserAffiliationRoles: jest.fn(),
 }));
 
 const mockStripes = {
@@ -41,6 +41,10 @@ const mockRolesData = {
   ]),
 };
 
+const mockUserAffiliationRoles = {
+  consortium: ['role1', 'role2'],
+};
+
 const mockKy = {
   extend: () => ({
     get: jest.fn().mockImplementationOnce(() => ({
@@ -48,6 +52,7 @@ const mockKy = {
     })).mockImplementationOnce(() => Promise.resolve(true)),
     put: jest.fn(() => ({
       json: () => Promise.resolve(),
+      catch: jest.fn(() => Promise.resolve({ status: 400 })),
     })),
   }),
 };
@@ -84,6 +89,7 @@ describe('withUserRoles HOC', () => {
   beforeEach(() => {
     useStripes.mockReturnValue(mockStripes);
     useAllRolesData.mockReturnValue(mockRolesData);
+    useUserAffiliationRoles.mockReturnValue(mockUserAffiliationRoles);
     useOkapiKy.mockReturnValue(mockKy);
   });
 
