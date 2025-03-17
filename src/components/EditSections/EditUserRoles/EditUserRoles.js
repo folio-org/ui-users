@@ -164,8 +164,12 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
         />
         <OnChange name="assignedRoleIds">
           {(userAssignedRoleIds) => {
-            const userRoleIds = isEmpty(userAssignedRoleIds) ? [] : userAssignedRoleIds;
-            setAssignedRoleIds(userRoleIds);
+            setAssignedRoleIds((prevAssignedRoleIds) => {
+              if (isEmpty(userAssignedRoleIds)) {
+                return { ...prevAssignedRoleIds, [tenantId]: [] };
+              }
+              return { ...prevAssignedRoleIds, [tenantId]: userAssignedRoleIds[tenantId] };
+            });
           }}
         </OnChange>
       </div>
