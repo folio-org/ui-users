@@ -43,9 +43,7 @@ const withUserRoles = (WrappedComponent) => (props) => {
           userId,
           roleIds: roleIds[tenantIdKey],
         }
-      }).catch((error) => {
-        sendErrorCallout(error);
-      });
+      }).catch(sendErrorCallout);
     });
 
     await Promise.allSettled(requests);
