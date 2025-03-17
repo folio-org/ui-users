@@ -30,15 +30,19 @@ class RequestFeeFineBlockButtons extends React.Component {
 
     return (
       <div data-test-actions-menu>
-        <IfPermission perm="ui-requests.all">
+        <IfPermission perm="ui-users.patron-blocks.all">
           <Button
             buttonStyle="dropdownItem"
-            data-test-actions-menu-create-request
-            to={createRequestUrl}
+            data-test-actions-menu-create-patronblocks
+            id="create-patron-block"
+            to={{
+              pathname: `/users/${userId}/patronblocks/create`,
+              search: location.search,
+            }}
             onClick={onToggle}
           >
             <Icon icon="plus-sign">
-              <FormattedMessage id="ui-users.requests.createRequest" />
+              <FormattedMessage id="ui-users.blocks.buttons.add" />
             </Icon>
           </Button>
         </IfPermission>
@@ -54,19 +58,15 @@ class RequestFeeFineBlockButtons extends React.Component {
             </Icon>
           </Button>
         </IfPermission>
-        <IfPermission perm="ui-users.patron-blocks.all">
+        <IfPermission perm="ui-requests.all">
           <Button
             buttonStyle="dropdownItem"
-            data-test-actions-menu-create-patronblocks
-            id="create-patron-block"
-            to={{
-              pathname: `/users/${userId}/patronblocks/create`,
-              search: location.search,
-            }}
+            data-test-actions-menu-create-request
+            to={createRequestUrl}
             onClick={onToggle}
           >
             <Icon icon="plus-sign">
-              <FormattedMessage id="ui-users.blocks.buttons.add" />
+              <FormattedMessage id="ui-users.requests.createRequest" />
             </Icon>
           </Button>
         </IfPermission>

@@ -487,16 +487,6 @@ class UserDetail extends React.Component {
     if (showActionMenu && !isVirtualPatron) {
       return (
         <>
-          {!isShadowUserType && (
-            <IfInterface name="feesfines">
-              <RequestFeeFineBlockButtons
-                barcode={barcode}
-                onToggle={onToggle}
-                userId={this.props.match.params.id}
-                disabled={isShadowUserType}
-              />
-            </IfInterface>
-          )}
           <ActionMenuEditButton
             id={this.props.match.params.id}
             suppressList={this.props.resources.suppressEdit}
@@ -512,6 +502,16 @@ class UserDetail extends React.Component {
               callout={this.callout}
             />
           </IfInterface>
+          {!isShadowUserType && (
+            <IfInterface name="feesfines">
+              <RequestFeeFineBlockButtons
+                barcode={barcode}
+                onToggle={onToggle}
+                userId={this.props.match.params.id}
+                disabled={isShadowUserType}
+              />
+            </IfInterface>
+          )}
           {
             isProfilePictureFeatureEnabled && (
               <PrintLibraryCardButton
