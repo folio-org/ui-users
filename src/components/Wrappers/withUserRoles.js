@@ -26,9 +26,13 @@ const withUserRoles = (WrappedComponent) => (props) => {
     }
   });
 
+  const stringifiedInitialAssignedRoleIds = JSON.stringify(initialAssignedRoleIds);
+
   useEffect(() => {
     setAssignedRoleIds(initialAssignedRoleIds);
-  }, [JSON.stringify(initialAssignedRoleIds)]);
+    // on each re-render reference to initialAssignedRoleIds are different, so putting initialAssignedRoleIds to deps causes infinite trigger
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stringifiedInitialAssignedRoleIds]);
 
   const updateUserRoles = async (roleIds) => {
     const requests = Object.keys(roleIds).map((tenantIdKey) => {
