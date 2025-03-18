@@ -1,6 +1,9 @@
 # Change history for ui-users
 
-## [12.1.0] In Progress
+## 12.2.0 IN PROGRESS
+
+## [12.1.0](https://github.com/folio-org/ui-users/tree/v12.1.0) (2025-03-18)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v12.0.0...v12.1.0)
 
 * Fetch roles from all affiliations to set the baseline in `initialAssignedRoleIds` and add/subtract in `assignedRoleIds` so react-final-form can make a proper comparison. Refs UIU-3331.
 * Refactor `updateUserRoles` to await all promises before closing the edit view. Refs UIU-3333.
