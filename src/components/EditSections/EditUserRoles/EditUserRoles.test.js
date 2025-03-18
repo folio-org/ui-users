@@ -41,7 +41,7 @@ const STRIPES = {
   hasPerm: jest.fn().mockReturnValue(true),
   hasInterface: jest.fn().mockReturnValue(true),
   okapi: {
-    tenant: 'diku',
+    tenant: 'consortium',
   },
   user: {
     user: {
@@ -49,6 +49,8 @@ const STRIPES = {
     },
   },
 };
+
+const mockInitialRoles = { 'consortium': ['1', '2'], 'college': ['3'] };
 
 const mockAllRolesData = {
   data: {
@@ -85,7 +87,7 @@ const arrayMutators = {
 const renderEditRolesAccordion = (props) => {
   const component = () => <EditUserRoles {...props} />;
   return renderWithRouter(<Form
-    initialValues={{ assignedRoleIds: { 'consortium': ['1', '2'] } }}
+    initialValues={{ assignedRoleIds: mockInitialRoles }}
     id="form-user"
     mutators={{
       ...arrayMutators
@@ -100,7 +102,7 @@ const propsData = {
   form: {
     change: mockChangeFunction,
   },
-  assignedRoleIds: { 'consortium': ['1', '2'] },
+  assignedRoleIds: mockInitialRoles,
   setAssignedRoleIds: jest.fn(),
   user: {
     id: '1'
@@ -133,6 +135,25 @@ describe('EditUserRoles Component', () => {
     expect(getByText('test role')).toBeInTheDocument();
     expect(getByText('admin role')).toBeInTheDocument();
     expect(queryByText('simple role')).not.toBeInTheDocument();
+  });
+
+  it('shows the list of user roles when switching affiliations', () => {
+    let { getByText, queryByText } = renderEditRolesAccordion(propsData);
+
+    expect(getByText('test role')).toBeInTheDocument();
+    expect(getByText('admin role')).toBeInTheDocument();
+    expect(queryByText('simple role')).not.toBeInTheDocument();
+
+    cleanup();
+
+    ({ getByText, queryByText } = renderEditRolesAccordion({
+      ...propsData,
+      tenantId: 'college'
+    }));
+
+    expect(queryByText('test role')).not.toBeInTheDocument();
+    expect(queryByText('admin role')).not.toBeInTheDocument();
+    expect(getByText('simple role')).toBeInTheDocument();
   });
 
   it('hides the roles accordion when user doesn\'t have view roles permission', () => {
