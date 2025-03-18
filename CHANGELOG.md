@@ -1,5 +1,7 @@
 # Change history for ui-users
 
+## 12.2.0 IN PROGRESS
+
 ## [12.1.0](https://github.com/folio-org/ui-users/tree/v12.1.0) (2025-03-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.0.0...v12.1.0)
 
