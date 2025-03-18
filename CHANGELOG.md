@@ -1,5 +1,8 @@
 # Change history for ui-users
 
+## (IN PROGRESS)
+* Use number gernerator for barcode. Refs UIU-2729.
+
 ## [12.0.0](https://github.com/folio-org/ui-users/tree/v12.0.0) (2025-03-13)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.11...v12.0.0)
 

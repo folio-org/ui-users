@@ -16,6 +16,7 @@ import CustomFieldsSettingsPane from './CustomFieldsSettings';
 import ConditionsSettings from './ConditionsSettings';
 import LimitsSettings from './LimitsSettings';
 import DepartmentsSettings from './DepartmentsSettings';
+import NumberGeneratorSettings from './NumberGeneratorSettings';
 import BlockTemplates from './patronBlocks/BlockTemplates';
 import TransferCriteriaSettings from './TransferCriteriaSettings';
 
@@ -54,6 +55,12 @@ const settingsGeneral = [
   //     component: ProfilePictureSettings,
   //     perm: 'ui-users.settings.profilePictures'
   //   },
+  {
+    component: NumberGeneratorSettings,
+    label: <FormattedMessage id="ui-users.settings.numberGenerator.options" />,
+    perm: 'ui-users.settings.manage-number-generator-options',
+    route: 'number-generator-options',
+  },
   {
     route: 'custom-fields',
     label: <FormattedMessage id="ui-users.settings.customFields" />,
