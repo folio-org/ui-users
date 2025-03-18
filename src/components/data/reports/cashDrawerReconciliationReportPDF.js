@@ -46,7 +46,7 @@ class CashDrawerReconciliationReportPDF extends CashDrawerReconciliationReport {
 
   generateTableColumns(columns) {
     return columns.map(value => ({
-      title: this.formatMessage({ id: `ui-users.reports.cash.${value}` }),
+      header: this.formatMessage({ id: `ui-users.reports.cash.${value}` }),
       dataKey: this.formatMessage({ id: `ui-users.reports.cash.${value}` })
     }));
   }
