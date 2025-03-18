@@ -1,7 +1,14 @@
 # Change history for ui-users
 
-## (IN PROGRESS)
+## 12.2.0 IN PROGRESS
 * Use number gernerator for barcode. Refs UIU-2729.
+
+## [12.1.0](https://github.com/folio-org/ui-users/tree/v12.1.0) (2025-03-18)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v12.0.0...v12.1.0)
+
+* Fetch roles from all affiliations to set the baseline in `initialAssignedRoleIds` and add/subtract in `assignedRoleIds` so react-final-form can make a proper comparison. Refs UIU-3331.
+* Refactor `updateUserRoles` to await all promises before closing the edit view. Refs UIU-3333.
+* Rename user details actions buttons and change order. Refs UIU-3121.
 
 ## [12.0.0](https://github.com/folio-org/ui-users/tree/v12.0.0) (2025-03-13)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.11...v12.0.0)
