@@ -40,6 +40,7 @@
 * Fetch roles from all affiliations to set the baseline in `initialAssignedRoleIds` and add/subtract in `assignedRoleIds` so react-final-form can make a proper comparison. Refs UIU-3331.
 * Refactor `updateUserRoles` to await all promises before closing the edit view. Refs UIU-3333.
 * Rename user details actions buttons and change order. Refs UIU-3121.
+* Update jspdf(to v3.0.0) and jspdf-autotable(to v5.0.2) for security. Refs UIU-3347.
 
 ## [12.0.0](https://github.com/folio-org/ui-users/tree/v12.0.0) (2025-03-13)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.11...v12.0.0)
@@ -195,7 +196,7 @@
 * *BREAKING* Add new okapi interface staging-users. Add action button for searching patrons pre registration records. Refs UIU-3219.
 * Display patrons pre registration records results. Refs UIU-3222
 * Create new permission 'Users: Can view patron preregistration data'. Refs UIU-3221.
-* Omit `assignedRoleIds` field on edit user. Refs UIU-3233. 
+* Omit `assignedRoleIds` field on edit user. Refs UIU-3233.
 * Review existing FOLIO user records on duplicates view. Refs UIU-3224.
 * Create new permission 'Users: Can merge patron preregistration data'. Refs UIU-3237.
 * Confirmation dialog when JIT AuthUser creation is required. Refs UIU-3192.

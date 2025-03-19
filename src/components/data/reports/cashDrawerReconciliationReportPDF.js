@@ -46,7 +46,7 @@ class CashDrawerReconciliationReportPDF extends CashDrawerReconciliationReport {
 
   generateTableColumns(columns) {
     return columns.map(value => ({
-      title: this.formatMessage({ id: `ui-users.reports.cash.${value}` }),
+      header: this.formatMessage({ id: `ui-users.reports.cash.${value}` }),
       dataKey: this.formatMessage({ id: `ui-users.reports.cash.${value}` })
     }));
   }
@@ -138,7 +138,7 @@ class CashDrawerReconciliationReportPDF extends CashDrawerReconciliationReport {
 
     autoTable(this.doc, {
       ...autoTableOptions,
-      startY: this.doc.autoTable.previous.finalY + 5,
+      startY: this.doc.lastAutoTable.finalY + 5,
       columns: [...this.sourceReportColumnsMap],
       body: [...getSourceReportValues],
       foot: this.buildFooter(getSourceReportFooter, 'sourceTotal'),
@@ -152,7 +152,7 @@ class CashDrawerReconciliationReportPDF extends CashDrawerReconciliationReport {
 
     autoTable(this.doc, {
       ...autoTableOptions,
-      startY: this.doc.autoTable.previous.finalY + 5,
+      startY: this.doc.lastAutoTable.finalY + 5,
       columns: [...this.cashPaymentMethodReportColumnsMap],
       body: [...getByPaymentMethodReportValues],
       foot: this.buildFooter(getByPaymentMethodReportFooter, 'paymentTotal'),
@@ -166,7 +166,7 @@ class CashDrawerReconciliationReportPDF extends CashDrawerReconciliationReport {
 
     autoTable(this.doc, {
       ...autoTableOptions,
-      startY: this.doc.autoTable.previous.finalY + 5,
+      startY: this.doc.lastAutoTable.finalY + 5,
       columns: [...this.cashFeeFineTypeReportColumnsMap],
       body: [...getByFeeFineTypeReportValues],
       foot: this.buildFooter(getByFeeFineTypeReportFooter, 'typeTotal'),
@@ -180,7 +180,7 @@ class CashDrawerReconciliationReportPDF extends CashDrawerReconciliationReport {
 
     autoTable(this.doc, {
       ...autoTableOptions,
-      startY: this.doc.autoTable.previous.finalY + 5,
+      startY: this.doc.lastAutoTable.finalY + 5,
       columns: [...this.cashFeeFineOwnerReportColumnsMap],
       body: [...getByFeeFineOwnerReportValues],
       foot: this.buildFooter(getByFeeFineOwnerReportFooter, 'ownerTotal'),
