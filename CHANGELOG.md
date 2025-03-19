@@ -1,6 +1,7 @@
 # Change history for ui-users
 
 ## 13.0.0 IN PROGRESS
+* Collect coverage from unit tests. Refs UIU-3356.
 * Use number gernerator for barcode. Refs UIU-2729.
 
 ## [12.1.0](https://github.com/folio-org/ui-users/tree/v12.1.0) (2025-03-18)

@@ -1200,7 +1200,7 @@
     "build": "stripes build",
     "lint": "eslint .",
     "test": "yarn run test:jest",
-    "test:jest": "jest",
+    "test:jest": "jest --coverage",
     "build-mod-descriptor": "stripes mod descriptor --full --strict | jq '.[]' > module-descriptor.json ",
     "formatjs-compile": "stripes translate compile"
   },
