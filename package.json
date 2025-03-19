@@ -396,7 +396,7 @@
         "visible": false
       },
       {
-        "permissionName": "ui-users.settings.manage-number-generator-options",	
+        "permissionName": "ui-users.settings.number-generator-options.all",	
         "displayName": "Settings (Users): Manage number generator options",
         "subPermissions": [
           "settings.users.enabled",

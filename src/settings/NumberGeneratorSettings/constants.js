@@ -14,7 +14,7 @@ export const NUMBER_GENERATOR_SETTINGS_SCOPE = 'ui-users.number-generator-settin
 
 export const BARCODE_SETTING = 'barcode';
 
-export const SERVICE_INTERACTION_API = '/settings/service-interaction';
-export const SERVICE_INTERACTION_NUMBER_GENERATOR_SEQUENCES_API = '/settings/service-interaction/numberGeneratorSequences/';
+export const SERVICE_INTERACTION_LINK = '/settings/service-interaction';
+export const SERVICE_INTERACTION_NUMBER_GENERATOR_SEQUENCES_LINK = '/settings/service-interaction/numberGeneratorSequences/';
 
 export const MOD_SETTINGS_API = 'settings/entries';

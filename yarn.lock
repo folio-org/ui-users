@@ -2037,9 +2037,9 @@
     minimist "^1.2.0"
 
 "@folio/stripes-testing@^5.0.0":
-  version "5.1.109900000000466"
-  resolved "https://repository.folio.org/repository/npm-folioci/@folio/stripes-testing/-/stripes-testing-5.1.109900000000466.tgz#ef087ffab91109cfe5511bf25e450a71fe771bce"
-  integrity sha512-JePKX8lb5jIyeFj/ohzmZqqUjKKJ6MDl4GA8htKw5gI4SmYqx0cazC09rV+16oq3K7AQULRoVknyv8ekx5HMEw==
+  version "5.1.109900000000472"
+  resolved "https://repository.folio.org/repository/npm-folioci/@folio/stripes-testing/-/stripes-testing-5.1.109900000000472.tgz#51d242c131eab82f8b8902478c23dc5dddbe1ccf"
+  integrity sha512-kUcAi+H11Kzb1IkV4fglzot1+XdTeMwkGb904DzG24oAG9UxOofpdSvF5NLpfvikvDsIbweu4wBpcqbPK/p2mw==
   dependencies:
     "@babel/core" "^7.19.3"
     "@babel/eslint-parser" "^7.19.1"
@@ -11101,9 +11101,9 @@ nano-time@1.0.0:
     big-integer "^1.6.16"
 
 nanoid@^3.3.4, nanoid@^3.3.8:
-  version "3.3.10"
-  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.10.tgz#7bc882237698ef787d5cbba109e3b0168ba6e7b1"
-  integrity sha512-vSJJTG+t/dIKAUhUDw/dLdZ9s//5OxcHqLaDWWrW4Cdq7o6tdLIczUkMXt2MBNmk6sJRZBZRXVixs7URY1CmIg==
+  version "3.3.11"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.11.tgz#4f4f112cefbe303202f2199838128936266d185b"
+  integrity sha512-N8SpfPUnUp1bK+PMYW8qSWdl9U+wwNWI4QKxOYDy9JAro3WMX7p2OeVRF9v+347pnakNevPmiHhNmZ2HbFA76w==
 
 napi-build-utils@^2.0.0:
   version "2.0.0"
@@ -12419,9 +12419,9 @@ rc@1.2.8, rc@^1.2.7:
     strip-json-comments "~2.0.1"
 
 react-barcode@^1.5.3:
-  version "1.5.3"
-  resolved "https://registry.yarnpkg.com/react-barcode/-/react-barcode-1.5.3.tgz#d9e887d87004062e7901d250dbd8f112c47f8544"
-  integrity sha512-EJPUwuERKpApcQ9qXzdVZzddFYRT7+3R/jJ3OrTfW6m2iq+WT+CBaVB7DsQazhPRXDfMcx9+dmMmzjsmveOViQ==
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/react-barcode/-/react-barcode-1.6.1.tgz#cb0437299536a74e1a371631713cbff29026e555"
+  integrity sha512-pc4ftnO5syHa/UjCruEeRsomlhoxKSugIgTA8T4dH0fvc89UMHL+/1Sp25IAphqG44pJkE5hMXhv89iS09jQyw==
   dependencies:
     jsbarcode "^3.8.0"
     prop-types "^15.6.2"

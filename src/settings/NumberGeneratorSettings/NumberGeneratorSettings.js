@@ -17,8 +17,8 @@ import {
   NUMBER_GENERATOR_OPTIONS,
   NUMBER_GENERATOR_SETTINGS_KEY,
   NUMBER_GENERATOR_SETTINGS_SCOPE,
-  SERVICE_INTERACTION_API,
-  SERVICE_INTERACTION_NUMBER_GENERATOR_SEQUENCES_API,
+  SERVICE_INTERACTION_LINK,
+  SERVICE_INTERACTION_NUMBER_GENERATOR_SEQUENCES_LINK,
 } from './constants';
 
 const NumberGeneratorSettings = () => {
@@ -56,13 +56,13 @@ const NumberGeneratorSettings = () => {
                 id="ui-users.settings.numberGenerator.infoAdditional"
                 values={{
                   serviceInteractionLink: (
-                    <Link to={SERVICE_INTERACTION_API}>
+                    <Link to={SERVICE_INTERACTION_LINK}>
                       <FormattedMessage id="stripes-core.settings" />{' > '}
                       <FormattedMessage id="ui-service-interaction.meta.title" />
                     </Link>
                   ),
                   numberGeneratorSequencesLink: (
-                    <Link to={SERVICE_INTERACTION_NUMBER_GENERATOR_SEQUENCES_API}>
+                    <Link to={SERVICE_INTERACTION_NUMBER_GENERATOR_SEQUENCES_LINK}>
                       <FormattedMessage id="stripes-core.settings" />{' > '}
                       <FormattedMessage id="ui-service-interaction.meta.title" />{' > '}
                       <FormattedMessage id="ui-service-interaction.settings.numberGeneratorSequences" />

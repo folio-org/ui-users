@@ -38,10 +38,10 @@ const settingsGeneral = [
     perm: 'ui-users.settings.departments.view'
   },
   {
-    component: NumberGeneratorSettings,
-    label: <FormattedMessage id="ui-users.settings.numberGenerator.options" />,
-    perm: 'ui-users.settings.manage-number-generator-options',
     route: 'number-generator-options',
+    label: <FormattedMessage id="ui-users.settings.numberGenerator.options" />,
+    component: NumberGeneratorSettings,
+    perm: 'ui-users.settings.number-generator-options.all',
   },
   {
     route: 'custom-fields',
