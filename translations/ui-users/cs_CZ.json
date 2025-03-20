@@ -151,7 +151,7 @@
     "duplicated": "{field} již existuje",
     "showTags": "Zobrazit štítky",
     "accounts.open": "Otevřené",
-    "accounts.closed": "Uzavřené",
+    "accounts.closed": "Zavřený",
     "accounts.all": "Všechny",
     "accounts.numOpenAccounts": "{count, number} {count, plural, one {otevřený poplatek/pokuta} other {otevřené poplatky/pokuty}}",
     "accounts.numClosedAccounts": "{count, number} {count, plural, one {uzavřený poplatek/pokuta} other {uzavřené poplatky/pokuty}}",
