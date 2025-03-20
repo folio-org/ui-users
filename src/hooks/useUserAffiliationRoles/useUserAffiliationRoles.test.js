@@ -35,33 +35,58 @@ describe('useUserAffiliationRoles', () => {
     jest.clearAllMocks();
   });
 
-  it('should return user roles for each tenant', async () => {
+  it('should return user roles for each tenant sorted alphabetically by role name', async () => {
     const userId = 'testUserId';
-    const mockData = [
-      { userRoles: [{ roleId: 'role1' }, { roleId: 'role2' }] },
-      { userRoles: [{ roleId: 'role3' }] },
-    ];
 
-    useQueries.mockReturnValue([
-      { data: mockData[0] },
-      { data: mockData[1] },
-    ]);
+    useQueries.mockImplementation((queries) => queries.map(({ queryKey }, index) => {
+      if (queryKey[0].includes('userTenantRoles')) {
+        if (index === 0) {
+          return {
+            data: { userRoles: [{ roleId: 'userRoleId' }, { roleId: 'adminRoleId' }] },
+            isLoading: false,
+            isError: false,
+          };
+        }
+        return {
+          data: { userRoles: [{ roleId: 'tenant2monkey' }] },
+          isLoading: false,
+          isError: false,
+        };
+      }
+      if (queryKey[0].includes('tenantRolesAllRecords')) {
+        if (index === 0) {
+          return {
+            data: { roles: [{ id: 'userRoleId', name: 'User' }, { id: 'adminRoleId', name: 'Admin' }] },
+            isLoading: false,
+            isError: false,
+          };
+        }
+        return {
+          data: { roles: [{ id: 'tenant2monkey', name: 'Monkey' }, { id: 'tenant4Monkey', name: 'Excluded' }] },
+          isLoading: false,
+          isError: false,
+        };
+      }
+      return { data: undefined, isLoading: false, isError: false };
+    }));
 
     const { result } = renderHook(() => useUserAffiliationRoles(userId));
 
-    await waitFor(() => expect(result.current).toEqual({
-      tenant1: ['role1', 'role2'],
-      tenant2: ['role3'],
-    }));
+    expect(result.current).toEqual({ tenant1: ['adminRoleId', 'userRoleId'], tenant2: ['tenant2monkey'] });
   });
 
   it('should return empty arrays if no roles are found', async () => {
     const userId = 'testUserId';
 
-    useQueries.mockReturnValue([
-      { data: { userRoles: [] } },
-      { data: { userRoles: [] } },
-    ]);
+    useQueries.mockImplementation((queries) => queries.map(({ queryKey }) => {
+      if (queryKey[0].includes('userTenantRoles')) {
+        return { data: { userRoles: [] } };
+      }
+      if (queryKey[0].includes('tenantRolesAllRecords')) {
+        return { data: { roles: [] } };
+      }
+      return { data: undefined, isLoading: false, isError: false };
+    }));
 
     const { result } = renderHook(() => useUserAffiliationRoles(userId));
 
@@ -75,14 +100,20 @@ describe('useUserAffiliationRoles', () => {
     const userId = 'testUserId';
     mockStripes.user.user.tenants = null;
 
-    useQueries.mockReturnValue([
-      { data: { userRoles: [{ roleId: 'role1' }] } },
-    ]);
+    useQueries.mockImplementation((queries) => queries.map(({ queryKey }) => {
+      if (queryKey[0].includes('userTenantRoles')) {
+        return { data: { userRoles: [] } };
+      }
+      if (queryKey[0].includes('tenantRolesAllRecords')) {
+        return { data: { roles: [] } };
+      }
+      return { data: undefined, isLoading: false, isError: false };
+    }));
 
     const { result } = renderHook(() => useUserAffiliationRoles(userId));
 
     await waitFor(() => expect(result.current).toEqual({
-      defaultTenant: ['role1'],
+      defaultTenant: [],
     }));
   });
 });
