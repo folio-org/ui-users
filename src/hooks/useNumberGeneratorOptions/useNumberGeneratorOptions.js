@@ -31,7 +31,7 @@ const useNumberGeneratorOptions = () => {
       const settingValue = response?.items?.[0]?.value;
 
       return {
-        barcode: settingValue.barcode || '',
+        barcode: settingValue?.barcode || '',
       };
     },
   });

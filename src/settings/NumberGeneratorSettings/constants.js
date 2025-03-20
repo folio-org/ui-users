@@ -12,6 +12,7 @@ export const NUMBER_GENERATOR_OPTIONS = [
 export const NUMBER_GENERATOR_SETTINGS_KEY = 'number-generator-settings';
 export const NUMBER_GENERATOR_SETTINGS_SCOPE = 'ui-users.number-generator-settings.manage';
 
+export const BARCODE_GENERATOR_CODE = 'users_patronBarcode';
 export const BARCODE_SETTING = 'barcode';
 
 export const SERVICE_INTERACTION_LINK = '/settings/service-interaction';

@@ -31,6 +31,7 @@ import { ChangeUserTypeModal, EditUserProfilePicture } from './components';
 import css from './EditUserInfo.css';
 import { validateLength } from '../../validators/validateLength';
 import {
+  BARCODE_GENERATOR_CODE,
   BARCODE_SETTING,
   NUMBER_GENERATOR_OPTIONS_ON_EDITABLE,
   NUMBER_GENERATOR_OPTIONS_ON_NOT_EDITABLE,
@@ -393,7 +394,7 @@ class EditUserInfo extends React.Component {
                       callback={(generated) => form.change('barcode', generated)}
                       id="userbarcode"
                       generateButtonLabel={<FormattedMessage id="ui-users.numberGenerator.generateBarcode" />}
-                      generator="users_patronBarcode"
+                      generator={BARCODE_GENERATOR_CODE}
                       modalProps={{
                         label: <FormattedMessage id="ui-users.numberGenerator.barcodeGenerator" />
                       }}
