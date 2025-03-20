@@ -9,7 +9,7 @@ function useUserAffiliationRoles(userId) {
     query: `userId==${userId}`,
   };
 
-  // To unify in case if consortium or non-consortium
+  // To unify in case if consortium of non-consortium
   const tenants = stripes.user.user?.tenants || [{ id: stripes.okapi.tenant }];
   const ky = useOkapiKy();
 
@@ -57,7 +57,7 @@ function useUserAffiliationRoles(userId) {
       const found = tenantRolesQueries[index].data?.roles.find(r => r.id === roleId);
       if (found) assignedRoles.push(found);
     });
-    acc[tenant.id] = assignedRoles.sort((a, b) => a.name.localeCompare(b.name)).map(({ id }) => id);
+    acc[tenant.id] = [...assignedRoles].sort((a, b) => a.name.localeCompare(b.name)).map(({ id }) => id);
     return acc;
   }, {});
 }
