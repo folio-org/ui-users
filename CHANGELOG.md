@@ -3,6 +3,7 @@
 ## 12.2.0 IN PROGRESS
 * Collect coverage from unit tests. Refs UIU-3356.
 * Update jspdf(to v3.0.0) and jspdf-autotable(to v5.0.2) for security. Refs UIU-3347.
+* Modify translation string for search view: "User search -> Search & filter". Refs UIU-3231.
 
 ## [12.1.0](https://github.com/folio-org/ui-users/tree/v12.1.0) (2025-03-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.0.0...v12.1.0)
