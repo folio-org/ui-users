@@ -19,10 +19,15 @@ const ConditionalLoad = ({
     return Promise.resolve({ default: FallbackComponent });
   },
 }) => {
+  const dynamicModuleMap = {
+    '@folio/stripes/components': () => import('@folio/stripes/components'),
+    '@folio/service-interaction': () => import('@folio/service-interaction'),
+  };
+
   const Component = lazy(() => {
     // Both try/catch and promise catch are necessary here for reasons I don't quite understand, but it triggers in sonar so I'm disabling for now
     try { // NOSONAR
-      return import(importString)
+      return dynamicModuleMap[importString]()
         .then(importSuccess)
         .catch(importError);
     } catch (e) {
