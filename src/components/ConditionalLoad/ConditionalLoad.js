@@ -1,0 +1,48 @@
+import { lazy, Suspense } from 'react';
+import PropTypes from 'prop-types';
+
+import { Loading } from '@folio/stripes/components';
+
+// This effectively becomes analogous to Pluggable, except happening at the dependency load stage -- should almost certainly belong to stripes-core
+// This protects feature sets such as NumberGenerator, brought in as peer dependencies and therefore present in all platform-core builds, but not necessarily
+// in all builds with Users present.
+const ConditionalLoad = ({
+  children,
+  FallbackComponent = () => <div>Feature not available</div>,
+  importString,
+  importSuccess = m => m,
+  suppressConsoleErrors = false,
+  importError = err => {
+    if (!suppressConsoleErrors) {
+      console.error('Cannot import, using fallback component', err);
+    }
+    return Promise.resolve({ default: FallbackComponent });
+  },
+}) => {
+  const Component = lazy(() => {
+    // Both try/catch and promise catch are necessary here for reasons I don't quite understand
+    try {
+      return import(importString)
+        .then(importSuccess)
+        .catch(importError);
+    } catch (e) {
+      return importError(e);
+    }
+  });
+
+
+  return (
+    <Suspense fallback={<Loading />}>
+      {children({ Component })}
+    </Suspense>
+  );
+};
+
+ConditionalLoad.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]).isRequired,
+  importString: PropTypes.string.isRequired,
+  importSuccess: PropTypes.func,
+  importError: PropTypes.func,
+};
+
+export default ConditionalLoad;
