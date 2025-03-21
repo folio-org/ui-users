@@ -6,7 +6,6 @@ import { Field } from 'react-final-form';
 import { OnChange } from 'react-final-form-listeners';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
-import { NumberGeneratorModalButton } from '@folio/service-interaction';
 import {
   Button,
   Select,
@@ -27,6 +26,8 @@ import asyncValidateField from '../../validators/asyncValidateField';
 import validateMinDate from '../../validators/validateMinDate';
 
 import { ChangeUserTypeModal, EditUserProfilePicture } from './components';
+
+import ConditionalLoad from '../../ConditionalLoad/ConditionalLoad';
 
 import css from './EditUserInfo.css';
 import { validateLength } from '../../validators/validateLength';
@@ -388,18 +389,30 @@ class EditUserInfo extends React.Component {
                     fullWidth
                     disabled={disabled || isBarcodeDisabled}
                   />
-                  {showNumberGeneratorForBarcode &&
-                    <NumberGeneratorModalButton
-                      buttonLabel={<FormattedMessage id="ui-users.numberGenerator.generateBarcode" />}
-                      callback={(generated) => form.change('barcode', generated)}
-                      id="userbarcode"
-                      generateButtonLabel={<FormattedMessage id="ui-users.numberGenerator.generateBarcode" />}
-                      generator={BARCODE_GENERATOR_CODE}
-                      modalProps={{
-                        label: <FormattedMessage id="ui-users.numberGenerator.barcodeGenerator" />
-                      }}
-                    />
-                  }
+                  <ConditionalLoad
+                    importString="@folio/service-interaction"
+                    importSuccess={m => ({ default: m.NumberGeneratorModalButton })}
+                  >
+                    {({ Component: NumberGeneratorModalButton }) => {
+                      if (showNumberGeneratorForBarcode) {
+                        return (
+                          <NumberGeneratorModalButton
+                            buttonLabel={<FormattedMessage id="ui-users.numberGenerator.generateBarcode"/>}
+                            callback={(generated) => form.change('barcode', generated)}
+                            id="userbarcode"
+                            generateButtonLabel={<FormattedMessage id="ui-users.numberGenerator.generateBarcode"/>}
+                            generator={BARCODE_GENERATOR_CODE}
+                            modalProps={{
+                              label: <FormattedMessage id="ui-users.numberGenerator.barcodeGenerator"/>
+                            }}
+                          />
+                        );
+                      }
+
+                      return null;
+                    }
+                    })
+                  </ConditionalLoad>
                 </Col>
               </Row>
             </Col>
