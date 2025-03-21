@@ -1,12 +1,19 @@
 import { act, render, waitFor } from '@folio/jest-config-stripes/testing-library/react';
 import ConditionalLoad from './ConditionalLoad';
 
+jest.mock('@folio/stripes/components', () => {
+  return ({
+    Test: Promise.resolve({ default: () => <>Testing External</> }),
+    Loading: () => <>Loading...</>,
+  });
+});
+
 let component;
 const testConditionalLoad = (props) => async () => {
   await act(() => {
     component = render(
       <ConditionalLoad
-        suppressConsoleErrors // We don't need messy errors in the test
+        suppressConsoleErrors={false} // We don't need messy errors in the test
         {...props}
       >
         {({ Component }) => <Component />}
@@ -85,6 +92,20 @@ describe('ConditionalLoad', () => {
       const { getByText } = component;
       await waitFor(() => {
         expect(getByText('Cannot find module \'./MadeUpComponent\' from \'src/components/ConditionalLoad/ConditionalLoad.js\'')).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('external import works as expected', () => {
+    beforeEach(testConditionalLoad({
+      importString: '@folio/stripes/components',
+      importSuccess: m => m.Test,
+    }));
+
+    test('renders mocked Test Component', async () => {
+      const { getByText } = component;
+      await waitFor(() => {
+        expect(getByText('Testing External')).toBeInTheDocument();
       });
     });
   });

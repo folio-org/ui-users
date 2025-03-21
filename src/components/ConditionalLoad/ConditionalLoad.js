@@ -31,7 +31,7 @@ const ConditionalLoad = ({
     if (isLocal) {
       importFunc = () => import(importString);
     } else {
-      importFunc = () => dynamicModuleMap[importString];
+      importFunc = dynamicModuleMap[importString];
     }
 
     // Both try/catch and promise catch are necessary here for reasons I don't quite understand, but it triggers in sonar so I'm disabling for now
