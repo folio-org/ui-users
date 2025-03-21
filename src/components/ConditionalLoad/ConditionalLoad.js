@@ -58,6 +58,7 @@ ConditionalLoad.propTypes = {
   importString: PropTypes.string.isRequired,
   importSuccess: PropTypes.func,
   importError: PropTypes.func,
+  isLocal: PropTypes.bool,
   suppressConsoleErrors: PropTypes.bool,
 };
 
