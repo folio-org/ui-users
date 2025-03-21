@@ -18,7 +18,8 @@ const testConditionalLoad = (props) => async () => {
 describe('ConditionalLoad', () => {
   describe('Component renders when import succeeds', () => {
     beforeEach(testConditionalLoad({
-      importString: './TestComponent'
+      importString: './TestComponent',
+      isLocal: true
     }));
 
     test('renders Test Component', async () => {
@@ -32,7 +33,8 @@ describe('ConditionalLoad', () => {
   describe('Can get component from module import', () => {
     beforeEach(testConditionalLoad({
       importString: './TestComponent/Extra',
-      importSuccess: m => ({ default: m.Extra })
+      importSuccess: m => ({ default: m.Extra }),
+      isLocal: true
     }));
 
     test('renders Extra Component', async () => {
@@ -45,7 +47,8 @@ describe('ConditionalLoad', () => {
 
   describe('Fallback component renders when import fails', () => {
     beforeEach(testConditionalLoad({
-      importString: './MadeUpComponent'
+      importString: './MadeUpComponent',
+      isLocal: true
     }));
 
     test('renders Test Component', async () => {
@@ -59,7 +62,8 @@ describe('ConditionalLoad', () => {
   describe('Fallback component is configurable', () => {
     beforeEach(testConditionalLoad({
       importString: './MadeUpComponent',
-      FallbackComponent: () => <div>Fallback Component</div>
+      FallbackComponent: () => <div>Fallback Component</div>,
+      isLocal: true
     }));
 
     test('renders Test Component', async () => {
@@ -73,7 +77,8 @@ describe('ConditionalLoad', () => {
   describe('importError is directly configurable', () => {
     beforeEach(testConditionalLoad({
       importString: './MadeUpComponent',
-      importError: (err) => Promise.resolve(({ default: () => <div>{err.message}</div> }))
+      importError: (err) => Promise.resolve(({ default: () => <div>{err.message}</div> })),
+      isLocal: true
     }));
 
     test('renders Test Component', async () => {
