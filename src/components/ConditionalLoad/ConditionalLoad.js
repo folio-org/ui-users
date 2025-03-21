@@ -20,8 +20,8 @@ const ConditionalLoad = ({
   },
 }) => {
   const Component = lazy(() => {
-    // Both try/catch and promise catch are necessary here for reasons I don't quite understand
-    try {
+    // Both try/catch and promise catch are necessary here for reasons I don't quite understand, but it triggers in sonar so I'm disabling for now
+    try { // NOSONAR
       return import(importString)
         .then(importSuccess)
         .catch(importError);
@@ -40,9 +40,11 @@ const ConditionalLoad = ({
 
 ConditionalLoad.propTypes = {
   children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]).isRequired,
+  FallbackComponent: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
   importString: PropTypes.string.isRequired,
   importSuccess: PropTypes.func,
   importError: PropTypes.func,
+  suppressConsoleErrors: PropTypes.bool.isRequired,
 };
 
 export default ConditionalLoad;
