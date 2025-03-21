@@ -34,14 +34,9 @@ const ConditionalLoad = ({
       importFunc = dynamicModuleMap[importString];
     }
 
-    // Both try/catch and promise catch are necessary here for reasons I don't quite understand, but it triggers in sonar so I'm disabling for now
-    try { // NOSONAR
-      return importFunc()
-        .then(importSuccess)
-        .catch(importError);
-    } catch (e) {
-      return importError(e);
-    }
+    return importFunc()
+      .then(importSuccess)
+      .catch(importError);
   });
 
 
