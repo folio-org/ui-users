@@ -13,7 +13,7 @@ const testConditionalLoad = (props) => async () => {
   await act(() => {
     component = render(
       <ConditionalLoad
-        suppressConsoleErrors={false} // We don't need messy errors in the test
+        suppressConsoleErrors // We don't need messy errors in the test
         {...props}
       >
         {({ Component }) => <Component />}
