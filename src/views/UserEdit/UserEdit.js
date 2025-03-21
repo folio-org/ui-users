@@ -47,6 +47,7 @@ class UserEdit extends React.Component {
     getUserServicePoints: PropTypes.func,
     getPreferredServicePoint: PropTypes.func,
     mutator: PropTypes.object,
+    numberGeneratorData: PropTypes.object,
     getProxies: PropTypes.func,
     getSponsors: PropTypes.func,
     /* assignedRoleIds, updateUserRoles,checkUserInKeycloak, setIsCreateKeycloakUserConfirmationOpen,
@@ -460,6 +461,7 @@ class UserEdit extends React.Component {
       resources,
       location,
       match: { params },
+      numberGeneratorData,
       isCreateKeycloakUserConfirmationOpen,
       setTenantId,
       tenantId,
@@ -494,6 +496,7 @@ class UserEdit extends React.Component {
         onCancel={this.onCompleteEdit}
         uniquenessValidator={this.props.mutator.uniquenessValidator}
         match={this.props.match}
+        numberGeneratorData={numberGeneratorData}
         location={location}
         history={history}
         stripes={this.props.stripes}

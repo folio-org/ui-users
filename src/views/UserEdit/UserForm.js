@@ -95,6 +95,7 @@ class UserForm extends React.Component {
       GET: PropTypes.func.isRequired,
     }).isRequired,
     match: PropTypes.object,
+    numberGeneratorData: PropTypes.object,
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
@@ -329,6 +330,7 @@ class UserForm extends React.Component {
       initialValues,
       handleSubmit,
       formData,
+      numberGeneratorData,
       servicePoints,
       onCancel,
       stripes,
@@ -405,6 +407,7 @@ class UserForm extends React.Component {
                   <EditUserInfo
                     accordionId="editUserInfo"
                     initialValues={initialValues}
+                    numberGeneratorData={numberGeneratorData}
                     patronGroups={formData.patronGroups}
                     stripes={stripes}
                     form={form}

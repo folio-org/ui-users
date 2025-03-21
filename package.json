@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "12.1.0",
+  "version": "13.0.0",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -34,6 +34,7 @@
       "permissions": "5.7",
       "login": "7.3",
       "users-bl": "6.1",
+      "settings": "1.1",
       "staging-users": "1.0",
       "tags": "1.0"
     },
@@ -381,6 +382,29 @@
           "feefines.item.post",
           "feefines.item.put",
           "feefine-reports.refund.post"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "mod-settings.global.read.ui-users.number-generator-settings.manage",
+        "displayName": "Settings (Users): Read the settings in the 'Number generator' section",
+        "visible": false
+      },
+      {
+        "permissionName": "mod-settings.global.write.ui-users.number-generator-settings.manage",
+        "displayName": "Settings (Users): Write the settings in the 'Number generator' section",
+        "visible": false
+      },
+      {
+        "permissionName": "ui-users.settings.number-generator-options.all",	
+        "displayName": "Settings (Users): Manage number generator options",
+        "subPermissions": [
+          "settings.users.enabled",
+          "mod-settings.entries.collection.get",
+          "mod-settings.entries.item.post",
+          "mod-settings.entries.item.put",
+          "mod-settings.global.read.ui-users.number-generator-settings.manage",
+          "mod-settings.global.write.ui-users.number-generator-settings.manage"
         ],
         "visible": true
       },
@@ -1191,8 +1215,10 @@
     "@babel/preset-react": "^7.9.0",
     "@folio/eslint-config-stripes": "^8.0.0",
     "@folio/jest-config-stripes": "^3.0.0",
+    "@folio/service-interaction": "^4.0.0",
     "@folio/stripes": "^10.0.0",
     "@folio/stripes-cli": "^4.0.0",
+    "@folio/stripes-erm-components": "^10.0.0",
     "@folio/stripes-testing": "^5.0.0",
     "core-js": "^3.6.4",
     "eslint": "^7.32.0",
@@ -1233,7 +1259,9 @@
     "uuid": "^9.0.0"
   },
   "peerDependencies": {
+    "@folio/service-interaction": "^4.0.0",
     "@folio/stripes": "^10.0.0",
+    "@folio/stripes-erm-components": "^10.0.0",
     "moment": "^2.24.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

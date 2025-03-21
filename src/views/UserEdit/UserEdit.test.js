@@ -23,6 +23,10 @@ jest.mock('../../components/Wrappers/withUserRoles', () => (Component) => {
   return Component;
 });
 
+jest.mock('@folio/service-interaction', () => ({
+  NumberGeneratorModalButton: () => <div>NumberGeneratorModalButton</div>
+}));
+
 jest.mock('@folio/stripes/components', () => ({
   ...jest.requireActual('@folio/stripes/components'),
   LoadingView: () => 'LoadingView',
