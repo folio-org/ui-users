@@ -408,10 +408,8 @@ class EditUserInfo extends React.Component {
                           />
                         );
                       }
-
                       return null;
-                    }
-                    })
+                    }}
                   </ConditionalLoad>
                 </Col>
               </Row>

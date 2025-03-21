@@ -58,7 +58,7 @@ ConditionalLoad.propTypes = {
   importString: PropTypes.string.isRequired,
   importSuccess: PropTypes.func,
   importError: PropTypes.func,
-  suppressConsoleErrors: PropTypes.bool.isRequired,
+  suppressConsoleErrors: PropTypes.bool,
 };
 
 export default ConditionalLoad;
