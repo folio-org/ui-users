@@ -5,6 +5,8 @@ import { Form } from 'react-final-form';
 
 import '__mock__/stripesComponents.mock';
 
+import { NumberGeneratorModalButton as MockNGMB } from '@folio/service-interaction';
+
 import renderWithRouter from 'helpers/renderWithRouter';
 
 import EditUserInfo from './EditUserInfo';
@@ -26,6 +28,20 @@ jest.mock('@folio/service-interaction', () => ({
     </button>
   ),
 }));
+
+jest.mock('../../ConditionalLoad/ConditionalLoad', () => ({
+  children,
+  importString,
+  importSuccess
+}) => {
+  const theImport = jest.requireMock(importString);
+  const Component = importSuccess(theImport).default; // Little bit hacky but it does the job
+  return (
+    <>
+      {children({ Component })}
+    </>
+  );
+});
 
 jest.mock('@folio/stripes/components', () => ({
   ...jest.requireActual('@folio/stripes/components'),
@@ -266,7 +282,6 @@ describe('Render Edit User Information component', () => {
       ...props,
       numberGeneratorData: { barcode: NUMBER_GENERATOR_OPTIONS_OFF },
     });
-
     expect(screen.getByRole('textbox', { name: 'ui-users.information.barcode' })).toBeEnabled();
     expect(screen.queryByRole('button', { name: 'NumberGeneratorModalButton' })).not.toBeInTheDocument();
   });
