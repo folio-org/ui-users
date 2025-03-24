@@ -6,6 +6,7 @@ import { Field } from 'react-final-form';
 import { OnChange } from 'react-final-form-listeners';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
+import { NumberGeneratorModalButton } from '@folio/service-interaction';
 import {
   Button,
   Select,
@@ -29,6 +30,12 @@ import { ChangeUserTypeModal, EditUserProfilePicture } from './components';
 
 import css from './EditUserInfo.css';
 import { validateLength } from '../../validators/validateLength';
+import {
+  BARCODE_GENERATOR_CODE,
+  BARCODE_SETTING,
+  NUMBER_GENERATOR_OPTIONS_ON_EDITABLE,
+  NUMBER_GENERATOR_OPTIONS_ON_NOT_EDITABLE,
+} from '../../../settings/NumberGeneratorSettings/constants';
 
 class EditUserInfo extends React.Component {
   static propTypes = {
@@ -49,6 +56,7 @@ class EditUserInfo extends React.Component {
     }).isRequired,
     form: PropTypes.object,
     disabled: PropTypes.bool,
+    numberGeneratorData: PropTypes.object,
     uniquenessValidator: PropTypes.object,
     profilePictureConfig: PropTypes.object.isRequired,
   };
@@ -130,6 +138,7 @@ class EditUserInfo extends React.Component {
       disabled,
       profilePictureConfig,
       form,
+      numberGeneratorData,
     } = this.props;
 
     const isConsortium = isConsortiumEnabled(stripes);
@@ -238,6 +247,9 @@ class EditUserInfo extends React.Component {
     const hasViewProfilePicturePerm = stripes.hasPerm('ui-users.profile-pictures.view');
     const areProfilePicturesEnabled = profilePictureConfig?.enabled;
     const displayProfilePicture = areProfilePicturesEnabled && hasViewProfilePicturePerm && !isShadowUser;
+
+    const isBarcodeDisabled = numberGeneratorData?.[BARCODE_SETTING] === NUMBER_GENERATOR_OPTIONS_ON_NOT_EDITABLE;
+    const showNumberGeneratorForBarcode = isBarcodeDisabled || numberGeneratorData?.[BARCODE_SETTING] === NUMBER_GENERATOR_OPTIONS_ON_EDITABLE;
 
     return (
       <>
@@ -374,8 +386,20 @@ class EditUserInfo extends React.Component {
                     component={TextField}
                     validate={asyncValidateField('barcode', barcode, uniquenessValidator)}
                     fullWidth
-                    disabled={disabled}
+                    disabled={disabled || isBarcodeDisabled}
                   />
+                  {showNumberGeneratorForBarcode &&
+                    <NumberGeneratorModalButton
+                      buttonLabel={<FormattedMessage id="ui-users.numberGenerator.generateBarcode" />}
+                      callback={(generated) => form.change('barcode', generated)}
+                      id="userbarcode"
+                      generateButtonLabel={<FormattedMessage id="ui-users.numberGenerator.generateBarcode" />}
+                      generator={BARCODE_GENERATOR_CODE}
+                      modalProps={{
+                        label: <FormattedMessage id="ui-users.numberGenerator.barcodeGenerator" />
+                      }}
+                    />
+                  }
                 </Col>
               </Row>
             </Col>

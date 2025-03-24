@@ -1,5 +1,9 @@
 import { buildQuery } from './UserSearchContainer';
 
+jest.mock('@folio/service-interaction', () => ({
+  NumberGeneratorModalButton: () => <div>NumberGeneratorModalButton</div>
+}));
+
 const queryParams = {
   filters: 'active.active',
   query: 'Joe',

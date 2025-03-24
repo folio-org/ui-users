@@ -10,6 +10,22 @@ import renderWithRouter from 'helpers/renderWithRouter';
 import EditUserInfo from './EditUserInfo';
 import { isConsortiumEnabled } from '../../util';
 import { USER_TYPES } from '../../../constants';
+import {
+  NUMBER_GENERATOR_OPTIONS_OFF,
+  NUMBER_GENERATOR_OPTIONS_ON_EDITABLE,
+  NUMBER_GENERATOR_OPTIONS_ON_NOT_EDITABLE,
+} from '../../../settings/NumberGeneratorSettings/constants';
+
+jest.mock('@folio/service-interaction', () => ({
+  NumberGeneratorModalButton: ({ callback }) => (
+    <button
+      onClick={() => callback('abc123')}
+      type="button"
+    >
+      NumberGeneratorModalButton
+    </button>
+  ),
+}));
 
 jest.mock('@folio/stripes/components', () => ({
   ...jest.requireActual('@folio/stripes/components'),
@@ -117,6 +133,7 @@ const props = {
     createdDate: '2022-05-16T02:01:15.606+00:00',
     departments: [],
     id: '578a8413-dec9-4a70-a2ab-10ec865399f6',
+    numberGeneratorData: { barcode: '' },
     patronGroup: '3684a786-6671-4268-8ed0-9db82ebca60b',
     permissions: [{}],
     personal: { lastName: 'Admin', firstName: 'acq-admin', addresses: [] },
@@ -242,6 +259,36 @@ describe('Render Edit User Information component', () => {
 
     await userEvent.click(cancelButton);
     expect(changeMock).toHaveBeenCalledWith('type', USER_TYPES.STAFF);
+  });
+
+  it('should enable barcode field and not render the NumberGeneratorModalButton when setting option=off', async () => {
+    renderEditUserInfo({
+      ...props,
+      numberGeneratorData: { barcode: NUMBER_GENERATOR_OPTIONS_OFF },
+    });
+
+    expect(screen.getByRole('textbox', { name: 'ui-users.information.barcode' })).toBeEnabled();
+    expect(screen.queryByRole('button', { name: 'NumberGeneratorModalButton' })).not.toBeInTheDocument();
+  });
+
+  it('should enable barcode field and render the NumberGeneratorModalButton when setting option=onEditable', async () => {
+    renderEditUserInfo({
+      ...props,
+      numberGeneratorData: { barcode: NUMBER_GENERATOR_OPTIONS_ON_EDITABLE },
+    });
+
+    expect(screen.getByRole('textbox', { name: 'ui-users.information.barcode' })).toBeEnabled();
+    expect(screen.getByRole('button', { name: 'NumberGeneratorModalButton' })).toBeInTheDocument();
+  });
+
+  it('should disable barcode field and render the NumberGeneratorModalButton when setting option=onNotEditable', async () => {
+    renderEditUserInfo({
+      ...props,
+      numberGeneratorData: { barcode: NUMBER_GENERATOR_OPTIONS_ON_NOT_EDITABLE },
+    });
+
+    expect(screen.getByRole('textbox', { name: 'ui-users.information.barcode' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'NumberGeneratorModalButton' })).toBeInTheDocument();
   });
 
   describe('when profilePicture configuration is not enabled', () => {

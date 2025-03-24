@@ -8,6 +8,7 @@ import PatronGroupsSettings from './PatronGroupsSettings';
 import AddressTypesSettings from './AddressTypesSettings';
 import CustomFieldsSettingsPane from './CustomFieldsSettings';
 import DepartmentsSettings from './DepartmentsSettings';
+import NumberGeneratorSettings from './NumberGeneratorSettings';
 
 jest.mock('./permissions/PermissionSets', () => jest.fn(() => <div>PermissionSets</div>));
 
@@ -37,6 +38,12 @@ const settingsGeneral = [
     perm: 'ui-users.settings.departments.view'
   },
   {
+    route: 'number-generator-options',
+    label: <FormattedMessage id="ui-users.settings.numberGenerator.options" />,
+    component: NumberGeneratorSettings,
+    perm: 'ui-users.settings.number-generator-options.all',
+  },
+  {
     route: 'custom-fields',
     label: <FormattedMessage id="ui-users.settings.customFields" />,
     component: CustomFieldsSettingsPane,
@@ -62,6 +69,7 @@ describe('sections', () => {
     expect(getByText(/ui-users.settings.patronGroups/i)).toBeInTheDocument();
     expect(getByText(/ui-users.settings.addressTypes/i)).toBeInTheDocument();
     expect(getByText(/ui-users.settings.departments/i)).toBeInTheDocument();
+    expect(getByText(/ui-users.settings.numberGenerator.options/i)).toBeInTheDocument();
     expect(getByText(/ui-users.settings.customFields/i)).toBeInTheDocument();
   });
 });

@@ -19,6 +19,10 @@ import { PatronPreRegistrationRecordsDuplicatesPage } from './PatronPreRegistrat
 
 jest.unmock('@folio/stripes/components');
 
+jest.mock('@folio/service-interaction', () => ({
+  NumberGeneratorModalButton: () => <div>NumberGeneratorModalButton</div>
+}));
+
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useHistory: jest.fn(),
