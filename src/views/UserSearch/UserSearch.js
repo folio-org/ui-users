@@ -735,7 +735,7 @@ class UserSearch extends React.Component {
                     {filterPaneIsVisible &&
                       <Pane
                         defaultWidth="22%"
-                        paneTitle={<FormattedMessage id="ui-users.userSearch" />}
+                        paneTitle={<FormattedMessage id="stripes-smart-components.searchAndFilter" />}
                         lastMenu={
                           <PaneMenu>
                             <CollapseFilterPaneButton onClick={this.toggleFilterPane} />
@@ -745,7 +745,7 @@ class UserSearch extends React.Component {
                         <form onSubmit={e => this.handleSubmit(e, onSubmitSearch)}>
                           <SRStatus ref={this.SRStatusRef} />
                           <div className={css.searchGroupWrap}>
-                            <FormattedMessage id="ui-users.userSearch">
+                            <FormattedMessage id="stripes-smart-components.searchAndFilter">
                               {label => (
                                 <SearchField
                                   aria-label={label}
