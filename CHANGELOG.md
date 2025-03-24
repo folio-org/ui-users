@@ -3,6 +3,7 @@
 ## 13.0.0 IN PROGRESS
 * Collect coverage from unit tests. Refs UIU-3356.
 * Use number generator for barcode. Refs UIU-2729.
+* Change amount input type to number. Refs UIU-2836.
 
 ## [12.1.0](https://github.com/folio-org/ui-users/tree/v12.1.0) (2025-03-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.0.0...v12.1.0)

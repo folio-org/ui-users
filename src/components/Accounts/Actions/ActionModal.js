@@ -415,6 +415,7 @@ class ActionModal extends React.Component {
                     <Field
                       id="amount"
                       name="amount"
+                      type="number"
                       component={TextField}
                       hasClearIcon={false}
                       fullWidth
