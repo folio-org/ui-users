@@ -909,13 +909,15 @@ class UserDetail extends React.Component {
                 }
 
                 { !this.showPermissionsAccordion() &&
-                  <UserRoles
-                    expanded={sections.rolesSection}
-                    onToggle={this.handleSectionToggle}
-                    accordionId="rolesSection"
-                    user={user}
-                    {...this.props}
-                  />
+                  <IfPermission perm="ui-users.roles.view">
+                    <UserRoles
+                      expanded={sections.rolesSection}
+                      onToggle={this.handleSectionToggle}
+                      accordionId="rolesSection"
+                      user={user}
+                      {...this.props}
+                    />
+                  </IfPermission>
                 }
 
                 <IfPermission perm="inventory-storage.service-points.collection.get,inventory-storage.service-points-users.collection.get">
