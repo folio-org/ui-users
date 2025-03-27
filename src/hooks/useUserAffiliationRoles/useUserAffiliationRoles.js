@@ -10,7 +10,9 @@ function useUserAffiliationRoles(userId) {
   };
 
   // To unify in case if consortium of non-consortium
-  const tenants = stripes.user.user?.tenants || [{ id: stripes.okapi.tenant }];
+  let tenants = stripes.user.user?.tenants || [{ id: stripes.okapi.tenant }];
+  // Only make API calls if user has permission to view roles
+  tenants = stripes.hasPerm('ui-users.roles.view') ? tenants : [];
   const ky = useOkapiKy();
 
   const queries = useQueries(
