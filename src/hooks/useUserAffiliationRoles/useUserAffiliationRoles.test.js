@@ -16,6 +16,7 @@ jest.mock('@folio/stripes/core', () => ({
 describe('useUserAffiliationRoles', () => {
   const mockStripes = {
     config: { maxUnpagedResourceCount: 1000 },
+    hasPerm: jest.fn().mockReturnValue(true),
     user: { user: { tenants: [{ id: 'tenant1' }, { id: 'tenant2' }] } },
     okapi: { tenant: 'defaultTenant' },
   };
