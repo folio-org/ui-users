@@ -8,6 +8,11 @@
 * Update jspdf(to v3.0.0) and jspdf-autotable(to v5.0.2) for security. Refs UIU-3347.
 * Prevent error toast from occurring when user doesn't have `ui-users.roles.view` capability. Refs UIU-3350.
 
+## [12.1.1] (https://github.com/folio-org/ui-users/tree/v12.1.1) (2025-03-26)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.0...v12.1.1)
+
+* Fetch all role records for each tenant in order to sort `assignedRoleIds` alphabetically by role name in UserEdit. Refs UIU-3355.   
+
 ## [12.1.0](https://github.com/folio-org/ui-users/tree/v12.1.0) (2025-03-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.0.0...v12.1.0)
 

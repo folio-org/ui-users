@@ -15,7 +15,7 @@ function useUserAffiliationRoles(userId) {
   tenants = stripes.hasPerm('ui-users.roles.view') ? tenants : [];
   const ky = useOkapiKy();
 
-  const queries = useQueries(
+  const userTenantRolesQueries = useQueries(
     tenants.map(({ id }) => {
       return {
         queryKey:['userTenantRoles', id],
@@ -32,10 +32,34 @@ function useUserAffiliationRoles(userId) {
     })
   );
 
-  // result from useQueries doesn’t provide information about the tenants.
+  // Since `roles/users` return doesn't include names (only ids) for the roles, and we need them sorted by role name,
+  // we need to retrieve all the records for roles and use them to determine the sequence of ids.
+  const tenantRolesQueries = useQueries(
+    tenants.map(({ id }) => {
+      return {
+        queryKey:['tenantRolesAllRecords', id],
+        queryFn:() => {
+          const api = ky.extend({
+            hooks: {
+              beforeRequest: [(req) => req.headers.set('X-Okapi-Tenant', id)]
+            }
+          });
+          return api.get(`roles?limit=${stripes.config.maxUnpagedResourceCount}&query=cql.allRecords=1 sortby name`).json();
+        },
+      };
+    })
+  );
+
+  // result from useQueries doesn’t provide information about the tenants, reach appropriate tenant using index
   // useQueries guarantees that the results come in the same order as provided [queryFns]
-  return tenants.reduce((acc, value, index) => {
-    acc[value.id] = queries[index].data?.userRoles.flatMap(d => d.roleId) || [];
+  return tenants.reduce((acc, tenant, index) => {
+    const roleIds = userTenantRolesQueries[index].data?.userRoles.map(d => d.roleId) || [];
+    const assignedRoles = [];
+    roleIds.forEach(roleId => {
+      const found = tenantRolesQueries[index].data?.roles.find(r => r.id === roleId);
+      if (found) assignedRoles.push(found);
+    });
+    acc[tenant.id] = [...assignedRoles].sort((a, b) => a.name.localeCompare(b.name)).map(({ id }) => id);
     return acc;
   }, {});
 }
