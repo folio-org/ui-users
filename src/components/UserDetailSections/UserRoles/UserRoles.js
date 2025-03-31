@@ -31,6 +31,7 @@ const UserRoles = (props) => {
   } = useUserTenantRoles({ userId, tenantId });
 
   const isLoading = isAffiliationsFetching || isPermissionsFetching;
+  const isAffiliationsVisible = isAffiliationsEnabled(user);
 
   useEffect(() => {
     if (!affiliations.some(({ tenantId: assigned }) => tenantId === assigned)) {
@@ -46,6 +47,7 @@ const UserRoles = (props) => {
     selectedAffiliation={tenantId}
     isLoading={isLoading}
     onChangeAffiliation={setTenantId}
+    isAffiliationsVisible={isAffiliationsVisible}
     listedRoles={userRoles || []}
   />);
 };
