@@ -123,6 +123,7 @@ class EditExtendedInfo extends Component {
               id="adduser_enrollmentdate"
               validate={validateMinDate('ui-users.errors.extended.dateEnrolled')}
               disabled={disabled}
+              timeZone="UTC"
             />
           </Col>
           <Col
