@@ -7,6 +7,7 @@
 * Change amount input type to number. Refs UIU-2836.
 * Update jspdf(to v3.0.0) and jspdf-autotable(to v5.0.2) for security. Refs UIU-3347.
 * Prevent error toast from occurring when user doesn't have `ui-users.roles.view` capability. Refs UIU-3350.
+* Field "Date enrolled" showing 1 day earlier in View than Edit. Refs UIU-3264.
 
 ## [12.1.1] (https://github.com/folio-org/ui-users/tree/v12.1.1) (2025-03-26)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.0...v12.1.1)
