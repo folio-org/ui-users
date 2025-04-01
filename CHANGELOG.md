@@ -10,6 +10,7 @@
 * "Affiliations" select in Role/Permission accordion should not be displayed on patron user details pane. Refs UIU-3314.
 * Fixed sponsor notification dropdown showing incorrect values for pristine forms. Refs UIU-3260.
 * Field "Date enrolled" showing 1 day earlier in View than Edit. Refs UIU-3264
+* "Affiliations" select in Role/Permission accordion should not be displayed on patron user details pane. Refs UIU-3314.
 
 ## [12.1.1] (https://github.com/folio-org/ui-users/tree/v12.1.1) (2025-03-26)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.0...v12.1.1)

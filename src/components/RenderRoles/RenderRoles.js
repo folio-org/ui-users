@@ -37,6 +37,7 @@ class RenderRoles extends React.Component {
         listInvisiblePerms: PropTypes.bool,
       }).isRequired,
     }).isRequired,
+    isAffiliationsVisible: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -73,6 +74,7 @@ class RenderRoles extends React.Component {
       permToRead,
       selectedAffiliation,
       heading,
+      isAffiliationsVisible,
     } = this.props;
 
     if (!stripes.hasPerm(permToRead)) { return null; }
@@ -89,7 +91,7 @@ class RenderRoles extends React.Component {
       >
         <IfConsortium>
           <IfConsortiumPermission perm="consortia.user-tenants.collection.get">
-            {Boolean(affiliations?.length) && (
+            {Boolean(affiliations?.length) && isAffiliationsVisible && (
               <AffiliationsSelect
                 affiliations={affiliations}
                 onChange={onChangeAffiliation}
