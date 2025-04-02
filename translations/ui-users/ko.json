@@ -554,7 +554,6 @@
     "loans.declareLostDialogBody": "<strong>{title} ({materialType})</strong> (Barcode: {barcode}) will be <strong>Declared lost</strong>. {countIndex, plural, =-1 {There may be open requests for this item.} =0 {} one {There is {openRequestValue} for this item.} other {There are {openRequestValue} for this item.}}",
     "loans.confirmLostState": "Confirm Declared lost status",
     "loans.declareLost.additionalInfoPlaceholder": "Enter more information about the lost item (required)",
-    "userSearch": "사용자 검색",
     "userSearchResults": "사용자 검색 결과",
     "feefines.ownerLabel": "Owner",
     "loans.details.overduePolicy": "Overdue fine policy",
@@ -1237,5 +1236,15 @@
     "accounts.history.columns.actions": "Actions",
     "charge.item.barcode.error": "No item with barcode {barcode} could be found",
     "information.pronouns": "Pronouns",
-    "errors.personal.pronounsCharLimit": "Pronouns are limited to 300 characters"
+    "errors.personal.pronounsCharLimit": "Pronouns are limited to 300 characters",
+    "settings.numberGenerator.barcode": "Barcode",
+    "settings.numberGenerator.info": "Fields which are usually filled using a numeric sequence can use the number generator. When the generator is switched on the field can either be fixed to prevent manual update, or made fully editable. When switched off, the field must be filled manually.",
+    "settings.numberGenerator.infoAdditional": "Additional number generator settings are available under {serviceInteractionLink}. At {numberGeneratorSequencesLink} sequences can be defined by selecting the appropriate generator via the drop-down menu.",
+    "settings.numberGenerator.options": "Number generator options",
+    "settings.numberGenerator.options.off": "Off",
+    "settings.numberGenerator.options.onEditable": "On, field editable",
+    "settings.numberGenerator.options.onNotEditable": "On, field not editable",
+    "numberGenerator.generateBarcode": "Generate user barcode",
+    "numberGenerator.barcodeGenerator": "User barcode generator",
+    "permission.settings.number-generator-options.all": "Settings (Users): Can create, edit, and view  number generator options"
 }

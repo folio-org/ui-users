@@ -554,7 +554,6 @@
     "loans.declareLostDialogBody": "<strong> {title} ( {materialType} ) </strong> (código de barras: {barcode} ) se <strong> declarará perdido </strong> . {countIndex, plural, =-1 {Puede haber solicitudes abiertas para este ítem.} =0 {} one { Hay {openRequestValue} para este ítem.} other { Hay {openRequestValue} para este ítem.}}",
     "loans.confirmLostState": "Confirmar declaración de estado perdido",
     "loans.declareLost.additionalInfoPlaceholder": "Introducir más información sobre el ítem perdido(requerido)",
-    "userSearch": "Búsqueda de usuarios",
     "userSearchResults": "Resultados de búsqueda de usuarios",
     "feefines.ownerLabel": "Propietario",
     "loans.details.overduePolicy": "Política de vencidos",
@@ -1237,5 +1236,15 @@
     "accounts.history.columns.actions": "Actions",
     "charge.item.barcode.error": "No item with barcode {barcode} could be found",
     "information.pronouns": "Pronouns",
-    "errors.personal.pronounsCharLimit": "Pronouns are limited to 300 characters"
+    "errors.personal.pronounsCharLimit": "Pronouns are limited to 300 characters",
+    "settings.numberGenerator.barcode": "Barcode",
+    "settings.numberGenerator.info": "Fields which are usually filled using a numeric sequence can use the number generator. When the generator is switched on the field can either be fixed to prevent manual update, or made fully editable. When switched off, the field must be filled manually.",
+    "settings.numberGenerator.infoAdditional": "Additional number generator settings are available under {serviceInteractionLink}. At {numberGeneratorSequencesLink} sequences can be defined by selecting the appropriate generator via the drop-down menu.",
+    "settings.numberGenerator.options": "Number generator options",
+    "settings.numberGenerator.options.off": "Off",
+    "settings.numberGenerator.options.onEditable": "On, field editable",
+    "settings.numberGenerator.options.onNotEditable": "On, field not editable",
+    "numberGenerator.generateBarcode": "Generate user barcode",
+    "numberGenerator.barcodeGenerator": "User barcode generator",
+    "permission.settings.number-generator-options.all": "Settings (Users): Can create, edit, and view  number generator options"
 }
