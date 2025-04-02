@@ -554,7 +554,6 @@
     "loans.declareLostDialogBody": "<strong> {title}  :  {materialType}  )  </strong>  : 条码 :  {barcode}  ) 将被<strong>声称遗失</strong> 。 {countIndex, plural, =-1 {此单件可能有未结请求。 } =0 {} one {此单件有{openRequestValue} 。 } other {此单件有{openRequestValue} 。 }}",
     "loans.confirmLostState": "确认声称遗失状态",
     "loans.declareLost.additionalInfoPlaceholder": "输入有关遗失单件的更多信息 : 必备 ) ",
-    "userSearch": "用户搜索",
     "userSearchResults": "用户搜索结果",
     "feefines.ownerLabel": "缴费处",
     "loans.details.overduePolicy": "超期罚款政策",
@@ -1237,5 +1236,15 @@
     "accounts.history.columns.actions": "操作",
     "charge.item.barcode.error": "找不到条码为{barcode}的单件",
     "information.pronouns": "代词",
-    "errors.personal.pronounsCharLimit": "Pronouns are limited to 300 characters"
+    "errors.personal.pronounsCharLimit": "Pronouns are limited to 300 characters",
+    "settings.numberGenerator.barcode": "Barcode",
+    "settings.numberGenerator.info": "Fields which are usually filled using a numeric sequence can use the number generator. When the generator is switched on the field can either be fixed to prevent manual update, or made fully editable. When switched off, the field must be filled manually.",
+    "settings.numberGenerator.infoAdditional": "Additional number generator settings are available under {serviceInteractionLink}. At {numberGeneratorSequencesLink} sequences can be defined by selecting the appropriate generator via the drop-down menu.",
+    "settings.numberGenerator.options": "Number generator options",
+    "settings.numberGenerator.options.off": "Off",
+    "settings.numberGenerator.options.onEditable": "On, field editable",
+    "settings.numberGenerator.options.onNotEditable": "On, field not editable",
+    "numberGenerator.generateBarcode": "Generate user barcode",
+    "numberGenerator.barcodeGenerator": "User barcode generator",
+    "permission.settings.number-generator-options.all": "Settings (Users): Can create, edit, and view  number generator options"
 }

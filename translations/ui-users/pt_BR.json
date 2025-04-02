@@ -554,7 +554,6 @@
     "loans.declareLostDialogBody": "<strong> {title} ({materialType}) </strong> (Barcode: {barcode}) será <strong>Declarado perdido</strong>. {countIndex, plural, =-1 {Pode haver requisições em aberto para este item. } =0 {} one { Há {openRequestValue} pedido aberto para este item.} other {Existem {openRequestValue} pedidos abertos para este item. }}",
     "loans.confirmLostState": "Confirmar estado de declarado perdido",
     "loans.declareLost.additionalInfoPlaceholder": "Digite mais informações sobre o item perdido (obrigatório)",
-    "userSearch": "Buscar usuário",
     "userSearchResults": "Resultados de pesquisa de usuário",
     "feefines.ownerLabel": "Proprietário",
     "loans.details.overduePolicy": "Política de multa por atraso",
@@ -1237,5 +1236,15 @@
     "accounts.history.columns.actions": "Ações",
     "charge.item.barcode.error": "Nenhum item com código de barras {barcode} foi encontrado",
     "information.pronouns": "Pronomes",
-    "errors.personal.pronounsCharLimit": "Os pronomes são limitados a 300 caracteres"
+    "errors.personal.pronounsCharLimit": "Os pronomes são limitados a 300 caracteres",
+    "settings.numberGenerator.barcode": "Código de barras",
+    "settings.numberGenerator.info": "Os campos que normalmente são preenchidos com uma sequência numérica podem usar o gerador de números. Quando o gerador é ativado, o campo pode ser fixo para impedir a atualização manual ou pode ser totalmente editável. Quando desativado, o campo deve ser preenchido manualmente.",
+    "settings.numberGenerator.infoAdditional": "Configurações adicionais do gerador de números estão disponíveis em {serviceInteractionLink}. Em {numberGeneratorSequencesLink} as sequências podem ser definidas selecionando o gerador apropriado no menu suspenso.",
+    "settings.numberGenerator.options": "Opções do gerador de números",
+    "settings.numberGenerator.options.off": "Desligado",
+    "settings.numberGenerator.options.onEditable": "Ligado, campo editável",
+    "settings.numberGenerator.options.onNotEditable": "Ligado, campo não editável",
+    "numberGenerator.generateBarcode": "Gerar código de barras do usuário",
+    "numberGenerator.barcodeGenerator": "Gerador de código de barras do usuário",
+    "permission.settings.number-generator-options.all": "Configurações (usuários): Pode criar, editar e visualizar as opções do gerador de números"
 }

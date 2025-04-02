@@ -554,7 +554,6 @@
     "loans.declareLostDialogBody": "سيتم <strong>إعلان ضياع</strong> <strong>{title} {materialType}</strong> (باركود: {barcode}). {countIndex, plural, =-1 {قد يكون هناك طلبات مفتوحة لهذه المادة.} =0 {} one {يوجد {openRequestValue} لهذه المادة.} other {يوجد {openRequestValue} لهذه المادة.}}",
     "loans.confirmLostState": "تأكيد حالة تم الإعلان عن ضياعها",
     "loans.declareLost.additionalInfoPlaceholder": "قم بإدخال المزيد من المعلومات حول المادة الضائعة (مطلوب)",
-    "userSearch": "بحث المستخدم",
     "userSearchResults": "نتائج بحث المستخدم",
     "feefines.ownerLabel": "جهة التحصيل",
     "loans.details.overduePolicy": "سياسة غرامة التأخير",
@@ -1237,5 +1236,15 @@
     "accounts.history.columns.actions": "Actions",
     "charge.item.barcode.error": "No item with barcode {barcode} could be found",
     "information.pronouns": "Pronouns",
-    "errors.personal.pronounsCharLimit": "Pronouns are limited to 300 characters"
+    "errors.personal.pronounsCharLimit": "تقتصر الضمائر الشخصية على 300 حرف",
+    "settings.numberGenerator.barcode": "باركود",
+    "settings.numberGenerator.info": "يمكن استخدام مولد الأرقام للحقول التي يتم ملؤها عادةً بتسلسل رقمي. عند تشغيل المولد، يمكن إما تثبيت الحقل لمنع التحديث اليدوي، أو جعله قابلاً للتحرير بالكامل. عند إيقاف تشغيله، يجب ملء الحقل يدوياً.",
+    "settings.numberGenerator.infoAdditional": "تتوفر إعدادات إضافية لمولد الأرقام أدنى {serviceInteractionLink}. في {numberGeneratorSequencesLink}، يمكن تحديد التسلسلات باختيار المولد المناسب من القائمة المنسدلة.",
+    "settings.numberGenerator.options": "خيارات مولد الأرقام",
+    "settings.numberGenerator.options.off": "إيقاف",
+    "settings.numberGenerator.options.onEditable": "قيد التشغيل، الحقل قابل للتحرير",
+    "settings.numberGenerator.options.onNotEditable": "قيد التشغيل، الحقل غير قابل للتحرير",
+    "numberGenerator.generateBarcode": "توليد باركود للمستخدم",
+    "numberGenerator.barcodeGenerator": "مولد الباركود للمستخدم",
+    "permission.settings.number-generator-options.all": "الإعدادات (المستخدمين): إمكانية إنشاء، وتحرير، وعرض خيارات توليد الأرقام"
 }
