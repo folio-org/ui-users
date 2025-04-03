@@ -105,7 +105,7 @@ class ProxyEditItem extends React.Component {
 
   optionsFor = (list) => {
     return list.map(option => (
-      <FormattedMessage id={`ui-users.${option}`} key={option}>
+      <FormattedMessage id={`ui-users.${option.toLowerCase()}`} key={option}>
         {(optionTranslated) => <option value={option}>{optionTranslated}</option>}
       </FormattedMessage>
     ));
@@ -118,11 +118,11 @@ class ProxyEditItem extends React.Component {
       onDelete,
     } = this.props;
 
-    const activeOptions = this.state.statusDisabled ? ['inactive'] : ['active', 'inactive'];
+    const activeOptions = this.state.statusDisabled ? ['Inactive'] : ['Active', 'Inactive'];
     const relationStatusOptions = this.optionsFor(activeOptions);
 
-    const requestForSponsorOptions = this.optionsFor(['yes', 'no']);
-    const notificationsToOptions = this.optionsFor(['proxy', 'sponsor']);
+    const requestForSponsorOptions = this.optionsFor(['Yes', 'No']);
+    const notificationsToOptions = this.optionsFor(['Proxy', 'Sponsor']);
     const proxyLinkMsg = <FormattedMessage id="ui-users.proxy.relationshipCreated" />;
     const proxyCreatedValue = get(record, 'proxy.metadata.createdDate', null);
     const proxyCreatedDate = proxyCreatedValue ? <FormattedTime
