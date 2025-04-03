@@ -245,7 +245,7 @@ class EditUserInfo extends React.Component {
     );
 
     const hasViewProfilePicturePerm = stripes.hasPerm('ui-users.profile-pictures.view');
-    const areProfilePicturesEnabled = profilePictureConfig?.enabled ?? true;
+    const areProfilePicturesEnabled = profilePictureConfig?.enabled;
     const displayProfilePicture = areProfilePicturesEnabled && hasViewProfilePicturePerm && !isShadowUser;
 
     const isBarcodeDisabled = numberGeneratorData?.[BARCODE_SETTING] === NUMBER_GENERATOR_OPTIONS_ON_NOT_EDITABLE;
