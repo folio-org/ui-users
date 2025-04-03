@@ -19,7 +19,7 @@ import { isAValidURL } from '../../../../util/util';
 import ExternalLinkModal from '../ExternalLinkModal';
 import DeleteProfilePictureModal from '../DeleteProfilePictureModal';
 import LocalFileModal from '../LocalFileModal';
-import WebCamModal from '../WebCamModal';
+import WebcamModal from '../WebcamModal';
 import { getRotatedImage, createImage } from './utils/canvasUtils';
 import {
   ACCEPTED_IMAGE_TYPES,
@@ -43,7 +43,7 @@ const COMPRESSION_OPTIONS = {
 const EditUserProfilePicture = ({ profilePictureId, form, personal, profilePictureMaxFileSize }) => {
   const [profilePictureLink, setProfilePictureLink] = useState(profilePictureId);
   const [externalLinkModalOpen, setExternalLinkModalOpen] = useState(false);
-  const [webCamModalOpen, setWebCamModalOpen] = useState(false);
+  const [webcamModalOpen, setWebcamModalOpen] = useState(false);
   const [deleteProfilePictureModalOpen, setDeleteProfilePictureModalOpen] = useState(false);
   const [isProfilePictureDeleted, setIsProfilePictureDeleted] = useState(false);
   const [disableDeleteButton, setDisableDeleteButton] = useState(false);
@@ -104,6 +104,10 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal, profilePictu
 
   const toggleLocalFileModal = useCallback(() => {
     setLocalFileModalOpen(prev => !prev);
+  }, []);
+
+  const toggleWebcamModal = useCallback(() => {
+    setWebcamModalOpen(prev => !prev);
   }, []);
 
   // to invoke error callout message on same local file upload.
@@ -230,27 +234,22 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal, profilePictu
     }
   };
 
-  const toggleWebCamModal = useCallback(() => {
-    console.log('=========> toggleWebCamModal ============>');
-    setWebCamModalOpen(prev => !prev);
-  }, []);
+  const handleSaveWebcamProfilePhoto = async (img) => {
+    try {
+      const data = await getCompressedImage(img);
+      uploadBlob(data);
+    } catch (err) {
+      toggleWebcamModal();
+      // eslint-disable-next-line no-console
+      console.warn(err.message);
+    }
+  };
 
   const renderMenu = () => (
     <DropdownMenu
       aria-label="profile picture action menu"
       role="menu"
     >
-      <Button
-        // data-testid="localFile"
-        buttonStyle="dropdownItem"
-        // disabled={isProfilePictureDeleted}
-        onClick={toggleWebCamModal}
-      >
-        {/* <Icon icon="profile">
-          {intl.formatMessage({ id: 'ui-users.information.profilePicture.localFile' })}
-        </Icon> */}
-        Take a pic
-      </Button>
       <Button
         data-testid="localFile"
         buttonStyle="dropdownItem"
@@ -269,6 +268,16 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal, profilePictu
       >
         <Icon icon="external-link">
           {intl.formatMessage({ id: 'ui-users.information.profilePicture.externalURL' })}
+        </Icon>
+      </Button>
+      <Button
+        data-testid="webcam"
+        buttonStyle="dropdownItem"
+        disabled={isProfilePictureDeleted}
+        onClick={toggleWebcamModal}
+      >
+        <Icon icon="profile">
+          {intl.formatMessage({ id: 'ui-users.information.profilePicture.takePhoto' })}
         </Icon>
       </Button>
       {
@@ -314,10 +323,11 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal, profilePictu
         )
       }
       {
-        webCamModalOpen && (
-          <WebCamModal
-            open={webCamModalOpen}
-            onClose={toggleWebCamModal}
+        webcamModalOpen && (
+          <WebcamModal
+            open={webcamModalOpen}
+            onClose={toggleWebcamModal}
+            onSave={handleSaveWebcamProfilePhoto}
           />
         )
       }
@@ -342,16 +352,16 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal, profilePictu
         )
       }
       {
-          imageSrc && localFileModalOpen && (
-            <LocalFileModal
-              open={localFileModalOpen}
-              onClose={toggleLocalFileModal}
-              rotation={rotation}
-              setRotation={setRotation}
-              imageSrc={imageSrc}
-              onSave={handleSaveLocalFile}
-            />
-          )
+        imageSrc && localFileModalOpen && (
+          <LocalFileModal
+            open={localFileModalOpen}
+            onClose={toggleLocalFileModal}
+            rotation={rotation}
+            setRotation={setRotation}
+            imageSrc={imageSrc}
+            onSave={handleSaveLocalFile}
+          />
+        )
       }
     </>
   );

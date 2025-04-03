@@ -1,5 +1,5 @@
 import Webcam from 'react-webcam';
-import { useRef, useState, useCallback, useEffect } from 'react';
+import { useRef, useState, useCallback } from 'react';
 import Cropper from 'react-easy-crop';
 import { FormattedMessage } from 'react-intl';
 
@@ -16,59 +16,59 @@ import Slider from '../LocalFileModal/components/Slider';
 
 import css from '../LocalFileModal/LocalFileModal.css';
 
-const videoConstraints = {
-  // width: { min: 200 },
-  // height: { min: 200 },
-  aspectRatio: 1,
-  audio: false,
-  // video: { width: 200, height: 200 }
-};
+const DEFAULT_ROTATION = 0;
 const DEFAULT_ZOOM = 1;
+const DEFAULT_CROP = { x: 0, y: 0 };
 
-const WebCamModal = ({ open, rotation, setRotation, onClose }) => {
-  const [mirrored, setMirrored] = useState(false);
-  const webcamRef = useRef(null);
+const WebcamModal = ({
+  open,
+  onClose,
+  onSave,
+}) => {
   const [imgSrc, setImgSrc] = useState(null);
-  const [devices, setDevices] = useState([]);
-
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [rotation, setRotation] = useState(DEFAULT_ROTATION);
+  const [crop, setCrop] = useState(DEFAULT_CROP);
   const [zoom, setZoom] = useState(DEFAULT_ZOOM);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const webcamRef = useRef(null);
 
   const capture = useCallback(() => {
-    const imageSrc = webcamRef.current.getScreenshot();
-    setImgSrc(imageSrc);
+    setImgSrc(webcamRef?.current?.getScreenshot());
   }, [webcamRef]);
 
-  const retake = () => {
+  const reset = () => {
+    setZoom(DEFAULT_ZOOM);
+    setRotation(DEFAULT_ROTATION);
+    setCrop(DEFAULT_CROP);
+    setCroppedAreaPixels(null);
     setImgSrc(null);
   };
 
-  const handleDevices = useCallback(
-    mediaDevices => setDevices(mediaDevices.filter(({ kind }) => kind === 'videoinput')),
-    [setDevices]
-  );
-
-  useEffect(
-    () => {
-      navigator.mediaDevices.enumerateDevices().then(handleDevices);
-    },
-    [handleDevices]
-  );
-
-  const onCropComplete = (croppedArea, croppedAreaPxs) => {
-    setCroppedAreaPixels(croppedAreaPxs);
+  const onCropComplete = (_, croppedPxs) => {
+    setCroppedAreaPixels(croppedPxs);
   };
+
+  const handleSave = useCallback(async () => {
+    await onSave(await getCroppedImg(await createImage(imgSrc), croppedAreaPixels, rotation));
+    reset();
+    onClose();
+  }, [croppedAreaPixels, imgSrc, onClose, onSave, rotation]);
 
   const renderFooter = useCallback(() => {
     return (
       <ModalFooter>
         <Button
           buttonStyle="primary"
-          id="save-local-file-btn"
-          // onClick={handleSaveProfilePictureLocalFile}
+          disabled={!imgSrc}
+          onClick={handleSave}
         >
           <FormattedMessage id="stripes-components.saveAndClose" />
+        </Button>
+        <Button
+          style={{ marginLeft: 'auto', marginRight: '1rem' }}
+          onClick={imgSrc ? reset : capture}
+        >
+          <FormattedMessage id={imgSrc ? 'ui-users.information.profilePicture.retakePhoto' : 'ui-users.information.profilePicture.takePhoto'} />
         </Button>
         <Button
           onClick={onClose}
@@ -77,14 +77,13 @@ const WebCamModal = ({ open, rotation, setRotation, onClose }) => {
         </Button>
       </ModalFooter>
     );
-  }, []);
+  }, [capture, handleSave, imgSrc, onClose]);
 
   return (
     <Modal
       open={open}
       size="medium"
-      // label={<FormattedMessage id="ui-users.information.profilePicture.localFile.modal.previewAndEdit" />}
-      label="web cam modal"
+      label={<FormattedMessage id="ui-users.information.profilePicture.takePhoto" />}
       footer={renderFooter()}
     >
       <div>
@@ -105,63 +104,50 @@ const WebCamModal = ({ open, rotation, setRotation, onClose }) => {
                 onZoomChange={setZoom}
               />
             </div>
-            <Row>
-              <Col xs={4}>
-                <Slider
-                  value={zoom}
-                  min={1}
-                  max={5}
-                  step={0.1}
-                  handleChange={(e) => setZoom(Number(e.target.value))}
-                  label="zoom"
-                />
-              </Col>
-              <Col xs={4}>
-                <Slider
-                  value={rotation}
-                  min={0}
-                  max={360}
-                  step={1}
-                  handleChange={(e) => setRotation(Number(e.target.value))}
-                  label="rotate"
-                />
-              </Col>
-            </Row>
           </div>
         ) : (
-          <Webcam
-            height={600}
-            width={600}
-            videoConstraints={videoConstraints}
-            ref={webcamRef}
-            mirrored={mirrored}
-            screenshotFormat="image/jpeg"
-            screenshotQuality={0.8}
-            onUserMediaError={(MediaStreamError) => alert('error ', MediaStreamError)}
-          />
+          <div className={css.videoFeedContainer}>
+            <Webcam
+              ref={webcamRef}
+              mirrored
+              videoConstraints={{
+                aspectRatio: 1,
+                audio: false,
+              }}
+              height={300}
+              width={300}
+              screenshotFormat="image/jpeg"
+              screenshotQuality={0.8}
+            />
+          </div>
         )}
-        <div className="controls">
-          {!imgSrc && (
-            <div>
-              <input
-                type="checkbox"
-                checked={mirrored}
-                onChange={(e) => setMirrored(e.target.checked)}
-              />
-              <label>Mirror</label>
-            </div>
-          )}
-        </div>
-        <div className="btn-container">
-          {imgSrc ? (
-            <button onClick={retake}>Retake photo</button>
-          ) : (
-            <button onClick={capture}>Capture photo</button>
-          )}
-        </div>
+        <Row>
+          <Col xs={4}>
+            <Slider
+              value={zoom}
+              min={1}
+              max={5}
+              step={0.1}
+              handleChange={({ target: { value } }) => setZoom(Number(value))}
+              label="zoom"
+              disabled={!imgSrc}
+            />
+          </Col>
+          <Col xs={4}>
+            <Slider
+              value={rotation}
+              min={0}
+              max={360}
+              step={1}
+              handleChange={({ target: { value } }) => setRotation(Number(value))}
+              label="rotate"
+              disabled={!imgSrc}
+            />
+          </Col>
+        </Row>
       </div>
     </Modal>
   );
 };
 
-export default WebCamModal;
+export default WebcamModal;

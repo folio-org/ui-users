@@ -1,1 +1,1 @@
-export { default } from './WebCamModal';
+export { default } from './WebcamModal';

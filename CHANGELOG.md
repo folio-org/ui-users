@@ -9,6 +9,7 @@
 * Prevent error toast from occurring when user doesn't have `ui-users.roles.view` capability. Refs UIU-3350.
 * Field "Date enrolled" showing 1 day earlier in View than Edit. Refs UIU-3264
 * "Affiliations" select in Role/Permission accordion should not be displayed on patron user details pane. Refs UIU-3314.
+* Add the ability for staff to take a patron's profile picture photo using a webcam. Refs UIU-3266.
 
 ## [12.1.1] (https://github.com/folio-org/ui-users/tree/v12.1.1) (2025-03-26)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.0...v12.1.1)
