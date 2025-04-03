@@ -554,7 +554,6 @@
     "loans.declareLostDialogBody": "Der Titel: <strong> {title} ( {materialType} ) </strong> (Barcode: {barcode} ) wird <strong> als verloren erklärt </strong>. {countIndex, plural, =-1 { Möglicherweise gibt es offene Bestandsanfragen für dieses Exemplar. } =0 {} one { Es gibt {openRequestValue} für dieses Exemplar. } other { Es gibt {openRequestValue} für dieses Exemplar. }}",
     "loans.confirmLostState": "Ausleihstatus bestätigen: Für verloren erklärt",
     "loans.declareLost.additionalInfoPlaceholder": "Weitere Informationen zum verlorenen Exemplar eingeben (erforderlich)",
-    "userSearch": "Personensuche",
     "userSearchResults": "Suchergebnisse",
     "feefines.ownerLabel": "Eigentümer/-in",
     "loans.details.overduePolicy": "Ausleihrichtlinie für überfällige Exemplare",
@@ -1237,5 +1236,15 @@
     "accounts.history.columns.actions": "Actions",
     "charge.item.barcode.error": "No item with barcode {barcode} could be found",
     "information.pronouns": "Pronouns",
-    "errors.personal.pronounsCharLimit": "Pronouns are limited to 300 characters"
+    "errors.personal.pronounsCharLimit": "Pronouns are limited to 300 characters",
+    "settings.numberGenerator.barcode": "Barcode",
+    "settings.numberGenerator.info": "Felder, die normalerweise Nummernkreise nutzen, könnten einen Nummerngenerator verwenden. Wenn der Generator aktiviert ist, kann das Feld entweder vor manueller Aktualisierung geschützt werden oder editierbar sein. Wenn der Generator deaktiviert ist, kann das Feld nur manuell verwendet werden.",
+    "settings.numberGenerator.infoAdditional": "Weitere Einstellungen für Nummerngeneratoren sind unter {serviceInteractionLink} verfügbar. Unter {numberGeneratorSequencesLink} können Nummernkreise definiert werden, indem der entsprechende Generator über das Dropdown-Menü ausgewählt wird.",
+    "settings.numberGenerator.options": "Nummerngenerator-Optionen",
+    "settings.numberGenerator.options.off": "Deaktiviert",
+    "settings.numberGenerator.options.onEditable": "Aktiviert, Feld editierbar",
+    "settings.numberGenerator.options.onNotEditable": "Aktiviert, Feld nicht editierbar",
+    "numberGenerator.generateBarcode": "Barcode generieren",
+    "numberGenerator.barcodeGenerator": "Barcode-Nummerngenerator",
+    "permission.settings.number-generator-options.all": "Einstellungen (Personen): Nummerngenerator-Optionen verwalten"
 }

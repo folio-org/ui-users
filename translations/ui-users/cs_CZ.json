@@ -554,7 +554,6 @@
     "loans.declareLostDialogBody": "<strong>{title} ({materialType})</strong> (Čárový kód: {barcode}) bude <strong>prohlášen za ztracený</strong>. {countIndex, plural, =-1 {Pro tuto jednotku mohou existovat otevřené žádanky.} =0 {} one {Pro tuto jednotku existuje {openRequestValue} žádanka.} other {Pro tuto jednotku existuje {openRequestValue} žádanek.}}",
     "loans.confirmLostState": "Potvrdit stav Prohlášena za ztracenou",
     "loans.declareLost.additionalInfoPlaceholder": "Zadat další informace o ztracené jednotce (povinné)",
-    "userSearch": "Vyhledávání uživatelů",
     "userSearchResults": "Výsledky vyhledávání uživatelů",
     "feefines.ownerLabel": "Vlastník",
     "loans.details.overduePolicy": "Pravidlo pokut za pozdní vrácení",
@@ -793,7 +792,7 @@
     "reports.feeFine.itemLoanDetails": "Detaily výpůjčky jednotky",
     "export.button": "Export",
     "reports.refunds.feeFineOwner": "Vlastník poplatku/pokuty",
-    "accounts.exportFeesFines": "Export poplatků/pokut",
+    "accounts.exportFeesFines": "Export poplatků/pokut (CSV)",
     "reports.refunds.modal.owner": "Vlastník poplatku/pokuty",
     "reports.refunds.modal.owner.placeholder": "Vybrat vlastníka poplatku/pokuty",
     "reports.feeFine.details": "Detaily poplatku/pokuty",
@@ -1237,5 +1236,15 @@
     "accounts.history.columns.actions": "Akce",
     "charge.item.barcode.error": "Nepodařilo se najít žádnou položku s čárovým kódem {barcode}",
     "information.pronouns": "Zájmena",
-    "errors.personal.pronounsCharLimit": "Zájmena jsou omezena na 300 znaků"
+    "errors.personal.pronounsCharLimit": "Zájmena jsou omezena na 300 znaků",
+    "settings.numberGenerator.barcode": "Čárový kód",
+    "settings.numberGenerator.info": "Pole, která se obvykle vyplňují pomocí číselné posloupnosti, mohou používat generátor čísel. Po zapnutí generátoru lze pole buď uzamknout, aby se zabránilo ruční aktualizaci, nebo jej lze nechat upravovatelné. Když je generátor vypnutý, je třeba pole vyplnit ručně.",
+    "settings.numberGenerator.infoAdditional": "Další nastavení generátoru čísel jsou k dispozici v části {serviceInteractionLink}. Na adrese {numberGeneratorSequencesLink} lze definovat sekvence výběrem příslušného generátoru prostřednictvím rozbalovací nabídky.",
+    "settings.numberGenerator.options": "Možnosti generátoru čísel",
+    "settings.numberGenerator.options.off": "Vypnuto",
+    "settings.numberGenerator.options.onEditable": "Zapnuto, pole lze upravovat",
+    "settings.numberGenerator.options.onNotEditable": "Zapnuto, pole nelze upravovat",
+    "numberGenerator.generateBarcode": "Vygenerovat čárový kód pro uživatele",
+    "numberGenerator.barcodeGenerator": "Generátor čárových kódů pro uživatele",
+    "permission.settings.number-generator-options.all": "Nastavení (Uživatelé): Může vytvářet, upravovat a zobrazovat možnosti generátoru čísel"
 }
