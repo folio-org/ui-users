@@ -1,11 +1,20 @@
-.cropContainer{
+.cropContainer {
   position: relative;
   width: 100%;
   height: 300px;
   background: #333;
 }
 
-.modalBodyContainer{
+.modalBodyContainer {
   display: flex;
   flex-direction: column;
+  width: 100%;
+}
+
+.videoFeedContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  background-color: black;
 }

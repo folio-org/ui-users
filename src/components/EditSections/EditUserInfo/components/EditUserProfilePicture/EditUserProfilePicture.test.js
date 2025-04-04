@@ -99,7 +99,15 @@ describe('Edit User Profile Picture', () => {
       const updateButton = screen.getByTestId('updateProfilePictureDropdown');
       await userEvent.click(updateButton);
 
-      expect(screen.getByText('Icon (profile)')).toBeInTheDocument();
+      expect(screen.getByTestId('localFile')).toBeInTheDocument();
+    });
+
+    it('should display take photo button', async () => {
+      renderProfilePicture(defaultProps);
+      const updateButton = screen.getByTestId('updateProfilePictureDropdown');
+      await userEvent.click(updateButton);
+
+      expect(screen.getByTestId('webcam')).toBeInTheDocument();
     });
 
     it('should display External link button', async () => {
@@ -107,7 +115,7 @@ describe('Edit User Profile Picture', () => {
       const updateButton = screen.getByTestId('updateProfilePictureDropdown');
       await userEvent.click(updateButton);
 
-      expect(screen.getByText('Icon (external-link)')).toBeInTheDocument();
+      expect(screen.getByTestId('externalURL')).toBeInTheDocument();
     });
 
     it('Should display Delete link button', async () => {

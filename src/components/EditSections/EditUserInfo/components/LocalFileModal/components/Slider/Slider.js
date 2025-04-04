@@ -8,7 +8,7 @@ import css from './Slider.css';
 
 const formatMessageMapping = (label) => (`ui-users.information.profilePicture.localFile.modal.${label}`);
 
-const Slider = ({ value, handleChange, min, max, step, label }) => {
+const Slider = ({ value, handleChange, min, max, step, label, disabled }) => {
   const id = `${uuidv4()}`;
 
   return (
@@ -24,15 +24,16 @@ const Slider = ({ value, handleChange, min, max, step, label }) => {
     >
       <FormattedMessage id={formatMessageMapping(label)} />
       <input
-        className={css.slider}
+        className={disabled ? css.sliderDisabled : css.slider}
         id={id}
         type="range"
-        defaultValue={value}
+        value={value}
         min={min}
         max={max}
         step={step}
         onChange={handleChange}
         aria-label={label}
+        disabled={disabled}
         style={{ width:'100%', marginLeft: '2px' }}
       />
     </label>
