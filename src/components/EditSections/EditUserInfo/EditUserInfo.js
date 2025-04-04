@@ -403,7 +403,6 @@ class EditUserInfo extends React.Component {
                 </Col>
               </Row>
             </Col>
-
             {
               displayProfilePicture &&
               <Col xs={3}>
