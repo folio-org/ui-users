@@ -317,6 +317,8 @@
   "information.lastName": "Last name",
   "information.firstName": "First name",
   "information.middleName": "Middle name",
+  "information.profilePicture.takePhoto": "Take photo",
+  "information.profilePicture.retakePhoto": "Retake photo",
   "information.profilePicture": "Profile picture",
   "information.profilePicture.update": "Update",
   "information.profilePicture.localFile": "Local file",
