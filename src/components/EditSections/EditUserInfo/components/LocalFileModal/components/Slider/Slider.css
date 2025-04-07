@@ -1,4 +1,4 @@
-.slider {
+.slider, .sliderDisabled {
   -webkit-appearance: none;  /* Override default CSS styles */
   appearance: none;
   width: 100%;
@@ -11,7 +11,7 @@
   opacity: 1;
 }
 
-.slider::-webkit-slider-thumb {
+.slider::-webkit-slider-thumb, .sliderDisabled::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
   width: 15px;
@@ -21,9 +21,17 @@
   cursor: pointer;
 }
 
-.slider::-moz-range-thumb {
+.slider::-moz-range-thumb, .sliderDisabled::-moz-range-thumb {
   width: 25px;
   height: 25px;
   background: #1960A4;
   cursor: pointer;
+}
+
+.sliderDisabled::-webkit-slider-thumb {
+  background: gray;
+}
+
+.sliderDisabled::-moz-range-thumb {
+  background: gray;
 }
