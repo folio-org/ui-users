@@ -1,5 +1,8 @@
 # Change history for ui-users
 
+## In progress
+* Add the ability for staff to take a patron's profile picture photo using a webcam. Refs UIU-3266.
+
 ## [11.0.11](https://github.com/folio-org/ui-users/tree/v11.0.11) (2025-01-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.10...v11.0.11)
 
