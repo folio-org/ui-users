@@ -31,6 +31,11 @@ const mockStripes = {
   config: {
     maxUnpagedResourceCount: 1000,
   },
+  mutator: {
+    selUser: {
+      PUT: jest.fn().mockResolvedValue({ data: {} }),
+    },
+  }
 };
 
 const mockRolesData = {

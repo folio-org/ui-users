@@ -334,7 +334,7 @@ class UserEdit extends React.Component {
     const { mutator, stripes } = this.props;
     try {
       if (stripes.hasInterface('users-keycloak')) {
-        await this.props.checkAndHandleKeycloakAuthUser(data, mutator, this.onCompleteEdit);
+        await this.props.checkAndHandleKeycloakAuthUser(this.onCompleteEdit, data, mutator);
       } else {
         await mutator.selUser.PUT(data);
         this.onCompleteEdit();

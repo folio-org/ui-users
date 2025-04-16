@@ -80,7 +80,7 @@ const withUserRoles = (WrappedComponent) => (props) => {
     await createKeycloakUser(userId);
   };
 
-  const handleKeycloakUserExists = async (data, onFinish) => {
+  const handleKeycloakUserExists = async (onFinish, data) => {
     await updateKeycloakUser(userId, data);
 
     if (!isEqual(assignedRoleIds, initialAssignedRoleIds)) {
@@ -89,12 +89,12 @@ const withUserRoles = (WrappedComponent) => (props) => {
     onFinish();
   };
 
-  const checkAndHandleKeycloakAuthUser = async (data, mutator, onFinish) => {
+  const checkAndHandleKeycloakAuthUser = async (onFinish, data, mutator) => {
     const userKeycloakStatus = await checkUserInKeycloak();
     switch (userKeycloakStatus) {
       case KEYCLOAK_USER_EXISTANCE.exist:
         // Only save changes to mod-users-keycloak.
-        await handleKeycloakUserExists(data, onFinish);
+        await handleKeycloakUserExists(onFinish, data);
         break;
       case KEYCLOAK_USER_EXISTANCE.nonExist:
         // First, save changes to mod-users.
