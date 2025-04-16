@@ -89,13 +89,17 @@ const withUserRoles = (WrappedComponent) => (props) => {
     onFinish();
   };
 
-  const checkAndHandleKeycloakAuthUser = async (data, onFinish) => {
+  const checkAndHandleKeycloakAuthUser = async (data, mutator, onFinish) => {
     const userKeycloakStatus = await checkUserInKeycloak();
     switch (userKeycloakStatus) {
       case KEYCLOAK_USER_EXISTANCE.exist:
+        // Only save changes to mod-users-keycloak.
         await handleKeycloakUserExists(data, onFinish);
         break;
       case KEYCLOAK_USER_EXISTANCE.nonExist:
+        // First, save changes to mod-users.
+        // If user decides to create a Keycloak user, then changes will be copied over from mod-users to mod-users-keycloak.
+        await mutator.selUser.PUT(data);
         setIsCreateKeycloakUserConfirmationOpen(true);
         break;
       default:

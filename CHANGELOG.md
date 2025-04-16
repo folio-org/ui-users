@@ -11,11 +11,12 @@
 * "Affiliations" select in Role/Permission accordion should not be displayed on patron user details pane. Refs UIU-3314.
 * Fixed sponsor notification dropdown showing incorrect values for pristine forms. Refs UIU-3260.
 * Add the ability for staff to take a patron's profile picture photo using a webcam. Refs UIU-3266.
+* Ensure keycloak user updates are sent to `mod-users-keycloak` and non-keycloak user updates are sent to `mod-users`. Refs UIU-3360.
 
 ## [12.1.1] (https://github.com/folio-org/ui-users/tree/v12.1.1) (2025-03-26)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.0...v12.1.1)
 
-* Fetch all role records for each tenant in order to sort `assignedRoleIds` alphabetically by role name in UserEdit. Refs UIU-3355.   
+* Fetch all role records for each tenant in order to sort `assignedRoleIds` alphabetically by role name in UserEdit. Refs UIU-3355.
 
 ## [12.1.0](https://github.com/folio-org/ui-users/tree/v12.1.0) (2025-03-18)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.0.0...v12.1.0)
