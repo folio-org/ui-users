@@ -53,6 +53,16 @@ const withUserRoles = (WrappedComponent) => (props) => {
     await Promise.allSettled(requests);
   };
 
+  const updateKeycloakUser = async (userId, data) => {
+    try {
+      await api.put(`users-keycloak/users/${userId}`, {
+        json: { ...data }
+      });
+    } catch (error) {
+      sendErrorCallout(error);
+    }
+  };
+
   const checkUserInKeycloak = async () => {
     try {
       await api.get(`users-keycloak/auth-users/${userId}`);
@@ -70,20 +80,20 @@ const withUserRoles = (WrappedComponent) => (props) => {
     await createKeycloakUser(userId);
   };
 
-  const handleKeycloakUserExists = async (onFinish) => {
-    await updateUserRoles(assignedRoleIds);
+  const handleKeycloakUserExists = async (data, onFinish) => {
+    await updateKeycloakUser(userId, data);
+
+    if (!isEqual(assignedRoleIds, initialAssignedRoleIds)) {
+      await updateUserRoles(assignedRoleIds);
+    }
     onFinish();
   };
 
-  const checkAndHandleKeycloakAuthUser = async (onFinish) => {
-    if (isEqual(assignedRoleIds, initialAssignedRoleIds)) {
-      onFinish();
-      return;
-    }
+  const checkAndHandleKeycloakAuthUser = async (data, onFinish) => {
     const userKeycloakStatus = await checkUserInKeycloak();
     switch (userKeycloakStatus) {
       case KEYCLOAK_USER_EXISTANCE.exist:
-        await handleKeycloakUserExists(onFinish);
+        await handleKeycloakUserExists(data, onFinish);
         break;
       case KEYCLOAK_USER_EXISTANCE.nonExist:
         setIsCreateKeycloakUserConfirmationOpen(true);

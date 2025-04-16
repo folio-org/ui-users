@@ -333,14 +333,12 @@ class UserEdit extends React.Component {
   async updateUserData(data) {
     const { mutator, stripes } = this.props;
     try {
-      await mutator.selUser.PUT(data);
-
-      if (!stripes.hasInterface('users-keycloak')) {
+      if (stripes.hasInterface('users-keycloak')) {
+        await this.props.checkAndHandleKeycloakAuthUser(data, this.onCompleteEdit);
+      } else {
+        await mutator.selUser.PUT(data);
         this.onCompleteEdit();
-        return;
       }
-
-      await this.props.checkAndHandleKeycloakAuthUser(this.onCompleteEdit);
     } catch (e) {
       showErrorCallout(e, this.context.sendCallout);
     }
