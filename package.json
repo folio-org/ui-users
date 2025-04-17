@@ -186,7 +186,7 @@
         "displayName": "Users: Can manage user/role assignments",
         "description": "",
         "subPermissions": [
-          "ui-users.view",
+          "ui-users.roles.view",
           "ui-users.edit",
           "ui-authorization-roles.users.settings.manage"
         ],
