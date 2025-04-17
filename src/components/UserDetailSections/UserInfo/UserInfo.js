@@ -99,7 +99,7 @@ const UserInfo = (props) => {
             <Col xs={3}>
               <KeyValue
                 label={<FormattedMessage id="ui-users.information.expirationDate" />}
-                value={user.expirationDate ? <FormattedDate value={user.expirationDate} /> : '-'}
+                value={user.expirationDate ? <FormattedDate value={user.expirationDate} timeZone="UTC" /> : '-'}
               />
             </Col>
             <Col xs={3}>

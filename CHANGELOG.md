@@ -10,6 +10,7 @@
 * Field "Date enrolled" showing 1 day earlier in View than Edit. Refs UIU-3264.
 * "Affiliations" select in Role/Permission accordion should not be displayed on patron user details pane. Refs UIU-3314.
 * Fixed sponsor notification dropdown showing incorrect values for pristine forms. Refs UIU-3260.
+* Fix incorrect date display in `UserDetail` due to unspecified timezone. Refs UIU-3352.
 * Add the ability for staff to take a patron's profile picture photo using a webcam. Refs UIU-3266.
 * Ensure keycloak user updates are sent to `mod-users-keycloak` and non-keycloak user updates are sent to `mod-users`. Refs UIU-3360.
 
@@ -26,7 +27,7 @@
 * Rename user details actions buttons and change order. Refs UIU-3121.
 
 ## [12.0.0](https://github.com/folio-org/ui-users/tree/v12.0.0) (2025-03-13)
-[Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.11...v12.0.0)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.12...v12.0.0)
 
 * `useUserTenantRoles` supplies `tenantId` in all its queries. Refs UIU-3279.
 * Leverage API supported sorting of columns on pre-registrations records list. Refs UIU-3249.
@@ -52,6 +53,11 @@
 * Add fallback / optional chaining guard for "Preferred email communications" `itemToString` prop for when `option` is `null` or `undefined`. Refs UIU-3335.
 * When viewing the detail page for a reminder fee, show the returned date (if any) of the associated loan. Fixes UIU-3187.
 * *BREAKING* Upgrade plugin-find-user to v8. Refs UIU-3342.
+
+## [11.0.12](https://github.com/folio-org/ui-users/tree/v11.0.12) (2025-04-10)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.11...v11.0.12)
+
+* Add the ability for staff to take a patron's profile picture photo using a webcam. Refs UIU-3266.
 
 ## [11.0.11](https://github.com/folio-org/ui-users/tree/v11.0.11) (2025-01-15)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.10...v11.0.11)
