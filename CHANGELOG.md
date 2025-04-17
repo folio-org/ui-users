@@ -12,6 +12,7 @@
 * Fixed sponsor notification dropdown showing incorrect values for pristine forms. Refs UIU-3260.
 * Fix incorrect date display in `UserDetail` due to unspecified timezone. Refs UIU-3352.
 * Add the ability for staff to take a patron's profile picture photo using a webcam. Refs UIU-3266.
+* Add missed subPermission `ui-users.roles.view` to `ui-users.roles.manage`. Refs UIU-3363.
 
 ## [12.1.1] (https://github.com/folio-org/ui-users/tree/v12.1.1) (2025-03-26)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.0...v12.1.1)
