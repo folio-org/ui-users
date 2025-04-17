@@ -187,7 +187,6 @@
         "description": "",
         "subPermissions": [
           "ui-users.roles.view",
-          "ui-users.view",
           "ui-users.edit",
           "ui-authorization-roles.users.settings.manage"
         ],
