@@ -1246,5 +1246,7 @@
     "settings.numberGenerator.options.onNotEditable": "Zapnuto, pole nelze upravovat",
     "numberGenerator.generateBarcode": "Vygenerovat čárový kód pro uživatele",
     "numberGenerator.barcodeGenerator": "Generátor čárových kódů pro uživatele",
-    "permission.settings.number-generator-options.all": "Nastavení (Uživatelé): Může vytvářet, upravovat a zobrazovat možnosti generátoru čísel"
+    "permission.settings.number-generator-options.all": "Nastavení (Uživatelé): Může vytvářet, upravovat a zobrazovat možnosti generátoru čísel",
+    "information.profilePicture.takePhoto": "Vyfotit",
+    "information.profilePicture.retakePhoto": "Vyfotit znovu"
 }

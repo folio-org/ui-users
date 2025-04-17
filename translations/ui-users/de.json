@@ -1246,5 +1246,7 @@
     "settings.numberGenerator.options.onNotEditable": "Aktiviert, Feld nicht editierbar",
     "numberGenerator.generateBarcode": "Barcode generieren",
     "numberGenerator.barcodeGenerator": "Barcode-Nummerngenerator",
-    "permission.settings.number-generator-options.all": "Einstellungen (Personen): Nummerngenerator-Optionen verwalten"
+    "permission.settings.number-generator-options.all": "Einstellungen (Personen): Nummerngenerator-Optionen verwalten",
+    "information.profilePicture.takePhoto": "Take photo",
+    "information.profilePicture.retakePhoto": "Retake photo"
 }

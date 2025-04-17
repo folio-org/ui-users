@@ -1246,5 +1246,7 @@
     "settings.numberGenerator.options.onNotEditable": "Ligado, campo não editável",
     "numberGenerator.generateBarcode": "Gerar código de barras do usuário",
     "numberGenerator.barcodeGenerator": "Gerador de código de barras do usuário",
-    "permission.settings.number-generator-options.all": "Configurações (usuários): Pode criar, editar e visualizar as opções do gerador de números"
+    "permission.settings.number-generator-options.all": "Configurações (usuários): Pode criar, editar e visualizar as opções do gerador de números",
+    "information.profilePicture.takePhoto": "Tirar foto",
+    "information.profilePicture.retakePhoto": "Refazer foto"
 }
