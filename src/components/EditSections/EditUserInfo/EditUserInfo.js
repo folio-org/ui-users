@@ -368,6 +368,7 @@ class EditUserInfo extends React.Component {
                     parse={this.parseExpirationDate}
                     disabled={disabled}
                     validate={validateMinDate('ui-users.errors.personal.dateOfBirth')}
+                    timeZone="UTC"
                   />
                   {checkShowRecalculateButton() && (
                     <Button

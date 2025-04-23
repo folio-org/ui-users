@@ -14,6 +14,7 @@
 * Add the ability for staff to take a patron's profile picture photo using a webcam. Refs UIU-3266.
 * Ensure keycloak user updates are sent to `mod-users-keycloak` and non-keycloak user updates are sent to `mod-users`. Refs UIU-3360.
 * Add missed subPermission `ui-users.roles.view` to `ui-users.roles.manage`. Refs UIU-3363.
+* [Follow-up] Fix incorrect date display in `EditUserInfo` due to unspecified timezone. Refs UIU-3352.
 
 ## [12.1.1] (https://github.com/folio-org/ui-users/tree/v12.1.1) (2025-03-26)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.0...v12.1.1)
