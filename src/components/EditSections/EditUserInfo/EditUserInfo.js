@@ -98,8 +98,8 @@ class EditUserInfo extends React.Component {
 
   calculateNewExpirationDate = (startCalcToday) => {
     const { initialValues, stripes: { locale } } = this.props;
-    const expirationDate = new Date(initialValues.expirationDate);
     const now = Date.now();
+    const expirationDate = initialValues.expirationDate ? new Date(initialValues.expirationDate) : now;
     const offsetOfSelectedPatronGroup = this.state.selectedPatronGroup ? this.getPatronGroupOffset() : '';
 
     const shouldRecalculateFromToday = startCalcToday || initialValues.expirationDate === undefined || expirationDate <= now;
@@ -225,7 +225,7 @@ class EditUserInfo extends React.Component {
 
     const offset = this.getPatronGroupOffset();
     const group = get(this.props.patronGroups.find(i => i.id === this.state.selectedPatronGroup), 'group', '');
-    const date = moment(this.calculateNewExpirationDate(true)).format('LL');
+    const date = moment(this.calculateNewExpirationDate(true), 'L').format('LL');
 
     const modalFooter = (
       <ModalFooter>
