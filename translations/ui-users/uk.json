@@ -385,7 +385,7 @@
     "accounts.cancellation.field.feefineType": "fee/fine type",
     "accounts.cancellation.feeFinewillBeCancelled": "<b>{amount}</b> {feeFineType} fee/fine will be <b>cancelled</b>",
     "accounts.comment.field.feeFineComment": "Staff information",
-    "accounts.actions.calloutMessage": "The {feeFineType} fee/fine of {amount} has been successfully {paymentStatus} for {name}.",
+    "accounts.actions.calloutMessage": "Пеня/штраф {feeFineType} у розмірі {amount} успішно {paymentStatus} для {name}.",
     "accounts.actions.payFeeFine": "Pay fees/fines",
     "accounts.actions.waiveFeeFine": "Waive fees/fines",
     "accounts.actions.warning.alertDetails": "Alert details",
