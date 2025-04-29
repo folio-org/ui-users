@@ -98,7 +98,7 @@ class EditUserInfo extends React.Component {
   }
 
   calculateNewExpirationDate = (startCalcToday) => {
-    const { initialValues, stripes: { locale } } = this.props;
+    const { initialValues } = this.props;
     const now = Date.now();
     const expirationDate = initialValues.expirationDate ? new Date(initialValues.expirationDate) : now;
     const offsetOfSelectedPatronGroup = this.state.selectedPatronGroup ? this.getPatronGroupOffset() : '';
