@@ -1136,7 +1136,7 @@
     "information.profilePicture.localFile.maxFileSize.error": "Photo size exceeds the {maxFileSize}MB limit. Please choose a photo with a size of {maxFileSize}MB or less.",
     "accounts.warning.unpaidItemSelected": "{total, number} {total, plural, one {item} other {items}} selected. {items, number} {items, plural, one {item} other {items}} cannot be {action} because {items, plural, one {it was} other {they were}} not paid.",
     "errors.renewWithReminders": "Renewals not allowed for loans with reminders.",
-    "information.profilePicture.externalLink.modal.externalURL.invalidURLErrorMessage": "Invalid image URL",
+    "information.profilePicture.externalLink.modal.externalURL.invalidURLErrorMessage": "Ungültige Bild-URL",
     "information.profilePicture.externalLink.modal.externalURL.invalidImageURLErrorMessage": "The provided URL is valid but does not point to an image file",
     "information.userType.dcb": "DCB",
     "readingRoom.readingRoomAccess": "Reading room access",
