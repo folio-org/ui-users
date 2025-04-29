@@ -18,6 +18,7 @@ import {
   Headline,
   Modal,
   ModalFooter,
+  dayjs,
 } from '@folio/stripes/components';
 import { ViewMetaData } from '@folio/stripes/smart-components';
 
@@ -103,9 +104,9 @@ class EditUserInfo extends React.Component {
     const offsetOfSelectedPatronGroup = this.state.selectedPatronGroup ? this.getPatronGroupOffset() : '';
 
     const shouldRecalculateFromToday = startCalcToday || initialValues.expirationDate === undefined || expirationDate <= now;
-    const baseDate = shouldRecalculateFromToday ? moment() : moment(expirationDate);
+    const baseDate = shouldRecalculateFromToday ? dayjs() : dayjs(expirationDate);
 
-    return baseDate.add(offsetOfSelectedPatronGroup, 'd').locale(locale);
+    return baseDate.add(offsetOfSelectedPatronGroup, 'd');
   }
 
   getPatronGroupOffset = () => {
@@ -225,7 +226,7 @@ class EditUserInfo extends React.Component {
 
     const offset = this.getPatronGroupOffset();
     const group = get(this.props.patronGroups.find(i => i.id === this.state.selectedPatronGroup), 'group', '');
-    const date = moment(this.calculateNewExpirationDate(true)).format('LL');
+    const date = this.calculateNewExpirationDate(true);
 
     const modalFooter = (
       <ModalFooter>
@@ -476,7 +477,15 @@ class EditUserInfo extends React.Component {
           <div>
             <FormattedMessage
               id="ui-users.information.recalculate.modal.text"
-              values={{ group, offset, date }}
+              values={{
+                group,
+                offset,
+                date: intl.formatDate(date, {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })
+              }}
             />
           </div>
         </Modal>
