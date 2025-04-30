@@ -16,6 +16,7 @@
 * Add missed subPermission `ui-users.roles.view` to `ui-users.roles.manage`. Refs UIU-3363.
 * [Follow-up] Fix incorrect date display in `EditUserInfo` due to unspecified timezone. Refs UIU-3352.
 * Fix `Expiration date` field value when non-default locale is applied. Refs UIU-3318.
+* [Follow-up] Fix `Expiration date` field value when non-default locale is applied. Refs UIU-3318.
 
 ## [12.1.1] (https://github.com/folio-org/ui-users/tree/v12.1.1) (2025-03-26)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.0...v12.1.1)
