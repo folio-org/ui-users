@@ -8,6 +8,10 @@
 * Update jspdf(to v3.0.0) and jspdf-autotable(to v5.0.2) for security. Refs UIU-3347.
 * Prevent error toast from occurring when user doesn't have `ui-users.roles.view` capability. Refs UIU-3350.
 
+## [12.1.5] (https://github.com/folio-org/ui-users/tree/v12.1.5) (2025-04-30)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.4...v12.1.5)
+* Ensure keycloak user updates are sent to `mod-users-keycloak` and non-keycloak user updates are sent to `mod-users`. Refs UIU-3360.
+
 ## [12.1.4] (https://github.com/folio-org/ui-users/tree/v12.1.4) (2025-04-25)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.3...v12.1.4)
 * Fix incorrect date display in `UserDetail` due to unspecified timezone. Refs UIU-3352.
@@ -15,7 +19,6 @@
 
 ## [12.1.3] (https://github.com/folio-org/ui-users/tree/v12.1.3) (2025-04-24)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.2...v12.1.3)
-* Ensure keycloak user updates are sent to `mod-users-keycloak` and non-keycloak user updates are sent to `mod-users`. Refs UIU-3360.
 * Add missed subPermission `ui-users.roles.view` to `ui-users.roles.manage`. Refs UIU-3363.
 
 ## [12.1.2] (https://github.com/folio-org/ui-users/tree/v12.1.2) (2025-04-10)
@@ -24,7 +27,6 @@
 * Field "Date enrolled" showing 1 day earlier in View than Edit. Refs UIU-3264
 * "Affiliations" select in Role/Permission accordion should not be displayed on patron user details pane. Refs UIU-3314.
 * Add the ability for staff to take a patron's profile picture photo using a webcam. Refs UIU-3266.
-* Ensure keycloak user updates are sent to `mod-users-keycloak` and non-keycloak user updates are sent to `mod-users`. Refs UIU-3360.
 
 ## [12.1.1] (https://github.com/folio-org/ui-users/tree/v12.1.1) (2025-03-26)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.0...v12.1.1)
