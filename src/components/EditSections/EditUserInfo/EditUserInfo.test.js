@@ -1,9 +1,13 @@
+import { act } from 'react';
+
 import okapiCurrentUser from 'fixtures/okapiCurrentUser';
 import { screen } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import { Form } from 'react-final-form';
 
 import '__mock__/stripesComponents.mock';
+
+import { dayjs } from '@folio/stripes/components';
 
 import renderWithRouter from 'helpers/renderWithRouter';
 
@@ -43,6 +47,7 @@ jest.mock('@folio/stripes/components', () => ({
   ModalFooter: jest.fn((props) => (
     <div>{props.children}</div>
   )),
+  dayjs: jest.fn(),
 }));
 
 jest.mock('../../util', () => ({
@@ -116,7 +121,7 @@ const props = {
   accordionId: 'editUserInfo',
   stripes: {
     connect: (Component) => Component,
-    timezone: 'USA/TestTimeZone',
+    timezone: 'America/New_York',
     locale: 'en-US',
     hasInterface: () => true,
     hasPerm: () => true,
@@ -165,6 +170,16 @@ const props = {
 describe('Render Edit User Information component', () => {
   beforeEach(() => {
     isConsortiumEnabled.mockClear().mockReturnValue(false);
+
+    dayjs.mockImplementation((date) => {
+      const dayjsObj = jest.requireActual('@folio/stripes/components').dayjs(date);
+
+      return {
+        ...dayjsObj,
+        format: jest.fn().mockReturnValue('05/04/2027'),
+        add: jest.fn().mockReturnThis(),
+      };
+    });
   });
 
   it('Must be rendered', () => {
@@ -176,6 +191,27 @@ describe('Render Edit User Information component', () => {
     await userEvent.click(screen.getByText('ui-users.information.recalculate.expirationDate'));
     expect(changeMock).toHaveBeenCalled();
   });
+
+  describe('when "Reset" (recalculate) button is clicked', () => {
+    it('should change expiration date', async () => {
+      dayjs.mockImplementation((date) => {
+        const dayjsObj = jest.requireActual('@folio/stripes/components').dayjs(date);
+
+        return {
+          ...dayjsObj,
+          format: jest.fn().mockReturnValue('06/05/2025'),
+          add: jest.fn().mockReturnThis(),
+        };
+      });
+
+      renderEditUserInfo(props);
+
+      await act(() => userEvent.click(screen.getByText('ui-users.information.recalculate.expirationDate')));
+
+      expect(changeMock).toHaveBeenCalledWith('expirationDate', '2025-06-05T03:59:59.999Z');
+    });
+  });
+
   it('should handle empty expiration date correctly', () => {
     renderEditUserInfo({
       ...props,
