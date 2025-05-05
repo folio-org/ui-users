@@ -84,7 +84,7 @@ class EditUserInfo extends React.Component {
 
   setRecalculatedExpirationDate = (startCalcToday) => {
     const { form: { change } } = this.props;
-    const recalculatedDate = this.calculateNewExpirationDate(startCalcToday);
+    const recalculatedDate = this.calculateNewExpirationDate(startCalcToday).format('L');
     const parsedRecalculatedDate = this.parseExpirationDate(recalculatedDate);
 
     change('expirationDate', parsedRecalculatedDate);
