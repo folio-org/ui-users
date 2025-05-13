@@ -17,6 +17,7 @@
 * [Follow-up] Fix incorrect date display in `EditUserInfo` due to unspecified timezone. Refs UIU-3352.
 * Fix `Expiration date` field value when non-default locale is applied. Refs UIU-3318.
 * [Follow-up] Fix `Expiration date` field value when non-default locale is applied. Refs UIU-3318.
+* Add 'users.collection.get' permission to user settings. Fixes UIU-3189.
 
 ## [12.1.1] (https://github.com/folio-org/ui-users/tree/v12.1.1) (2025-03-26)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.0...v12.1.1)

@@ -247,6 +247,7 @@
         "subPermissions": [
           "usergroups.collection.get",
           "usergroups.item.get",
+          "users.collection.get",
           "settings.users.enabled"
         ],
         "visible": true
@@ -672,6 +673,7 @@
         "displayName": "Settings (Users): Can view patron blocks templates",
         "subPermissions": [
           "settings.users.enabled",
+          "users.collection.get",
           "manual-block-templates.collection.get",
           "manual-block-templates.item.get"
         ],
