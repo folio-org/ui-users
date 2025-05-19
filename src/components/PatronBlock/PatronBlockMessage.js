@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { TextField } from '@folio/stripes/components';
+import { MessageBanner } from '@folio/stripes/components';
 import { stripesConnect } from '@folio/stripes/core';
 
 import {
@@ -17,7 +17,9 @@ class PatronBlockMessage extends React.Component {
     const { intl } = this.props;
     const place = intl.formatMessage({ id: 'ui-users.blocks.textField.place' });
     return (
-      <TextField id="patron-block-place" fullWidth readOnly value={place} error=" " />
+      <MessageBanner type="error">
+        {place}
+      </MessageBanner>
     );
   }
 }
