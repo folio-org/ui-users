@@ -55,7 +55,7 @@ const withUserRoles = (WrappedComponent) => (props) => {
 
   const updateKeycloakUser = async (userId, data) => {
     try {
-      await api.put(`users-keycloak/users/${userId}`, {
+      await ky.put(`users-keycloak/users/${userId}`, {
         json: { ...data }
       });
     } catch (error) {
