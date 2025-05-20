@@ -1,4 +1,5 @@
-import React from 'react';
+import { act } from 'react';
+
 import { cleanup, render, waitFor } from '@folio/jest-config-stripes/testing-library/react';
 import { useStripes, useOkapiKy } from '@folio/stripes/core';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
@@ -50,16 +51,26 @@ const mockUserAffiliationRoles = {
   consortium: ['role1', 'role2'],
 };
 
+const mockData = {
+  id: 'userId',
+  username: 'testUser',
+};
+
+const mockApiPut = jest.fn(() => ({
+  json: () => Promise.resolve(),
+  catch: jest.fn(() => Promise.resolve({ status: 400 })),
+}));
+
+const mockKyPut = jest.fn();
+
 const mockKy = {
   extend: () => ({
     get: jest.fn().mockImplementationOnce(() => ({
       json: () => Promise.resolve({ userRoles: [{ roleId: 'role1' }, { roleId: 'role2' }] }),
     })).mockImplementationOnce(() => Promise.resolve(true)),
-    put: jest.fn(() => ({
-      json: () => Promise.resolve(),
-      catch: jest.fn(() => Promise.resolve({ status: 400 })),
-    })),
+    put: mockApiPut,
   }),
+  put: mockKyPut,
 };
 
 const WrappedComponent = ({ assignedRoleIds,
@@ -69,11 +80,20 @@ const WrappedComponent = ({ assignedRoleIds,
       <button
         type="submit"
         data-testid="submit-form"
-        onClick={() => checkAndHandleKeycloakAuthUser(() => {
-        })}
+        onClick={() => checkAndHandleKeycloakAuthUser(() => {}, mockData)}
       >Submit
       </button>
-      <button type="button" onClick={() => setAssignedRoleIds({ 'consortium': [5, 6, 7] })} data-testid="assignRoles" id="cancel">Assign roles</button>
+      <button
+        type="button"
+        onClick={() => setAssignedRoleIds({
+          college: ['collegeRole1'],
+          consortium: ['role1', 'role2'],
+          university: ['universityRole1'],
+        })}
+        data-testid="assignRoles"
+      >
+        Assign roles
+      </button>
       <div data-testid="confirmation-dialog">
         <button
           type="button"
@@ -84,6 +104,16 @@ const WrappedComponent = ({ assignedRoleIds,
         </button>
       </div>
     </div>
+);
+
+const CompWithUserRoles = withUserRoles(WrappedComponent);
+
+const renderComponent = (props = {}) => render(
+  <CompWithUserRoles
+    match={{ params: { id: 'user1' } }}
+    stripes={mockStripes}
+    {...props}
+  />
 );
 
 describe('withUserRoles HOC', () => {
@@ -126,5 +156,47 @@ describe('withUserRoles HOC', () => {
 
     await userEvent.click(getByTestId('assignRoles'));
     await userEvent.click(getByTestId('confirm-create-keycloak-user'));
+  });
+
+  describe('when assigning roles for other tenants', () => {
+    beforeEach(async () => {
+      useUserAffiliationRoles.mockReturnValue({ 
+        college: [],
+        consortium: ['role1', 'role2'],
+        university: [],
+      });
+      
+      const { getByTestId } = renderComponent();
+
+      await act(() => userEvent.click(getByTestId('assignRoles')));
+      await act(() => userEvent.click(getByTestId('submit-form')));
+    });
+
+    it('should save roles for each tenant', () => {
+      expect(mockApiPut).toHaveBeenCalledWith('roles/users/user1', {
+        json: {
+          userId: 'user1',
+          roleIds: ['collegeRole1'],
+        },
+      });
+      expect(mockApiPut).toHaveBeenCalledWith('roles/users/user1', {
+        json: {
+          userId: 'user1',
+          roleIds: ['universityRole1'],
+        },
+      });
+      expect(mockApiPut).toHaveBeenCalledWith('roles/users/user1', {
+        json: {
+          userId: 'user1',
+          roleIds: ['role1', 'role2'],
+        },
+      });
+    });
+
+    it('should save user data for the current tenant using `ky.put` rather than `api.put`', () => {
+      expect(mockKyPut).toHaveBeenCalledWith('users-keycloak/users/user1', {
+        json: mockData,
+      });
+    });
   });
 });

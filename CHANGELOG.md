@@ -19,6 +19,7 @@
 * [Follow-up] Fix `Expiration date` field value when non-default locale is applied. Refs UIU-3318.
 * Add 'users.collection.get' permission to user settings. Fixes UIU-3189.
 * Replace TextField with MessageBanner for patron block warning. Refs UIU-3120.
+* Refactor `updateKeycloakUser` to use `ky.put` instead of `api.put` for user updates. Fixes UIU-3383.
 
 ## [12.1.1] (https://github.com/folio-org/ui-users/tree/v12.1.1) (2025-03-26)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.0...v12.1.1)
