@@ -1119,7 +1119,8 @@
         "subPermissions": [
           "ui-users.settings.conditions.view",
           "ui-users.settings.limits.view",
-          "ui-users.settings.patron-block-templates.view"
+          "ui-users.settings.patron-block-templates.view",
+          "users.collection.get"
         ],
         "visible": true
       },
