@@ -12,7 +12,8 @@ const renderPatronBlockMessage = (props = {}) => renderWithRouter(<PatronBlockMe
 describe('Patron Block Message component', () => {
   it('it must contain the textbox and alert elements', () => {
     renderPatronBlockMessage();
-    expect(screen.getByRole('textbox')).toBeTruthy();
+
     expect(screen.getByRole('alert')).toBeTruthy();
+    expect(screen.getByText('ui-users.blocks.textField.place')).toBeVisible();
   });
 });

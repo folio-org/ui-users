@@ -8,3 +8,8 @@
   font-weight: normal;
   word-wrap: break-word;
 }
+
+.patronBlockBannerRow {
+  align-items: end;
+  margin-bottom: 0.5rem;
+}
