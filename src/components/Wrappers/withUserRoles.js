@@ -35,6 +35,7 @@ const withUserRoles = (WrappedComponent) => (props) => {
   }, [stringifiedInitialAssignedRoleIds]);
 
   const updateUserRoles = async (roleIds) => {
+    // to update roles for different tenants, we need to make API requests for each tenant
     const requests = Object.keys(roleIds).map((tenantIdKey) => {
       const putApi = ky.extend({
         hooks: {
@@ -55,7 +56,8 @@ const withUserRoles = (WrappedComponent) => (props) => {
 
   const updateKeycloakUser = async (userId, data) => {
     try {
-      await api.put(`users-keycloak/users/${userId}`, {
+      // use `ky.put` instead of `api.put` because updating current user data requires setting x-okapi-tenant to the current tenant.
+      await ky.put(`users-keycloak/users/${userId}`, {
         json: { ...data }
       });
     } catch (error) {
