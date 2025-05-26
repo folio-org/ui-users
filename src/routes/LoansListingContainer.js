@@ -60,8 +60,24 @@ class LoansListingContainer extends React.Component {
     loansHistory: {
       type: 'okapi',
       records: 'loans',
-      path: 'circulation/loans?query=(userId==:{id}) sortby id&limit=100000',
-      permissionsRequired: 'circulation.loans.collection.get',
+      path: (_q, _p, _r, _l, props) => {
+        const {
+          match: { params: { id } },
+          stripes,
+        } = props;
+        const query = `query=(userId==${id}) sortby id&limit=100000`;
+
+        if (stripes.hasInterface('circulation-bff-loans', '1.3')
+          && stripes.hasPerm('circulation-bff.loans.collection.get')) {
+          return `circulation-bff/loans?${query}`;
+        }
+
+        if (stripes.hasPerm('circulation.loans.collection.get')) {
+          return `circulation/loans?${query}`;
+        }
+
+        return null;
+      },
       shouldRefresh: (_, action, refresh) => {
         const { path } = action.meta;
         return refresh || (path && path.match(/loan-anonymization/));

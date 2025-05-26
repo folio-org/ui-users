@@ -160,12 +160,12 @@ describe('withUserRoles HOC', () => {
 
   describe('when assigning roles for other tenants', () => {
     beforeEach(async () => {
-      useUserAffiliationRoles.mockReturnValue({ 
+      useUserAffiliationRoles.mockReturnValue({
         college: [],
         consortium: ['role1', 'role2'],
         university: [],
       });
-      
+
       const { getByTestId } = renderComponent();
 
       await act(() => userEvent.click(getByTestId('assignRoles')));
