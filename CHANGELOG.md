@@ -3,7 +3,7 @@
 ## 13.0.0 IN PROGRESS
 * Collect coverage from unit tests. Refs UIU-3356.
 * Modify translation string for search view: "User search -> Search & filter". Refs UIU-3231.
-* Use number generator for barcode. Refs UIU-2729.
+* *BREAKING* Use number generator for barcode. Refs UIU-2729.
 * Change amount input type to number. Refs UIU-2836.
 * Update jspdf(to v3.0.0) and jspdf-autotable(to v5.0.2) for security. Refs UIU-3347.
 * Prevent error toast from occurring when user doesn't have `ui-users.roles.view` capability. Refs UIU-3350.
