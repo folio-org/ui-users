@@ -65,7 +65,7 @@ class LoansListingContainer extends React.Component {
           match: { params: { id } },
           stripes,
         } = props;
-        const query = `query=(userId==${id}) sortby id&limit=100000`;
+        const query = `query=(userId==${id}) sortby id&limit=99999`;
 
         if (stripes.hasInterface('circulation-bff-loans', '1.3')
           && stripes.hasPerm('circulation-bff.loans.collection.get')) {
