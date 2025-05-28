@@ -826,7 +826,8 @@
           "circulation-storage.fixed-due-date-schedules.collection.get",
           "circulation-storage.staff-slips.collection.get",
           "accounts.collection.get",
-          "comments.collection.get"
+          "comments.collection.get",
+          "circulation-bff.loans.collection.get"
         ],
         "visible": true
       },
