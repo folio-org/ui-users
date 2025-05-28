@@ -3,7 +3,7 @@
 ## 13.0.0 IN PROGRESS
 * Collect coverage from unit tests. Refs UIU-3356.
 * Modify translation string for search view: "User search -> Search & filter". Refs UIU-3231.
-* Use number generator for barcode. Refs UIU-2729.
+* *BREAKING* Use number generator for barcode. Refs UIU-2729.
 * Change amount input type to number. Refs UIU-2836.
 * Update jspdf(to v3.0.0) and jspdf-autotable(to v5.0.2) for security. Refs UIU-3347.
 * Prevent error toast from occurring when user doesn't have `ui-users.roles.view` capability. Refs UIU-3350.
@@ -20,6 +20,7 @@
 * Add 'users.collection.get' permission to user settings. Fixes UIU-3189.
 * Replace TextField with MessageBanner for patron block warning. Refs UIU-3120.
 * Refactor `updateKeycloakUser` to use `ky.put` instead of `api.put`, because updating current user data requires setting `x-okapi-tenant` to the current tenant. Fixes UIU-3383.
+* *BREAKING* Use the `circulation-bff-loans` endpoint instead of `circulation/loans` in `LoansListingContainer` and `LoanDetailContainer` to have all tokens for DCB item. Fixes UIU-3392.
 
 ## [12.1.1] (https://github.com/folio-org/ui-users/tree/v12.1.1) (2025-03-26)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.0...v12.1.1)

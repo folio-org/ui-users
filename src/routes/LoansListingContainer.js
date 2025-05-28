@@ -60,8 +60,8 @@ class LoansListingContainer extends React.Component {
     loansHistory: {
       type: 'okapi',
       records: 'loans',
-      path: 'circulation/loans?query=(userId==:{id}) sortby id&limit=100000',
-      permissionsRequired: 'circulation.loans.collection.get',
+      path: 'circulation-bff/loans?query=(userId==:{id}) sortby id&limit=100000',
+      permissionsRequired: 'circulation-bff.loans.collection.get',
       shouldRefresh: (_, action, refresh) => {
         const { path } = action.meta;
         return refresh || (path && path.match(/loan-anonymization/));
