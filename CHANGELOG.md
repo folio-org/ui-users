@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## [11.0.13](https://github.com/folio-org/ui-users/tree/v11.0.13) (2025-05-29)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.12...v11.0.13)
+* Use the `circulation-bff-loans` endpoint instead of `circulation/loans` in `LoansListingContainer` and `LoanDetailContainer` to have all tokens for DCB item. Fixes UIU-3392.
+
 ## [11.0.12](https://github.com/folio-org/ui-users/tree/v11.0.12) (2025-04-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.11...v11.0.12)
 * Add the ability for staff to take a patron's profile picture photo using a webcam. Refs UIU-3266.
