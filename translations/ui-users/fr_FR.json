@@ -1237,7 +1237,7 @@
     "charge.item.barcode.error": "No item with barcode {barcode} could be found",
     "information.pronouns": "Pronouns",
     "errors.personal.pronounsCharLimit": "Pronouns are limited to 300 characters",
-    "settings.numberGenerator.barcode": "Barcode",
+    "settings.numberGenerator.barcode": "Code-barres",
     "settings.numberGenerator.info": "Fields which are usually filled using a numeric sequence can use the number generator. When the generator is switched on the field can either be fixed to prevent manual update, or made fully editable. When switched off, the field must be filled manually.",
     "settings.numberGenerator.infoAdditional": "Additional number generator settings are available under {serviceInteractionLink}. At {numberGeneratorSequencesLink} sequences can be defined by selecting the appropriate generator via the drop-down menu.",
     "settings.numberGenerator.options": "Number generator options",
