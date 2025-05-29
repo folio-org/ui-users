@@ -61,6 +61,7 @@
 * Add fallback / optional chaining guard for "Preferred email communications" `itemToString` prop for when `option` is `null` or `undefined`. Refs UIU-3335.
 * When viewing the detail page for a reminder fee, show the returned date (if any) of the associated loan. Fixes UIU-3187.
 * *BREAKING* Upgrade plugin-find-user to v8. Refs UIU-3342.
+* Remove addressTypeId prop from EditContactInfo and UserForm components to avoid address component issues. Refs UIU-3287.
 
 ## [11.0.12](https://github.com/folio-org/ui-users/tree/v11.0.12) (2025-04-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.11...v11.0.12)

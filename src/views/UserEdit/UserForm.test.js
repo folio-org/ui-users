@@ -1,7 +1,11 @@
+import { act } from 'react';
+
 import { FormattedMessage } from 'react-intl';
 import {
   screen,
+  within,
 } from '@folio/jest-config-stripes/testing-library/react';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
 import renderWithRouter from 'helpers/renderWithRouter';
 import { USER_TYPES } from '../../constants';
@@ -18,7 +22,7 @@ jest.mock('@folio/stripes/smart-components', () => ({
 jest.mock(
   '../../components/EditSections',
   () => ({
-    EditContactInfo: jest.fn(() => <div>EditContactInfo accordion</div>),
+    ...jest.requireActual('../../components/EditSections'),
     EditExtendedInfo: jest.fn(() => <div>EditExtendedInfo accordion</div>),
     EditProxy: jest.fn(() => <div>EditProxy accordion</div>),
     EditServicePoints: jest.fn(() => <div>EditServicePoints accordion</div>),
@@ -38,6 +42,10 @@ jest.mock(
   './TenantsPermissionsAccordion',
   () => jest.fn(() => <div>TenantsPermissionsAccordion accordion</div>),
 );
+jest.mock('@folio/service-interaction', () => () => <div>service-interaction</div>);
+
+const mockOnCancel = jest.fn();
+const mockOnSubmit = jest.fn();
 
 const STRIPES = {
   connect: (Component) => Component,
@@ -76,6 +84,44 @@ const STRIPES = {
   withOkapi: true,
 };
 
+const formData = {
+  patronGroups: [],
+  addressTypes: [
+    {
+      addressType: 'Claim',
+      id: 'claim-id',
+    },
+    {
+      addressType: 'Home',
+      id: 'home-id',
+    },
+    {
+      addressType: 'Payment',
+      id: 'payment-id',
+    },
+  ],
+};
+
+const initialValues = {
+  id: 'id',
+  creds: {
+    password: 'password',
+  },
+  patronGroup: 'patronGroup',
+  personal: {
+    lastName: 'lastName',
+    preferredContactTypeId: 'preferredContactTypeId',
+    addresses: [
+      {
+        addressType: 'home-id',
+      },
+    ],
+  },
+  preferredServicePoint: 'preferredServicePoint',
+  servicePoints: ['a', 'b'],
+  username: 'username',
+};
+
 describe('UserForm', () => {
   beforeEach(() => {
     useUserAffiliations
@@ -85,6 +131,22 @@ describe('UserForm', () => {
       .mockClear()
       .mockReturnValue({ isFetching: false });
   });
+
+  const renderUserForm = (props = {}) => renderWithRouter(
+    <UserForm
+      formData={formData}
+      initialValues={initialValues}
+      stripes={STRIPES}
+      uniquenessValidator={{
+        reset: jest.fn(),
+        GET: jest.fn(),
+      }}
+      profilePictureConfig={{}}
+      onCancel={mockOnCancel}
+      onSubmit={mockOnSubmit}
+      {...props}
+    />
+  );
 
   describe('validate', () => {
     it('validates correctly-shaped data', () => {
@@ -159,72 +221,73 @@ describe('UserForm', () => {
 
 
   describe('renders accordions and other values', () => {
-    const props = {
-      formData: {
-        patronGroups: [],
-      },
-      initialValues: {
-        id: 'id',
-        creds: {
-          password: 'password',
-        },
-        patronGroup: 'patronGroup',
-        personal: {
-          lastName: 'lastName',
-          preferredContactTypeId: 'preferredContactTypeId',
-          addresses: [
-            { addressType: 'addressType' },
-          ],
-        },
-        preferredServicePoint: 'preferredServicePoint',
-        servicePoints: ['a', 'b'],
-        username: 'username',
-      },
-      onCancel: jest.fn(),
-      onSubmit: jest.fn(),
-      stripes: STRIPES,
-      uniquenessValidator: {
-        reset: jest.fn(),
-        GET: jest.fn(),
-      }
-    };
-
     it('shows permissions accordion in legacy mode', async () => {
-      renderWithRouter(<UserForm {...props} />);
+      renderUserForm();
 
       expect(screen.getByText('TenantsPermissionsAccordion accordion')).toBeTruthy();
     });
 
     it('shows permissions accordion when "roles" interface is NOT present', async () => {
-      renderWithRouter(<UserForm {...props} />);
+      renderUserForm();
 
       expect(screen.queryByText('TenantsPermissionsAccordion accordion')).toBeInTheDocument();
     });
 
     it('show roles accordion when "roles" interface is present', async () => {
-      props.stripes.hasInterface = () => true;
-      renderWithRouter(<UserForm {...props} />);
+      renderUserForm({
+        stripes: {
+          ...STRIPES,
+          hasInterface: () => true,
+        },
+      });
 
       expect(screen.queryByText('EditUserRoles accordion')).toBeInTheDocument();
     });
 
     it('renders pronouns', () => {
-      renderWithRouter(
-        <UserForm
-          {...props}
-          initialValues={
-            {
-              ...props.initialValues,
-              personal: {
-                ...props.initialValues.personal,
-                pronouns: 'r2/d2',
-              },
-            }
-          }
-        />
-      );
+      renderUserForm({
+        initialValues: {
+          ...initialValues,
+          personal: {
+            ...initialValues.personal,
+            pronouns: 'r2/d2',
+          },
+        },
+      });
 
       expect(screen.getByText('(r2/d2)')).toBeInTheDocument();
+    });
+  });
+
+  describe('when adding a new address', () => {
+    beforeEach(async () => {
+      renderUserForm({
+        initialValues: {
+          ...initialValues,
+          personal: {
+            ...initialValues.personal,
+            addresses: [
+              {
+                addressType: 'payment-id',
+              },
+            ],
+          },
+        },
+      });
+
+      await act(() => userEvent.click(screen.getByText('stripes-smart-components.address.addAddress')));
+    });
+
+    it('should not change the address type of the previous address', async () => {
+      const addressTypeSelects = screen.getAllByRole('combobox', { name: 'stripes-smart-components.addressEdit.label.addressType' });
+
+      expect(within(addressTypeSelects[0]).getByText('Payment').selected).toBeTruthy();
+    });
+
+    it('should not have address type field selected for the new row', () => {
+      const addressTypeSelects = screen.getAllByRole('combobox', { name: 'stripes-smart-components.addressEdit.label.addressType' });
+
+      expect(within(addressTypeSelects[1]).getByText('ui-users.contact.selectAddressType').selected).toBeTruthy();
     });
   });
 
