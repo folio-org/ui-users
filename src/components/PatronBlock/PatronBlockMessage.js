@@ -10,12 +10,17 @@ import {
 
 class PatronBlockMessage extends React.Component {
   static propTypes = {
+    count: PropTypes.number.isRequired,
     intl: PropTypes.object.isRequired,
   }
 
   render() {
-    const { intl } = this.props;
-    const place = intl.formatMessage({ id: 'ui-users.blocks.textField.place' });
+    const {
+      intl,
+      count,
+    } = this.props;
+    const place = intl.formatMessage({ id: 'ui-users.blocks.textField.place' }, { count });
+
     return (
       <MessageBanner type="error">
         {place}
