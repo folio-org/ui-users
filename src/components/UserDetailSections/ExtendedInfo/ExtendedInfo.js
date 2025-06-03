@@ -1,5 +1,4 @@
 import get from 'lodash/get';
-import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import {
@@ -41,32 +40,26 @@ const ExtendedInfo = (props) => {
           </KeyValue>
         </Col>
         <Col xs={12} md={3}>
+          <KeyValue label={<FormattedMessage id="ui-users.extended.externalSystemId" />}>
+            {user?.externalSystemId}
+          </KeyValue>
+        </Col>
+        <Col xs={12} md={3}>
           <KeyValue label={<FormattedMessage id="ui-users.extended.birthDate" />}>
             {user.personal?.dateOfBirth ? <FormattedUTCDate value={user.personal.dateOfBirth} timeZone="UTC" /> : '-'}
           </KeyValue>
         </Col>
-      </Row>
-      <Row>
-        <Col xs={12} md={6}>
+        <Col xs={12} md={3}>
           <KeyValue label={<FormattedMessage id="ui-users.extended.folioNumber" />}>
             {get(user, ['id'], '-')}
           </KeyValue>
         </Col>
-        <Col xs={12} md={6}>
-          <KeyValue label={<FormattedMessage id="ui-users.extended.externalSystemId" />}>
-            {get(user, ['externalSystemId'], '-')}
-          </KeyValue>
-        </Col>
       </Row>
-      <Row>
-        <Col xs={12} md={9}>
-          <RequestPreferencesView
-            requestPreferences={requestPreferences}
-            defaultServicePointName={defaultServicePointName}
-            defaultDeliveryAddressTypeName={defaultDeliveryAddressTypeName}
-          />
-        </Col>
-      </Row>
+      <RequestPreferencesView
+        requestPreferences={requestPreferences}
+        defaultServicePointName={defaultServicePointName}
+        defaultDeliveryAddressTypeName={defaultDeliveryAddressTypeName}
+      />
       {departments.length
         ? (
           <Row>
