@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## [12.1.7] (https://github.com/folio-org/ui-users/tree/v12.1.7) (2025-06-03)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.6...v12.1.7)
+* Refactor `updateKeycloakUser` to use `ky.put` instead of `api.put`, because updating current user data requires setting `x-okapi-tenant` to the current tenant. Fixes UIU-3383.
+
 ## [12.1.6] (https://github.com/folio-org/ui-users/tree/v12.1.6) (2025-05-20)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.5...v12.1.6)
 * Update jspdf(to v3.0.0) and jspdf-autotable(to v5.0.2) for security. Refs UIU-3347.
