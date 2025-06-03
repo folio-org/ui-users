@@ -737,7 +737,7 @@ class UserDetail extends React.Component {
               <Row className={css.patronBlockBannerRow}>
                 <Col xs={10}>
                   {hasPatronBlocks
-                    ? <PatronBlockMessage />
+                    ? <PatronBlockMessage count={patronBlocks.length} />
                     : ''}
                 </Col>
                 <Col xs={2}>

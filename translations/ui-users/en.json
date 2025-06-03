@@ -786,7 +786,7 @@
   "blocks.layer.confirmLabel": "Delete",
   "blocks.layer.newBlockTitle": "New Block",
   "blocks.message": "patron block will be removed",
-  "blocks.textField.place": "Patron has block(s) in place",
+  "blocks.textField.place": "Patron has {count, plural, one {block} other {blocks}} in place.",
   "additionalInfo.label": "Additional information",
   "additionalInfo.placeholder": "Enter more information about the override (required)",
   "button.override": "Override",
