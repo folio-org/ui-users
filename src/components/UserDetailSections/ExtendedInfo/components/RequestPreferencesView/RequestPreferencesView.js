@@ -25,41 +25,39 @@ class RequestPreferencesView extends Component {
     } = this.props;
 
     return (
-      <>
-        <Row>
-          <Col xs={12} md={3}>
-            <KeyValue label={<FormattedMessage id="ui-users.requests.preferences" />}>
-              <>
-                <Checkbox
-                  label={<FormattedMessage id="ui-users.requests.holdShelf" />}
-                  checked={requestPreferences.holdShelf}
-                  disabled
-                />
-                <Checkbox
-                  label={<FormattedMessage id="ui-users.requests.delivery" />}
-                  checked={requestPreferences.delivery}
-                  disabled
-                />
-              </>
-            </KeyValue>
-          </Col>
-          <Col xs={12} md={3}>
-            <KeyValue label={<FormattedMessage id="ui-users.requests.defaultPickupServicePoint" />}>
-              {defaultServicePointName}
-            </KeyValue>
-          </Col>
-          <Col xs={12} md={3}>
-            <KeyValue label={<FormattedMessage id="ui-users.requests.fulfillmentPreference" />}>
-              {requestPreferences.fulfillment}
-            </KeyValue>
-          </Col>
-          <Col xs={12} md={3}>
-            <KeyValue label={<FormattedMessage id="ui-users.requests.defaultDeliveryAddress" />}>
-              {defaultDeliveryAddressTypeName}
-            </KeyValue>
-          </Col>
-        </Row>
-      </>
+      <Row>
+        <Col xs={12} md={3}>
+          <KeyValue label={<FormattedMessage id="ui-users.requests.preferences" />}>
+            <>
+              <Checkbox
+                label={<FormattedMessage id="ui-users.requests.holdShelf" />}
+                checked={requestPreferences.holdShelf}
+                disabled
+              />
+              <Checkbox
+                label={<FormattedMessage id="ui-users.requests.delivery" />}
+                checked={requestPreferences.delivery}
+                disabled
+              />
+            </>
+          </KeyValue>
+        </Col>
+        <Col xs={12} md={3}>
+          <KeyValue label={<FormattedMessage id="ui-users.requests.defaultPickupServicePoint" />}>
+            {defaultServicePointName}
+          </KeyValue>
+        </Col>
+        <Col xs={12} md={3}>
+          <KeyValue label={<FormattedMessage id="ui-users.requests.fulfillmentPreference" />}>
+            {requestPreferences.fulfillment}
+          </KeyValue>
+        </Col>
+        <Col xs={12} md={3}>
+          <KeyValue label={<FormattedMessage id="ui-users.requests.defaultDeliveryAddress" />}>
+            {defaultDeliveryAddressTypeName}
+          </KeyValue>
+        </Col>
+      </Row>
     );
   }
 }
