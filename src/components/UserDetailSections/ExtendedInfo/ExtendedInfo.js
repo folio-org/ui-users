@@ -60,20 +60,13 @@ const ExtendedInfo = (props) => {
         defaultServicePointName={defaultServicePointName}
         defaultDeliveryAddressTypeName={defaultDeliveryAddressTypeName}
       />
-      {departments.length
-        ? (
-          <Row>
-            <Col xs={12} md={6}>
-              <KeyValue label={<FormattedMessage id="ui-users.extended.department.name" />}>
-                <span data-test-department-name>
-                  {departments.join(', ')}
-                </span>
-              </KeyValue>
-            </Col>
-          </Row>
-        )
-        : null
-      }
+      <Row>
+        <Col xs={12} md={6}>
+          <KeyValue label={<FormattedMessage id="ui-users.extended.department.name" />}>
+            {departments.join(', ')}
+          </KeyValue>
+        </Col>
+      </Row>
       <Row>
         <Col xs={12} md={6}>
           <KeyValue label={<FormattedMessage id="ui-users.information.username" />}>
