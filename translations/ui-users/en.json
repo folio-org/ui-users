@@ -238,6 +238,7 @@
   "requests.preferences": "Request preferences",
   "requests.defaultPickupServicePoint": "Default pickup service point",
   "requests.fulfillmentPreference": "Fulfillment preference",
+  "requests.fulfillmentPreference.info": "Select the <strong>Delivery</strong> checkbox to choose <strong>Fulfillment preference</strong> and <strong>Default delivery address</strong>.",
   "requests.defaultDeliveryAddress": "Default delivery address",
   "requests.deliveryYes": "Delivery - Yes",
   "requests.deliveryNo": "Delivery - No",
