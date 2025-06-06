@@ -4,6 +4,8 @@ import {
 } from 'react-intl';
 import PropTypes from 'prop-types';
 import { Field } from 'react-final-form';
+import isEqual from 'lodash/isEqual';
+
 import {
   Select,
   TextField,
@@ -137,6 +139,7 @@ const EditContactInfo = ({
                 disabled={disabled}
                 filter={prefEmailCommFilterOptions}
                 itemToString={(option) => option?.value ?? ''}
+                isEqual={isEqual}
               />
             </Col>
           </Row>

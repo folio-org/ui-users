@@ -7,6 +7,10 @@ import UserEdit from './UserEdit';
 import { KEYCLOAK_USER_EXISTANCE } from '../../constants';
 
 const userFormData = {
+  departments: [{
+    value: 'department-id-1',
+    label: 'department1',
+  }],
   requestPreferences: {},
   personal: {
     addresses: [],
@@ -72,98 +76,95 @@ jest.mock('../../components/EditSections', () => ({
   EditServicePoints: jest.fn(() => null),
 }));
 
-const stripes = {
-  hasPerm: jest.fn().mockReturnValue(true),
-  hasInterface: () => true,
-  okapi: {
-    tenant: 'tenantId',
+const props = {
+  stripes: {
+    hasPerm: jest.fn().mockReturnValue(true),
+    hasInterface: jest.fn().mockReturnValue(true),
+    okapi: {
+      tenant: 'tenantId',
+    },
+  },
+  resources: {
+    selUser: {
+      records: [{
+        id: 'userId',
+        departments: ['department-id-1', 'department-id-2'],
+        preferredEmailCommunication: ['Programs', 'Support']
+      }],
+    },
+    patronGroups: {
+      records: [],
+    },
+    perms: {
+      records: [{ id: 'permUserRecordId' }],
+    },
+    addressTypes: {
+      records: [],
+    },
+    servicePoints: {
+      records: [],
+    },
+    departments: {
+      records: [],
+    },
+    userReadingRoomPermissions: {
+      records: [],
+    },
+  },
+  history: {
+    push: jest.fn(),
+  },
+  location: {
+    search: '?filters=active.active'
+  },
+  match: { params: { id: 'userId' } },
+  updateProxies: jest.fn(),
+  updateSponsors: jest.fn(),
+  updateServicePoints: jest.fn(),
+  updateUserRoles:jest.fn(),
+  getUserServicePoints: jest.fn(),
+  getPreferredServicePoint: jest.fn(),
+  mutator: {
+    records: {
+      POST: jest
+        .fn()
+        .mockResolvedValue(jest.fn().mockResolvedValue({ result: [] })),
+    },
+    perms: {
+      POST: jest.fn().mockResolvedValue({ data: {} }),
+      PUT: jest.fn().mockResolvedValue({ data: {} }),
+    },
+    permissions: {
+      POST: jest.fn().mockResolvedValue({ data: {} }),
+      PUT: jest.fn().mockResolvedValue({ data: {} }),
+    },
+    requestPreferences: {
+      POST: jest.fn().mockResolvedValue({ data: {} }),
+      PUT: jest.fn().mockResolvedValue({ data: {} }),
+    },
+    selUser: {
+      PUT: jest.fn().mockResolvedValue({ data: {} }),
+    },
+    permUserId: '2',
+    userReadingRoomPermissions: {
+      PUT: jest.fn().mockResolvedValue({ data: {} }),
+      GET: jest.fn().mockResolvedValue({ data: {} }),
+    }
+  },
+  getProxies: jest.fn(),
+  getSponsors: jest.fn(),
+  okapiKy: {
+    extend: jest.fn(() => props.okapiKy),
+    get: jest.fn(() => ({ json: () => Promise.resolve() })),
+    post: jest.fn(() => ({ json: () => Promise.resolve({}) })),
+    put: jest.fn(() => ({ json: () => Promise.resolve({}) })),
   },
 };
 
 describe('UserEdit', () => {
-  let props = {
-    stripes: {
-      hasPerm: jest.fn().mockReturnValue(true),
-      hasInterface: jest.fn().mockReturnValue(true),
-      okapi: {
-        tenant: 'tenantId',
-      },
-    },
-    resources: {
-      selUser: {
-        records: [{
-          id: 'userId',
-          preferredEmailCommunication: ['Programs', 'Support']
-        }],
-      },
-      patronGroups: {
-        records: [],
-      },
-      perms: {
-        records: [{ id: 'permUserRecordId' }],
-      },
-      addressTypes: {
-        records: [],
-      },
-      servicePoints: {
-        records: [],
-      },
-      departments: {
-        records: [],
-      },
-      userReadingRoomPermissions: {
-        records: [],
-      },
-    },
-    history: {
-      push: jest.fn(),
-    },
-    location: {
-      search: '?filters=active.active'
-    },
-    match: { params: { id: 'userId' } },
-    updateProxies: jest.fn(),
-    updateSponsors: jest.fn(),
-    updateServicePoints: jest.fn(),
-    updateUserRoles:jest.fn(),
-    getUserServicePoints: jest.fn(),
-    getPreferredServicePoint: jest.fn(),
-    mutator: {
-      records: {
-        POST: jest
-          .fn()
-          .mockResolvedValue(jest.fn().mockResolvedValue({ result: [] })),
-      },
-      perms: {
-        POST: jest.fn().mockResolvedValue({ data: {} }),
-        PUT: jest.fn().mockResolvedValue({ data: {} }),
-      },
-      permissions: {
-        POST: jest.fn().mockResolvedValue({ data: {} }),
-        PUT: jest.fn().mockResolvedValue({ data: {} }),
-      },
-      requestPreferences: {
-        POST: jest.fn().mockResolvedValue({ data: {} }),
-        PUT: jest.fn().mockResolvedValue({ data: {} }),
-      },
-      selUser: {
-        PUT: jest.fn().mockResolvedValue({ data: {} }),
-      },
-      permUserId: '2',
-      userReadingRoomPermissions: {
-        PUT: jest.fn().mockResolvedValue({ data: {} }),
-        GET: jest.fn().mockResolvedValue({ data: {} }),
-      }
-    },
-    getProxies: jest.fn(),
-    getSponsors: jest.fn(),
-    okapiKy: {
-      extend: jest.fn(() => props.okapiKy),
-      get: jest.fn(() => ({ json: () => Promise.resolve() })),
-      post: jest.fn(() => ({ json: () => Promise.resolve({}) })),
-      put: jest.fn(() => ({ json: () => Promise.resolve({}) })),
-    },
-  };
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
   it('should render without crashing', () => {
     const { container } = renderWithRouter(<UserEdit {...props} />);
@@ -175,7 +176,7 @@ describe('UserEdit', () => {
       ...jest.requireActual('./UserEditHelpers'),
       resourcesLoaded: jest.fn().mockReturnValue(0),
     }));
-    props = {
+    const _props = {
       ...props,
       match: { params: { id: 0 } },
       resources: {
@@ -200,7 +201,7 @@ describe('UserEdit', () => {
         },
       },
     };
-    const { container } = renderWithRouter(<UserEdit {...props} />);
+    const { container } = renderWithRouter(<UserEdit {..._props} />);
     expect(container).toBeInTheDocument();
   });
 
@@ -209,7 +210,7 @@ describe('UserEdit', () => {
       ...jest.requireActual('./UserEditHelpers'),
       resourcesLoaded: jest.fn().mockReturnValue(0),
     }));
-    props = {
+    const _props = {
       ...props,
       match: { params: { id: 0 } },
       resources: {
@@ -235,14 +236,14 @@ describe('UserEdit', () => {
         },
       },
     };
-    const { container } = renderWithRouter(<UserEdit {...props} />);
+    const { container } = renderWithRouter(<UserEdit {..._props} />);
     const submitButton = container.querySelector('#clickable-save');
     await userEvent.click(submitButton);
     expect(container).toBeInTheDocument();
   });
 
   it('should render without crashing update description', async () => {
-    props = {
+    const _props = {
       ...props,
       match: { params: { id: 1 } },
       resources: {
@@ -268,14 +269,14 @@ describe('UserEdit', () => {
         },
       },
     };
-    const { container } = renderWithRouter(<UserEdit {...props} />);
+    const { container } = renderWithRouter(<UserEdit {..._props} />);
     const submitButton = container.querySelector('#clickable-save');
     await userEvent.click(submitButton);
     expect(container).toBeInTheDocument();
   });
 
   it('should render with perms Failed update', async () => {
-    props = {
+    const _props = {
       ...props,
       match: { params: { id: 1 } },
       mutator: {
@@ -315,14 +316,14 @@ describe('UserEdit', () => {
         },
       },
     };
-    const { container } = renderWithRouter(<UserEdit {...props} />);
+    const { container } = renderWithRouter(<UserEdit {..._props} />);
     const submitButton = container.querySelector('#clickable-save');
     await userEvent.click(submitButton);
     expect(container).toBeInTheDocument();
   });
 
   it('should render without crashing permissions', async () => {
-    props = {
+    const _props = {
       ...props,
       match: { params: { id: 1 } },
       resources: {
@@ -348,14 +349,14 @@ describe('UserEdit', () => {
         },
       },
     };
-    const { container } = renderWithRouter(<UserEdit {...props} />);
+    const { container } = renderWithRouter(<UserEdit {..._props} />);
     const submitButton = container.querySelector('#clickable-save');
     await userEvent.click(submitButton);
     expect(container).toBeInTheDocument();
   });
 
   it('should render without crashing departments', () => {
-    props = {
+    const _props = {
       ...props,
       match: {
         params: { id: 0 },
@@ -381,7 +382,7 @@ describe('UserEdit', () => {
         },
       },
     };
-    const { container } = renderWithRouter(<UserEdit {...props} />);
+    const { container } = renderWithRouter(<UserEdit {..._props} />);
 
     expect(container).toBeInTheDocument();
   });
@@ -415,9 +416,15 @@ describe('UserEdit', () => {
     });
 
     it('should save the user updates when the users interfaces is not 16.2', async () => {
-      stripes.hasInterface = jest.fn().mockReturnValue(false);
-
-      renderWithRouter(<UserEdit {...props} />);
+      renderWithRouter(
+        <UserEdit
+          {...props}
+          stripes={{
+            ...props.stripes,
+            hasInterface: () => false,
+          }}
+        />
+      );
       await UserForm.mock.calls[0][0].onSubmit(userFormData);
 
       expect(props.mutator.requestPreferences.POST).toHaveBeenCalled();
@@ -426,9 +433,44 @@ describe('UserEdit', () => {
       expect(props.updateServicePoints).toHaveBeenCalled();
     });
 
+    it('should update the user with correct data', async () => {
+      const { getByText } = renderWithRouter(
+        <UserEdit
+          {...props}
+          stripes={{
+            ...props.stripes,
+            hasInterface: () => false,
+          }}
+        />
+      );
+
+      const submitButton = getByText('Submit Form');
+      await userEvent.click(submitButton);
+
+      expect(props.mutator.selUser.PUT).toHaveBeenCalledWith(expect.objectContaining({
+        departments: ['department-id-1'],
+      }));
+    });
+
+    it('should create the user with correct data', async () => {
+      const { getByText } = renderWithRouter(
+        <UserEdit
+          {...props}
+          match={{ params: { id: '' } }}
+        />
+      );
+
+      const submitButton = getByText('Submit Form');
+      await userEvent.click(submitButton);
+
+      expect(props.mutator.records.POST).toHaveBeenCalledWith(expect.objectContaining({
+        departments: ['department-id-1'],
+      }));
+    });
+
     describe('when user has user profile edit', () => {
       it('should update permissions when user has "ui-users.perms.edit" permissions', async () => {
-        props = {
+        const _props = {
           ...props,
           resources: {
             ...props.resources,
@@ -442,7 +484,7 @@ describe('UserEdit', () => {
             },
           }
         };
-        renderWithRouter(<UserEdit {...props} />);
+        renderWithRouter(<UserEdit {..._props} />);
 
         await UserForm.mock.calls[0][0].onSubmit(userFormData);
 
@@ -450,14 +492,14 @@ describe('UserEdit', () => {
       });
 
       it('should not update permissions when user has "ui-users.perms.view" permission', async () => {
-        props = {
+        const _props = {
           ...props,
           stripes: {
             ...props.stripes,
             hasPerm: jest.fn().mockReturnValue(false),
           },
         };
-        renderWithRouter(<UserEdit {...props} />);
+        renderWithRouter(<UserEdit {..._props} />);
 
         await UserForm.mock.calls[0][0].onSubmit(userFormData);
 
@@ -697,14 +739,15 @@ describe('UserEdit', () => {
       it('calls history.push in case if hasInterface True, user exists in Keycloak and old assignedRoleIds and updated are equal', async () => {
         const mockSubmitCreateKeycloakUser = jest.fn();
         const alteredProps = { ...defaultProps,
-          confirmCreateKeycloakUser: mockSubmitCreateKeycloakUser };
+          confirmCreateKeycloakUser: mockSubmitCreateKeycloakUser,
+          checkAndHandleKeycloakAuthUser: jest.fn() };
 
         const { container } = renderWithRouter(<UserEdit {...alteredProps} />);
         const submitButton = container.querySelector('#clickable-save');
 
         await userEvent.click(submitButton);
 
-        expect(alteredProps.history.push).toHaveBeenCalled();
+        expect(alteredProps.checkAndHandleKeycloakAuthUser).toHaveBeenCalled();
       });
 
       it('calls submit create keycloak user', async () => {

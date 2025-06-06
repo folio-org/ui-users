@@ -1,6 +1,0 @@
-.repeatableFieldRemoveItem {
-  & fieldset,
-  & div {
-    margin-top: 0;
-  }
-}
