@@ -21,6 +21,8 @@
 * Replace TextField with MessageBanner for patron block warning. Refs UIU-3120.
 * Refactor `updateKeycloakUser` to use `ky.put` instead of `api.put`, because updating current user data requires setting `x-okapi-tenant` to the current tenant. Fixes UIU-3383.
 * *BREAKING* Use the `circulation-bff-loans` endpoint instead of `circulation/loans` in `LoansListingContainer` and `LoanDetailContainer` to have all tokens for DCB item. Fixes UIU-3392.
+* Update patron block message to support pluralization. Refs UIU-3394.
+* Change fields order in `ExtendedInfo` and `RequestPreferencesView` components. Refs UIU-3122.
 * Extended information - change order of fields, use MultiSelection for the departments field. Refs UIU-3123.
 
 ## [12.1.1] (https://github.com/folio-org/ui-users/tree/v12.1.1) (2025-03-26)
@@ -62,7 +64,6 @@
 * Add fallback / optional chaining guard for "Preferred email communications" `itemToString` prop for when `option` is `null` or `undefined`. Refs UIU-3335.
 * When viewing the detail page for a reminder fee, show the returned date (if any) of the associated loan. Fixes UIU-3187.
 * *BREAKING* Upgrade plugin-find-user to v8. Refs UIU-3342.
-* Update patron block message to support pluralization. Refs UIU-3394.
 
 ## [11.0.12](https://github.com/folio-org/ui-users/tree/v11.0.12) (2025-04-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.11...v11.0.12)
