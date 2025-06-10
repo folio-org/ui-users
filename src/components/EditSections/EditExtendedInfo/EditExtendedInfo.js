@@ -163,22 +163,15 @@ class EditExtendedInfo extends Component {
             <div>{userId || '-'}</div>
           </Col>
         </Row>
+        <RequestPreferencesEdit
+          addressTypes={addressTypes}
+          addresses={addresses}
+          defaultDeliveryAddressTypeId={defaultDeliveryAddressTypeId}
+          deliveryAvailable={deliveryAvailable}
+          setFieldValue={change}
+          disabled={disabled}
+        />
         <Row>
-          <Col
-            xs={12}
-            md={6}
-          >
-            <Row>
-              <RequestPreferencesEdit
-                addressTypes={addressTypes}
-                addresses={addresses}
-                defaultDeliveryAddressTypeId={defaultDeliveryAddressTypeId}
-                deliveryAvailable={deliveryAvailable}
-                setFieldValue={change}
-                disabled={disabled}
-              />
-            </Row>
-          </Col>
           {departments.length
             ? (
               <Col

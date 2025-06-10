@@ -22,6 +22,7 @@
 * *BREAKING* Use the `circulation-bff-loans` endpoint instead of `circulation/loans` in `LoansListingContainer` and `LoanDetailContainer` to have all tokens for DCB item. Fixes UIU-3392.
 * Update patron block message to support pluralization. Refs UIU-3394.
 * Change fields order in `ExtendedInfo` and `RequestPreferencesView` components. Refs UIU-3122.
+* Extended information - change order of fields, use MultiSelection for the departments field. Refs UIU-3123.
 
 ## [12.1.7] (https://github.com/folio-org/ui-users/tree/v12.1.7) (2025-06-03)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.6...v12.1.7)

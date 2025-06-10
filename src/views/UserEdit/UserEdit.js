@@ -10,7 +10,6 @@ import {
   find,
   omit,
   get,
-  compact
 } from 'lodash';
 
 import { LoadingView } from '@folio/stripes/components';
@@ -40,7 +39,7 @@ class UserEdit extends React.Component {
     history: PropTypes.object,
     location: PropTypes.object,
     match: PropTypes.object,
-    okapiKy: PropTypes.func.isRequired,
+    okapiKy: PropTypes.object.isRequired,
     updateProxies: PropTypes.func,
     updateSponsors: PropTypes.func,
     updateServicePoints: PropTypes.func,
@@ -80,6 +79,19 @@ class UserEdit extends React.Component {
       prefEmailComm?.map(a => {
         return preferredEmailCommunicationOptions.find(b => b.value === a);
       }) : prefEmailComm;
+  }
+
+  getDepartmentsInitialValue = (departments = []) => {
+    const data = this.getUserFormData();
+
+    return departments.map(id => {
+      const label = data.departments.find(department => department.id === id)?.name || '';
+
+      return {
+        value: id,
+        label,
+      };
+    });
   }
 
   getUserFormValues() {
@@ -124,6 +136,7 @@ class UserEdit extends React.Component {
 
     return {
       ...userFormValues,
+      departments: this.getDepartmentsInitialValue(userFormValues.departments),
       preferredServicePoint: getPreferredServicePoint(),
       proxies: getProxies(),
       sponsors: getSponsors(),
@@ -201,13 +214,17 @@ class UserEdit extends React.Component {
     prefEmailComm?.map(option => option.value)
   )
 
+  formatDepartments = (departments = []) => {
+    return departments.map(({ value }) => value);
+  }
+
   create = ({ requestPreferences, ...userFormData }) => {
     const { mutator, history, location: { search }, stripes } = this.props;
     const userData = cloneDeep(userFormData);
     const user = { ...userData, id: uuidv4() };
     user.personal.addresses = toUserAddresses(user.personal.addresses);
     user.personal.email = user.personal.email.trim();
-    user.departments = compact(user.departments);
+    user.departments = this.formatDepartments(user.departments);
     this.deleteEmptyFields(user);
 
     if (stripes.hasInterface('users', '16.2')) {
@@ -288,7 +305,7 @@ class UserEdit extends React.Component {
     this.deleteEmptyFields(user);
     user.personal.addresses = toUserAddresses(user.personal.addresses); // eslint-disable-line no-param-reassign
     user.personal.email = user.personal.email?.trim();
-    user.departments = compact(user.departments);
+    user.departments = this.formatDepartments(user.departments);
 
     if (stripes.hasInterface('users', '16.2')) {
       user.preferredEmailCommunication = this.formatPrefEmailCommPayload(user.preferredEmailCommunication);
