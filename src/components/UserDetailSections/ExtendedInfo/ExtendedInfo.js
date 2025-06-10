@@ -24,6 +24,7 @@ const ExtendedInfo = (props) => {
     defaultServicePointName,
     defaultDeliveryAddressTypeName,
     departments,
+    userDepartments,
   } = props;
 
   return (
@@ -60,13 +61,18 @@ const ExtendedInfo = (props) => {
         defaultServicePointName={defaultServicePointName}
         defaultDeliveryAddressTypeName={defaultDeliveryAddressTypeName}
       />
-      <Row>
-        <Col xs={12} md={6}>
-          <KeyValue label={<FormattedMessage id="ui-users.extended.department.name" />}>
-            {departments.join(', ')}
-          </KeyValue>
-        </Col>
-      </Row>
+      {departments.length && (
+        <Row>
+          <Col xs={12} md={6}>
+            <KeyValue
+              label={<FormattedMessage id="ui-users.extended.department.name" />}
+              data-testid="department-names"
+            >
+              {userDepartments.join(', ')}
+            </KeyValue>
+          </Col>
+        </Row>
+      )}
       <Row>
         <Col xs={12} md={6}>
           <KeyValue label={<FormattedMessage id="ui-users.information.username" />}>
@@ -83,6 +89,7 @@ ExtendedInfo.propTypes = {
   expanded: PropTypes.bool,
   onToggle: PropTypes.func,
   user: PropTypes.object,
+  userDepartments: PropTypes.arrayOf(PropTypes.string).isRequired,
   defaultServicePointName: PropTypes.string,
   requestPreferences: requestPreferencesShape,
   defaultDeliveryAddressTypeName: PropTypes.string.isRequired,
