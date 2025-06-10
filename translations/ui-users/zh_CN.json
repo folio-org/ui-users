@@ -538,12 +538,8 @@
     "requests.preferences": "请求偏好",
     "requests.fulfillmentPreference": "执行偏好",
     "requests.defaultDeliveryAddress": "默认传递地址",
-    "requests.deliveryYes": "传递 - 是",
-    "requests.deliveryNo": "传递 - 否",
     "requests.holdShelf": "预约架",
     "requests.delivery": "传递",
-    "requests.holdShelfYes": "预约架 - 是",
-    "requests.holdShelfNo": "预约架 - 否",
     "requests.selectDeliveryAddress": "选择传递地址",
     "addAddressError": "请在“地址”部分中添加至少一个地址",
     "requests.defaultPickupServicePoint": "默认取件服务点",
@@ -1247,6 +1243,6 @@
     "numberGenerator.generateBarcode": "生成用户条码",
     "numberGenerator.barcodeGenerator": "用户条码生成器",
     "permission.settings.number-generator-options.all": "设置（用户）：可以创建、编辑和查看数字生成器选项",
-    "information.profilePicture.takePhoto": "Take photo",
-    "information.profilePicture.retakePhoto": "Retake photo"
+    "information.profilePicture.takePhoto": "拍照",
+    "information.profilePicture.retakePhoto": "重新拍照"
 }
