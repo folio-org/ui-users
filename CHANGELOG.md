@@ -20,6 +20,8 @@
 * Add 'users.collection.get' permission to user settings. Fixes UIU-3189.
 * Replace TextField with MessageBanner for patron block warning. Refs UIU-3120.
 * *BREAKING* Use the `circulation-bff-loans` endpoint instead of `circulation/loans` in `LoansListingContainer` and `LoanDetailContainer` to have all tokens for DCB item. Fixes UIU-3392.
+* Update patron block message to support pluralization. Refs UIU-3394.
+* Change fields order in `ExtendedInfo` and `RequestPreferencesView` components. Refs UIU-3122.
 
 ## [12.1.7] (https://github.com/folio-org/ui-users/tree/v12.1.7) (2025-06-03)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.6...v12.1.7)
@@ -64,7 +66,6 @@
 * Add fallback / optional chaining guard for "Preferred email communications" `itemToString` prop for when `option` is `null` or `undefined`. Refs UIU-3335.
 * When viewing the detail page for a reminder fee, show the returned date (if any) of the associated loan. Fixes UIU-3187.
 * *BREAKING* Upgrade plugin-find-user to v8. Refs UIU-3342.
-* Update patron block message to support pluralization. Refs UIU-3394.
 
 ## [11.0.12](https://github.com/folio-org/ui-users/tree/v11.0.12) (2025-04-10)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.11...v11.0.12)
