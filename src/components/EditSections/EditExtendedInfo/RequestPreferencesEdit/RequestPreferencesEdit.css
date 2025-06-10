@@ -7,3 +7,12 @@
 .rowMargin {
   margin-bottom: var(--gutter);
 }
+
+.preferencesFieldset {
+  margin: 0 0 var(--control-margin-bottom) 0;
+}
+
+.infoPopoverButton {
+  padding-top: 0;
+  padding-bottom: 0;
+}

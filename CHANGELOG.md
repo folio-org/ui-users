@@ -19,8 +19,14 @@
 * [Follow-up] Fix `Expiration date` field value when non-default locale is applied. Refs UIU-3318.
 * Add 'users.collection.get' permission to user settings. Fixes UIU-3189.
 * Replace TextField with MessageBanner for patron block warning. Refs UIU-3120.
-* Refactor `updateKeycloakUser` to use `ky.put` instead of `api.put`, because updating current user data requires setting `x-okapi-tenant` to the current tenant. Fixes UIU-3383.
 * *BREAKING* Use the `circulation-bff-loans` endpoint instead of `circulation/loans` in `LoansListingContainer` and `LoanDetailContainer` to have all tokens for DCB item. Fixes UIU-3392.
+* Update patron block message to support pluralization. Refs UIU-3394.
+* Change fields order in `ExtendedInfo` and `RequestPreferencesView` components. Refs UIU-3122.
+* Extended information - change order of fields, use MultiSelection for the departments field. Refs UIU-3123.
+
+## [12.1.7] (https://github.com/folio-org/ui-users/tree/v12.1.7) (2025-06-03)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.6...v12.1.7)
+* Refactor `updateKeycloakUser` to use `ky.put` instead of `api.put`, because updating current user data requires setting `x-okapi-tenant` to the current tenant. Fixes UIU-3383.
 
 ## [12.1.1] (https://github.com/folio-org/ui-users/tree/v12.1.1) (2025-03-26)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.0...v12.1.1)

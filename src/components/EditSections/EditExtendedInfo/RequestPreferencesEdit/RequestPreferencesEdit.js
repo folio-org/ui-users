@@ -17,6 +17,7 @@ import {
   Select,
   Checkbox,
   Label,
+  InfoPopover,
 } from '@folio/stripes/components';
 
 import { deliveryFulfillmentValues } from '../../../../constants';
@@ -61,6 +62,8 @@ class RequestPreferencesEdit extends Component {
   }
 
   renderDefaultDeliveryAddressSelect() {
+    const { deliveryAvailable } = this.props;
+
     return (
       <div data-test-default-delivery-address-field>
         <Field
@@ -71,6 +74,7 @@ class RequestPreferencesEdit extends Component {
           validate={this.defaultDeliveryAddressValidator}
           placeholder={this.props.intl.formatMessage({ id: 'ui-users.requests.selectDeliveryAddress' })}
           required
+          disabled={!deliveryAvailable}
         />
       </div>
     );
@@ -104,7 +108,11 @@ class RequestPreferencesEdit extends Component {
   }
 
   renderFulfillmentPreferenceSelect() {
-    const { intl } = this.props;
+    const {
+      intl,
+      deliveryAvailable,
+    } = this.props;
+
     const options = [
       {
         value: deliveryFulfillmentValues.HOLD_SHELF,
@@ -116,13 +124,27 @@ class RequestPreferencesEdit extends Component {
       },
     ];
 
+    const label = (
+      <>
+        <FormattedMessage id="ui-users.requests.fulfillmentPreference" />
+        <InfoPopover
+          iconSize="medium"
+          buttonProps={{
+            innerClassName: styles.infoPopoverButton,
+          }}
+          content={<FormattedMessage id="ui-users.requests.fulfillmentPreference.info" />}
+        />
+      </>
+    );
+
     return (
       <Field
         data-test-fulfillment-preference
         name="requestPreferences.fulfillment"
-        label={<FormattedMessage id="ui-users.requests.fulfillmentPreference" />}
+        label={label}
         dataOptions={options}
         component={Select}
+        disabled={!deliveryAvailable}
       />
     );
   }
@@ -150,6 +172,10 @@ class RequestPreferencesEdit extends Component {
 
   // eslint-disable-next-line consistent-return
   defaultDeliveryAddressValidator = (value, formData) => {
+    const { deliveryAvailable } = this.props;
+
+    if (!deliveryAvailable) return;
+
     const nonEmptyAddresses = get(formData, 'personal.addresses', []).filter(address => !isEmpty(address));
 
     if (nonEmptyAddresses.length === 0) {
@@ -175,61 +201,54 @@ class RequestPreferencesEdit extends Component {
 
   render() {
     const {
-      deliveryAvailable,
       disabled,
     } = this.props;
 
     return (
-      <Col xs={12}>
-        <Row>
-          <Col
-            xs={12}
-            md={6}
-          >
-            <Label tagName="div">
-              <span className={styles.heading}>
-                <FormattedMessage id="ui-users.requests.preferences" />
-              </span>
+      <Row>
+        <Col
+          xs={12}
+          md={3}
+        >
+          <fieldset className={styles.preferencesFieldset}>
+            <Label tagName="legend">
+              <FormattedMessage id="ui-users.requests.preferences" />
             </Label>
-          </Col>
-        </Row>
-        <Row className={styles.rowMargin}>
-          <Col xs={12} md={6}>
-            <Field
-              data-test-hold-shelf-checkbox
-              name="requestPreferences.holdShelf"
-              label={<FormattedMessage id="ui-users.requests.holdShelf" />}
-              checked
-              disabled
-              component={Checkbox}
-              type="checkbox"
-            />
-          </Col>
-          <Col xs={12} md={6}>
-            <Field
-              data-test-delivery-checkbox
-              name="requestPreferences.delivery"
-              label={<FormattedMessage id="ui-users.requests.delivery" />}
-              component={Checkbox}
-              type="checkbox"
-              disabled={disabled}
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={12} md={6}>
-            {this.renderServicePointSelect()}
-          </Col>
-          <Col xs={12} md={6}>
-            { deliveryAvailable && this.renderFulfillmentPreferenceSelect() }
-          </Col>
-        </Row>
-        <Row>
-          <Col mdOffset={6} xs={12} md={6}>
-            { deliveryAvailable && this.renderDefaultDeliveryAddressSelect() }
-          </Col>
-        </Row>
-      </Col>
+            <Row>
+              <Col xs={12} md={6}>
+                <Field
+                  data-test-hold-shelf-checkbox
+                  name="requestPreferences.holdShelf"
+                  label={<FormattedMessage id="ui-users.requests.holdShelf" />}
+                  checked
+                  disabled
+                  component={Checkbox}
+                  type="checkbox"
+                />
+              </Col>
+              <Col xs={12} md={6}>
+                <Field
+                  data-test-delivery-checkbox
+                  name="requestPreferences.delivery"
+                  label={<FormattedMessage id="ui-users.requests.delivery" />}
+                  component={Checkbox}
+                  type="checkbox"
+                  disabled={disabled}
+                />
+              </Col>
+            </Row>
+          </fieldset>
+        </Col>
+        <Col xs={12} md={3}>
+          {this.renderServicePointSelect()}
+        </Col>
+        <Col xs={12} md={3}>
+          {this.renderFulfillmentPreferenceSelect()}
+        </Col>
+        <Col xs={12} md={3}>
+          {this.renderDefaultDeliveryAddressSelect()}
+        </Col>
+      </Row>
     );
   }
 }
