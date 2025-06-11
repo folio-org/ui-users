@@ -2,7 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { KeyValue } from '@folio/stripes/components';
+import {
+  KeyValue,
+  NoValue,
+} from '@folio/stripes/components';
 import { stripesConnect } from '@folio/stripes/core';
 import { getFullName } from '../../components/util';
 
@@ -54,16 +57,17 @@ class LoanProxyDetails extends React.Component {
   }
 
   render() {
+    let value = <NoValue />;
+
     if (this.props.id && this.props.resources.proxy.hasLoaded) {
-      return <KeyValue
-        label={<FormattedMessage id="ui-users.loans.details.proxyBorrower" />}
-        value={this.getUserFullName()}
-      />;
+      value = this.getUserFullName();
+    } else if (this.props.id) {
+      value = <FormattedMessage id="ui-users.user.unknown" />;
     }
 
     return <KeyValue
       label={<FormattedMessage id="ui-users.loans.details.proxyBorrower" />}
-      value="-"
+      value={value}
     />;
   }
 }
