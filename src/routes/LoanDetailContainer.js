@@ -57,8 +57,24 @@ class LoanDetailContainer extends React.Component {
     loanHistory: {
       type: 'okapi',
       records: 'loans',
-      path: 'circulation-bff/loans?query=(userId==:{id}) sortby id&limit=2000',
-      permissionsRequired: 'circulation-bff.loans.collection.get',
+      path: (_q, _p, _r, _l, props) => {
+        const {
+          match: { params: { id } },
+          stripes,
+        } = props;
+        const query = `query=(userId==${id}) sortby id&limit=2000`;
+
+        if (stripes.hasInterface('circulation-bff-loans', '1.3')
+          && stripes.hasPerm('circulation-bff.loans.collection.get')) {
+          return `circulation-bff/loans?${query}`;
+        }
+
+        if (stripes.hasPerm('circulation.loans.collection.get')) {
+          return `circulation/loans?${query}`;
+        }
+
+        return null;
+      },
     },
     requests: {
       type: 'okapi',
