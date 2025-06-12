@@ -61,7 +61,7 @@ const ExtendedInfo = (props) => {
         defaultServicePointName={defaultServicePointName}
         defaultDeliveryAddressTypeName={defaultDeliveryAddressTypeName}
       />
-      {departments.length && (
+      {!!departments.length && (
         <Row>
           <Col xs={12} md={6}>
             <KeyValue
