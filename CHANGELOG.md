@@ -25,6 +25,7 @@
 * Extended information - change order of fields, use MultiSelection for the departments field. Refs UIU-3123.
 * Display "Unknown user" instead of dash in proxy borrower field. Refs UIU-3373.
 * Make circulation-bff-loans dependency optional in folio_users UI module. Refs UIU-3409.
+* Escape the `username` and `barcode` fields. Fixes UIU-2882.
 
 ## [12.1.7] (https://github.com/folio-org/ui-users/tree/v12.1.7) (2025-06-03)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.6...v12.1.7)
