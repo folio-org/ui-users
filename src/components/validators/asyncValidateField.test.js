@@ -53,29 +53,29 @@ describe('Async Validate Field component', () => {
       memoize.mockImplementation(jest.requireActual('../util/memoize').default);
     });
 
-    it(`should escape *`, async () => {
+    it('should escape *', async () => {
       await asyncValidateField('username', '', mockValidator)('foo*');
       expect(mockValidator.GET).toHaveBeenCalledWith({ params: { query: '(username=="foo\\*")' } });
-    }); 
+    });
 
-    it(`should escape ?`, async () => {
+    it('should escape ?', async () => {
       await asyncValidateField('barcode', '', mockValidator)('foo?');
       expect(mockValidator.GET).toHaveBeenCalledWith({ params: { query: '(barcode=="foo\\?")' } });
-    }); 
+    });
 
-    it(`should escape ^`, async () => {
+    it('should escape ^', async () => {
       await asyncValidateField('username', '', mockValidator)('foo^');
       expect(mockValidator.GET).toHaveBeenCalledWith({ params: { query: '(username=="foo\\^")' } });
-    }); 
+    });
 
-    it(`should escape "`, async () => {
+    it('should escape "', async () => {
       await asyncValidateField('username', '', mockValidator)('foo"');
       expect(mockValidator.GET).toHaveBeenCalledWith({ params: { query: '(username=="foo\\"")' } });
-    }); 
+    });
 
-    it(`should escape \\`, async () => {
+    it('should escape \\', async () => {
       await asyncValidateField('username', '', mockValidator)('foo\\');
       expect(mockValidator.GET).toHaveBeenCalledWith({ params: { query: '(username=="foo\\\\")' } });
-    }); 
+    });
   });
 });
