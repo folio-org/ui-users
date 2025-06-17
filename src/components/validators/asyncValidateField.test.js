@@ -49,7 +49,9 @@ describe('Async Validate Field component', () => {
   });
 
   describe('query escaping', () => {
-    memoize.mockImplementation(jest.requireActual('../util/memoize').default);
+    beforeEach(() => {
+      memoize.mockImplementation(jest.requireActual('../util/memoize').default);
+    });
 
     it(`should escape *`, async () => {
       await asyncValidateField('username', '', mockValidator)('foo*');
