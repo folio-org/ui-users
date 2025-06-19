@@ -5,6 +5,7 @@ import DeleteProfilePictureModal from './DeleteProfilePictureModal';
 jest.unmock('react-intl');
 
 jest.mock('react-intl', () => ({
+  ...jest.requireActual('react-intl'),
   FormattedMessage: jest.fn(({ id, values }) => {
     if (values) {
       const valueStr = Object.values(values).join(',');
