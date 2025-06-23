@@ -76,6 +76,7 @@ import ActionMenuDeleteButton from './components/ActionMenuDeleteButton';
 import OpenTransactionModal from './components/OpenTransactionModal';
 import DeleteUserModal from './components/DeleteUserModal';
 import ExportFeesFinesReportButton from './components';
+import { CUSTOM_FIELDS_SCOPE } from '../../constants';
 
 import css from './UserDetail.css';
 
@@ -815,6 +816,7 @@ class UserDetail extends React.Component {
                   customFieldsValues={customFields}
                   customFieldsLabel={<FormattedMessage id="ui-users.custom.customFields" />}
                   noCustomFieldsFoundLabel={<FormattedMessage id="ui-users.custom.noCustomFieldsFound" />}
+                  scope={CUSTOM_FIELDS_SCOPE}
                 />
                 {
                   displayReadingRoomAccessAccordion && (

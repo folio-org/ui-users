@@ -82,6 +82,9 @@
           "users-keycloak.item.get",
           "usergroups.collection.get",
           "configuration.entries.collection.get",
+          "mod-settings.entries.collection.get",
+          "mod-settings.entries.item.get",
+          "mod-settings.global.read.ui-users.custom-fields.manage",
           "user-settings.custom-fields.collection.get",
           "user-settings.custom-fields.item.get",
           "user-settings.custom-fields.item.stats.get",
@@ -415,7 +418,9 @@
         "displayName": "Settings (Users): Can view custom fields",
         "subPermissions": [
           "settings.users.enabled",
-          "configuration.entries.collection.get",
+          "mod-settings.entries.collection.get",
+          "mod-settings.entries.item.get",
+          "mod-settings.global.read.ui-users.custom-fields.manage",
           "user-settings.custom-fields.collection.get",
           "user-settings.custom-fields.item.option.stats.get"
         ],
@@ -430,7 +435,10 @@
           "user-settings.custom-fields.item.post",
           "user-settings.custom-fields.item.put",
           "configuration.entries.item.post",
-          "configuration.entries.item.put"
+          "configuration.entries.item.put",
+          "mod-settings.entries.item.post",
+          "mod-settings.entries.item.put",
+          "mod-settings.global.write.ui-users.custom-fields.manage"
         ],
         "visible": true
       },
@@ -1196,6 +1204,16 @@
           "staging-users.collection.get"
         ],
         "visible": true
+      },
+      {
+        "permissionName": "mod-settings.global.read.ui-users.custom-fields.manage",
+        "displayName": "Settings (Users): Read the custom fields settings",
+        "visible": false
+      },
+      {
+        "permissionName": "mod-settings.global.write.ui-users.custom-fields.manage",
+        "displayName": "Settings (Users): Write the custom fields settings",
+        "visible": false
       }
     ]
   },

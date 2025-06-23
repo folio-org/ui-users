@@ -406,3 +406,5 @@ export const NEW_FEE_FINE_FIELD_NAMES = {
   ITEM_BARCODE: 'itemBarcode',
   KEY_OF_ITEM_BARCODE: 'keyOfItemBarcode',
 };
+
+export const CUSTOM_FIELDS_SCOPE = 'ui-users.custom-fields.manage';
