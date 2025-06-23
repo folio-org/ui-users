@@ -1,6 +1,7 @@
 import React from 'react';
 
 jest.mock('@folio/stripes/components', () => ({
+  ...jest.requireActual('@folio/stripes/components'),
   Accordion: jest.fn(({ children, ...rest }) => (
     <span {...rest}>{children}</span>
   )),
@@ -220,28 +221,6 @@ jest.mock('@folio/stripes/components', () => ({
       {...props}
     />
   )),
-  Select: jest.fn(({ children, dataOptions }) => {
-    const dummyData = [{
-      value: 'testValue',
-      id: 'testId',
-      label: 'TestLabel'
-    }];
-    const options = dataOptions && dataOptions.length > 0 ? dataOptions : dummyData;
-    return (
-      <div>
-        <select>
-          {options.forEach((option, i) => (
-            <option
-              value={option.value}
-              key={option.id || `option-${i}`}
-            >
-              {option.label}
-            </option>))}
-        </select>
-        {children}
-      </div>
-    );
-  }),
   TextArea: jest.fn((props) => (
     <div>
       <label htmlFor={props.label}>{props.label}</label>

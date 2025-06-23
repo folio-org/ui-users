@@ -26,6 +26,7 @@
 * Display "Unknown user" instead of dash in proxy borrower field. Refs UIU-3373.
 * Make circulation-bff-loans dependency optional in folio_users UI module. Refs UIU-3409.
 * Escape the `username` and `barcode` fields. Fixes UIU-2882.
+* Remove addressTypeId prop from EditContactInfo and UserForm components to avoid address component issues. Refs UIU-3287.
 * Migrate custom fields from mod-configuration to mod-settings. Refs UIU-3411.
 
 ## [12.1.7] (https://github.com/folio-org/ui-users/tree/v12.1.7) (2025-06-03)
