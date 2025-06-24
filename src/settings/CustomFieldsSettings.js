@@ -6,6 +6,8 @@ import { useIntl } from 'react-intl';
 import { useStripes, TitleManager } from '@folio/stripes/core';
 import { ViewCustomFieldsSettings, EditCustomFieldsSettings } from '@folio/stripes/smart-components';
 
+import { CUSTOM_FIELDS_SCOPE } from '../constants';
+
 const propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
@@ -45,6 +47,7 @@ const CustomFieldsSettings = ({
             entityType={entityType}
             editRoute={`${base}/edit`}
             permissions={permissions}
+            scope={CUSTOM_FIELDS_SCOPE}
           />
         </Route>
         <Route exact path={`${base}/edit`}>
@@ -53,6 +56,7 @@ const CustomFieldsSettings = ({
             entityType={entityType}
             viewRoute={base}
             permissions={permissions}
+            scope={CUSTOM_FIELDS_SCOPE}
           />
         </Route>
       </Switch>
