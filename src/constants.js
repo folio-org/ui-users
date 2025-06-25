@@ -408,3 +408,4 @@ export const NEW_FEE_FINE_FIELD_NAMES = {
 };
 
 export const CUSTOM_FIELDS_SCOPE = 'ui-users.custom-fields.manage';
+export const TAGS_SCOPE = 'ui-tags.tags.manage';

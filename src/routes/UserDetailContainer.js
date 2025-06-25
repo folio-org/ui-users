@@ -2,9 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import UserRecordContainer from './UserRecordContainer';
 import { UserDetail, UserDetailFullscreen } from '../views';
+import {TAGS_SCOPE} from "../constants";
 
 export const UserDetailContainer = ({ children, match, ...rest }) => (
-  <UserRecordContainer key={`user-record-${match?.params?.id}`} match={match} {...rest}>
+  <UserRecordContainer
+    key={`user-record-${match?.params?.id}`}
+    match={match}
+    tagsScope={TAGS_SCOPE}
+    {...rest}
+  >
     { payload => <UserDetail {...payload} paneWidth="44%">{children}</UserDetail> }
   </UserRecordContainer>
 );
@@ -15,7 +21,10 @@ UserDetailContainer.propTypes = {
 };
 
 export const UserDetailFullscreenContainer = ({ children, ...rest }) => (
-  <UserRecordContainer {...rest}>
+  <UserRecordContainer
+    tagsScope={TAGS_SCOPE}
+    {...rest}
+  >
     { payload => <UserDetailFullscreen {...payload}>{children}</UserDetailFullscreen> }
   </UserRecordContainer>
 );
