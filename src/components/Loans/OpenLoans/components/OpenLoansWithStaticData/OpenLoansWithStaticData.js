@@ -117,6 +117,7 @@ class OpenLoansWithStaticData extends React.Component {
     'contributors',
     'renewals',
     'loanPolicy',
+    'useAtLocation',
     'location',
     'loanDate',
   ];

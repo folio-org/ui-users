@@ -96,6 +96,15 @@ export default function getListDataFormatter(
       formatter: loan => getLoanPolicy(loan.loanPolicyId),
       sorter: loan => getLoanPolicy(loan.loanPolicyId),
     },
+    'useAtLocation': {
+      key: 'useAtLocation',
+      view: formatMessage({ id: 'ui-users.loans.columns.useAtLocation' }),
+      formatter: loan => {
+        const ual = loan.forUseAtLocation;
+        return !ual ? <NoValue /> : formatMessage({ id: `ui-users.loans.columns.useAtLocation.${ual.status}` });
+      },
+      sorter: loan => loan.forUseAtLocation?.status,
+    },
     'contributors': {
       key:'Contributors',
       view: formatMessage({ id: 'ui-users.loans.columns.contributors' }),

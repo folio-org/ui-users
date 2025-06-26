@@ -85,6 +85,7 @@ class OpenLoansControl extends React.Component {
       'Contributors',
       'renewals',
       'loanPolicy',
+      'useAtLocation',
       'location',
       'loanDate',
       ' ',
@@ -102,6 +103,7 @@ class OpenLoansControl extends React.Component {
       'Contributors',
       'renewals',
       'loanPolicy',
+      'useAtLocation',
       'location',
       'loanDate',
     ];
