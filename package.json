@@ -1259,6 +1259,7 @@
     "regenerator-runtime": "^0.13.9"
   },
   "dependencies": {
+    "@folio/stripes-util": "^7.0.0",
     "compressorjs": "^1.2.1",
     "dompurify": "^3.2.0",
     "final-form-set-field-data": "^1.0.2",
