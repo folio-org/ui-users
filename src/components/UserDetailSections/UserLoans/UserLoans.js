@@ -16,6 +16,37 @@ import {
   loanStatuses,
 } from '../../../constants';
 
+
+const ListLoans = (props) => {
+  const { params, location, items } = props;
+  return (
+    <List
+      listStyle="bullets"
+      itemFormatter={(item, index) => (
+        <li key={index}>
+          <Link
+            id={item.id}
+            to={{
+              pathname: `/users/${params.id}/loans/${item.status}`,
+              state: { search: location.search },
+            }}
+          >
+            <FormattedMessage id={item.formattedMessageId} values={{ count: item.count }} />
+          </Link>
+          {item.claimedReturnedCount > 0 &&
+            <span id="claimed-returned-count">
+              {' '}
+              <FormattedMessage id="ui-users.loans.numClaimedReturnedLoans" values={{ count: item.claimedReturnedCount }} />
+            </span>
+          }
+          {item.subItems && <ListLoans params={params} location={location} items={item.subItems} />}
+        </li>)}
+      items={items}
+    />
+  );
+};
+
+
 /**
  * User-details "Loans" accordion pane.
  *
@@ -115,6 +146,23 @@ class UserLoans extends React.Component {
     const closedLoansCount = resources?.closedLoansCount?.records?.[0]?.totalRecords ?? 0;
     const loansLoaded = !this.isLoading();
     const displayWhenClosed = loansLoaded ? (<Badge><FormattedNumber value={openLoansCount} /></Badge>) : (<Icon icon="spinner-ellipsis" width="10px" />);
+    const heldLoansCount = 123; // XXX
+    const inUseLoansCount = 123; // XXX
+
+    const subItems = [
+      {
+        id: 'clickable-viewheldloans',
+        count: heldLoansCount,
+        formattedMessageId: 'ui-users.loans.numOpenLoans.held',
+        status: 'open',
+      },
+      {
+        id: 'clickable-viewinuseloans',
+        count: inUseLoansCount,
+        formattedMessageId: 'ui-users.loans.numOpenLoans.inUse',
+        status: 'open',
+      },
+    ];
 
     const items = [
       {
@@ -123,6 +171,7 @@ class UserLoans extends React.Component {
         claimedReturnedCount,
         formattedMessageId: 'ui-users.loans.numOpenLoans',
         status: 'open',
+        subItems,
       },
       {
         id: 'clickable-viewclosedloans',
@@ -144,28 +193,8 @@ class UserLoans extends React.Component {
         displayWhenClosed={displayWhenClosed}
       >
         {loansLoaded ?
-          <List
-            listStyle="bullets"
-            itemFormatter={(item, index) => (
-              <li key={index}>
-                <Link
-                  id={item.id}
-                  to={{
-                    pathname: `/users/${params.id}/loans/${item.status}`,
-                    state: { search: location.search },
-                  }}
-                >
-                  <FormattedMessage id={item.formattedMessageId} values={{ count: item.count }} />
-                </Link>
-                {item.claimedReturnedCount > 0 &&
-                  <span id="claimed-returned-count">
-                    {' '}
-                    <FormattedMessage id="ui-users.loans.numClaimedReturnedLoans" values={{ count: item.claimedReturnedCount }} />
-                  </span>
-                }
-              </li>)}
-            items={items}
-          /> : <Icon icon="spinner-ellipsis" width="10px" />
+          <ListLoans params={params} location={location} items={items} /> :
+          <Icon icon="spinner-ellipsis" width="10px" />
         }
       </Accordion>
     );
