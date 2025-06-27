@@ -54,7 +54,7 @@ const ListLoans = (props) => {
  * number of open-loans in the preview.
  */
 class UserLoans extends React.Component {
-  // "limit=0" on the closedLoansCount fields is a hack
+  // "limit=0" on the claimedReturnedCount and closedLoansCount fields is a hack
   // to get at the "totalRecords" field without pulling down any other data
   // see https://issues.folio.org/browse/FOLIO-773
   static manifest = Object.freeze({
@@ -65,7 +65,7 @@ class UserLoans extends React.Component {
         path: 'circulation/loans?query=(userId==:{id})&limit=1000',
       },
     },
-    openLoansCount: {
+    openLoans: {
       type: 'okapi',
       GET: {
         path: 'circulation/loans',
@@ -104,7 +104,7 @@ class UserLoans extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
       closedLoansCount: PropTypes.object,
-      openLoansCount: PropTypes.object,
+      openLoans: PropTypes.object,
       claimedReturnedCount: PropTypes.object,
     }),
     accordionId: PropTypes.string,
@@ -120,13 +120,13 @@ class UserLoans extends React.Component {
   isLoading() {
     const {
       resources: {
-        openLoansCount,
+        openLoans,
         claimedReturnedCount,
         closedLoansCount,
       }
     } = this.props;
 
-    return (openLoansCount?.isPending ?? true) &&
+    return (openLoans?.isPending ?? true) &&
       (closedLoansCount?.isPending ?? true) &&
       (claimedReturnedCount?.isPending ?? true);
   }
@@ -141,15 +141,15 @@ class UserLoans extends React.Component {
       location,
     } = this.props;
 
-    const openLoansCount = resources?.openLoansCount?.records?.[0]?.totalRecords ?? 0;
+    const openLoansCount = resources?.openLoans?.records?.[0]?.totalRecords ?? 0;
     const claimedReturnedCount = resources?.claimedReturnedCount?.records?.[0]?.totalRecords ?? 0;
     const closedLoansCount = resources?.closedLoansCount?.records?.[0]?.totalRecords ?? 0;
     const loansLoaded = !this.isLoading();
     const displayWhenClosed = loansLoaded ? (<Badge><FormattedNumber value={openLoansCount} /></Badge>) : (<Icon icon="spinner-ellipsis" width="10px" />);
 
-    const loans = resources?.openLoansCount?.records?.[0]?.loans;
-    const heldLoansCount = loans.filter(l => l.forUseAtLocation?.status === 'Held').length;
-    const inUseLoansCount = loans.filter(l => l.forUseAtLocation?.status === 'In use').length;
+    const loans = resources?.openLoans?.records?.[0]?.loans;
+    const heldLoansCount = loans?.filter(l => l.forUseAtLocation?.status === 'Held').length;
+    const inUseLoansCount = loans?.filter(l => l.forUseAtLocation?.status === 'In use').length;
 
     const subItems = [
       {
