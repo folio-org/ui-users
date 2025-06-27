@@ -54,7 +54,7 @@ const ListLoans = (props) => {
  * number of open-loans in the preview.
  */
 class UserLoans extends React.Component {
-  // "limit=0" on the openLoansCount and closedLoansCount fields is a hack
+  // "limit=0" on the closedLoansCount fields is a hack
   // to get at the "totalRecords" field without pulling down any other data
   // see https://issues.folio.org/browse/FOLIO-773
   static manifest = Object.freeze({
@@ -71,7 +71,7 @@ class UserLoans extends React.Component {
         path: 'circulation/loans',
         params: {
           query: `(userId==:{id} and status.name<>${loanStatuses.CLOSED})`,
-          limit: '0',
+          limit: '1000',
         },
       },
     },
@@ -146,8 +146,10 @@ class UserLoans extends React.Component {
     const closedLoansCount = resources?.closedLoansCount?.records?.[0]?.totalRecords ?? 0;
     const loansLoaded = !this.isLoading();
     const displayWhenClosed = loansLoaded ? (<Badge><FormattedNumber value={openLoansCount} /></Badge>) : (<Icon icon="spinner-ellipsis" width="10px" />);
-    const heldLoansCount = 123; // XXX
-    const inUseLoansCount = 123; // XXX
+
+    const loans = resources?.openLoansCount?.records?.[0]?.loans;
+    const heldLoansCount = loans.filter(l => l.forUseAtLocation?.status === 'Held').length;
+    const inUseLoansCount = loans.filter(l => l.forUseAtLocation?.status === 'In use').length;
 
     const subItems = [
       {
