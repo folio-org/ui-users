@@ -39,7 +39,10 @@ const ListLoans = (props) => {
               <FormattedMessage id="ui-users.loans.numClaimedReturnedLoans" values={{ count: item.claimedReturnedCount }} />
             </span>
           }
-          {item.subItems && <ListLoans params={params} location={location} items={item.subItems} />}
+          {item.subItems &&
+            (!item.subItemsCond || item.subItemsCond()) &&
+            <ListLoans params={params} location={location} items={item.subItems} />
+          }
         </li>)}
       items={items}
     />
@@ -174,6 +177,7 @@ class UserLoans extends React.Component {
         formattedMessageId: 'ui-users.loans.numOpenLoans',
         status: 'open',
         subItems,
+        subItemsCond: () => heldLoansCount !== 0 || inUseLoansCount !== 0,
       },
       {
         id: 'clickable-viewclosedloans',
