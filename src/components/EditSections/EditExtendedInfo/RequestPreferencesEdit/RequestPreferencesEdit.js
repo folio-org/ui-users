@@ -170,11 +170,10 @@ class RequestPreferencesEdit extends Component {
     }, []);
   }
 
-  // eslint-disable-next-line consistent-return
   defaultDeliveryAddressValidator = (value, formData) => {
     const { deliveryAvailable } = this.props;
 
-    if (!deliveryAvailable) return;
+    if (!deliveryAvailable) return undefined;
 
     const nonEmptyAddresses = get(formData, 'personal.addresses', []).filter(address => !isEmpty(address));
 
@@ -185,6 +184,8 @@ class RequestPreferencesEdit extends Component {
     if (!value) {
       return <FormattedMessage id="ui-users.errors.missingRequiredField" />;
     }
+
+    return undefined;
   }
 
   resetDefaultDeliveryAddress() {

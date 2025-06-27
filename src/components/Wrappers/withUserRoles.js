@@ -54,10 +54,10 @@ const withUserRoles = (WrappedComponent) => (props) => {
     await Promise.allSettled(requests);
   };
 
-  const updateKeycloakUser = async (userId, data) => {
+  const updateKeycloakUser = async (userId2, data) => {
     try {
       // use `ky.put` instead of `api.put` because updating current user data requires setting x-okapi-tenant to the current tenant.
-      await ky.put(`users-keycloak/users/${userId}`, {
+      await ky.put(`users-keycloak/users/${userId2}`, {
         json: { ...data }
       });
     } catch (error) {
