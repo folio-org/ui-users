@@ -4,7 +4,9 @@ import { render, screen, fireEvent } from '@folio/jest-config-stripes/testing-li
 import '__mock__/stripesCore.mock';
 import '__mock__/stripesSmartComponent.mock';
 
-import ModalContent from './ModalContent';
+import ModalContent, {
+  getMutatorFunction,
+} from './ModalContent';
 
 jest.unmock('@folio/stripes/components');
 
@@ -472,5 +474,41 @@ describe('Modal Content', () => {
     } });
 
     fireEvent.click(document.querySelector('[data-test-dialog-confirm-button="true"]'));
+  });
+
+  describe('getMutatorFunction ', () => {
+    const stripes = {
+      config: {
+        enableEcsRequests: true,
+      },
+    };
+    const mutatorFunction = {
+      declareLostBFF: {
+        POST: 'declareLostBFF',
+      },
+      declareLost: {
+        POST: 'declareLost',
+      },
+      notDeclareLost: {
+        POST: 'notDeclareLost',
+      },
+    };
+    const loanAction = 'declareLost';
+
+    it('should return mutator POST value for declareLostBFF action', () => {
+      expect(getMutatorFunction(stripes, mutatorFunction, loanAction)).toEqual('declareLostBFF');
+    });
+
+    it('should return mutator POST value for declareLost action', () => {
+      const stripesWithOutEnableEcsRequests = {};
+
+      expect(getMutatorFunction(stripesWithOutEnableEcsRequests, mutatorFunction, loanAction)).toEqual('declareLost');
+    });
+
+    it('should return mutator POST value for passed action', () => {
+      const notDeclareLost = 'notDeclareLost';
+
+      expect(getMutatorFunction(stripes, mutatorFunction, notDeclareLost)).toEqual('notDeclareLost');
+    });
   });
 });
