@@ -29,6 +29,7 @@
 * Remove addressTypeId prop from EditContactInfo and UserForm components to avoid address component issues. Refs UIU-3287.
 * Migrate custom fields from mod-configuration to mod-settings. Refs UIU-3411.
 * Open Loans page now shows useAtLocation column. Refs UIU-3405.
+* Add support for use circulation-bff for declare-item-lost. Refs UIU-3414.
 
 ## [12.1.7] (https://github.com/folio-org/ui-users/tree/v12.1.7) (2025-06-03)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.6...v12.1.7)
