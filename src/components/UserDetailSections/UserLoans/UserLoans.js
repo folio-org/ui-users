@@ -16,6 +16,43 @@ import {
   loanStatuses,
 } from '../../../constants';
 
+
+const ListLoans = (props) => {
+  const { params, location, items } = props;
+  return (
+    <List
+      listStyle="bullets"
+      itemFormatter={(item, index) => (
+        <li key={index}>
+          <Link
+            id={item.id}
+            to={{
+              pathname: `/users/${params.id}/loans/${item.status}`,
+              state: { search: location.search },
+            }}
+          >
+            <FormattedMessage id={item.formattedMessageId} values={{ count: item.count }} />
+          </Link>
+          {item.claimedReturnedCount > 0 &&
+            <span id="claimed-returned-count">
+              {' '}
+              <FormattedMessage id="ui-users.loans.numClaimedReturnedLoans" values={{ count: item.claimedReturnedCount }} />
+            </span>
+          }
+          {item.subItems &&
+            (!item.subItemsCond || item.subItemsCond()) &&
+            <ul>
+              <li>{item.subItemsHeader}</li>
+              <ListLoans params={params} location={location} items={item.subItems} />
+            </ul>
+          }
+        </li>)}
+      items={items}
+    />
+  );
+};
+
+
 /**
  * User-details "Loans" accordion pane.
  *
@@ -23,7 +60,7 @@ import {
  * number of open-loans in the preview.
  */
 class UserLoans extends React.Component {
-  // "limit=0" on the openLoansCount and closedLoansCount fields is a hack
+  // "limit=0" on the claimedReturnedCount and closedLoansCount fields is a hack
   // to get at the "totalRecords" field without pulling down any other data
   // see https://issues.folio.org/browse/FOLIO-773
   static manifest = Object.freeze({
@@ -34,13 +71,13 @@ class UserLoans extends React.Component {
         path: 'circulation/loans?query=(userId==:{id})&limit=1000',
       },
     },
-    openLoansCount: {
+    openLoans: {
       type: 'okapi',
       GET: {
         path: 'circulation/loans',
         params: {
           query: `(userId==:{id} and status.name<>${loanStatuses.CLOSED})`,
-          limit: '0',
+          limit: '1000',
         },
       },
     },
@@ -73,7 +110,7 @@ class UserLoans extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
       closedLoansCount: PropTypes.object,
-      openLoansCount: PropTypes.object,
+      openLoans: PropTypes.object,
       claimedReturnedCount: PropTypes.object,
     }),
     accordionId: PropTypes.string,
@@ -89,13 +126,13 @@ class UserLoans extends React.Component {
   isLoading() {
     const {
       resources: {
-        openLoansCount,
+        openLoans,
         claimedReturnedCount,
         closedLoansCount,
       }
     } = this.props;
 
-    return (openLoansCount?.isPending ?? true) &&
+    return (openLoans?.isPending ?? true) &&
       (closedLoansCount?.isPending ?? true) &&
       (claimedReturnedCount?.isPending ?? true);
   }
@@ -110,11 +147,30 @@ class UserLoans extends React.Component {
       location,
     } = this.props;
 
-    const openLoansCount = resources?.openLoansCount?.records?.[0]?.totalRecords ?? 0;
+    const openLoansCount = resources?.openLoans?.records?.[0]?.totalRecords ?? 0;
     const claimedReturnedCount = resources?.claimedReturnedCount?.records?.[0]?.totalRecords ?? 0;
     const closedLoansCount = resources?.closedLoansCount?.records?.[0]?.totalRecords ?? 0;
     const loansLoaded = !this.isLoading();
     const displayWhenClosed = loansLoaded ? (<Badge><FormattedNumber value={openLoansCount} /></Badge>) : (<Icon icon="spinner-ellipsis" width="10px" />);
+
+    const loans = resources?.openLoans?.records?.[0]?.loans;
+    const heldLoansCount = loans?.filter(l => l.forUseAtLocation?.status === 'Held').length;
+    const inUseLoansCount = loans?.filter(l => l.forUseAtLocation?.status === 'In use').length;
+
+    const subItems = [
+      {
+        id: 'clickable-viewheldloans',
+        count: heldLoansCount,
+        formattedMessageId: 'ui-users.loans.numOpenLoans.held',
+        status: 'open',
+      },
+      {
+        id: 'clickable-viewinuseloans',
+        count: inUseLoansCount,
+        formattedMessageId: 'ui-users.loans.numOpenLoans.inUse',
+        status: 'open',
+      },
+    ];
 
     const items = [
       {
@@ -123,6 +179,9 @@ class UserLoans extends React.Component {
         claimedReturnedCount,
         formattedMessageId: 'ui-users.loans.numOpenLoans',
         status: 'open',
+        subItemsCond: () => heldLoansCount !== 0 || inUseLoansCount !== 0,
+        subItemsHeader: <FormattedMessage id="ui-users.loans.columns.useAtLocation" />,
+        subItems,
       },
       {
         id: 'clickable-viewclosedloans',
@@ -144,28 +203,8 @@ class UserLoans extends React.Component {
         displayWhenClosed={displayWhenClosed}
       >
         {loansLoaded ?
-          <List
-            listStyle="bullets"
-            itemFormatter={(item, index) => (
-              <li key={index}>
-                <Link
-                  id={item.id}
-                  to={{
-                    pathname: `/users/${params.id}/loans/${item.status}`,
-                    state: { search: location.search },
-                  }}
-                >
-                  <FormattedMessage id={item.formattedMessageId} values={{ count: item.count }} />
-                </Link>
-                {item.claimedReturnedCount > 0 &&
-                  <span id="claimed-returned-count">
-                    {' '}
-                    <FormattedMessage id="ui-users.loans.numClaimedReturnedLoans" values={{ count: item.claimedReturnedCount }} />
-                  </span>
-                }
-              </li>)}
-            items={items}
-          /> : <Icon icon="spinner-ellipsis" width="10px" />
+          <ListLoans params={params} location={location} items={items} /> :
+          <Icon icon="spinner-ellipsis" width="10px" />
         }
       </Accordion>
     );
