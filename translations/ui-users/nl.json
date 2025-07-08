@@ -1244,5 +1244,13 @@
     "numberGenerator.barcodeGenerator": "Barcode generator voor gebruikers",
     "permission.settings.number-generator-options.all": "Gebruikers: Kan nummergeneratoropties aanmaken, bewerken en bekijken",
     "information.profilePicture.takePhoto": "Foto maken",
-    "information.profilePicture.retakePhoto": "Foto herhalen"
+    "information.profilePicture.retakePhoto": "Foto herhalen",
+    "requests.fulfillmentPreference.info": "Selecteer het selectievakje <strong>Levering</strong> om <strong>Voorkeur voor levering</strong> en <strong>Standaard leveringsadres</strong> te kiezen.",
+    "loans.columns.useAtLocation": "Gebruik op Locatie",
+    "loans.columns.useAtLocation.In use": "In gebruik",
+    "loans.columns.useAtLocation.Held": "Holdings",
+    "loans.columns.useAtLocation.Returned": "Geretourneerd",
+    "loans.numOpenLoans.useAtLocation": "Use at location",
+    "loans.numOpenLoans.held": "Held: {count}",
+    "loans.numOpenLoans.inUse": "In use: {count}"
 }
