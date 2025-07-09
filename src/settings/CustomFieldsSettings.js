@@ -6,7 +6,10 @@ import { useIntl } from 'react-intl';
 import { useStripes, TitleManager } from '@folio/stripes/core';
 import { ViewCustomFieldsSettings, EditCustomFieldsSettings } from '@folio/stripes/smart-components';
 
-import { CUSTOM_FIELDS_SCOPE } from '../constants';
+import { 
+  CUSTOM_FIELDS_SCOPE, 
+  CUSTOM_FIELDS_SECTION, 
+} from '../constants';
 
 const propTypes = {
   history: PropTypes.shape({
@@ -32,6 +35,33 @@ const CustomFieldsSettings = ({
   const backendModuleName = 'users';
   const entityType = 'user';
 
+  const displayInAccordionOptions = [
+    {
+      value: CUSTOM_FIELDS_SECTION.USER_INFO, 
+      label: formatMessage({ id: 'ui-users.information.userInformation' }),
+    },
+    {
+      value: CUSTOM_FIELDS_SECTION.EXTENDED_INFO, 
+      label: formatMessage({ id: 'ui-users.extended.extendedInformation' }),
+    },
+    {
+      value: CUSTOM_FIELDS_SECTION.CONTACT_INFO, 
+      label: formatMessage({ id: 'ui-users.contact.contactInfo' }),
+    },
+    {
+      value: CUSTOM_FIELDS_SECTION.FEES_FINES, 
+      label: formatMessage({ id: 'ui-users.accounts.title.feeFine' }),
+    },
+    {
+      value: CUSTOM_FIELDS_SECTION.LOANS, 
+      label: formatMessage({ id: 'ui-users.loans.title' }),
+    },
+    {
+      value: CUSTOM_FIELDS_SECTION.REQUESTS, 
+      label: formatMessage({ id: 'ui-users.requests.title' }),
+    },
+  ];
+
   if (!permissions.canView) {
     history.replace('/settings/users');
   }
@@ -48,6 +78,8 @@ const CustomFieldsSettings = ({
             editRoute={`${base}/edit`}
             permissions={permissions}
             scope={CUSTOM_FIELDS_SCOPE}
+            hasDisplayInAccordionField
+            displayInAccordionOptions={displayInAccordionOptions}
           />
         </Route>
         <Route exact path={`${base}/edit`}>
@@ -57,6 +89,8 @@ const CustomFieldsSettings = ({
             viewRoute={base}
             permissions={permissions}
             scope={CUSTOM_FIELDS_SCOPE}
+            hasDisplayInAccordionField
+            displayInAccordionOptions={displayInAccordionOptions}
           />
         </Route>
       </Switch>

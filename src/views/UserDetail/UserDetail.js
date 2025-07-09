@@ -76,7 +76,10 @@ import ActionMenuDeleteButton from './components/ActionMenuDeleteButton';
 import OpenTransactionModal from './components/OpenTransactionModal';
 import DeleteUserModal from './components/DeleteUserModal';
 import ExportFeesFinesReportButton from './components';
-import { CUSTOM_FIELDS_SCOPE } from '../../constants';
+import { 
+  CUSTOM_FIELDS_SCOPE,
+  CUSTOM_FIELDS_SECTION,
+} from '../../constants';
 
 import css from './UserDetail.css';
 
@@ -750,7 +753,7 @@ class UserDetail extends React.Component {
               </Row>
               <AccordionSet>
                 <UserInfo
-                  accordionId="userInformationSection"
+                  accordionId={CUSTOM_FIELDS_SECTION.USER_INFO}
                   user={user}
                   patronGroup={patronGroup}
                   settings={settings}
@@ -788,7 +791,7 @@ class UserDetail extends React.Component {
                   }
                 </IfInterface>
                 <ExtendedInfo
-                  accordionId="extendedInfoSection"
+                  accordionId={CUSTOM_FIELDS_SECTION.EXTENDED_INFO}
                   user={user}
                   expanded={sections.extendedInfoSection}
                   requestPreferences={requestPreferences}
@@ -799,7 +802,7 @@ class UserDetail extends React.Component {
                   userDepartments={userDepartments}
                 />
                 <ContactInfo
-                  accordionId="contactInfoSection"
+                  accordionId={CUSTOM_FIELDS_SECTION.CONTACT_INFO}
                   stripes={stripes}
                   user={user}
                   addresses={addressesList}
@@ -808,7 +811,7 @@ class UserDetail extends React.Component {
                   onToggle={this.handleSectionToggle}
                 />
                 <ViewCustomFieldsRecord
-                  accordionId="customFields"
+                  accordionId={CUSTOM_FIELDS_SECTION.CUSTOM_FIELDS}
                   onToggle={this.handleSectionToggle}
                   expanded={sections.customFields}
                   backendModuleName="users"
@@ -853,7 +856,7 @@ class UserDetail extends React.Component {
                           <UserAccounts
                             expanded={sections.accountsSection}
                             onToggle={this.handleSectionToggle}
-                            accordionId="accountsSection"
+                            accordionId={CUSTOM_FIELDS_SECTION.FEES_FINES}
                             location={location}
                             accounts={accounts}
                             match={match}
@@ -874,7 +877,7 @@ class UserDetail extends React.Component {
                               onClickViewClosedLoans={this.onClickViewClosedLoans}
                               expanded={sections.loansSection}
                               onToggle={this.handleSectionToggle}
-                              accordionId="loansSection"
+                              accordionId={CUSTOM_FIELDS_SECTION.LOANS}
                               {...this.props}
                             />
                           </IfInterface>
@@ -887,7 +890,7 @@ class UserDetail extends React.Component {
                             <UserRequests
                               expanded={sections.requestsSection}
                               onToggle={this.handleSectionToggle}
-                              accordionId="requestsSection"
+                              accordionId={CUSTOM_FIELDS_SECTION.REQUESTS}
                               user={user}
                               {...this.props}
                             />

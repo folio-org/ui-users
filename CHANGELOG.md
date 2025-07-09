@@ -31,6 +31,7 @@
 * Open Loans page now shows useAtLocation column. Refs UIU-3405.
 * Right-pane full-record display's Loans accordion now shows counts of Held and In Use use-at-location loans. Refs UIU-3406.
 * Support `{{item.seriesStatements}}` in due-date receipt slips. Refs UIU-3416.
+* Pass `hasDisplayInAccordionField` and `displayInAccordionOptions` props to `ViewCustomFieldsSettings` and `EditCustomFieldsSettings` to display `Display in accordion` field in settings. Refs UIU-3140.
 
 ## [12.1.7] (https://github.com/folio-org/ui-users/tree/v12.1.7) (2025-06-03)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.6...v12.1.7)
