@@ -1244,5 +1244,13 @@
     "numberGenerator.barcodeGenerator": "Generátor čárových kódů pro uživatele",
     "permission.settings.number-generator-options.all": "Nastavení (Uživatelé): Může vytvářet, upravovat a zobrazovat možnosti generátoru čísel",
     "information.profilePicture.takePhoto": "Vyfotit",
-    "information.profilePicture.retakePhoto": "Vyfotit znovu"
+    "information.profilePicture.retakePhoto": "Vyfotit znovu",
+    "requests.fulfillmentPreference.info": "Zaškrtněte políčko <strong> Doručení </strong> a vyberte <strong> Preferovaný způsob vyřízení </strong> a <strong> Výchozí dodací adresu </strong>.",
+    "loans.columns.useAtLocation": "Use at location",
+    "loans.columns.useAtLocation.In use": "In use",
+    "loans.columns.useAtLocation.Held": "Held",
+    "loans.columns.useAtLocation.Returned": "Returned",
+    "loans.numOpenLoans.useAtLocation": "Use at location",
+    "loans.numOpenLoans.held": "Held: {count}",
+    "loans.numOpenLoans.inUse": "In use: {count}"
 }

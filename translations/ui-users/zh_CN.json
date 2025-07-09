@@ -1244,5 +1244,13 @@
     "numberGenerator.barcodeGenerator": "用户条码生成器",
     "permission.settings.number-generator-options.all": "设置（用户）：可以创建、编辑和查看数字生成器选项",
     "information.profilePicture.takePhoto": "拍照",
-    "information.profilePicture.retakePhoto": "重新拍照"
+    "information.profilePicture.retakePhoto": "重新拍照",
+    "requests.fulfillmentPreference.info": "Select the <strong>Delivery</strong> checkbox to choose <strong>Fulfillment preference</strong> and <strong>Default delivery address</strong>.",
+    "loans.columns.useAtLocation": "Use at location",
+    "loans.columns.useAtLocation.In use": "In use",
+    "loans.columns.useAtLocation.Held": "Held",
+    "loans.columns.useAtLocation.Returned": "Returned",
+    "loans.numOpenLoans.useAtLocation": "Use at location",
+    "loans.numOpenLoans.held": "Held: {count}",
+    "loans.numOpenLoans.inUse": "In use: {count}"
 }

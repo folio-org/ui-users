@@ -764,7 +764,7 @@
     "reports.feeFine.actionDate": "Data da ação",
     "reports.feeFine.actionDescription": "Descrição da ação",
     "reports.feeFine.actionAmount": "Valor da ação",
-    "reports.feeFine.actionBalance": "Balanço de ação",
+    "reports.feeFine.actionBalance": "Saldo de ação",
     "reports.feeFine.actionTransactionInfo": "Informações sobre transações de ação",
     "reports.feeFine.actionCreatedAt": "Ação criada em",
     "reports.feeFine.actionSource": "Fonte de ação",
@@ -1206,7 +1206,7 @@
     "permission.loans-anonymize.execute": "Usuários: Anomnimizar empréstimos de usuário",
     "permission.loans-due-date.edit": "Usuários: Empréstimos de usuários - alterar a data de vencimento",
     "permission.loans-claim-item-returned.execute": "Usuários: Reclamação de empréstimos de usuários devolvida",
-    "permission.loans-declare-claimed-returned-item-as-missing.execute": "Usuários: Empréstimos de usuários - marcados como reivindicados, devolvidos como desaparecidos",
+    "permission.loans-declare-claimed-returned-item-as-missing.execute": "Usuários: Empréstimos de usuários marcados como reivindicados, devolvidos com falta",
     "permission.loans-declare-item-lost.execute": "Usuários: declarar como perdido empréstimos de usuários",
     "permission.loans-renew-override.create": "Usuários: Renovação de empréstimos de usuários por meio de sobreposição",
     "permission.loans-renew.create": "Usuários: Renovação de empréstimos de usuários",
@@ -1244,5 +1244,13 @@
     "numberGenerator.barcodeGenerator": "Gerador de código de barras do usuário",
     "permission.settings.number-generator-options.all": "Configurações (usuários): Pode criar, editar e visualizar as opções do gerador de números",
     "information.profilePicture.takePhoto": "Tirar foto",
-    "information.profilePicture.retakePhoto": "Refazer foto"
+    "information.profilePicture.retakePhoto": "Refazer foto",
+    "requests.fulfillmentPreference.info": "Marque a caixa de seleção <strong>Entrega</strong> para escolher <strong>Preferência de atendimento</strong> e <strong>Endereço de entrega padrão</strong>.",
+    "loans.columns.useAtLocation": "Uso no local",
+    "loans.columns.useAtLocation.In use": "Em uso",
+    "loans.columns.useAtLocation.Held": "Realizado",
+    "loans.columns.useAtLocation.Returned": "Devolvido",
+    "loans.numOpenLoans.useAtLocation": "Uso no local",
+    "loans.numOpenLoans.held": "Realizado: {count}",
+    "loans.numOpenLoans.inUse": "Em uso: {count}"
 }
