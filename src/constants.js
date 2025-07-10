@@ -411,12 +411,13 @@ export const NEW_FEE_FINE_FIELD_NAMES = {
 
 export const CUSTOM_FIELDS_SCOPE = 'ui-users.custom-fields.manage';
 
+// These fields will be validated on the BE side
 export const CUSTOM_FIELDS_SECTION = {
   CUSTOM_FIELDS: CUSTOM_FIELDS_SECTION_ID,
-  USER_INFO: 'userInformationSection',
-  EXTENDED_INFO: 'extendedInfoSection',
-  CONTACT_INFO: 'contactInfoSection',
-  FEES_FINES: 'accountsSection',
-  LOANS: 'loansSection',
-  REQUESTS: 'requestsSection',
+  USER_INFO: 'user_information',
+  EXTENDED_INFO: 'extended_information',
+  CONTACT_INFO: 'contact_information',
+  FEES_FINES: 'fees_fines',
+  LOANS: 'loans',
+  REQUESTS: 'requests',
 };
