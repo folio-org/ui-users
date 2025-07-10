@@ -63,6 +63,7 @@ jest.mock('react-final-form', () => ({
   }),
 }));
 jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
   Link: jest.fn(() => <div />),
 }));
 

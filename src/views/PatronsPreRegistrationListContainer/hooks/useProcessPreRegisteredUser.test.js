@@ -12,6 +12,7 @@ import { PATRON_PREREGISTRATIONS_API } from '../../../constants';
 import useProcessPreRegisteredUser from './useProcessPreRegisteredUser';
 
 jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
   useHistory: jest.fn(),
 }));
 jest.mock('@folio/stripes/core', () => ({
