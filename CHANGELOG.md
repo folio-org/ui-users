@@ -1,5 +1,7 @@
 # Change history for ui-users
 
+* Add support for use circulation-bff for declare-item-lost. Refs UIU-3414.
+
 ## [12.1.8] (https://github.com/folio-org/ui-users/tree/v12.1.8) (2025-07-30)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.7...v12.1.8)
 * Add the ability for staff to take a patron's profile picture photo using a webcam. Refs UIU-3266.
