@@ -1,3 +1,5 @@
+import { CUSTOM_FIELDS_SECTION_ID } from '@folio/stripes/smart-components';
+
 export const requestStatuses = {
   AWAITING_PICKUP: 'Open - Awaiting pickup',
   AWAITING_DELIVERY: 'Open - Awaiting delivery',
@@ -408,3 +410,14 @@ export const NEW_FEE_FINE_FIELD_NAMES = {
 };
 
 export const CUSTOM_FIELDS_SCOPE = 'ui-users.custom-fields.manage';
+
+// These fields will be validated on the BE side
+export const CUSTOM_FIELDS_SECTION = {
+  CUSTOM_FIELDS: CUSTOM_FIELDS_SECTION_ID,
+  USER_INFO: 'user_information',
+  EXTENDED_INFO: 'extended_information',
+  CONTACT_INFO: 'contact_information',
+  FEES_FINES: 'fees_fines',
+  LOANS: 'loans',
+  REQUESTS: 'requests',
+};
