@@ -9,3 +9,4 @@ import './stripesUtils.mock';
 import './currencyData.mock';
 import './resizeObserver.mock';
 import './matchMedia.mock';
+import './serviceInteraction.mock';

@@ -248,6 +248,18 @@ class AccountDetailsContainer extends React.Component {
   }
 
   render() {
+    const {
+      resources,
+    } = this.props;
+    const {
+      selUser,
+      patronGroups,
+      instance,
+      loans,
+      accountActions,
+      feefineshistory,
+    } = resources;
+
     const user = this.getUser();
     const account = this.getAccount();
     const patronGroup = this.getPatronGroup();
@@ -258,7 +270,14 @@ class AccountDetailsContainer extends React.Component {
       return <CurrentUserServicePointAbsenteeErrorModal />;
     }
 
-    if (!account) {
+    if (!account
+      || selUser.isPending
+      || patronGroups.isPending
+      || instance.isPending
+      || loans.isPending
+      || accountActions.isPending
+      || feefineshistory.isPending
+    ) {
       return (
         <LoadingView
           defaultWidth="100%"

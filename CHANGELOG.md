@@ -33,6 +33,7 @@
 * Support `{{item.seriesStatements}}` in due-date receipt slips. Refs UIU-3416.
 * Pass `hasDisplayInAccordionField` and `displayInAccordionOptions` props to `ViewCustomFieldsSettings` and `EditCustomFieldsSettings` to display `Display in accordion` field in settings. Refs UIU-3140.
 * UIU-3414* Add support for use circulation-bff for declare-item-lost. Refs UIU-3414.
+* AccountDetailsContainer - Show loading while data is loading to prevent page crash when visiting the Fee/fines details page via URL. Fixes UIU-3428.
 
 ## [12.1.7] (https://github.com/folio-org/ui-users/tree/v12.1.7) (2025-06-03)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.6...v12.1.7)
