@@ -191,9 +191,9 @@ class PermissionsModal extends React.Component {
     // Need a bit of extra work to search for terms that might appear only in a translated label
     const translationResults = this.getMatchedTranslations(searchText, permissions);
 
-    // Search in permission display names or permission names
+    // Search in permission display names and permission names
     const filteredPermissions = permissions.filter(({ displayName, permissionName }) => {
-      const permissionText = displayName || permissionName;
+      const permissionText = [displayName, permissionName].join('|');
       return permissionText.toLowerCase().includes(searchText.toLowerCase());
     });
 
