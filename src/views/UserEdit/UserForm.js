@@ -2,7 +2,7 @@ import isEqual from 'lodash/isEqual';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, FormattedMessage } from 'react-intl';
-import { Field, FormSpy } from 'react-final-form';
+import { FormSpy } from 'react-final-form';
 import setFieldData from 'final-form-set-field-data';
 
 import { AppIcon, IfInterface, IfPermission } from '@folio/stripes/core';
@@ -23,12 +23,11 @@ import {
   expandAllSections,
   collapseAllSections, ConfirmationModal
 } from '@folio/stripes/components';
-import { EditCustomFieldsRecord } from '@folio/stripes/smart-components';
 import stripesFinalForm from '@folio/stripes/final-form';
 
 import {
-  CUSTOM_FIELDS_SCOPE,
   USER_TYPES,
+  CUSTOM_FIELDS_SECTION,
 } from '../../constants';
 import {
   EditUserInfo,
@@ -38,6 +37,10 @@ import {
   EditServicePoints,
   EditReadingRoomAccess,
   EditUserRoles,
+  EditFeesFines,
+  EditCustomFieldsSection,
+  EditLoans,
+  EditRequests,
 } from '../../components/EditSections';
 import { getFormattedPronouns, getFullName } from '../../components/util';
 import RequestFeeFineBlockButtons from '../../components/RequestFeeFineBlockButtons';
@@ -84,6 +87,17 @@ export function validate(values) {
 
   return errors;
 }
+
+const ACCORDION_ID = {
+  CUSTOM_FIELDS: 'customFields',
+  READING_ROOM_ACCESS: 'readingRoomAccess',
+  PROXY: 'proxy',
+  FEES_FINES: 'feesFines',
+  LOANS: 'loans',
+  REQUESTS: 'requests',
+  USER_ROLES: 'userRoles',
+  SERVICE_POINTS: 'servicePoints',
+};
 
 class UserForm extends React.Component {
   static propTypes = {
@@ -343,6 +357,7 @@ class UserForm extends React.Component {
       isCreateKeycloakUserConfirmationOpen,
       onCancelKeycloakConfirmation
     } = this.props;
+    const isEditing = !!initialValues.id;
     const selectedPatronGroup = form.getFieldState('patronGroup')?.value;
     const firstMenu = this.getAddFirstMenu();
     const footer = this.getPaneFooter();
@@ -399,12 +414,15 @@ class UserForm extends React.Component {
                     editUserInfo: true,
                     extendedInfo: true,
                     contactInfo: true,
-                    proxy: false,
+                    [ACCORDION_ID.PROXY]: false,
                     permissions: false,
-                    servicePoints: false,
-                    customFields: true,
-                    readingRoomAccess: false,
-                    userRoles: false
+                    [ACCORDION_ID.SERVICE_POINTS]: false,
+                    [ACCORDION_ID.CUSTOM_FIELDS]: true,
+                    [ACCORDION_ID.READING_ROOM_ACCESS]: false,
+                    [ACCORDION_ID.FEES_FINES]: true,
+                    [ACCORDION_ID.LOANS]: true,
+                    [ACCORDION_ID.REQUESTS]: true,
+                    [ACCORDION_ID.USER_ROLES]: false
                   }}
                 >
                   <EditUserInfo
@@ -439,68 +457,64 @@ class UserForm extends React.Component {
                     disabled={isShadowUser}
                     stripes={stripes}
                   />
-                  <EditCustomFieldsRecord
-                    formName="userForm"
-                    accordionId="customFields"
-                    backendModuleName="users"
-                    entityType="user"
-                    finalFormCustomFieldsValues={form.getState().values.customFields}
-                    fieldComponent={Field}
-                    changeFinalFormField={form.change}
-                    scope={CUSTOM_FIELDS_SCOPE}
+                  <EditCustomFieldsSection
+                    accordionId={ACCORDION_ID.CUSTOM_FIELDS}
+                    sectionId={CUSTOM_FIELDS_SECTION.CUSTOM_FIELDS}
                   />
-                  {initialValues.id &&
-                    <div>
-                      {
-                        displayReadingRoomAccess && (
-                          <IfInterface name="reading-room-patron-permission">
-                            <IfPermission perm="reading-room.patron-permission.item.put">
-                              <EditReadingRoomAccess
-                                accordionId="readingRoomAccess"
-                                userRRAPermissions={initialValues.readingRoomAccess?.records}
-                                form={form}
-                                formData={formData.userReadingRoomPermissions}
-                              />
-                            </IfPermission>
-                          </IfInterface>
-                        )
-                      }
-                      {
-                      !isShadowUser && (
-                        <EditProxy
-                          accordionId="proxy"
-                          sponsors={initialValues.sponsors}
-                          proxies={initialValues.proxies}
-                          fullName={fullName}
-                        />
-                      )
-                      }
-                      {
-                      this.showPermissionsAccordion() ?
-                        <TenantsPermissionsAccordion
+                  {isEditing && displayReadingRoomAccess && (
+                    <IfInterface name="reading-room-patron-permission">
+                      <IfPermission perm="reading-room.patron-permission.item.put">
+                        <EditReadingRoomAccess
+                          accordionId={ACCORDION_ID.READING_ROOM_ACCESS}
+                          userRRAPermissions={initialValues.readingRoomAccess?.records}
                           form={form}
-                          initialValues={initialValues}
-                          setButtonRef={this.setButtonRef}
-                        /> :
-                        <IfPermission perm="ui-users.roles.view">
-                          <EditUserRoles
-                            form={form}
-                            user={initialValues}
-                            setTenantId={this.props.setTenantId}
-                            tenantId={this.props.tenantId}
-                            setAssignedRoleIds={this.props.setAssignedRoleIds}
-                            assignedRoleIds={this.props.assignedRoleIds}
-                            accordionId="userRoles"
-                          />
-                        </IfPermission>
-                      }
-                      <EditServicePoints
-                        accordionId="servicePoints"
-                        setButtonRef={this.setButtonRef}
-                        {...this.props}
+                          formData={formData.userReadingRoomPermissions}
+                        />
+                      </IfPermission>
+                    </IfInterface>
+                  )}
+                  {isEditing && !isShadowUser && (
+                    <EditProxy
+                      accordionId={ACCORDION_ID.PROXY}
+                      sponsors={initialValues.sponsors}
+                      proxies={initialValues.proxies}
+                      fullName={fullName}
+                    />
+                  )}
+                  <EditFeesFines
+                    accordionId={ACCORDION_ID.FEES_FINES}
+                  />
+                  <EditLoans
+                    accordionId={ACCORDION_ID.LOANS}
+                  />
+                  <EditRequests
+                    accordionId={ACCORDION_ID.REQUESTS}
+                  />
+                  {isEditing && this.showPermissionsAccordion() ?
+                    <TenantsPermissionsAccordion
+                      form={form}
+                      initialValues={initialValues}
+                      setButtonRef={this.setButtonRef}
+                    /> :
+                    <IfPermission perm="ui-users.roles.view">
+                      <EditUserRoles
+                        form={form}
+                        user={initialValues}
+                        setTenantId={this.props.setTenantId}
+                        tenantId={this.props.tenantId}
+                        setAssignedRoleIds={this.props.setAssignedRoleIds}
+                        assignedRoleIds={this.props.assignedRoleIds}
+                        accordionId={ACCORDION_ID.USER_ROLES}
                       />
-                    </div>
+                    </IfPermission>
                   }
+                  {isEditing && (
+                    <EditServicePoints
+                      accordionId={ACCORDION_ID.SERVICE_POINTS}
+                      setButtonRef={this.setButtonRef}
+                      {...this.props}
+                    />
+                  )}
                 </AccordionSet>
               </AccordionStatus>
             </Pane>

@@ -421,3 +421,6 @@ export const CUSTOM_FIELDS_SECTION = {
   LOANS: 'loans',
   REQUESTS: 'requests',
 };
+
+export const MODULE_NAME = 'users';
+export const CUSTOM_FIELDS_ENTITY_TYPE = 'user';

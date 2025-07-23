@@ -17,9 +17,11 @@ import {
 } from '@folio/stripes/components';
 import { AddressEditList } from '@folio/stripes/smart-components';
 
+import EditCustomFieldsSection from '../EditCustomFieldsSection';
 import { toAddressTypeOptions } from '../../data/converters/address_type';
 import contactTypes from '../../data/static/contactTypes';
 import { preferredEmailCommunicationOptions } from './constants';
+import { CUSTOM_FIELDS_SECTION } from '../../../constants';
 
 const EditContactInfo = ({
   expanded,
@@ -143,6 +145,11 @@ const EditContactInfo = ({
           </Row>
         )
       }
+      <Row>
+        <EditCustomFieldsSection
+          sectionId={CUSTOM_FIELDS_SECTION.CONTACT_INFO}
+        />
+      </Row>
       <br />
       <AddressEditList
         name="personal.addresses"
