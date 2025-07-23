@@ -8,7 +8,7 @@ import {
 } from '@folio/stripes/components';
 
 import EditCustomFieldsSection from '../EditCustomFieldsSection';
-import { useCustomFieldsSection } from '../../../hooks/useCustomFieldsSection';
+import { useCustomFieldsSection } from '../../../hooks';
 import { CUSTOM_FIELDS_SECTION } from '../../../constants';
 
 const propTypes = {
