@@ -7,7 +7,6 @@ import { useStripes, TitleManager } from '@folio/stripes/core';
 import { ViewCustomFieldsSettings, EditCustomFieldsSettings } from '@folio/stripes/smart-components';
 
 import {
-  CUSTOM_FIELDS_SCOPE,
   CUSTOM_FIELDS_SECTION,
 } from '../constants';
 
@@ -77,7 +76,6 @@ const CustomFieldsSettings = ({
             entityType={entityType}
             editRoute={`${base}/edit`}
             permissions={permissions}
-            scope={CUSTOM_FIELDS_SCOPE}
             hasDisplayInAccordionField
             displayInAccordionOptions={displayInAccordionOptions}
           />
@@ -88,7 +86,6 @@ const CustomFieldsSettings = ({
             entityType={entityType}
             viewRoute={base}
             permissions={permissions}
-            scope={CUSTOM_FIELDS_SCOPE}
             hasDisplayInAccordionField
             displayInAccordionOptions={displayInAccordionOptions}
           />

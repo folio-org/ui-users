@@ -27,7 +27,6 @@ import { EditCustomFieldsRecord } from '@folio/stripes/smart-components';
 import stripesFinalForm from '@folio/stripes/final-form';
 
 import {
-  CUSTOM_FIELDS_SCOPE,
   USER_TYPES,
 } from '../../constants';
 import {
@@ -447,7 +446,6 @@ class UserForm extends React.Component {
                     finalFormCustomFieldsValues={form.getState().values.customFields}
                     fieldComponent={Field}
                     changeFinalFormField={form.change}
-                    scope={CUSTOM_FIELDS_SCOPE}
                   />
                   {initialValues.id &&
                     <div>

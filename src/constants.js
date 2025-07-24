@@ -409,8 +409,6 @@ export const NEW_FEE_FINE_FIELD_NAMES = {
   KEY_OF_ITEM_BARCODE: 'keyOfItemBarcode',
 };
 
-export const CUSTOM_FIELDS_SCOPE = 'ui-users.custom-fields.manage';
-
 // These fields will be validated on the BE side
 export const CUSTOM_FIELDS_SECTION = {
   CUSTOM_FIELDS: CUSTOM_FIELDS_SECTION_ID,
