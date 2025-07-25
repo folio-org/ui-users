@@ -1,0 +1,37 @@
+import { Field, useForm } from 'react-final-form';
+import PropTypes from 'prop-types';
+
+import { EditCustomFieldsRecord } from '@folio/stripes/smart-components';
+
+import {
+  CUSTOM_FIELDS_ENTITY_TYPE,
+  MODULE_NAME,
+} from '../../../constants';
+
+const propTypes = {
+  accordionId: PropTypes.string,
+  sectionId: PropTypes.string,
+};
+
+const EditCustomFieldsSection = ({
+  accordionId,
+  sectionId,
+}) => {
+  const form = useForm();
+
+  return (
+    <EditCustomFieldsRecord
+      accordionId={accordionId}
+      backendModuleName={MODULE_NAME}
+      entityType={CUSTOM_FIELDS_ENTITY_TYPE}
+      finalFormCustomFieldsValues={form.getState().values.customFields}
+      fieldComponent={Field}
+      changeFinalFormField={form.change}
+      sectionId={sectionId}
+    />
+  );
+};
+
+EditCustomFieldsSection.propTypes = propTypes;
+
+export default EditCustomFieldsSection;

@@ -1,9 +1,16 @@
-import { useCustomFields } from '@folio/stripes/smart-components';
+import { useCustomFieldsQuery } from '@folio/stripes/smart-components';
 
 import CustomFieldsFilter from './CustomFieldsFilter';
+import {
+  MODULE_NAME,
+  CUSTOM_FIELDS_ENTITY_TYPE,
+} from '../../constants';
 
 const CustomFieldsFilters = props => {
-  const [customFields] = useCustomFields('users', 'user');
+  const { customFields } = useCustomFieldsQuery({
+    moduleName: MODULE_NAME,
+    entityType: CUSTOM_FIELDS_ENTITY_TYPE,
+  });
 
   if (!customFields) return null;
 

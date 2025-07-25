@@ -5,3 +5,7 @@ export { default as EditUserInfo } from './EditUserInfo';
 export { default as EditServicePoints } from './EditServicePoints';
 export { default as EditReadingRoomAccess } from './EditReadingRoomAccess';
 export { default as EditUserRoles } from './EditUserRoles';
+export { default as EditCustomFieldsSection } from './EditCustomFieldsSection';
+export { default as EditFeesFines } from './EditFeesFines';
+export { default as EditLoans } from './EditLoans';
+export { default as EditRequests } from './EditRequests';

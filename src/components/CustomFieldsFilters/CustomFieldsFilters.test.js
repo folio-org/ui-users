@@ -1,4 +1,6 @@
 import React from 'react';
+
+import { useCustomFieldsQuery } from '@folio/stripes/smart-components';
 import {
   render,
   screen,
@@ -6,20 +8,17 @@ import {
 
 import '__mock__/matchMedia.mock';
 
+import customField from 'fixtures/multiSelectCustomField';
 import CustomFieldsFilters from './CustomFieldsFilters';
 
 jest.unmock('@folio/stripes/components');
-jest.unmock('@folio/stripes/smart-components');
 
-jest.mock('@folio/stripes/smart-components', () => {
-  // eslint-disable-next-line global-require
-  const customField = require('fixtures/multiSelectCustomField');
-  return {
-    // eslint-disable-next-line global-require
-    ...jest.requireActual('@folio/stripes/smart-components'),
-    useCustomFields: jest.fn(() => [[customField]]),
-  };
-});
+useCustomFieldsQuery.mockReturnValue(({
+  customFields: [customField],
+  isLoadingCustomFields: false,
+  isCustomFieldsError: false,
+  refetchCustomFields: jest.fn(),
+}));
 
 const props = {
   clearGroup: jest.fn(),

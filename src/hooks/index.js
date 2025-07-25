@@ -15,3 +15,4 @@ export { default as useStagingUserMutation } from './useStagingUserMutation';
 export { default as useStagingUsersQuery } from './useStagingUsersQuery';
 export { default as useUsersQuery } from './useUsersQuery';
 export { default as useUserAffiliationRoles } from './useUserAffiliationRoles';
+export { default as useCustomFieldsSection } from './useCustomFieldsSection';
