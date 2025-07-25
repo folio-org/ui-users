@@ -15,7 +15,12 @@ import {
 import { ViewMetaData, ProfilePicture } from '@folio/stripes/smart-components';
 import { useStripes } from '@folio/stripes/core';
 
-import { USER_TYPE_FIELD, USER_TYPES } from '../../../constants';
+import ViewCustomFieldsSection from '../ViewCustomFieldsSection';
+import {
+  CUSTOM_FIELDS_SECTION,
+  USER_TYPE_FIELD,
+  USER_TYPES,
+} from '../../../constants';
 
 const UserInfo = (props) => {
   const {
@@ -24,6 +29,7 @@ const UserInfo = (props) => {
     settings,
     expanded,
     accordionId,
+    customFields,
     onToggle
   } = props;
   const profilePictureLink = user?.personal?.profilePictureLink;
@@ -122,6 +128,10 @@ const UserInfo = (props) => {
                 value={get(user, ['personal', 'pronouns']) || <NoValue />}
               />
             </Col>
+            <ViewCustomFieldsSection
+              customFields={customFields}
+              sectionId={CUSTOM_FIELDS_SECTION.USER_INFO}
+            />
           </Row>
         </Col>
 

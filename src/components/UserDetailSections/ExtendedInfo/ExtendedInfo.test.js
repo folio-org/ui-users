@@ -67,6 +67,11 @@ describe('ExtendedInfo', () => {
     expect(screen.getByText('user-id')).toBeInTheDocument();
   });
 
+  it('should display ViewCustomFieldsRecord', () => {
+    renderComponent();
+    expect(screen.getByText('ViewCustomFieldsRecord')).toBeInTheDocument();
+  });
+
   describe('RequestPreferencesView', () => {
     it('displays request preferences', () => {
       renderComponent();

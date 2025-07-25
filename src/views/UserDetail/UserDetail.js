@@ -51,6 +51,7 @@ import {
   UserAffiliations,
   UserServicePoints,
   ReadingRoomAccess,
+  ViewCustomFieldsSection,
 } from '../../components/UserDetailSections';
 import HelperApp from '../../components/HelperApp';
 import IfConsortium from '../../components/IfConsortium';
@@ -76,9 +77,13 @@ import ActionMenuDeleteButton from './components/ActionMenuDeleteButton';
 import OpenTransactionModal from './components/OpenTransactionModal';
 import DeleteUserModal from './components/DeleteUserModal';
 import ExportFeesFinesReportButton from './components';
-import { CUSTOM_FIELDS_SCOPE } from '../../constants';
+import { CUSTOM_FIELDS_SECTION } from '../../constants';
 
 import css from './UserDetail.css';
+
+export const ACCORDION_ID = {
+  CUSTOM_FIELDS: 'customFields',
+};
 
 class UserDetail extends React.Component {
   static propTypes = {
@@ -208,7 +213,7 @@ class UserDetail extends React.Component {
         rolesSection: false,
         servicePointsSection: false,
         notesAccordion: false,
-        customFields: false,
+        [ACCORDION_ID.CUSTOM_FIELDS]: false,
         readingRoomAccessSection: false,
       },
     };
@@ -692,7 +697,7 @@ class UserDetail extends React.Component {
       );
     }
 
-    if (!user) {
+    if (!user || resources.selUser.isPending) {
       return (
         <LoadingPane
           id="pane-userdetails"
@@ -756,6 +761,7 @@ class UserDetail extends React.Component {
                   settings={settings}
                   stripes={stripes}
                   expanded={sections.userInformationSection}
+                  customFields={customFields}
                   onToggle={this.handleSectionToggle}
                 />
 
@@ -797,6 +803,7 @@ class UserDetail extends React.Component {
                   onToggle={this.handleSectionToggle}
                   departments={departments}
                   userDepartments={userDepartments}
+                  customFields={customFields}
                 />
                 <ContactInfo
                   accordionId="contactInfoSection"
@@ -805,18 +812,15 @@ class UserDetail extends React.Component {
                   addresses={addressesList}
                   addressTypes={addressTypes}
                   expanded={sections.contactInfoSection}
+                  customFields={customFields}
                   onToggle={this.handleSectionToggle}
                 />
-                <ViewCustomFieldsRecord
-                  accordionId="customFields"
+                <ViewCustomFieldsSection
+                  accordionId={ACCORDION_ID.CUSTOM_FIELDS}
+                  customFields={customFields}
+                  expanded={sections[ACCORDION_ID.CUSTOM_FIELDS]}
+                  sectionId={CUSTOM_FIELDS_SECTION.CUSTOM_FIELDS}
                   onToggle={this.handleSectionToggle}
-                  expanded={sections.customFields}
-                  backendModuleName="users"
-                  entityType="user"
-                  customFieldsValues={customFields}
-                  customFieldsLabel={<FormattedMessage id="ui-users.custom.customFields" />}
-                  noCustomFieldsFoundLabel={<FormattedMessage id="ui-users.custom.noCustomFieldsFound" />}
-                  scope={CUSTOM_FIELDS_SCOPE}
                 />
                 {
                   displayReadingRoomAccessAccordion && (

@@ -293,6 +293,11 @@ describe('UserDetail', () => {
       expect(screen.getByRole('button', { name: 'ui-users.details.checkDelete' })).toBeVisible();
     });
 
+    it('should display ViewCustomFieldsRecord', () => {
+      renderUserDetail(stripes);
+      expect(screen.getByText('ViewCustomFieldsRecord')).toBeInTheDocument();
+    });
+
     describe('when roles interface is absent', () => {
       it('shows permissions accordion', async () => {
         stripes.hasInterface = () => false;

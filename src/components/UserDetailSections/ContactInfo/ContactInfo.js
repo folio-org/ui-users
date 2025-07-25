@@ -13,6 +13,8 @@ import {
 
 import UserAddresses from '../../UserAddresses';
 import contactTypes from '../../data/static/contactTypes';
+import { CUSTOM_FIELDS_SECTION } from '../../../constants';
+import ViewCustomFieldsSection from '../ViewCustomFieldsSection';
 
 const ContactInfo = ({
   stripes,
@@ -22,6 +24,7 @@ const ContactInfo = ({
   user,
   addressTypes,
   addresses,
+  customFields,
 }) => {
   const preferredContact = contactTypes.find(g => g.id === _.get(user, ['personal', 'preferredContactTypeId'], '')) || { type: '' };
   const preferredEmailCommunication = _.get(user, ['preferredEmailCommunication'])?.join(', ') || <NoValue />;
@@ -72,7 +75,12 @@ const ContactInfo = ({
         </Row>
         )
       }
-      <br />
+      <Row>
+        <ViewCustomFieldsSection
+          customFields={customFields}
+          sectionId={CUSTOM_FIELDS_SECTION.CONTACT_INFO}
+        />
+      </Row>
       <Row>
         <Col xs={12}>
           <UserAddresses

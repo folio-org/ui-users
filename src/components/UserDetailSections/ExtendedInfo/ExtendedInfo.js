@@ -13,6 +13,8 @@ import {
 import { requestPreferencesShape } from '../../../shapes';
 
 import RequestPreferencesView from './components/RequestPreferencesView';
+import ViewCustomFieldsSection from '../ViewCustomFieldsSection';
+import { CUSTOM_FIELDS_SECTION } from '../../../constants';
 
 const ExtendedInfo = (props) => {
   const {
@@ -25,6 +27,7 @@ const ExtendedInfo = (props) => {
     defaultDeliveryAddressTypeName,
     departments,
     userDepartments,
+    customFields,
   } = props;
 
   return (
@@ -61,8 +64,8 @@ const ExtendedInfo = (props) => {
         defaultServicePointName={defaultServicePointName}
         defaultDeliveryAddressTypeName={defaultDeliveryAddressTypeName}
       />
-      {!!departments.length && (
-        <Row>
+      <Row>
+        {departments.length > 0 && (
           <Col xs={12} md={6}>
             <KeyValue
               label={<FormattedMessage id="ui-users.extended.department.name" />}
@@ -71,8 +74,12 @@ const ExtendedInfo = (props) => {
               {userDepartments.join(', ')}
             </KeyValue>
           </Col>
-        </Row>
-      )}
+        )}
+        <ViewCustomFieldsSection
+          customFields={customFields}
+          sectionId={CUSTOM_FIELDS_SECTION.EXTENDED_INFO}
+        />
+      </Row>
       <Row>
         <Col xs={12} md={6}>
           <KeyValue label={<FormattedMessage id="ui-users.information.username" />}>
