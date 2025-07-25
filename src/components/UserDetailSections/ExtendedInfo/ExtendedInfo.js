@@ -93,6 +93,7 @@ const ExtendedInfo = (props) => {
 
 ExtendedInfo.propTypes = {
   accordionId: PropTypes.string.isRequired,
+  customFields: PropTypes.arrayOf(PropTypes.object).isRequired,
   expanded: PropTypes.bool,
   onToggle: PropTypes.func,
   user: PropTypes.object,
