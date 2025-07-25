@@ -33,7 +33,6 @@ import {
 } from '@folio/stripes/components';
 import {
   NotesSmartAccordion,
-  ViewCustomFieldsRecord,
   NotePopupModal,
 } from '@folio/stripes/smart-components';
 

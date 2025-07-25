@@ -114,6 +114,7 @@ jest.mock('../../components/ErrorPane', () => 'UserNotFound');
 jest.mock(
   '../../components/UserDetailSections',
   () => ({
+    ...jest.requireActual('../../components/UserDetailSections'),
     UserInfo: jest.fn(() => null),
     ExtendedInfo: jest.fn(() => null),
     ContactInfo: jest.fn(() => null),
