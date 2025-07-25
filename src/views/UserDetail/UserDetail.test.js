@@ -114,6 +114,7 @@ jest.mock('../../components/ErrorPane', () => 'UserNotFound');
 jest.mock(
   '../../components/UserDetailSections',
   () => ({
+    ...jest.requireActual('../../components/UserDetailSections'),
     UserInfo: jest.fn(() => null),
     ExtendedInfo: jest.fn(() => null),
     ContactInfo: jest.fn(() => null),
@@ -291,6 +292,11 @@ describe('UserDetail', () => {
     test('should render checkDelete button in action menu ', async () => {
       renderUserDetail(stripes);
       expect(screen.getByRole('button', { name: 'ui-users.details.checkDelete' })).toBeVisible();
+    });
+
+    it('should display ViewCustomFieldsRecord', () => {
+      renderUserDetail(stripes);
+      expect(screen.getByText('ViewCustomFieldsRecord')).toBeInTheDocument();
     });
 
     describe('when roles interface is absent', () => {

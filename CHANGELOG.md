@@ -38,6 +38,7 @@
 * PermissionsModal to search in permissionName. Refs UIU-3436.
 * Revert migration of custom fields title from mod-configuration to mod-settings. Ref UIU-3441.
 * Display custom fields in different accordions depending on the selected section. Refs UIU-3131.
+* Update the user record view page to display custom fields under the "User information", "Extended information", "Contact information", or default "Custom fields" accordions as configured in settings. Refs UIU-3129.
 
 ## [12.1.7] (https://github.com/folio-org/ui-users/tree/v12.1.7) (2025-06-03)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.6...v12.1.7)
