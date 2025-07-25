@@ -5,7 +5,6 @@ import { EditCustomFieldsRecord } from '@folio/stripes/smart-components';
 
 import {
   CUSTOM_FIELDS_ENTITY_TYPE,
-  CUSTOM_FIELDS_SCOPE,
   MODULE_NAME,
 } from '../../../constants';
 
@@ -28,7 +27,6 @@ const EditCustomFieldsSection = ({
       finalFormCustomFieldsValues={form.getState().values.customFields}
       fieldComponent={Field}
       changeFinalFormField={form.change}
-      scope={CUSTOM_FIELDS_SCOPE}
       sectionId={sectionId}
     />
   );
