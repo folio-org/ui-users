@@ -92,5 +92,11 @@ jest.mock('@folio/stripes/smart-components', () => {
         </div>;
       return component;
     },
+    useCustomFieldsQuery: jest.fn(() => ({
+      customFields: [],
+      isLoadingCustomFields: false,
+      isCustomFieldsError: false,
+      refetchCustomFields: jest.fn(),
+    })),
   };
 });

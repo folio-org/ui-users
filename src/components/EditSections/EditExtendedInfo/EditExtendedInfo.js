@@ -32,6 +32,8 @@ import {
 import CreateResetPasswordControl from './CreateResetPasswordControl';
 import RequestPreferencesEdit from './RequestPreferencesEdit';
 import DepartmentsNameEdit from './DepartmentsNameEdit';
+import EditCustomFieldsSection from '../EditCustomFieldsSection';
+import { CUSTOM_FIELDS_SECTION } from '../../../constants';
 
 class EditExtendedInfo extends Component {
   static propTypes = {
@@ -183,6 +185,9 @@ class EditExtendedInfo extends Component {
             )
             : null
           }
+          <EditCustomFieldsSection
+            sectionId={CUSTOM_FIELDS_SECTION.EXTENDED_INFO}
+          />
         </Row>
         <Row>
           <Col

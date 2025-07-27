@@ -22,12 +22,17 @@ import {
 } from '@folio/stripes/components';
 import { ViewMetaData } from '@folio/stripes/smart-components';
 
-import { USER_TYPES, USER_TYPE_FIELD } from '../../../constants';
+import {
+  USER_TYPES,
+  USER_TYPE_FIELD,
+  CUSTOM_FIELDS_SECTION,
+} from '../../../constants';
 import { isConsortiumEnabled } from '../../util';
 import asyncValidateField from '../../validators/asyncValidateField';
 import validateMinDate from '../../validators/validateMinDate';
 
 import { ChangeUserTypeModal, EditUserProfilePicture } from './components';
+import EditCustomFieldsSection from '../EditCustomFieldsSection';
 
 import css from './EditUserInfo.css';
 import { validateLength } from '../../validators/validateLength';
@@ -465,6 +470,9 @@ class EditUserInfo extends React.Component {
                 fullWidth
               />
             </Col>
+            <EditCustomFieldsSection
+              sectionId={CUSTOM_FIELDS_SECTION.USER_INFO}
+            />
           </Row>
 
         </Accordion>

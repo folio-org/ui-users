@@ -18,6 +18,12 @@ import UserForm, { validate } from './UserForm';
 jest.mock('@folio/stripes/smart-components', () => ({
   ...jest.requireActual('@folio/stripes/smart-components'),
   EditCustomFieldsRecord: jest.fn(() => 'EditCustomFieldsRecord'),
+  useCustomFieldsQuery: jest.fn(() => ({
+    customFields: [],
+    isLoadingCustomFields: false,
+    isCustomFieldsError: false,
+    refetchCustomFields: jest.fn(),
+  })),
 }));
 jest.mock(
   '../../components/EditSections',
