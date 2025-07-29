@@ -1250,7 +1250,7 @@
     "loans.columns.useAtLocation.In use": "In gebruik",
     "loans.columns.useAtLocation.Held": "Holdings",
     "loans.columns.useAtLocation.Returned": "Geretourneerd",
-    "loans.numOpenLoans.useAtLocation": "Use at location",
-    "loans.numOpenLoans.held": "Held: {count}",
-    "loans.numOpenLoans.inUse": "In use: {count}"
+    "loans.numOpenLoans.useAtLocation": "Gebruik op Locatie",
+    "loans.numOpenLoans.held": "Reservering: {count}",
+    "loans.numOpenLoans.inUse": "In gebruik: {count}"
 }
