@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## [11.0.14](https://github.com/folio-org/ui-users/tree/v11.0.14) (2025-07-30)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.13...v11.0.14)
+* Add support for use circulation-bff for declare-item-lost. Refs UIU-3414.
+
 ## [11.0.13](https://github.com/folio-org/ui-users/tree/v11.0.13) (2025-05-29)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v11.0.12...v11.0.13)
 * Use the `circulation-bff-loans` endpoint instead of `circulation/loans` in `LoansListingContainer` and `LoanDetailContainer` to have all tokens for DCB item. Fixes UIU-3392.
