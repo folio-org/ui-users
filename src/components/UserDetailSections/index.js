@@ -12,3 +12,4 @@ export { default as UserRoles } from './UserRoles';
 export { default as UserServicePoints } from './UserServicePoints';
 export { default as RequestPreferencesView } from './ExtendedInfo/components/RequestPreferencesView';
 export { default as ReadingRoomAccess } from './ReadingRoomAccess';
+export { default as ViewCustomFieldsSection } from './ViewCustomFieldsSection';

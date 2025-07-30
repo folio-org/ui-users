@@ -9,10 +9,17 @@ import {
   KeyValue,
   Row,
 } from '@folio/stripes/components';
+import { useCustomFieldsQuery } from '@folio/stripes/smart-components';
 
 import { requestPreferencesShape } from '../../../shapes';
 
 import RequestPreferencesView from './components/RequestPreferencesView';
+import ViewCustomFieldsSection from '../ViewCustomFieldsSection';
+import {
+  CUSTOM_FIELDS_ENTITY_TYPE,
+  CUSTOM_FIELDS_SECTION,
+  MODULE_NAME,
+} from '../../../constants';
 
 const ExtendedInfo = (props) => {
   const {
@@ -25,7 +32,21 @@ const ExtendedInfo = (props) => {
     defaultDeliveryAddressTypeName,
     departments,
     userDepartments,
+    customFields,
   } = props;
+
+  const {
+    customFields: visibleCustomFields,
+    isCustomFieldsError: customFieldsFetchFailed,
+    isLoadingCustomFields,
+  } = useCustomFieldsQuery({
+    moduleName: MODULE_NAME,
+    entityType: CUSTOM_FIELDS_ENTITY_TYPE,
+    sectionId: CUSTOM_FIELDS_SECTION.CONTACT_INFO,
+    isVisible: true,
+  });
+
+  const showCustomFieldsSection = isLoadingCustomFields || (!customFieldsFetchFailed && visibleCustomFields?.length > 0);
 
   return (
     <Accordion
@@ -61,16 +82,22 @@ const ExtendedInfo = (props) => {
         defaultServicePointName={defaultServicePointName}
         defaultDeliveryAddressTypeName={defaultDeliveryAddressTypeName}
       />
-      {!!departments.length && (
+      {(showCustomFieldsSection || departments.length > 0) && (
         <Row>
-          <Col xs={12} md={6}>
-            <KeyValue
-              label={<FormattedMessage id="ui-users.extended.department.name" />}
-              data-testid="department-names"
-            >
-              {userDepartments.join(', ')}
-            </KeyValue>
-          </Col>
+          {departments.length > 0 && (
+            <Col xs={12} md={6}>
+              <KeyValue
+                label={<FormattedMessage id="ui-users.extended.department.name" />}
+                data-testid="department-names"
+              >
+                {userDepartments.join(', ')}
+              </KeyValue>
+            </Col>
+          )}
+          <ViewCustomFieldsSection
+            customFields={customFields}
+            sectionId={CUSTOM_FIELDS_SECTION.EXTENDED_INFO}
+          />
         </Row>
       )}
       <Row>
@@ -86,6 +113,7 @@ const ExtendedInfo = (props) => {
 
 ExtendedInfo.propTypes = {
   accordionId: PropTypes.string.isRequired,
+  customFields: PropTypes.arrayOf(PropTypes.object).isRequired,
   expanded: PropTypes.bool,
   onToggle: PropTypes.func,
   user: PropTypes.object,

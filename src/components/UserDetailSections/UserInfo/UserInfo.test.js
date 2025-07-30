@@ -66,4 +66,9 @@ describe('Render userInfo component', () => {
       expect(screen.queryByText('ProfilePicture')).not.toBeInTheDocument();
     });
   });
+
+  it('should display ViewCustomFieldsRecord', () => {
+    renderUserInfo(props);
+    expect(screen.getByText('ViewCustomFieldsRecord')).toBeInTheDocument();
+  });
 });

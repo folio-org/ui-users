@@ -1,4 +1,4 @@
-
+import { useCustomFieldsQuery } from '@folio/stripes/smart-components';
 import {
   screen,
   within,
@@ -8,6 +8,14 @@ import renderWithRouter from 'helpers/renderWithRouter';
 import ExtendedInfo from './ExtendedInfo';
 
 jest.unmock('@folio/stripes/components');
+
+useCustomFieldsQuery.mockReturnValue({
+  customFields: [{
+    id: 'custom-field-1',
+  }],
+  isLoadingCustomFields: false,
+  isCustomFieldsError: false,
+});
 
 const mockUser = {
   id: 'user-id',
@@ -65,6 +73,11 @@ describe('ExtendedInfo', () => {
     renderComponent();
     expect(screen.getByText(/ui-users.extended.folioNumber/i)).toBeInTheDocument();
     expect(screen.getByText('user-id')).toBeInTheDocument();
+  });
+
+  it('should display ViewCustomFieldsRecord', () => {
+    renderComponent();
+    expect(screen.getByText('ViewCustomFieldsRecord')).toBeInTheDocument();
   });
 
   describe('RequestPreferencesView', () => {
