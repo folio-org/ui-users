@@ -17,7 +17,6 @@ import { CUSTOM_FIELDS_SECTION } from '../../../constants';
 import ViewCustomFieldsSection from '../ViewCustomFieldsSection';
 
 const ContactInfo = ({
-  stripes,
   expanded,
   onToggle,
   accordionId,
@@ -28,7 +27,6 @@ const ContactInfo = ({
 }) => {
   const preferredContact = contactTypes.find(g => g.id === _.get(user, ['personal', 'preferredContactTypeId'], '')) || { type: '' };
   const preferredEmailCommunication = _.get(user, ['preferredEmailCommunication'])?.join(', ') || <NoValue />;
-  const displayPreferredEmailCommunication = Boolean(stripes.hasInterface('users', '16.2'));
 
   return (
     <Accordion
@@ -63,19 +61,13 @@ const ContactInfo = ({
           />
         </Col>
       </Row>
-      {
-        displayPreferredEmailCommunication && (
-        <Row>
-          <Col xs={12}>
-            <KeyValue
-              label={<FormattedMessage id="ui-users.contact.preferredEmailCommunication" />}
-              value={preferredEmailCommunication}
-            />
-          </Col>
-        </Row>
-        )
-      }
       <Row>
+        <Col xs={6}>
+          <KeyValue
+            label={<FormattedMessage id="ui-users.contact.preferredEmailCommunication" />}
+            value={preferredEmailCommunication}
+          />
+        </Col>
         <ViewCustomFieldsSection
           customFields={customFields}
           sectionId={CUSTOM_FIELDS_SECTION.CONTACT_INFO}
@@ -102,9 +94,6 @@ ContactInfo.propTypes = {
   user: PropTypes.object,
   addressTypes: PropTypes.arrayOf(PropTypes.object),
   addresses: PropTypes.arrayOf(PropTypes.object),
-  stripes: PropTypes.shape({
-    hasInterface: PropTypes.func.isRequired,
-  }).isRequired,
 };
 
 export default ContactInfo;
