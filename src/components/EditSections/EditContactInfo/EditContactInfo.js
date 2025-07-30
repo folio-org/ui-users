@@ -31,7 +31,6 @@ const EditContactInfo = ({
   preferredContactTypeId,
   intl,
   disabled,
-  stripes,
 }) => {
   const contactTypeOptions = (contactTypes || []).map(g => {
     return (
@@ -64,8 +63,6 @@ const EditContactInfo = ({
     const exactMatch = filterText ? (renderedItems.filter(item => item.value === filterText).length === 1) : false;
     return { renderedItems, exactMatch };
   };
-
-  const displayPreferredEmailCommunications = Boolean(stripes.hasInterface('users', '16.2'));
 
   return (
     <Accordion
@@ -125,27 +122,21 @@ const EditContactInfo = ({
           </Field>
         </Col>
       </Row>
-      {
-        displayPreferredEmailCommunications && (
-          <Row>
-            <Col xs={12} md={3}>
-              <Field
-                component={MultiSelection}
-                label={<FormattedMessage id="ui-users.contact.preferredEmailCommunication" />}
-                id="adduserPreferredEmailCommunication"
-                name="preferredEmailCommunication"
-                dataOptions={preferredEmailCommunicationOptions}
-                fullWidth
-                disabled={disabled}
-                filter={prefEmailCommFilterOptions}
-                itemToString={(option) => option?.value ?? ''}
-                isEqual={isEqual}
-              />
-            </Col>
-          </Row>
-        )
-      }
       <Row>
+        <Col xs={12} md={3}>
+          <Field
+            component={MultiSelection}
+            label={<FormattedMessage id="ui-users.contact.preferredEmailCommunication" />}
+            id="adduserPreferredEmailCommunication"
+            name="preferredEmailCommunication"
+            dataOptions={preferredEmailCommunicationOptions}
+            fullWidth
+            disabled={disabled}
+            filter={prefEmailCommFilterOptions}
+            itemToString={(option) => option?.value ?? ''}
+            isEqual={isEqual}
+          />
+        </Col>
         <EditCustomFieldsSection
           sectionId={CUSTOM_FIELDS_SECTION.CONTACT_INFO}
         />
@@ -170,7 +161,6 @@ EditContactInfo.propTypes = {
   preferredContactTypeId: PropTypes.string,
   intl: PropTypes.object.isRequired,
   disabled: PropTypes.bool,
-  stripes: PropTypes.object.isRequired,
 };
 
 export default injectIntl(EditContactInfo);

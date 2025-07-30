@@ -1,4 +1,4 @@
-
+import { useCustomFieldsQuery } from '@folio/stripes/smart-components';
 import {
   screen,
   within,
@@ -8,6 +8,14 @@ import renderWithRouter from 'helpers/renderWithRouter';
 import ExtendedInfo from './ExtendedInfo';
 
 jest.unmock('@folio/stripes/components');
+
+useCustomFieldsQuery.mockReturnValue({
+  customFields: [{
+    id: 'custom-field-1',
+  }],
+  isLoadingCustomFields: false,
+  isCustomFieldsError: false,
+});
 
 const mockUser = {
   id: 'user-id',

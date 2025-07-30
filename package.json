@@ -1226,7 +1226,7 @@
     "@folio/eslint-config-stripes": "^8.0.0",
     "@folio/jest-config-stripes": "^3.0.0",
     "@folio/service-interaction": "^4.0.0",
-    "@folio/stripes": "^10.0.0",
+    "@folio/stripes": "^10.1.0",
     "@folio/stripes-cli": "^4.0.0",
     "@folio/stripes-erm-components": "^10.0.0",
     "@folio/stripes-testing": "^5.0.0",
@@ -1272,7 +1272,7 @@
   },
   "peerDependencies": {
     "@folio/service-interaction": "^4.0.0",
-    "@folio/stripes": "^10.0.0",
+    "@folio/stripes": "^10.1.0",
     "@folio/stripes-erm-components": "^10.0.0",
     "moment": "^2.24.0",
     "react": "^18.2.0",

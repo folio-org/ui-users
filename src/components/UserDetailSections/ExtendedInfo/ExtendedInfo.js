@@ -9,12 +9,17 @@ import {
   KeyValue,
   Row,
 } from '@folio/stripes/components';
+import { useCustomFieldsQuery } from '@folio/stripes/smart-components';
 
 import { requestPreferencesShape } from '../../../shapes';
 
 import RequestPreferencesView from './components/RequestPreferencesView';
 import ViewCustomFieldsSection from '../ViewCustomFieldsSection';
-import { CUSTOM_FIELDS_SECTION } from '../../../constants';
+import {
+  CUSTOM_FIELDS_ENTITY_TYPE,
+  CUSTOM_FIELDS_SECTION,
+  MODULE_NAME,
+} from '../../../constants';
 
 const ExtendedInfo = (props) => {
   const {
@@ -29,6 +34,19 @@ const ExtendedInfo = (props) => {
     userDepartments,
     customFields,
   } = props;
+
+  const {
+    customFields: visibleCustomFields,
+    isCustomFieldsError: customFieldsFetchFailed,
+    isLoadingCustomFields,
+  } = useCustomFieldsQuery({
+    moduleName: MODULE_NAME,
+    entityType: CUSTOM_FIELDS_ENTITY_TYPE,
+    sectionId: CUSTOM_FIELDS_SECTION.CONTACT_INFO,
+    isVisible: true,
+  });
+
+  const showCustomFieldsSection = isLoadingCustomFields || (!customFieldsFetchFailed && visibleCustomFields?.length > 0);
 
   return (
     <Accordion
@@ -64,22 +82,24 @@ const ExtendedInfo = (props) => {
         defaultServicePointName={defaultServicePointName}
         defaultDeliveryAddressTypeName={defaultDeliveryAddressTypeName}
       />
-      <Row>
-        {departments.length > 0 && (
-          <Col xs={12} md={6}>
-            <KeyValue
-              label={<FormattedMessage id="ui-users.extended.department.name" />}
-              data-testid="department-names"
-            >
-              {userDepartments.join(', ')}
-            </KeyValue>
-          </Col>
-        )}
-        <ViewCustomFieldsSection
-          customFields={customFields}
-          sectionId={CUSTOM_FIELDS_SECTION.EXTENDED_INFO}
-        />
-      </Row>
+      {(showCustomFieldsSection || departments.length > 0) && (
+        <Row>
+          {departments.length > 0 && (
+            <Col xs={12} md={6}>
+              <KeyValue
+                label={<FormattedMessage id="ui-users.extended.department.name" />}
+                data-testid="department-names"
+              >
+                {userDepartments.join(', ')}
+              </KeyValue>
+            </Col>
+          )}
+          <ViewCustomFieldsSection
+            customFields={customFields}
+            sectionId={CUSTOM_FIELDS_SECTION.EXTENDED_INFO}
+          />
+        </Row>
+      )}
       <Row>
         <Col xs={12} md={6}>
           <KeyValue label={<FormattedMessage id="ui-users.information.username" />}>
