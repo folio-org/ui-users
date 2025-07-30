@@ -82,6 +82,20 @@ import css from './UserDetail.css';
 
 export const ACCORDION_ID = {
   CUSTOM_FIELDS: 'customFields',
+  USER_INFORMATION: 'userInformationSection',
+  AFFILIATIONS: 'affiliationsSection',
+  EXTENDED_INFO: 'extendedInfoSection',
+  CONTACT_INFO: 'contactInfoSection',
+  PROXY: 'proxySection',
+  PATRON_BLOCKS: 'patronBlocksSection',
+  LOANS: 'loansSection',
+  REQUESTS: 'requestsSection',
+  ACCOUNTS: 'accountsSection',
+  PERMISSIONS: 'permissionsSection',
+  ROLES: 'rolesSection',
+  SERVICE_POINTS: 'servicePointsSection',
+  NOTES: 'notesAccordion',
+  READING_ROOM_ACCESS: 'readingRoomAccessSection',
 };
 
 class UserDetail extends React.Component {
@@ -199,21 +213,21 @@ class UserDetail extends React.Component {
       showOpenTransactionModal: false,
       showDeleteUserModal: false,
       sections: {
-        userInformationSection: true,
-        affiliationsSection: false,
-        extendedInfoSection: false,
-        contactInfoSection: false,
-        proxySection: false,
-        patronBlocksSection: false,
-        loansSection: false,
-        requestsSection: false,
-        accountsSection: false,
-        permissionsSection: false,
-        rolesSection: false,
-        servicePointsSection: false,
-        notesAccordion: false,
+        [ACCORDION_ID.USER_INFORMATION]: true,
+        [ACCORDION_ID.AFFILIATIONS]: false,
+        [ACCORDION_ID.EXTENDED_INFO]: false,
+        [ACCORDION_ID.CONTACT_INFO]: false,
+        [ACCORDION_ID.PROXY]: false,
+        [ACCORDION_ID.PATRON_BLOCKS]: false,
+        [ACCORDION_ID.LOANS]: false,
+        [ACCORDION_ID.REQUESTS]: false,
+        [ACCORDION_ID.ACCOUNTS]: false,
+        [ACCORDION_ID.PERMISSIONS]: false,
+        [ACCORDION_ID.ROLES]: false,
+        [ACCORDION_ID.SERVICE_POINTS]: false,
+        [ACCORDION_ID.NOTES]: false,
         [ACCORDION_ID.CUSTOM_FIELDS]: false,
-        readingRoomAccessSection: false,
+        [ACCORDION_ID.READING_ROOM_ACCESS]: false,
       },
     };
 
@@ -617,8 +631,8 @@ class UserDetail extends React.Component {
         patronBlocks,
       });
 
-      if (!sections.patronBlocksSection && patronBlocks.length) {
-        this.handleSectionToggle({ id: 'patronBlocksSection' });
+      if (!sections[ACCORDION_ID.PATRON_BLOCKS] && patronBlocks.length) {
+        this.handleSectionToggle({ id: ACCORDION_ID.PATRON_BLOCKS });
       }
     });
   }
@@ -754,12 +768,12 @@ class UserDetail extends React.Component {
               </Row>
               <AccordionSet>
                 <UserInfo
-                  accordionId="userInformationSection"
+                  accordionId={ACCORDION_ID.USER_INFORMATION}
                   user={user}
                   patronGroup={patronGroup}
                   settings={settings}
                   stripes={stripes}
-                  expanded={sections.userInformationSection}
+                  expanded={sections[ACCORDION_ID.USER_INFORMATION]}
                   customFields={customFields}
                   onToggle={this.handleSectionToggle}
                 />
@@ -769,8 +783,8 @@ class UserDetail extends React.Component {
                     {
                       isAffiliationsVisible && (
                         <UserAffiliations
-                          accordionId="affiliationsSection"
-                          expanded={sections.affiliationsSection}
+                          accordionId={ACCORDION_ID.AFFILIATIONS}
+                          expanded={sections[ACCORDION_ID.AFFILIATIONS]}
                           onToggle={this.handleSectionToggle}
                           userId={user?.id}
                           userName={user?.username}
@@ -783,9 +797,9 @@ class UserDetail extends React.Component {
                 <IfInterface name="feesfines">
                   {showPatronBlocksSection &&
                     <PatronBlock
-                      accordionId="patronBlocksSection"
+                      accordionId={ACCORDION_ID.PATRON_BLOCKS}
                       patronBlocks={patronBlocks}
-                      expanded={sections.patronBlocksSection}
+                      expanded={sections[ACCORDION_ID.PATRON_BLOCKS]}
                       onToggle={this.handleSectionToggle}
                       onClickViewPatronBlock={this.onClickViewPatronBlock}
                       {...this.props}
@@ -793,9 +807,9 @@ class UserDetail extends React.Component {
                   }
                 </IfInterface>
                 <ExtendedInfo
-                  accordionId="extendedInfoSection"
+                  accordionId={ACCORDION_ID.EXTENDED_INFO}
                   user={user}
-                  expanded={sections.extendedInfoSection}
+                  expanded={sections[ACCORDION_ID.EXTENDED_INFO]}
                   requestPreferences={requestPreferences}
                   defaultServicePointName={defaultServicePointName}
                   defaultDeliveryAddressTypeName={defaultDeliveryAddressTypeName}
@@ -805,12 +819,12 @@ class UserDetail extends React.Component {
                   customFields={customFields}
                 />
                 <ContactInfo
-                  accordionId="contactInfoSection"
+                  accordionId={ACCORDION_ID.CONTACT_INFO}
                   stripes={stripes}
                   user={user}
                   addresses={addressesList}
                   addressTypes={addressTypes}
-                  expanded={sections.contactInfoSection}
+                  expanded={sections[ACCORDION_ID.CONTACT_INFO]}
                   customFields={customFields}
                   onToggle={this.handleSectionToggle}
                 />
@@ -826,9 +840,9 @@ class UserDetail extends React.Component {
                     <IfInterface name="reading-room-patron-permission">
                       <IfPermission perm="ui-users.reading-room-access.view">
                         <ReadingRoomAccess
-                          accordionId="readingRoomAccessSection"
+                          accordionId={ACCORDION_ID.READING_ROOM_ACCESS}
                           onToggle={this.handleSectionToggle}
-                          expanded={sections.readingRoomAccessSection}
+                          expanded={sections[ACCORDION_ID.READING_ROOM_ACCESS]}
                           readingRoomPermissions={readingRoomPermissions}
                         />
                       </IfPermission>
@@ -842,11 +856,11 @@ class UserDetail extends React.Component {
                       <IfPermission perm="proxiesfor.collection.get">
                         <ProxyPermissions
                           user={user}
-                          accordionId="proxySection"
+                          accordionId={ACCORDION_ID.PROXY}
                           onToggle={this.handleSectionToggle}
                           proxies={proxies}
                           sponsors={sponsors}
-                          expanded={sections.proxySection}
+                          expanded={sections[ACCORDION_ID.PROXY]}
                           {...this.props}
                         />
                       </IfPermission>
@@ -854,9 +868,9 @@ class UserDetail extends React.Component {
                       <IfInterface name="feesfines">
                         <IfPermission perm="ui-users.feesfines.view">
                           <UserAccounts
-                            expanded={sections.accountsSection}
+                            expanded={sections[ACCORDION_ID.ACCOUNTS]}
                             onToggle={this.handleSectionToggle}
-                            accordionId="accountsSection"
+                            accordionId={ACCORDION_ID.ACCOUNTS}
                             location={location}
                             accounts={accounts}
                             match={match}
@@ -875,9 +889,9 @@ class UserDetail extends React.Component {
                               onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
                               onClickViewOpenLoans={this.onClickViewOpenLoans}
                               onClickViewClosedLoans={this.onClickViewClosedLoans}
-                              expanded={sections.loansSection}
+                              expanded={sections[ACCORDION_ID.LOANS]}
                               onToggle={this.handleSectionToggle}
-                              accordionId="loansSection"
+                              accordionId={ACCORDION_ID.LOANS}
                               {...this.props}
                             />
                           </IfInterface>
@@ -888,9 +902,9 @@ class UserDetail extends React.Component {
                         <IfInterface name="request-storage" version="2.5 3.0 4.0 5.0 6.0">
                           <IfInterface name="circulation">
                             <UserRequests
-                              expanded={sections.requestsSection}
+                              expanded={sections[ACCORDION_ID.REQUESTS]}
                               onToggle={this.handleSectionToggle}
-                              accordionId="requestsSection"
+                              accordionId={ACCORDION_ID.REQUESTS}
                               user={user}
                               {...this.props}
                             />
@@ -905,9 +919,9 @@ class UserDetail extends React.Component {
                   <IfPermission perm="perms.users.get">
                     <IfInterface name="permissions" version="5.0">
                       <UserPermissions
-                        expanded={sections.permissionsSection}
+                        expanded={sections[ACCORDION_ID.PERMISSIONS]}
                         onToggle={this.handleSectionToggle}
-                        accordionId="permissionsSection"
+                        accordionId={ACCORDION_ID.PERMISSIONS}
                         user={user}
                         {...this.props}
                       />
@@ -918,9 +932,9 @@ class UserDetail extends React.Component {
                 { !this.showPermissionsAccordion() &&
                   <IfPermission perm="ui-users.roles.view">
                     <UserRoles
-                      expanded={sections.rolesSection}
+                      expanded={sections[ACCORDION_ID.ROLES]}
                       onToggle={this.handleSectionToggle}
-                      accordionId="rolesSection"
+                      accordionId={ACCORDION_ID.ROLES}
                       user={user}
                       {...this.props}
                     />
@@ -930,9 +944,9 @@ class UserDetail extends React.Component {
                 <IfPermission perm="inventory-storage.service-points.collection.get,inventory-storage.service-points-users.collection.get">
                   <IfInterface name="service-points-users" version="1.0">
                     <UserServicePoints
-                      expanded={sections.servicePointsSection}
+                      expanded={sections[ACCORDION_ID.SERVICE_POINTS]}
                       onToggle={this.handleSectionToggle}
-                      accordionId="servicePointsSection"
+                      accordionId={ACCORDION_ID.SERVICE_POINTS}
                       servicePoints={servicePoints}
                       preferredServicePoint={preferredServicePoint}
                       {...this.props}
@@ -945,9 +959,9 @@ class UserDetail extends React.Component {
                       domainName="users"
                       entityId={match.params.id}
                       entityName={getFullName(user)}
-                      open={this.state.sections.notesAccordion}
+                      open={this.state.sections[ACCORDION_ID.NOTES]}
                       onToggle={this.handleSectionToggle}
-                      id="notesAccordion"
+                      id={ACCORDION_ID.NOTES}
                       entityType="user"
                       pathToNoteCreate="/users/notes/new"
                       pathToNoteDetails="/users/notes"
