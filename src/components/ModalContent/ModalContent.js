@@ -22,6 +22,18 @@ import { loanActionMutators, refundClaimReturned, loanActions } from '../../cons
 
 import css from './ModalContent.css';
 
+export const getMutatorFunction = (stripes, mutator, loanAction) => {
+  if (stripes?.config?.enableEcsRequests && loanAction === loanActionMutators.DECLARE_LOST) {
+    if (stripes.hasInterface('circulation-bff-loans', '1.4')) {
+      return mutator.declareLostBFF.POST;
+    } else {
+      throw new Error('Required okapi interfaces circulation-bff-loans v1.4');
+    }
+  } else {
+    return mutator[loanAction].POST;
+  }
+};
+
 class ModalContent extends React.Component {
   static manifest = Object.freeze({
     claimReturned: {
@@ -37,6 +49,14 @@ class ModalContent extends React.Component {
       throwErrors: false,
       POST: {
         path: 'circulation/loans/!{loan.id}/declare-item-lost',
+      },
+    },
+    declareLostBFF: {
+      type: 'okapi',
+      fetch: false,
+      throwErrors: false,
+      POST: {
+        path: 'circulation-bff/loans/!{loan.id}/declare-item-lost',
       },
     },
     markAsMissing: {
@@ -142,7 +162,9 @@ class ModalContent extends React.Component {
     const { additionalInfo } = this.state;
 
     const {
+      mutator,
       loanAction,
+      stripes,
       stripes: {
         user: {
           user: {
@@ -158,7 +180,7 @@ class ModalContent extends React.Component {
     } = this.props;
 
     const isInfo = (loanAction === 'patronInfo' || loanAction === 'staffInfo');
-    const mutatorFunction = this.props.mutator[loanAction].POST;
+    const mutatorFunction = getMutatorFunction(stripes, mutator, loanAction);
     const requestData = isInfo ?
       { action: loanAction === 'patronInfo' ? 'patronInfoAdded' : 'staffInfoAdded', actionComment: additionalInfo } :
       { comment: additionalInfo };
