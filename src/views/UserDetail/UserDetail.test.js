@@ -16,6 +16,8 @@ import {
   PatronBlock,
 } from '../../components/UserDetailSections';
 
+const userId = '84954cee-c6f9-4478-8ebd-80f04bc8571d';
+
 const resources = {
   accounts: {},
   addressTypes: {},
@@ -37,7 +39,7 @@ const resources = {
   query: {},
   records: {
     username: 'rick, psych',
-    id: '84954cee-c6f9-4478-8ebd-80f04bc8571d',
+    id: userId,
     active: true,
     patronGroup:'3684a786-6671-4268-8ed0-9db82ebca60b',
     departments:[],
@@ -307,7 +309,7 @@ describe('UserDetail', () => {
             selUser: {
               isPending: true,
               records: [{
-                username: 'rick, psych',
+                id: userId,
               }],
             },
           },
