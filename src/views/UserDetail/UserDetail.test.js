@@ -299,6 +299,24 @@ describe('UserDetail', () => {
       expect(screen.getByText('ViewCustomFieldsRecord')).toBeInTheDocument();
     });
 
+    describe('when user data is loading and there is previous user data', () => {
+      it('should not render loading pane', () => {
+        renderUserDetail(stripes, {
+          resources: {
+            ...resources,
+            selUser: {
+              isPending: true,
+              records: [{
+                username: 'rick, psych',
+              }],
+            },
+          },
+        });
+
+        expect(screen.queryByText('LoadingPane')).not.toBeInTheDocument();
+      });
+    });
+
     describe('when roles interface is absent', () => {
       it('shows permissions accordion', async () => {
         stripes.hasInterface = () => false;
