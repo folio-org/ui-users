@@ -710,7 +710,11 @@ class UserDetail extends React.Component {
       );
     }
 
-    if (!user || resources.selUser.isPending) {
+    // Don't display loading if `resources.selUser.isPending` is true`, because creating a new tag in the 4th pane
+    // will cause the `selUser` to load again. During loading, the 4th pane will not be shown, because it is rendered
+    // in the 3rd pane, so it will not be visible to the user. Also, after creating a new tag, no success toast message
+    // will be shown, and an E2E test will fail.
+    if (!user) {
       return (
         <LoadingPane
           id="pane-userdetails"

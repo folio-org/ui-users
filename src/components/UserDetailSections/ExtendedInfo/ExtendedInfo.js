@@ -42,7 +42,7 @@ const ExtendedInfo = (props) => {
   } = useCustomFieldsQuery({
     moduleName: MODULE_NAME,
     entityType: CUSTOM_FIELDS_ENTITY_TYPE,
-    sectionId: CUSTOM_FIELDS_SECTION.CONTACT_INFO,
+    sectionId: CUSTOM_FIELDS_SECTION.EXTENDED_INFO,
     isVisible: true,
   });
 
