@@ -57,12 +57,15 @@ class ActionsDropdown extends React.Component {
       patronGroup,
       history,
     } = this.props;
+    const {
+      timezone = 'UTC',
+    } = stripes;
 
     const itemStatusName = loan?.item?.status?.name;
     const itemDetailsLink = `/inventory/view/${loan.item?.instanceId}/${loan.item?.holdingsRecordId}/${loan.itemId}`;
     const loanPolicyLink = `/settings/circulation/loan-policies/${loan.loanPolicyId}`;
     const buttonDisabled = !stripes.hasPerm('ui-users.feesfines.actions.all');
-    const isUserActive = checkUserActive(user);
+    const isUserActive = checkUserActive(user, timezone);
     const isVirtualUser = isDcbUser(user);
     const isVirtualItem = isDcbItem(loan?.item);
     const isItemAbsent = !loan?.item;
