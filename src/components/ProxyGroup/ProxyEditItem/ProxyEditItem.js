@@ -11,6 +11,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Field } from 'react-final-form';
 import { OnChange } from 'react-final-form-listeners';
+import { withStripes } from '@folio/stripes/core';
 import {
   Row,
   Col,
@@ -96,11 +97,15 @@ class ProxyEditItem extends React.Component {
     const {
       index,
       namespace,
+      stripes,
     } = this.props;
+    const {
+      timezone = 'UTC',
+    } = stripes;
 
     const formValues = this.state.formValues;
 
-    this.toggleStatus(!getWarning(formValues, namespace, index));
+    this.toggleStatus(!getWarning(formValues, namespace, index, timezone));
   }
 
   optionsFor = (list) => {
@@ -244,4 +249,4 @@ class ProxyEditItem extends React.Component {
   }
 }
 
-export default ProxyEditItem;
+export default withStripes(ProxyEditItem);
