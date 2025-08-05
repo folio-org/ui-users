@@ -16,6 +16,8 @@ import {
   PatronBlock,
 } from '../../components/UserDetailSections';
 
+const userId = '84954cee-c6f9-4478-8ebd-80f04bc8571d';
+
 const resources = {
   accounts: {},
   addressTypes: {},
@@ -37,7 +39,7 @@ const resources = {
   query: {},
   records: {
     username: 'rick, psych',
-    id: '84954cee-c6f9-4478-8ebd-80f04bc8571d',
+    id: userId,
     active: true,
     patronGroup:'3684a786-6671-4268-8ed0-9db82ebca60b',
     departments:[],
@@ -297,6 +299,24 @@ describe('UserDetail', () => {
     it('should display ViewCustomFieldsRecord', () => {
       renderUserDetail(stripes);
       expect(screen.getByText('ViewCustomFieldsRecord')).toBeInTheDocument();
+    });
+
+    describe('when user data is loading and there is previous user data', () => {
+      it('should not render loading pane', () => {
+        renderUserDetail(stripes, {
+          resources: {
+            ...resources,
+            selUser: {
+              isPending: true,
+              records: [{
+                id: userId,
+              }],
+            },
+          },
+        });
+
+        expect(screen.queryByText('LoadingPane')).not.toBeInTheDocument();
+      });
     });
 
     describe('when roles interface is absent', () => {
