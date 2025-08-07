@@ -5,7 +5,6 @@ import isEqual from 'lodash/isEqual';
 import { useCreateAuthUserKeycloak, useUserAffiliationRoles } from '../../hooks';
 import { KEYCLOAK_USER_EXISTANCE } from '../../constants';
 import { showErrorCallout } from '../../views/UserEdit/UserEditHelpers';
-import { isEmpty } from 'lodash';
 
 const withUserRoles = (WrappedComponent) => (props) => {
   const { okapi } = useStripes();
