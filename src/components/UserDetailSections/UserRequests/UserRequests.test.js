@@ -4,6 +4,16 @@ import '__mock__/stripesComponents.mock';
 import renderWithRouter from 'helpers/renderWithRouter';
 import UserRequests from './UserRequests';
 
+jest.mock('../../Wrappers', () => ({
+  ...jest.requireActual('../../Wrappers'),
+  withCustomFields: jest.fn(Component => props => (
+    <Component
+      {...props}
+      showCustomFieldsSection
+    />
+  )),
+}));
+
 const toggleMock = jest.fn();
 
 const renderUserRequests = (props) => renderWithRouter(<UserRequests {...props} />);
@@ -29,6 +39,7 @@ const mutator = {
 
 const props = (perm) => {
   return {
+    customFields: [],
     expanded: true,
     mutator,
     onToggle: toggleMock,
@@ -118,6 +129,10 @@ const props = (perm) => {
 };
 
 describe('Render User Requests component', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('Check if Component is rendered', () => {
     renderUserRequests(props(true));
     expect(screen.getByText('List Component')).toBeInTheDocument();
@@ -140,6 +155,14 @@ describe('Render User Requests component', () => {
       };
       renderUserRequests(alteredProps(true));
       expect(screen.queryByText('Create Request')).toBeNull();
+    });
+  });
+
+  describe('when custom fields are present', () => {
+    it('should display "ViewCustomFieldsRecord"', () => {
+      renderUserRequests(props(true));
+
+      expect(screen.getByText('ViewCustomFieldsRecord')).toBeInTheDocument();
     });
   });
 });

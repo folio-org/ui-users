@@ -5,12 +5,23 @@ import renderWithRouter from 'helpers/renderWithRouter';
 import UserLoans from './UserLoans';
 
 jest.unmock('@folio/stripes/components');
-jest.unmock('@folio/stripes/smart-components');
+
+jest.mock('../../Wrappers', () => ({
+  ...jest.requireActual('../../Wrappers'),
+  withCustomFields: jest.fn(Component => props => (
+    <Component
+      {...props}
+      showCustomFieldsSection
+    />
+  )),
+}));
+
 const renderUserLoans = (extraprops) => renderWithRouter(<UserLoans {...extraprops} />);
 
 function props(isexpanded, pending, claimedReturnedCount) {
   return {
     accordionId: 'userLoansSection',
+    customFields: [],
     expanded: isexpanded,
     match:  { params: { id: 'mock-match-params-id' } },
     location: { search: 'search', pathname: 'pathname' },
@@ -38,6 +49,10 @@ function props(isexpanded, pending, claimedReturnedCount) {
 }
 
 describe('Render User Loans component', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('open accordion, loansLoaded is false', () => {
     renderUserLoans(props(true, true));
     expect(screen.queryByText('ui-users.loans.numOpenLoans')).not.toBeInTheDocument();
@@ -62,5 +77,13 @@ describe('Render User Loans component', () => {
   it('claimed return count is 0', () => {
     renderUserLoans(props(true, false, 0));
     expect(screen.queryByText('ui-users.loans.numClaimedReturnedLoans')).not.toBeInTheDocument();
+  });
+
+  describe('when custom fields are present', () => {
+    it('should display "ViewCustomFieldsRecord"', () => {
+      renderUserLoans(props(true));
+
+      expect(screen.getByText('ViewCustomFieldsRecord')).toBeInTheDocument();
+    });
   });
 });

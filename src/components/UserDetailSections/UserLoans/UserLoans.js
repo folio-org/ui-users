@@ -2,18 +2,24 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Link } from 'react-router-dom';
+import flowRight from 'lodash/flowRight';
+
 import { stripesConnect } from '@folio/stripes/core';
 import {
   Badge,
   Accordion,
   List,
   Icon,
+  Row,
   Headline
 } from '@folio/stripes/components';
 
+import { withCustomFields } from '../../Wrappers';
+import ViewCustomFieldsSection from '../ViewCustomFieldsSection';
 import {
   loanActions,
   loanStatuses,
+  CUSTOM_FIELDS_SECTION,
 } from '../../../constants';
 
 
@@ -105,6 +111,7 @@ class UserLoans extends React.Component {
   });
 
   static propTypes = {
+    customFields: PropTypes.arrayOf(PropTypes.object).isRequired,
     resources: PropTypes.shape({
       loansHistory: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
@@ -121,6 +128,7 @@ class UserLoans extends React.Component {
       search: PropTypes.string,
       pathname: PropTypes.string,
     }),
+    showCustomFieldsSection: PropTypes.bool.isRequired,
   };
 
   isLoading() {
@@ -145,6 +153,8 @@ class UserLoans extends React.Component {
       resources,
       match: { params },
       location,
+      customFields,
+      showCustomFieldsSection,
     } = this.props;
 
     const openLoansCount = resources?.openLoans?.records?.[0]?.totalRecords ?? 0;
@@ -206,9 +216,23 @@ class UserLoans extends React.Component {
           <ListLoans params={params} location={location} items={items} /> :
           <Icon icon="spinner-ellipsis" width="10px" />
         }
+        {showCustomFieldsSection && (
+          <Row>
+            <ViewCustomFieldsSection
+              customFields={customFields}
+              sectionId={CUSTOM_FIELDS_SECTION.LOANS}
+            />
+          </Row>
+        )}
       </Accordion>
     );
   }
 }
 
-export default stripesConnect(UserLoans);
+export default flowRight(
+  Component => withCustomFields(Component, {
+    isVisible: true,
+    sectionId: CUSTOM_FIELDS_SECTION.LOANS,
+  }),
+  stripesConnect,
+)(UserLoans);

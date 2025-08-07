@@ -1,3 +1,4 @@
+import { useCustomFieldsQuery } from '@folio/stripes/smart-components';
 import { screen } from '@folio/jest-config-stripes/testing-library/react';
 import accounts from 'fixtures/account';
 import loans from 'fixtures/openLoans';
@@ -35,6 +36,7 @@ const props = (emptyData) => {
       isPending: !emptyData,
     },
     accordionId: 'UserAccounts',
+    customFields: [],
     expanded: true,
     onToggle: onToggleMock,
     location: {
@@ -51,6 +53,10 @@ const props = (emptyData) => {
 };
 
 describe('Render UserAccounts component', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('Check if List is rendered', () => {
     renderUserAccounts(props(true));
     expect(screen.getAllByText('List Component')[0]).toBeInTheDocument();
@@ -93,6 +99,19 @@ describe('Render UserAccounts component', () => {
       };
       renderUserAccounts(alteredProps);
       expect(screen.queryByText('Create fee/fine')).toBeNull();
+    });
+  });
+
+  describe('when custom fields are present', () => {
+    it('should display "ViewCustomFieldsRecord"', () => {
+      useCustomFieldsQuery.mockImplementation(() => ({
+        isCustomFieldsError: false,
+        customFields: [{ id: 'customField1' }],
+      }));
+
+      renderUserAccounts(props(true));
+
+      expect(screen.getByText('ViewCustomFieldsRecord')).toBeInTheDocument();
     });
   });
 });

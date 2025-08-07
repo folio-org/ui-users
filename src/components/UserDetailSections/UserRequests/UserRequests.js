@@ -4,12 +4,15 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import queryString from 'query-string';
+import flowRight from 'lodash/flowRight';
+
 import {
   Accordion,
   Badge,
   Button,
   Icon,
   Headline,
+  Row,
   List
 } from '@folio/stripes/components';
 import {
@@ -17,12 +20,15 @@ import {
   stripesConnect,
 } from '@folio/stripes/core';
 
+import { withCustomFields } from '../../Wrappers';
+import ViewCustomFieldsSection from '../ViewCustomFieldsSection';
 import {
   getOpenRequestStatusesFilterString,
   getClosedRequestStatusesFilterString,
   getRequestUrl,
   isDcbUser,
 } from '../../util';
+import { CUSTOM_FIELDS_SECTION } from '../../../constants';
 
 /**
  * User-details "Requests" accordion pane.
@@ -62,6 +68,7 @@ class UserRequests extends React.Component {
 
   static propTypes = {
     accordionId: PropTypes.string,
+    customFields: PropTypes.arrayOf(PropTypes.object).isRequired,
     expanded: PropTypes.bool,
     match: PropTypes.shape({
       params: PropTypes.shape({
@@ -78,6 +85,7 @@ class UserRequests extends React.Component {
       }),
     }),
     user: PropTypes.object,
+    showCustomFieldsSection: PropTypes.bool.isRequired,
     stripes: PropTypes.object,
   };
 
@@ -109,6 +117,8 @@ class UserRequests extends React.Component {
       onToggle,
       accordionId,
       user,
+      customFields,
+      showCustomFieldsSection,
       resources
     } = this.props;
     const { barcode, id } = user;
@@ -163,9 +173,23 @@ class UserRequests extends React.Component {
             ]}
           /> : <Icon icon="spinner-ellipsis" width="10px" />
         }
+        {showCustomFieldsSection && (
+          <Row>
+            <ViewCustomFieldsSection
+              customFields={customFields}
+              sectionId={CUSTOM_FIELDS_SECTION.REQUESTS}
+            />
+          </Row>
+        )}
       </Accordion>
     );
   }
 }
 
-export default stripesConnect(UserRequests);
+export default flowRight(
+  Component => withCustomFields(Component, {
+    isVisible: true,
+    sectionId: CUSTOM_FIELDS_SECTION.REQUESTS,
+  }),
+  stripesConnect,
+)(UserRequests);

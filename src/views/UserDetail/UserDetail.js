@@ -878,6 +878,7 @@ class UserDetail extends React.Component {
                             location={location}
                             accounts={accounts}
                             match={match}
+                            customFields={customFields}
                             {...this.props}
                           />
                         </IfPermission>
@@ -896,6 +897,7 @@ class UserDetail extends React.Component {
                               expanded={sections[ACCORDION_ID.LOANS]}
                               onToggle={this.handleSectionToggle}
                               accordionId={ACCORDION_ID.LOANS}
+                              customFields={customFields}
                               {...this.props}
                             />
                           </IfInterface>
@@ -910,6 +912,7 @@ class UserDetail extends React.Component {
                               onToggle={this.handleSectionToggle}
                               accordionId={ACCORDION_ID.REQUESTS}
                               user={user}
+                              customFields={customFields}
                               {...this.props}
                             />
                           </IfInterface>
