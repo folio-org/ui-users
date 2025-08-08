@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## [12.1.10] (https://github.com/folio-org/ui-users/tree/v12.1.10) (2025-08-20)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.9...v12.1.10)
+* Only show Keycloak user record confirmation when assigning roles to a non-Keycloak record. Refs UIU-3426.
+
 ## [12.1.9] (https://github.com/folio-org/ui-users/tree/v12.1.9) (2025-07-30)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.8...v12.1.9)
 * Add support for use circulation-bff for declare-item-lost. Refs UIU-3414.
