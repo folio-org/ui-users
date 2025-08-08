@@ -68,7 +68,12 @@ const PatronsPreRegistrationList = ({
       const isEmailVerified = get(user, 'isEmailVerified');
       if (isEmailVerified) return intl.formatMessage({ id: 'ui-users.stagingRecords.activated' });
       else return intl.formatMessage({ id: 'ui-users.stagingRecords.notActivated' });
-    }
+    },
+    [COLUMNS_NAME.MINOR]: user => {
+      return user?.minor
+        ? intl.formatMessage({ id: 'ui-users.stagingRecords.minor.yes' })
+        : '';
+    },
   });
 
   return (

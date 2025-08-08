@@ -1,3 +1,4 @@
+import { FormattedMessage } from 'react-intl';
 import {
   QueryClient,
   QueryClientProvider,
@@ -83,6 +84,30 @@ describe('PatronsPreRegistrationList', () => {
     };
 
     renderComponent(props);
+    expect(MultiColumnList).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
+  });
+
+  it('should display minor column', () => {
+    const expectedProps = {
+      columnMapping: expect.objectContaining({
+        minor: <FormattedMessage id="ui-users.stagingRecords.list.columnNames.minor" />,
+      }),
+      formatter: expect.objectContaining({
+        minor: expect.any(Function),
+      }),
+      visibleColumns: expect.arrayContaining(['minor']),
+    };
+
+    const props = {
+      totalCount: 1,
+      data: [{
+        ...preRegistrationRecords[0],
+        minor: true,
+      }],
+    };
+
+    renderComponent(props);
+
     expect(MultiColumnList).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
   });
 });
