@@ -4,6 +4,16 @@ import '__mock__/stripesComponents.mock';
 import renderWithRouter from 'helpers/renderWithRouter';
 import UserRequests from './UserRequests';
 
+jest.mock('../../Wrappers', () => ({
+  ...jest.requireActual('../../Wrappers'),
+  withCustomFields: jest.fn(Component => props => (
+    <Component
+      {...props}
+      showCustomFieldsSection
+    />
+  )),
+}));
+
 const toggleMock = jest.fn();
 
 const renderUserRequests = (props) => renderWithRouter(<UserRequests {...props} />);
@@ -14,12 +24,14 @@ const mutator = {
     POST: jest.fn(),
     PUT: jest.fn(),
     cancel: jest.fn(),
+    GET: jest.fn(),
   },
   openRequestsCount: {
     DELETE: jest.fn(),
     POST: jest.fn(),
     PUT: jest.fn(),
     cancel: jest.fn(),
+    GET: jest.fn(),
   },
   userid: {
     update: jest.fn(),
@@ -29,6 +41,7 @@ const mutator = {
 
 const props = (perm) => {
   return {
+    customFields: [],
     expanded: true,
     mutator,
     onToggle: toggleMock,
@@ -45,6 +58,7 @@ const props = (perm) => {
     stripes: {
       connect: (Component) => Component,
       hasPerm: perm ? jest.fn().mockReturnValue(true) : jest.fn().mockReturnValue(false),
+      hasInterface: jest.fn().mockReturnValue(true),
     },
     patronGroup: {
       desc: 'Staff Member',
@@ -118,13 +132,17 @@ const props = (perm) => {
 };
 
 describe('Render User Requests component', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('Check if Component is rendered', () => {
     renderUserRequests(props(true));
     expect(screen.getByText('List Component')).toBeInTheDocument();
   });
   it('Sending permissions as false', () => {
     renderUserRequests(props(false));
-    expect(screen.getByText('List Component')).toBeInTheDocument();
+    expect(screen.queryByText('List Component')).not.toBeInTheDocument();
   });
 
   describe('when user is of type dcb', () => {
@@ -140,6 +158,14 @@ describe('Render User Requests component', () => {
       };
       renderUserRequests(alteredProps(true));
       expect(screen.queryByText('Create Request')).toBeNull();
+    });
+  });
+
+  describe('when custom fields are present', () => {
+    it('should display "ViewCustomFieldsRecord"', () => {
+      renderUserRequests(props(true));
+
+      expect(screen.getByText('ViewCustomFieldsRecord')).toBeInTheDocument();
     });
   });
 });

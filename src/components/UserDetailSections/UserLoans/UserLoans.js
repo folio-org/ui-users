@@ -2,18 +2,24 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Link } from 'react-router-dom';
+import flowRight from 'lodash/flowRight';
+
 import { stripesConnect } from '@folio/stripes/core';
 import {
   Badge,
   Accordion,
   List,
   Icon,
+  Row,
   Headline
 } from '@folio/stripes/components';
 
+import { withCustomFields } from '../../Wrappers';
+import ViewCustomFieldsSection from '../ViewCustomFieldsSection';
 import {
   loanActions,
   loanStatuses,
+  CUSTOM_FIELDS_SECTION,
 } from '../../../constants';
 
 
@@ -70,6 +76,9 @@ class UserLoans extends React.Component {
       GET: {
         path: 'circulation/loans?query=(userId==:{id})&limit=1000',
       },
+      fetch: false,
+      throwErrors: false,
+      accumulate: true,
     },
     openLoans: {
       type: 'okapi',
@@ -80,6 +89,9 @@ class UserLoans extends React.Component {
           limit: '1000',
         },
       },
+      fetch: false,
+      throwErrors: false,
+      accumulate: true,
     },
     claimedReturnedCount: {
       type: 'okapi',
@@ -90,6 +102,9 @@ class UserLoans extends React.Component {
           limit: '0',
         },
       },
+      fetch: false,
+      throwErrors: false,
+      accumulate: true,
     },
     closedLoansCount: {
       type: 'okapi',
@@ -100,11 +115,29 @@ class UserLoans extends React.Component {
           limit: '0',
         },
       },
+      fetch: false,
+      throwErrors: false,
+      accumulate: true,
     },
     userid: {},
   });
 
   static propTypes = {
+    customFields: PropTypes.arrayOf(PropTypes.object).isRequired,
+    mutator: PropTypes.shape({
+      loansHistory: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+      }).isRequired,
+      openLoans: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+      }).isRequired,
+      claimedReturnedCount: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+      }).isRequired,
+      closedLoansCount: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+      }).isRequired,
+    }).isRequired,
     resources: PropTypes.shape({
       loansHistory: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
@@ -121,7 +154,28 @@ class UserLoans extends React.Component {
       search: PropTypes.string,
       pathname: PropTypes.string,
     }),
+    showCustomFieldsSection: PropTypes.bool.isRequired,
+    stripes: PropTypes.shape({
+      hasPerm: PropTypes.func.isRequired,
+      hasInterface: PropTypes.func.isRequired,
+    }).isRequired,
   };
+
+  componentDidMount() {
+    const { mutator } = this.props;
+
+    if (this.showLoans) {
+      mutator.loansHistory.GET();
+      mutator.openLoans.GET();
+      mutator.claimedReturnedCount.GET();
+      mutator.closedLoansCount.GET();
+    }
+  }
+
+  hasViewLoansPerm = this.props.stripes.hasPerm('ui-users.loans.view');
+  hasLoanPolicyStorageInterface = !!this.props.stripes.hasInterface('loan-policy-storage');
+  hasCirculationInterface = !!this.props.stripes.hasInterface('circulation');
+  showLoans = this.hasViewLoansPerm && this.hasLoanPolicyStorageInterface && this.hasCirculationInterface;
 
   isLoading() {
     const {
@@ -145,6 +199,8 @@ class UserLoans extends React.Component {
       resources,
       match: { params },
       location,
+      customFields,
+      showCustomFieldsSection,
     } = this.props;
 
     const openLoansCount = resources?.openLoans?.records?.[0]?.totalRecords ?? 0;
@@ -191,6 +247,10 @@ class UserLoans extends React.Component {
       },
     ];
 
+    if (!showCustomFieldsSection && !this.showLoans) {
+      return null;
+    }
+
     return (
       <Accordion
         open={expanded}
@@ -202,13 +262,27 @@ class UserLoans extends React.Component {
           </Headline>)}
         displayWhenClosed={displayWhenClosed}
       >
-        {loansLoaded ?
+        {this.showLoans && (loansLoaded ?
           <ListLoans params={params} location={location} items={items} /> :
           <Icon icon="spinner-ellipsis" width="10px" />
-        }
+        )}
+        {showCustomFieldsSection && (
+          <Row>
+            <ViewCustomFieldsSection
+              customFields={customFields}
+              sectionId={CUSTOM_FIELDS_SECTION.LOANS}
+            />
+          </Row>
+        )}
       </Accordion>
     );
   }
 }
 
-export default stripesConnect(UserLoans);
+export default flowRight(
+  Component => withCustomFields(Component, {
+    isVisible: true,
+    sectionId: CUSTOM_FIELDS_SECTION.LOANS,
+  }),
+  stripesConnect,
+)(UserLoans);

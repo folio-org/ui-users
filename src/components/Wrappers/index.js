@@ -6,3 +6,4 @@ export { default as withClaimReturned } from './withClaimReturned';
 export { default as withMarkAsMissing } from './withMarkAsMissing';
 export { default as withAddInfo } from './withAddInfo';
 export { default as withFormValues } from './withFormValues';
+export { default as withCustomFields } from './withCustomFields';

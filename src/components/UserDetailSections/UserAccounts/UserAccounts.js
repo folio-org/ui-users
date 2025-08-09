@@ -14,12 +14,17 @@ import {
   List,
   Headline
 } from '@folio/stripes/components';
+import { useCustomFieldsQuery } from '@folio/stripes/smart-components';
 import { useStripes } from '@folio/stripes/core';
 
+import ViewCustomFieldsSection from '../ViewCustomFieldsSection';
 import {
   accountStatuses,
   refundStatuses,
   refundClaimReturned,
+  CUSTOM_FIELDS_SECTION,
+  CUSTOM_FIELDS_ENTITY_TYPE,
+  MODULE_NAME,
 } from '../../../constants';
 import { isDcbUser } from '../../util';
 import { useLocalizedCurrency } from '../../../hooks';
@@ -40,6 +45,7 @@ const UserAccounts = ({
     isPending,
   },
   resources,
+  customFields,
 }) => {
   const user = get(resources, ['selUser', 'records', '0']);
   const [totals, setTotals] = useState({
@@ -53,6 +59,21 @@ const UserAccounts = ({
   });
   const stripes = useStripes();
   const { localizeCurrency } = useLocalizedCurrency();
+
+  const {
+    customFields: visibleCustomFields,
+    isCustomFieldsError: customFieldsFetchFailed,
+    isLoadingCustomFields,
+  } = useCustomFieldsQuery({
+    moduleName: MODULE_NAME,
+    entityType: CUSTOM_FIELDS_ENTITY_TYPE,
+    sectionId: CUSTOM_FIELDS_SECTION.FEES_FINES,
+    isVisible: true,
+  });
+
+  const showCustomFieldsSection = isLoadingCustomFields || (!customFieldsFetchFailed && visibleCustomFields?.length > 0);
+  const showAccounts = !!(stripes.hasPerm('ui-users.feesfines.view') && stripes.hasInterface('feesfines'));
+
   const accountsLoaded = !isPending;
   const {
     openAccountsCount,
@@ -95,6 +116,10 @@ const UserAccounts = ({
     });
   }, [records, resources]);
 
+  if (!showCustomFieldsSection && !showAccounts) {
+    return null;
+  }
+
   return (
     <Accordion
       open={expanded}
@@ -104,7 +129,7 @@ const UserAccounts = ({
       displayWhenClosed={displayWhenClosed}
       displayWhenOpen={!isDcbUser(user) ? displayWhenOpen : null}
     >
-      {accountsLoaded ?
+      {showAccounts && (accountsLoaded ?
         <Row>
           <Col xs={5}>
             <List
@@ -171,7 +196,15 @@ const UserAccounts = ({
             />
           </Col>
         </Row> : <Icon icon="spinner-ellipsis" width="10px" />
-      }
+      )}
+      {showCustomFieldsSection && (
+        <Row>
+          <ViewCustomFieldsSection
+            customFields={customFields}
+            sectionId={CUSTOM_FIELDS_SECTION.FEES_FINES}
+          />
+        </Row>
+      )}
     </Accordion>
   );
 };
@@ -179,6 +212,7 @@ const UserAccounts = ({
 UserAccounts.propTypes = {
   accounts: PropTypes.object,
   accordionId: PropTypes.string,
+  customFields: PropTypes.arrayOf(PropTypes.object).isRequired,
   expanded: PropTypes.bool,
   onToggle: PropTypes.func,
   location: PropTypes.shape({
@@ -209,6 +243,10 @@ UserAccounts.propTypes = {
         })
       ),
     }).isRequired,
+  }).isRequired,
+  stripes: PropTypes.shape({
+    hasPerm: PropTypes.func.isRequired,
+    hasInterface: PropTypes.func.isRequired,
   }).isRequired,
 };
 

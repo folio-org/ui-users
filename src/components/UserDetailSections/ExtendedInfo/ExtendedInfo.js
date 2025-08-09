@@ -85,7 +85,7 @@ const ExtendedInfo = (props) => {
       {(showCustomFieldsSection || departments.length > 0) && (
         <Row>
           {departments.length > 0 && (
-            <Col xs={12} md={6}>
+            <Col xs={12} md={3}>
               <KeyValue
                 label={<FormattedMessage id="ui-users.extended.department.name" />}
                 data-testid="department-names"

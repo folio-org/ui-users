@@ -4,12 +4,15 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import queryString from 'query-string';
+import flowRight from 'lodash/flowRight';
+
 import {
   Accordion,
   Badge,
   Button,
   Icon,
   Headline,
+  Row,
   List
 } from '@folio/stripes/components';
 import {
@@ -17,12 +20,15 @@ import {
   stripesConnect,
 } from '@folio/stripes/core';
 
+import { withCustomFields } from '../../Wrappers';
+import ViewCustomFieldsSection from '../ViewCustomFieldsSection';
 import {
   getOpenRequestStatusesFilterString,
   getClosedRequestStatusesFilterString,
   getRequestUrl,
   isDcbUser,
 } from '../../util';
+import { CUSTOM_FIELDS_SECTION } from '../../../constants';
 
 /**
  * User-details "Requests" accordion pane.
@@ -46,6 +52,9 @@ class UserRequests extends React.Component {
           limit: '1',
         },
       },
+      fetch: false,
+      throwErrors: false,
+      accumulate: true,
     },
     closedRequestsCount: {
       type: 'okapi',
@@ -56,16 +65,28 @@ class UserRequests extends React.Component {
           limit: '1',
         },
       },
+      fetch: false,
+      throwErrors: false,
+      accumulate: true,
     },
     userid: {},
   });
 
   static propTypes = {
     accordionId: PropTypes.string,
+    customFields: PropTypes.arrayOf(PropTypes.object).isRequired,
     expanded: PropTypes.bool,
     match: PropTypes.shape({
       params: PropTypes.shape({
         id: PropTypes.string,
+      }),
+    }).isRequired,
+    mutator: PropTypes.shape({
+      openRequestsCount: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+      }),
+      closedRequestsCount: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
       }),
     }).isRequired,
     onToggle: PropTypes.func,
@@ -78,8 +99,26 @@ class UserRequests extends React.Component {
       }),
     }),
     user: PropTypes.object,
-    stripes: PropTypes.object,
+    showCustomFieldsSection: PropTypes.bool.isRequired,
+    stripes: PropTypes.shape({
+      hasPerm: PropTypes.func.isRequired,
+      hasInterface: PropTypes.func.isRequired,
+    }).isRequired,
   };
+
+  componentDidMount() {
+    const { mutator } = this.props;
+
+    if (this.showRequests) {
+      mutator.openRequestsCount.GET();
+      mutator.closedRequestsCount.GET();
+    }
+  }
+
+  hasViewRequestsPerm = this.props.stripes.hasPerm('ui-users.requests.all');
+  hasRequestStorageInterface = !!this.props.stripes.hasInterface('request-storage', '2.5 3.0 4.0 5.0 6.0');
+  hasCirculationInterface = !!this.props.stripes.hasInterface('circulation');
+  showRequests = this.hasViewRequestsPerm && this.hasRequestStorageInterface && this.hasCirculationInterface;
 
   renderLinkItem = (item, index) => {
     return (
@@ -109,6 +148,8 @@ class UserRequests extends React.Component {
       onToggle,
       accordionId,
       user,
+      customFields,
+      showCustomFieldsSection,
       resources
     } = this.props;
     const { barcode, id } = user;
@@ -134,6 +175,10 @@ class UserRequests extends React.Component {
       this.renderLinkItem :
       this.renderItem;
 
+    if (!showCustomFieldsSection && !this.showRequests) {
+      return null;
+    }
+
     return (
       <Accordion
         open={expanded}
@@ -143,7 +188,7 @@ class UserRequests extends React.Component {
         displayWhenClosed={displayWhenClosed}
         displayWhenOpen={!isDcbUser(user) ? displayWhenOpen : null}
       >
-        {requestsLoaded ?
+        {this.showRequests && (requestsLoaded ?
           <List
             listStyle="bullets"
             itemFormatter={itemFormatter}
@@ -162,10 +207,24 @@ class UserRequests extends React.Component {
               },
             ]}
           /> : <Icon icon="spinner-ellipsis" width="10px" />
-        }
+        )}
+        {showCustomFieldsSection && (
+          <Row>
+            <ViewCustomFieldsSection
+              customFields={customFields}
+              sectionId={CUSTOM_FIELDS_SECTION.REQUESTS}
+            />
+          </Row>
+        )}
       </Accordion>
     );
   }
 }
 
-export default stripesConnect(UserRequests);
+export default flowRight(
+  Component => withCustomFields(Component, {
+    isVisible: true,
+    sectionId: CUSTOM_FIELDS_SECTION.REQUESTS,
+  }),
+  stripesConnect,
+)(UserRequests);
