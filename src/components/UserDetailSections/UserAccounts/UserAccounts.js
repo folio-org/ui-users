@@ -72,6 +72,7 @@ const UserAccounts = ({
   });
 
   const showCustomFieldsSection = isLoadingCustomFields || (!customFieldsFetchFailed && visibleCustomFields?.length > 0);
+  const showAccounts = !!(stripes.hasPerm('ui-users.feesfines.view') && stripes.hasInterface('feesfines'));
 
   const accountsLoaded = !isPending;
   const {
@@ -115,6 +116,10 @@ const UserAccounts = ({
     });
   }, [records, resources]);
 
+  if (!showCustomFieldsSection && !showAccounts) {
+    return null;
+  }
+
   return (
     <Accordion
       open={expanded}
@@ -124,7 +129,7 @@ const UserAccounts = ({
       displayWhenClosed={displayWhenClosed}
       displayWhenOpen={!isDcbUser(user) ? displayWhenOpen : null}
     >
-      {accountsLoaded ?
+      {showAccounts && (accountsLoaded ?
         <Row>
           <Col xs={5}>
             <List
@@ -191,7 +196,7 @@ const UserAccounts = ({
             />
           </Col>
         </Row> : <Icon icon="spinner-ellipsis" width="10px" />
-      }
+      )}
       {showCustomFieldsSection && (
         <Row>
           <ViewCustomFieldsSection
@@ -238,6 +243,10 @@ UserAccounts.propTypes = {
         })
       ),
     }).isRequired,
+  }).isRequired,
+  stripes: PropTypes.shape({
+    hasPerm: PropTypes.func.isRequired,
+    hasInterface: PropTypes.func.isRequired,
   }).isRequired,
 };
 

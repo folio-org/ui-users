@@ -76,6 +76,9 @@ class UserLoans extends React.Component {
       GET: {
         path: 'circulation/loans?query=(userId==:{id})&limit=1000',
       },
+      fetch: false,
+      throwErrors: false,
+      accumulate: true,
     },
     openLoans: {
       type: 'okapi',
@@ -86,6 +89,9 @@ class UserLoans extends React.Component {
           limit: '1000',
         },
       },
+      fetch: false,
+      throwErrors: false,
+      accumulate: true,
     },
     claimedReturnedCount: {
       type: 'okapi',
@@ -96,6 +102,9 @@ class UserLoans extends React.Component {
           limit: '0',
         },
       },
+      fetch: false,
+      throwErrors: false,
+      accumulate: true,
     },
     closedLoansCount: {
       type: 'okapi',
@@ -106,6 +115,9 @@ class UserLoans extends React.Component {
           limit: '0',
         },
       },
+      fetch: false,
+      throwErrors: false,
+      accumulate: true,
     },
     userid: {},
   });
@@ -129,7 +141,27 @@ class UserLoans extends React.Component {
       pathname: PropTypes.string,
     }),
     showCustomFieldsSection: PropTypes.bool.isRequired,
+    stripes: PropTypes.shape({
+      hasPerm: PropTypes.func.isRequired,
+      hasInterface: PropTypes.func.isRequired,
+    }).isRequired,
   };
+
+  hasViewLoansPerm = this.props.stripes.hasPerm('ui-users.loans.view');
+  hasLoanPolicyStorageInterface = !!this.props.stripes.hasInterface('loan-policy-storage');
+  hasCirculationInterface = !!this.props.stripes.hasInterface('circulation');
+  showLoans = this.hasViewLoansPerm && this.hasLoanPolicyStorageInterface && this.hasCirculationInterface;
+
+  componentDidMount() {
+    const { mutator } = this.props;
+
+    if (this.showLoans) {
+      mutator.loansHistory.GET();
+      mutator.openLoans.GET();
+      mutator.claimedReturnedCount.GET();
+      mutator.closedLoansCount.GET();
+    }
+  }
 
   isLoading() {
     const {
@@ -201,6 +233,10 @@ class UserLoans extends React.Component {
       },
     ];
 
+    if (!showCustomFieldsSection && !this.showLoans) {
+      return null;
+    }
+
     return (
       <Accordion
         open={expanded}
@@ -212,10 +248,10 @@ class UserLoans extends React.Component {
           </Headline>)}
         displayWhenClosed={displayWhenClosed}
       >
-        {loansLoaded ?
+        {this.showLoans && (loansLoaded ?
           <ListLoans params={params} location={location} items={items} /> :
           <Icon icon="spinner-ellipsis" width="10px" />
-        }
+        )}
         {showCustomFieldsSection && (
           <Row>
             <ViewCustomFieldsSection

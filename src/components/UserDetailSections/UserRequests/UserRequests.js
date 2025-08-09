@@ -52,6 +52,9 @@ class UserRequests extends React.Component {
           limit: '1',
         },
       },
+      fetch: false,
+      throwErrors: false,
+      accumulate: true,
     },
     closedRequestsCount: {
       type: 'okapi',
@@ -62,6 +65,9 @@ class UserRequests extends React.Component {
           limit: '1',
         },
       },
+      fetch: false,
+      throwErrors: false,
+      accumulate: true,
     },
     userid: {},
   });
@@ -86,8 +92,25 @@ class UserRequests extends React.Component {
     }),
     user: PropTypes.object,
     showCustomFieldsSection: PropTypes.bool.isRequired,
-    stripes: PropTypes.object,
+    stripes: PropTypes.shape({
+      hasPerm: PropTypes.func.isRequired,
+      hasInterface: PropTypes.func.isRequired,
+    }).isRequired,
   };
+
+  hasViewRequestsPerm = this.props.stripes.hasPerm('ui-users.requests.all');
+  hasRequestStorageInterface = !!this.props.stripes.hasInterface('request-storage', '2.5 3.0 4.0 5.0 6.0');
+  hasCirculationInterface = !!this.props.stripes.hasInterface('circulation');
+  showRequests = this.hasViewRequestsPerm && this.hasRequestStorageInterface && this.hasCirculationInterface;
+
+  componentDidMount() {
+    const { mutator } = this.props;
+
+    if (this.showRequests) {
+      mutator.openRequestsCount.GET();
+      mutator.closedRequestsCount.GET();
+    }
+  }
 
   renderLinkItem = (item, index) => {
     return (
@@ -144,6 +167,10 @@ class UserRequests extends React.Component {
       this.renderLinkItem :
       this.renderItem;
 
+    if (!showCustomFieldsSection && !this.showRequests) {
+      return null;
+    }
+
     return (
       <Accordion
         open={expanded}
@@ -153,7 +180,7 @@ class UserRequests extends React.Component {
         displayWhenClosed={displayWhenClosed}
         displayWhenOpen={!isDcbUser(user) ? displayWhenOpen : null}
       >
-        {requestsLoaded ?
+        {this.showRequests && (requestsLoaded ?
           <List
             listStyle="bullets"
             itemFormatter={itemFormatter}
@@ -172,7 +199,7 @@ class UserRequests extends React.Component {
               },
             ]}
           /> : <Icon icon="spinner-ellipsis" width="10px" />
-        }
+        )}
         {showCustomFieldsSection && (
           <Row>
             <ViewCustomFieldsSection

@@ -868,56 +868,34 @@ class UserDetail extends React.Component {
                           {...this.props}
                         />
                       </IfPermission>
-
-                      <IfInterface name="feesfines">
-                        <IfPermission perm="ui-users.feesfines.view">
-                          <UserAccounts
-                            expanded={sections[ACCORDION_ID.ACCOUNTS]}
-                            onToggle={this.handleSectionToggle}
-                            accordionId={ACCORDION_ID.ACCOUNTS}
-                            location={location}
-                            accounts={accounts}
-                            match={match}
-                            customFields={customFields}
-                            {...this.props}
-                          />
-                        </IfPermission>
-                      </IfInterface>
-
-                      <IfPermission perm="ui-users.loans.view">
-                        <IfInterface name="loan-policy-storage">
-                          { /* Check without version, so can support either of multiple versions.
-                    Replace with specific check when facility for providing
-                    multiple versions is available */ }
-                          <IfInterface name="circulation">
-                            <UserLoans
-                              onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
-                              onClickViewOpenLoans={this.onClickViewOpenLoans}
-                              onClickViewClosedLoans={this.onClickViewClosedLoans}
-                              expanded={sections[ACCORDION_ID.LOANS]}
-                              onToggle={this.handleSectionToggle}
-                              accordionId={ACCORDION_ID.LOANS}
-                              customFields={customFields}
-                              {...this.props}
-                            />
-                          </IfInterface>
-                        </IfInterface>
-                      </IfPermission>
-
-                      <IfPermission perm="ui-users.requests.all">
-                        <IfInterface name="request-storage" version="2.5 3.0 4.0 5.0 6.0">
-                          <IfInterface name="circulation">
-                            <UserRequests
-                              expanded={sections[ACCORDION_ID.REQUESTS]}
-                              onToggle={this.handleSectionToggle}
-                              accordionId={ACCORDION_ID.REQUESTS}
-                              user={user}
-                              customFields={customFields}
-                              {...this.props}
-                            />
-                          </IfInterface>
-                        </IfInterface>
-                      </IfPermission>
+                      <UserAccounts
+                        expanded={sections[ACCORDION_ID.ACCOUNTS]}
+                        onToggle={this.handleSectionToggle}
+                        accordionId={ACCORDION_ID.ACCOUNTS}
+                        location={location}
+                        accounts={accounts}
+                        match={match}
+                        customFields={customFields}
+                        {...this.props}
+                      />
+                      <UserLoans
+                        onClickViewLoanActionsHistory={this.onClickViewLoanActionsHistory}
+                        onClickViewOpenLoans={this.onClickViewOpenLoans}
+                        onClickViewClosedLoans={this.onClickViewClosedLoans}
+                        expanded={sections[ACCORDION_ID.LOANS]}
+                        onToggle={this.handleSectionToggle}
+                        accordionId={ACCORDION_ID.LOANS}
+                        customFields={customFields}
+                        {...this.props}
+                      />
+                      <UserRequests
+                        expanded={sections[ACCORDION_ID.REQUESTS]}
+                        onToggle={this.handleSectionToggle}
+                        accordionId={ACCORDION_ID.REQUESTS}
+                        user={user}
+                        customFields={customFields}
+                        {...this.props}
+                      />
                     </>
                   )
                 }
