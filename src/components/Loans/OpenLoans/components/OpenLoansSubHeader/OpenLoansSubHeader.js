@@ -6,7 +6,10 @@ import {
 } from 'lodash';
 import { useIntl } from 'react-intl';
 
-import { IfPermission } from '@folio/stripes/core';
+import {
+  IfPermission,
+  useStripes,
+} from '@folio/stripes/core';
 import {
   Button,
   Dropdown,
@@ -54,8 +57,13 @@ const OpenLoansSubHeader = ({
   patronGroup
 }) => {
   const intl = useIntl();
+  const stripes = useStripes();
 
   const [toggleDropdownState, setToggleDropdownState] = useState(false);
+
+  const {
+    timezone = 'UTC',
+  } = stripes;
 
   const headers = [
     'action',
@@ -124,7 +132,7 @@ const OpenLoansSubHeader = ({
   const countRenews = getRenewalPatronBlocksFromPatronBlocks(patronBlocks);
   const onlyClaimedReturnedItemsSelected = hasEveryLoanItemStatus(checkedLoans, itemStatuses.CLAIMED_RETURNED);
   const onlyLostyItemsSelected = hasAnyLoanItemStatus(checkedLoans, lostItemStatuses);
-  const isUserActive = checkUserActive(user);
+  const isUserActive = checkUserActive(user, timezone);
   const isVirtualUser = isDcbUser(user);
   const checkedLoansArray = Object.values(checkedLoans);
 

@@ -1,5 +1,4 @@
 import get from 'lodash/get';
-import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Field } from 'react-final-form';
@@ -89,7 +88,7 @@ class EditUserInfo extends React.Component {
 
   setRecalculatedExpirationDate = (startCalcToday) => {
     const { form: { change } } = this.props;
-    const recalculatedDate = this.calculateNewExpirationDate(startCalcToday).format('L');
+    const recalculatedDate = this.calculateNewExpirationDate(startCalcToday).format('YYYY-MM-DD');
     const parsedRecalculatedDate = this.parseExpirationDate(recalculatedDate);
 
     change('expirationDate', parsedRecalculatedDate);
@@ -102,16 +101,36 @@ class EditUserInfo extends React.Component {
     this.setState({ showUserTypeModal: false });
   }
 
+  /**
+   * Calculates a new expiration date by adding the patron group's offset days
+   * to either today's date or the existing expiration date.
+   *
+   * All calculations are performed in the tenant's timezone to ensure
+   * consistent date arithmetic regardless of the user's browser timezone.
+   *
+   * @param {boolean} startCalcToday - If true, calculate from today; if false, from existing expiration date
+   * @returns {object} dayjs object representing the new expiration date in tenant timezone
+   */
   calculateNewExpirationDate = (startCalcToday) => {
-    const { initialValues } = this.props;
-    const now = Date.now();
-    const expirationDate = initialValues.expirationDate ? new Date(initialValues.expirationDate) : now;
+    const {
+      initialValues,
+      stripes,
+    } = this.props;
+    const {
+      timezone = 'UTC',
+    } = stripes;
+
+    // Use tenant timezone for date calculations to ensure consistency
+    const now = dayjs().tz(timezone);
+    const expirationDate = initialValues.expirationDate ? dayjs.tz(initialValues.expirationDate, timezone) : now;
     const offsetOfSelectedPatronGroup = this.state.selectedPatronGroup ? this.getPatronGroupOffset() : '';
 
-    const shouldRecalculateFromToday = startCalcToday || initialValues.expirationDate === undefined || expirationDate <= now;
-    const baseDate = shouldRecalculateFromToday ? dayjs() : dayjs(expirationDate);
+    const shouldRecalculateFromToday = startCalcToday || initialValues.expirationDate === undefined || expirationDate.isSameOrBefore(now);
+    const baseDate = shouldRecalculateFromToday ? now : expirationDate;
 
-    return baseDate.add(offsetOfSelectedPatronGroup, 'd');
+    const result = baseDate.add(offsetOfSelectedPatronGroup, 'd');
+
+    return result;
   }
 
   getPatronGroupOffset = () => {
@@ -119,16 +138,65 @@ class EditUserInfo extends React.Component {
     return get(selectedPatronGroup, 'expirationOffsetInDays', '');
   };
 
+  /**
+   * Parses expiration date input and converts to UTC ISO string for consistent storage.
+   *
+   * This function handles both:
+   * 1. ISO date strings (YYYY-MM-DD) from recalculation - converted to UTC end-of-day
+   * 2. Date strings from manual datepicker input - parsed and converted to UTC end-of-day
+   *
+   * We store dates as UTC end-of-day to ensure the user gets the full day of access.
+   * The timezone-aware comparison logic in getNowAndExpirationEndOfDayInTenantTz
+   * handles proper expiration timing based on the tenant's timezone.
+   * This ensures consistent display in the datepicker regardless of timezone.
+   *
+   * @param {string} expirationDate - Date input (ISO string from calculation or datepicker input)
+   * @returns {string} UTC ISO string for storage (end of day)
+   */
   parseExpirationDate = (expirationDate) => {
-    const {
-      stripes: {
-        timezone,
-      },
-    } = this.props;
+    if (!expirationDate) return expirationDate;
 
-    return expirationDate
-      ? moment.tz(expirationDate, timezone).endOf('day').toDate().toISOString()
-      : expirationDate;
+    const dateToStore = dayjs.utc(expirationDate).endOf('day').toISOString();
+
+    return dateToStore;
+  };
+
+  /**
+   * Creates timezone-aware date objects for expiration comparison.
+   *
+   * This function extracts just the date part (YYYY-MM-DD) from the UTC stored expiration date because:
+   * 1. Dates are stored as UTC end-of-day (e.g., "2025-07-31T23:59:59.999Z") and not end-of-day for some old data
+   * 2. We need to compare the expiration date against the current time in the tenant's timezone
+   * 3. A user should expire at midnight in their local timezone, not at a UTC-based time
+   *
+   * @param {string} expDate - UTC ISO string of the expiration date
+   * @returns {Object} Object with nowInTenantTz and expirationEndOfDayInTenantTz dayjs instances
+   */
+  getNowAndExpirationEndOfDayInTenantTz = (expDate) => {
+    const { stripes } = this.props;
+    const timezone = stripes.timezone || 'UTC';
+
+    // Use `dayjs.utc` rather than `dayjs` to avoid month and day shifting due to local timezone.
+    // For example, if timezone is UTC+3 and the `expirationDate` is 2025-07-31T23:59:59.999Z,
+    // `dayjs('2025-07-31T23:59:59.999Z')` will be parsed as 2025-08-01T02:59:59+03:00
+    // with the 3 hours offset applied (month and day are changed).
+    // The `dayjs.utc` ensures that we get the exact date and time as stored in the database without any timezone adjustments.
+    // `dayjs.utc('2025-07-31T23:59:59.999Z')` returns 2025-07-31T23:59:59Z.
+    const expirationDate = dayjs.utc(expDate);
+    // Format using `.format('YYYY-MM-DD')` to get just the date part, since the time can be incorrect for some old data.
+    const expirationDateString = expirationDate.format('YYYY-MM-DD');
+
+    // Create end of day in tenant timezone for that date. Use `timezone`, otherwise when switching the timezone in the settings,
+    // it will not be taken into account in the calculations.
+    const expirationEndOfDayInTenantTz = dayjs.tz(expirationDateString, timezone).endOf('day');
+    // Same here, if you switch the timezone in the settings, `dayjs()` without timezone specified will use your local timezone,
+    // not the one selected in the settings.
+    const nowInTenantTz = dayjs().tz(timezone);
+
+    return {
+      nowInTenantTz,
+      expirationEndOfDayInTenantTz,
+    };
   };
 
   render() {
@@ -151,16 +219,21 @@ class EditUserInfo extends React.Component {
     const { barcode } = initialValues;
 
     const isUserExpired = () => {
-      const expirationDate = new Date(initialValues.expirationDate);
-      const now = Date.now();
-      return expirationDate <= now;
+      if (!initialValues.expirationDate) return false;
+
+      const { nowInTenantTz, expirationEndOfDayInTenantTz } = this.getNowAndExpirationEndOfDayInTenantTz(initialValues.expirationDate);
+
+      return expirationEndOfDayInTenantTz.isBefore(nowInTenantTz);
     };
 
     const willUserExtend = () => {
       const expirationDate = form.getFieldState('expirationDate')?.value ?? '';
-      const currentExpirationDate = new Date(expirationDate);
-      const now = Date.now();
-      return currentExpirationDate >= now;
+
+      if (!expirationDate) return false;
+
+      const { nowInTenantTz, expirationEndOfDayInTenantTz } = this.getNowAndExpirationEndOfDayInTenantTz(expirationDate);
+
+      return expirationEndOfDayInTenantTz.isAfter(nowInTenantTz);
     };
 
     const isStatusFieldDisabled = () => {
