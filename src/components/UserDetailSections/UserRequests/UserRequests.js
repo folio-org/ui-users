@@ -98,11 +98,6 @@ class UserRequests extends React.Component {
     }).isRequired,
   };
 
-  hasViewRequestsPerm = this.props.stripes.hasPerm('ui-users.requests.all');
-  hasRequestStorageInterface = !!this.props.stripes.hasInterface('request-storage', '2.5 3.0 4.0 5.0 6.0');
-  hasCirculationInterface = !!this.props.stripes.hasInterface('circulation');
-  showRequests = this.hasViewRequestsPerm && this.hasRequestStorageInterface && this.hasCirculationInterface;
-
   componentDidMount() {
     const { mutator } = this.props;
 
@@ -111,6 +106,11 @@ class UserRequests extends React.Component {
       mutator.closedRequestsCount.GET();
     }
   }
+
+  hasViewRequestsPerm = this.props.stripes.hasPerm('ui-users.requests.all');
+  hasRequestStorageInterface = !!this.props.stripes.hasInterface('request-storage', '2.5 3.0 4.0 5.0 6.0');
+  hasCirculationInterface = !!this.props.stripes.hasInterface('circulation');
+  showRequests = this.hasViewRequestsPerm && this.hasRequestStorageInterface && this.hasCirculationInterface;
 
   renderLinkItem = (item, index) => {
     return (

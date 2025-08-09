@@ -147,11 +147,6 @@ class UserLoans extends React.Component {
     }).isRequired,
   };
 
-  hasViewLoansPerm = this.props.stripes.hasPerm('ui-users.loans.view');
-  hasLoanPolicyStorageInterface = !!this.props.stripes.hasInterface('loan-policy-storage');
-  hasCirculationInterface = !!this.props.stripes.hasInterface('circulation');
-  showLoans = this.hasViewLoansPerm && this.hasLoanPolicyStorageInterface && this.hasCirculationInterface;
-
   componentDidMount() {
     const { mutator } = this.props;
 
@@ -162,6 +157,11 @@ class UserLoans extends React.Component {
       mutator.closedLoansCount.GET();
     }
   }
+
+  hasViewLoansPerm = this.props.stripes.hasPerm('ui-users.loans.view');
+  hasLoanPolicyStorageInterface = !!this.props.stripes.hasInterface('loan-policy-storage');
+  hasCirculationInterface = !!this.props.stripes.hasInterface('circulation');
+  showLoans = this.hasViewLoansPerm && this.hasLoanPolicyStorageInterface && this.hasCirculationInterface;
 
   isLoading() {
     const {

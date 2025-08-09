@@ -1,9 +1,11 @@
+import { useStripes } from '@folio/stripes/core';
 import { useCustomFieldsQuery } from '@folio/stripes/smart-components';
 import { screen } from '@folio/jest-config-stripes/testing-library/react';
 import accounts from 'fixtures/account';
 import loans from 'fixtures/openLoans';
 import renderWithRouter from 'helpers/renderWithRouter';
 import UserAccounts from './UserAccounts';
+import { buildStripes } from '../../../../test/jest/__mock__/stripesCore.mock';
 
 const renderUserAccounts = (props) => renderWithRouter(<UserAccounts {...props} />);
 
@@ -52,9 +54,13 @@ const props = (emptyData) => {
   };
 };
 
+const stripes = buildStripes();
+
 describe('Render UserAccounts component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+
+    useStripes.mockReturnValue(stripes);
   });
 
   it('Check if List is rendered', () => {
@@ -66,6 +72,19 @@ describe('Render UserAccounts component', () => {
     renderUserAccounts(props(false));
     expect(document.querySelector('[id="numOpenAccounts"]')).toBeNull();
   });
+
+  describe('when there is no required permission', () => {
+    it('should not render fees/fines list', () => {
+      useStripes.mockReturnValue(buildStripes({
+        hasPerm: jest.fn().mockReturnValue(false),
+      }));
+
+      renderUserAccounts(props(false));
+
+      expect(screen.queryByText('Fees/Fines')).not.toBeInTheDocument();
+    });
+  });
+
   describe('when user is of type dcb', () => {
     it('should not display "Create fee/fine" button', () => {
       const alteredProps = {

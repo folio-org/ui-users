@@ -24,12 +24,14 @@ const mutator = {
     POST: jest.fn(),
     PUT: jest.fn(),
     cancel: jest.fn(),
+    GET: jest.fn(),
   },
   openRequestsCount: {
     DELETE: jest.fn(),
     POST: jest.fn(),
     PUT: jest.fn(),
     cancel: jest.fn(),
+    GET: jest.fn(),
   },
   userid: {
     update: jest.fn(),
@@ -56,6 +58,7 @@ const props = (perm) => {
     stripes: {
       connect: (Component) => Component,
       hasPerm: perm ? jest.fn().mockReturnValue(true) : jest.fn().mockReturnValue(false),
+      hasInterface: jest.fn().mockReturnValue(true),
     },
     patronGroup: {
       desc: 'Staff Member',
@@ -139,7 +142,7 @@ describe('Render User Requests component', () => {
   });
   it('Sending permissions as false', () => {
     renderUserRequests(props(false));
-    expect(screen.getByText('List Component')).toBeInTheDocument();
+    expect(screen.queryByText('List Component')).not.toBeInTheDocument();
   });
 
   describe('when user is of type dcb', () => {
