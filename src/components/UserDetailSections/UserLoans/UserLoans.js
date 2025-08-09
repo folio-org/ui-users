@@ -124,6 +124,20 @@ class UserLoans extends React.Component {
 
   static propTypes = {
     customFields: PropTypes.arrayOf(PropTypes.object).isRequired,
+    mutator: PropTypes.shape({
+      loansHistory: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+      }).isRequired,
+      openLoans: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+      }).isRequired,
+      claimedReturnedCount: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+      }).isRequired,
+      closedLoansCount: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+      }).isRequired,
+    }).isRequired,
     resources: PropTypes.shape({
       loansHistory: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),

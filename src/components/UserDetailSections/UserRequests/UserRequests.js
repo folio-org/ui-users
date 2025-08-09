@@ -81,6 +81,14 @@ class UserRequests extends React.Component {
         id: PropTypes.string,
       }),
     }).isRequired,
+    mutator: PropTypes.shape({
+      openRequestsCount: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+      }),
+      closedRequestsCount: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+      }),
+    }).isRequired,
     onToggle: PropTypes.func,
     resources: PropTypes.shape({
       openRequestsCount: PropTypes.shape({
