@@ -18,16 +18,27 @@ import { stripesConnect } from '@folio/stripes/core';
 
 import { getOpenRequestsPath } from '../util';
 
-import { loanActionMutators, refundClaimReturned, loanActions } from '../../constants';
+import {
+  loanActionMutators,
+  refundClaimReturned,
+  loanActions,
+  CIRCULATION_BFF_LOANS_INTERFACE_NAME,
+  CIRCULATION_BFF_LOANS_INTERFACE_VERSION,
+  CIRCULATION_BFF_LOANS_INTERFACE_ERROR,
+} from '../../constants';
 
 import css from './ModalContent.css';
 
 export const getMutatorFunction = (stripes, mutator, loanAction) => {
-  if (stripes?.config?.enableEcsRequests && loanAction === loanActionMutators.DECLARE_LOST) {
-    if (stripes.hasInterface('circulation-bff-loans', '1.4')) {
+  if (stripes?.config?.enableEcsRequests && (loanAction === loanActionMutators.DECLARE_LOST || loanAction === loanActionMutators.CLAIMED_RETURNED)) {
+    const isCorrectCirculationBFFLoansInterface = stripes.hasInterface(CIRCULATION_BFF_LOANS_INTERFACE_NAME, CIRCULATION_BFF_LOANS_INTERFACE_VERSION);
+
+    if (isCorrectCirculationBFFLoansInterface && loanAction === loanActionMutators.DECLARE_LOST) {
       return mutator.declareLostBFF.POST;
+    } else if (isCorrectCirculationBFFLoansInterface && loanAction === loanActionMutators.CLAIMED_RETURNED) {
+      return mutator.claimReturnedBFF.POST;
     } else {
-      throw new Error('Required okapi interfaces circulation-bff-loans v1.4');
+      throw new Error(CIRCULATION_BFF_LOANS_INTERFACE_ERROR);
     }
   } else {
     return mutator[loanAction].POST;
@@ -57,6 +68,14 @@ class ModalContent extends React.Component {
       throwErrors: false,
       POST: {
         path: 'circulation-bff/loans/!{loan.id}/declare-item-lost',
+      },
+    },
+    claimReturnedBFF: {
+      type: 'okapi',
+      fetch: false,
+      throwErrors: false,
+      POST: {
+        path: 'circulation-bff/loans/!{loan.id}/claim-item-returned',
       },
     },
     markAsMissing: {
@@ -102,6 +121,12 @@ class ModalContent extends React.Component {
         POST: PropTypes.func.isRequired,
       }).isRequired,
       declareLost: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }).isRequired,
+      declareLostBFF: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }).isRequired,
+      claimReturnedBFF: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }).isRequired,
       markAsMissing: PropTypes.shape({

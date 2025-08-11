@@ -490,6 +490,12 @@ describe('Modal Content', () => {
       declareLost: {
         POST: 'declareLost',
       },
+      claimReturnedBFF: {
+        POST: 'claimReturnedBFF',
+      },
+      claimReturned: {
+        POST: 'claimReturned',
+      },
       notDeclareLost: {
         POST: 'notDeclareLost',
       },
@@ -498,6 +504,10 @@ describe('Modal Content', () => {
 
     it('should return mutator POST value for declareLostBFF action', () => {
       expect(getMutatorFunction(stripes, mutatorFunction, loanAction)).toEqual('declareLostBFF');
+    });
+
+    it('should return mutator POST value for claimReturnedBFF action', () => {
+      expect(getMutatorFunction(stripes, mutatorFunction, 'claimReturned')).toEqual('claimReturnedBFF');
     });
 
     it('should return required okapi interfaces error', () => {
@@ -513,6 +523,12 @@ describe('Modal Content', () => {
       const stripesWithOutEnableEcsRequests = {};
 
       expect(getMutatorFunction(stripesWithOutEnableEcsRequests, mutatorFunction, loanAction)).toEqual('declareLost');
+    });
+
+    it('should return mutator POST value for claimReturned action', () => {
+      const stripesWithOutEnableEcsRequests = {};
+
+      expect(getMutatorFunction(stripesWithOutEnableEcsRequests, mutatorFunction, 'claimReturned')).toEqual('claimReturned');
     });
 
     it('should return mutator POST value for passed action', () => {

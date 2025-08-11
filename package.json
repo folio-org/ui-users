@@ -836,6 +836,7 @@
         "replaces": ["ui-users.loans.claim-item-returned"],
         "subPermissions": [
           "circulation.loans.claim-item-returned.post",
+          "circulation-bff.loans.claim-item-returned.execute",
           "circulation-storage.loans.item.get",
           "inventory-storage.items.item.get",
           "inventory-storage.holdings.item.get",
