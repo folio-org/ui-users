@@ -42,6 +42,7 @@
 * Only show Keycloak user record confirmation when assigning roles to a non-Keycloak record. Refs UIU-3426.
 * Add 'Minor' column to Patrons Pre-Registration List. Refs UIU-3425.
 * *BREAKING* Update the user record view page to display custom fields under the Fees/fines, Loans, or Requests accordions as configured in settings. Refs UIU-3130.
+* Fix User Edit workflow for making edits to non-Keycloak user. Previously Edit screen remained open. Now it properly returns to User Detail page with updated data. Refs UIU-3426.
 
 ## [12.1.7] (https://github.com/folio-org/ui-users/tree/v12.1.7) (2025-06-03)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.6...v12.1.7)
