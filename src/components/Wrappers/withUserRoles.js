@@ -106,6 +106,8 @@ const withUserRoles = (WrappedComponent) => (props) => {
         // If user confirms, then changes will be copied over from mod-users to mod-users-keycloak.
         if (!isEqual(assignedRoleIds, initialAssignedRoleIds)) {
           setIsCreateKeycloakUserConfirmationOpen(true);
+        } else {
+          onFinish();
         }
         break;
       default:
