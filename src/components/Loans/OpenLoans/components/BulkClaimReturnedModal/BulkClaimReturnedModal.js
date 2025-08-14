@@ -20,6 +20,12 @@ import {
 import { getOpenRequestsPath } from '../../../../util';
 import refundTransferClaimReturned from '../../../../util/refundTransferClaimReturned';
 
+import {
+  CIRCULATION_BFF_LOANS_INTERFACE_ERROR,
+  CIRCULATION_BFF_LOANS_INTERFACE_NAME,
+  CIRCULATION_BFF_LOANS_INTERFACE_VERSION,
+} from '../../../../../constants';
+
 import css from '../../../../ModalContent';
 
 class BulkClaimReturnedModal extends React.Component {
@@ -30,6 +36,14 @@ class BulkClaimReturnedModal extends React.Component {
       throwErrors: false,
       POST: {
         path: 'circulation/loans/%{loanId}/claim-item-returned',
+      },
+    },
+    claimReturnedBFF: {
+      type: 'okapi',
+      fetch: false,
+      throwErrors: false,
+      POST: {
+        path: 'circulation-bff/loans/%{loanId}/claim-item-returned',
       },
     },
     feefineactions: {
@@ -59,6 +73,9 @@ class BulkClaimReturnedModal extends React.Component {
       claimReturned: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }).isRequired,
+      claimReturnedBFF: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }).isRequired,
       loanId: PropTypes.shape({
         replace: PropTypes.func.isRequired,
       }).isRequired,
@@ -79,7 +96,11 @@ class BulkClaimReturnedModal extends React.Component {
     }).isRequired,
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
+      hasInterface: PropTypes.func.isRequired,
       hasPerm: PropTypes.func,
+      config: PropTypes.shape({
+        enableEcsRequests: PropTypes.bool,
+      }),
     }),
     onCancel: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
@@ -125,11 +146,27 @@ class BulkClaimReturnedModal extends React.Component {
     this.setState({ additionalInfo: e.target.value.trim() });
   };
 
+  getMutatorFunction = () => {
+    const {
+      stripes,
+    } = this.props;
+
+    if (stripes?.config?.enableEcsRequests) {
+      if (stripes.hasInterface(CIRCULATION_BFF_LOANS_INTERFACE_NAME, CIRCULATION_BFF_LOANS_INTERFACE_VERSION)) {
+        return this.props.mutator.claimReturnedBFF.POST;
+      } else {
+        throw new Error(CIRCULATION_BFF_LOANS_INTERFACE_ERROR);
+      }
+    } else {
+      return this.props.mutator.claimReturned.POST;
+    }
+  }
+
   claimItemReturned = (loan) => {
     if (!loan) return null;
 
     this.props.mutator.loanId.replace(loan.id);
-    return this.props.mutator.claimReturned.POST(
+    return this.getMutatorFunction()(
       {
         itemClaimedReturnedDateTime: moment().format(),
         comment: this.state.additionalInfo,
