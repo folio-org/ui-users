@@ -13,10 +13,12 @@ import { CUSTOM_FIELDS_SECTION } from '../../../constants';
 
 const propTypes = {
   accordionId: PropTypes.string.isRequired,
+  isCreateMode: PropTypes.bool,
 };
 
 const EditRequests = ({
   accordionId,
+  isCreateMode = false,
 }) => {
   const intl = useIntl();
   const renderState = useCustomFieldsSection({ sectionId: CUSTOM_FIELDS_SECTION.REQUESTS });
@@ -42,6 +44,7 @@ const EditRequests = ({
       <Row>
         <EditCustomFieldsSection
           sectionId={CUSTOM_FIELDS_SECTION.REQUESTS}
+          isCreateMode={isCreateMode}
         />
       </Row>
     </Accordion>
