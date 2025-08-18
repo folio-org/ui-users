@@ -1252,5 +1252,7 @@
     "loans.columns.useAtLocation.Returned": "Vráceno",
     "loans.numOpenLoans.useAtLocation": "Použít na místě",
     "loans.numOpenLoans.held": "Drženo: {count}",
-    "loans.numOpenLoans.inUse": "Používá se: {count}"
+    "loans.numOpenLoans.inUse": "Používá se: {count}",
+    "stagingRecords.list.columnNames.minor": "Drobné",
+    "stagingRecords.minor.yes": "Ano"
 }

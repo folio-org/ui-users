@@ -1042,7 +1042,7 @@
     "data.loanActionMap.patronInfo.superseded": "Benutzer/-in Info (ersetzt)",
     "data.loanActionMap.staffInfo": "Information nur für Personal",
     "data.loanActionMap.staffInfo.superseded": "Personalinformationen (ERSETZT)",
-    "loans.newPatronInfo": "Neue Personen-Information",
+    "loans.newPatronInfo": "Information für Benutzer/-in hinzufügen",
     "loans.newStaffInfo": "Neue Personalinformationen",
     "loans.patronInfoDialogBody": "Neue Personeninformationen für <strong> {title} ( {materialType} ) </strong> (Barcode: {barcode} ) hinzufügen. Dadurch werden alle zuvor hinzugefügten Personeninformationen ersetzt.",
     "loans.staffInfoDialogBody": "Neue Personalinformationen für <strong> {title} ( {materialType} ) </strong> (Barcode: {barcode} ) hinzufügen.",
@@ -1252,5 +1252,7 @@
     "loans.columns.useAtLocation.Returned": "Returned",
     "loans.numOpenLoans.useAtLocation": "Use at location",
     "loans.numOpenLoans.held": "Held: {count}",
-    "loans.numOpenLoans.inUse": "In use: {count}"
+    "loans.numOpenLoans.inUse": "In use: {count}",
+    "stagingRecords.list.columnNames.minor": "Minor",
+    "stagingRecords.minor.yes": "Yes"
 }

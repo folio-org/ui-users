@@ -1252,5 +1252,7 @@
     "loans.columns.useAtLocation.Returned": "Devolvido",
     "loans.numOpenLoans.useAtLocation": "Uso no local",
     "loans.numOpenLoans.held": "Realizado: {count}",
-    "loans.numOpenLoans.inUse": "Em uso: {count}"
+    "loans.numOpenLoans.inUse": "Em uso: {count}",
+    "stagingRecords.list.columnNames.minor": "Menor",
+    "stagingRecords.minor.yes": "Sim"
 }
