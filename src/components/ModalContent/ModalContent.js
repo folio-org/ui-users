@@ -30,10 +30,12 @@ import {
 import css from './ModalContent.css';
 
 export const getMutatorFunction = (stripes, mutator, loanAction) => {
-  if (stripes?.config?.enableEcsRequests && (loanAction === loanActionMutators.DECLARE_LOST || loanAction === loanActionMutators.CLAIMED_RETURNED)) {
+  const isDeclareLostAction = loanAction === loanActionMutators.DECLARE_LOST;
+
+  if (stripes?.config?.enableEcsRequests && (isDeclareLostAction || loanAction === loanActionMutators.CLAIMED_RETURNED)) {
     const isCorrectCirculationBFFLoansInterface = stripes.hasInterface(CIRCULATION_BFF_LOANS_INTERFACE_NAME, CIRCULATION_BFF_LOANS_INTERFACE_VERSION);
 
-    if (isCorrectCirculationBFFLoansInterface && loanAction === loanActionMutators.DECLARE_LOST) {
+    if (isCorrectCirculationBFFLoansInterface && isDeclareLostAction) {
       return mutator.declareLostBFF.POST;
     } else if (isCorrectCirculationBFFLoansInterface && loanAction === loanActionMutators.CLAIMED_RETURNED) {
       return mutator.claimReturnedBFF.POST;
