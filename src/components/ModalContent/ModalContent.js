@@ -31,13 +31,14 @@ import css from './ModalContent.css';
 
 export const getMutatorFunction = (stripes, mutator, loanAction) => {
   const isDeclareLostAction = loanAction === loanActionMutators.DECLARE_LOST;
+  const isClaimedReturnedAction = loanAction === loanActionMutators.CLAIMED_RETURNED;
 
-  if (stripes?.config?.enableEcsRequests && (isDeclareLostAction || loanAction === loanActionMutators.CLAIMED_RETURNED)) {
+  if (stripes?.config?.enableEcsRequests && (isDeclareLostAction || isClaimedReturnedAction)) {
     const isCorrectCirculationBFFLoansInterface = stripes.hasInterface(CIRCULATION_BFF_LOANS_INTERFACE_NAME, CIRCULATION_BFF_LOANS_INTERFACE_VERSION);
 
     if (isCorrectCirculationBFFLoansInterface && isDeclareLostAction) {
       return mutator.declareLostBFF.POST;
-    } else if (isCorrectCirculationBFFLoansInterface && loanAction === loanActionMutators.CLAIMED_RETURNED) {
+    } else if (isCorrectCirculationBFFLoansInterface && isClaimedReturnedAction) {
       return mutator.claimReturnedBFF.POST;
     } else {
       throw new Error(CIRCULATION_BFF_LOANS_INTERFACE_ERROR);
