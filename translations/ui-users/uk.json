@@ -300,7 +300,7 @@
     "dueDate": "Термін видачі",
     "loanDate": "Дата видачі",
     "returnDate": "Дата повернення",
-    "systemReturnDate": "System returnDate",
+    "systemReturnDate": "Системна дата повернення (returnDate)",
     "item.barcode": "Штрихкод",
     "item.contributors": "Імена контрибуторів",
     "item.holdingsRecordId": "ІД запису даних про фонди (холдінгси)",
@@ -1250,7 +1250,9 @@
     "loans.columns.useAtLocation.In use": "Використовується",
     "loans.columns.useAtLocation.Held": "Проведено",
     "loans.columns.useAtLocation.Returned": "Повернуто",
-    "loans.numOpenLoans.useAtLocation": "Use at location",
+    "loans.numOpenLoans.useAtLocation": "Використовувати у місці розміщення",
     "loans.numOpenLoans.held": "Утримується: {count}",
-    "loans.numOpenLoans.inUse": "Використовується: {count}"
+    "loans.numOpenLoans.inUse": "Використовується: {count}",
+    "stagingRecords.list.columnNames.minor": "Minor",
+    "stagingRecords.minor.yes": "Так"
 }

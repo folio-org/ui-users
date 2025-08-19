@@ -1252,5 +1252,7 @@
     "loans.columns.useAtLocation.Returned": "已还",
     "loans.numOpenLoans.useAtLocation": "在现场使用",
     "loans.numOpenLoans.held": "已预约： {count}",
-    "loans.numOpenLoans.inUse": "使用中： {count}"
+    "loans.numOpenLoans.inUse": "使用中： {count}",
+    "stagingRecords.list.columnNames.minor": "Minor",
+    "stagingRecords.minor.yes": "Yes"
 }
