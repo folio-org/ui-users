@@ -44,6 +44,7 @@
 * *BREAKING* Update the user record view page to display custom fields under the Fees/fines, Loans, or Requests accordions as configured in settings. Refs UIU-3130.
 * Fix User Edit workflow for making edits to non-Keycloak user. Previously Edit screen remained open. Now it properly returns to User Detail page with updated data. Refs UIU-3426.
 * Add support for use circulation-bff for claim-item-returned. Refs UIU-3413.
+* Fix user search pagination and total count display beyond 1000 records. Refs UIU-3387.
 
 ## [12.1.7] (https://github.com/folio-org/ui-users/tree/v12.1.7) (2025-06-03)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.6...v12.1.7)
