@@ -10,11 +10,13 @@ import {
 
 const propTypes = {
   accordionId: PropTypes.string,
+  isCreateMode: PropTypes.bool,
   sectionId: PropTypes.string,
 };
 
 const EditCustomFieldsSection = ({
   accordionId,
+  isCreateMode = false,
   sectionId,
 }) => {
   const form = useForm();
@@ -27,6 +29,8 @@ const EditCustomFieldsSection = ({
       finalFormCustomFieldsValues={form.getState().values.customFields}
       fieldComponent={Field}
       changeFinalFormField={form.change}
+      finalFormInstance={form}
+      isCreateMode={isCreateMode}
       sectionId={sectionId}
     />
   );

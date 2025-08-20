@@ -31,6 +31,7 @@ const EditContactInfo = ({
   preferredContactTypeId,
   intl,
   disabled,
+  isCreateMode = false,
 }) => {
   const contactTypeOptions = (contactTypes || []).map(g => {
     return (
@@ -139,6 +140,7 @@ const EditContactInfo = ({
         </Col>
         <EditCustomFieldsSection
           sectionId={CUSTOM_FIELDS_SECTION.CONTACT_INFO}
+          isCreateMode={isCreateMode}
         />
       </Row>
       <br />
@@ -161,6 +163,7 @@ EditContactInfo.propTypes = {
   preferredContactTypeId: PropTypes.string,
   intl: PropTypes.object.isRequired,
   disabled: PropTypes.bool,
+  isCreateMode: PropTypes.bool,
 };
 
 export default injectIntl(EditContactInfo);
