@@ -32,7 +32,7 @@
 * Right-pane full-record display's Loans accordion now shows counts of Held and In Use use-at-location loans. Refs UIU-3406.
 * Support `{{item.seriesStatements}}` in due-date receipt slips. Refs UIU-3416.
 * Pass `hasDisplayInAccordionField` and `displayInAccordionOptions` props to `ViewCustomFieldsSettings` and `EditCustomFieldsSettings` to display `Display in accordion` field in settings. Refs UIU-3140.
-* UIU-3414* Add support for use circulation-bff for declare-item-lost. Refs UIU-3414.
+* Add support for use circulation-bff for declare-item-lost. Refs UIU-3414.
 * Remove empty lines in drop-down menus in Settings > Orders > Number generator options. Refs UIU-3424.
 * AccountDetailsContainer - Show loading while data is loading to prevent page crash when visiting the Fee/fines details page via URL. Fixes UIU-3428.
 * PermissionsModal to search in permissionName. Refs UIU-3436.
@@ -43,6 +43,7 @@
 * Add 'Minor' column to Patrons Pre-Registration List. Refs UIU-3425.
 * *BREAKING* Update the user record view page to display custom fields under the Fees/fines, Loans, or Requests accordions as configured in settings. Refs UIU-3130.
 * Fix User Edit workflow for making edits to non-Keycloak user. Previously Edit screen remained open. Now it properly returns to User Detail page with updated data. Refs UIU-3426.
+* Add support for use circulation-bff for claim-item-returned. Refs UIU-3413.
 * Pass `isCreateMode` prop to `EditCustomFieldsSection` components to ensure proper dirty and pristine form states. Refs UIU-3390.
 
 ## [12.1.7] (https://github.com/folio-org/ui-users/tree/v12.1.7) (2025-06-03)

@@ -152,7 +152,7 @@
     "showTags": "Pokaż etykiety",
     "accounts.open": "Otwarte",
     "accounts.closed": "Zamknięty",
-    "accounts.all": "Wszystkie",
+    "accounts.all": "Wszystko",
     "accounts.numOpenAccounts": "{count, number} {count, plural, zero {otwartych opłat/kar} one {otwarta opłata/kara} few {otwartych opłat/kar} other {otwarte opłaty/kary}}",
     "accounts.numClosedAccounts": "{count, number} {count, plural, zero {zamkniętych opłat/kar} one {zamknięta opłata/kara} other {zamknięte opłaty/kary}}",
     "accounts.chargeManual": "Utwórz opłatę/karę",
@@ -523,7 +523,7 @@
     "permissions.modal.permissionSet": "Zestaw uprawnień",
     "permissions.modal.save": "Zapisz",
     "permissions.modal.cancel": "Anuluj",
-    "permissions.modal.search.header": "Wyszukaj i filtruj",
+    "permissions.modal.search.header": "Szukaj i filtruj",
     "permissions.modal.search.resetAll": "Resetuj wszystko",
     "permissions.modal.total": "Wybrano łącznie: {count}",
     "permissions.modal.hideSearchPane": "Ukryj okienko wyszukiwania i filtrów.",
@@ -965,7 +965,7 @@
     "lostItems.list.columnName.action.patronDetails": "Szczegóły czytelnika",
     "lostItems.list.columnName.action.loanDetails": "Szczegóły wypożyczenia",
     "lostItems.list.columnName.action.itemDetails": "Szczegóły egzemplarza",
-    "lostItems.list.filters": "Wyszukaj i filtruj",
+    "lostItems.list.filters": "Szukaj i filtruj",
     "lostItems.list.searchResults": "Zagubione egzemplarze wymagające zwrotu rzeczywistej wartości",
     "lostItems.list.filters.lossType": "Rodzaj braku",
     "lostItems.list.filters.lossType.agedToLost": "Uznany za zagubiony",
@@ -1252,5 +1252,7 @@
     "loans.columns.useAtLocation.Returned": "Zwrócony",
     "loans.numOpenLoans.useAtLocation": "Użyj w lokalizacji",
     "loans.numOpenLoans.held": "Przechowywany: {count}",
-    "loans.numOpenLoans.inUse": "W użyciu: {count}"
+    "loans.numOpenLoans.inUse": "W użyciu: {count}",
+    "stagingRecords.list.columnNames.minor": "Minor",
+    "stagingRecords.minor.yes": "Yes"
 }
