@@ -368,8 +368,8 @@ function BlockTemplateForm(props) {
 }
 
 BlockTemplateForm.propTypes = {
-  initialValues: PropTypes.object,
-  intl: PropTypes.object.isRequired,
+  initialValues: PropTypes.shape({}),
+  intl: PropTypes.shape({}).isRequired,
   handleSubmit: PropTypes.func.isRequired,
   onCancel: PropTypes.func,
   onRemove: PropTypes.func,

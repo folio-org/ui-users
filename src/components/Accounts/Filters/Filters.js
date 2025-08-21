@@ -46,13 +46,13 @@ const Filters = (props) => {
 };
 
 Filters.propTypes = {
-  query: PropTypes.object,
+  query: PropTypes.shape({}),
   toggle: PropTypes.func,
   showFilters: PropTypes.bool,
   onChangeSearch: PropTypes.func,
-  mutator: PropTypes.object,
-  filterConfig: PropTypes.arrayOf(PropTypes.object),
-  filters: PropTypes.object,
+  mutator: PropTypes.shape({}),
+  filterConfig: PropTypes.arrayOf(PropTypes.shape({})),
+  filters: PropTypes.shape({}),
   onChangeFilter: PropTypes.func,
   onClearSearch: PropTypes.func,
   onClearFilters: PropTypes.func,

@@ -48,14 +48,14 @@ class PatronBlockContainer extends React.Component {
         PUT: PropTypes.func.isRequired,
         DELETE: PropTypes.func.isRequired,
       }),
-      activeRecord: PropTypes.object,
+      activeRecord: PropTypes.shape({}),
     }).isRequired,
-    resources: PropTypes.object,
-    selectedPatronBlock: PropTypes.object,
+    resources: PropTypes.shape({}),
+    selectedPatronBlock: PropTypes.shape({}),
     onCancel: PropTypes.func,
-    match: PropTypes.object,
-    initialValues: PropTypes.object,
-    stripes: PropTypes.object,
+    match: PropTypes.shape({}),
+    initialValues: PropTypes.shape({}),
+    stripes: PropTypes.shape({}),
   };
 
   getUser = () => {

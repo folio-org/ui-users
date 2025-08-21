@@ -95,7 +95,7 @@ PatronBlockModal.propTypes = {
   open: PropTypes.bool,
   onOverride: PropTypes.func.isRequired,
   onClose: PropTypes.func,
-  patronBlocks: PropTypes.arrayOf(PropTypes.object),
+  patronBlocks: PropTypes.arrayOf(PropTypes.shape({})),
   viewUserPath: PropTypes.string,
 };
 

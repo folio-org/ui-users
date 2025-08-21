@@ -66,7 +66,7 @@ const Owners = ({ dataOptions, onChange, filterShared }) => {
 };
 
 Owners.propTypes = {
-  dataOptions: PropTypes.arrayOf(PropTypes.object).isRequired,
+  dataOptions: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   onChange: PropTypes.func.isRequired,
   filterShared: PropTypes.bool,
 };

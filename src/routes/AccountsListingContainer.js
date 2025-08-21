@@ -91,17 +91,17 @@ class AccountsListingContainer extends React.Component {
     }),
     resources: PropTypes.shape({
       feefineshistory: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
       loans: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
-      query: PropTypes.object,
+      query: PropTypes.shape({}),
       patronGroups: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
       selUser: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
     }),
     okapi: PropTypes.shape({
@@ -111,23 +111,23 @@ class AccountsListingContainer extends React.Component {
         }),
       }).isRequired,
     }).isRequired,
-    user: PropTypes.object,
+    user: PropTypes.shape({}),
     // onCancel: PropTypes.func.isRequired,
     // onClickViewChargeFeeFine: PropTypes.func.isRequired,
     openAccounts: PropTypes.bool,
-    patronGroup: PropTypes.object,
+    patronGroup: PropTypes.shape({}),
     mutator: PropTypes.shape({
       user: PropTypes.shape({
         update: PropTypes.func.isRequired,
       }),
-      activeRecord: PropTypes.object,
+      activeRecord: PropTypes.shape({}),
     }),
     parentMutator: PropTypes.shape({
-      query: PropTypes.object.isRequired,
+      query: PropTypes.shape({}).isRequired,
     }),
-    history: PropTypes.object,
-    location: PropTypes.object,
-    match: PropTypes.object,
+    history: PropTypes.shape({}),
+    location: PropTypes.shape({}),
+    match: PropTypes.shape({}),
     // addRecord: PropTypes.bool,
     num: PropTypes.number,
     // handleAddRecords: PropTypes.func,

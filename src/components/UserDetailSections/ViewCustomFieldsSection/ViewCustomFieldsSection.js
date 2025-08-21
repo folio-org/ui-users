@@ -10,7 +10,7 @@ import {
 
 const propTypes = {
   accordionId: PropTypes.string,
-  customFields: PropTypes.object.isRequired,
+  customFields: PropTypes.shape({}).isRequired,
   expanded: PropTypes.bool,
   sectionId: PropTypes.string,
   onToggle: PropTypes.func,

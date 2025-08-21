@@ -22,18 +22,18 @@ import css from './modal.css';
 
 class CancellationModal extends React.Component {
   static propTypes = {
-    form: PropTypes.object.isRequired,
+    form: PropTypes.shape({}).isRequired,
     open: PropTypes.bool,
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
-    account: PropTypes.object,
+    account: PropTypes.shape({}),
     onClose: PropTypes.func,
     reset: PropTypes.func,
     handleSubmit: PropTypes.func.isRequired,
-    owners: PropTypes.arrayOf(PropTypes.object),
-    feefines: PropTypes.arrayOf(PropTypes.object),
-    intl: PropTypes.object.isRequired,
-    stripes: PropTypes.object.isRequired,
+    owners: PropTypes.arrayOf(PropTypes.shape({})),
+    feefines: PropTypes.arrayOf(PropTypes.shape({})),
+    intl: PropTypes.shape({}).isRequired,
+    stripes: PropTypes.shape({}).isRequired,
   };
 
   onCloseModal = () => {

@@ -38,7 +38,7 @@ const UserInfo = (props) => {
 };
 
 UserInfo.propTypes = {
-  user: PropTypes.object,
+  user: PropTypes.shape({}),
 };
 
 export default UserInfo;

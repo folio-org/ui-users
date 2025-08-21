@@ -210,9 +210,9 @@ const UserAccounts = ({
 };
 
 UserAccounts.propTypes = {
-  accounts: PropTypes.object,
+  accounts: PropTypes.shape({}),
   accordionId: PropTypes.string,
-  customFields: PropTypes.arrayOf(PropTypes.object).isRequired,
+  customFields: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   expanded: PropTypes.bool,
   onToggle: PropTypes.func,
   location: PropTypes.shape({
@@ -220,7 +220,7 @@ UserAccounts.propTypes = {
     pathname: PropTypes.string,
   }),
   match: PropTypes.shape({
-    params: PropTypes.object,
+    params: PropTypes.shape({}),
   }).isRequired,
   resources: PropTypes.shape({
     accounts: PropTypes.shape({
@@ -234,7 +234,7 @@ UserAccounts.propTypes = {
       ),
     }).isRequired,
     loansHistory: PropTypes.shape({
-      records: PropTypes.arrayOf(PropTypes.object),
+      records: PropTypes.arrayOf(PropTypes.shape({})),
     }),
     feefineactions: PropTypes.shape({
       records: PropTypes.arrayOf(

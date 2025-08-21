@@ -154,13 +154,13 @@ const UserInfo = (props) => {
 };
 
 UserInfo.propTypes = {
-  customFields: PropTypes.arrayOf(PropTypes.object).isRequired,
+  customFields: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   expanded: PropTypes.bool,
   onToggle: PropTypes.func,
   accordionId: PropTypes.string.isRequired,
-  user: PropTypes.object.isRequired,
-  patronGroup: PropTypes.object.isRequired,
-  settings: PropTypes.arrayOf(PropTypes.object).isRequired,
+  user: PropTypes.shape({}).isRequired,
+  patronGroup: PropTypes.shape({}).isRequired,
+  settings: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 };
 
 export default UserInfo;

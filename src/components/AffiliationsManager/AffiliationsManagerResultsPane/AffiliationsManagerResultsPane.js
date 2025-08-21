@@ -115,13 +115,13 @@ const AffiliationsManagerResultsPane = ({
 };
 
 AffiliationsManagerResultsPane.propTypes = {
-  assignment: PropTypes.object.isRequired,
+  assignment: PropTypes.shape({}).isRequired,
   changeSorting: PropTypes.func.isRequired,
-  contentData: PropTypes.arrayOf(PropTypes.object).isRequired,
+  contentData: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   isAllAssigned: PropTypes.bool.isRequired,
   isFiltersVisible: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
-  sortDirection: PropTypes.object.isRequired,
+  sortDirection: PropTypes.shape({}).isRequired,
   sortOrder: PropTypes.string.isRequired,
   toggleAllRecords: PropTypes.func.isRequired,
   toggleFilters: PropTypes.func.isRequired,

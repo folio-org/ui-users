@@ -67,7 +67,7 @@ const filtersList = [
 
 class Filters extends React.Component {
   static propTypes = {
-    activeFilters: PropTypes.object,
+    activeFilters: PropTypes.shape({}),
     onChangeHandlers: PropTypes.shape({
       clearGroup: PropTypes.func.isRequired,
       state: PropTypes.func.isRequired,

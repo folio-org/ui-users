@@ -28,7 +28,7 @@ class CreateResetPasswordControl extends React.Component {
       }),
     }).isRequired,
     disabled: PropTypes.bool,
-    stripes: PropTypes.object.isRequired,
+    stripes: PropTypes.shape({}).isRequired,
   };
 
   static manifest = Object.freeze({

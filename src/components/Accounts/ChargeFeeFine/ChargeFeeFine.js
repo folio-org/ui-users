@@ -30,12 +30,12 @@ class ChargeFeeFine extends React.Component {
   static propTypes = {
     resources: PropTypes.shape({
       feefines: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
       owners: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
-      activeRecord: PropTypes.object,
+      activeRecord: PropTypes.shape({}),
     }).isRequired,
     mutator: PropTypes.shape({
       accounts: PropTypes.shape({
@@ -55,14 +55,14 @@ class ChargeFeeFine extends React.Component {
         POST: PropTypes.func.isRequired,
       }),
     }).isRequired,
-    stripes: PropTypes.object.isRequired,
-    okapi: PropTypes.object,
-    selectedLoan: PropTypes.object,
-    user: PropTypes.object,
-    intl: PropTypes.object.isRequired,
-    history: PropTypes.object,
-    location: PropTypes.object,
-    match: PropTypes.object,
+    stripes: PropTypes.shape({}).isRequired,
+    okapi: PropTypes.shape({}),
+    selectedLoan: PropTypes.shape({}),
+    user: PropTypes.shape({}),
+    intl: PropTypes.shape({}).isRequired,
+    history: PropTypes.shape({}),
+    location: PropTypes.shape({}),
+    match: PropTypes.shape({}),
   };
 
   constructor(props) {

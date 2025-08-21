@@ -38,14 +38,14 @@ class PermissionSetForm extends React.Component {
       hasPerm: PropTypes.func.isRequired,
       connect: PropTypes.func.isRequired,
     }).isRequired,
-    initialValues: PropTypes.object,
-    intl: PropTypes.object,
+    initialValues: PropTypes.shape({}),
+    intl: PropTypes.shape({}),
     handleSubmit: PropTypes.func.isRequired,
     onCancel: PropTypes.func,
     onRemove: PropTypes.func,
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
-    form: PropTypes.object,
+    form: PropTypes.shape({}),
     tenantId: PropTypes.string,
   };
 

@@ -35,8 +35,8 @@ const MarkAsMissingButton = ({ initialValues, values, change }) => {
 };
 
 MarkAsMissingButton.propTypes = {
-  initialValues: PropTypes.object,
-  values: PropTypes.object,
+  initialValues: PropTypes.shape({}),
+  values: PropTypes.shape({}),
   change: PropTypes.func,
 };
 

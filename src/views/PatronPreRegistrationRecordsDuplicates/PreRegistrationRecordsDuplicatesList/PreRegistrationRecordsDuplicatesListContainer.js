@@ -84,8 +84,8 @@ const PreRegistrationRecordsDuplicatesListContainer = ({
 PreRegistrationRecordsDuplicatesListContainer.propTypes = {
   isLoading: PropTypes.bool,
   totalRecords: PropTypes.number,
-  user: PropTypes.object,
-  users: PropTypes.arrayOf(PropTypes.object),
+  user: PropTypes.shape({}),
+  users: PropTypes.arrayOf(PropTypes.shape({})),
 };
 
 export default PreRegistrationRecordsDuplicatesListContainer;

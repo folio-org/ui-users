@@ -13,17 +13,17 @@ import {
 
 class OpenLoans extends React.Component {
   static propTypes = {
-    history: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired,
+    history: PropTypes.shape({}).isRequired,
+    location: PropTypes.shape({}).isRequired,
     isLoanChecked: PropTypes.func.isRequired,
-    match: PropTypes.object.isRequired,
-    loans: PropTypes.arrayOf(PropTypes.object).isRequired,
-    sortMap: PropTypes.object.isRequired,
-    loanFormatter: PropTypes.object.isRequired,
-    requestCounts: PropTypes.object.isRequired,
-    columnMapping: PropTypes.object.isRequired,
+    match: PropTypes.shape({}).isRequired,
+    loans: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    sortMap: PropTypes.shape({}).isRequired,
+    loanFormatter: PropTypes.shape({}).isRequired,
+    requestCounts: PropTypes.shape({}).isRequired,
+    columnMapping: PropTypes.shape({}).isRequired,
     sortOrder: PropTypes.arrayOf(PropTypes.string).isRequired,
-    visibleColumns: PropTypes.arrayOf(PropTypes.object).isRequired,
+    visibleColumns: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     possibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
   };
 

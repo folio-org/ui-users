@@ -165,7 +165,7 @@ function BlockTemplateDetails(props) {
 }
 
 BlockTemplateDetails.propTypes = {
-  initialValues: PropTypes.object,
+  initialValues: PropTypes.shape({}),
 };
 
 export default BlockTemplateDetails;

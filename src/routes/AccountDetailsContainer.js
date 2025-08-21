@@ -110,24 +110,24 @@ class AccountDetailsContainer extends React.Component {
 
   static propTypes = {
     resources: PropTypes.shape({
-      loans: PropTypes.object,
+      loans: PropTypes.shape({}),
       activeRecord: PropTypes.shape({
         instanceId: PropTypes.string,
       }),
       accounts: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
       patronGroups: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
       selUser: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
       instance: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
       feefineshistory: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
     }),
     match: PropTypes.shape({

@@ -61,7 +61,7 @@ class PermissionsModal extends React.Component {
       okapi: PropTypes.shape({
         tenant: PropTypes.string,
         token: PropTypes.string,
-        translations: PropTypes.object,
+        translations: PropTypes.shape({}),
       }).isRequired,
     }).isRequired,
     mutator: PropTypes.shape({
@@ -72,7 +72,7 @@ class PermissionsModal extends React.Component {
     }),
     resources: PropTypes.shape({
       availablePermissions: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
     }),
     filtersConfig: PropTypes.arrayOf(

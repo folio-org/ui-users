@@ -28,17 +28,17 @@ import PrintToPDFWrapper from '../PrintToPDFWrapper/PrintToPDFWrapper';
 class ActionsDropdown extends React.Component {
   static propTypes = {
     stripes: stripesShape.isRequired,
-    loan: PropTypes.object.isRequired,
+    loan: PropTypes.shape({}).isRequired,
     requestQueue: PropTypes.bool.isRequired,
     itemRequestCount: PropTypes.number.isRequired,
     handleOptionsChange: PropTypes.func.isRequired,
     disableFeeFineDetails: PropTypes.bool,
     match: PropTypes.shape({
-      params: PropTypes.object
+      params: PropTypes.shape({})
     }),
-    intl: PropTypes.object.isRequired,
-    user: PropTypes.object.isRequired,
-    patronGroup: PropTypes.object.isRequired,
+    intl: PropTypes.shape({}).isRequired,
+    user: PropTypes.shape({}).isRequired,
+    patronGroup: PropTypes.shape({}).isRequired,
     history: PropTypes.shape({
       push: PropTypes.func,
     }).isRequired,

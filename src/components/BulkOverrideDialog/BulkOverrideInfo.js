@@ -45,13 +45,13 @@ class BulkOverrideInfo extends React.Component {
       }).isRequired,
     }).isRequired,
     failedRenewals: PropTypes.arrayOf(
-      PropTypes.object
+      PropTypes.shape({})
     ).isRequired,
     showDueDatePicker: PropTypes.bool.isRequired,
-    user: PropTypes.object.isRequired,
-    loanPolicies: PropTypes.object.isRequired,
-    requestCounts: PropTypes.object.isRequired,
-    errorMessages: PropTypes.object.isRequired,
+    user: PropTypes.shape({}).isRequired,
+    loanPolicies: PropTypes.shape({}).isRequired,
+    requestCounts: PropTypes.shape({}).isRequired,
+    errorMessages: PropTypes.shape({}).isRequired,
     onCancel: PropTypes.func.isRequired,
     onCloseRenewModal: PropTypes.func.isRequired,
   };

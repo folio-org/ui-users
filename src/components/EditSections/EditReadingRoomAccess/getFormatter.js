@@ -47,7 +47,7 @@ export const getFormatter = (form) => {
           }}
         />
       ),
-      { rowIndex: PropTypes.number, record: PropTypes.object }
+      { rowIndex: PropTypes.number, record: PropTypes.shape({}) }
     ),
     [rraColumns.READING_ROOM_NAME] : ({ readingRoomName }) => readingRoomName,
     [rraColumns.NOTES] : Object.assign(
@@ -69,7 +69,7 @@ export const getFormatter = (form) => {
           )}
         />
       ),
-      { rowIndex: PropTypes.number, record: PropTypes.object }
+      { rowIndex: PropTypes.number, record: PropTypes.shape({}) }
     )
   });
 };

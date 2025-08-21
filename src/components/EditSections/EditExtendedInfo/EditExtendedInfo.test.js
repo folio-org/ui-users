@@ -79,7 +79,7 @@ const DepartmentsName = ({ departments }) => {
 };
 
 DepartmentsName.propTypes = {
-  departments: PropTypes.arrayOf(PropTypes.object),
+  departments: PropTypes.arrayOf(PropTypes.shape({})),
 };
 
 jest.mock('./DepartmentsNameEdit', () => DepartmentsName);
@@ -91,7 +91,7 @@ const RequestPreferencesEditMock = ({ addressTypes }) => {
 };
 
 RequestPreferencesEditMock.propTypes = {
-  addressTypes: PropTypes.arrayOf(PropTypes.object),
+  addressTypes: PropTypes.arrayOf(PropTypes.shape({})),
 };
 
 jest.mock('./RequestPreferencesEdit', () => RequestPreferencesEditMock);

@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 
 class RenderPatronGroupNumberOfUsers extends React.Component {
   static propTypes = {
-    item: PropTypes.object.isRequired,
-    usersPerGroup: PropTypes.object,
+    item: PropTypes.shape({}).isRequired,
+    usersPerGroup: PropTypes.shape({}),
   };
 
   getFacetCount() {

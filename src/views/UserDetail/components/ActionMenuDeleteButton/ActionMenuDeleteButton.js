@@ -53,7 +53,7 @@ ActionMenuDeleteButton.propTypes = {
   id: PropTypes.string,
   onToggle: PropTypes.func,
   suppressList: PropTypes.shape({
-    records: PropTypes.arrayOf(PropTypes.object)
+    records: PropTypes.arrayOf(PropTypes.shape({}))
   }),
 };
 

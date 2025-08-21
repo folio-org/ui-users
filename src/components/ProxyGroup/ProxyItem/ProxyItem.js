@@ -120,7 +120,7 @@ const ProxyItem = ({ record }) => {
 };
 
 ProxyItem.propTypes = {
-  record: PropTypes.object,
+  record: PropTypes.shape({}),
 };
 
 export default ProxyItem;

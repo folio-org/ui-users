@@ -19,7 +19,7 @@ class PatronGroupsSettings extends React.Component {
       hasPerm: PropTypes.func.isRequired,
     }).isRequired,
 
-    intl: PropTypes.object.isRequired,
+    intl: PropTypes.shape({}).isRequired,
   };
 
   constructor(props) {

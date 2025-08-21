@@ -57,16 +57,16 @@ class LimitsSettings extends Component {
   static propTypes = {
     resources: PropTypes.shape({
       groups: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
       patronBlockCondition: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }).isRequired,
       patronBlockLimits: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }).isRequired,
     }),
-    intl: PropTypes.object,
+    intl: PropTypes.shape({}),
   };
 
   static defaultProps = {

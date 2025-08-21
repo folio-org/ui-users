@@ -124,37 +124,37 @@ class UserDetail extends React.Component {
       }),
     }),
     resources: PropTypes.shape({
-      selUser: PropTypes.object,
-      delUser: PropTypes.object,
-      openTransactions: PropTypes.object,
-      user: PropTypes.arrayOf(PropTypes.object),
+      selUser: PropTypes.shape({}),
+      delUser: PropTypes.shape({}),
+      openTransactions: PropTypes.shape({}),
+      user: PropTypes.arrayOf(PropTypes.shape({})),
       accounts: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
       addressTypes: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
       departments: PropTypes.shape({
         records: departmentsShape,
       }),
       permissions: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
-      // query: PropTypes.object,
+      // query: PropTypes.shape({}),
       patronGroups: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
       settings: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
       loansHistory: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
       suppressEdit: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
       userReadingRoomPermissions: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
     }),
     match: PropTypes.shape({
@@ -165,20 +165,20 @@ class UserDetail extends React.Component {
     }).isRequired,
     okapi: PropTypes.shape({
       currentUser: PropTypes.shape({
-        servicePoints: PropTypes.arrayOf(PropTypes.object),
+        servicePoints: PropTypes.arrayOf(PropTypes.shape({})),
       }).isRequired,
     }).isRequired,
     onClose: PropTypes.func,
     tagsToggle: PropTypes.func,
-    location: PropTypes.object,
-    history: PropTypes.object,
+    location: PropTypes.shape({}),
+    history: PropTypes.shape({}),
     getSponsors: PropTypes.func,
     getProxies: PropTypes.func,
     getUserServicePoints: PropTypes.func,
     getPreferredServicePoint: PropTypes.func,
     tagsEnabled: PropTypes.bool,
     paneWidth: PropTypes.string,
-    intl: PropTypes.object.isRequired,
+    intl: PropTypes.shape({}).isRequired,
   };
 
   static defaultProps = {

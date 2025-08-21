@@ -27,7 +27,7 @@ class RenderPermissions extends React.Component {
       formatMessage: PropTypes.func.isRequired,
     }),
     isLoading: PropTypes.bool,
-    listedPermissions: PropTypes.arrayOf(PropTypes.object),
+    listedPermissions: PropTypes.arrayOf(PropTypes.shape({})),
     onChangeAffiliation: PropTypes.func,
     onToggle: PropTypes.func,
     permToRead: PropTypes.string.isRequired,

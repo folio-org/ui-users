@@ -47,8 +47,8 @@ Wrapper.propTypes = {
   updateSponsors: PropTypes.func,
   getSponsors: PropTypes.func,
   getProxies: PropTypes.func,
-  updatedProxies: PropTypes.arrayOf(PropTypes.object),
-  updatedSponsors: PropTypes.arrayOf(PropTypes.object),
+  updatedProxies: PropTypes.arrayOf(PropTypes.shape({})),
+  updatedSponsors: PropTypes.arrayOf(PropTypes.shape({})),
 };
 
 const mutator = {

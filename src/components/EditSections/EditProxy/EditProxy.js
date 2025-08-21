@@ -62,9 +62,9 @@ EditProxy.propTypes = {
   expanded: PropTypes.bool,
   onToggle: PropTypes.func,
   accordionId: PropTypes.string.isRequired,
-  proxies: PropTypes.arrayOf(PropTypes.object),
-  sponsors: PropTypes.arrayOf(PropTypes.object),
-  intl: PropTypes.object.isRequired,
+  proxies: PropTypes.arrayOf(PropTypes.shape({})),
+  sponsors: PropTypes.arrayOf(PropTypes.shape({})),
+  intl: PropTypes.shape({}).isRequired,
 };
 
 export default injectIntl(EditProxy);

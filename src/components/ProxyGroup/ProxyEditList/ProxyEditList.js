@@ -23,10 +23,10 @@ class ProxyEditList extends React.Component {
     name: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
     itemComponent: PropTypes.func.isRequired,
-    initialValues: PropTypes.object,
+    initialValues: PropTypes.shape({}),
     change: PropTypes.func.isRequired,
-    intl: PropTypes.object.isRequired,
-    values: PropTypes.object,
+    intl: PropTypes.shape({}).isRequired,
+    values: PropTypes.shape({}),
   };
 
   constructor(props) {

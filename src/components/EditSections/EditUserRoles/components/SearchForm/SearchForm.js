@@ -93,7 +93,7 @@ SearchForm.propTypes = {
       ).isRequired,
     })
   ).isRequired,
-  filters: PropTypes.object.isRequired,
+  filters: PropTypes.shape({}).isRequired,
   onSubmitSearch: PropTypes.func.isRequired,
   onChangeFilter: PropTypes.func.isRequired,
   onClearFilter: PropTypes.func.isRequired,

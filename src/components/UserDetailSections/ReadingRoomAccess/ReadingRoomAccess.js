@@ -138,7 +138,7 @@ ReadingRoomAccess.propTypes = {
   accordionId: PropTypes.string.isRequired,
   readingRoomPermissions: PropTypes.shape({
     isPending: PropTypes.bool,
-    records: PropTypes.arrayOf(PropTypes.object),
+    records: PropTypes.arrayOf(PropTypes.shape({})),
   })
 };
 

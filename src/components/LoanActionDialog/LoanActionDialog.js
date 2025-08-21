@@ -17,9 +17,9 @@ class LoanActionDialog extends React.Component {
   static propTypes = {
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
-    loan: PropTypes.object.isRequired,
+    loan: PropTypes.shape({}).isRequired,
     loanAction: PropTypes.string.isRequired,
-    modalLabel: PropTypes.object.isRequired,
+    modalLabel: PropTypes.shape({}).isRequired,
     toggleButton: PropTypes.func,
     isInProgress: PropTypes.bool,
     validateAction: PropTypes.func,

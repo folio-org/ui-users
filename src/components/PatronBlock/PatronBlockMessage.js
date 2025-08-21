@@ -11,7 +11,7 @@ import {
 class PatronBlockMessage extends React.Component {
   static propTypes = {
     count: PropTypes.number.isRequired,
-    intl: PropTypes.object.isRequired,
+    intl: PropTypes.shape({}).isRequired,
   }
 
   render() {

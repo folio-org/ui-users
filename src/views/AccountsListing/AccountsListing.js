@@ -107,22 +107,22 @@ class AccountsHistory extends React.Component {
     stripes: stripesShape.isRequired,
     resources: PropTypes.shape({
       feefineshistory: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
       comments: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
       loans: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
-      query: PropTypes.object,
-      filter: PropTypes.object,
+      query: PropTypes.shape({}),
+      filter: PropTypes.shape({}),
     }),
-    okapi: PropTypes.object,
-    user: PropTypes.object,
-    currentUser: PropTypes.object,
+    okapi: PropTypes.shape({}),
+    user: PropTypes.shape({}),
+    currentUser: PropTypes.shape({}),
     openAccounts: PropTypes.bool,
-    patronGroup: PropTypes.object,
+    patronGroup: PropTypes.shape({}),
     mutator: PropTypes.shape({
       user: PropTypes.shape({
         update: PropTypes.func,
@@ -130,17 +130,17 @@ class AccountsHistory extends React.Component {
       query: PropTypes.shape({
         update: PropTypes.func,
       }),
-      activeRecord: PropTypes.object,
+      activeRecord: PropTypes.shape({}),
     }),
     parentMutator: PropTypes.shape({
-      query: PropTypes.object.isRequired,
+      query: PropTypes.shape({}).isRequired,
     }),
-    history: PropTypes.object,
+    history: PropTypes.shape({}),
     update: PropTypes.func,
-    loans: PropTypes.arrayOf(PropTypes.object),
-    location: PropTypes.object,
-    match: PropTypes.object,
-    intl: PropTypes.object.isRequired,
+    loans: PropTypes.arrayOf(PropTypes.shape({})),
+    location: PropTypes.shape({}),
+    match: PropTypes.shape({}),
+    intl: PropTypes.shape({}).isRequired,
     num: PropTypes.number,
   };
 

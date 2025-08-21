@@ -56,9 +56,9 @@ const withClaimReturned = WrappedComponent => class withClaimReturnedComponent e
         update: PropTypes.func,
       }).isRequired,
     }).isRequired,
-    loan: PropTypes.object.isRequired,
+    loan: PropTypes.shape({}).isRequired,
     okapi: PropTypes.shape({
-      currentUser: PropTypes.object.isRequired,
+      currentUser: PropTypes.shape({}).isRequired,
     }).isRequired,
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,

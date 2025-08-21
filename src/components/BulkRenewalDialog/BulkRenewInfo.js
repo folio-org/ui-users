@@ -20,12 +20,12 @@ class BulkRenewInfo extends React.Component {
   static propTypes = {
     additionalInfo: PropTypes.string.isRequired,
     stripes: stripesShape.isRequired,
-    successRenewals: PropTypes.arrayOf(PropTypes.object).isRequired,
-    failedRenewals: PropTypes.arrayOf(PropTypes.object).isRequired,
-    loanPolicies: PropTypes.object.isRequired,
-    requestCounts: PropTypes.object.isRequired,
-    errorMessages: PropTypes.object.isRequired,
-    user: PropTypes.object.isRequired,
+    successRenewals: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    failedRenewals: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    loanPolicies: PropTypes.shape({}).isRequired,
+    requestCounts: PropTypes.shape({}).isRequired,
+    errorMessages: PropTypes.shape({}).isRequired,
+    user: PropTypes.shape({}).isRequired,
     onCancel: PropTypes.func.isRequired,
   };
 

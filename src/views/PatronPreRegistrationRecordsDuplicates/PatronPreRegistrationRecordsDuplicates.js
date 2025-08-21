@@ -116,7 +116,7 @@ const PatronPreRegistrationRecordsDuplicates = ({
 PatronPreRegistrationRecordsDuplicates.propTypes = {
   isLoading: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
-  user: PropTypes.object,
+  user: PropTypes.shape({}),
 };
 
 export default PatronPreRegistrationRecordsDuplicates;

@@ -111,8 +111,8 @@ EditReadingRoomAccess.propTypes = {
   expanded: PropTypes.bool,
   onToggle: PropTypes.func,
   accordionId: PropTypes.string.isRequired,
-  formData: PropTypes.object,
-  form: PropTypes.object,
+  formData: PropTypes.shape({}),
+  form: PropTypes.shape({}),
 };
 
 export default EditReadingRoomAccess;

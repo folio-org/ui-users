@@ -16,7 +16,7 @@ class RequestFeeFineBlockButtons extends React.Component {
     barcode: PropTypes.string,
     onToggle: PropTypes.func,
     userId: PropTypes.string,
-    location: PropTypes.object,
+    location: PropTypes.shape({}),
   };
 
   render() {

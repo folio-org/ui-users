@@ -12,14 +12,14 @@ class BulkOverrideDialog extends React.Component {
     additionalInfo: PropTypes.string.isRequired,
     stripes: stripesShape.isRequired,
     failedRenewals: PropTypes.arrayOf(
-      PropTypes.object
+      PropTypes.shape({})
     ).isRequired,
     open: PropTypes.bool.isRequired,
     showDueDatePicker: PropTypes.bool.isRequired,
-    user: PropTypes.object.isRequired,
-    loanPolicies: PropTypes.object.isRequired,
-    requestCounts: PropTypes.object.isRequired,
-    errorMessages: PropTypes.object.isRequired,
+    user: PropTypes.shape({}).isRequired,
+    loanPolicies: PropTypes.shape({}).isRequired,
+    requestCounts: PropTypes.shape({}).isRequired,
+    errorMessages: PropTypes.shape({}).isRequired,
     onClose: PropTypes.func.isRequired,
     onCloseRenewModal: PropTypes.func.isRequired,
   };

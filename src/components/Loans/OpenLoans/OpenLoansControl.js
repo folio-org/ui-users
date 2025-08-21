@@ -31,11 +31,11 @@ import TableModel from './components/OpenLoansWithStaticData';
 
 class OpenLoansControl extends React.Component {
   static propTypes = {
-    intl: PropTypes.object.isRequired,
+    intl: PropTypes.shape({}).isRequired,
     stripes: stripesShape.isRequired,
     mutator: PropTypes.shape({
-      query: PropTypes.object.isRequired,
-      activeRecord: PropTypes.object,
+      query: PropTypes.shape({}).isRequired,
+      activeRecord: PropTypes.shape({}),
       loanPolicies: PropTypes.shape({
         GET: PropTypes.func,
         reset: PropTypes.func,
@@ -46,8 +46,8 @@ class OpenLoansControl extends React.Component {
       }),
     }),
     resources: PropTypes.shape({
-      loanAccount: PropTypes.object,
-      query: PropTypes.object,
+      loanAccount: PropTypes.shape({}),
+      query: PropTypes.shape({}),
       requests: PropTypes.shape({
         GET: PropTypes.func,
         reset: PropTypes.func,
@@ -56,14 +56,14 @@ class OpenLoansControl extends React.Component {
     user: PropTypes.shape({
       id: PropTypes.string.isRequired,
     }).isRequired,
-    history: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired,
-    match: PropTypes.object,
-    patronGroup: PropTypes.object.isRequired,
-    requestCounts: PropTypes.object.isRequired,
-    loanPolicies: PropTypes.object.isRequired,
-    loans: PropTypes.arrayOf(PropTypes.object).isRequired,
-    patronBlocks: PropTypes.arrayOf(PropTypes.object).isRequired,
+    history: PropTypes.shape({}).isRequired,
+    location: PropTypes.shape({}).isRequired,
+    match: PropTypes.shape({}),
+    patronGroup: PropTypes.shape({}).isRequired,
+    requestCounts: PropTypes.shape({}).isRequired,
+    loanPolicies: PropTypes.shape({}).isRequired,
+    loans: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    patronBlocks: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     renew: PropTypes.func.isRequired,
     declareLost: PropTypes.func.isRequired,
     claimReturned: PropTypes.func.isRequired,

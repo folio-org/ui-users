@@ -51,7 +51,7 @@ const SettingsPage = ({ sections, path }) => {
 
 SettingsPage.propTypes = {
   path: PropTypes.string.isRequired,
-  sections: PropTypes.arrayOf(PropTypes.object).isRequired,
+  sections: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 };
 
 export default SettingsPage;

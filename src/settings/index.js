@@ -21,7 +21,7 @@ const Settings = ({ children, match }) => {
 
 Settings.propTypes = {
   children: PropTypes.node,
-  match: PropTypes.object.isRequired,
+  match: PropTypes.shape({}).isRequired,
 };
 
 export default Settings;

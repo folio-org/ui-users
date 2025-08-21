@@ -42,10 +42,10 @@ class ViewFeesFines extends React.Component {
   static propTypes = {
     resources: PropTypes.shape({
       comments: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
       loans: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
     }),
     mutator: PropTypes.shape({
@@ -56,15 +56,15 @@ class ViewFeesFines extends React.Component {
     stripes: stripesShape.isRequired,
     onChangeActions: PropTypes.func.isRequired,
     onChangeSelected: PropTypes.func.isRequired,
-    accounts: PropTypes.arrayOf(PropTypes.object),
-    feeFineActions: PropTypes.arrayOf(PropTypes.object),
-    loans: PropTypes.arrayOf(PropTypes.object),
-    match: PropTypes.object,
-    history: PropTypes.object,
-    user: PropTypes.object,
+    accounts: PropTypes.arrayOf(PropTypes.shape({})),
+    feeFineActions: PropTypes.arrayOf(PropTypes.shape({})),
+    loans: PropTypes.arrayOf(PropTypes.shape({})),
+    match: PropTypes.shape({}),
+    history: PropTypes.shape({}),
+    user: PropTypes.shape({}),
     visibleColumns: PropTypes.arrayOf(PropTypes.string),
-    intl: PropTypes.object.isRequired,
-    selectedAccounts: PropTypes.arrayOf(PropTypes.object),
+    intl: PropTypes.shape({}).isRequired,
+    selectedAccounts: PropTypes.arrayOf(PropTypes.shape({})),
   };
 
   constructor(props) {

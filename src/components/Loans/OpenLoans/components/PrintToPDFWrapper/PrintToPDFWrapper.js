@@ -29,9 +29,9 @@ const PrintToPDFWrapper = ({
 
 PrintToPDFWrapper.propTypes = {
   children: PropTypes.func.isRequired,
-  entities: PropTypes.arrayOf(PropTypes.object),
+  entities: PropTypes.arrayOf(PropTypes.shape({})),
   type: PropTypes.string,
-  patronGroup: PropTypes.object,
+  patronGroup: PropTypes.shape({}),
 };
 
 export default PrintToPDFWrapper;

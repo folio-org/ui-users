@@ -23,9 +23,9 @@ class AddServicePointModal extends React.Component {
     onSave: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
-    servicePoints: PropTypes.arrayOf(PropTypes.object),
-    assignedServicePoints: PropTypes.arrayOf(PropTypes.object),
-    intl: PropTypes.object.isRequired,
+    servicePoints: PropTypes.arrayOf(PropTypes.shape({})),
+    assignedServicePoints: PropTypes.arrayOf(PropTypes.shape({})),
+    intl: PropTypes.shape({}).isRequired,
   }
 
   state = {

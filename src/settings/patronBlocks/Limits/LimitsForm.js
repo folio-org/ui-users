@@ -73,7 +73,7 @@ class LimitsForm extends Component {
   static propTypes = {
     patronGroup: PropTypes.string.isRequired,
     patronBlockConditions: PropTypes.arrayOf(
-      PropTypes.object
+      PropTypes.shape({})
     ),
     pristine: PropTypes.bool.isRequired,
     submitting: PropTypes.bool.isRequired,

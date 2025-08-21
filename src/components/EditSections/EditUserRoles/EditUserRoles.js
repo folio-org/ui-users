@@ -180,9 +180,9 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
 EditUserRoles.propTypes = {
   match: PropTypes.shape({ params: { id: PropTypes.string } }),
   accordionId: PropTypes.string,
-  form: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
-  assignedRoleIds: PropTypes.object.isRequired,
+  form: PropTypes.shape({}).isRequired,
+  user: PropTypes.shape({}).isRequired,
+  assignedRoleIds: PropTypes.shape({}).isRequired,
   setAssignedRoleIds: PropTypes.func.isRequired,
   tenantId: PropTypes.string.isRequired,
   setTenantId: PropTypes.func.isRequired

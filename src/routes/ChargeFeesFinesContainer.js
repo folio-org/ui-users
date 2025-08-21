@@ -127,21 +127,21 @@ class ChargeFeesFinesContainer extends React.Component {
   static propTypes = {
     resources: PropTypes.shape({
       selUser: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
       feefines: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
       owners: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
       loan: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
       loanItem: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
-      activeRecord: PropTypes.object,
+      activeRecord: PropTypes.shape({}),
     }).isRequired,
     mutator: PropTypes.shape({
       accounts: PropTypes.shape({
@@ -161,7 +161,7 @@ class ChargeFeesFinesContainer extends React.Component {
         POST: PropTypes.func.isRequired,
       }),
     }).isRequired,
-    stripes: PropTypes.object.isRequired,
+    stripes: PropTypes.shape({}).isRequired,
     okapi: PropTypes.shape({
       currentUser: PropTypes.shape({
         curServicePoint: PropTypes.shape({

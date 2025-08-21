@@ -115,9 +115,9 @@ const PreRegistrationRecordsDuplicatesList = ({
 PreRegistrationRecordsDuplicatesList.propTypes = {
   isLoading: PropTypes.bool,
   onMerge: PropTypes.func.isRequired,
-  patronGroups: PropTypes.arrayOf(PropTypes.object),
+  patronGroups: PropTypes.arrayOf(PropTypes.shape({})),
   totalRecords: PropTypes.number,
-  users: PropTypes.arrayOf(PropTypes.object),
+  users: PropTypes.arrayOf(PropTypes.shape({})),
 };
 
 export default memo(PreRegistrationRecordsDuplicatesList);

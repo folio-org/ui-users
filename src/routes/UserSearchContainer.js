@@ -184,12 +184,12 @@ class UserSearchContainer extends React.Component {
 
   static propTypes = {
     children: PropTypes.node,
-    location: PropTypes.object,
-    match: PropTypes.object,
-    history: PropTypes.object,
+    location: PropTypes.shape({}),
+    match: PropTypes.shape({}),
+    history: PropTypes.shape({}),
     resources: PropTypes.shape({
       patronGroups: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
     }).isRequired,
     mutator: PropTypes.shape({
@@ -224,7 +224,7 @@ class UserSearchContainer extends React.Component {
       }),
     }).isRequired,
     stripes: PropTypes.shape({
-      logger: PropTypes.object
+      logger: PropTypes.shape({})
     }).isRequired,
   }
 

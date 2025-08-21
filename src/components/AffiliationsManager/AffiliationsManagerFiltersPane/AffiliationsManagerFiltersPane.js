@@ -135,7 +135,7 @@ const AffiliationsManagerFiltersPane = ({
 
 AffiliationsManagerFiltersPane.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  filters: PropTypes.object.isRequired,
+  filters: PropTypes.shape({}).isRequired,
   isFiltersVisible: PropTypes.bool,
   isLoading: PropTypes.bool,
   toggleFilters: PropTypes.func.isRequired,

@@ -171,7 +171,7 @@ const PrintLibraryCardButton = ({ user, patronGroup }) => {
 };
 
 PrintLibraryCardButton.propTypes = {
-  user: PropTypes.object,
+  user: PropTypes.shape({}),
   patronGroup: PropTypes.string,
 };
 export default PrintLibraryCardButton;

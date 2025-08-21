@@ -227,18 +227,18 @@ const OpenLoansSubHeader = ({
 
 OpenLoansSubHeader.propTypes = {
   buildRecords: PropTypes.func.isRequired,
-  checkedLoans: PropTypes.object.isRequired,
-  columnMapping: PropTypes.object.isRequired,
-  loans: PropTypes.arrayOf(PropTypes.object).isRequired,
+  checkedLoans: PropTypes.shape({}).isRequired,
+  columnMapping: PropTypes.shape({}).isRequired,
+  loans: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   openBulkClaimReturnedModal: PropTypes.func.isRequired,
   openPatronBlockedModal: PropTypes.func.isRequired,
-  patronBlocks: PropTypes.arrayOf(PropTypes.object).isRequired,
+  patronBlocks: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   renewSelected: PropTypes.func.isRequired,
   showChangeDueDateDialog: PropTypes.func.isRequired,
   toggleColumn: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired,
-  visibleColumns: PropTypes.arrayOf(PropTypes.object).isRequired,
-  patronGroup: PropTypes.object.isRequired,
+  user: PropTypes.shape({}).isRequired,
+  visibleColumns: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  patronGroup: PropTypes.shape({}).isRequired,
 };
 
 export default OpenLoansSubHeader;

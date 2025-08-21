@@ -275,7 +275,7 @@ PermissionsAccordion.propTypes = {
   intl: PropTypes.shape({
     formatMessage: PropTypes.func.isRequired,
   }),
-  initialValues: PropTypes.object,
+  initialValues: PropTypes.shape({}),
   isLoading: PropTypes.bool,
   onChangeAffiliation: PropTypes.func,
   onToggle: PropTypes.func,
@@ -283,7 +283,7 @@ PermissionsAccordion.propTypes = {
   permToDelete: PropTypes.string.isRequired,
   permToModify: PropTypes.string.isRequired,
   permToRead: PropTypes.string.isRequired,
-  stripes: PropTypes.object.isRequired,
+  stripes: PropTypes.shape({}).isRequired,
   tenantId: PropTypes.string,
   // eslint-disable-next-line react/no-unused-prop-types
   formName: PropTypes.string.isRequired,
@@ -306,7 +306,7 @@ PermissionsAccordion.propTypes = {
   visibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
   headlineContent: PropTypes.element.isRequired,
   excludePermissionSets: PropTypes.bool,
-  form: PropTypes.object,
+  form: PropTypes.shape({}),
   setButtonRef: PropTypes.func
 };
 

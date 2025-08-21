@@ -16,10 +16,10 @@ class ExportFeesFinesReportButton extends React.Component {
   static propTypes = {
     feesFinesReportData: PropTypes.shape({
       patronGroup: PropTypes.string.isRequired,
-      servicePoints: PropTypes.arrayOf(PropTypes.object),
-      feeFineActions:  PropTypes.arrayOf(PropTypes.object).isRequired,
-      accounts: PropTypes.arrayOf(PropTypes.object).isRequired,
-      loans: PropTypes.arrayOf(PropTypes.object).isRequired,
+      servicePoints: PropTypes.arrayOf(PropTypes.shape({})),
+      feeFineActions:  PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+      accounts: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+      loans: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
       user: PropTypes.shape({
         id: PropTypes.string.isRequired,
       }).isRequired,
@@ -31,7 +31,7 @@ class ExportFeesFinesReportButton extends React.Component {
       PropTypes.shape({ current: PropTypes.instanceOf(Element) })
     ]),
     onToggle: PropTypes.func.isRequired,
-    intl: PropTypes.object.isRequired,
+    intl: PropTypes.shape({}).isRequired,
   };
 
   constructor(props) {

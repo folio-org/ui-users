@@ -70,19 +70,19 @@ const BLOCK_TEMPLATE_FIELDS_MAP = {
 
 class PatronBlockForm extends React.Component {
   static propTypes = {
-    user: PropTypes.object,
+    user: PropTypes.shape({}),
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
-    params: PropTypes.object,
+    params: PropTypes.shape({}),
     onDeleteItem: PropTypes.func,
     onClose: PropTypes.func,
     handleSubmit: PropTypes.func.isRequired,
     connect: PropTypes.func,
-    intl: PropTypes.object.isRequired,
-    stripes: PropTypes.object,
-    initialValues: PropTypes.object,
-    blockTemplates: PropTypes.arrayOf(PropTypes.shape()),
+    intl: PropTypes.shape({}).isRequired,
+    stripes: PropTypes.shape({}),
+    initialValues: PropTypes.shape({}),
+    blockTemplates: PropTypes.arrayOf(PropTypes.shape({})),
     form: PropTypes.shape({
       batch: PropTypes.func.isRequired,
       change: PropTypes.func.isRequired,

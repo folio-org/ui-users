@@ -12,7 +12,7 @@ import {
 class ItemLookup extends React.Component {
   static propTypes = {
     open: PropTypes.bool,
-    items: PropTypes.arrayOf(PropTypes.object),
+    items: PropTypes.arrayOf(PropTypes.shape({})),
     onClose: PropTypes.func.isRequired,
     onChangeItem: PropTypes.func.isRequired,
   }

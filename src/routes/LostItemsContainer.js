@@ -94,11 +94,11 @@ class LostItemsContainer extends React.Component {
   });
 
   static propTypes = {
-    location: PropTypes.object,
-    history: PropTypes.object,
+    location: PropTypes.shape({}),
+    history: PropTypes.shape({}),
     resources: PropTypes.shape({
-      query: PropTypes.object,
-      [ACTUAL_COST_RECORD_NAME]: PropTypes.object,
+      query: PropTypes.shape({}),
+      [ACTUAL_COST_RECORD_NAME]: PropTypes.shape({}),
     }).isRequired,
     mutator: PropTypes.shape({
       [ACTUAL_COST_RECORD_NAME]: PropTypes.shape({
@@ -113,7 +113,7 @@ class LostItemsContainer extends React.Component {
       }).isRequired,
     }).isRequired,
     stripes: PropTypes.shape({
-      logger: PropTypes.object.isRequired,
+      logger: PropTypes.shape({}).isRequired,
       hasPerm: PropTypes.func.isRequired,
     }).isRequired,
     okapi: PropTypes.shape({

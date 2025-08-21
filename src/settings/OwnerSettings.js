@@ -56,8 +56,8 @@ class OwnerSettings extends React.Component {
       connect: PropTypes.func.isRequired,
       hasPerm: PropTypes.func.isRequired,
     }).isRequired,
-    resources: PropTypes.object,
-    intl: PropTypes.object.isRequired,
+    resources: PropTypes.shape({}),
+    intl: PropTypes.shape({}).isRequired,
   };
 
   constructor(props) {

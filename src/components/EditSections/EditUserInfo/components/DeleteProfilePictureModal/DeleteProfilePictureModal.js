@@ -33,6 +33,6 @@ DeleteProfilePictureModal.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
   onConfirm: PropTypes.func,
-  personal: PropTypes.object.isRequired,
+  personal: PropTypes.shape({}).isRequired,
 };
 export default DeleteProfilePictureModal;

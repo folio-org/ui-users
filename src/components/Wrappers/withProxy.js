@@ -41,8 +41,8 @@ const withProxy = WrappedComponent => class WithProxyComponent extends React.Com
         hasPerm: PropTypes.func.isRequired,
       }),
       resources: PropTypes.shape({
-        sponsors: PropTypes.object,
-        proxies: PropTypes.object,
+        sponsors: PropTypes.shape({}),
+        proxies: PropTypes.shape({}),
       }),
       match: PropTypes.shape({
         params: PropTypes.shape({

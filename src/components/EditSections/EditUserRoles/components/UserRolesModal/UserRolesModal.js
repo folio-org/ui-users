@@ -185,7 +185,7 @@ export default function UserRolesModal({ isOpen,
 UserRolesModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  initialRoleIds: PropTypes.object,
+  initialRoleIds: PropTypes.shape({}),
   changeUserRoles: PropTypes.func.isRequired,
   tenantId: PropTypes.string.isRequired,
 };

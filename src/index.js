@@ -30,10 +30,10 @@ class UsersRouting extends React.Component {
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired,
     }).isRequired,
-    location: PropTypes.object.isRequired,
-    match: PropTypes.object.isRequired,
+    location: PropTypes.shape({}).isRequired,
+    match: PropTypes.shape({}).isRequired,
     showSettings: PropTypes.bool,
-    history: PropTypes.object,
+    history: PropTypes.shape({}),
   }
 
   static actionNames = ['stripesHome', 'usersSortByName'];

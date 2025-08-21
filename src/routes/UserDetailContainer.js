@@ -11,7 +11,7 @@ export const UserDetailContainer = ({ children, match, ...rest }) => (
 
 UserDetailContainer.propTypes = {
   children: PropTypes.node,
-  match: PropTypes.object,
+  match: PropTypes.shape({}),
 };
 
 export const UserDetailFullscreenContainer = ({ children, ...rest }) => (

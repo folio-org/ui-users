@@ -47,8 +47,8 @@ class EditExtendedInfo extends Component {
     username: PropTypes.string.isRequired,
     onToggle: PropTypes.func,
     change: PropTypes.func.isRequired,
-    values: PropTypes.object,
-    uniquenessValidator: PropTypes.object,
+    values: PropTypes.shape({}),
+    uniquenessValidator: PropTypes.shape({}),
     disabled: PropTypes.bool,
     stripes: stripesShape,
   };

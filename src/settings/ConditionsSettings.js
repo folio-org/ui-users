@@ -26,7 +26,7 @@ class ConditionsSettings extends Component {
   static propTypes = {
     resources: PropTypes.shape({
       patronBlockConditions: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object).isRequired,
+        records: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
       }).isRequired,
     }).isRequired,
     mutator: PropTypes.shape({
@@ -34,7 +34,7 @@ class ConditionsSettings extends Component {
         GET: PropTypes.func,
       }).isRequired,
     }).isRequired,
-    intl: PropTypes.object,
+    intl: PropTypes.shape({}),
   };
 
   getConditionsPages = () => {

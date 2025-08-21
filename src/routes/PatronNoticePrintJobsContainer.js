@@ -53,7 +53,7 @@ PatronNoticePrintJobsContainer.manifest = {
 PatronNoticePrintJobsContainer.propTypes = {
   resources: PropTypes.shape({
     entries: PropTypes.shape({
-      records: PropTypes.arrayOf(PropTypes.object),
+      records: PropTypes.arrayOf(PropTypes.shape({})),
     }),
   }).isRequired,
   mutator: PropTypes.shape({
@@ -62,7 +62,7 @@ PatronNoticePrintJobsContainer.propTypes = {
       reset: PropTypes.func,
     }),
   }).isRequired,
-  location: PropTypes.object,
+  location: PropTypes.shape({}),
 };
 
 export default stripesConnect(PatronNoticePrintJobsContainer);

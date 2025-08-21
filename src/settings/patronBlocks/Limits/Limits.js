@@ -40,7 +40,7 @@ class Limits extends Component {
 
   static propTypes = {
     resources: PropTypes.shape({
-      patronBlockLimits: PropTypes.object,
+      patronBlockLimits: PropTypes.shape({}),
     }).isRequired,
     mutator: PropTypes.shape({
       patronBlockLimits: PropTypes.shape({
@@ -49,13 +49,13 @@ class Limits extends Component {
         PUT: PropTypes.func,
         DELETE: PropTypes.func,
       }).isRequired,
-      patronBlockLimitId: PropTypes.object.isRequired,
+      patronBlockLimitId: PropTypes.shape({}).isRequired,
     }).isRequired,
     patronBlockConditions: PropTypes.arrayOf(
-      PropTypes.object
+      PropTypes.shape({})
     ).isRequired,
     patronBlockLimits: PropTypes.arrayOf(
-      PropTypes.object
+      PropTypes.shape({})
     ).isRequired,
     patronGroupId: PropTypes.string.isRequired,
     patronGroup: PropTypes.string.isRequired,

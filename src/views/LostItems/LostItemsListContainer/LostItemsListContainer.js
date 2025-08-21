@@ -40,7 +40,7 @@ class LostItemsListContainer extends React.Component {
     queryGetter: PropTypes.func,
     querySetter: PropTypes.func,
     resources: PropTypes.shape({
-      [ACTUAL_COST_RECORD_NAME]: PropTypes.object,
+      [ACTUAL_COST_RECORD_NAME]: PropTypes.shape({}),
     }).isRequired,
     mutator: PropTypes.shape({
       resultOffset: PropTypes.shape({
@@ -67,7 +67,7 @@ class LostItemsListContainer extends React.Component {
     addBilledRecord: PropTypes.func.isRequired,
     cancelledRecords: PropTypes.arrayOf(PropTypes.string).isRequired,
     addCancelledRecord: PropTypes.func.isRequired,
-    source: PropTypes.object,
+    source: PropTypes.shape({}),
   }
 
   static contextType = CalloutContext;
