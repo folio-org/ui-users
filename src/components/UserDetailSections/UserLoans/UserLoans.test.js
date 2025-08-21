@@ -46,9 +46,6 @@ function props(isexpanded, pending, claimedReturnedCount, hasPerm = true) {
         isPending: pending,
         records: [{ totalRecords: claimedReturnedCount }]
       },
-      loansHistory: {
-        records: []
-      },
     }
   };
 }

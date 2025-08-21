@@ -70,16 +70,6 @@ class UserLoans extends React.Component {
   // to get at the "totalRecords" field without pulling down any other data
   // see https://issues.folio.org/browse/FOLIO-773
   static manifest = Object.freeze({
-    loansHistory: {
-      type: 'okapi',
-      records: 'loans',
-      GET: {
-        path: 'circulation/loans?query=(userId==:{id})&limit=1000',
-      },
-      fetch: false,
-      throwErrors: false,
-      accumulate: true,
-    },
     openLoans: {
       type: 'okapi',
       GET: {
@@ -125,9 +115,6 @@ class UserLoans extends React.Component {
   static propTypes = {
     customFields: PropTypes.arrayOf(PropTypes.object).isRequired,
     mutator: PropTypes.shape({
-      loansHistory: PropTypes.shape({
-        GET: PropTypes.func.isRequired,
-      }).isRequired,
       openLoans: PropTypes.shape({
         GET: PropTypes.func.isRequired,
       }).isRequired,
@@ -139,9 +126,6 @@ class UserLoans extends React.Component {
       }).isRequired,
     }).isRequired,
     resources: PropTypes.shape({
-      loansHistory: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
-      }),
       closedLoansCount: PropTypes.object,
       openLoans: PropTypes.object,
       claimedReturnedCount: PropTypes.object,
@@ -165,7 +149,6 @@ class UserLoans extends React.Component {
     const { mutator } = this.props;
 
     if (this.showLoans) {
-      mutator.loansHistory.GET();
       mutator.openLoans.GET();
       mutator.claimedReturnedCount.GET();
       mutator.closedLoansCount.GET();
