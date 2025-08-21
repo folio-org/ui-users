@@ -65,9 +65,11 @@ let searchableIndexes;
 
 class UserSearch extends React.Component {
   static propTypes = {
+    actualTotalRecords: PropTypes.number.isRequired,
     children: PropTypes.node,
     contentRef: PropTypes.object,
     // filterConfig: PropTypes.arrayOf(PropTypes.object),
+    hasLoadedActualTotalRecords: PropTypes.bool.isRequired,
     history: PropTypes.object.isRequired,
     idPrefix: PropTypes.string,
     initialSearch: PropTypes.string,
@@ -76,6 +78,7 @@ class UserSearch extends React.Component {
     match: PropTypes.object.isRequired,
     onComponentWillUnmount: PropTypes.func,
     onNeedMoreData: PropTypes.func.isRequired,
+    onResetActualTotalRecords: PropTypes.func.isRequired,
     queryGetter: PropTypes.func,
     querySetter: PropTypes.func,
     resources: PropTypes.shape({

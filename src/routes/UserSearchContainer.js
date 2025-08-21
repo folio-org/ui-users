@@ -5,7 +5,6 @@ import {
   get,
   template,
   flowRight,
-  noop,
 } from 'lodash';
 
 import {
@@ -199,7 +198,12 @@ class UserSearchContainer extends React.Component {
     location: PropTypes.object,
     match: PropTypes.object,
     history: PropTypes.object,
+    okapiKy: PropTypes.func.isRequired,
     resources: PropTypes.shape({
+      query: PropTypes.shape({
+        query: PropTypes.string,
+        filters: PropTypes.arrayOf(PropTypes.object),
+      }).isRequired,
       patronGroups: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
@@ -321,7 +325,8 @@ class UserSearchContainer extends React.Component {
         hasLoadedActualTotalRecords: true,
       });
     } catch (error) {
-      noop();
+      // eslint-disable-next-line no-console
+      console.error('Error fetching actual total records:', error);
     }
   }
 
