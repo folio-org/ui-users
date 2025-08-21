@@ -12,7 +12,8 @@ export const COLUMNS_NAME = {
   ADDRESS: 'addressInfo.addressLine0',
   EMAIL_COMMUNICATION_PREFERENCES: 'preferredEmailCommunication',
   SUBMISSION_DATE: 'metadata.updatedDate', // 'submissionDate',
-  EMAIL_VERIFICATION: 'isEmailVerified'
+  EMAIL_VERIFICATION: 'isEmailVerified',
+  MINOR: 'minor',
 };
 
 export const visibleColumns = [
@@ -27,7 +28,8 @@ export const visibleColumns = [
   COLUMNS_NAME.ADDRESS,
   COLUMNS_NAME.EMAIL_COMMUNICATION_PREFERENCES,
   COLUMNS_NAME.SUBMISSION_DATE,
-  COLUMNS_NAME.EMAIL_VERIFICATION
+  COLUMNS_NAME.EMAIL_VERIFICATION,
+  COLUMNS_NAME.MINOR,
 ];
 
 export const columnMapping = {
@@ -43,4 +45,5 @@ export const columnMapping = {
   [COLUMNS_NAME.EMAIL_COMMUNICATION_PREFERENCES]: <FormattedMessage id="ui-users.stagingRecords.list.columnNames.emailCommunicationPreferences" />,
   [COLUMNS_NAME.SUBMISSION_DATE]: <FormattedMessage id="ui-users.stagingRecords.list.columnNames.submissionDate" />,
   [COLUMNS_NAME.EMAIL_VERIFICATION]: <FormattedMessage id="ui-users.stagingRecords.list.columnNames.emailVerification" />,
+  [COLUMNS_NAME.MINOR]: <FormattedMessage id="ui-users.stagingRecords.list.columnNames.minor" />,
 };

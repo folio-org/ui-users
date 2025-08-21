@@ -1252,5 +1252,7 @@
     "loans.columns.useAtLocation.Returned": "Geretourneerd",
     "loans.numOpenLoans.useAtLocation": "Gebruik op Locatie",
     "loans.numOpenLoans.held": "Reservering: {count}",
-    "loans.numOpenLoans.inUse": "In gebruik: {count}"
+    "loans.numOpenLoans.inUse": "In gebruik: {count}",
+    "stagingRecords.list.columnNames.minor": "Minor",
+    "stagingRecords.minor.yes": "Yes"
 }

@@ -100,9 +100,15 @@ const withUserRoles = (WrappedComponent) => (props) => {
         break;
       case KEYCLOAK_USER_EXISTANCE.nonExist:
         // First, save changes to mod-users.
-        // If user decides to create a Keycloak user, then changes will be copied over from mod-users to mod-users-keycloak.
         await mutator.selUser.PUT(data);
-        setIsCreateKeycloakUserConfirmationOpen(true);
+
+        // Only prompt and create Keycloak user if assigning roles.
+        // If user confirms, then changes will be copied over from mod-users to mod-users-keycloak.
+        if (!isEqual(assignedRoleIds, initialAssignedRoleIds)) {
+          setIsCreateKeycloakUserConfirmationOpen(true);
+        } else {
+          onFinish();
+        }
         break;
       default:
         break;
