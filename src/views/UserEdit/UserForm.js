@@ -456,10 +456,12 @@ class UserForm extends React.Component {
                     preferredContactTypeId={initialValues.preferredContactTypeId}
                     disabled={isShadowUser}
                     stripes={stripes}
+                    isCreateMode={!isEditing}
                   />
                   <EditCustomFieldsSection
                     accordionId={ACCORDION_ID.CUSTOM_FIELDS}
                     sectionId={CUSTOM_FIELDS_SECTION.CUSTOM_FIELDS}
+                    isCreateMode={!isEditing}
                   />
                   {isEditing && displayReadingRoomAccess && (
                     <IfInterface name="reading-room-patron-permission">
@@ -486,9 +488,11 @@ class UserForm extends React.Component {
                   />
                   <EditLoans
                     accordionId={ACCORDION_ID.LOANS}
+                    isCreateMode={!isEditing}
                   />
                   <EditRequests
                     accordionId={ACCORDION_ID.REQUESTS}
+                    isCreateMode={!isEditing}
                   />
                   {isEditing && this.showPermissionsAccordion() ?
                     <TenantsPermissionsAccordion

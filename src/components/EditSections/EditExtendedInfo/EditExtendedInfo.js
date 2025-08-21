@@ -187,6 +187,7 @@ class EditExtendedInfo extends Component {
           }
           <EditCustomFieldsSection
             sectionId={CUSTOM_FIELDS_SECTION.EXTENDED_INFO}
+            isCreateMode={!this.props.userId}
           />
         </Row>
         <Row>

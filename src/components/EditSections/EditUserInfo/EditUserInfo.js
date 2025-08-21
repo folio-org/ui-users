@@ -472,6 +472,7 @@ class EditUserInfo extends React.Component {
             </Col>
             <EditCustomFieldsSection
               sectionId={CUSTOM_FIELDS_SECTION.USER_INFO}
+              isCreateMode={!this.props.initialValues?.id}
             />
           </Row>
 
