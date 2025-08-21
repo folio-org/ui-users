@@ -46,6 +46,10 @@
 * Add support for use circulation-bff for claim-item-returned. Refs UIU-3413.
 * Pass `isCreateMode` prop to `EditCustomFieldsSection` components to ensure proper dirty and pristine form states. Refs UIU-3390.
 
+## [12.1.8] (https://github.com/folio-org/ui-users/tree/v12.1.8) (2025-07-30)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.7...v12.1.8)
+* Add the ability for staff to take a patron's profile picture photo using a webcam. Refs UIU-3266.
+
 ## [12.1.7] (https://github.com/folio-org/ui-users/tree/v12.1.7) (2025-06-03)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.6...v12.1.7)
 * Refactor `updateKeycloakUser` to use `ky.put` instead of `api.put`, because updating current user data requires setting `x-okapi-tenant` to the current tenant. Fixes UIU-3383.
