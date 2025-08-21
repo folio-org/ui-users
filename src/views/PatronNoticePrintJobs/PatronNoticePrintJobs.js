@@ -136,7 +136,7 @@ const PatronNoticePrintJobs = (props) => {
 };
 
 PatronNoticePrintJobs.propTypes = {
-  records: PropTypes.arrayOf(PropTypes.object),
+  records: PropTypes.arrayOf(PropTypes.shape({})),
   onClose: PropTypes.func,
   mutator: PropTypes.shape({
     printingJob: PropTypes.shape({

@@ -135,26 +135,26 @@ class LoanDetailContainer extends React.Component {
   static propTypes = {
     resources: PropTypes.shape({
       loanHistory: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
         hasLoaded: PropTypes.bool.isRequired,
       }),
       hasManualPatronBlocks: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
       hasAutomatedPatronBlocks: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
       patronGroups: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
       selUser: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
       loanAccountsActions: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
-      loanActions: PropTypes.object,
-      users: PropTypes.object,
+      loanActions: PropTypes.shape({}),
+      users: PropTypes.shape({}),
     }),
     match: PropTypes.shape({
       params: PropTypes.shape({

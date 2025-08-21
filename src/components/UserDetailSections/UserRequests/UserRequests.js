@@ -74,7 +74,7 @@ class UserRequests extends React.Component {
 
   static propTypes = {
     accordionId: PropTypes.string,
-    customFields: PropTypes.arrayOf(PropTypes.object).isRequired,
+    customFields: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     expanded: PropTypes.bool,
     match: PropTypes.shape({
       params: PropTypes.shape({
@@ -92,13 +92,13 @@ class UserRequests extends React.Component {
     onToggle: PropTypes.func,
     resources: PropTypes.shape({
       openRequestsCount: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
       closedRequestsCount: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
     }),
-    user: PropTypes.object,
+    user: PropTypes.shape({}),
     showCustomFieldsSection: PropTypes.bool.isRequired,
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired,

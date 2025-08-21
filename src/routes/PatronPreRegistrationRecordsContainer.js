@@ -102,9 +102,9 @@ PatronPreRegistrationRecordsContainer.manifest = {
 };
 
 PatronPreRegistrationRecordsContainer.propTypes = {
-  mutator: PropTypes.object,
-  stripes: PropTypes.object,
-  resources: PropTypes.object,
+  mutator: PropTypes.shape({}),
+  stripes: PropTypes.shape({}),
+  resources: PropTypes.shape({}),
 };
 
 export default stripesConnect(PatronPreRegistrationRecordsContainer);

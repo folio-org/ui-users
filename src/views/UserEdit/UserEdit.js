@@ -34,30 +34,30 @@ import withUserRoles from '../../components/Wrappers/withUserRoles';
 
 class UserEdit extends React.Component {
   static propTypes = {
-    stripes: PropTypes.object,
-    resources: PropTypes.object,
-    history: PropTypes.object,
-    location: PropTypes.object,
-    match: PropTypes.object,
-    okapiKy: PropTypes.object.isRequired,
+    stripes: PropTypes.shape({}),
+    resources: PropTypes.shape({}),
+    history: PropTypes.shape({}),
+    location: PropTypes.shape({}),
+    match: PropTypes.shape({}),
+    okapiKy: PropTypes.shape({}).isRequired,
     updateProxies: PropTypes.func,
     updateSponsors: PropTypes.func,
     updateServicePoints: PropTypes.func,
     getUserServicePoints: PropTypes.func,
     getPreferredServicePoint: PropTypes.func,
-    mutator: PropTypes.object,
-    numberGeneratorData: PropTypes.object,
+    mutator: PropTypes.shape({}),
+    numberGeneratorData: PropTypes.shape({}),
     getProxies: PropTypes.func,
     getSponsors: PropTypes.func,
     /* assignedRoleIds, updateUserRoles,checkUserInKeycloak, setIsCreateKeycloakUserConfirmationOpen,
     isCreateKeycloakUserConfirmationOpen,submitCreateKeycloakUser comes from withUserRoles HOC
     */
-    assignedRoleIds: PropTypes.object,
+    assignedRoleIds: PropTypes.shape({}),
     setAssignedRoleIds: PropTypes.func,
     tenantId: PropTypes.string,
     setTenantId: PropTypes.func,
     isCreateKeycloakUserConfirmationOpen: PropTypes.bool,
-    initialAssignedRoleIds: PropTypes.object,
+    initialAssignedRoleIds: PropTypes.shape({}),
     checkAndHandleKeycloakAuthUser: PropTypes.func,
     confirmCreateKeycloakUser: PropTypes.func
   }

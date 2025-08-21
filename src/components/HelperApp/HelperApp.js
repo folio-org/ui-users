@@ -6,8 +6,8 @@ import { stripesConnect } from '@folio/stripes/core';
 
 class HelperApp extends React.Component {
   static propTypes = {
-    match: PropTypes.object,
-    stripes: PropTypes.object,
+    match: PropTypes.shape({}),
+    stripes: PropTypes.shape({}),
     onClose: PropTypes.func,
     appName: PropTypes.string,
   };

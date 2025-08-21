@@ -131,10 +131,10 @@ const RefundsReportModal = (props) => {
 };
 
 RefundsReportModal.propTypes = {
-  form: PropTypes.object.isRequired,
-  intl: PropTypes.object.isRequired,
+  form: PropTypes.shape({}).isRequired,
+  intl: PropTypes.shape({}).isRequired,
   label: PropTypes.string.isRequired,
-  owners: PropTypes.arrayOf(PropTypes.object).isRequired,
+  owners: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   onClose: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
 };

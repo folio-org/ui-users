@@ -30,7 +30,7 @@ const AssignedUsersList = ({ users = [], isFetching = false }) => (
 );
 
 AssignedUsersList.propTypes = {
-  users: PropTypes.arrayOf(PropTypes.object),
+  users: PropTypes.arrayOf(PropTypes.shape({})),
   isFetching: PropTypes.bool,
 };
 

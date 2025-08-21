@@ -25,7 +25,7 @@ class RenderRoles extends React.Component {
       formatMessage: PropTypes.func.isRequired,
     }),
     isLoading: PropTypes.bool,
-    listedRoles: PropTypes.arrayOf(PropTypes.object),
+    listedRoles: PropTypes.arrayOf(PropTypes.shape({})),
     onChangeAffiliation: PropTypes.func,
     onToggle: PropTypes.func,
     permToRead: PropTypes.string.isRequired,

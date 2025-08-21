@@ -56,13 +56,13 @@ const ProxyPermissions = (props) => {
 };
 
 ProxyPermissions.propTypes = {
-  stripes: PropTypes.object.isRequired,
+  stripes: PropTypes.shape({}).isRequired,
   expanded: PropTypes.bool,
   onToggle: PropTypes.func,
   accordionId: PropTypes.string.isRequired,
-  proxies: PropTypes.arrayOf(PropTypes.object),
-  sponsors: PropTypes.arrayOf(PropTypes.object),
-  user: PropTypes.object,
+  proxies: PropTypes.arrayOf(PropTypes.shape({})),
+  sponsors: PropTypes.arrayOf(PropTypes.shape({})),
+  user: PropTypes.shape({}),
 };
 
 export default ProxyPermissions;

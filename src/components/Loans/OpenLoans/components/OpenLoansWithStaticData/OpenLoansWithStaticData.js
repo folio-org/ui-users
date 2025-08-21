@@ -24,21 +24,21 @@ import { refundClaimReturned } from '../../../../../constants';
 
 class OpenLoansWithStaticData extends React.Component {
   static propTypes = {
-    intl: PropTypes.object.isRequired,
+    intl: PropTypes.shape({}).isRequired,
     stripes: stripesShape.isRequired,
     user: PropTypes.shape({
       id: PropTypes.string.isRequired,
     }).isRequired,
     activeLoan: PropTypes.string,
-    loans: PropTypes.arrayOf(PropTypes.object).isRequired,
-    patronBlocks: PropTypes.arrayOf(PropTypes.object).isRequired,
-    requestRecords: PropTypes.arrayOf(PropTypes.object).isRequired,
-    visibleColumns: PropTypes.arrayOf(PropTypes.object).isRequired,
+    loans: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    patronBlocks: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    requestRecords: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    visibleColumns: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     possibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
-    resources: PropTypes.object.isRequired,
-    patronGroup: PropTypes.object.isRequired,
-    checkedLoans: PropTypes.object.isRequired,
-    requestCounts: PropTypes.object.isRequired,
+    resources: PropTypes.shape({}).isRequired,
+    patronGroup: PropTypes.shape({}).isRequired,
+    checkedLoans: PropTypes.shape({}).isRequired,
+    requestCounts: PropTypes.shape({}).isRequired,
     allChecked: PropTypes.bool.isRequired,
     patronBlockedModal: PropTypes.bool.isRequired,
     changeDueDateDialogOpen: PropTypes.bool.isRequired,
@@ -55,9 +55,9 @@ class OpenLoansWithStaticData extends React.Component {
     hideChangeDueDateDialog: PropTypes.func.isRequired,
     onClosePatronBlockedModal: PropTypes.func.isRequired,
     feeFineCount: PropTypes.func.isRequired,
-    history: PropTypes.object,
-    location: PropTypes.object,
-    match: PropTypes.object,
+    history: PropTypes.shape({}),
+    location: PropTypes.shape({}),
+    match: PropTypes.shape({}),
   };
 
   constructor(props) {

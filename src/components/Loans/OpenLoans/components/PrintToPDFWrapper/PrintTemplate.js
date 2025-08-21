@@ -27,7 +27,7 @@ const PrintTemplate = ({ dataSource, templateFn }) => {
 };
 
 PrintTemplate.propTypes = {
-  dataSource: PropTypes.object,
+  dataSource: PropTypes.shape({}),
   templateFn: PropTypes.func,
 };
 

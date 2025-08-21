@@ -49,7 +49,7 @@ const Setting = ({
 Setting.propTypes = {
   label: PropTypes.string,
   name: PropTypes.string,
-  intl: PropTypes.object,
+  intl: PropTypes.shape({}),
   viewOnly: PropTypes.bool,
 };
 
@@ -123,7 +123,7 @@ CommentRequiredForm.propTypes = {
   handleSubmit: PropTypes.func,
   pristine: PropTypes.bool,
   submitting: PropTypes.bool,
-  intl: PropTypes.object,
+  intl: PropTypes.shape({}),
   viewOnly: PropTypes.bool,
 };
 

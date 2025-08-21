@@ -49,9 +49,9 @@ const PermissionsAccordionListItem = ({ item, index, fields, showPerms, permToDe
 };
 
 PermissionsAccordionListItem.propTypes = {
-  item: PropTypes.object,
+  item: PropTypes.shape({}),
   index: PropTypes.number,
-  fields: PropTypes.object,
+  fields: PropTypes.shape({}),
   showPerms: PropTypes.bool,
   permToDelete: PropTypes.string,
   changePermissions: PropTypes.func.isRequired,

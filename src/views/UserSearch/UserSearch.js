@@ -66,30 +66,57 @@ let searchableIndexes;
 class UserSearch extends React.Component {
   static propTypes = {
     children: PropTypes.node,
-    contentRef: PropTypes.object,
-    // filterConfig: PropTypes.arrayOf(PropTypes.object),
-    history: PropTypes.object.isRequired,
+    contentRef: PropTypes.shape({}),
+    // filterConfig: PropTypes.arrayOf(PropTypes.shape({})),
+    history: PropTypes.shape({
+      push: PropTypes.func,
+    }).isRequired,
     idPrefix: PropTypes.string,
     initialSearch: PropTypes.string,
-    intl: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired,
-    match: PropTypes.object.isRequired,
+    intl: PropTypes.shape({
+      formatMessage: PropTypes.func.isRequired,
+    }).isRequired,
+    location: PropTypes.shape({
+      pathname: PropTypes.string,
+      search: PropTypes.string,
+    }).isRequired,
+    match: PropTypes.shape({
+      path: PropTypes.string,
+      params: PropTypes.shape({}),
+    }).isRequired,
     onComponentWillUnmount: PropTypes.func,
     onNeedMoreData: PropTypes.func.isRequired,
     queryGetter: PropTypes.func,
     querySetter: PropTypes.func,
     resources: PropTypes.shape({
-      records: PropTypes.object,
-      patronGroups: PropTypes.object,
-      departments: PropTypes.object,
-      owners: PropTypes.object,
-      servicePointsUsers: PropTypes.object,
+      records: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.shape({})),
+        isPending: PropTypes.bool,
+        other: PropTypes.shape({
+          totalRecords: PropTypes.number,
+        }),
+      }),
+      patronGroups: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.shape({})),
+      }),
+      departments: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.shape({})),
+      }),
+      owners: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.shape({})),
+      }),
+      servicePointsUsers: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.shape({})),
+      }),
       query: PropTypes.shape({
         qindex: PropTypes.string,
       }).isRequired,
     }).isRequired,
     mutator: PropTypes.shape({
-      loans: PropTypes.object,
+      loans: PropTypes.shape({
+        GET: PropTypes.func,
+        reset: PropTypes.func,
+      }),
       resultOffset: PropTypes.shape({
         replace: PropTypes.func.isRequired,
       }),
@@ -111,10 +138,13 @@ class UserSearch extends React.Component {
     }).isRequired,
     okapi: PropTypes.shape({
       currentUser: PropTypes.shape({
-        servicePoints: PropTypes.arrayOf(PropTypes.object),
+        servicePoints: PropTypes.arrayOf(PropTypes.shape({})),
       }),
     }),
-    source: PropTypes.object,
+    source: PropTypes.shape({
+      totalCount: PropTypes.func,
+      loaded: PropTypes.func,
+    }),
     stripes: PropTypes.shape({
       timezone: PropTypes.string.isRequired,
     }),

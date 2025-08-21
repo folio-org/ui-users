@@ -36,13 +36,13 @@ class CommentRequiredSettings extends React.Component {
     }),
     resources: PropTypes.shape({
       commentRequired: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
     }),
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired
     }).isRequired,
-    intl: PropTypes.object,
+    intl: PropTypes.shape({}),
   };
 
   componentDidMount() {

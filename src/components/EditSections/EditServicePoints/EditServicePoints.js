@@ -33,12 +33,12 @@ class EditServicePoints extends React.Component {
     accordionId: PropTypes.string.isRequired,
     expanded: PropTypes.bool,
     initialValues: PropTypes.shape({
-      servicePoints: PropTypes.arrayOf(PropTypes.object),
+      servicePoints: PropTypes.arrayOf(PropTypes.shape({})),
     }).isRequired,
     onToggle: PropTypes.func,
-    formData: PropTypes.object.isRequired,
-    intl: PropTypes.object.isRequired,
-    form: PropTypes.object,
+    formData: PropTypes.shape({}).isRequired,
+    intl: PropTypes.shape({}).isRequired,
+    form: PropTypes.shape({}),
     setButtonRef: PropTypes.func,
   };
 

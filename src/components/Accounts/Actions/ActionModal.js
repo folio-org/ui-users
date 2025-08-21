@@ -33,13 +33,13 @@ import { localizeCurrencyAmount } from '../../util';
 
 class ActionModal extends React.Component {
   static propTypes = {
-    form: PropTypes.object.isRequired,
+    form: PropTypes.shape({}).isRequired,
     onClose: PropTypes.func,
     handleSubmit: PropTypes.func,
     open: PropTypes.bool,
-    accounts: PropTypes.arrayOf(PropTypes.object),
-    feeFineActions: PropTypes.arrayOf(PropTypes.object),
-    data: PropTypes.arrayOf(PropTypes.object),
+    accounts: PropTypes.arrayOf(PropTypes.shape({})),
+    feeFineActions: PropTypes.arrayOf(PropTypes.shape({})),
+    data: PropTypes.arrayOf(PropTypes.shape({})),
     balance: PropTypes.string,
     totalPaidAmount: PropTypes.string,
     owedAmount: PropTypes.string,
@@ -47,14 +47,14 @@ class ActionModal extends React.Component {
     pristine: PropTypes.bool,
     reset: PropTypes.func,
     commentRequired: PropTypes.bool,
-    owners: PropTypes.arrayOf(PropTypes.object),
+    owners: PropTypes.arrayOf(PropTypes.shape({})),
     label: PropTypes.string,
     action: PropTypes.string,
-    intl: PropTypes.object.isRequired,
+    intl: PropTypes.shape({}).isRequired,
     checkAmount: PropTypes.string,
-    okapi: PropTypes.object,
-    initialValues: PropTypes.object,
-    stripes: PropTypes.object,
+    okapi: PropTypes.shape({}),
+    initialValues: PropTypes.shape({}),
+    stripes: PropTypes.shape({}),
   };
 
   static defaultProps = {

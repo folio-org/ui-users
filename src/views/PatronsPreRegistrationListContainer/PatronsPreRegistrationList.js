@@ -104,7 +104,7 @@ const PatronsPreRegistrationList = ({
 PatronsPreRegistrationList.propTypes = {
   isEmptyMessage: PropTypes.node.isRequired,
   totalCount: PropTypes.number.isRequired,
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   onNeedMoreData: PropTypes.func.isRequired,
   sortOrder: PropTypes.string,
   onSort: PropTypes.func.isRequired,

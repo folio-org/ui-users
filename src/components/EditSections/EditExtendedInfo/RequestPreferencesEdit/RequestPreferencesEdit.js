@@ -28,14 +28,14 @@ import styles from './RequestPreferencesEdit.css';
 class RequestPreferencesEdit extends Component {
   static propTypes = {
     deliveryAvailable: PropTypes.bool,
-    servicePoints: PropTypes.arrayOf(PropTypes.object),
+    servicePoints: PropTypes.arrayOf(PropTypes.shape({})),
     addresses: PropTypes.arrayOf(PropTypes.shape({
       addressType: PropTypes.string.isRequired,
     })),
     addressTypes: addressTypesShape,
     setFieldValue: PropTypes.func.isRequired,
     defaultDeliveryAddressTypeId: nullOrStringIsRequiredTypeValidator,
-    intl: PropTypes.object.isRequired,
+    intl: PropTypes.shape({}).isRequired,
     disabled: PropTypes.bool,
   }
 

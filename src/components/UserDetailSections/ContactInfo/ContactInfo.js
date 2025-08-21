@@ -87,13 +87,13 @@ const ContactInfo = ({
 };
 
 ContactInfo.propTypes = {
-  customFields: PropTypes.arrayOf(PropTypes.object).isRequired,
+  customFields: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   expanded: PropTypes.bool,
   onToggle: PropTypes.func,
   accordionId: PropTypes.string.isRequired,
-  user: PropTypes.object,
-  addressTypes: PropTypes.arrayOf(PropTypes.object),
-  addresses: PropTypes.arrayOf(PropTypes.object),
+  user: PropTypes.shape({}),
+  addressTypes: PropTypes.arrayOf(PropTypes.shape({})),
+  addresses: PropTypes.arrayOf(PropTypes.shape({})),
 };
 
 export default ContactInfo;

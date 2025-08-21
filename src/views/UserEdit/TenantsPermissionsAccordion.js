@@ -143,8 +143,8 @@ const TenantsPermissionsAccordion = ({
 };
 
 TenantsPermissionsAccordion.propTypes = {
-  initialValues: PropTypes.object.isRequired,
-  form: PropTypes.object.isRequired,
+  initialValues: PropTypes.shape({}).isRequired,
+  form: PropTypes.shape({}).isRequired,
   setButtonRef: PropTypes.func,
 };
 

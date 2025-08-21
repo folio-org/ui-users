@@ -18,9 +18,9 @@ import {
 // HOC used to manage renew
 const withRenew = WrappedComponent => class WithRenewComponent extends React.Component {
   static propTypes = {
-    intl: PropTypes.object,
-    loans: PropTypes.arrayOf(PropTypes.object),
-    patronBlocks: PropTypes.arrayOf(PropTypes.object),
+    intl: PropTypes.shape({}),
+    loans: PropTypes.arrayOf(PropTypes.shape({})),
+    patronBlocks: PropTypes.arrayOf(PropTypes.shape({})),
     mutator: PropTypes.shape({
       loanPolicies: PropTypes.shape({
         GET: PropTypes.func.isRequired,
@@ -37,7 +37,7 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
     }),
-    user: PropTypes.object,
+    user: PropTypes.shape({}),
   };
 
   static defaultProps = {

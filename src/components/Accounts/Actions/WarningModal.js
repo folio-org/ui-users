@@ -30,13 +30,13 @@ import css from './modal.css';
 
 class WarningModal extends React.Component {
   static propTypes = {
-    accounts: PropTypes.arrayOf(PropTypes.object),
-    feeFineActions: PropTypes.arrayOf(PropTypes.object),
+    accounts: PropTypes.arrayOf(PropTypes.shape({})),
+    feeFineActions: PropTypes.arrayOf(PropTypes.shape({})),
     onChangeAccounts: PropTypes.func.isRequired,
     open: PropTypes.bool,
     label: PropTypes.string,
     onClose: PropTypes.func.isRequired,
-    intl: PropTypes.object.isRequired,
+    intl: PropTypes.shape({}).isRequired,
     stripes: stripesShape.isRequired,
   };
 

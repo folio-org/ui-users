@@ -63,10 +63,10 @@ const CustomFieldsFilter = ({
 };
 
 CustomFieldsFilter.propTypes = {
-  customField: PropTypes.object,
+  customField: PropTypes.shape({}),
   clearGroup: PropTypes.func,
   onChange: PropTypes.func,
-  activeFilters: PropTypes.object,
+  activeFilters: PropTypes.shape({}),
 };
 
 export default memo(CustomFieldsFilter);

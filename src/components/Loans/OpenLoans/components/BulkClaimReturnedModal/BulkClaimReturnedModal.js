@@ -67,8 +67,8 @@ class BulkClaimReturnedModal extends React.Component {
   });
 
   static propTypes = {
-    checkedLoansIndex: PropTypes.object.isRequired,
-    intl: PropTypes.object.isRequired,
+    checkedLoansIndex: PropTypes.shape({}).isRequired,
+    intl: PropTypes.shape({}).isRequired,
     mutator: PropTypes.shape({
       claimReturned: PropTypes.shape({
         POST: PropTypes.func.isRequired,
@@ -92,7 +92,7 @@ class BulkClaimReturnedModal extends React.Component {
       }).isRequired,
     }).isRequired,
     okapi: PropTypes.shape({
-      currentUser: PropTypes.object.isRequired,
+      currentUser: PropTypes.shape({}).isRequired,
     }).isRequired,
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
@@ -104,7 +104,7 @@ class BulkClaimReturnedModal extends React.Component {
     }),
     onCancel: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
-    requestCounts: PropTypes.object.isRequired,
+    requestCounts: PropTypes.shape({}).isRequired,
   }
 
   constructor(props) {

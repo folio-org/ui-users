@@ -28,11 +28,11 @@ const ProxyViewList = ({ records, name, label, itemComponent, stripes }) => {
 };
 
 ProxyViewList.propTypes = {
-  records: PropTypes.arrayOf(PropTypes.object),
+  records: PropTypes.arrayOf(PropTypes.shape({})),
   itemComponent: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
   label: PropTypes.node.isRequired,
-  stripes: PropTypes.object.isRequired,
+  stripes: PropTypes.shape({}).isRequired,
 };
 
 export default ProxyViewList;

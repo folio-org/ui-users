@@ -15,16 +15,16 @@ import { effectiveCallNumber } from '@folio/stripes/util';
 
 class BulkOverrideLoansList extends Component {
   static propTypes = {
-    intl: PropTypes.object.isRequired,
+    intl: PropTypes.shape({}).isRequired,
     height: PropTypes.number,
     allChecked: PropTypes.bool.isRequired,
-    loanPolicies: PropTypes.object.isRequired,
-    errorMessages: PropTypes.object.isRequired,
-    requestCounts: PropTypes.object.isRequired,
+    loanPolicies: PropTypes.shape({}).isRequired,
+    errorMessages: PropTypes.shape({}).isRequired,
+    requestCounts: PropTypes.shape({}).isRequired,
     toggleAll: PropTypes.func.isRequired,
     toggleItem: PropTypes.func.isRequired,
     isLoanChecked: PropTypes.func.isRequired,
-    failedRenewals: PropTypes.arrayOf(PropTypes.object).isRequired,
+    failedRenewals: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   };
 
   static defaultProps = {

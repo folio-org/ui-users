@@ -159,9 +159,9 @@ EditContactInfo.propTypes = {
   expanded: PropTypes.bool,
   onToggle: PropTypes.func,
   accordionId: PropTypes.string.isRequired,
-  addressTypes: PropTypes.arrayOf(PropTypes.object),
+  addressTypes: PropTypes.arrayOf(PropTypes.shape({})),
   preferredContactTypeId: PropTypes.string,
-  intl: PropTypes.object.isRequired,
+  intl: PropTypes.shape({}).isRequired,
   disabled: PropTypes.bool,
   isCreateMode: PropTypes.bool,
 };

@@ -36,8 +36,8 @@ const AssignUsers = ({ assignUsers, stripes, selectedUsers, tenantId }) => {
 
 AssignUsers.propTypes = {
   assignUsers: PropTypes.func.isRequired,
-  stripes: PropTypes.object.isRequired,
-  selectedUsers: PropTypes.arrayOf(PropTypes.object),
+  stripes: PropTypes.shape({}).isRequired,
+  selectedUsers: PropTypes.arrayOf(PropTypes.shape({})),
   tenantId: PropTypes.string,
 };
 

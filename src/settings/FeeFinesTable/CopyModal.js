@@ -35,11 +35,11 @@ const validate = (type) => {
 
 class CopyForm extends React.Component {
   static propTypes = {
-    owners: PropTypes.arrayOf(PropTypes.object),
+    owners: PropTypes.arrayOf(PropTypes.shape({})),
     onClose: PropTypes.func,
-    form: PropTypes.object,
+    form: PropTypes.shape({}),
     handleSubmit: PropTypes.func.isRequired,
-    intl: PropTypes.object.isRequired,
+    intl: PropTypes.shape({}).isRequired,
   };
 
   constructor(props) {
@@ -118,7 +118,7 @@ const CopyModal = props => (
 );
 
 CopyModal.propTypes = {
-  ownerList: PropTypes.arrayOf(PropTypes.object),
+  ownerList: PropTypes.arrayOf(PropTypes.shape({})),
   onCloseModal: PropTypes.func,
   openModal: PropTypes.bool,
   onCopyFeeFines: PropTypes.func,

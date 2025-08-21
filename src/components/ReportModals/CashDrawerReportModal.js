@@ -183,13 +183,13 @@ const CashDrawerReportModal = (props) => {
 };
 
 CashDrawerReportModal.propTypes = {
-  form: PropTypes.object.isRequired,
-  intl: PropTypes.object.isRequired,
+  form: PropTypes.shape({}).isRequired,
+  intl: PropTypes.shape({}).isRequired,
   label: PropTypes.string.isRequired,
-  servicePoints: PropTypes.arrayOf(PropTypes.object).isRequired,
+  servicePoints: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   onClose: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  values: PropTypes.object.isRequired,
+  values: PropTypes.shape({}).isRequired,
   cashDrawerReportSources: PropTypes.shape({
     POST: PropTypes.func.isRequired,
   }).isRequired,

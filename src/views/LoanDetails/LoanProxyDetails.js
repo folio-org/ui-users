@@ -24,7 +24,7 @@ class LoanProxyDetails extends React.Component {
     id: PropTypes.string,
     resources: PropTypes.shape({
       proxy: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
         hasLoaded: PropTypes.bool,
       }),
     }),

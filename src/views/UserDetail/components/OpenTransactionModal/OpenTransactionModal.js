@@ -50,7 +50,7 @@ function OpenTransactionModal(props) {
 
 OpenTransactionModal.propTypes = {
   username: PropTypes.string,
-  openTransactions: PropTypes.object,
+  openTransactions: PropTypes.shape({}),
   onCloseModal: PropTypes.func,
 };
 

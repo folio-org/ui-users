@@ -29,7 +29,7 @@ const PrintContent = ({
 };
 
 PrintContent.propTypes = {
-  dataSource: PropTypes.object,
+  dataSource: PropTypes.shape({}),
   templateFn: PropTypes.func,
   contentRef: PropTypes.func,
 };

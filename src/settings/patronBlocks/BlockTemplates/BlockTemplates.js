@@ -69,10 +69,10 @@ BlockTemplates.manifest = Object.freeze({
 });
 
 BlockTemplates.propTypes = {
-  intl: PropTypes.object,
+  intl: PropTypes.shape({}),
   resources: PropTypes.shape({
     manualBlockTemplates: PropTypes.shape({
-      records: PropTypes.arrayOf(PropTypes.object),
+      records: PropTypes.arrayOf(PropTypes.shape({})),
     }),
   }),
   mutator: PropTypes.shape({

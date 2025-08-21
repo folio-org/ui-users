@@ -47,10 +47,10 @@ class EditUserInfo extends React.Component {
   static propTypes = {
     accordionId: PropTypes.string.isRequired,
     expanded: PropTypes.bool,
-    initialValues: PropTypes.object,
-    intl: PropTypes.object.isRequired,
+    initialValues: PropTypes.shape({}),
+    intl: PropTypes.shape({}).isRequired,
     onToggle: PropTypes.func,
-    patronGroups: PropTypes.arrayOf(PropTypes.object),
+    patronGroups: PropTypes.arrayOf(PropTypes.shape({})),
     stripes: PropTypes.shape({
       timezone: PropTypes.string.isRequired,
       locale: PropTypes.string.isRequired,
@@ -60,11 +60,11 @@ class EditUserInfo extends React.Component {
       }),
       hasPerm: PropTypes.func,
     }).isRequired,
-    form: PropTypes.object,
+    form: PropTypes.shape({}),
     disabled: PropTypes.bool,
-    numberGeneratorData: PropTypes.object,
-    uniquenessValidator: PropTypes.object,
-    profilePictureConfig: PropTypes.object.isRequired,
+    numberGeneratorData: PropTypes.shape({}),
+    uniquenessValidator: PropTypes.shape({}),
+    profilePictureConfig: PropTypes.shape({}).isRequired,
   };
 
   constructor(props) {

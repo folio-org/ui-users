@@ -33,17 +33,17 @@ Item.propTypes = {
   edit: PropTypes.bool,
   value: PropTypes.string,
   name: PropTypes.string,
-  dataOptions: PropTypes.arrayOf(PropTypes.object),
+  dataOptions: PropTypes.arrayOf(PropTypes.shape({})),
 };
 
 class ChargeNotice extends React.Component {
   static propTypes = {
-    owner: PropTypes.object,
+    owner: PropTypes.shape({}),
     handleSubmit: PropTypes.func,
-    templateCharge: PropTypes.arrayOf(PropTypes.object),
-    templateAction: PropTypes.arrayOf(PropTypes.object),
-    templates: PropTypes.arrayOf(PropTypes.object),
-    form: PropTypes.object,
+    templateCharge: PropTypes.arrayOf(PropTypes.shape({})),
+    templateAction: PropTypes.arrayOf(PropTypes.shape({})),
+    templates: PropTypes.arrayOf(PropTypes.shape({})),
+    form: PropTypes.shape({}),
     hasEditOwnerPerm: PropTypes.bool,
   };
 

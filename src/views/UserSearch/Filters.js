@@ -25,16 +25,16 @@ const ACCORDION_ID_PREFIX = 'users-filter-accordion';
 
 class Filters extends React.Component {
   static propTypes = {
-    activeFilters: PropTypes.object,
+    activeFilters: PropTypes.shape({}),
     intl: PropTypes.shape({
       formatMessage: PropTypes.func.isRequired,
     }).isRequired,
-    resources: PropTypes.object.isRequired,
-    onChangeHandlers: PropTypes.object.isRequired,
+    resources: PropTypes.shape({}).isRequired,
+    onChangeHandlers: PropTypes.shape({}).isRequired,
     resultOffset: PropTypes.shape({
       replace: PropTypes.func.isRequired,
     }),
-    stripes: PropTypes.object.isRequired,
+    stripes: PropTypes.shape({}).isRequired,
   };
 
   static defaultProps = {

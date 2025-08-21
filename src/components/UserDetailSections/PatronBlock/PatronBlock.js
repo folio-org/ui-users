@@ -33,17 +33,17 @@ class PatronBlock extends React.Component {
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func,
     }),
-    history: PropTypes.object,
-    location: PropTypes.object,
-    match: PropTypes.object,
-    intl: PropTypes.object.isRequired,
+    history: PropTypes.shape({}),
+    location: PropTypes.shape({}),
+    match: PropTypes.shape({}),
+    intl: PropTypes.shape({}).isRequired,
     onToggle: PropTypes.func,
     expanded: PropTypes.bool,
     accordionId: PropTypes.string,
-    patronBlocks: PropTypes.arrayOf(PropTypes.object),
+    patronBlocks: PropTypes.arrayOf(PropTypes.shape({})),
     resources: PropTypes.shape({
       selUser: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
     }),
     mutator: PropTypes.shape({

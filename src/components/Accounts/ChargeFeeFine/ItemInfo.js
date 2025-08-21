@@ -17,7 +17,7 @@ class ItemInfo extends React.Component {
   static propTypes = {
     resources: PropTypes.shape({
       items: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
         isPending: PropTypes.bool,
       }),
       activeRecord: PropTypes.shape({
@@ -29,10 +29,10 @@ class ItemInfo extends React.Component {
         replace: PropTypes.func,
       }),
     }),
-    values: PropTypes.object.isRequired,
-    form: PropTypes.object.isRequired,
+    values: PropTypes.shape({}).isRequired,
+    form: PropTypes.shape({}).isRequired,
     onClickSelectItem: PropTypes.func,
-    item: PropTypes.object,
+    item: PropTypes.shape({}),
     editable: PropTypes.bool,
   };
 

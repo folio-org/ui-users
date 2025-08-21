@@ -71,7 +71,7 @@ class FeeFineSettings extends React.Component {
 
   static propTypes = {
     stripes: stripesShape.isRequired,
-    resources: PropTypes.object,
+    resources: PropTypes.shape({}),
     mutator: PropTypes.shape({
       feefines: PropTypes.shape({
         POST: PropTypes.func.isRequired,
@@ -87,7 +87,7 @@ class FeeFineSettings extends React.Component {
         PUT: PropTypes.func.isRequired,
       }),
     }).isRequired,
-    intl: PropTypes.object.isRequired,
+    intl: PropTypes.shape({}).isRequired,
   };
 
   constructor(props) {

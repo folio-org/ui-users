@@ -42,22 +42,22 @@ import css from './ClosedLoans.css';
 class ClosedLoans extends React.Component {
   static propTypes = {
     stripes: stripesShape.isRequired,
-    loans: PropTypes.arrayOf(PropTypes.object).isRequired,
+    loans: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     mutator: PropTypes.shape({
-      query: PropTypes.object.isRequired,
-      activeRecord: PropTypes.object,
+      query: PropTypes.shape({}).isRequired,
+      activeRecord: PropTypes.shape({}),
       anonymize: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }),
     }),
     resources: PropTypes.shape({
-      query: PropTypes.object,
+      query: PropTypes.shape({}),
     }),
-    match: PropTypes.object,
-    user: PropTypes.object,
-    intl: PropTypes.object.isRequired,
-    history: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired,
+    match: PropTypes.shape({}),
+    user: PropTypes.shape({}),
+    intl: PropTypes.shape({}).isRequired,
+    history: PropTypes.shape({}).isRequired,
+    location: PropTypes.shape({}).isRequired,
   };
 
   constructor(props) {

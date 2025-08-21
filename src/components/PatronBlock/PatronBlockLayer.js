@@ -17,18 +17,18 @@ class PatronBlockLayer extends React.Component {
         PUT: PropTypes.func.isRequired,
         DELETE: PropTypes.func.isRequired
       }),
-      activeRecord: PropTypes.object,
+      activeRecord: PropTypes.shape({}),
     }).isRequired,
     resources: PropTypes.shape({
-      manualPatronBlocks: PropTypes.object,
+      manualPatronBlocks: PropTypes.shape({}),
     }),
-    user: PropTypes.object,
-    selectedPatronBlock: PropTypes.object,
-    history: PropTypes.object,
-    location: PropTypes.object,
-    match: PropTypes.object,
-    intl: PropTypes.object.isRequired,
-    stripes: PropTypes.object,
+    user: PropTypes.shape({}),
+    selectedPatronBlock: PropTypes.shape({}),
+    history: PropTypes.shape({}),
+    location: PropTypes.shape({}),
+    match: PropTypes.shape({}),
+    intl: PropTypes.shape({}).isRequired,
+    stripes: PropTypes.shape({}),
   };
 
   constructor(props) {

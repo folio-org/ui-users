@@ -72,15 +72,15 @@ const columns = [
 
 class AccountDetails extends React.Component {
   static propTypes = {
-    stripes: PropTypes.object,
+    stripes: PropTypes.shape({}),
     resources: PropTypes.shape({
       feefineshistory: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
-      accountActions: PropTypes.object,
-      accounts: PropTypes.object.isRequired,
-      feefineactions: PropTypes.object.isRequired,
-      loans: PropTypes.object.isRequired,
+      accountActions: PropTypes.shape({}),
+      accounts: PropTypes.shape({}).isRequired,
+      feefineactions: PropTypes.shape({}).isRequired,
+      loans: PropTypes.shape({}).isRequired,
     }),
     mutator: PropTypes.shape({
       activeRecord: PropTypes.shape({
@@ -97,20 +97,20 @@ class AccountDetails extends React.Component {
     user: PropTypes.shape({
       id: PropTypes.string.isRequired,
     }).isRequired,
-    history: PropTypes.object,
-    match: PropTypes.object,
+    history: PropTypes.shape({}),
+    match: PropTypes.shape({}),
     patronGroup: PropTypes.shape({
       group: PropTypes.string.isRequired,
     }).isRequired,
-    itemDetails: PropTypes.object,
+    itemDetails: PropTypes.shape({}),
     okapi: PropTypes.shape({
       currentUser: PropTypes.shape({
-        servicePoints: PropTypes.arrayOf(PropTypes.object).isRequired,
+        servicePoints: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
       }).isRequired,
     }).isRequired,
-    account: PropTypes.object,
+    account: PropTypes.shape({}),
     owedAmount: PropTypes.number,
-    intl: PropTypes.object.isRequired,
+    intl: PropTypes.shape({}).isRequired,
   };
 
   static defaultProps = {

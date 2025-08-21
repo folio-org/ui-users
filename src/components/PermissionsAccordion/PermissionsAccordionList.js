@@ -50,7 +50,7 @@ const PermissionsAccordionList = ({ fields, showPerms, getAssignedPermissions, c
 };
 
 PermissionsAccordionList.propTypes = {
-  fields: PropTypes.object,
+  fields: PropTypes.shape({}),
   showPerms: PropTypes.bool,
   getAssignedPermissions: PropTypes.func,
   changePermissions: PropTypes.func.isRequired,

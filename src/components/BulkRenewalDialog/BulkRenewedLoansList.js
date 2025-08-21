@@ -17,11 +17,11 @@ import css from './BulkRenewedLoansList.css';
 
 const propTypes = {
   height: PropTypes.number,
-  failedRenewals: PropTypes.arrayOf(PropTypes.object).isRequired,
-  successRenewals: PropTypes.arrayOf(PropTypes.object).isRequired,
-  requestCounts: PropTypes.object.isRequired,
-  loanPolicies: PropTypes.object.isRequired,
-  errorMessages: PropTypes.object.isRequired,
+  failedRenewals: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  successRenewals: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  requestCounts: PropTypes.shape({}).isRequired,
+  loanPolicies: PropTypes.shape({}).isRequired,
+  errorMessages: PropTypes.shape({}).isRequired,
 };
 
 const BulkRenewedLoansList = (props) => {

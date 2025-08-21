@@ -11,12 +11,12 @@ import { toAddressTypeOptions } from '../data/converters/address_type';
 
 class UserAddresses extends React.Component {
   static propTypes = {
-    addresses: PropTypes.arrayOf(PropTypes.object),
-    addressTypes: PropTypes.arrayOf(PropTypes.object),
+    addresses: PropTypes.arrayOf(PropTypes.shape({})),
+    addressTypes: PropTypes.arrayOf(PropTypes.shape({})),
     onUpdate: PropTypes.func,
     expanded: PropTypes.bool,
     editable: PropTypes.bool,
-    intl: PropTypes.object.isRequired,
+    intl: PropTypes.shape({}).isRequired,
   };
 
   constructor(props) {

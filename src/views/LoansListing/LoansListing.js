@@ -21,12 +21,12 @@ import css from './LoansListing.css';
  */
 class LoansListing extends React.Component {
   static propTypes = {
-    user: PropTypes.object.isRequired,
-    patronGroup: PropTypes.object.isRequired,
-    loansHistory: PropTypes.arrayOf(PropTypes.object).isRequired,
-    location: PropTypes.object,
-    history: PropTypes.object,
-    match: PropTypes.object,
+    user: PropTypes.shape({}).isRequired,
+    patronGroup: PropTypes.shape({}).isRequired,
+    loansHistory: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    location: PropTypes.shape({}),
+    history: PropTypes.shape({}),
+    match: PropTypes.shape({}),
   };
 
   constructor(props) {

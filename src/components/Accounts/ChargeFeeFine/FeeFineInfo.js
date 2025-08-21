@@ -14,16 +14,16 @@ import { formatCurrencyAmount } from '../../util';
 
 class FeeFineInfo extends React.Component {
   static propTypes = {
-    feefineList: PropTypes.arrayOf(PropTypes.object),
-    form: PropTypes.object.isRequired,
+    feefineList: PropTypes.arrayOf(PropTypes.shape({})),
+    form: PropTypes.shape({}).isRequired,
     initialValues: PropTypes.shape({
       ownerId: PropTypes.string,
     }).isRequired,
     onChangeOwner: PropTypes.func.isRequired,
-    ownerOptions: PropTypes.arrayOf(PropTypes.object),
+    ownerOptions: PropTypes.arrayOf(PropTypes.shape({})),
     onChangeFeeFine: PropTypes.func,
-    intl: PropTypes.object,
-    isPending: PropTypes.object,
+    intl: PropTypes.shape({}),
+    isPending: PropTypes.shape({}),
   };
 
   componentDidMount() {

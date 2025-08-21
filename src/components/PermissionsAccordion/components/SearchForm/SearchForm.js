@@ -82,8 +82,8 @@ export default function SearchForm(props) {
 }
 
 SearchForm.propTypes = {
-  config: PropTypes.object.isRequired,
-  filters: PropTypes.object.isRequired,
+  config: PropTypes.shape({}).isRequired,
+  filters: PropTypes.shape({}).isRequired,
   onSubmitSearch: PropTypes.func.isRequired,
   onChangeFilter: PropTypes.func.isRequired,
   onClearFilter: PropTypes.func.isRequired,

@@ -368,9 +368,9 @@ const EditUserProfilePicture = ({ profilePictureId, form, personal, profilePictu
 };
 
 EditUserProfilePicture.propTypes = {
-  form: PropTypes.object.isRequired,
+  form: PropTypes.shape({}).isRequired,
   profilePictureId: PropTypes.string,
-  personal: PropTypes.object.isRequired,
+  personal: PropTypes.shape({}).isRequired,
   profilePictureMaxFileSize: PropTypes.number.isRequired,
 };
 

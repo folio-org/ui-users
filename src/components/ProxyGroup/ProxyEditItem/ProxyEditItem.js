@@ -29,12 +29,12 @@ import css from './ProxyEditItem.css';
 class ProxyEditItem extends React.Component {
   static propTypes = {
     index: PropTypes.number,
-    record: PropTypes.object,
+    record: PropTypes.shape({}),
     namespace: PropTypes.string, // sponsors or proxies
     name: PropTypes.string,
     onDelete: PropTypes.func,
     change: PropTypes.func.isRequired,
-    formValues: PropTypes.object,
+    formValues: PropTypes.shape({}),
   };
 
   constructor() {

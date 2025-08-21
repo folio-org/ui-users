@@ -73,7 +73,7 @@ const UserRolesList = ({ assignedUserRoleIds,
 };
 
 UserRolesList.propTypes = {
-  assignedUserRoleIds: PropTypes.object.isRequired,
+  assignedUserRoleIds: PropTypes.shape({}).isRequired,
   filteredRoles: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,

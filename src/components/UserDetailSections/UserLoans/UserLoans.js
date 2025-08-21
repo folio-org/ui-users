@@ -113,7 +113,7 @@ class UserLoans extends React.Component {
   });
 
   static propTypes = {
-    customFields: PropTypes.arrayOf(PropTypes.object).isRequired,
+    customFields: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     mutator: PropTypes.shape({
       openLoans: PropTypes.shape({
         GET: PropTypes.func.isRequired,
@@ -126,14 +126,14 @@ class UserLoans extends React.Component {
       }).isRequired,
     }).isRequired,
     resources: PropTypes.shape({
-      closedLoansCount: PropTypes.object,
-      openLoans: PropTypes.object,
-      claimedReturnedCount: PropTypes.object,
+      closedLoansCount: PropTypes.shape({}),
+      openLoans: PropTypes.shape({}),
+      claimedReturnedCount: PropTypes.shape({}),
     }),
     accordionId: PropTypes.string,
     expanded: PropTypes.bool,
     onToggle: PropTypes.func,
-    match: PropTypes.object,
+    match: PropTypes.shape({}),
     location: PropTypes.shape({
       search: PropTypes.string,
       pathname: PropTypes.string,

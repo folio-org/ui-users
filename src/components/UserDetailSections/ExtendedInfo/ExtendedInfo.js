@@ -113,10 +113,10 @@ const ExtendedInfo = (props) => {
 
 ExtendedInfo.propTypes = {
   accordionId: PropTypes.string.isRequired,
-  customFields: PropTypes.arrayOf(PropTypes.object).isRequired,
+  customFields: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   expanded: PropTypes.bool,
   onToggle: PropTypes.func,
-  user: PropTypes.object,
+  user: PropTypes.shape({}),
   userDepartments: PropTypes.arrayOf(PropTypes.string).isRequired,
   defaultServicePointName: PropTypes.string,
   requestPreferences: requestPreferencesShape,

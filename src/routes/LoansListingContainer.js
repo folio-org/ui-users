@@ -137,10 +137,10 @@ class LoansListingContainer extends React.Component {
   static propTypes = {
     resources: PropTypes.shape({
       patronGroups: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
       selUser: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
     }),
     match: PropTypes.shape({

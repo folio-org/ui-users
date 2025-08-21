@@ -13,12 +13,12 @@ class BulkRenewalDialog extends React.Component {
     stripes: stripesShape.isRequired,
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
-    successRenewals: PropTypes.arrayOf(PropTypes.object).isRequired,
-    failedRenewals: PropTypes.arrayOf(PropTypes.object).isRequired,
-    loanPolicies: PropTypes.object.isRequired,
-    user: PropTypes.object.isRequired,
-    requestCounts: PropTypes.object.isRequired,
-    errorMessages: PropTypes.object.isRequired,
+    successRenewals: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    failedRenewals: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    loanPolicies: PropTypes.shape({}).isRequired,
+    user: PropTypes.shape({}).isRequired,
+    requestCounts: PropTypes.shape({}).isRequired,
+    errorMessages: PropTypes.shape({}).isRequired,
   };
 
   render() {

@@ -80,10 +80,10 @@ function formatLoanAction(la, loanActionsWithUser) {
 class LoanDetails extends React.Component {
   static propTypes = {
     isLoading: PropTypes.bool,
-    stripes: PropTypes.object.isRequired,
+    stripes: PropTypes.shape({}).isRequired,
     resources: PropTypes.shape({
-      loanActions: PropTypes.object,
-      loanActionsWithUser: PropTypes.object,
+      loanActions: PropTypes.shape({}),
+      loanActionsWithUser: PropTypes.shape({}),
     }).isRequired,
     mutator: PropTypes.shape({
       modified: PropTypes.shape({
@@ -99,14 +99,14 @@ class LoanDetails extends React.Component {
         replace: PropTypes.func,
       }),
     }).isRequired,
-    loan: PropTypes.object,
+    loan: PropTypes.shape({}),
     loanIsMissing: PropTypes.bool,
-    patronGroup: PropTypes.object,
-    user: PropTypes.object,
-    loanActionsWithUser: PropTypes.arrayOf(PropTypes.object),
-    loanAccountActions: PropTypes.arrayOf(PropTypes.object),
-    loanPolicies: PropTypes.object,
-    requestCounts: PropTypes.object,
+    patronGroup: PropTypes.shape({}),
+    user: PropTypes.shape({}),
+    loanActionsWithUser: PropTypes.arrayOf(PropTypes.shape({})),
+    loanAccountActions: PropTypes.arrayOf(PropTypes.shape({})),
+    loanPolicies: PropTypes.shape({}),
+    requestCounts: PropTypes.shape({}),
     renew: PropTypes.func,
     declareLost: PropTypes.func,
     markAsMissing: PropTypes.func,
@@ -114,11 +114,11 @@ class LoanDetails extends React.Component {
     claimReturned: PropTypes.func,
     setDeclareLostInProgress: PropTypes.func,
     declareLostInProgress: PropTypes.bool,
-    patronBlocks: PropTypes.arrayOf(PropTypes.object),
-    intl: PropTypes.object.isRequired,
-    match: PropTypes.object.isRequired,
-    history: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired,
+    patronBlocks: PropTypes.arrayOf(PropTypes.shape({})),
+    intl: PropTypes.shape({}).isRequired,
+    match: PropTypes.shape({}).isRequired,
+    history: PropTypes.shape({}).isRequired,
+    location: PropTypes.shape({}).isRequired,
     showErrorCallout: PropTypes.func.isRequired,
   };
 

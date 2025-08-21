@@ -23,9 +23,9 @@ class PermissionSetDetails extends React.Component {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
     }).isRequired,
-    initialValues: PropTypes.object,
+    initialValues: PropTypes.shape({}),
     tenantId: PropTypes.string,
-    intl: PropTypes.object,
+    intl: PropTypes.shape({}),
   };
 
   constructor(props) {

@@ -247,37 +247,37 @@ class UserRecordContainer extends React.Component {
       }).isRequired,
     }).isRequired,
     resources: PropTypes.shape({
-      selUser: PropTypes.object,
+      selUser: PropTypes.shape({}),
       addressTypes: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
       departments: PropTypes.shape({
         records: departmentsShape,
       }),
       permissions: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
       perms: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
-      query: PropTypes.object,
+      query: PropTypes.shape({}),
       patronGroups: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
       settings: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
       loansHistory: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
       feefineactions: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object).isRequired,
+        records: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
       }).isRequired,
       accounts: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object).isRequired,
+        records: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
       }).isRequired,
       loanRecords: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object).isRequired,
+        records: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
       }).isRequired,
     }),
     mutator: PropTypes.shape({
@@ -301,7 +301,7 @@ class UserRecordContainer extends React.Component {
         reset: PropTypes.func.isRequired,
         GET: PropTypes.func.isRequired,
       }).isRequired,
-      query: PropTypes.object.isRequired,
+      query: PropTypes.shape({}).isRequired,
     }),
     match: PropTypes.shape({
       path: PropTypes.string.isRequired,
@@ -310,8 +310,8 @@ class UserRecordContainer extends React.Component {
       }),
     }).isRequired,
     tagsToggle: PropTypes.func,
-    location: PropTypes.object,
-    history: PropTypes.object,
+    location: PropTypes.shape({}),
+    history: PropTypes.shape({}),
     updateProxies: PropTypes.func,
     updateServicePoints: PropTypes.func,
     updateSponsors: PropTypes.func,
@@ -320,7 +320,7 @@ class UserRecordContainer extends React.Component {
     getUserServicePoints: PropTypes.func,
     getPreferredServicePoint: PropTypes.func,
     tagsEnabled: PropTypes.bool,
-    okapi: PropTypes.object,
+    okapi: PropTypes.shape({}),
     children: PropTypes.oneOfType([
       PropTypes.func,
       PropTypes.node,

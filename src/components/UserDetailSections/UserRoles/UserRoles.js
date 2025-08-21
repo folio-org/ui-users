@@ -11,8 +11,8 @@ import RenderRoles from '../../RenderRoles';
 import { isAffiliationsEnabled } from '../../util';
 
 const propTypes = {
-  stripes: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
+  stripes: PropTypes.shape({}).isRequired,
+  user: PropTypes.shape({}).isRequired,
 };
 
 const UserRoles = (props) => {

@@ -46,7 +46,7 @@ class PermissionSets extends React.Component {
   static propTypes = {
     resources: PropTypes.shape({
       entries: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
     }).isRequired,
     mutator: PropTypes.shape({
@@ -56,7 +56,7 @@ class PermissionSets extends React.Component {
         DELETE: PropTypes.func,
       }),
     }).isRequired,
-    intl: PropTypes.object,
+    intl: PropTypes.shape({}),
   };
 
   beforeSave = (data) => {

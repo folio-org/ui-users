@@ -154,12 +154,12 @@ class Actions extends React.Component {
   static propTypes = {
     resources: PropTypes.shape({
       refunds: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({})),
       }),
     }),
     mutator: PropTypes.shape({
-      user: PropTypes.object,
-      activeRecord: PropTypes.object,
+      user: PropTypes.shape({}),
+      activeRecord: PropTypes.shape({}),
       accounts: PropTypes.shape({
         PUT: PropTypes.func.isRequired,
       }),
@@ -194,20 +194,20 @@ class Actions extends React.Component {
         POST: PropTypes.func.isRequired,
       }),
     }),
-    okapi: PropTypes.object,
+    okapi: PropTypes.shape({}),
     balance: PropTypes.number,
     totalPaidAmount: PropTypes.number,
     owedAmount: PropTypes.number,
-    accounts: PropTypes.arrayOf(PropTypes.object),
-    selectedAccounts: PropTypes.arrayOf(PropTypes.object),
+    accounts: PropTypes.arrayOf(PropTypes.shape({})),
+    selectedAccounts: PropTypes.arrayOf(PropTypes.shape({})),
     onChangeSelectedAccounts: PropTypes.func,
-    actions: PropTypes.object,
+    actions: PropTypes.shape({}),
     onChangeActions: PropTypes.func,
-    stripes: PropTypes.object,
+    stripes: PropTypes.shape({}),
     handleEdit: PropTypes.func,
-    user: PropTypes.object,
-    intl: PropTypes.object.isRequired,
-    match: PropTypes.object,
+    user: PropTypes.shape({}),
+    intl: PropTypes.shape({}).isRequired,
+    match: PropTypes.shape({}),
   };
 
   static defaultProps = {

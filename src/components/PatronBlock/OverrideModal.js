@@ -96,7 +96,7 @@ OverrideModal.propTypes = {
   onSetAdditionalInfo: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
-  patronBlocks: PropTypes.arrayOf(PropTypes.object),
+  patronBlocks: PropTypes.arrayOf(PropTypes.shape({})),
 };
 
 export default OverrideModal;

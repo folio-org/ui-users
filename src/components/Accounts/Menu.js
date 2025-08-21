@@ -92,16 +92,16 @@ const Menu = (props) => {
 };
 
 Menu.propTypes = {
-  user: PropTypes.object,
+  user: PropTypes.shape({}),
   stripes: PropTypes.shape({
     hasPerm: PropTypes.func,
   }),
   showFilters: PropTypes.bool,
   selected: PropTypes.number,
-  filters: PropTypes.object,
-  match: PropTypes.object,
-  patronGroup: PropTypes.object,
-  accounts: PropTypes.arrayOf(PropTypes.object).isRequired,
+  filters: PropTypes.shape({}),
+  match: PropTypes.shape({}),
+  patronGroup: PropTypes.shape({}),
+  accounts: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 };
 
 export default Menu;

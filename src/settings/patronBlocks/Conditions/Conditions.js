@@ -24,7 +24,7 @@ class Conditions extends Component {
 
   static propTypes = {
     resources: PropTypes.shape({
-      patronBlockCondition: PropTypes.object
+      patronBlockCondition: PropTypes.shape({})
     }),
     id: PropTypes.string.isRequired,
     mutator: PropTypes.shape({
@@ -35,7 +35,7 @@ class Conditions extends Component {
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired
     }).isRequired,
-    intl: PropTypes.object,
+    intl: PropTypes.shape({}),
   };
 
   callout = React.createRef();

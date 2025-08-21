@@ -72,7 +72,7 @@ class PatronBlockModalWithOverrideModal extends React.Component {
 PatronBlockModalWithOverrideModal.propTypes = {
   patronBlockedModalOpen: PropTypes.bool.isRequired,
   viewUserPath: PropTypes.string.isRequired,
-  patronBlocks: PropTypes.arrayOf(PropTypes.object).isRequired,
+  patronBlocks: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   onClosePatronBlockedModal: PropTypes.func.isRequired,
   onOpenPatronBlockedModal: PropTypes.func.isRequired,
   onRenew: PropTypes.func.isRequired,
