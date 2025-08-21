@@ -704,7 +704,7 @@ class UserSearch extends React.Component {
     let resultPaneSub = <FormattedMessage id="stripes-smart-components.searchCriteria" />;
 
     if (hasLoadedActualTotalRecords) {
-      resultPaneSub = <FormattedMessage id="stripes-smart-components.searchResultsCountHeader" values={{ count: actualTotalRecords }} />;
+      resultPaneSub = formatMessage({ id: 'stripes-smart-components.searchResultsCountHeader' }, { count: actualTotalRecords });
     }
 
     const resultsFormatter = {

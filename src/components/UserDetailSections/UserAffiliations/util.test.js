@@ -38,7 +38,6 @@ describe('createErrorMessage', () => {
       code: 'HAS_PRIMARY_AFFILIATION_ERROR',
       userName: 'mobius',
     });
-    console.log('formattedError', formattedError);
     expect(formattedError.props).toEqual({
       id: 'ui-users.affiliations.manager.modal.changes.error.hasPrimaryAffiliation',
       values: {

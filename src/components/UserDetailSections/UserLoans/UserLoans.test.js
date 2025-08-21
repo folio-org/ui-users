@@ -8,9 +8,9 @@ jest.unmock('@folio/stripes/components');
 
 jest.mock('../../Wrappers', () => ({
   ...jest.requireActual('../../Wrappers'),
-  withCustomFields: jest.fn(Component => props => (
+  withCustomFields: jest.fn(Component => _props => (
     <Component
-      {...props}
+      {..._props}
       showCustomFieldsSection
     />
   )),
