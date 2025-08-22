@@ -29,7 +29,9 @@ const useAssignedUsersMutation = ({ tenantId, permissionName }, options = {}) =>
       return api.put(`${PERMISSIONS_API}/${id}`, body);
     });
 
-    return Promise.all(query);
+    await Promise.all(query);
+
+    return permissionUsersResponse;
   };
 
   const removeMutationFn = async (users = []) => {

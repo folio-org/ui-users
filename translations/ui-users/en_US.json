@@ -1091,7 +1091,6 @@
     "permissions.assignedUsers.patronGroup": "Patron group",
     "permissions.assignUsers.actions.assign": "Assign/unassign",
     "permissions.assignUsers.actions.assign.notAvailable": "Assign users is not available",
-    "permissions.assignUsers.actions.message.success": "Permissions set user assignment updated successfully",
     "permissions.assignUsers.actions.message.error": "Permissions set user assignment change not successful. {error}",
     "permissions.assignUsers.actions.message.permission.error": "You do not have required permissions.",
     "errors.generic": "Something went wrong. Please try again later.",
