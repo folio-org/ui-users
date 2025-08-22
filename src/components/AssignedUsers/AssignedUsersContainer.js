@@ -78,10 +78,50 @@ const AssignedUsersContainer = ({
 
   const handleAssignUsers = async (selectedUsers) => {
     const { added, removed } = getUpdatedUsersList(users, selectedUsers);
+    let assignedUsers = [];
 
-    if (added.length) await assignUsers(added, { onError: handleMutationError });
+    if (added.length) {
+      try {
+        assignedUsers = await assignUsers(added) || [];
+      } catch (error) {
+        handleMutationError(error);
+        return;
+      }
+    }
 
-    if (removed.length) await unassignUsers(removed, { onError: handleMutationError });
+    if (removed.length) {
+      try {
+        await unassignUsers(removed);
+      } catch (error) {
+        refetch();
+        handleMutationError(error);
+        return;
+      }
+    }
+
+    if (added.length) {
+      // If no users are assigned
+      if (!assignedUsers.length) {
+        refetch();
+        callout.sendCallout({
+          message: <FormattedMessage id="ui-users.permissions.assignUsers.actions.message.error.all" />,
+          type: 'error',
+        });
+
+        return;
+      }
+
+      // If not all users are assigned
+      if (added.length !== assignedUsers.length) {
+        refetch();
+        callout.sendCallout({
+          message: <FormattedMessage id="ui-users.permissions.assignUsers.actions.message.error.some" />,
+          type: 'error',
+        });
+
+        return;
+      }
+    }
 
     if (removed.length || added.length) {
       handleMutationSuccess();
