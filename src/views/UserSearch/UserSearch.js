@@ -65,9 +65,11 @@ let searchableIndexes;
 
 class UserSearch extends React.Component {
   static propTypes = {
+    actualTotalRecords: PropTypes.number.isRequired,
     children: PropTypes.node,
     contentRef: PropTypes.object,
     // filterConfig: PropTypes.arrayOf(PropTypes.object),
+    hasLoadedActualTotalRecords: PropTypes.bool.isRequired,
     history: PropTypes.object.isRequired,
     idPrefix: PropTypes.string,
     initialSearch: PropTypes.string,
@@ -76,6 +78,7 @@ class UserSearch extends React.Component {
     match: PropTypes.object.isRequired,
     onComponentWillUnmount: PropTypes.func,
     onNeedMoreData: PropTypes.func.isRequired,
+    onResetActualTotalRecords: PropTypes.func.isRequired,
     queryGetter: PropTypes.func,
     querySetter: PropTypes.func,
     resources: PropTypes.shape({
@@ -160,6 +163,12 @@ class UserSearch extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
+    const {
+      resources,
+      source,
+      history,
+    } = this.props;
+
     if (
       this.state.searchPending &&
       prevProps.resources.records &&
@@ -168,7 +177,6 @@ class UserSearch extends React.Component {
       this.onSearchComplete(this.props.resources.records);
     }
 
-    const { resources, source, history } = this.props;
     // Open the detail view when there's a single hit
     if (resources.records.records[0] !== prevProps.resources.records.records[0] &&
       source.totalCount() === 1) {
@@ -197,11 +205,14 @@ class UserSearch extends React.Component {
     };
   }
 
-  onSearchComplete = records => {
-    const { intl } = this.props;
+  onSearchComplete = () => {
+    const {
+      intl,
+      actualTotalRecords,
+    } = this.props;
+
     const headerEl = this.resultsPaneTitleRef.current;
-    const resultsCount = get(records, 'other.totalRecords', 0);
-    const hasResults = !!resultsCount;
+    const hasResults = !!actualTotalRecords;
 
     this.setState({ searchPending: false });
 
@@ -209,7 +220,7 @@ class UserSearch extends React.Component {
     this.SRStatusRef.current.sendMessage(intl.formatMessage({
       id: 'ui-users.resultCount',
     }, {
-      count: resultsCount
+      count: actualTotalRecords,
     }));
 
     // Focus the pane header if we have results to minimize tabbing distance
@@ -631,6 +642,13 @@ class UserSearch extends React.Component {
     }
   }
 
+  handleResetAll = (resetAll) => () => {
+    const { onResetActualTotalRecords } = this.props;
+
+    onResetActualTotalRecords();
+    resetAll();
+  }
+
   render() {
     const {
       onComponentWillUnmount,
@@ -646,6 +664,8 @@ class UserSearch extends React.Component {
       stripes: { timezone },
       okapi: { currentUser },
       intl: { formatMessage },
+      actualTotalRecords,
+      hasLoadedActualTotalRecords,
     } = this.props;
     const {
       filterPaneIsVisible,
@@ -670,7 +690,6 @@ class UserSearch extends React.Component {
     const servicePoints = currentUser.servicePoints;
     const patronGroups = (resources.patronGroups || {}).records || [];
     const query = queryGetter ? queryGetter() || {} : {};
-    const count = source ? source.totalCount() : 0;
     const sortOrder = query.sort || '';
     const initialCashDrawerReportValues = {
       format: 'both'
@@ -686,8 +705,9 @@ class UserSearch extends React.Component {
       </div>) : 'no source yet';
 
     let resultPaneSub = <FormattedMessage id="stripes-smart-components.searchCriteria" />;
-    if (source && source.loaded()) {
-      resultPaneSub = <FormattedMessage id="stripes-smart-components.searchResultsCountHeader" values={{ count }} />;
+
+    if (hasLoadedActualTotalRecords) {
+      resultPaneSub = formatMessage({ id: 'stripes-smart-components.searchResultsCountHeader' }, { count: actualTotalRecords });
     }
 
     const resultsFormatter = {
@@ -789,7 +809,7 @@ class UserSearch extends React.Component {
                               id="clickable-reset-all"
                               disabled={!(filterChanged || searchChanged)}
                               fullWidth
-                              onClick={resetAll}
+                              onClick={this.handleResetAll(resetAll)}
                             >
                               <Icon icon="times-circle-solid">
                                 <FormattedMessage id="stripes-smart-components.resetAll" />
@@ -827,7 +847,7 @@ class UserSearch extends React.Component {
                             visibleColumns={visibleColumns}
                             rowUpdater={this.rowUpdater}
                             contentData={users}
-                            totalCount={count}
+                            totalCount={actualTotalRecords}
                             columnMapping={columnMapping}
                             formatter={resultsFormatter}
                             onNeedMoreData={onNeedMoreData}

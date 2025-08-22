@@ -4,9 +4,13 @@ import {
   cloneDeep,
   get,
   template,
+  flowRight,
 } from 'lodash';
 
-import { stripesConnect } from '@folio/stripes/core';
+import {
+  stripesConnect,
+  withOkapiKy,
+} from '@folio/stripes/core';
 import {
   makeQueryFunction,
   StripesConnectedSource,
@@ -105,7 +109,14 @@ class UserSearchContainer extends React.Component {
       perRequest: 100,
       path: 'users',
       GET: {
-        params: { query: buildQuery },
+        params: {
+          query: buildQuery,
+          // Setting `resultOffset` to the `offset` parameter is required to fetch results further than the 10th page (offset > 1000).
+          // BE returns `totalRecords` as 1000 even though there are more (this is how it works https://folio-org.atlassian.net/browse/RMB-673)
+          // and stripes-connect requests 1000 in the `offset` parameter even when `resultOffset` is more then 1000 as it uses `totalRecords` value.
+          // We can get around this by setting `offset` to the `resultOffset` value.
+          offset: '%{resultOffset}',
+        },
         staticFallback: { params: {} },
       },
       shouldRefresh: (resource, action, refresh) => {
@@ -187,7 +198,12 @@ class UserSearchContainer extends React.Component {
     location: PropTypes.object,
     match: PropTypes.object,
     history: PropTypes.object,
+    okapiKy: PropTypes.func.isRequired,
     resources: PropTypes.shape({
+      query: PropTypes.shape({
+        query: PropTypes.string,
+        filters: PropTypes.arrayOf(PropTypes.object),
+      }).isRequired,
       patronGroups: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
@@ -236,14 +252,32 @@ class UserSearchContainer extends React.Component {
     this.searchField = React.createRef();
   }
 
+  state = {
+    actualTotalRecords: 0,
+    hasLoadedActualTotalRecords: false,
+  }
+
   componentDidMount() {
+    const {
+      resources,
+    } = this.props;
+
     this.source = new StripesConnectedSource(this.props, this.logger);
     if (this.searchField.current) {
       this.searchField.current.focus();
     }
+
+    if (resources.query?.query || resources.query?.filters) {
+      this.fetchActualTotalRecords();
+    }
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
+    const {
+      resources,
+    } = this.props;
+
+    // Process patron groups
     const pg = (this?.props?.resources?.patronGroups || {})?.records || [];
     if (pg.length) {
       const pgFilterConfig = filterConfig.find(group => group.name === 'pg');
@@ -253,11 +287,53 @@ class UserSearchContainer extends React.Component {
         this.props.mutator.initializedFilterConfig.replace(true); // triggers refresh of users
       }
     }
+
+    // Only fetch actual total records if the `query` or `filters` have changed
+    if ((resources.query.query && resources.query.query !== prevProps.resources.query.query)
+      || (resources.query.filters && resources.query.filters !== prevProps.resources.query.filters)
+    ) {
+      this.fetchActualTotalRecords();
+    }
+
     this.source.update(this.props);
+  }
+
+  resetActualTotalRecords = () => {
+    this.setState({
+      actualTotalRecords: 0,
+      hasLoadedActualTotalRecords: false,
+    });
+  }
+
+  fetchActualTotalRecords = async () => {
+    const {
+      okapiKy,
+      resources,
+    } = this.props;
+
+    const queryParams = { ...resources.query };
+    const searchQuery = buildQuery(queryParams, {}, resources, this.logger, this.props);
+
+    if (!searchQuery) return;
+
+    try {
+      const response = await okapiKy(`users?limit=0&query=${searchQuery}`);
+      const data = await response.json();
+
+      this.setState({
+        actualTotalRecords: data.totalRecords,
+        hasLoadedActualTotalRecords: true,
+      });
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('Error fetching actual total records:', error);
+    }
   }
 
   onNeedMoreData = (askAmount, index) => {
     const { resultOffset } = this.props.mutator;
+
+    this.fetchActualTotalRecords();
 
     if (this.source) {
       if (resultOffset && index >= 0) {
@@ -287,9 +363,7 @@ class UserSearchContainer extends React.Component {
       location = { ...locationProp, pathname };
     }
 
-    // reset offset when sort values change
-    // https://issues.folio.org/browse/UIU-2466
-    if (state.sortChanged) {
+    if (resultOffset) {
       resultOffset.replace(0);
     }
 
@@ -308,6 +382,11 @@ class UserSearchContainer extends React.Component {
   }
 
   render() {
+    const {
+      actualTotalRecords,
+      hasLoadedActualTotalRecords,
+    } = this.state;
+
     if (this.source) {
       this.source.update(this.props);
     }
@@ -319,6 +398,9 @@ class UserSearchContainer extends React.Component {
         onNeedMoreData={this.onNeedMoreData}
         queryGetter={this.queryGetter}
         querySetter={this.querySetter}
+        actualTotalRecords={actualTotalRecords}
+        hasLoadedActualTotalRecords={hasLoadedActualTotalRecords}
+        onResetActualTotalRecords={this.resetActualTotalRecords}
         {...this.props}
       >
         { this.props.children }
@@ -327,4 +409,6 @@ class UserSearchContainer extends React.Component {
   }
 }
 
-export default stripesConnect(UserSearchContainer);
+export default flowRight(
+  withOkapiKy,
+)(stripesConnect(UserSearchContainer));
