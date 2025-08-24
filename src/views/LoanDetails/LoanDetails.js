@@ -422,6 +422,9 @@ class LoanDetails extends React.Component {
       isLoading,
       showErrorCallout,
     } = this.props;
+    const {
+      timezone = 'UTC',
+    } = stripes;
 
     const {
       patronBlockedModal,
@@ -528,7 +531,7 @@ class LoanDetails extends React.Component {
       </p>
     );
     const patronBlocksForModal = getRenewalPatronBlocksFromPatronBlocks(patronBlocks);
-    const isUserActive = user ? checkUserActive(user) : false;
+    const isUserActive = user ? checkUserActive(user, timezone) : false;
     const borrower = user ? getFullName(user) : <FormattedMessage id="ui-users.user.unknown" />;
     const isVirtualPatron = isDcbUser(user);
 
