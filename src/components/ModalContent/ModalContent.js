@@ -32,14 +32,17 @@ import css from './ModalContent.css';
 export const getMutatorFunction = (stripes, mutator, loanAction) => {
   const isDeclareLostAction = loanAction === loanActionMutators.DECLARE_LOST;
   const isClaimedReturnedAction = loanAction === loanActionMutators.CLAIMED_RETURNED;
+  const isMarkAsMissingAction = loanAction === loanActionMutators.MARK_AS_MISSING;
 
-  if (stripes?.config?.enableEcsRequests && (isDeclareLostAction || isClaimedReturnedAction)) {
+  if (stripes?.config?.enableEcsRequests && (isDeclareLostAction || isClaimedReturnedAction || isMarkAsMissingAction)) {
     const isCorrectCirculationBFFLoansInterface = stripes.hasInterface(CIRCULATION_BFF_LOANS_INTERFACE_NAME, CIRCULATION_BFF_LOANS_INTERFACE_VERSION);
 
     if (isCorrectCirculationBFFLoansInterface && isDeclareLostAction) {
       return mutator.declareLostBFF.POST;
     } else if (isCorrectCirculationBFFLoansInterface && isClaimedReturnedAction) {
       return mutator.claimReturnedBFF.POST;
+    } else if (isCorrectCirculationBFFLoansInterface && isMarkAsMissingAction) {
+      return mutator.markAsMissingBFF.POST;
     } else {
       throw new Error(CIRCULATION_BFF_LOANS_INTERFACE_ERROR);
     }
@@ -88,6 +91,13 @@ class ModalContent extends React.Component {
         path: 'circulation/loans/!{loan.id}/declare-claimed-returned-item-as-missing',
       },
     },
+    markAsMissingBFF: {
+      type: 'okapi',
+      fetch: false,
+      POST: {
+        path: 'circulation-bff/loans/!{loan.id}/declare-claimed-returned-item-as-missing',
+      },
+    },
     patronInfo: {
       type: 'okapi',
       fetch: false,
@@ -133,6 +143,9 @@ class ModalContent extends React.Component {
         POST: PropTypes.func.isRequired,
       }).isRequired,
       markAsMissing: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }).isRequired,
+      markAsMissingBFF: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }).isRequired,
       patronInfo: PropTypes.shape({

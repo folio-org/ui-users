@@ -47,7 +47,7 @@ export const loanActionMutators = {
 };
 
 export const CIRCULATION_BFF_LOANS_INTERFACE_NAME = 'circulation-bff-loans';
-export const CIRCULATION_BFF_LOANS_INTERFACE_VERSION = '1.4';
+export const CIRCULATION_BFF_LOANS_INTERFACE_VERSION = '1.6';
 export const CIRCULATION_BFF_LOANS_INTERFACE_ERROR = `Required okapi interfaces ${CIRCULATION_BFF_LOANS_INTERFACE_NAME} v${CIRCULATION_BFF_LOANS_INTERFACE_VERSION}`;
 
 export const deliveryFulfillmentValues = {
