@@ -266,6 +266,100 @@ describe('UserForm', () => {
     });
   });
 
+  describe('when creating a new user', () => {
+    const createModeInitialValues = {
+      // No id field means create mode (isEditing = false)
+      creds: {
+        password: 'password',
+      },
+      patronGroup: 'patronGroup',
+      personal: {
+        lastName: 'lastName',
+        preferredContactTypeId: 'preferredContactTypeId',
+        addresses: [
+          {
+            addressType: 'home-id',
+          },
+        ],
+      },
+      preferredServicePoint: 'preferredServicePoint',
+      servicePoints: ['a', 'b'],
+      username: 'username',
+    };
+
+    it('should not show permissions accordion in create mode', () => {
+      renderUserForm({
+        initialValues: createModeInitialValues,
+        stripes: {
+          ...STRIPES,
+          hasInterface: () => false, // roles interface is NOT present
+        },
+      });
+
+      expect(screen.queryByText('TenantsPermissionsAccordion accordion')).not.toBeInTheDocument();
+    });
+
+    it('should not show roles accordion in create mode', () => {
+      renderUserForm({
+        initialValues: createModeInitialValues,
+        stripes: {
+          ...STRIPES,
+          hasInterface: () => true, // roles interface is present
+        },
+      });
+
+      expect(screen.queryByText('EditUserRoles accordion')).not.toBeInTheDocument();
+    });
+  });
+
+  describe('when editing an existing user', () => {
+    const editModeInitialValues = {
+      id: 'existing-user-id', // ID present means edit mode (isEditing = true)
+      creds: {
+        password: 'password',
+      },
+      patronGroup: 'patronGroup',
+      personal: {
+        lastName: 'lastName',
+        preferredContactTypeId: 'preferredContactTypeId',
+        addresses: [
+          {
+            addressType: 'home-id',
+          },
+        ],
+      },
+      preferredServicePoint: 'preferredServicePoint',
+      servicePoints: ['a', 'b'],
+      username: 'username',
+    };
+
+    it('should show permissions accordion in edit mode when roles interface is NOT present', () => {
+      renderUserForm({
+        initialValues: editModeInitialValues,
+        stripes: {
+          ...STRIPES,
+          hasInterface: () => false, // roles interface is NOT present
+        },
+      });
+
+      expect(screen.queryByText('TenantsPermissionsAccordion accordion')).toBeInTheDocument();
+      expect(screen.queryByText('EditUserRoles accordion')).not.toBeInTheDocument();
+    });
+
+    it('should show roles accordion in edit mode when roles interface is present', () => {
+      renderUserForm({
+        initialValues: editModeInitialValues,
+        stripes: {
+          ...STRIPES,
+          hasInterface: () => true, // roles interface is present
+        },
+      });
+
+      expect(screen.queryByText('EditUserRoles accordion')).toBeInTheDocument();
+      expect(screen.queryByText('TenantsPermissionsAccordion accordion')).not.toBeInTheDocument();
+    });
+  });
+
   describe('when adding a new address', () => {
     beforeEach(async () => {
       renderUserForm({

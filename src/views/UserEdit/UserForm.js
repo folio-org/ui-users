@@ -494,7 +494,7 @@ class UserForm extends React.Component {
                     accordionId={ACCORDION_ID.REQUESTS}
                     isCreateMode={!isEditing}
                   />
-                  {isEditing && this.showPermissionsAccordion() ?
+                  {isEditing && (this.showPermissionsAccordion() ?
                     <TenantsPermissionsAccordion
                       form={form}
                       initialValues={initialValues}
@@ -511,7 +511,7 @@ class UserForm extends React.Component {
                         accordionId={ACCORDION_ID.USER_ROLES}
                       />
                     </IfPermission>
-                  }
+                  )}
                   {isEditing && (
                     <EditServicePoints
                       accordionId={ACCORDION_ID.SERVICE_POINTS}
