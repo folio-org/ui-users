@@ -417,6 +417,7 @@
         "displayName": "Settings (Users): Can view custom fields",
         "subPermissions": [
           "settings.users.enabled",
+          "configuration.entries.collection.get",
           "mod-settings.entries.collection.get",
           "mod-settings.entries.item.get",
           "user-settings.custom-fields.collection.get",
