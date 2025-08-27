@@ -46,6 +46,7 @@
 * Add support for use circulation-bff for claim-item-returned. Refs UIU-3413.
 * Pass `isCreateMode` prop to `EditCustomFieldsSection` components to ensure proper dirty and pristine form states. Refs UIU-3390.
 * Fix user search pagination and total count display beyond 1000 records. Refs UIU-3387.
+* Hide permissions and roles accordions on user create page. Refs UIU-3449.
 
 ## [12.1.8] (https://github.com/folio-org/ui-users/tree/v12.1.8) (2025-07-30)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.7...v12.1.8)
