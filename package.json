@@ -51,7 +51,7 @@
       "request-storage": "2.5 3.0 4.0 5.0 6.0",
       "reading-room-patron-permission": "1.0",
       "roles": "1.0",
-      "circulation-bff-loans": "1.4",
+      "circulation-bff-loans": "1.6",
       "users-keycloak": "1.0"
     },
     "permissionSets": [
@@ -791,6 +791,7 @@
         "replaces": ["ui-users.loans.declare-claimed-returned-item-as-missing"],
         "subPermissions": [
           "circulation.loans.declare-claimed-returned-item-as-missing.post",
+          "circulation-bff.loans.declare-claimed-returned-item-as-missing.execute",
           "circulation-storage.loans.item.get",
           "inventory-storage.items.item.get",
           "inventory-storage.holdings.item.get",

@@ -8,6 +8,10 @@ import ModalContent, {
   getMutatorFunction,
 } from './ModalContent';
 
+import {
+  CIRCULATION_BFF_LOANS_INTERFACE_ERROR,
+} from '../../constants';
+
 jest.unmock('@folio/stripes/components');
 
 const resources = (records = {}) => {
@@ -496,6 +500,12 @@ describe('Modal Content', () => {
       claimReturned: {
         POST: 'claimReturned',
       },
+      markAsMissingBFF: {
+        POST: 'markAsMissingBFF',
+      },
+      markAsMissing: {
+        POST: 'markAsMissing',
+      },
       notDeclareLost: {
         POST: 'notDeclareLost',
       },
@@ -510,13 +520,17 @@ describe('Modal Content', () => {
       expect(getMutatorFunction(stripes, mutatorFunction, 'claimReturned')).toEqual('claimReturnedBFF');
     });
 
+    it('should return mutator POST value for markAsMissingBFF action', () => {
+      expect(getMutatorFunction(stripes, mutatorFunction, 'markAsMissing')).toEqual('markAsMissingBFF');
+    });
+
     it('should return required okapi interfaces error', () => {
       const stripesWithOutCirculationBffLoans = {
         ...stripes,
         hasInterface: () => false,
       };
 
-      expect(() => { getMutatorFunction(stripesWithOutCirculationBffLoans, mutatorFunction, loanAction); }).toThrow('Required okapi interfaces circulation-bff-loans v1.4');
+      expect(() => { getMutatorFunction(stripesWithOutCirculationBffLoans, mutatorFunction, loanAction); }).toThrow(CIRCULATION_BFF_LOANS_INTERFACE_ERROR);
     });
 
     it('should return mutator POST value for declareLost action', () => {
@@ -529,6 +543,12 @@ describe('Modal Content', () => {
       const stripesWithOutEnableEcsRequests = {};
 
       expect(getMutatorFunction(stripesWithOutEnableEcsRequests, mutatorFunction, 'claimReturned')).toEqual('claimReturned');
+    });
+
+    it('should return mutator POST value for markAsMissing action', () => {
+      const stripesWithOutEnableEcsRequests = {};
+
+      expect(getMutatorFunction(stripesWithOutEnableEcsRequests, mutatorFunction, 'markAsMissing')).toEqual('markAsMissing');
     });
 
     it('should return mutator POST value for passed action', () => {
