@@ -49,6 +49,19 @@
 * Hide permissions and roles accordions on user create page. Refs UIU-3449.
 * Add support for use circulation-bff for mark-as-missing.  Refs UIU-3444.
 
+## [12.1.11] (https://github.com/folio-org/ui-users/tree/v12.1.11) (2025-08-27)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.10...v12.1.11)
+* Add 'Minor' column to Patrons Pre-Registration List. Refs UIU-3425.
+
+## [12.1.10] (https://github.com/folio-org/ui-users/tree/v12.1.10) (2025-08-20)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.9...v12.1.10)
+* Only show Keycloak user record confirmation when assigning roles to a non-Keycloak record. Refs UIU-3426.
+* Fix User Edit workflow for making edits to non-Keycloak user. Previously Edit screen remained open. Now it properly returns to User Detail page with updated data. Refs UIU-3426.
+
+## [12.1.9] (https://github.com/folio-org/ui-users/tree/v12.1.9) (2025-07-30)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.8...v12.1.9)
+* Add support for use circulation-bff for declare-item-lost. Refs UIU-3414.
+
 ## [12.1.8] (https://github.com/folio-org/ui-users/tree/v12.1.8) (2025-07-30)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.7...v12.1.8)
 * Add the ability for staff to take a patron's profile picture photo using a webcam. Refs UIU-3266.
