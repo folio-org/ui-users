@@ -89,7 +89,11 @@ class EditUserInfo extends React.Component {
 
   setRecalculatedExpirationDate = (startCalcToday) => {
     const { form: { change } } = this.props;
-    const recalculatedDate = this.calculateNewExpirationDate(startCalcToday).format('L');
+    // Use .format() instead of .format('L') to preserve timezone information in the ISO string.
+    // .format('L') would produce a local date string like "08/31/2025" which loses timezone context,
+    // causing parseExpirationDate to incorrectly interpret the date and shift it by a day.
+    // .format() produces an ISO string like "2025-08-31T02:59:59+03:00" that maintains timezone info.
+    const recalculatedDate = this.calculateNewExpirationDate(startCalcToday).format();
     const parsedRecalculatedDate = this.parseExpirationDate(recalculatedDate);
 
     change('expirationDate', parsedRecalculatedDate);
@@ -374,7 +378,6 @@ class EditUserInfo extends React.Component {
                     parse={this.parseExpirationDate}
                     disabled={disabled}
                     validate={validateMinDate('ui-users.errors.personal.dateOfBirth')}
-                    timeZone="UTC"
                   />
                   {checkShowRecalculateButton() && (
                     <Button
