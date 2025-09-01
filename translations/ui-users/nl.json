@@ -1253,6 +1253,6 @@
     "loans.numOpenLoans.useAtLocation": "Gebruik op Locatie",
     "loans.numOpenLoans.held": "Reservering: {count}",
     "loans.numOpenLoans.inUse": "In gebruik: {count}",
-    "stagingRecords.list.columnNames.minor": "Minor",
-    "stagingRecords.minor.yes": "Yes"
+    "stagingRecords.list.columnNames.minor": "Kleine",
+    "stagingRecords.minor.yes": "Ja"
 }
