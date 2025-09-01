@@ -289,10 +289,15 @@ class UserSearchContainer extends React.Component {
     }
 
     // Only fetch actual total records if the `query` or `filters` have changed
-    if ((resources.query.query && resources.query.query !== prevProps.resources.query.query)
-      || (resources.query.filters && resources.query.filters !== prevProps.resources.query.filters)
+    if ((resources.query.query !== prevProps.resources.query.query)
+      || (resources.query.filters !== prevProps.resources.query.filters)
     ) {
-      this.fetchActualTotalRecords();
+      if (resources.query?.query || resources.query?.filters) {
+        this.fetchActualTotalRecords();
+      } else {
+        // Reset actual total records if both query and filters are empty and we previously had records
+        this.resetActualTotalRecords();
+      }
     }
 
     this.source.update(this.props);
@@ -400,7 +405,6 @@ class UserSearchContainer extends React.Component {
         querySetter={this.querySetter}
         actualTotalRecords={actualTotalRecords}
         hasLoadedActualTotalRecords={hasLoadedActualTotalRecords}
-        onResetActualTotalRecords={this.resetActualTotalRecords}
         {...this.props}
       >
         { this.props.children }

@@ -168,7 +168,7 @@ describe('UserSearchContainer', () => {
 
   describe('when Reset all button is hit', () => {
     it('should reset the query, filters and total records', async () => {
-      const { getByRole, queryByText, getByText } = await act(() => renderUserSearchContainer({
+      const { getByRole, queryByText, getByText, rerender } = await act(() => renderUserSearchContainer({
         resources: {
           ...resources,
           query: {
@@ -189,6 +189,17 @@ describe('UserSearchContainer', () => {
       expect(activeFilter).toBeChecked();
 
       await act(() => userEvent.click(getByRole('button', { name: 'Reset all' })));
+
+      await act(() => rerender(getUserSearchContainer({
+        resources: {
+          ...resources,
+          query: {
+            query: '',
+            filters: '',
+            sort: 'name',
+          },
+        },
+      })));
 
       expect(searchField).toHaveValue('');
       expect(activeFilter).not.toBeChecked();
@@ -248,6 +259,121 @@ describe('UserSearchContainer', () => {
       })));
 
       expect(history.push).toHaveBeenCalledWith('/users/preview/user-id-1?sort=name');
+    });
+  });
+
+  describe('when a user adds a search term, hits search and then removes the search term', () => {
+    it('should reset total records to 0 and display the correct message instead of total records', async () => {
+      const { getByRole, queryByText, getByText, rerender } = await act(() => renderUserSearchContainer({
+        resources: {
+          ...resources,
+          query: {
+            query: 'foo',
+            filters: '',
+            sort: 'name',
+          },
+        },
+      }));
+
+      const searchField = getByRole('searchbox', { name: 'Search & filter' });
+
+      await act(() => userEvent.type(searchField, 'test'));
+      await act(() => userEvent.click(getByRole('button', { name: 'Search' })));
+
+      expect(getByText('1,200 records found')).toBeVisible();
+
+      await act(() => userEvent.clear(searchField));
+
+      await act(() => rerender(getUserSearchContainer({
+        resources: {
+          ...resources,
+          query: {
+            query: '',
+            filters: '',
+            sort: 'name',
+          },
+        },
+      })));
+
+      expect(queryByText('1,200 records found')).not.toBeInTheDocument();
+      expect(getByText('Enter search criteria to start search')).toBeVisible();
+    });
+  });
+
+  describe('when a user selects any filter and then unselects', () => {
+    it('should reset total records to 0 and display the correct message instead of total records', async () => {
+      const { getByRole, queryByText, getByText, rerender } = await act(() => renderUserSearchContainer({
+        resources: {
+          ...resources,
+          query: {
+            query: 'foo',
+            filters: '',
+            sort: 'name',
+          },
+        },
+      }));
+
+      const activeFilter = getByRole('checkbox', { name: 'Active' });
+
+      await act(() => userEvent.click(activeFilter));
+
+      expect(getByText('1,200 records found')).toBeVisible();
+      expect(activeFilter).toBeChecked();
+
+      await act(() => userEvent.click(activeFilter));
+
+      await act(() => rerender(getUserSearchContainer({
+        resources: {
+          ...resources,
+          query: {
+            query: '',
+            filters: '',
+            sort: 'name',
+          },
+        },
+      })));
+
+      expect(activeFilter).not.toBeChecked();
+      expect(queryByText('1,200 records found')).not.toBeInTheDocument();
+      expect(getByText('Enter search criteria to start search')).toBeVisible();
+    });
+  });
+
+  describe('when there are query and filter and a user unselects the filter', () => {
+    it('should fetch actual total records', async () => {
+      const { getByRole, getByText, rerender } = await act(() => renderUserSearchContainer({
+        resources: {
+          ...resources,
+          query: {
+            query: 'foo',
+            filters: 'active.active',
+            sort: 'name',
+          },
+        },
+      }));
+
+
+      expect(getByText('1,200 records found')).toBeVisible();
+
+      const activeFilter = getByRole('checkbox', { name: 'Active' });
+
+      await act(() => userEvent.click(activeFilter));
+
+      mockOkapiKy.mockClear();
+
+      await act(() => rerender(getUserSearchContainer({
+        resources: {
+          ...resources,
+          query: {
+            query: 'foo',
+            filters: '',
+            sort: 'name',
+          },
+        },
+      })));
+
+      expect(mockOkapiKy).toHaveBeenCalledWith(expect.stringContaining('users?limit=0&query=(keywords="foo*")'));
+      expect(getByText('1,200 records found')).toBeInTheDocument();
     });
   });
 });
