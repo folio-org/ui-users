@@ -78,7 +78,6 @@ class UserSearch extends React.Component {
     match: PropTypes.object.isRequired,
     onComponentWillUnmount: PropTypes.func,
     onNeedMoreData: PropTypes.func.isRequired,
-    onResetActualTotalRecords: PropTypes.func.isRequired,
     queryGetter: PropTypes.func,
     querySetter: PropTypes.func,
     resources: PropTypes.shape({
@@ -642,13 +641,6 @@ class UserSearch extends React.Component {
     }
   }
 
-  handleResetAll = (resetAll) => () => {
-    const { onResetActualTotalRecords } = this.props;
-
-    onResetActualTotalRecords();
-    resetAll();
-  }
-
   render() {
     const {
       onComponentWillUnmount,
@@ -809,7 +801,7 @@ class UserSearch extends React.Component {
                               id="clickable-reset-all"
                               disabled={!(filterChanged || searchChanged)}
                               fullWidth
-                              onClick={this.handleResetAll(resetAll)}
+                              onClick={resetAll}
                             >
                               <Icon icon="times-circle-solid">
                                 <FormattedMessage id="stripes-smart-components.resetAll" />
