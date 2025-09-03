@@ -89,6 +89,7 @@
           "user-settings.custom-fields.item.stats.get",
           "departments.collection.get",
           "departments.item.get",
+          "circulation-storage.request-preferences.collection.get",
           "users.configurations.item.get",
           "users-keycloak.auth-users.item.get"
         ],
