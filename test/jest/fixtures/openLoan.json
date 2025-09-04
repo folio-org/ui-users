@@ -74,5 +74,9 @@
   },
   "feesAndFines" : {
     "amountRemainingToPay" : 0.0
+  },
+  "forUseAtLocation": {
+    "status": "Held",
+    "holdShelfExpirationDate": "2025-09-04T15:45:28Z"
   }
 }
