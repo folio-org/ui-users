@@ -26,7 +26,9 @@ export default function getListDataFormatter(
   getContributorslist,
   feeFineCount,
   user,
-  patronGroup = {}
+  patronGroup = {},
+  formatDate,
+  formatTime,
 ) {
   return {
     '  ' : {
@@ -101,7 +103,15 @@ export default function getListDataFormatter(
       view: formatMessage({ id: 'ui-users.loans.columns.useAtLocation' }),
       formatter: loan => {
         const ual = loan.forUseAtLocation;
-        return !ual ? <NoValue /> : formatMessage({ id: `ui-users.loans.columns.useAtLocation.${ual.status}` });
+        if (!ual) return <NoValue />;
+        const expiryDate = ual.holdShelfExpirationDate;
+        return formatMessage(
+          { id: `ui-users.loans.columns.useAtLocation.${ual.status}` },
+          {
+            servicePoint: loan.checkoutServicePoint?.name,
+            expiry: expiryDate && formatDate(expiryDate) + ' ' + formatTime(expiryDate),
+          },
+        );
       },
       sorter: loan => loan.forUseAtLocation?.status,
     },

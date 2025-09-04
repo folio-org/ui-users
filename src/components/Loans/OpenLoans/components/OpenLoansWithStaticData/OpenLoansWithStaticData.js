@@ -70,7 +70,7 @@ class OpenLoansWithStaticData extends React.Component {
 
   setFormatters() {
     const {
-      intl: { formatMessage },
+      intl: { formatMessage, formatDate, formatTime },
       toggleItem,
       isLoanChecked,
       requestRecords,
@@ -99,6 +99,8 @@ class OpenLoansWithStaticData extends React.Component {
       feeFineCount,
       user,
       patronGroup,
+      formatDate,
+      formatTime,
     );
 
     this.sortMap = this.getSortMap();
