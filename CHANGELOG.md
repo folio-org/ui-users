@@ -49,6 +49,7 @@
 * Hide permissions and roles accordions on user create page. Refs UIU-3449.
 * Add support for use circulation-bff for mark-as-missing.  Refs UIU-3444.
 * Add permission for circulation-storage.request-preferences.collection.get to ui-users.view to display request preferences. Refs UIU-3445.
+* Avoid indirection through null item when loaned item is deleted. Fixes UIU-3457.
 
 ## [12.1.11] (https://github.com/folio-org/ui-users/tree/v12.1.11) (2025-08-27)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.10...v12.1.11)
