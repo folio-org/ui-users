@@ -59,7 +59,7 @@ export const mapEntityToTemplate = (entity, type, formatTime, patronGroup) => {
       'item.editions': get(entity, 'item.editions')?.join('/'),
       'item.physicalDescriptions': get(entity, 'item.physicalDescriptions')?.join('/'),
       'item.instanceHrid': get(entity, 'item.instanceHrid'),
-      'item.seriesStatements': entity?.item.seriesStatements?.join(' / '),
+      'item.seriesStatements': get(entity, 'item.seriesStatements')?.join(' / '),
       'item.instanceHridImage': `<Barcode>${get(entity, 'item.instanceHrid')}</Barcode>`,
 
       'loan.dueDate': formatDateAndTime(get(entity, 'dueDate'), formatTime),
