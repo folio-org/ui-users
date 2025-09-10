@@ -19,6 +19,7 @@ const propTypes = {
 
 const EditFeesFines = ({
   accordionId,
+  isCreateMode,
 }) => {
   const intl = useIntl();
   const renderState = useCustomFieldsSection({ sectionId: CUSTOM_FIELDS_SECTION.FEES_FINES });
@@ -44,6 +45,7 @@ const EditFeesFines = ({
       <Row>
         <EditCustomFieldsSection
           sectionId={CUSTOM_FIELDS_SECTION.FEES_FINES}
+          isCreateMode={isCreateMode}
         />
       </Row>
     </Accordion>
