@@ -70,6 +70,9 @@ const getFeeFine = getFeeFineMock;
 const getContributorslist = contributorsMock;
 const feeFineCount = jest.fn();
 const user = okapiCurrentUser;
+const patronGroup = {};
+const formatDate = jest.fn();
+const formatTime = jest.fn();
 
 const sortOrderKeys = [
   'title',
@@ -80,18 +83,22 @@ const sortOrderKeys = [
   'feefineIncurred',
 ];
 
+
 describe('Data Formatter component', () => {
   it('Checking Loan Date and loan policy', async () => {
-    const data = getListDataFormatter(formatMessage, toggleItem, isLoanChecked, requestCounts,
-      requestRecords, resources, getLoanPolicy, handleOptionsChange, stripes, getFeeFine,
-      getContributorslist, feeFineCount, user);
+    const data = getListDataFormatter(formatMessage, toggleItem, isLoanChecked, requestRecords,
+      requestCounts, resources, getLoanPolicy, handleOptionsChange, stripes, getFeeFine,
+      getContributorslist, feeFineCount, user, patronGroup, formatDate, formatTime);
     data.loanDate.sorter(loan);
     data.loanDate.formatter(loan);
     data.loanPolicy.sorter(loan);
     data.loanPolicy.formatter(loan);
     data.location.sorter(loan);
     data.location.formatter(loan);
+    data.useAtLocation.formatter(loan);
     expect(formatMessageMock).toHaveBeenCalled();
+    expect(formatDate).toHaveBeenCalled();
+    expect(formatTime).toHaveBeenCalled();
   });
   it('Checking sort order key', () => {
     const data = getListDataFormatter(formatMessage, toggleItem, isLoanChecked, requestCounts,

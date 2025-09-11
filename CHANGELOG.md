@@ -50,6 +50,7 @@
 * Add support for use circulation-bff for mark-as-missing.  Refs UIU-3444.
 * Add permission for circulation-storage.request-preferences.collection.get to ui-users.view to display request preferences. Refs UIU-3445.
 * Avoid indirection through null item when loaned item is deleted. Fixes UIU-3457.
+* In the list of a user's open loans, the "Use at location" includes service-point and (when relevant) exipiry date. Fixes UIU-3418.
 
 ## [12.1.11] (https://github.com/folio-org/ui-users/tree/v12.1.11) (2025-08-27)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.10...v12.1.11)
