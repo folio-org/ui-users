@@ -33,6 +33,7 @@ import CreateResetPasswordControl from './CreateResetPasswordControl';
 import RequestPreferencesEdit from './RequestPreferencesEdit';
 import DepartmentsNameEdit from './DepartmentsNameEdit';
 import EditCustomFieldsSection from '../EditCustomFieldsSection';
+import { AsyncValidateField } from '../../AsyncValidateField';
 import { CUSTOM_FIELDS_SECTION } from '../../../constants';
 
 class EditExtendedInfo extends Component {
@@ -52,6 +53,12 @@ class EditExtendedInfo extends Component {
     disabled: PropTypes.bool,
     stripes: stripesShape,
   };
+
+  validateUsername = (value) => {
+    const { username, uniquenessValidator } = this.props;
+    
+    return asyncValidateField(value, 'username', username, uniquenessValidator);
+  }
 
   buildAccordionHeader = () => {
     return (
@@ -195,7 +202,7 @@ class EditExtendedInfo extends Component {
             xs={12}
             md={3}
           >
-            <Field
+            <AsyncValidateField
               label={<FormattedMessage id="ui-users.information.username" />}
               name="username"
               id="adduser_username"
@@ -204,7 +211,7 @@ class EditExtendedInfo extends Component {
               validStylesEnabled
               disabled={disabled}
               required={isUsernameFieldRequired}
-              validate={asyncValidateField('username', username, uniquenessValidator)}
+              validate={this.validateUsername}
             />
           </Col>
           <IfPermission perm="ui-users.reset.password">

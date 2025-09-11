@@ -3,22 +3,18 @@ import { FormattedMessage } from 'react-intl';
 
 import { escapeCqlWildcards } from '@folio/stripes-util';
 
-import memoize from '../util/memoize';
+export default async function asyncValidateField(value, fieldName, initValue, validator) {
+  // Don't validate if value is empty or matches initial value
+  if (!value || value === initValue) return '';
 
-// validate field asynchronously
-export default function asyncValidateField(fieldName, initValue, validator) {
-  return memoize(async (value) => {
-    if (!value || value === initValue) return '';
+  const query = `(${fieldName}=="${escapeCqlWildcards(value.trim())}")`;
 
-    const query = `(${fieldName}=="${escapeCqlWildcards(value.trim())}")`;
+  validator.reset();
+  const records = await validator.GET({ params: { query } });
 
-    validator.reset();
-    const records = await validator.GET({ params: { query } });
+  if (records.length > 0) {
+    return <FormattedMessage id={`ui-users.errors.${fieldName}Unavailable`} />;
+  }
 
-    if (records.length > 0) {
-      return <FormattedMessage id={`ui-users.errors.${fieldName}Unavailable`} />;
-    }
-
-    return '';
-  });
+  return '';
 }

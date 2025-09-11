@@ -33,6 +33,7 @@ import validateMinDate from '../../validators/validateMinDate';
 
 import { ChangeUserTypeModal, EditUserProfilePicture } from './components';
 import EditCustomFieldsSection from '../EditCustomFieldsSection';
+import { AsyncValidateField } from '../../AsyncValidateField';
 
 import css from './EditUserInfo.css';
 import { validateLength } from '../../validators/validateLength';
@@ -130,6 +131,15 @@ class EditUserInfo extends React.Component {
       ? moment.tz(expirationDate, timezone).endOf('day').toDate().toISOString()
       : expirationDate;
   };
+
+  validateBarcode = (value) => {
+    const { 
+      initialValues: { barcode },
+      uniquenessValidator,
+    } = this.props;
+
+    return asyncValidateField(value, 'barcode', barcode, uniquenessValidator);
+  }
 
   render() {
     const {
@@ -386,12 +396,12 @@ class EditUserInfo extends React.Component {
                   )}
                 </Col>
                 <Col xs={12} md={3}>
-                  <Field
+                  <AsyncValidateField
                     label={<FormattedMessage id="ui-users.information.barcode" />}
                     name="barcode"
                     id="adduser_barcode"
                     component={TextField}
-                    validate={asyncValidateField('barcode', barcode, uniquenessValidator)}
+                    validate={this.validateBarcode}
                     fullWidth
                     disabled={disabled || isBarcodeDisabled}
                   />
