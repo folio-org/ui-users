@@ -89,7 +89,7 @@ describe('Data Formatter component', () => {
     const data = getListDataFormatter(formatMessage, toggleItem, isLoanChecked, requestRecords,
       requestCounts, resources, getLoanPolicy, handleOptionsChange, stripes, getFeeFine,
       getContributorslist, feeFineCount, user, patronGroup, formatDate, formatTime);
-    data.loanDate.sorter(loan)
+    data.loanDate.sorter(loan);
     data.loanDate.formatter(loan);
     data.loanPolicy.sorter(loan);
     data.loanPolicy.formatter(loan);
