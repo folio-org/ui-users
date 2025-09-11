@@ -137,6 +137,21 @@ describe('mapEntityToTemplate', () => {
   });
 });
 
+describe('when entity.item is missing and type is SLIPS_TYPES.DUE_DATE', () => {
+  it('should not throw error <Cannot read properties of undefined>', () => {
+    const entity = {
+      borrower: {
+        firstName: 'John',
+      },
+    };
+    const slipType = 'Due date receipt';
+
+    const result = mapEntityToTemplate(entity, slipType, 'short', {});
+
+    expect(result).toBeDefined();
+  });
+});
+
 describe('usePrintData', () => {
   beforeEach(() => {
     // Mock the implementation of useStaffSlips
