@@ -135,6 +135,23 @@ describe('mapEntityToTemplate', () => {
 
     expect(result).toBe(entity);
   });
+
+  describe('when entity.item is missing and type is SLIPS_TYPES.DUE_DATE', () => {
+    it('should not throw an error and map available fields', () => {
+      const entity = {
+        borrower: {
+          firstName: 'John',
+          lastName: 'Doe',
+        },
+        dueDate: '2024-10-10T12:00:00Z',
+      };
+      const slipType = 'Due date receipt';
+
+      const result = mapEntityToTemplate(entity, slipType, 'short');
+
+      expect(result).toBe(entity);
+    });
+  });
 });
 
 describe('usePrintData', () => {

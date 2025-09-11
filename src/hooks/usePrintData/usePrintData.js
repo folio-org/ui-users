@@ -29,6 +29,8 @@ export function buildTemplate(template = '') {
 }
 
 export const mapEntityToTemplate = (entity, type, formatTime, patronGroup) => {
+  // const entity = { ...entity };
+    // delete entity.item;
   if (type === SLIPS_TYPES.DUE_DATE) {
     const barcode = get(entity, 'item.barcode');
 
@@ -53,15 +55,14 @@ export const mapEntityToTemplate = (entity, type, formatTime, patronGroup) => {
       'item.volume': get(entity, 'item.volume'),
       'item.chronology': get(entity, 'item.chronology'),
       'item.materialType': get(entity, 'item.materialType')?.name,
-      'item.accessionNumber': entity?.item.accessionNumber,
-      'item.administrativeNotes': entity?.item.administrativeNotes?.join('/'),
-      'item.datesOfPublication': entity?.item.datesOfPublication?.join('/'),
-      'item.editions': entity?.item.editions?.join('/'),
-      'item.physicalDescriptions': entity?.item.physicalDescriptions?.join('/'),
-      'item.instanceHrid': entity?.item.instanceHrid,
-      'item.seriesStatements': entity?.item.seriesStatements?.join(' / '),
-      'item.instanceHridImage': `<Barcode>${entity?.item.instanceHrid}</Barcode>`,
-
+      'item.accessionNumber': entity?.item?.accessionNumber,
+      'item.administrativeNotes': entity?.item?.administrativeNotes?.join('/'),
+      'item.datesOfPublication': entity?.item?.datesOfPublication?.join('/'),
+      'item.editions': entity?.item?.editions?.join('/'),
+      'item.physicalDescriptions': entity?.item?.physicalDescriptions?.join('/'),
+      'item.instanceHrid': entity?.item?.instanceHrid,
+      'item.seriesStatements': entity?.item?.seriesStatements?.join(' / '),
+      'item.instanceHridImage': `<Barcode>${entity?.item?.instanceHrid}</Barcode>`,
       'loan.dueDate': formatDateAndTime(get(entity, 'dueDate'), formatTime),
     };
   }
