@@ -49,7 +49,7 @@ export default function UserRolesModal({ isOpen,
     if (assignedRoleIds[tenantId]?.includes(id)) {
       setAssignedRoleIds({ ...assignedRoleIds, [tenantId]: assignedRoleIds[tenantId].filter(role => role !== id) });
     } else {
-      setAssignedRoleIds({ ...assignedRoleIds, [tenantId]: assignedRoleIds[tenantId].concat(id) });
+      setAssignedRoleIds({ ...assignedRoleIds, [tenantId]: assignedRoleIds[tenantId] ? assignedRoleIds[tenantId].concat(id) : [id] });
     }
   };
 
