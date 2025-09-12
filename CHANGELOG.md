@@ -52,6 +52,10 @@
 * Avoid indirection through null item when loaned item is deleted. Fixes UIU-3457.
 * In the list of a user's open loans, the "Use at location" includes service-point and (when relevant) exipiry date. Fixes UIU-3418.
 
+## [12.1.12] (https://github.com/folio-org/ui-users/tree/v12.1.12) (2025-09-12)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.11...v12.1.12)
+* Use the `circulation-bff-loans` endpoint instead of `circulation/loans` in `LoansListingContainer` and `LoanDetailContainer` to have all tokens for DCB item. Fixes UIU-3392.
+
 ## [12.1.11] (https://github.com/folio-org/ui-users/tree/v12.1.11) (2025-08-27)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.10...v12.1.11)
 * Add 'Minor' column to Patrons Pre-Registration List. Refs UIU-3425.
