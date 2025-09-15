@@ -89,7 +89,7 @@ class EditUserInfo extends React.Component {
 
   setRecalculatedExpirationDate = (startCalcToday) => {
     const { form: { change } } = this.props;
-    const recalculatedDate = this.calculateNewExpirationDate(startCalcToday).format('L');
+    const recalculatedDate = this.calculateNewExpirationDate(startCalcToday).format();
     const parsedRecalculatedDate = this.parseExpirationDate(recalculatedDate);
 
     change('expirationDate', parsedRecalculatedDate);
@@ -374,7 +374,6 @@ class EditUserInfo extends React.Component {
                     parse={this.parseExpirationDate}
                     disabled={disabled}
                     validate={validateMinDate('ui-users.errors.personal.dateOfBirth')}
-                    timeZone="UTC"
                   />
                   {checkShowRecalculateButton() && (
                     <Button
