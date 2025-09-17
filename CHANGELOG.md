@@ -54,6 +54,10 @@
 * Added null check to allow roles to be selected for user when list is emptied. Fixes UIU-3465.
 * Remove UTC timezone from expiration date formatting in `UserInfo` and `EditUserInfo` components so that expiration is correct. Use `.format()` instead of `.format('L')` in `recalculatedDate` to preserve timezone information. Fixes UIU-3400.
 
+## [12.1.13] (https://github.com/folio-org/ui-users/tree/v12.1.13) (2025-09-16)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.12...v12.1.13)
+* Avoid indirection through null item when loaned item is deleted. Fixes UIU-3457.
+
 ## [12.1.12] (https://github.com/folio-org/ui-users/tree/v12.1.12) (2025-09-12)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.11...v12.1.12)
 * Use the `circulation-bff-loans` endpoint instead of `circulation/loans` in `LoansListingContainer` and `LoanDetailContainer` to have all tokens for DCB item. Fixes UIU-3392.
