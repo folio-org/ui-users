@@ -1,7 +1,8 @@
 import React from 'react';
-import moment from 'moment';
 import { FormattedMessage } from 'react-intl';
 import { get } from 'lodash';
+
+import { dayjs } from '@folio/stripes/components';
 
 /**
  * getProxySponsorWarning
@@ -26,24 +27,24 @@ import { get } from 'lodash';
  *
  * @return empty string indicates no warnings; a string contains a warning message.
  */
-export default function getProxySponsorWarning(values, namespace, index) {
+export default function getProxySponsorWarning(values, namespace, index, timezone = 'UTC') {
   const proxyRel = values[namespace][index] || {};
-  const today = moment().endOf('day');
+  const today = dayjs().tz(timezone).endOf('day');
   let warning = '';
 
   // proxy/sponsor user expired
-  if (get(proxyRel, 'user.expirationDate') && moment(proxyRel.user.expirationDate).isSameOrBefore(today, 'day')) {
+  if (get(proxyRel, 'user.expirationDate') && dayjs.tz(proxyRel.user.expirationDate, timezone).isSameOrBefore(today, 'day')) {
     warning = <FormattedMessage id={`ui-users.errors.${namespace}.expired`} />;
   }
 
   // current user expired
-  if (values.expirationDate && moment(values.expirationDate).isSameOrBefore(today, 'day')) {
+  if (values.expirationDate && dayjs.tz(values.expirationDate, timezone).isSameOrBefore(today, 'day')) {
     warning = <FormattedMessage id="ui-users.errors.currentUser.expired" />;
   }
 
   // proxy relationship expired
   if (get(proxyRel, 'proxy.expirationDate') &&
-    moment(proxyRel.proxy.expirationDate).isSameOrBefore(today, 'day')) {
+    dayjs.tz(proxyRel.proxy.expirationDate, timezone).isSameOrBefore(today, 'day')) {
     warning = <FormattedMessage id="ui-users.errors.proxyrelationship.expired" />;
   }
 

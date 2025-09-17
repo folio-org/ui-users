@@ -357,6 +357,10 @@ class UserForm extends React.Component {
       isCreateKeycloakUserConfirmationOpen,
       onCancelKeycloakConfirmation
     } = this.props;
+    const {
+      timezone = 'UTC',
+    } = stripes;
+
     const isEditing = !!initialValues.id;
     const selectedPatronGroup = form.getFieldState('patronGroup')?.value;
     const firstMenu = this.getAddFirstMenu();
@@ -531,7 +535,7 @@ class UserForm extends React.Component {
               ['sponsors', 'proxies'].forEach(namespace => {
                 if (values[namespace]) {
                   values[namespace].forEach((_, index) => {
-                    const warning = getProxySponsorWarning(values, namespace, index);
+                    const warning = getProxySponsorWarning(values, namespace, index, timezone);
 
                     if (warning) {
                       mutators.setFieldData(`${namespace}[${index}].proxy.status`, { warning });

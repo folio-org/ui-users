@@ -3,6 +3,8 @@ import getProxySponsorWarning from './getProxySponsorWarning';
 
 describe('Proxy Sponsor component', () => {
   it('getProxySponsorWarning', async () => {
+    const timezone = 'Pacific/Fakaofo';
+
     const values = {
       proxies: [
         {
@@ -23,7 +25,7 @@ describe('Proxy Sponsor component', () => {
       expirationDate: '2022-05-30T03:22:53.897+00:00',
     };
 
-    const data = getProxySponsorWarning(values, 'proxies', 0);
+    const data = getProxySponsorWarning(values, 'proxies', 0, timezone);
     expect(data).toBeTruthy();
   });
 });

@@ -3,7 +3,10 @@ import { FormattedMessage } from 'react-intl';
 import { every, orderBy } from 'lodash';
 import queryString from 'query-string';
 
-import { NoValue } from '@folio/stripes/components';
+import {
+  dayjs,
+  NoValue,
+} from '@folio/stripes/components';
 
 import {
   USER_TYPES,
@@ -176,11 +179,9 @@ export function getValue(value) {
   return value || '';
 }
 
-// Given a user record, test whether the user is active. Checking the `active` property ought to
-// be sufficient, but test the expiration date as well just to be sure.
-export function checkUserActive(user) {
+export function checkUserActive(user = {}, timezone = 'UTC') {
   if (user.expirationDate == null || user.expirationDate === undefined) return user.active;
-  return user.active && (new Date(user.expirationDate) >= new Date());
+  return user.active && (dayjs.tz(user.expirationDate, timezone).isAfter(dayjs().tz(timezone), 'day'));
 }
 
 export const getContributors = (account, instance) => {
