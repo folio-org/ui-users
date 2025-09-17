@@ -31,6 +31,7 @@ const props = {
     updatedDate: '2022-05-10T02:00:49.576+00:00',
     username: 'acq-admin'
   },
+  customFields: [],
   settings: [{ enabled: true }]
 };
 
@@ -70,5 +71,23 @@ describe('Render userInfo component', () => {
   it('should display ViewCustomFieldsRecord', () => {
     renderUserInfo(props);
     expect(screen.getByText('ViewCustomFieldsRecord')).toBeInTheDocument();
+  });
+
+  it('should not include UTC or any other timezone in FormattedDate for expiration date', () => {
+    const propsWithExpirationDate = {
+      ...props,
+      user: {
+        ...props.user,
+        expirationDate: '2023-12-31T23:59:59.000Z'
+      }
+    };
+
+    renderUserInfo(propsWithExpirationDate);
+
+    const formattedDateElement = screen.getByTestId('formatted-date-expirationDate');
+    expect(formattedDateElement).toBeInTheDocument();
+
+    expect(formattedDateElement).not.toHaveAttribute('data-timezone', 'UTC');
+    expect(formattedDateElement).not.toHaveAttribute('data-timezone');
   });
 });

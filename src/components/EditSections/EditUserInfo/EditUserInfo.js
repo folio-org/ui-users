@@ -1,5 +1,4 @@
 import get from 'lodash/get';
-import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Field } from 'react-final-form';
@@ -89,7 +88,7 @@ class EditUserInfo extends React.Component {
 
   setRecalculatedExpirationDate = (startCalcToday) => {
     const { form: { change } } = this.props;
-    const recalculatedDate = this.calculateNewExpirationDate(startCalcToday).format('L');
+    const recalculatedDate = this.calculateNewExpirationDate(startCalcToday).format();
     const parsedRecalculatedDate = this.parseExpirationDate(recalculatedDate);
 
     change('expirationDate', parsedRecalculatedDate);
@@ -127,7 +126,7 @@ class EditUserInfo extends React.Component {
     } = this.props;
 
     return expirationDate
-      ? moment.tz(expirationDate, timezone).endOf('day').toDate().toISOString()
+      ? dayjs.tz(expirationDate, timezone).endOf('day').toISOString()
       : expirationDate;
   };
 
@@ -374,7 +373,6 @@ class EditUserInfo extends React.Component {
                     parse={this.parseExpirationDate}
                     disabled={disabled}
                     validate={validateMinDate('ui-users.errors.personal.dateOfBirth')}
-                    timeZone="UTC"
                   />
                   {checkShowRecalculateButton() && (
                     <Button

@@ -52,6 +52,7 @@
 * Avoid indirection through null item when loaned item is deleted. Fixes UIU-3457.
 * In the list of a user's open loans, the "Use at location" includes service-point and (when relevant) exipiry date. Fixes UIU-3418.
 * Added null check to allow roles to be selected for user when list is emptied. Fixes UIU-3465.
+* Remove UTC timezone from expiration date formatting in `UserInfo` and `EditUserInfo` components so that expiration is correct. Use `.format()` instead of `.format('L')` in `recalculatedDate` to preserve timezone information. Fixes UIU-3400.
 
 ## [12.1.13] (https://github.com/folio-org/ui-users/tree/v12.1.13) (2025-09-16)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.12...v12.1.13)
