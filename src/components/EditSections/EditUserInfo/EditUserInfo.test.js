@@ -52,6 +52,22 @@ jest.mock('./components', () => ({
 
 const onSubmit = jest.fn();
 
+const getDayjsMock = (date) => {
+  const dayjsObj = jest.requireActual('@folio/stripes/components').dayjs(date);
+
+  return {
+    ...dayjsObj,
+    format: jest.fn().mockReturnValue('05/04/2027'),
+    add: jest.fn().mockReturnThis(),
+    tz: jest.fn().mockReturnThis(),
+    endOf: jest.fn().mockReturnThis(),
+    toISOString: jest.fn().mockReturnValue('2027-05-04T03:59:59.999Z'),
+    isSameOrBefore: jest.fn().mockReturnValue(false),
+    isBefore: jest.fn().mockReturnValue(true),
+    isAfter: jest.fn().mockReturnValue(true),
+  };
+};
+
 const arrayMutators = {
   concat: jest.fn(),
   move: jest.fn(),
@@ -147,7 +163,11 @@ const props = {
 
 describe('Render Edit User Information component', () => {
   beforeEach(() => {
+    jest.clearAllMocks();
     isConsortiumEnabled.mockClear().mockReturnValue(false);
+
+    dayjs.mockImplementation(getDayjsMock);
+    dayjs.tz = jest.fn(getDayjsMock);
   });
 
   it('Must be rendered', () => {
@@ -159,6 +179,17 @@ describe('Render Edit User Information component', () => {
     await userEvent.click(screen.getByText('ui-users.information.recalculate.expirationDate'));
     expect(changeMock).toHaveBeenCalled();
   });
+
+  describe('when "Reset" (recalculate) button is clicked', () => {
+    it('should change expiration date', async () => {
+      renderEditUserInfo(props);
+
+      await act(() => userEvent.click(screen.getByText('ui-users.information.recalculate.expirationDate')));
+
+      expect(changeMock).toHaveBeenCalledWith('expirationDate', '2027-05-04T03:59:59.999Z');
+    });
+  });
+
   it('should handle empty expiration date correctly', () => {
     renderEditUserInfo({
       ...props,

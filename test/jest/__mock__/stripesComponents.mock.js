@@ -61,12 +61,19 @@ jest.mock('@folio/stripes/components', () => ({
 
     return value;
   }),
-  FormattedDate: jest.fn(({ value, children }) => {
+  FormattedDate: jest.fn(({ value, children, timeZone, 'data-testid': dataTestId }) => {
     if (children) {
       return children([value]);
     }
 
-    return value;
+    return (
+      <span
+        data-timezone={timeZone}
+        data-testid={dataTestId}
+      >
+        {value}
+      </span>
+    );
   }),
   HasCommand: jest.fn(({ children }) => (
     <span>{children}</span>
