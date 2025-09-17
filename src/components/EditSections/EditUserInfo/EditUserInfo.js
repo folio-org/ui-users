@@ -1,5 +1,4 @@
 import get from 'lodash/get';
-import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Field } from 'react-final-form';
@@ -127,7 +126,7 @@ class EditUserInfo extends React.Component {
     } = this.props;
 
     return expirationDate
-      ? moment.tz(expirationDate, timezone).endOf('day').toDate().toISOString()
+      ? dayjs.tz(expirationDate, timezone).endOf('day').toISOString()
       : expirationDate;
   };
 
