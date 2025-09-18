@@ -102,13 +102,18 @@ class EditUserInfo extends React.Component {
   }
 
   calculateNewExpirationDate = (startCalcToday) => {
-    const { initialValues } = this.props;
-    const now = Date.now();
-    const expirationDate = initialValues.expirationDate ? new Date(initialValues.expirationDate) : now;
+    const { 
+      initialValues,
+      stripes: { 
+        timezone,
+      },
+    } = this.props;
+    const now = dayjs().tz(timezone);
+    const expirationDate = initialValues.expirationDate ? dayjs(initialValues.expirationDate).tz(timezone) : now;
     const offsetOfSelectedPatronGroup = this.state.selectedPatronGroup ? this.getPatronGroupOffset() : '';
 
-    const shouldRecalculateFromToday = startCalcToday || initialValues.expirationDate === undefined || expirationDate <= now;
-    const baseDate = shouldRecalculateFromToday ? dayjs() : dayjs(expirationDate);
+    const shouldRecalculateFromToday = startCalcToday || initialValues.expirationDate === undefined || expirationDate.isSameOrBefore(now);
+    const baseDate = shouldRecalculateFromToday ? now : expirationDate;
 
     return baseDate.add(offsetOfSelectedPatronGroup, 'd');
   }
@@ -126,7 +131,7 @@ class EditUserInfo extends React.Component {
     } = this.props;
 
     return expirationDate
-      ? dayjs.tz(expirationDate, timezone).endOf('day').toISOString()
+      ? dayjs(expirationDate).tz(timezone).endOf('day').toISOString()
       : expirationDate;
   };
 
