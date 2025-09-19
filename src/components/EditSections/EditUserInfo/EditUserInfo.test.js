@@ -347,4 +347,34 @@ describe('Render Edit User Information component', () => {
       expect(screen.queryByText('Profile Picture')).not.toBeInTheDocument();
     });
   });
+
+  describe('parseExpirationDate function', () => {
+    it('should use dayjs(expirationDate).tz(timezone) instead of dayjs.tz(expirationDate, timezone)', async () => {
+      const mockTz = jest.fn().mockReturnThis();
+      const mockEndOf = jest.fn().mockReturnThis();
+      const mockToISOString = jest.fn().mockReturnValue('2027-05-04T03:59:59.999Z');
+
+      const mockDayjsInstance = {
+        tz: mockTz,
+        endOf: mockEndOf,
+        toISOString: mockToISOString,
+        format: jest.fn().mockReturnValue('05/04/2027'),
+        add: jest.fn().mockReturnThis(),
+        isSameOrBefore: jest.fn().mockReturnValue(false),
+        isBefore: jest.fn().mockReturnValue(true),
+        isAfter: jest.fn().mockReturnValue(true),
+      };
+
+      dayjs.mockImplementation(() => mockDayjsInstance);
+
+      renderEditUserInfo(props);
+
+      await act(() => userEvent.click(screen.getByText('ui-users.information.recalculate.expirationDate')));
+
+      expect(dayjs).toHaveBeenCalled();
+      expect(mockTz).toHaveBeenCalledWith('America/New_York');
+      expect(mockEndOf).toHaveBeenCalledWith('day');
+      expect(mockToISOString).toHaveBeenCalled();
+    });
+  });
 });
