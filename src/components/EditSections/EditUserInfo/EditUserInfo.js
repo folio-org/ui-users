@@ -126,7 +126,7 @@ class EditUserInfo extends React.Component {
     } = this.props;
 
     return expirationDate
-      ? dayjs.tz(expirationDate, timezone).endOf('day').toISOString()
+      ? dayjs(expirationDate).tz(timezone).endOf('day').toISOString()
       : expirationDate;
   };
 
