@@ -19,4 +19,6 @@ export default {
   'staffInfoAdded': 'ui-users.data.loanActionMap.staffInfo',
   'unknownAction': 'ui-users.data.loanActionMap.unknownAction',
   'reminderFee': 'ui-users.data.loanActionMap.reminderFee',
+  'heldForUseAtLocation': 'ui-users.data.loanActionMap.heldForUseAtLocation',
+  'pickedUpForUseAtLocation': 'ui-users.data.loanActionMap.pickedUpForUseAtLocation',
 };
