@@ -62,6 +62,8 @@
   "data.loanActionMap.staffInfo.superseded": "Staff info (SUPERSEDED)",
   "data.loanActionMap.unknownAction": "Unknown action",
   "data.loanActionMap.reminderFee": "Reminder fee",
+  "data.loanActionMap.heldForUseAtLocation": "Held for use at location",
+  "data.loanActionMap.pickedUpForUseAtLocation": "Picked up for use at location",
   "user.unknown": "Unknown user",
   "action": "Action",
   "actionMenu.lostItems": "Lost items requiring actual cost",
