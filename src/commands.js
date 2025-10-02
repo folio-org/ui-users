@@ -38,6 +38,7 @@ const commands = [
     shortcut: 'mod+alt+k',
   },
   {
+    name: 'expandCollapse',
     label: (<FormattedMessage id="ui-users.shortcut.expandCollapse" />),
     shortcut: 'spacebar'
   }
