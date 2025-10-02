@@ -63,7 +63,7 @@ class EditUserInfo extends React.Component {
     disabled: PropTypes.bool,
     numberGeneratorData: PropTypes.object,
     uniquenessValidator: PropTypes.object,
-    profilePictureConfig: PropTypes.object.isRequired,
+    profilePictureConfig: PropTypes.object,
   };
 
   constructor(props) {
