@@ -469,6 +469,7 @@ class EditUserInfo extends React.Component {
               />
             </Col>
             <EditCustomFieldsSection
+              accordionId={accordionId}
               sectionId={CUSTOM_FIELDS_SECTION.USER_INFO}
               isCreateMode={!this.props.initialValues?.id}
             />
