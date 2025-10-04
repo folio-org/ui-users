@@ -644,7 +644,7 @@
     "extended.department.name": "Nazwa działu",
     "extended.department.add": "Dodaj dział",
     "extended.department.default": "Wybierz dział",
-    "item.copyNumber": "Liczba kopii",
+    "item.copyNumber": "Numer kopii",
     "permission.settings.departments.view": "Ustawienia (Użytkownicy): można wyświetlać działy",
     "permission.settings.departments.edit": "Ustawienia (Użytkownicy): edycja działów",
     "permission.settings.departments.create": "Ustawienia (Użytkownicy): tworzenie działów",
@@ -684,7 +684,7 @@
     "reports.item.callNumberComponents.suffix": "Sufiks sygnatury",
     "reports.item.enumeration": "Numeracja",
     "reports.item.chronology": "Chronologia",
-    "reports.item.copyNumber": "Liczba kopii",
+    "reports.item.copyNumber": "Numer kopii",
     "reports.item.volume": "Wolumin",
     "reports.item.location.name": "Lokalizacja",
     "reports.item.instanceId": "ID instancji",
@@ -1254,5 +1254,7 @@
     "loans.numOpenLoans.held": "Przechowywany: {count}",
     "loans.numOpenLoans.inUse": "W użyciu: {count}",
     "stagingRecords.list.columnNames.minor": "Minor",
-    "stagingRecords.minor.yes": "Yes"
+    "stagingRecords.minor.yes": "Yes",
+    "data.loanActionMap.heldForUseAtLocation": "Held for use at location",
+    "data.loanActionMap.pickedUpForUseAtLocation": "Picked up for use at location"
 }

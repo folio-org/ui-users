@@ -1099,7 +1099,7 @@
     "information.userType": "Тип користувача",
     "information.userType.patron": "Користувач",
     "information.userType.staff": "Персонал",
-    "information.userType.shadow": "Shadow",
+    "information.userType.shadow": "Приховано",
     "information.userType.system": "Система",
     "userType": "Тип користувача",
     "data.loanActionMap.reminderFee": "Плата за нагадування",
@@ -1182,7 +1182,7 @@
     "stagingRecords.list.columnNames.mobileNumber": "Номер мобільного",
     "stagingRecords.list.columnNames.address": "Адреса",
     "stagingRecords.list.columnNames.emailCommunicationPreferences": "Налаштування спілкування е-поштою",
-    "stagingRecords.list.columnNames.submissionDate": "Submission date",
+    "stagingRecords.list.columnNames.submissionDate": "Дата подання",
     "stagingRecords.list.columnNames.emailVerification": "Перевірка електронної пошти",
     "stagingRecords.activated": "Активовано",
     "stagingRecords.notActivated": "Не активовано",
@@ -1231,7 +1231,7 @@
     "title.patronBlock.edit": "Користувачі - Редагування блокування користувача",
     "accounts.history.columns.actions": "Дії",
     "charge.item.barcode.error": "Не вдалося знайти примірник зі штрихкодом {barcode}",
-    "information.pronouns": "Pronouns",
+    "information.pronouns": "Займенники",
     "errors.personal.pronounsCharLimit": "Кількість займенників обмежена 300 символами",
     "settings.numberGenerator.barcode": "Штрихкод",
     "settings.numberGenerator.info": "Поля, які, як правило, заповнюються за допомогою цифрової послідовності, можуть використовувати генератор номерів. Коли генератор увімкнено, поле можна зафіксувати, щоб запобігти його оновленню вручну. Або ж зробити це поле повністю редагованим. Якщо генератор вимкнено, то поле потрібно заповнювати вручну.",
@@ -1253,6 +1253,8 @@
     "loans.numOpenLoans.useAtLocation": "Використовувати у місці розміщення",
     "loans.numOpenLoans.held": "Утримується: {count}",
     "loans.numOpenLoans.inUse": "Використовується: {count}",
-    "stagingRecords.list.columnNames.minor": "Minor",
-    "stagingRecords.minor.yes": "Так"
+    "stagingRecords.list.columnNames.minor": "Другорядне",
+    "stagingRecords.minor.yes": "Так",
+    "data.loanActionMap.heldForUseAtLocation": "Held for use at location",
+    "data.loanActionMap.pickedUpForUseAtLocation": "Picked up for use at location"
 }
