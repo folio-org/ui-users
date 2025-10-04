@@ -1247,12 +1247,14 @@
     "information.profilePicture.retakePhoto": "重新拍照",
     "requests.fulfillmentPreference.info": "选中<strong>发送</strong>复选框以选择<strong>履行偏好</strong>和<strong>默认发送地址</strong> 。",
     "loans.columns.useAtLocation": "在现场使用",
-    "loans.columns.useAtLocation.In use": "使用中",
-    "loans.columns.useAtLocation.Held": "已预约",
+    "loans.columns.useAtLocation.In use": "正在{servicePoint}使用",
+    "loans.columns.useAtLocation.Held": "在{servicePoint}预约，直至{expiry}",
     "loans.columns.useAtLocation.Returned": "已还",
     "loans.numOpenLoans.useAtLocation": "在现场使用",
     "loans.numOpenLoans.held": "已预约： {count}",
     "loans.numOpenLoans.inUse": "使用中： {count}",
-    "stagingRecords.list.columnNames.minor": "Minor",
-    "stagingRecords.minor.yes": "Yes"
+    "stagingRecords.list.columnNames.minor": "次要的",
+    "stagingRecords.minor.yes": "是",
+    "data.loanActionMap.heldForUseAtLocation": "预约在馆藏地使用",
+    "data.loanActionMap.pickedUpForUseAtLocation": "领取后在馆藏地使用"
 }

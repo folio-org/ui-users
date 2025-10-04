@@ -1254,5 +1254,7 @@
     "loans.numOpenLoans.held": "Realizado: {count}",
     "loans.numOpenLoans.inUse": "Em uso: {count}",
     "stagingRecords.list.columnNames.minor": "Menor",
-    "stagingRecords.minor.yes": "Sim"
+    "stagingRecords.minor.yes": "Sim",
+    "data.loanActionMap.heldForUseAtLocation": "Mantido para uso no local",
+    "data.loanActionMap.pickedUpForUseAtLocation": "Retirado para uso no local"
 }
