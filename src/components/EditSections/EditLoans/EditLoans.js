@@ -45,6 +45,7 @@ const EditLoans = ({
     >
       <Row>
         <EditCustomFieldsSection
+          accordionId={accordionId}
           sectionId={CUSTOM_FIELDS_SECTION.LOANS}
           isCreateMode={isCreateMode}
         />

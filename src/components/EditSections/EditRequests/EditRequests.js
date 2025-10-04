@@ -43,6 +43,7 @@ const EditRequests = ({
     >
       <Row>
         <EditCustomFieldsSection
+          accordionId={accordionId}
           sectionId={CUSTOM_FIELDS_SECTION.REQUESTS}
           isCreateMode={isCreateMode}
         />

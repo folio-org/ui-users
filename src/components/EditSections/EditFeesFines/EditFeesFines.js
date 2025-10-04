@@ -43,6 +43,7 @@ const EditFeesFines = ({
     >
       <Row>
         <EditCustomFieldsSection
+          accordionId={accordionId}
           sectionId={CUSTOM_FIELDS_SECTION.FEES_FINES}
         />
       </Row>
