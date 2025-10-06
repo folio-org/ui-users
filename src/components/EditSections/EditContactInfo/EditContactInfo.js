@@ -139,6 +139,7 @@ const EditContactInfo = ({
           />
         </Col>
         <EditCustomFieldsSection
+          accordionId={accordionId}
           sectionId={CUSTOM_FIELDS_SECTION.CONTACT_INFO}
           isCreateMode={isCreateMode}
         />

@@ -123,7 +123,7 @@ class UserForm extends React.Component {
     stripes: PropTypes.object,
     form: PropTypes.object, // provided by final-form
     intl: PropTypes.object,
-    profilePictureConfig: PropTypes.object.isRequired,
+    profilePictureConfig: PropTypes.object,
     isCreateKeycloakUserConfirmationOpen: PropTypes.bool,
     onCancelKeycloakConfirmation: PropTypes.func,
     confirmCreateKeycloakUser: PropTypes.func,

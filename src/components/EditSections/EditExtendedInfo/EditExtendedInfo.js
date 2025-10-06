@@ -186,6 +186,7 @@ class EditExtendedInfo extends Component {
             : null
           }
           <EditCustomFieldsSection
+            accordionId={accordionId}
             sectionId={CUSTOM_FIELDS_SECTION.EXTENDED_INFO}
             isCreateMode={!this.props.userId}
           />

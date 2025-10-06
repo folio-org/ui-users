@@ -63,7 +63,7 @@ class EditUserInfo extends React.Component {
     disabled: PropTypes.bool,
     numberGeneratorData: PropTypes.object,
     uniquenessValidator: PropTypes.object,
-    profilePictureConfig: PropTypes.object.isRequired,
+    profilePictureConfig: PropTypes.object,
   };
 
   constructor(props) {
@@ -469,6 +469,7 @@ class EditUserInfo extends React.Component {
               />
             </Col>
             <EditCustomFieldsSection
+              accordionId={accordionId}
               sectionId={CUSTOM_FIELDS_SECTION.USER_INFO}
               isCreateMode={!this.props.initialValues?.id}
             />
