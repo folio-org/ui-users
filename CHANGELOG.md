@@ -1,7 +1,9 @@
 # Change history for ui-users
 
+## [12.1.14] (https://github.com/folio-org/ui-users/tree/v12.1.14) (2025-10-08)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.13...v12.1.14)
 * Add support for use circulation-bff for claim-item-returned. Refs UIU-3413.
-* Add support for use circulation-bff for mark-as-missing.  Refs UIU-3444.
+* Add support for use circulation-bff for mark-as-missing. Refs UIU-3444.
 
 ## [12.1.13] (https://github.com/folio-org/ui-users/tree/v12.1.13) (2025-09-16)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.12...v12.1.13)
