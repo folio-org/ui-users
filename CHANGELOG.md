@@ -43,17 +43,20 @@
 * Add 'Minor' column to Patrons Pre-Registration List. Refs UIU-3425.
 * *BREAKING* Update the user record view page to display custom fields under the Fees/fines, Loans, or Requests accordions as configured in settings. Refs UIU-3130.
 * Fix User Edit workflow for making edits to non-Keycloak user. Previously Edit screen remained open. Now it properly returns to User Detail page with updated data. Refs UIU-3426.
-* Add support for use circulation-bff for claim-item-returned. Refs UIU-3413.
 * Pass `isCreateMode` prop to `EditCustomFieldsSection` components to ensure proper dirty and pristine form states. Refs UIU-3390.
 * Fix user search pagination and total count display beyond 1000 records. Refs UIU-3387.
 * Hide permissions and roles accordions on user create page. Refs UIU-3449.
-* Add support for use circulation-bff for mark-as-missing.  Refs UIU-3444.
 * Add permission for circulation-storage.request-preferences.collection.get to ui-users.view to display request preferences. Refs UIU-3445.
 * Avoid indirection through null item when loaned item is deleted. Fixes UIU-3457.
 * In the list of a user's open loans, the "Use at location" includes service-point and (when relevant) exipiry date. Fixes UIU-3418.
 * Added null check to allow roles to be selected for user when list is emptied. Fixes UIU-3465.
 * Remove UTC timezone from expiration date formatting in `UserInfo` and `EditUserInfo` components so that expiration is correct. Use `.format()` instead of `.format('L')` in `recalculatedDate` to preserve timezone information. Fixes UIU-3400.
 * Add translations for use-at-location actions for history list in loan detail pages. Fixes UIU-3420.
+
+## [12.1.14] (https://github.com/folio-org/ui-users/tree/v12.1.14) (2025-10-08)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.13...v12.1.14)
+* Add support for use circulation-bff for claim-item-returned. Refs UIU-3413.
+* Add support for use circulation-bff for mark-as-missing. Refs UIU-3444.
 
 ## [12.1.13] (https://github.com/folio-org/ui-users/tree/v12.1.13) (2025-09-16)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.12...v12.1.13)
