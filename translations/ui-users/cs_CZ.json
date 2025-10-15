@@ -1255,6 +1255,6 @@
     "loans.numOpenLoans.inUse": "Používá se: {count}",
     "stagingRecords.list.columnNames.minor": "Drobné",
     "stagingRecords.minor.yes": "Ano",
-    "data.loanActionMap.heldForUseAtLocation": "Held for use at location",
-    "data.loanActionMap.pickedUpForUseAtLocation": "Picked up for use at location"
+    "data.loanActionMap.heldForUseAtLocation": "Drženo pro použití na místě",
+    "data.loanActionMap.pickedUpForUseAtLocation": "Vyzvednuto k použití na místě"
 }
