@@ -17,7 +17,6 @@ import {
   nav,
   isDcbUser,
 } from '../../util';
-import { DCB_VIRTUAL_USER } from '../../../constants';
 
 jest.unmock('@folio/stripes/components');
 jest.mock('../../util', () => ({
@@ -448,7 +447,9 @@ describe('Given ClosedLoans', () => {
   describe('when DCB lending role - virtual user and real item', () => {
     const dcbUserProps = {
       ...props,
-      user: DCB_VIRTUAL_USER,
+      user: {
+        type: 'dcb',
+      },
     };
 
     it('should not render "Anonymize all loans" button', () => {
@@ -558,7 +559,9 @@ describe('Given ClosedLoans', () => {
   describe('when DCB pickup role - virtual user and virtual item', () => {
     const dcbProps = {
       ...props,
-      user: DCB_VIRTUAL_USER,
+      user: {
+        type: 'dcb',
+      },
       loans: [
         {
           'id': '42255465-5c4c-40a2-be1c-dbb24a99c581',

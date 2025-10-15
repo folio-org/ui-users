@@ -450,7 +450,7 @@ describe('UserDetail', () => {
 
   describe('when user type is dcb', () => {
     it('should not render action menu', () => {
-      renderUserDetail(stripes, { resources: { ...resources, selUser: { records: [{ ...resources.selUser.records[0], type: 'dcb', personal: { lastName: 'DcbSystem' } }] } } });
+      renderUserDetail(stripes, { resources: { ...resources, selUser: { records: [{ ...resources.selUser.records[0], type: 'dcb' }] } } });
       expect(screen.queryByText('Actions')).toBeNull();
     });
   });
