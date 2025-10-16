@@ -109,7 +109,6 @@ describe('Render UserAccounts component', () => {
           selUser: {
             records: [
               {
-                personal: { lastName: 'DcbSystem' },
                 type: 'dcb'
               }
             ]

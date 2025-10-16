@@ -11,7 +11,6 @@ import loans from 'fixtures/openLoans';
 
 import {
   DCB,
-  DCB_VIRTUAL_USER,
 } from '../../../../../constants';
 
 import OpenLoansSubHeader from './OpenLoansSubHeader';
@@ -296,7 +295,6 @@ describe('Given OpenLoansSubHeader', () => {
         ...props,
         user: {
           ...okapiCurrentUser,
-          lastName: DCB_VIRTUAL_USER.personal.lastName,
           type: DCB,
         }
       };
@@ -310,7 +308,6 @@ describe('Given OpenLoansSubHeader', () => {
         ...props,
         user: {
           ...okapiCurrentUser,
-          lastName: DCB_VIRTUAL_USER.personal.lastName,
           type: DCB,
         }
       };
@@ -324,7 +321,6 @@ describe('Given OpenLoansSubHeader', () => {
         ...props,
         user: {
           ...okapiCurrentUser,
-          lastName: DCB_VIRTUAL_USER.personal.lastName,
           type: DCB,
         }
       };
@@ -338,7 +334,6 @@ describe('Given OpenLoansSubHeader', () => {
         ...props,
         user: {
           ...okapiCurrentUser,
-          lastName: DCB_VIRTUAL_USER.personal.lastName,
           type: DCB,
         }
       };
