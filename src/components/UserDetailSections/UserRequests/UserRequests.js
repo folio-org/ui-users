@@ -84,9 +84,11 @@ class UserRequests extends React.Component {
     mutator: PropTypes.shape({
       openRequestsCount: PropTypes.shape({
         GET: PropTypes.func.isRequired,
+        reset: PropTypes.func.isRequired,
       }),
       closedRequestsCount: PropTypes.shape({
         GET: PropTypes.func.isRequired,
+        reset: PropTypes.func.isRequired,
       }),
     }).isRequired,
     onToggle: PropTypes.func,
@@ -110,6 +112,8 @@ class UserRequests extends React.Component {
     const { mutator } = this.props;
 
     if (this.showRequests) {
+      mutator.openRequestsCount.reset();
+      mutator.closedRequestsCount.reset();
       mutator.openRequestsCount.GET();
       mutator.closedRequestsCount.GET();
     }

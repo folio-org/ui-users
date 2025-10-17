@@ -25,6 +25,7 @@ const mutator = {
     PUT: jest.fn(),
     cancel: jest.fn(),
     GET: jest.fn(),
+    reset: jest.fn(),
   },
   openRequestsCount: {
     DELETE: jest.fn(),
@@ -32,6 +33,7 @@ const mutator = {
     PUT: jest.fn(),
     cancel: jest.fn(),
     GET: jest.fn(),
+    reset: jest.fn(),
   },
   userid: {
     update: jest.fn(),
@@ -166,5 +168,12 @@ describe('Render User Requests component', () => {
 
       expect(screen.getByText('ViewCustomFieldsRecord')).toBeInTheDocument();
     });
+  });
+
+  it('should reset openRequestsCount and closedRequestsCount on mount', () => {
+    renderUserRequests(props(true));
+
+    expect(mutator.openRequestsCount.reset).toHaveBeenCalled();
+    expect(mutator.closedRequestsCount.reset).toHaveBeenCalled();
   });
 });
