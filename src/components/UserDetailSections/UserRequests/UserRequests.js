@@ -110,6 +110,8 @@ class UserRequests extends React.Component {
     const { mutator } = this.props;
 
     if (this.showRequests) {
+      mutator.openRequestsCount.reset();
+      mutator.closedRequestsCount.reset();
       mutator.openRequestsCount.GET();
       mutator.closedRequestsCount.GET();
     }

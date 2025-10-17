@@ -149,6 +149,9 @@ class UserLoans extends React.Component {
     const { mutator } = this.props;
 
     if (this.showLoans) {
+      mutator.openLoans.reset();
+      mutator.claimedReturnedCount.reset();
+      mutator.closedLoansCount.reset();
       mutator.openLoans.GET();
       mutator.claimedReturnedCount.GET();
       mutator.closedLoansCount.GET();
