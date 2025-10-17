@@ -366,13 +366,6 @@ export const USER_TYPES = {
 export const DCB_INSTANCE_ID = '9d1b77e4-f02e-4b7f-b296-3f2042ddac54';
 export const DCB_HOLDINGS_RECORD_ID = '10cd3a5a-d36f-4c7a-bc4f-e1ae3cf820c9';
 
-export const DCB_VIRTUAL_USER = {
-  personal: {
-    lastName: 'DcbSystem',
-  },
-  type: DCB,
-};
-
 export const PROFILE_PIC_DEFAULT_MAX_SIZE_IN_MB = 10;
 export const ACCEPTED_IMAGE_TYPES = 'image/jpg, image/jpeg, image/png';
 

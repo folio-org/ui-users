@@ -74,7 +74,6 @@ describe('render ProxyPermissions component', () => {
           selUser: {
             records: [
               {
-                personal: { lastName: 'DcbSystem' },
                 type: 'dcb'
               }
             ]

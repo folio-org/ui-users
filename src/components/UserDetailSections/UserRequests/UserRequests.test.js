@@ -151,7 +151,6 @@ describe('Render User Requests component', () => {
         return {
           ...props(perm),
           user: {
-            personal: { lastName: 'DcbSystem' },
             type: 'dcb'
           },
         };

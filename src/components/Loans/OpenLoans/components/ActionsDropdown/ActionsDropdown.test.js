@@ -17,7 +17,6 @@ import ActionsDropdown from './ActionsDropdown';
 import {
   itemStatuses,
   DCB,
-  DCB_VIRTUAL_USER,
   DCB_HOLDINGS_RECORD_ID,
   DCB_INSTANCE_ID,
 } from '../../../../../constants';
@@ -248,7 +247,6 @@ describe('ActoinsDropdown component', () => {
         ...props,
         user: {
           ...okapiCurrentUser,
-          lastName: DCB_VIRTUAL_USER.personal.lastName,
           type: DCB,
         }
       };
