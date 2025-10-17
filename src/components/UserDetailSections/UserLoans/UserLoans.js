@@ -117,12 +117,15 @@ class UserLoans extends React.Component {
     mutator: PropTypes.shape({
       openLoans: PropTypes.shape({
         GET: PropTypes.func.isRequired,
+        reset: PropTypes.func.isRequired,
       }).isRequired,
       claimedReturnedCount: PropTypes.shape({
         GET: PropTypes.func.isRequired,
+        reset: PropTypes.func.isRequired,
       }).isRequired,
       closedLoansCount: PropTypes.shape({
         GET: PropTypes.func.isRequired,
+        reset: PropTypes.func.isRequired,
       }).isRequired,
     }).isRequired,
     resources: PropTypes.shape({
