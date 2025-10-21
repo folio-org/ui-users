@@ -30,6 +30,20 @@ function props(isexpanded, pending, claimedReturnedCount, hasPerm = true) {
       hasPerm: hasPerm ? jest.fn().mockReturnValue(true) : jest.fn().mockReturnValue(false),
       hasInterface: jest.fn().mockReturnValue(true),
     },
+    mutator: {
+      openLoans: {
+        GET: jest.fn(),
+        reset: jest.fn(),
+      },
+      claimedReturnedCount: {
+        GET: jest.fn(),
+        reset: jest.fn(),
+      },
+      closedLoansCount: {
+        GET: jest.fn(),
+        reset: jest.fn(),
+      },
+    },
     resources: {
       closedLoansCount:{
         resource: 'closedLoansCount',
@@ -105,5 +119,14 @@ describe('Render User Loans component', () => {
 
       expect(screen.getByText('ViewCustomFieldsRecord')).toBeInTheDocument();
     });
+  });
+
+  it('should reset openLoans, claimedReturnedCount and closedLoansCount on mount', () => {
+    const propsObj = props(true);
+    renderUserLoans(propsObj);
+
+    expect(propsObj.mutator.openLoans.reset).toHaveBeenCalled();
+    expect(propsObj.mutator.claimedReturnedCount.reset).toHaveBeenCalled();
+    expect(propsObj.mutator.closedLoansCount.reset).toHaveBeenCalled();
   });
 });

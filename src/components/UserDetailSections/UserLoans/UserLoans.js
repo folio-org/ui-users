@@ -121,12 +121,15 @@ class UserLoans extends React.Component {
     mutator: PropTypes.shape({
       openLoans: PropTypes.shape({
         GET: PropTypes.func.isRequired,
+        reset: PropTypes.func.isRequired,
       }).isRequired,
       claimedReturnedCount: PropTypes.shape({
         GET: PropTypes.func.isRequired,
+        reset: PropTypes.func.isRequired,
       }).isRequired,
       closedLoansCount: PropTypes.shape({
         GET: PropTypes.func.isRequired,
+        reset: PropTypes.func.isRequired,
       }).isRequired,
     }).isRequired,
     resources: PropTypes.shape({
@@ -153,6 +156,9 @@ class UserLoans extends React.Component {
     const { mutator } = this.props;
 
     if (this.showLoans) {
+      mutator.openLoans.reset();
+      mutator.claimedReturnedCount.reset();
+      mutator.closedLoansCount.reset();
       mutator.openLoans.GET();
       mutator.claimedReturnedCount.GET();
       mutator.closedLoansCount.GET();
