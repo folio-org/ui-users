@@ -54,6 +54,7 @@
 * Add translations for use-at-location actions for history list in loan detail pages. Fixes UIU-3420.
 * Remove `DCB_VIRTUAL_USER` constant and update related tests to use user type directly. The last name will no longer be hardcoded to `DcbSystem`. Refs UIU-3477.
 * Reset loans and requests data on mount in UserLoans and UserRequests. Refs UIU-3460.
+* In a user's Loans accordion, the Held and In Use counts no long redundantly link to the Open Loans page. Fixes UIU-3475.
 
 ## [12.1.14] (https://github.com/folio-org/ui-users/tree/v12.1.14) (2025-10-08)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.13...v12.1.14)

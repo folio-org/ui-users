@@ -30,15 +30,19 @@ const ListLoans = (props) => {
       listStyle="bullets"
       itemFormatter={(item, index) => (
         <li key={index}>
-          <Link
-            id={item.id}
-            to={{
-              pathname: `/users/${params.id}/loans/${item.status}`,
-              state: { search: location.search },
-            }}
-          >
+          {item.status ? (
+            <Link
+              id={item.id}
+              to={{
+                pathname: `/users/${params.id}/loans/${item.status}`,
+                state: { search: location.search },
+              }}
+            >
+              <FormattedMessage id={item.formattedMessageId} values={{ count: item.count }} />
+            </Link>
+          ) : (
             <FormattedMessage id={item.formattedMessageId} values={{ count: item.count }} />
-          </Link>
+          )}
           {item.claimedReturnedCount > 0 &&
             <span id="claimed-returned-count">
               {' '}
@@ -207,13 +211,11 @@ class UserLoans extends React.Component {
         id: 'clickable-viewheldloans',
         count: heldLoansCount,
         formattedMessageId: 'ui-users.loans.numOpenLoans.held',
-        status: 'open',
       },
       {
         id: 'clickable-viewinuseloans',
         count: inUseLoansCount,
         formattedMessageId: 'ui-users.loans.numOpenLoans.inUse',
-        status: 'open',
       },
     ];
 
