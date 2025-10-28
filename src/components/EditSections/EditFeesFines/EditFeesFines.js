@@ -15,6 +15,7 @@ import {
 
 const propTypes = {
   accordionId: PropTypes.string.isRequired,
+  isCreateMode: PropTypes.bool.isRequired,
 };
 
 const EditFeesFines = ({
