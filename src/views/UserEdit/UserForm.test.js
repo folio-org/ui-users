@@ -7,7 +7,8 @@ import {
 } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
-import renderWithRouter from 'helpers/renderWithRouter';
+import renderWithRouter from '../../../test/jest/helpers/renderWithRouter';
+import { EditFeesFines } from '../../components/EditSections';
 import { USER_TYPES } from '../../constants';
 import {
   useUserAffiliations,
@@ -34,6 +35,7 @@ jest.mock(
     EditServicePoints: jest.fn(() => <div>EditServicePoints accordion</div>),
     EditReadingRoomAccess: jest.fn(() => <div>EditReadingRoomAccess</div>),
     EditUserInfo: jest.fn(() => <div>EditUserInfo accordion</div>),
+    EditFeesFines: jest.fn(() => <div>EditFeesFines accordion</div>),
     EditUserRoles: jest.fn(() => <div>EditUserRoles accordion</div>)
   })
 );
@@ -147,11 +149,11 @@ const renderUserForm = (props = {}) => renderWithRouter(
 
 describe('UserForm', () => {
   beforeEach(() => {
+    jest.clearAllMocks();
+
     useUserAffiliations
-      .mockClear()
       .mockReturnValue({ affiliations: [] });
     useUserTenantPermissions
-      .mockClear()
       .mockReturnValue({ isFetching: false });
   });
 
@@ -309,6 +311,21 @@ describe('UserForm', () => {
       });
 
       expect(screen.queryByText('EditUserRoles accordion')).not.toBeInTheDocument();
+    });
+
+    it('should pass props to EditFeesFines component correctly', () => {
+      renderUserForm({
+        initialValues: createModeInitialValues,
+        stripes: {
+          ...STRIPES,
+          hasInterface: () => true,
+        },
+      });
+
+      expect(EditFeesFines).toHaveBeenCalledWith({
+        accordionId: 'feesFines',
+        isCreateMode: true,
+      }, {});
     });
   });
 

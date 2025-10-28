@@ -485,6 +485,7 @@ class UserForm extends React.Component {
                   )}
                   <EditFeesFines
                     accordionId={ACCORDION_ID.FEES_FINES}
+                    isCreateMode={!isEditing}
                   />
                   <EditLoans
                     accordionId={ACCORDION_ID.LOANS}

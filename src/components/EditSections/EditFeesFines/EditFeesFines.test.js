@@ -4,8 +4,9 @@ import {
   Accordion,
   Icon,
 } from '@folio/stripes/components';
+import { EditCustomFieldsRecord } from '@folio/stripes/smart-components';
 
-import renderWithRouter from 'helpers/renderWithRouter';
+import renderWithRouter from '../../../../test/jest/helpers/renderWithRouter';
 import EditFeesFines from './EditFeesFines';
 import { useCustomFieldsSection } from '../../../hooks';
 
@@ -63,6 +64,21 @@ describe('EditFeesFines', () => {
     const accordion = container.querySelector('#test-accordion');
 
     expect(accordion).toBeInTheDocument();
+  });
+
+  it('should render EditCustomFieldsSection with correct props', () => {
+    renderEditLoans({
+      isCreateMode: true,
+    });
+
+    expect(EditCustomFieldsRecord).toHaveBeenCalledWith(expect.objectContaining({
+      isCreateMode: true,
+      accordionId: 'test-accordion',
+      sectionId: 'fees_fines',
+      backendModuleName: 'users',
+      changeFinalFormField: expect.any(Function),
+      entityType: 'user',
+    }), {});
   });
 
   it('should call useCustomFieldsSection with correct parameters', () => {
