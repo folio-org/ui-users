@@ -375,7 +375,7 @@
     "errors.reviewBeforeRenewal": "{message} Analise {policyName} antes de tentar renovar.",
     "errors.loanNotRenewedReason": "O empréstimo não pode ser renovado porque: {message}.",
     "loading": "Carregando...",
-    "charge.itemLookup.modalLabel": "Pesquisa de item",
+    "charge.itemLookup.modalLabel": "Consultar item",
     "charge.itemLookup.confirm": "Confirmar",
     "charge.itemLookup.cancel": "Cancelar",
     "accounts.feeFine": "taxa/multa",

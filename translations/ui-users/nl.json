@@ -593,7 +593,7 @@
     "permission.settings.customfields.all": "Instellingen (Gebruikers): Kan maatwerkvelden aanmaken, bewerken, bekijken en verwijderen.",
     "permission.settings.customfields.edit": "Instellingen (Gebruikers): Kan maatwerkvelden aanmaken, bewerken en weergeven",
     "permission.settings.customfields.view": "Instellingen (Gebruikers): Kan maatwerkvelden bekijken",
-    "permission.settings.feefine": "Gebruikers: Kan instellingen voor kosten/boetes aanmaken, bewerken en verwijderen",
+    "permission.settings.feefine": "Instellingen (gebruikers): Kan instellingen voor kosten/boetes aanmaken, bewerken en verwijderen",
     "permission.view": "Gebruikers: Kan gebruikersprofiel bekijken",
     "loans.history": "Uitleengeschiedenis",
     "accounts.loading": "Accounts laden",
@@ -645,7 +645,7 @@
     "extended.department.add": "Afdeling toevoegen",
     "extended.department.default": "Afdeling selecteren",
     "item.copyNumber": "Kopienummer",
-    "permission.settings.departments.view": "Gebruikers: Afdelingen bekijken",
+    "permission.settings.departments.view": "Instellingen (gebruikers): kan afdelingen bekijken",
     "permission.settings.departments.edit": "Instellingen (Gebruikers): Afdelingen bewerken",
     "permission.settings.departments.create": "Instellingen (Gebruikers): Afdelingen aanmaken",
     "permission.settings.departments.delete": "Instellingen (Gebruikers): Afdelingen verwijderen",
@@ -1242,7 +1242,7 @@
     "settings.numberGenerator.options.onNotEditable": "Aan, veld niet bewerkbaar",
     "numberGenerator.generateBarcode": "Barcode voor gebruikers genereren",
     "numberGenerator.barcodeGenerator": "Barcode generator voor gebruikers",
-    "permission.settings.number-generator-options.all": "Gebruikers: Kan nummergeneratoropties aanmaken, bewerken en bekijken",
+    "permission.settings.number-generator-options.all": "Instellingen (gebruikers): kan opties voor nummergenerator maken, bewerken en bekijken",
     "information.profilePicture.takePhoto": "Foto maken",
     "information.profilePicture.retakePhoto": "Foto herhalen",
     "requests.fulfillmentPreference.info": "Selecteer het selectievakje <strong>Levering</strong> om <strong>Voorkeur voor levering</strong> en <strong>Standaard leveringsadres</strong> te kiezen.",
@@ -1255,6 +1255,6 @@
     "loans.numOpenLoans.inUse": "In gebruik: {count}",
     "stagingRecords.list.columnNames.minor": "Kleine",
     "stagingRecords.minor.yes": "Ja",
-    "data.loanActionMap.heldForUseAtLocation": "Held for use at location",
-    "data.loanActionMap.pickedUpForUseAtLocation": "Picked up for use at location"
+    "data.loanActionMap.heldForUseAtLocation": "Gereserveerd voor gebruik op locatie",
+    "data.loanActionMap.pickedUpForUseAtLocation": "Afgehaald voor gebruik op Locatie"
 }
