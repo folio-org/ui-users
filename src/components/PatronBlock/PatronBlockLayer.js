@@ -4,8 +4,11 @@ import {
   injectIntl
 } from 'react-intl';
 import PropTypes from 'prop-types';
-import moment from 'moment';
-import { ConfirmationModal } from '@folio/stripes/components';
+
+import {
+  ConfirmationModal,
+  dayjs,
+} from '@folio/stripes/components';
 import { TitleManager } from '@folio/stripes/core';
 import PatronBlockForm from './PatronBlockForm';
 
@@ -58,7 +61,7 @@ class PatronBlockLayer extends React.Component {
     item.type = 'Manual';
     item.userId = (params.id);
     if (item.expirationDate) {
-      item.expirationDate = moment.utc(item.expirationDate).startOf('day');
+      item.expirationDate = dayjs.utc(item.expirationDate).startOf('day');
     }
     return this.props.mutator.manualPatronBlocks.POST(item).then(() => {
       this.props.mutator.activeRecord.update({ blockid: item.userId });
@@ -81,7 +84,7 @@ class PatronBlockLayer extends React.Component {
 
   onUpdateItem = (item) => {
     if (item.expirationDate) {
-      item.expirationDate = moment.utc(item.expirationDate).startOf('day');
+      item.expirationDate = dayjs.utc(item.expirationDate).startOf('day');
     }
     delete item.metadata;
     this.props.mutator.activeRecord.update({ blockid: item.id });

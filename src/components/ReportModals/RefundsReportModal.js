@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment-timezone';
 import { Field } from 'react-final-form';
 import { isEmpty } from 'lodash';
 import {
@@ -19,6 +18,7 @@ import {
   Row,
   ModalFooter,
   MultiSelection,
+  dayjs,
 } from '@folio/stripes/components';
 
 import { DATE_FORMAT } from '../../constants';
@@ -32,7 +32,7 @@ const validate = ({ startDate, endDate }) => {
     errors.startDate = <FormattedMessage id="ui-users.reports.refunds.validation.startDate" />;
   }
 
-  if ((!isEmpty(startDate) && !isEmpty(endDate)) && (moment(startDate).isAfter(moment(endDate)))) {
+  if ((!isEmpty(startDate) && !isEmpty(endDate)) && (dayjs(startDate).isAfter(dayjs(endDate)))) {
     errors.endDate = <FormattedMessage id="ui-users.reports.refunds.validation.endDate" />;
   }
 

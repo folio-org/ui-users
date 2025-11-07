@@ -2,7 +2,7 @@ import { cloneDeep, get, isEmpty, isEqual, isNil } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import {
+import { 
   Accordion,
   ExpandAllButton,
   Pane,
@@ -16,7 +16,8 @@ import {
   Checkbox,
   Datepicker,
   Selection,
-  PaneFooter
+  PaneFooter,
+  dayjs,
 } from '@folio/stripes/components';
 import {
   AppIcon,
@@ -27,7 +28,7 @@ import setFieldData from 'final-form-set-field-data';
 
 import stripesFinalForm from '@folio/stripes/final-form';
 import { ViewMetaData } from '@folio/stripes/smart-components';
-import moment from 'moment';
+
 import {
   FormattedMessage,
 } from 'react-intl';
@@ -53,7 +54,7 @@ const showValidationErrors = ({
     errors.renewals = ' ';
     errors.requests = ' ';
   }
-  if (expirationDate && moment(moment(expirationDate).endOf('day')).isBefore(moment().endOf('day').add(1, 'days'))) {
+  if (expirationDate && dayjs(expirationDate).endOf('day').isBefore(dayjs().endOf('day').add(1, 'day'))) {
     errors.expirationDate = <FormattedMessage id="ui-users.blocks.form.validate.future" />;
   }
 
