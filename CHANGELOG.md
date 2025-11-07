@@ -56,6 +56,7 @@
 * Reset loans and requests data on mount in UserLoans and UserRequests. Refs UIU-3460.
 * In a user's Loans accordion, the Held and In Use counts no long redundantly link to the Open Loans page. Fixes UIU-3475.
 * Add the `isCreateMode` prop to the `EditFeesFines` component to prevent the button from being active when a new user page is opened and the fee fines custom field is present. Fixes UIU-3461.
+* Add missing subPermissions for Financial transaction detail report. Refs UIU-3459.
 * Replace `moment` with `dayjs`. Refs UIU-3334.
 
 ## [12.1.14] (https://github.com/folio-org/ui-users/tree/v12.1.14) (2025-10-08)

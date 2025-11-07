@@ -1058,7 +1058,9 @@
         "displayName": "Users: Create and download Financial transaction detail report",
         "replaces": ["ui-users.financialTransactionReport"],
         "subPermissions": [
-          "feefine-reports.financial-transactions-detail.post"
+          "ui-users.view",
+          "feefine-reports.financial-transactions-detail.post",
+          "owners.collection.get"
         ],
         "visible": true
       },
