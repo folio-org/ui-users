@@ -2,7 +2,7 @@ import { cloneDeep, get, isEmpty, isEqual, isNil } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { 
+import {
   Accordion,
   ExpandAllButton,
   Pane,
