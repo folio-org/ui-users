@@ -98,5 +98,6 @@ jest.mock('@folio/stripes/smart-components', () => {
       isCustomFieldsError: false,
       refetchCustomFields: jest.fn(),
     })),
+    withTags: jest.fn((Component) => Component),
   };
 });
