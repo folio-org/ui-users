@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
 import { FormattedMessage } from 'react-intl';
 
@@ -12,7 +11,10 @@ import {
   get,
 } from 'lodash';
 
-import { LoadingView } from '@folio/stripes/components';
+import {
+  LoadingView,
+  dayjs,
+} from '@folio/stripes/components';
 import {
   CalloutContext,
   withOkapiKy,
@@ -329,7 +331,7 @@ class UserEdit extends React.Component {
     }
 
     const data = omit(user, propertiesToOmit);
-    const today = moment().endOf('day');
+    const today = dayjs().endOf('day');
     const curActive = user.active;
     const prevActive = prevUser.active;
     const formattedCustomFieldsPayload = this.formatCustomFieldsPayload(data.customFields);
@@ -341,7 +343,7 @@ class UserEdit extends React.Component {
     if (curActive !== prevActive || !user.expirationDate) {
       data.active = curActive;
     } else {
-      data.active = (moment(user.expirationDate).endOf('day').isSameOrAfter(today));
+      data.active = (dayjs(user.expirationDate).endOf('day').isSameOrAfter(today));
     }
 
     this.updateUserData(data, user);

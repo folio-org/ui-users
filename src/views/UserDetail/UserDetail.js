@@ -7,7 +7,6 @@ import {
   concat,
   orderBy,
 } from 'lodash';
-import moment from 'moment';
 import { injectIntl, FormattedMessage } from 'react-intl';
 
 import {
@@ -30,6 +29,7 @@ import {
   AccordionSet,
   LoadingPane,
   HasCommand,
+  dayjs,
 } from '@folio/stripes/components';
 import {
   NotesSmartAccordion,
@@ -622,7 +622,7 @@ class UserDetail extends React.Component {
 
       let patronBlocks = concat(manualPatronBlocks, automatedPatronBlocks)
         .filter((patronBlock) => {
-          return moment(patronBlock.expirationDate).endOf('day').isSameOrAfter(moment().endOf('day'));
+          return dayjs(patronBlock.expirationDate).endOf('day').isSameOrAfter(dayjs().endOf('day'));
         });
 
       patronBlocks = orderBy(patronBlocks, ['metadata.createdDate'], ['desc']);

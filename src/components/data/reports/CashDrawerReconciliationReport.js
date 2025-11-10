@@ -1,4 +1,4 @@
-import moment from 'moment';
+import { dayjs } from '@folio/stripes/components';
 
 class CashDrawerReconciliationReport {
   constructor({
@@ -32,7 +32,7 @@ class CashDrawerReconciliationReport {
         servicePoint: this.headerData.createdAt,
         sources: this.headerData.sources,
         startDate: this.formatDate(this.headerData.startDate, DEFAULT_DATE_OPTIONS),
-        endDate: this.formatDate(this.headerData.endDate, DEFAULT_DATE_OPTIONS) || moment().format('YYYY/MM/DD') // if no endDate then show date='today'
+        endDate: this.formatDate(this.headerData.endDate, DEFAULT_DATE_OPTIONS) || dayjs().format('YYYY/MM/DD') // if no endDate then show date='today'
       }
     );
   }

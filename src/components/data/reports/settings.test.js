@@ -1,9 +1,10 @@
-import moment from 'moment-timezone';
+import { dayjs } from '@folio/stripes/components';
+
 import settings from './settings';
 
 describe('Settings', () => {
   test('Check overdue queryString', () => {
-    const currentTime = moment().tz('UTC').format();
+    const currentTime = dayjs().utc().format();
     const qs = settings.overdue.queryString();
     expect(qs).toStrictEqual(`(status.name=="Open" and dueDate < "${currentTime}") sortby metadata.updatedDate desc`);
   });

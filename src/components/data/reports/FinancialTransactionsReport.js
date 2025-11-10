@@ -1,7 +1,9 @@
-import moment from 'moment';
 import { isEmpty } from 'lodash';
 
-import { exportToCsv } from '@folio/stripes/components';
+import {
+  exportToCsv,
+  dayjs,
+} from '@folio/stripes/components';
 
 import { financialTransactionsMainReportColumns } from '../../../constants';
 import {
@@ -51,7 +53,7 @@ class FinancialTransactionsReport {
         owner: this.headerData.feeFineOwner,
         servicePoints: this.headerData.createdAt,
         startDate: this.formatDate(this.headerData.startDate),
-        endDate: this.formatDate(this.headerData.endDate) || moment().format('YYYY/MM/DD'), // if no endDate then show date='today'
+        endDate: this.formatDate(this.headerData.endDate) || dayjs().format('YYYY/MM/DD'), // if no endDate then show date='today'
       }
     );
   }

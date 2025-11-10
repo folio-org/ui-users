@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { v4 as uuidv4 } from 'uuid';
 import _ from 'lodash';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import moment from 'moment';
+
 import {
   Callout,
   ConfirmationModal,
+  dayjs,
 } from '@folio/stripes/components';
 import {
   FormattedMessage,
@@ -189,7 +189,7 @@ class ChargeFeeFine extends React.Component {
     const notify = _.isEmpty(action) ? this.state.notify : this.state.paymentNotify;
 
     return mutator.account.GET({ path }).then(record => {
-      const dateAction = _.get(record, ['metadata', 'updatedDate'], moment().format());
+      const dateAction = _.get(record, ['metadata', 'updatedDate'], dayjs().format());
 
       const newAction = {
         typeAction,

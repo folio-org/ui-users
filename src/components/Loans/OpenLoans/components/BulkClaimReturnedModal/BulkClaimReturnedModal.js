@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { isEmpty } from 'lodash';
-import moment from 'moment';
 
 import {
   Button,
@@ -15,6 +14,7 @@ import {
   Spinner,
   TextArea,
   FormattedDate,
+  dayjs,
 } from '@folio/stripes/components';
 
 import { getOpenRequestsPath } from '../../../../util';
@@ -168,7 +168,7 @@ class BulkClaimReturnedModal extends React.Component {
     this.props.mutator.loanId.replace(loan.id);
     return this.getMutatorFunction()(
       {
-        itemClaimedReturnedDateTime: moment().format(),
+        itemClaimedReturnedDateTime: dayjs().format(),
         comment: this.state.additionalInfo,
       }
     );
