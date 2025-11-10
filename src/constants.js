@@ -419,3 +419,5 @@ export const CUSTOM_FIELDS_SECTION = {
 
 export const MODULE_NAME = 'users';
 export const CUSTOM_FIELDS_ENTITY_TYPE = 'user';
+
+export const TAGS_SCOPE = 'ui-tags.tags.manage';

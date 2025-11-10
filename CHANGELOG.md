@@ -57,6 +57,7 @@
 * In a user's Loans accordion, the Held and In Use counts no long redundantly link to the Open Loans page. Fixes UIU-3475.
 * Add the `isCreateMode` prop to the `EditFeesFines` component to prevent the button from being active when a new user page is opened and the fee fines custom field is present. Fixes UIU-3461.
 * Add missing subPermissions for Financial transaction detail report. Refs UIU-3459.
+* Migrate tag flag from mod-configuration to mod-settings. Refs UIU-3412.
 
 ## [12.1.14] (https://github.com/folio-org/ui-users/tree/v12.1.14) (2025-10-08)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.13...v12.1.14)

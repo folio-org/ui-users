@@ -82,6 +82,7 @@
           "users-keycloak.item.get",
           "usergroups.collection.get",
           "configuration.entries.collection.get",
+          "mod-settings.global.read.ui-tags.tags.manage",
           "mod-settings.entries.collection.get",
           "mod-settings.entries.item.get",
           "user-settings.custom-fields.collection.get",

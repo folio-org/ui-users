@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { compose } from 'redux';
+import flowRight from 'lodash/flowRight';
+
 import { stripesConnect } from '@folio/stripes/core';
 import { withTags } from '@folio/stripes/smart-components';
 
@@ -11,7 +12,10 @@ import {
   withServicePoints
 } from '../components/Wrappers';
 import { departmentsShape } from '../shapes';
-import { MAX_RECORDS } from '../constants';
+import {
+  MAX_RECORDS,
+  TAGS_SCOPE,
+} from '../constants';
 
 class UserRecordContainer extends React.Component {
   static manifest = Object.freeze({
@@ -336,9 +340,17 @@ class UserRecordContainer extends React.Component {
   }
 }
 
-export default compose(
+const ComposedUserRecordContainer = flowRight(
   stripesConnect,
   withServicePoints,
   withTags,
   withProxy,
 )(UserRecordContainer);
+
+ComposedUserRecordContainer.defaultProps = {
+  // tagsScope is used in withTags HOC. It is applied to the final composed component
+  // so that tagsScope is not undefined in the withTags manifest
+  tagsScope: TAGS_SCOPE,
+};
+
+export default ComposedUserRecordContainer;
