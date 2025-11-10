@@ -7,9 +7,11 @@ import {
   injectIntl,
 } from 'react-intl';
 import { stripesConnect } from '@folio/stripes/core';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import moment from 'moment';
-import { Callout, ConfirmationModal } from '@folio/stripes/components';
+import {
+  Callout,
+  ConfirmationModal,
+  dayjs,
+} from '@folio/stripes/components';
 
 import CancellationModal from './CancellationModal';
 import CommentModal from './CommentModal';
@@ -302,7 +304,7 @@ class Actions extends React.Component {
       source: `${this.props.okapi.currentUser.lastName}, ${this.props.okapi.currentUser.firstName}`,
       createdAt: createAt,
       accountId: id,
-      dateAction: moment().format(),
+      dateAction: dayjs().format(),
       userId: this.props.user.id,
       amountAction: formatCurrencyAmount(amount),
       balance: formatCurrencyAmount(balance),
@@ -315,7 +317,7 @@ class Actions extends React.Component {
   }
 
   editAccount = (account, paymentStatus, status, remaining) => {
-    account.metadata.updatedDate = moment().format();
+    account.metadata.updatedDate = dayjs().format();
     const newAccount = {
       status: { name: status },
       paymentStatus: { name: paymentStatus },

@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment-timezone';
 import { Field } from 'react-final-form';
 import { isEmpty } from 'lodash';
 import {
@@ -22,6 +21,7 @@ import {
   RadioButtonGroup,
   RadioButton,
   Label,
+  dayjs,
 } from '@folio/stripes/components';
 
 import { DATE_FORMAT } from '../../constants';
@@ -40,7 +40,7 @@ export const validate = (options) => {
     errors.startDate = <FormattedMessage id="ui-users.reports.cash.drawer.report.endDateWithoutStart.error" />;
   }
 
-  if ((!isEmpty(startDate) && !isEmpty(endDate)) && (moment(startDate).isAfter(moment(endDate)))) {
+  if ((!isEmpty(startDate) && !isEmpty(endDate)) && (dayjs(startDate).isAfter(dayjs(endDate)))) {
     errors.endDate = <FormattedMessage id="ui-users.reports.cash.drawer.report.endDate.error" />;
   }
 

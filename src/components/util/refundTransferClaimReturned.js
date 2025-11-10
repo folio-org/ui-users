@@ -5,7 +5,9 @@ import {
   flow,
   map,
 } from 'lodash';
-import moment from 'moment';
+
+import { dayjs } from '@folio/stripes/components';
+
 import { refundClaimReturned, itemStatuses, accountStatuses } from '../../constants';
 
 class RefundTransferCR {
@@ -111,8 +113,8 @@ refundTransfers = async (loan, props) => {
         : lastBalance;
 
       const now = type.startsWith(refundClaimReturned.TRANSACTION_CREDITED)
-        ? moment().format()
-        : moment().add(2, 'seconds').format();
+        ? dayjs().format()
+        : dayjs().add(2, 'second').format();
 
       const transactionVerb = type.startsWith(refundClaimReturned.TRANSACTION_CREDITED)
         ? refundClaimReturned.TRANSACTION_VERB_REFUND
