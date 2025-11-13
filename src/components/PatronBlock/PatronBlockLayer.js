@@ -1,5 +1,6 @@
 import { get as _get, isEmpty as _isEmpty } from 'lodash';
 import React from 'react';
+import moment from 'moment';
 import {
   injectIntl
 } from 'react-intl';
@@ -84,7 +85,7 @@ class PatronBlockLayer extends React.Component {
 
   onUpdateItem = (item) => {
     if (item.expirationDate) {
-      item.expirationDate = dayjs.utc(item.expirationDate).startOf('day');
+      item.expirationDate = dayjs.utc(item.expirationDate).startOf('day').toISOString();
     }
     delete item.metadata;
     this.props.mutator.activeRecord.update({ blockid: item.id });
