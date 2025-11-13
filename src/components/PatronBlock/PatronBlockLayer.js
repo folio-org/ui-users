@@ -56,12 +56,16 @@ class PatronBlockLayer extends React.Component {
     }
   }
 
+  normalizeExpirationDate = (date) => {
+    return dayjs.utc(date).startOf('day').toISOString();
+  }
+
   onCreateItem = (item) => {
     const { match: { params } } = this.props;
     item.type = 'Manual';
     item.userId = (params.id);
     if (item.expirationDate) {
-      item.expirationDate = dayjs.utc(item.expirationDate).startOf('day');
+      item.expirationDate = this.normalizeExpirationDate(item.expirationDate);
     }
     return this.props.mutator.manualPatronBlocks.POST(item).then(() => {
       this.props.mutator.activeRecord.update({ blockid: item.userId });
@@ -84,7 +88,7 @@ class PatronBlockLayer extends React.Component {
 
   onUpdateItem = (item) => {
     if (item.expirationDate) {
-      item.expirationDate = dayjs.utc(item.expirationDate).startOf('day');
+      item.expirationDate = this.normalizeExpirationDate(item.expirationDate);
     }
     delete item.metadata;
     this.props.mutator.activeRecord.update({ blockid: item.id });
