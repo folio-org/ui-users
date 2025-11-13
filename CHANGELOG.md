@@ -48,7 +48,6 @@
 * Hide permissions and roles accordions on user create page. Refs UIU-3449.
 * Add permission for circulation-storage.request-preferences.collection.get to ui-users.view to display request preferences. Refs UIU-3445.
 * Avoid indirection through null item when loaned item is deleted. Fixes UIU-3457.
-* Fix patron block expiration date display issue by converting dayjs object to ISO string format. Refs UIU-3334.
 * In the list of a user's open loans, the "Use at location" includes service-point and (when relevant) exipiry date. Fixes UIU-3418.
 * Added null check to allow roles to be selected for user when list is emptied. Fixes UIU-3465.
 * Remove UTC timezone from expiration date formatting in `UserInfo` and `EditUserInfo` components so that expiration is correct. Use `.format()` instead of `.format('L')` in `recalculatedDate` to preserve timezone information. Fixes UIU-3400.
