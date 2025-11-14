@@ -1005,8 +1005,9 @@
         "visible": false
       },
       {
-        "permissionName": "ui-users.settings.departments.create.edit.view",
+        "permissionName": "ui-users.settings.departments.create-edit-view.edit",
         "displayName": "Settings (Users): Can create, edit, and view departments",
+        "replaces": ["ui-users.settings.departments.create.edit.view"],
         "subPermissions": [
           "ui-users.settings.departments.create",
           "ui-users.settings.departments.edit",

@@ -59,6 +59,7 @@
 * Add missing subPermissions for Financial transaction detail report. Refs UIU-3459.
 * Replace `moment` with `dayjs`. Refs UIU-3334.
 * Migrate tag flag from mod-configuration to mod-settings. Refs UIU-3412.
+* Rename the `ui-users.settings.departments.create.edit.view` permission to avoid displaying the edit capability as a view. Fixes UIU-3403.
 
 ## [12.1.14] (https://github.com/folio-org/ui-users/tree/v12.1.14) (2025-10-08)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.13...v12.1.14)
