@@ -161,7 +161,7 @@ const UserInfo = (props) => {
 };
 
 UserInfo.propTypes = {
-  customFields: PropTypes.arrayOf(PropTypes.object).isRequired,
+  customFields: PropTypes.object.isRequired,
   expanded: PropTypes.bool,
   onToggle: PropTypes.func,
   accordionId: PropTypes.string.isRequired,
