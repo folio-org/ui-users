@@ -74,7 +74,7 @@ class UserRequests extends React.Component {
 
   static propTypes = {
     accordionId: PropTypes.string,
-    customFields: PropTypes.arrayOf(PropTypes.object).isRequired,
+    customFields: PropTypes.object.isRequired,
     expanded: PropTypes.bool,
     match: PropTypes.shape({
       params: PropTypes.shape({
