@@ -212,7 +212,7 @@ const UserAccounts = ({
 UserAccounts.propTypes = {
   accounts: PropTypes.object,
   accordionId: PropTypes.string,
-  customFields: PropTypes.arrayOf(PropTypes.object).isRequired,
+  customFields: PropTypes.object.isRequired,
   expanded: PropTypes.bool,
   onToggle: PropTypes.func,
   location: PropTypes.shape({

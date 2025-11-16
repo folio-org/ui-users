@@ -117,7 +117,7 @@ class UserLoans extends React.Component {
   });
 
   static propTypes = {
-    customFields: PropTypes.arrayOf(PropTypes.object).isRequired,
+    customFields: PropTypes.object.isRequired,
     mutator: PropTypes.shape({
       openLoans: PropTypes.shape({
         GET: PropTypes.func.isRequired,
