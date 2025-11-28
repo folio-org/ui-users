@@ -50,41 +50,44 @@ const AssignedUsersContainer = ({
     permissionName,
   });
 
-  const handleMutationSuccess = () => {
-    refetch();
-    callout.sendCallout({
-      message: <FormattedMessage id="ui-users.permissions.assignUsers.actions.message.success" />,
-      type: 'success',
-    });
-  };
-
-  const handleMutationError = async ({ response, message }) => {
-    const errorMessageId = 'ui-users.permissions.assignUsers.actions.message.error';
-
-    const error = await response?.text();
-    const statusCode = response?.status;
-    let errorMessage = error || message;
-
-    if (statusCode === 403 || statusCode === 405) {
-      errorMessage = <FormattedMessage id="ui-users.permissions.assignUsers.actions.message.permission.error" />;
-    }
-
-    return callout.sendCallout({
-      message: intl.formatMessage({ id: errorMessageId }, { error: errorMessage }),
-      type: 'error',
-      timeout: 0,
-    });
-  };
-
   const handleAssignUsers = async (selectedUsers) => {
     const { added, removed } = getUpdatedUsersList(users, selectedUsers);
 
-    if (added.length) await assignUsers(added, { onError: handleMutationError });
+    let assignResult = { attempted: 0, successful: 0, totalSelected: 0 };
+    if (added.length) {
+      assignResult = await assignUsers(added);
+    }
 
-    if (removed.length) await unassignUsers(removed, { onError: handleMutationError });
+    if (removed.length) {
+      await unassignUsers(removed);
+    }
+
+    if (added.length) {
+      if (assignResult.successful === assignResult.totalSelected) {
+        callout.sendCallout({
+          message: <FormattedMessage id="ui-users.permissions.assignUsers.actions.message.success" />,
+          type: 'success',
+        });
+      } else if (assignResult.successful > 0) {
+        callout.sendCallout({
+          message: <FormattedMessage id="ui-users.permissions.assignUsers.actions.message.partialSuccess" />,
+          type: 'error',
+        });
+      } else {
+        callout.sendCallout({
+          message: <FormattedMessage id="ui-users.permissions.assignUsers.actions.message.allFailed" />,
+          type: 'error',
+        });
+      }
+    } else if (removed.length) {
+      callout.sendCallout({
+        message: <FormattedMessage id="ui-users.permissions.assignUsers.actions.message.success" />,
+        type: 'success',
+      });
+    }
 
     if (removed.length || added.length) {
-      handleMutationSuccess();
+      refetch();
     }
   };
 

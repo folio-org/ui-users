@@ -271,9 +271,11 @@
   "permissions.assignedUsers.patronGroup": "Patron group",
   "permissions.assignUsers.actions.assign": "Assign/unassign",
   "permissions.assignUsers.actions.assign.notAvailable": "Assign users is not available",
-  "permissions.assignUsers.actions.message.success": "Permissions set user assignment updated successfully",
-  "permissions.assignUsers.actions.message.error": "Permissions set user assignment change not successful. {error}",
+  "permissions.assignUsers.actions.message.success": "Permission set user assignment updated successfully",
+  "permissions.assignUsers.actions.message.error": "Permission set user assignment change not successful. {error}",
   "permissions.assignUsers.actions.message.permission.error": "You do not have required permissions.",
+  "permissions.assignUsers.actions.message.partialSuccess": "Permission set user assignment failed to update for some users",
+  "permissions.assignUsers.actions.message.allFailed": "Permission set user assignment failed to update",
   "permissions.untitledPermissionSet": "Untitled permission set",
   "permissions.closePermissionSetDialog": "Close permission set dialog",
   "permissions.createPermissionSet": "Create permission set",
@@ -1260,5 +1262,6 @@
   "keycloak.modal.creation": "This operation will create new record in Keycloak for <b>{user}</b>",
 
   "title.patronBlock.create": "Users - Create a new patron block",
-  "title.patronBlock.edit": "Users - Edit a patron block"
+  "title.patronBlock.edit": "Users - Edit a patron block",
+  "customFields.testField": "Test1 <b>{name}</b>."
 }

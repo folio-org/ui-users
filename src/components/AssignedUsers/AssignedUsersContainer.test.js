@@ -189,7 +189,8 @@ describe('handle mutations', () => {
   ];
 
   it.each(testCases)('handles %s case', async (scenario, input) => {
-    const mockAssignUsers = jest.fn();
+    const mockAssignUsers = jest.fn().mockResolvedValue({ successful: input.added.length, totalSelected: input.added.length, attempted: input.added.length });
+    const mockUnassignUsers = jest.fn().mockResolvedValue({ successful: input.removed.length, totalSelected: input.removed.length, attempted: input.removed.length });
     const mockRefetch = jest.fn();
 
     usePermissionSet.mockClear().mockReturnValue({
@@ -202,8 +203,8 @@ describe('handle mutations', () => {
       refetch: mockRefetch,
     });
     useAssignedUsersMutation.mockClear().mockReturnValue({
-      assignUsers: jest.fn(),
-      unassignUsers: jest.fn(),
+      assignUsers: mockAssignUsers,
+      unassignUsers: mockUnassignUsers,
       isLoading: false,
     });
     useAssignedUsers.mockReturnValue({

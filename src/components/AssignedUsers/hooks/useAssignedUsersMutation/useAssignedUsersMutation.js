@@ -20,8 +20,14 @@ const useAssignedUsersMutation = ({ tenantId, permissionName }, options = {}) =>
   });
 
   const assignMutationFn = async (users = []) => {
+    if (!users.length) return { attempted: 0, successful: 0, totalSelected: 0 };
+
     const userIds = users.map(({ id }) => id);
     const permissionUsersResponse = await fetchUsersByUsersIds(api, userIds);
+
+    const attempted = permissionUsersResponse.length;
+
+    if (attempted === 0) return { attempted: 0, successful: 0, totalSelected: users.length };
 
     const query = permissionUsersResponse.map(({ id, userId, permissions }) => {
       const body = { json: { permissions: [...new Set([...permissions, permissionName])], userId, id } };
@@ -29,17 +35,30 @@ const useAssignedUsersMutation = ({ tenantId, permissionName }, options = {}) =>
       return api.put(`${PERMISSIONS_API}/${id}`, body);
     });
 
-    return Promise.all(query);
+    const results = await Promise.allSettled(query);
+    const successful = results.filter(r => r.status === 'fulfilled').length;
+
+    return { attempted, successful, totalSelected: users.length };
   };
 
   const removeMutationFn = async (users = []) => {
+    if (!users.length) return { attempted: 0, successful: 0, totalSelected: 0 };
+
     const userIds = users.map(({ id }) => id);
     const permissionUsersResponse = await fetchUsersByUsersIds(api, userIds);
+
+    const attempted = permissionUsersResponse.length;
+
+    if (attempted === 0) return { attempted: 0, successful: 0, totalSelected: users.length };
+
     const query = permissionUsersResponse.map(({ id }) => {
       return api.delete(`${PERMISSIONS_API}/${id}/permissions/${permissionName}`);
     });
 
-    return Promise.all(query);
+    const results = await Promise.allSettled(query);
+    const successful = results.filter(r => r.status === 'fulfilled').length;
+
+    return { attempted, successful, totalSelected: users.length };
   };
 
   const {
