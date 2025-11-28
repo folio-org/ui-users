@@ -17,10 +17,12 @@ import { getUpdatedUsersList } from './utils';
 jest.unmock('@folio/stripes/components');
 jest.unmock('@folio/stripes/util');
 
+const mockSendCallout = jest.fn();
+
 jest.mock('@folio/stripes/core', () => ({
   ...jest.requireActual('@folio/stripes/core'),
   useCallout: jest.fn(() => ({
-    sendCallout: jest.fn(),
+    sendCallout: mockSendCallout,
   })),
   IfPermission: props => <>{props.children}</>,
 }));
@@ -78,6 +80,7 @@ describe('AssignedUsersContainer', () => {
   };
 
   beforeEach(() => {
+    jest.clearAllMocks();
     AssignedUsersList.mockClear();
     usePermissionSet.mockClear().mockReturnValue({
       permissionSet: {
@@ -167,6 +170,289 @@ describe('AssignedUsersContainer', () => {
     await waitFor(() => expect(screen.getByText('AssignedUsersList')).toBeInTheDocument());
     expect(onToggle).toHaveBeenCalled();
   });
+
+  describe('callout messages', () => {
+    it('should show success message when all users are successfully assigned', async () => {
+      const mockRefetch = jest.fn();
+
+      usePermissionSet.mockReturnValue({
+        permissionSet: {
+          id: '1',
+          name: 'permissionSetName',
+          grantedTo: ['1', '2'],
+        },
+        isLoading: false,
+        refetch: mockRefetch,
+      });
+      useAssignedUsersMutation.mockReturnValue({
+        assignUsers: jest.fn().mockResolvedValue({
+          requested: 2,
+          successful: 2,
+          failed: 0,
+        }),
+        unassignUsers: jest.fn().mockResolvedValue({
+          requested: 0,
+          successful: 0,
+          failed: 0,
+        }),
+        isLoading: false,
+      });
+      useAssignedUsers.mockReturnValue({
+        users: mockUsers,
+        isLoading: false,
+      });
+
+      getUpdatedUsersList.mockReturnValue({
+        added: [{ id: '1' }, { id: '2' }],
+        removed: [],
+      });
+
+      renderComponent(props);
+
+      await waitFor(() => expect(screen.queryByText('Loading')).toBeNull());
+
+      userEvent.click(screen.getByText('Assign/Unassign'));
+
+      await waitFor(() => {
+        expect(mockSendCallout).toHaveBeenCalledWith({
+          message: 'ui-users.permissions.assignUsers.actions.message.success',
+          type: 'success',
+        });
+      });
+    });
+
+    it('should show failure message when no users could be assigned', async () => {
+      const mockRefetch = jest.fn();
+
+      usePermissionSet.mockReturnValue({
+        permissionSet: {
+          id: '1',
+          name: 'permissionSetName',
+          grantedTo: ['1', '2'],
+        },
+        isLoading: false,
+        refetch: mockRefetch,
+      });
+      useAssignedUsersMutation.mockReturnValue({
+        assignUsers: jest.fn().mockResolvedValue({
+          requested: 3,
+          successful: 0,
+          failed: 3,
+        }),
+        unassignUsers: jest.fn(),
+        isLoading: false,
+      });
+      useAssignedUsers.mockReturnValue({
+        users: mockUsers,
+        isLoading: false,
+      });
+
+      getUpdatedUsersList.mockReturnValue({
+        added: [{ id: '1' }, { id: '2' }, { id: '3' }],
+        removed: [],
+      });
+
+      renderComponent(props);
+
+      await waitFor(() => expect(screen.queryByText('Loading')).toBeNull());
+
+      userEvent.click(screen.getByText('Assign/Unassign'));
+
+      await waitFor(() => {
+        expect(mockSendCallout).toHaveBeenCalledWith({
+          message: 'ui-users.permissions.assignUsers.actions.message.failure',
+          type: 'error',
+        });
+      });
+      expect(mockRefetch).not.toHaveBeenCalled();
+    });
+
+    it('should show partial failure message when some users could not be assigned', async () => {
+      const mockRefetch = jest.fn();
+
+      usePermissionSet.mockReturnValue({
+        permissionSet: {
+          id: '1',
+          name: 'permissionSetName',
+          grantedTo: ['1', '2'],
+        },
+        isLoading: false,
+        refetch: mockRefetch,
+      });
+      useAssignedUsersMutation.mockReturnValue({
+        assignUsers: jest.fn().mockResolvedValue({
+          requested: 5,
+          successful: 2,
+          failed: 3,
+        }),
+        unassignUsers: jest.fn(),
+        isLoading: false,
+      });
+      useAssignedUsers.mockReturnValue({
+        users: mockUsers,
+        isLoading: false,
+      });
+
+      getUpdatedUsersList.mockReturnValue({
+        added: [{ id: '1' }, { id: '2' }, { id: '3' }, { id: '4' }, { id: '5' }],
+        removed: [],
+      });
+
+      renderComponent(props);
+
+      await waitFor(() => expect(screen.queryByText('Loading')).toBeNull());
+
+      userEvent.click(screen.getByText('Assign/Unassign'));
+
+      await waitFor(() => {
+        expect(mockSendCallout).toHaveBeenCalledWith({
+          message: 'ui-users.permissions.assignUsers.actions.message.partialFailure',
+          type: 'error',
+        });
+      });
+      expect(mockRefetch).toHaveBeenCalled();
+    });
+
+    it('should show success message when all users are successfully unassigned', async () => {
+      const mockRefetch = jest.fn();
+
+      usePermissionSet.mockReturnValue({
+        permissionSet: {
+          id: '1',
+          name: 'permissionSetName',
+          grantedTo: ['1', '2'],
+        },
+        isLoading: false,
+        refetch: mockRefetch,
+      });
+      useAssignedUsersMutation.mockReturnValue({
+        assignUsers: jest.fn(),
+        unassignUsers: jest.fn().mockResolvedValue({
+          requested: 2,
+          successful: 2,
+          failed: 0,
+        }),
+        isLoading: false,
+      });
+      useAssignedUsers.mockReturnValue({
+        users: mockUsers,
+        isLoading: false,
+      });
+
+      getUpdatedUsersList.mockReturnValue({
+        added: [],
+        removed: [{ id: '1' }, { id: '2' }],
+      });
+
+      renderComponent(props);
+
+      await waitFor(() => expect(screen.queryByText('Loading')).toBeNull());
+
+      userEvent.click(screen.getByText('Assign/Unassign'));
+
+      await waitFor(() => {
+        expect(mockSendCallout).toHaveBeenCalledWith({
+          message: 'ui-users.permissions.assignUsers.actions.message.success',
+          type: 'success',
+        });
+      });
+    });
+
+    it('should aggregate results from both assign and unassign operations', async () => {
+      const mockRefetch = jest.fn();
+
+      usePermissionSet.mockReturnValue({
+        permissionSet: {
+          id: '1',
+          name: 'permissionSetName',
+          grantedTo: ['1', '2'],
+        },
+        isLoading: false,
+        refetch: mockRefetch,
+      });
+      useAssignedUsersMutation.mockReturnValue({
+        assignUsers: jest.fn().mockResolvedValue({
+          requested: 2,
+          successful: 1,
+          failed: 1,
+        }),
+        unassignUsers: jest.fn().mockResolvedValue({
+          requested: 2,
+          successful: 1,
+          failed: 1,
+        }),
+        isLoading: false,
+      });
+      useAssignedUsers.mockReturnValue({
+        users: mockUsers,
+        isLoading: false,
+      });
+
+      getUpdatedUsersList.mockReturnValue({
+        added: [{ id: '1' }, { id: '2' }],
+        removed: [{ id: '3' }, { id: '4' }],
+      });
+
+      renderComponent(props);
+
+      await waitFor(() => expect(screen.queryByText('Loading')).toBeNull());
+
+      userEvent.click(screen.getByText('Assign/Unassign'));
+
+      await waitFor(() => {
+        expect(mockSendCallout).toHaveBeenCalledWith({
+          message: 'ui-users.permissions.assignUsers.actions.message.partialFailure',
+          type: 'error',
+        });
+      });
+      expect(mockRefetch).toHaveBeenCalled();
+    });
+
+    it('should handle catastrophic errors gracefully', async () => {
+      const mockRefetch = jest.fn();
+      const mockError = { response: { text: () => Promise.resolve('Network error'), status: 500 }, message: 'Error' };
+
+      usePermissionSet.mockReturnValue({
+        permissionSet: {
+          id: '1',
+          name: 'permissionSetName',
+          grantedTo: ['1', '2'],
+        },
+        isLoading: false,
+        refetch: mockRefetch,
+      });
+      useAssignedUsersMutation.mockReturnValue({
+        assignUsers: jest.fn().mockRejectedValue(mockError),
+        unassignUsers: jest.fn(),
+        isLoading: false,
+      });
+      useAssignedUsers.mockReturnValue({
+        users: mockUsers,
+        isLoading: false,
+      });
+
+      getUpdatedUsersList.mockReturnValue({
+        added: [{ id: '1' }],
+        removed: [],
+      });
+
+      renderComponent(props);
+
+      await waitFor(() => expect(screen.queryByText('Loading')).toBeNull());
+
+      userEvent.click(screen.getByText('Assign/Unassign'));
+
+      await waitFor(() => {
+        expect(mockSendCallout).toHaveBeenCalledWith(
+          expect.objectContaining({
+            type: 'error',
+            timeout: 0,
+          })
+        );
+      });
+      expect(mockRefetch).not.toHaveBeenCalled();
+    });
+  });
 });
 
 describe('handle mutations', () => {
@@ -192,6 +478,18 @@ describe('handle mutations', () => {
     const mockAssignUsers = jest.fn();
     const mockRefetch = jest.fn();
 
+    const mockAssignUsersResult = {
+      requested: input.added.length,
+      successful: input.added.length,
+      failed: 0,
+    };
+
+    const mockUnassignUsersResult = {
+      requested: input.removed.length,
+      successful: input.removed.length,
+      failed: 0,
+    };
+
     usePermissionSet.mockClear().mockReturnValue({
       permissionSet: {
         id: '1',
@@ -202,8 +500,8 @@ describe('handle mutations', () => {
       refetch: mockRefetch,
     });
     useAssignedUsersMutation.mockClear().mockReturnValue({
-      assignUsers: jest.fn(),
-      unassignUsers: jest.fn(),
+      assignUsers: jest.fn().mockResolvedValue(mockAssignUsersResult),
+      unassignUsers: jest.fn().mockResolvedValue(mockUnassignUsersResult),
       isLoading: false,
     });
     useAssignedUsers.mockReturnValue({

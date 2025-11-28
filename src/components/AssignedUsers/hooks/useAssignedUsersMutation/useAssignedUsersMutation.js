@@ -29,7 +29,14 @@ const useAssignedUsersMutation = ({ tenantId, permissionName }, options = {}) =>
       return api.put(`${PERMISSIONS_API}/${id}`, body);
     });
 
-    return Promise.all(query);
+    const results = await Promise.allSettled(query);
+    const successfulUpdates = results.filter(result => result.status === 'fulfilled').length;
+
+    return {
+      requested: users.length,
+      successful: successfulUpdates,
+      failed: users.length - successfulUpdates,
+    };
   };
 
   const removeMutationFn = async (users = []) => {
@@ -39,7 +46,14 @@ const useAssignedUsersMutation = ({ tenantId, permissionName }, options = {}) =>
       return api.delete(`${PERMISSIONS_API}/${id}/permissions/${permissionName}`);
     });
 
-    return Promise.all(query);
+    const results = await Promise.allSettled(query);
+    const successfulUpdates = results.filter(result => result.status === 'fulfilled').length;
+
+    return {
+      requested: users.length,
+      successful: successfulUpdates,
+      failed: users.length - successfulUpdates,
+    };
   };
 
   const {

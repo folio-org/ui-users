@@ -50,14 +50,6 @@ const AssignedUsersContainer = ({
     permissionName,
   });
 
-  const handleMutationSuccess = () => {
-    refetch();
-    callout.sendCallout({
-      message: <FormattedMessage id="ui-users.permissions.assignUsers.actions.message.success" />,
-      type: 'success',
-    });
-  };
-
   const handleMutationError = async ({ response, message }) => {
     const errorMessageId = 'ui-users.permissions.assignUsers.actions.message.error';
 
@@ -69,7 +61,7 @@ const AssignedUsersContainer = ({
       errorMessage = <FormattedMessage id="ui-users.permissions.assignUsers.actions.message.permission.error" />;
     }
 
-    return callout.sendCallout({
+    callout.sendCallout({
       message: intl.formatMessage({ id: errorMessageId }, { error: errorMessage }),
       type: 'error',
       timeout: 0,
@@ -79,12 +71,56 @@ const AssignedUsersContainer = ({
   const handleAssignUsers = async (selectedUsers) => {
     const { added, removed } = getUpdatedUsersList(users, selectedUsers);
 
-    if (added.length) await assignUsers(added, { onError: handleMutationError });
+    let totalRequested = 0;
+    let totalSuccessful = 0;
+    let totalFailed = 0;
 
-    if (removed.length) await unassignUsers(removed, { onError: handleMutationError });
+    if (added.length) {
+      try {
+        const result = await assignUsers(added);
+        totalRequested += result.requested;
+        totalSuccessful += result.successful;
+        totalFailed += result.failed;
+      } catch (error) {
+        await handleMutationError(error);
+      }
+    }
 
-    if (removed.length || added.length) {
-      handleMutationSuccess();
+    if (removed.length) {
+      try {
+        const result = await unassignUsers(removed);
+        totalRequested += result.requested;
+        totalSuccessful += result.successful;
+        totalFailed += result.failed;
+      } catch (error) {
+        await handleMutationError(error);
+      }
+    }
+
+    if (totalRequested > 0) {
+      if (totalSuccessful > 0) {
+        refetch();
+      }
+
+      if (totalFailed === 0) {
+        // All users were successfully assigned/unassigned
+        callout.sendCallout({
+          message: intl.formatMessage({ id: 'ui-users.permissions.assignUsers.actions.message.success' }),
+          type: 'success',
+        });
+      } else if (totalSuccessful === 0) {
+        // No users were assigned/unassigned
+        callout.sendCallout({
+          message: intl.formatMessage({ id: 'ui-users.permissions.assignUsers.actions.message.failure' }),
+          type: 'error',
+        });
+      } else {
+        // Some users were assigned/unassigned, but not all
+        callout.sendCallout({
+          message: intl.formatMessage({ id: 'ui-users.permissions.assignUsers.actions.message.partialFailure' }),
+          type: 'error',
+        });
+      }
     }
   };
 
