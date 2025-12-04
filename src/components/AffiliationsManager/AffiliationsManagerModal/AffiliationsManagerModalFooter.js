@@ -7,7 +7,7 @@ import {
 } from '@folio/stripes/components';
 
 const AffiliationsManagerModalFooter = ({
-  isLoading,
+  isLoading = false,
   onCancel,
   onSubmit,
   totalSelected,
@@ -41,6 +41,7 @@ const AffiliationsManagerModalFooter = ({
 };
 
 AffiliationsManagerModalFooter.propTypes = {
+  isLoading: PropTypes.bool,
   onCancel: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   totalSelected: PropTypes.number.isRequired,
