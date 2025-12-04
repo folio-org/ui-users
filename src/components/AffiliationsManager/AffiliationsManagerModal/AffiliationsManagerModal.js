@@ -8,6 +8,7 @@ import {
   useCallback,
   useMemo,
   useReducer,
+  useState,
 } from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -41,11 +42,17 @@ import css from '../AffiliationsManager.css';
 
 const INITIAL_FILTERS = {};
 
-const AffiliationManagerModal = ({ onClose, onSubmit, userId }) => {
+const AffiliationManagerModal = ({
+  onClose,
+  onSubmit,
+  userId,
+}) => {
   const [isFiltersVisible, toggleFilters] = useToggle(true);
   const [filters, dispatch] = useReducer(filtersReducer, INITIAL_FILTERS);
   const stripes = useStripes();
   const currentUserTenants = useMemo(() => stripes.user?.user?.tenants || [], [stripes]);
+
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const {
     sortOrder,
@@ -87,6 +94,8 @@ const AffiliationManagerModal = ({ onClose, onSubmit, userId }) => {
   const isLoading = isConsortiumTenantsLoading || isUsersAffiliationsLoading;
 
   const handleOnSubmit = useCallback(async () => {
+    setIsProcessing(true);
+
     const affiliationIdsToCompare = affiliations
       .filter(({ isPrimary }) => !isPrimary)
       .map(({ tenantId }) => tenantId);
@@ -103,11 +112,13 @@ const AffiliationManagerModal = ({ onClose, onSubmit, userId }) => {
     const removed = buildResult(intersection(getAffiliationIds(false), affiliationIdsToCompare));
 
     await onSubmit({ added, removed });
+    setIsProcessing(false);
     onClose();
   }, [affiliations, assignment, onClose, onSubmit, userId]);
 
   const modalFooter = (
     <AffiliationsManagerModalFooter
+      isLoading={isProcessing}
       onCancel={onClose}
       onSubmit={handleOnSubmit}
       totalSelected={totalAssigned}
