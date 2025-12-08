@@ -7,6 +7,7 @@ import {
 } from '@folio/stripes/components';
 
 const AffiliationsManagerModalFooter = ({
+  isLoading = false,
   onCancel,
   onSubmit,
   totalSelected,
@@ -31,6 +32,7 @@ const AffiliationsManagerModalFooter = ({
         marginBottom0
         buttonStyle="primary"
         onClick={onSubmit}
+        disabled={isLoading}
       >
         <FormattedMessage id="stripes-components.saveAndClose" />
       </Button>
@@ -39,6 +41,7 @@ const AffiliationsManagerModalFooter = ({
 };
 
 AffiliationsManagerModalFooter.propTypes = {
+  isLoading: PropTypes.bool,
   onCancel: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   totalSelected: PropTypes.number.isRequired,
