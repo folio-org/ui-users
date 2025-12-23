@@ -1,9 +1,13 @@
+import { act } from 'react';
+
 import okapiCurrentUser from 'fixtures/okapiCurrentUser';
 import { screen } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import { Form } from 'react-final-form';
 
 import '__mock__/stripesComponents.mock';
+
+import { dayjs } from '@folio/stripes/components';
 
 import renderWithRouter from 'helpers/renderWithRouter';
 
@@ -27,6 +31,7 @@ jest.mock('@folio/stripes/components', () => ({
   ModalFooter: jest.fn((props) => (
     <div>{props.children}</div>
   )),
+  dayjs: jest.fn(),
 }));
 
 jest.mock('../../util', () => ({
@@ -116,7 +121,7 @@ const props = {
   accordionId: 'editUserInfo',
   stripes: {
     connect: (Component) => Component,
-    timezone: 'USA/TestTimeZone',
+    timezone: 'America/New_York',
     locale: 'en-US',
     hasInterface: () => true,
     hasPerm: () => true,
@@ -293,6 +298,36 @@ describe('Render Edit User Information component', () => {
       };
       renderEditUserInfo(alteredProps);
       expect(screen.queryByText('Profile Picture')).not.toBeInTheDocument();
+    });
+  });
+
+  describe('parseExpirationDate function', () => {
+    it('should use dayjs(expirationDate).tz(timezone) instead of dayjs.tz(expirationDate, timezone)', async () => {
+      const mockTz = jest.fn().mockReturnThis();
+      const mockEndOf = jest.fn().mockReturnThis();
+      const mockToISOString = jest.fn().mockReturnValue('2027-05-04T03:59:59.999Z');
+
+      const mockDayjsInstance = {
+        tz: mockTz,
+        endOf: mockEndOf,
+        toISOString: mockToISOString,
+        format: jest.fn().mockReturnValue('05/04/2027'),
+        add: jest.fn().mockReturnThis(),
+        isSameOrBefore: jest.fn().mockReturnValue(false),
+        isBefore: jest.fn().mockReturnValue(true),
+        isAfter: jest.fn().mockReturnValue(true),
+      };
+
+      dayjs.mockImplementation(() => mockDayjsInstance);
+
+      renderEditUserInfo(props);
+
+      await act(() => userEvent.click(screen.getByText('ui-users.information.recalculate.expirationDate')));
+
+      expect(dayjs).toHaveBeenCalled();
+      expect(mockTz).toHaveBeenCalledWith('America/New_York');
+      expect(mockEndOf).toHaveBeenCalledWith('day');
+      expect(mockToISOString).toHaveBeenCalled();
     });
   });
 });

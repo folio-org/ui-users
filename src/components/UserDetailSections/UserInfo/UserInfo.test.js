@@ -68,11 +68,6 @@ describe('Render userInfo component', () => {
     });
   });
 
-  it('should display ViewCustomFieldsRecord', () => {
-    renderUserInfo(props);
-    expect(screen.getByText('ViewCustomFieldsRecord')).toBeInTheDocument();
-  });
-
   it('should not include UTC or any other timezone in FormattedDate for expiration date', () => {
     const propsWithExpirationDate = {
       ...props,

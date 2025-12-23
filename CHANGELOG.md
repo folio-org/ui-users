@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## [12.1.15] (https://github.com/folio-org/ui-users/tree/v12.1.15) (2025-12-23)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.14...v12.1.15)
+* Remove UTC timezone from expiration date formatting in `UserInfo` and `EditUserInfo` components so that expiration is correct. Use `.format()` instead of `.format('L')` in `recalculatedDate` to preserve timezone information. Fixes UIU-3400.
+
 ## [12.1.14] (https://github.com/folio-org/ui-users/tree/v12.1.14) (2025-10-08)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.13...v12.1.14)
 * Add support for use circulation-bff for claim-item-returned. Refs UIU-3413.
