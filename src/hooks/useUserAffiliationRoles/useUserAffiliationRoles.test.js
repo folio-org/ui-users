@@ -3,6 +3,7 @@ import { useStripes, useOkapiKy } from '@folio/stripes/core';
 import { renderHook, waitFor } from '@folio/jest-config-stripes/testing-library/react';
 
 import useUserAffiliationRoles from './useUserAffiliationRoles';
+import useUserAffiliations from '../useUserAffiliations';
 
 jest.mock('react-query', () => ({
   useQueries: jest.fn(),
@@ -12,6 +13,8 @@ jest.mock('@folio/stripes/core', () => ({
   useStripes: jest.fn(),
   useOkapiKy: jest.fn(),
 }));
+
+jest.mock('../useUserAffiliations', () => jest.fn());
 
 describe('useUserAffiliationRoles', () => {
   const mockStripes = {
@@ -27,94 +30,53 @@ describe('useUserAffiliationRoles', () => {
     json: jest.fn(),
   };
 
+  const mockUser = {
+    id: 'testUserId',
+    consortium: { id: 'consortiumId' },
+  };
+
   beforeEach(() => {
     useStripes.mockReturnValue(mockStripes);
     useOkapiKy.mockReturnValue(mockKy);
+    useUserAffiliations.mockReturnValue({
+      affiliations: [{ tenantId: 'tenant1' }, { tenantId: 'tenant2' }],
+    });
   });
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  it('should return user roles for each tenant sorted alphabetically by role name', async () => {
-    const userId = 'testUserId';
-
-    useQueries.mockImplementation((queries) => queries.map(({ queryKey }, index) => {
-      if (queryKey[0].includes('userTenantRoles')) {
-        if (index === 0) {
-          return {
-            data: { userRoles: [{ roleId: 'userRoleId' }, { roleId: 'adminRoleId' }] },
-            isLoading: false,
-            isError: false,
-          };
-        }
-        return {
-          data: { userRoles: [{ roleId: 'tenant2monkey' }] },
-          isLoading: false,
-          isError: false,
-        };
-      }
-      if (queryKey[0].includes('tenantRolesAllRecords')) {
-        if (index === 0) {
-          return {
-            data: { roles: [{ id: 'userRoleId', name: 'User' }, { id: 'adminRoleId', name: 'Admin' }] },
-            isLoading: false,
-            isError: false,
-          };
-        }
-        return {
-          data: { roles: [{ id: 'tenant2monkey', name: 'Monkey' }, { id: 'tenant4Monkey', name: 'Excluded' }] },
-          isLoading: false,
-          isError: false,
-        };
-      }
-      return { data: undefined, isLoading: false, isError: false };
-    }));
-
-    const { result } = renderHook(() => useUserAffiliationRoles(userId));
-
-    expect(result.current).toEqual({ tenant1: ['adminRoleId', 'userRoleId'], tenant2: ['tenant2monkey'] });
-  });
-
   it('should return empty arrays if no roles are found', async () => {
     const userId = 'testUserId';
 
-    useQueries.mockImplementation((queries) => queries.map(({ queryKey }) => {
-      if (queryKey[0].includes('userTenantRoles')) {
-        return { data: { userRoles: [] } };
-      }
-      if (queryKey[0].includes('tenantRolesAllRecords')) {
-        return { data: { roles: [] } };
-      }
-      return { data: undefined, isLoading: false, isError: false };
-    }));
+    useQueries.mockImplementation((queries) => queries.map(() => ({
+      data: { userRoles: [] },
+      isLoading: false,
+      isError: false,
+    })));
 
-    const { result } = renderHook(() => useUserAffiliationRoles(userId));
+    const { result } = renderHook(() => useUserAffiliationRoles(userId, mockUser));
 
-    await waitFor(() => expect(result.current).toEqual({
+    await waitFor(() => expect(result.current.userRoles).toEqual({
       tenant1: [],
       tenant2: [],
     }));
+    expect(result.current.isLoading).toBe(false);
   });
 
   it('should handle missing tenants gracefully', async () => {
     const userId = 'testUserId';
-    mockStripes.user.user.tenants = null;
 
-    useQueries.mockImplementation((queries) => queries.map(({ queryKey }) => {
-      if (queryKey[0].includes('userTenantRoles')) {
-        return { data: { userRoles: [] } };
-      }
-      if (queryKey[0].includes('tenantRolesAllRecords')) {
-        return { data: { roles: [] } };
-      }
-      return { data: undefined, isLoading: false, isError: false };
-    }));
+    useUserAffiliations.mockReturnValue({
+      affiliations: [],
+    });
 
-    const { result } = renderHook(() => useUserAffiliationRoles(userId));
+    useQueries.mockImplementation(() => []);
 
-    await waitFor(() => expect(result.current).toEqual({
-      defaultTenant: [],
-    }));
+    const { result } = renderHook(() => useUserAffiliationRoles(userId, mockUser));
+
+    await waitFor(() => expect(result.current.userRoles).toEqual({}));
+    expect(result.current.isLoading).toBe(false);
   });
 });

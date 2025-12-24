@@ -1,6 +1,6 @@
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
-import renderWithRouter from 'helpers/renderWithRouter';
+import renderWithRouter from '../../../test/jest/helpers/renderWithRouter';
 
 import UserForm from './UserForm';
 import UserEdit from './UserEdit';

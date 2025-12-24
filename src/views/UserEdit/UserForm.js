@@ -116,6 +116,7 @@ class UserForm extends React.Component {
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
     invalid: PropTypes.bool,
+    isLoadingAffiliationRoles: PropTypes.bool.isRequired,
     onCancel: PropTypes.func.isRequired,
     onSubmit: PropTypes.func.isRequired,
     initialValues: PropTypes.object.isRequired,
@@ -355,7 +356,8 @@ class UserForm extends React.Component {
       uniquenessValidator,
       profilePictureConfig,
       isCreateKeycloakUserConfirmationOpen,
-      onCancelKeycloakConfirmation
+      onCancelKeycloakConfirmation,
+      isLoadingAffiliationRoles,
     } = this.props;
     const isEditing = !!initialValues.id;
     const selectedPatronGroup = form.getFieldState('patronGroup')?.value;
@@ -510,6 +512,7 @@ class UserForm extends React.Component {
                         setAssignedRoleIds={this.props.setAssignedRoleIds}
                         assignedRoleIds={this.props.assignedRoleIds}
                         accordionId={ACCORDION_ID.USER_ROLES}
+                        isLoadingAffiliationRoles={isLoadingAffiliationRoles}
                       />
                     </IfPermission>
                   )}

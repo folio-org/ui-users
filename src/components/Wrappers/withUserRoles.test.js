@@ -4,7 +4,11 @@ import { cleanup, render, waitFor } from '@folio/jest-config-stripes/testing-lib
 import { useStripes, useOkapiKy } from '@folio/stripes/core';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import withUserRoles from './withUserRoles';
-import { useAllRolesData, useUserAffiliationRoles } from '../../hooks';
+import {
+  useAllRolesData,
+  useUserAffiliationRoles,
+  useUserAffiliations,
+} from '../../hooks';
 
 jest.mock('react-query', () => ({
   useQueryClient: jest.fn(() => ({ invalidateQueries: jest.fn() })),
@@ -23,6 +27,7 @@ jest.mock('../../hooks', () => ({
   })),
   useAllRolesData: jest.fn(),
   useUserAffiliationRoles: jest.fn(),
+  useUserAffiliations: jest.fn(),
 }));
 
 const mockStripes = {
@@ -49,6 +54,14 @@ const mockRolesData = {
 
 const mockUserAffiliationRoles = {
   consortium: ['role1', 'role2'],
+};
+
+const mockUserAffiliations = {
+  affiliations: [
+    { tenantId: 'consortium' },
+    { tenantId: 'college' },
+    { tenantId: 'university' },
+  ],
 };
 
 const mockData = {
@@ -112,6 +125,11 @@ const renderComponent = (props = {}) => render(
   <CompWithUserRoles
     match={{ params: { id: 'user1' } }}
     stripes={mockStripes}
+    resources={{
+      selUser: {
+        records: [{ id: 'user1', username: 'testUser' }],
+      },
+    }}
     {...props}
   />
 );
@@ -124,35 +142,35 @@ describe('withUserRoles HOC', () => {
   beforeEach(() => {
     useStripes.mockReturnValue(mockStripes);
     useAllRolesData.mockReturnValue(mockRolesData);
-    useUserAffiliationRoles.mockReturnValue(mockUserAffiliationRoles);
+    useUserAffiliationRoles.mockReturnValue({
+      userRoles: mockUserAffiliationRoles,
+      isLoading: false,
+    });
+    useUserAffiliations.mockReturnValue(mockUserAffiliations);
     useOkapiKy.mockReturnValue(mockKy);
   });
 
   it('fetches and sets assigned role ids on mount and assignedRoleIds passed to wrapped component correctly', async () => {
-    const ComponentWithUserRoles = withUserRoles(WrappedComponent);
-    const { getByTestId } = render(<ComponentWithUserRoles match={{ params: { id: 'user1' } }} stripes={{ hasInterface: jest.fn().mockReturnValue(true) }} />);
+    const { getByTestId } = renderComponent();
 
     await waitFor(() => expect(getByTestId('assigned-role-ids')).toHaveTextContent('role1, role2'));
   });
 
   it('check keycloak user', async () => {
-    const ComponentWithUserRoles = withUserRoles(WrappedComponent);
-    const { getByTestId } = render(<ComponentWithUserRoles match={{ params: { id: 'user1' } }} stripes={{ hasInterface: jest.fn().mockReturnValue(true) }} />);
+    const { getByTestId } = renderComponent();
 
     await userEvent.click(getByTestId('submit-form'));
   });
 
   it('submit form changing user role ids', async () => {
-    const ComponentWithUserRoles = withUserRoles(WrappedComponent);
-    const { getByTestId } = render(<ComponentWithUserRoles match={{ params: { id: 'user1' } }} stripes={{ hasInterface: jest.fn().mockReturnValue(true) }} />);
+    const { getByTestId } = renderComponent();
 
     await userEvent.click(getByTestId('assignRoles'));
     await userEvent.click(getByTestId('submit-form'));
   });
 
   it('submit form after changing user role ids', async () => {
-    const ComponentWithUserRoles = withUserRoles(WrappedComponent);
-    const { getByTestId } = render(<ComponentWithUserRoles match={{ params: { id: 'user1' } }} stripes={{ hasInterface: jest.fn().mockReturnValue(true) }} />);
+    const { getByTestId } = renderComponent();
 
     await userEvent.click(getByTestId('assignRoles'));
     await userEvent.click(getByTestId('confirm-create-keycloak-user'));
@@ -160,10 +178,15 @@ describe('withUserRoles HOC', () => {
 
   describe('when assigning roles for other tenants', () => {
     beforeEach(async () => {
+      jest.clearAllMocks();
+
       useUserAffiliationRoles.mockReturnValue({
-        college: [],
-        consortium: ['role1', 'role2'],
-        university: [],
+        userRoles: {
+          college: [],
+          consortium: ['role1', 'role2'],
+          university: [],
+        },
+        isLoading: false,
       });
 
       const { getByTestId } = renderComponent();
@@ -185,12 +208,13 @@ describe('withUserRoles HOC', () => {
           roleIds: ['universityRole1'],
         },
       });
-      expect(mockApiPut).toHaveBeenCalledWith('roles/users/user1', {
+      expect(mockApiPut).not.toHaveBeenCalledWith('roles/users/user1', {
         json: {
           userId: 'user1',
           roleIds: ['role1', 'role2'],
         },
       });
+      expect(mockApiPut).toHaveBeenCalledTimes(2);
     });
 
     it('should save user data for the current tenant using `ky.put` rather than `api.put`', () => {

@@ -20,7 +20,13 @@ function useAllRolesData(options = {}) {
 
   const [namespace] = useNamespace();
 
-  const { data, isLoading, isSuccess, refetch } = useQuery([namespace, 'user-roles'], () => {
+  const {
+    data,
+    isLoading,
+    isFetching,
+    isSuccess,
+    refetch,
+  } = useQuery([namespace, 'user-roles'], () => {
     return ky.get(`roles?limit=${stripes.config.maxUnpagedResourceCount}&query=cql.allRecords=1 sortby name`).json();
   }, { enabled: stripes.hasInterface('roles') });
 
@@ -33,7 +39,14 @@ function useAllRolesData(options = {}) {
     return rolesMap;
   }, [data]);
 
-  return { data, isLoading, allRolesMapStructure, isSuccess, refetch };
+  return {
+    data,
+    isLoading,
+    isFetching,
+    allRolesMapStructure,
+    isSuccess,
+    refetch,
+  };
 }
 
 export default useAllRolesData;

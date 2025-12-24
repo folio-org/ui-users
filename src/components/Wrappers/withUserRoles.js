@@ -9,8 +9,14 @@ import { showErrorCallout } from '../../views/UserEdit/UserEditHelpers';
 const withUserRoles = (WrappedComponent) => (props) => {
   const { okapi } = useStripes();
   // eslint-disable-next-line react/prop-types
+  const user = props.resources?.selUser?.records?.[0] || {};
+  // eslint-disable-next-line react/prop-types
   const userId = props.match.params.id;
-  const initialAssignedRoleIds = useUserAffiliationRoles(userId);
+  const {
+    userRoles: initialAssignedRoleIds,
+    isLoading: isLoadingAffiliationRoles,
+  } = useUserAffiliationRoles(userId, user);
+
   const [tenantId, setTenantId] = useState(okapi.tenant);
   const [assignedRoleIds, setAssignedRoleIds] = useState({});
   const [isCreateKeycloakUserConfirmationOpen, setIsCreateKeycloakUserConfirmationOpen] = useState(false);
@@ -37,6 +43,11 @@ const withUserRoles = (WrappedComponent) => (props) => {
   const updateUserRoles = async (roleIds) => {
     // to update roles for different tenants, we need to make API requests for each tenant
     const requests = Object.keys(roleIds).map((tenantIdKey) => {
+      // No need to make API call if roles didn't change for the tenant
+      if (isEqual(roleIds[tenantIdKey], initialAssignedRoleIds[tenantIdKey])) {
+        return Promise.resolve();
+      }
+
       const putApi = ky.extend({
         hooks: {
           beforeRequest: [(req) => req.headers.set('X-Okapi-Tenant', tenantIdKey)]
@@ -131,6 +142,7 @@ const withUserRoles = (WrappedComponent) => (props) => {
     initialAssignedRoleIds={initialAssignedRoleIds}
     checkAndHandleKeycloakAuthUser={checkAndHandleKeycloakAuthUser}
     confirmCreateKeycloakUser={confirmCreateKeycloakUser}
+    isLoadingAffiliationRoles={isLoadingAffiliationRoles}
   />;
 };
 
