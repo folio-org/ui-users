@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { isEmpty } from 'lodash';
 import { FieldArray } from 'react-final-form-arrays';
 import { OnChange } from 'react-final-form-listeners';
+import { useForm } from 'react-final-form';
 
 import { IfPermission, useStripes } from '@folio/stripes/core';
 import { Accordion, Headline, Badge, Row, Col, List, Button, Icon, ConfirmationModal } from '@folio/stripes/components';
@@ -17,8 +18,18 @@ import UserRolesModal from './components/UserRolesModal/UserRolesModal';
 import { isAffiliationsEnabled } from '../../util/util';
 import { filtersConfig } from './helpers';
 
-function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds, assignedRoleIds, setTenantId, tenantId }) {
+function EditUserRoles({ 
+  accordionId,
+  form: { change },
+  user,
+  setAssignedRoleIds,
+  assignedRoleIds,
+  setTenantId,
+  tenantId,
+  initialAssignedRoleIds,
+}) {
   const stripes = useStripes();
+  const form = useForm();
   const [isOpen, setIsOpen] = useState(false);
   const [unassignModalOpen, setUnassignModalOpen] = useState(false);
   const intl = useIntl();
@@ -28,7 +39,33 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
     isFetching: isAffiliationsFetching,
   } = useUserAffiliations({ userId: user.id }, { enabled: isAffiliationsEnabled(user) });
 
-  const { isLoading: isAllRolesDataLoading, allRolesMapStructure, refetch } = useAllRolesData({ tenantId });
+  // console.log('affiliations', affiliations);
+
+  // TODO: use roles data from useUserAffiliationRoles hook to have correct loading state
+  const { 
+    isLoading: isAllRolesDataLoading, 
+    isFetching: isAllRolesDataFetching,
+    allRolesMapStructure, 
+    refetch,
+    data: allRolesData,
+  } = useAllRolesData({ tenantId });
+  // console.log('allRolesMapStructure', allRolesMapStructure)
+  // console.log('isAllRolesDataLoading11', isAllRolesDataLoading)
+
+  // const isRolesDataLoading = isAllRolesDataLoading || isAffiliationsFetching;
+
+  // useEffect(() => {
+  //   console.log('allRolesData?.roles', allRolesData?.roles)
+  //   console.log('initialAssignedRoleIds', initialAssignedRoleIds)
+  //   const hasTenantAssignedRoles = tenantId in initialAssignedRoleIds;
+  //   if (allRolesData?.roles && !hasTenantAssignedRoles) { // isEmpty(assignedRoleIds[tenantId])
+  //     console.log('setAssignedRoleIds called')
+  //     setAssignedRoleIds(prevAssignedRoleIds => ({
+  //       ...prevAssignedRoleIds,
+  //       [tenantId]: [],
+  //     }));
+  //   }
+  // }, [allRolesData?.roles]);
 
   useEffect(() => {
     if (!affiliations.some(({ tenantId: assigned }) => tenantId === assigned)) {
@@ -38,6 +75,18 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
     }
   }, [affiliations, stripes.okapi.tenant, setTenantId, tenantId, refetch]);
 
+  // Initialize form field for the current tenant if it doesn't exist yet
+  useEffect(() => {
+    const formState = form.getState();
+    const currentFieldValue = formState.values?.assignedRoleIds?.[tenantId];
+    const hasInitialValue = initialAssignedRoleIds?.[tenantId];
+    
+    // If the form field doesn't exist but we have initial values for this tenant, initialize it
+    if (currentFieldValue === undefined && hasInitialValue) {
+      change(`assignedRoleIds.${tenantId}`, initialAssignedRoleIds[tenantId]);
+    }
+  }, [tenantId, initialAssignedRoleIds, form, change]);
+
   const changeUserRoles = (roleIds) => {
     change(`assignedRoleIds[${tenantId}]`, roleIds);
   };
@@ -46,6 +95,8 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
     changeUserRoles([]);
     setUnassignModalOpen(false);
   };
+
+  // console.log('allRolesMapStructure', allRolesMapStructure)
 
   const listItemsData = useMemo(() => {
     if (isEmpty(assignedRoleIds[tenantId]) || isAllRolesDataLoading) return [];
@@ -58,8 +109,12 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
         mappedRoleIds.push({ name: foundUserRole.name, id: foundUserRole.id });
       }
     });
+    // console.log('mappedRoleIds', mappedRoleIds)
+
     return !isEmpty(mappedRoleIds) ? mappedRoleIds.sort((a, b) => a.name.localeCompare(b.name)) : [];
   }, [assignedRoleIds, isAllRolesDataLoading, allRolesMapStructure, tenantId]);
+
+  console.log('listItemsData11', listItemsData)
 
   const unassignAllMessage = <FormattedMessage
     id="ui-users.roles.modal.unassignAll.label"
@@ -97,6 +152,7 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
   };
 
   const renderUserRolesComponent = ({ fields }) => {
+    console.log('fields', fields)
     return (
       <List
         items={listItemsData}
@@ -107,6 +163,15 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
   };
 
   function renderUserRoles() {
+    // console.log('isAllRolesDataFetching', isAllRolesDataFetching)
+    if (isAllRolesDataFetching || isAllRolesDataLoading || isAffiliationsFetching) {
+      return (
+        <div style={{ width: '100%', paddingBottom: '20px' }}>
+          <Icon icon="spinner-ellipsis" />
+        </div>
+      );
+    }
+
     return (
       <Col xs={12}>
         <FieldArray
@@ -116,6 +181,9 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
       </Col>
     );
   }
+
+  // console.log('isAllRolesDataLoading || isAffiliationsFetching', isAllRolesDataLoading || isAffiliationsFetching)
+  // console.log('isEmpty(listItemsData)', isEmpty(listItemsData))
 
   return (
     <IfPermission perm="ui-authorization-roles.users.settings.view">
@@ -140,8 +208,20 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
             </IfConsortium>
             {renderUserRoles()}
             <IfPermission perm="ui-authorization-roles.users.settings.manage">
-              <Button data-testid="add-roles-button" onClick={() => setIsOpen(true)}><FormattedMessage id="ui-users.roles.addRoles" /></Button>
-              <Button data-testid="unassign-all-roles-button" disabled={isEmpty(listItemsData)} onClick={() => setUnassignModalOpen(true)}><FormattedMessage id="ui-users.roles.unassignAllRoles" /></Button>
+              <Button
+                data-testid="add-roles-button" 
+                onClick={() => setIsOpen(true)}
+                disabled={isAllRolesDataFetching || isAllRolesDataLoading || isAffiliationsFetching}
+              >
+                <FormattedMessage id="ui-users.roles.addRoles" />
+              </Button>
+              <Button 
+                data-testid="unassign-all-roles-button" 
+                disabled={isEmpty(listItemsData) || isAllRolesDataFetching || isAllRolesDataLoading || isAffiliationsFetching} 
+                onClick={() => setUnassignModalOpen(true)}
+              >
+                <FormattedMessage id="ui-users.roles.unassignAllRoles" />
+              </Button>
             </IfPermission>
           </Row>
         </Accordion>
@@ -164,6 +244,7 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
         />
         <OnChange name="assignedRoleIds">
           {(userAssignedRoleIds) => {
+            console.log('userAssignedRoleIds111111', userAssignedRoleIds)
             setAssignedRoleIds((prevAssignedRoleIds) => {
               if (isEmpty(userAssignedRoleIds)) {
                 return { ...prevAssignedRoleIds, [tenantId]: [] };

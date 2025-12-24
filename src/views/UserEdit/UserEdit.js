@@ -136,6 +136,7 @@ class UserEdit extends React.Component {
     userFormValues.personal.addresses = getFormAddressList(get(user, 'personal.addresses', []));
     userFormValues.preferredEmailCommunication = this.getPrefEmailCommunicationFormValue(userFormValues.preferredEmailCommunication);
 
+    console.log('77initialAssignedRoleIds', initialAssignedRoleIds)
     return {
       ...userFormValues,
       departments: this.getDepartmentsInitialValue(userFormValues.departments),
@@ -482,6 +483,7 @@ class UserEdit extends React.Component {
       isCreateKeycloakUserConfirmationOpen,
       setTenantId,
       tenantId,
+      setInitialAssignedRoleIds,
       setAssignedRoleIds,
       assignedRoleIds
     } = this.props;
@@ -504,11 +506,13 @@ class UserEdit extends React.Component {
     // data is information that the form needs, mostly to populate options lists
     const formData = this.getUserFormData();
     const onSubmit = params.id ? (record) => this.update(record) : (record) => this.create(record);
+    const initialValues = this.getUserFormValues();
+    console.log('initialValues', initialValues)
 
     return (
       <UserForm
         formData={formData}
-        initialValues={this.getUserFormValues()} // values are strictly values...if we're editing (id param present) pull in existing values.
+        initialValues={initialValues} // values are strictly values...if we're editing (id param present) pull in existing values.
         onSubmit={onSubmit}
         onCancel={this.onCompleteEdit}
         uniquenessValidator={this.props.mutator.uniquenessValidator}
@@ -525,6 +529,7 @@ class UserEdit extends React.Component {
         tenantId={tenantId}
         setAssignedRoleIds={setAssignedRoleIds}
         assignedRoleIds={assignedRoleIds}
+        setInitialAssignedRoleIds={setInitialAssignedRoleIds}
       />
     );
   }

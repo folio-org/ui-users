@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { useStripes, useOkapiKy, useCallout } from '@folio/stripes/core';
 import isEqual from 'lodash/isEqual';
+import isEmpty from 'lodash/isEmpty';
 import { useCreateAuthUserKeycloak, useUserAffiliationRoles } from '../../hooks';
 import { KEYCLOAK_USER_EXISTANCE } from '../../constants';
 import { showErrorCallout } from '../../views/UserEdit/UserEditHelpers';
@@ -10,8 +11,9 @@ const withUserRoles = (WrappedComponent) => (props) => {
   const { okapi } = useStripes();
   // eslint-disable-next-line react/prop-types
   const userId = props.match.params.id;
-  const initialAssignedRoleIds = useUserAffiliationRoles(userId);
+  const [initialAssignedRoleIds, setInitialAssignedRoleIds] = useState({});
   const [tenantId, setTenantId] = useState(okapi.tenant);
+  const { userRoleIds } = useUserAffiliationRoles(userId, tenantId);
   const [assignedRoleIds, setAssignedRoleIds] = useState({});
   const [isCreateKeycloakUserConfirmationOpen, setIsCreateKeycloakUserConfirmationOpen] = useState(false);
   const callout = useCallout();
@@ -25,18 +27,56 @@ const withUserRoles = (WrappedComponent) => (props) => {
       beforeRequest: [(req) => req.headers.set('X-Okapi-Tenant', tenantId)]
     }
   });
-
-  const stringifiedInitialAssignedRoleIds = JSON.stringify(initialAssignedRoleIds);
+  // console.log('+++initialAssignedRoles', initialAssignedRoles)
 
   useEffect(() => {
-    setAssignedRoleIds(initialAssignedRoleIds);
-    // on each re-render reference to initialAssignedRoleIds are different, so putting initialAssignedRoleIds to deps causes infinite trigger
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [stringifiedInitialAssignedRoleIds]);
+    // if (!isEmpty(initialAssignedRoleIds)) return;
+    // No need to set roles if there are empty or loading
+    if (!userRoleIds.length) return;
+    console.log('userRoleIds111', userRoleIds)
+
+    setInitialAssignedRoleIds(prev => ({
+      ...prev,
+      [tenantId]: userRoleIds,
+    }));
+
+
+    // Set assigned roles only if they are not set for the tenant yet
+    // if (!(tenantId in assignedRoleIds)) {
+    // if (!(tenantId in assignedRoleIds) || isEmpty(assignedRoleIds[tenantId])) {
+      setAssignedRoleIds(prev => ({
+        ...prev,
+        [tenantId]: userRoleIds,
+      }));
+    // }
+    // console.log('__initialAssignedRoles', initialAssignedRoles)
+  }, [userRoleIds]);
+
+  useEffect(() => {
+    console.log('initialAssignedRoleIds', initialAssignedRoleIds)
+  }, [initialAssignedRoleIds]);
+
+  useEffect(() => {
+    console.log('assignedRoleIds', assignedRoleIds)
+  }, [assignedRoleIds]);
+
+  // const stringifiedInitialAssignedRoleIds = JSON.stringify(initialAssignedRoleIds);
+
+  // useEffect(() => {
+  //   setAssignedRoleIds(initialAssignedRoleIds);
+  //   // on each re-render reference to initialAssignedRoleIds are different, so putting initialAssignedRoleIds to deps causes infinite trigger
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [stringifiedInitialAssignedRoleIds]);
 
   const updateUserRoles = async (roleIds) => {
+    console.log('roleIds', roleIds)
     // to update roles for different tenants, we need to make API requests for each tenant
     const requests = Object.keys(roleIds).map((tenantIdKey) => {
+      // No need to make API call if roles didn't change for the tenant
+      if (isEqual(roleIds[tenantIdKey], initialAssignedRoleIds[tenantIdKey])) {
+        return Promise.resolve();
+      }
+
       const putApi = ky.extend({
         hooks: {
           beforeRequest: [(req) => req.headers.set('X-Okapi-Tenant', tenantIdKey)]
@@ -84,6 +124,8 @@ const withUserRoles = (WrappedComponent) => (props) => {
 
   const handleKeycloakUserExists = async (onFinish, data) => {
     await updateKeycloakUser(userId, data);
+    console.log('111assignedRoleIds', assignedRoleIds)
+    console.log('111initialAssignedRoleIds', initialAssignedRoleIds)
 
     if (!isEqual(assignedRoleIds, initialAssignedRoleIds)) {
       await updateUserRoles(assignedRoleIds);
@@ -129,6 +171,7 @@ const withUserRoles = (WrappedComponent) => (props) => {
     setAssignedRoleIds={setAssignedRoleIds}
     isCreateKeycloakUserConfirmationOpen={isCreateKeycloakUserConfirmationOpen}
     initialAssignedRoleIds={initialAssignedRoleIds}
+    setInitialAssignedRoleIds={setInitialAssignedRoleIds}
     checkAndHandleKeycloakAuthUser={checkAndHandleKeycloakAuthUser}
     confirmCreateKeycloakUser={confirmCreateKeycloakUser}
   />;
