@@ -462,6 +462,7 @@ class UserEdit extends React.Component {
       setTenantId,
       tenantId,
       setAssignedRoleIds,
+      isLoadingAffiliationRoles,
       assignedRoleIds
     } = this.props;
 
@@ -503,6 +504,7 @@ class UserEdit extends React.Component {
         tenantId={tenantId}
         setAssignedRoleIds={setAssignedRoleIds}
         assignedRoleIds={assignedRoleIds}
+        isLoadingAffiliationRoles={isLoadingAffiliationRoles}
       />
     );
   }

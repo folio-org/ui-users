@@ -7,7 +7,7 @@ import { FieldArray } from 'react-final-form-arrays';
 import { OnChange } from 'react-final-form-listeners';
 
 import { IfPermission, useStripes } from '@folio/stripes/core';
-import { Accordion, Headline, Badge, Row, Col, List, Button, Icon, ConfirmationModal } from '@folio/stripes/components';
+import { Accordion, Headline, Badge, Row, Col, List, Button, Icon, ConfirmationModal, Layout } from '@folio/stripes/components';
 
 import { useAllRolesData, useUserAffiliations } from '../../../hooks';
 import AffiliationsSelect from '../../AffiliationsSelect/AffiliationsSelect';
@@ -17,7 +17,7 @@ import UserRolesModal from './components/UserRolesModal/UserRolesModal';
 import { isAffiliationsEnabled } from '../../util/util';
 import { filtersConfig } from './helpers';
 
-function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds, assignedRoleIds, setTenantId, tenantId }) {
+function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds, assignedRoleIds, setTenantId, tenantId, isLoadingAffiliationRoles }) {
   const stripes = useStripes();
   const [isOpen, setIsOpen] = useState(false);
   const [unassignModalOpen, setUnassignModalOpen] = useState(false);
@@ -28,7 +28,14 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
     isFetching: isAffiliationsFetching,
   } = useUserAffiliations({ userId: user.id }, { enabled: isAffiliationsEnabled(user) });
 
-  const { isLoading: isAllRolesDataLoading, allRolesMapStructure, refetch } = useAllRolesData({ tenantId });
+  const { isLoading: isAllRolesDataLoading, allRolesMapStructure, refetch, isFetching: isAllRolesDataFetching } = useAllRolesData({ tenantId });
+
+  const isLoadingData = (
+    isAffiliationsFetching
+    || isLoadingAffiliationRoles
+    || isAllRolesDataLoading
+    || isAllRolesDataFetching
+  );
 
   useEffect(() => {
     if (!affiliations.some(({ tenantId: assigned }) => tenantId === assigned)) {
@@ -66,12 +73,11 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
     values={{ roles: listItemsData.map(d => d.name).join(', ') }}
   />;
 
-  const renderRoleComponent = (fields) => (_, index) => {
+  const renderRoleComponent = (fields) => (role) => {
     const tenantValue = fields.value;
     if (isEmpty(tenantValue)) return null;
 
-    const roleId = tenantValue[index];
-    const role = allRolesMapStructure.get(roleId);
+    const fieldIndex = tenantValue.indexOf(role.id);
 
     if (!role) return null;
     return (
@@ -87,7 +93,7 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
             type="button"
             id={`clickable-remove-user-role-${role.id}`}
             aria-label={`${intl.formatMessage({ id:'ui-users.roles.deleteRole' })}: ${role.name}`}
-            onClick={() => fields.remove(index)}
+            onClick={() => fields.remove(fieldIndex)}
           >
             <Icon icon="times-circle" />
           </Button>
@@ -107,6 +113,14 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
   };
 
   function renderUserRoles() {
+    if (isLoadingData) {
+      return (
+        <Layout className="full padding-bottom-gutter">
+          <Icon icon="spinner-ellipsis" />
+        </Layout>
+      );
+    }
+    
     return (
       <Col xs={12}>
         <FieldArray
@@ -140,8 +154,8 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
             </IfConsortium>
             {renderUserRoles()}
             <IfPermission perm="ui-authorization-roles.users.settings.manage">
-              <Button data-testid="add-roles-button" onClick={() => setIsOpen(true)}><FormattedMessage id="ui-users.roles.addRoles" /></Button>
-              <Button data-testid="unassign-all-roles-button" disabled={isEmpty(listItemsData)} onClick={() => setUnassignModalOpen(true)}><FormattedMessage id="ui-users.roles.unassignAllRoles" /></Button>
+              <Button disabled={isLoadingData} data-testid="add-roles-button" onClick={() => setIsOpen(true)}><FormattedMessage id="ui-users.roles.addRoles" /></Button>
+              <Button data-testid="unassign-all-roles-button" disabled={isEmpty(listItemsData) || isLoadingData} onClick={() => setUnassignModalOpen(true)}><FormattedMessage id="ui-users.roles.unassignAllRoles" /></Button>
             </IfPermission>
           </Row>
         </Accordion>

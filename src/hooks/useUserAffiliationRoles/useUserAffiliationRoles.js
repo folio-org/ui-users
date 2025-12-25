@@ -1,22 +1,25 @@
 import { useStripes, useOkapiKy } from '@folio/stripes/core';
 import { useQueries } from 'react-query';
 
-function useUserAffiliationRoles(userId) {
+import useUserAffiliations from '../useUserAffiliations';
+import { isAffiliationsEnabled } from '../../components/util/util';
+
+function useUserAffiliationRoles(userId, user) {
   const stripes = useStripes();
+  const hasPerm = stripes.hasPerm('ui-users.roles.view');
 
-  const searchParams = {
-    limit: stripes.config.maxUnpagedResourceCount,
-    query: `userId==${userId}`,
-  };
+  const {
+    affiliations,
+  } = useUserAffiliations({
+    userId: user.id,
+  }, {
+    enabled: Boolean(hasPerm && isAffiliationsEnabled(user)),
+  });
 
-  // To unify in case if consortium of non-consortium
-  let tenants = stripes.user.user?.tenants || [{ id: stripes.okapi.tenant }];
-  // Only make API calls if user has permission to view roles
-  tenants = stripes.hasPerm('ui-users.roles.view') ? tenants : [];
   const ky = useOkapiKy();
 
   const userTenantRolesQueries = useQueries(
-    tenants.map(({ id }) => {
+    affiliations.map(({ tenantId: id }) => {
       return {
         queryKey:['userTenantRoles', id],
         queryFn:() => {
@@ -25,43 +28,24 @@ function useUserAffiliationRoles(userId) {
               beforeRequest: [(req) => req.headers.set('X-Okapi-Tenant', id)]
             }
           });
-          return api.get('roles/users', { searchParams }).json();
+          return api.get(`roles/users/${userId}`).json();
         },
         enabled: Boolean(userId)
       };
     })
   );
 
-  // Since `roles/users` return doesn't include names (only ids) for the roles, and we need them sorted by role name,
-  // we need to retrieve all the records for roles and use them to determine the sequence of ids.
-  const tenantRolesQueries = useQueries(
-    tenants.map(({ id }) => {
-      return {
-        queryKey:['tenantRolesAllRecords', id],
-        queryFn:() => {
-          const api = ky.extend({
-            hooks: {
-              beforeRequest: [(req) => req.headers.set('X-Okapi-Tenant', id)]
-            }
-          });
-          return api.get(`roles?limit=${stripes.config.maxUnpagedResourceCount}&query=cql.allRecords=1 sortby name`).json();
-        },
-      };
-    })
-  );
-
-  // result from useQueries doesn’t provide information about the tenants, reach appropriate tenant using index
-  // useQueries guarantees that the results come in the same order as provided [queryFns]
-  return tenants.reduce((acc, tenant, index) => {
-    const roleIds = userTenantRolesQueries[index].data?.userRoles.map(d => d.roleId) || [];
-    const assignedRoles = [];
-    roleIds.forEach(roleId => {
-      const found = tenantRolesQueries[index].data?.roles.find(r => r.id === roleId);
-      if (found) assignedRoles.push(found);
-    });
-    acc[tenant.id] = [...assignedRoles].sort((a, b) => a.name.localeCompare(b.name)).map(({ id }) => id);
+  const userRoles = affiliations.reduce((acc, { tenantId }, index) => {
+    acc[tenantId] = userTenantRolesQueries[index]?.data?.userRoles?.map(({ roleId }) => roleId) || [];
     return acc;
   }, {});
+
+  const isLoading = userTenantRolesQueries.some(query => query.isLoading);
+
+   return {
+    userRoles,
+    isLoading,
+  };
 }
 
 export default useUserAffiliationRoles;
