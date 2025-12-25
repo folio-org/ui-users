@@ -14,15 +14,18 @@ import { useQuery } from 'react-query';
  */
 
 function useAllRolesData(options = {}) {
-  const { tenantId } = options;
+  const { 
+    tenantId,
+    enabled = true,
+  } = options;
   const stripes = useStripes();
   const ky = useOkapiKy({ tenant: tenantId || stripes.okapi.tenant });
 
-  const [namespace] = useNamespace();
+  const [namespace] = useNamespace({ key: 'tenant-roles' });
 
-  const { data, isLoading, isSuccess, refetch } = useQuery([namespace, 'user-roles'], () => {
+  const { data, isLoading, isSuccess, refetch, isFetching } = useQuery([namespace, tenantId], () => {
     return ky.get(`roles?limit=${stripes.config.maxUnpagedResourceCount}&query=cql.allRecords=1 sortby name`).json();
-  }, { enabled: stripes.hasInterface('roles') });
+  }, { enabled: stripes.hasInterface('roles') && enabled });
 
   const allRolesMapStructure = useMemo(() => {
     const rolesMap = new Map();
@@ -33,7 +36,7 @@ function useAllRolesData(options = {}) {
     return rolesMap;
   }, [data]);
 
-  return { data, isLoading, allRolesMapStructure, isSuccess, refetch };
+  return { data, isLoading, allRolesMapStructure, isSuccess, refetch, isFetching };
 }
 
 export default useAllRolesData;

@@ -336,6 +336,7 @@ class UserForm extends React.Component {
       uniquenessValidator,
       profilePictureConfig,
       isCreateKeycloakUserConfirmationOpen,
+      isLoadingAffiliationRoles,
       onCancelKeycloakConfirmation
     } = this.props;
     const selectedPatronGroup = form.getFieldState('patronGroup')?.value;
@@ -485,6 +486,8 @@ class UserForm extends React.Component {
                             setAssignedRoleIds={this.props.setAssignedRoleIds}
                             assignedRoleIds={this.props.assignedRoleIds}
                             accordionId="userRoles"
+                            initialAssignedRoleIds={initialValues.assignedRoleIds}
+                            isLoadingAffiliationRoles={isLoadingAffiliationRoles}
                           />
                         </IfPermission>
                       }
@@ -542,4 +545,5 @@ export default stripesFinalForm({
   initialValuesEqual: (a, b) => isEqual(a, b),
   navigationCheck: true,
   enableReinitialize: true,
+  keepDirtyOnReinitialize: true,
 })(injectIntl(UserForm));

@@ -20,7 +20,7 @@ export default function UserRolesModal({ isOpen,
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState('');
   const [assignedRoleIds, setAssignedRoleIds] = useState({});
   const { filters, onChangeFilter, onClearFilter, resetFilters } = useRolesModalFilters();
-  const { data: allRolesData, allRolesMapStructure } = useAllRolesData();
+  const { data: allRolesData, allRolesMapStructure } = useAllRolesData({ tenantId });
 
   useEffect(() => {
     setAssignedRoleIds(initialRoleIds);
