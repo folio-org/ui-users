@@ -484,8 +484,8 @@ class UserEdit extends React.Component {
       setTenantId,
       tenantId,
       setAssignedRoleIds,
-      assignedRoleIds,
       isLoadingAffiliationRoles,
+      assignedRoleIds
     } = this.props;
 
     const profilePictureConfig = get(resources, 'settings.records[0]');

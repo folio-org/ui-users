@@ -5,20 +5,10 @@ import PropTypes from 'prop-types';
 import { isEmpty } from 'lodash';
 import { FieldArray } from 'react-final-form-arrays';
 import { OnChange } from 'react-final-form-listeners';
+import { useForm } from 'react-final-form';
 
 import { IfPermission, useStripes } from '@folio/stripes/core';
-import {
-  Accordion,
-  Headline,
-  Badge,
-  Row,
-  Col,
-  List,
-  Button,
-  Icon,
-  ConfirmationModal,
-  Layout,
-} from '@folio/stripes/components';
+import { Accordion, Headline, Badge, Row, Col, List, Button, Icon, ConfirmationModal, Layout } from '@folio/stripes/components';
 
 import { useAllRolesData, useUserAffiliations } from '../../../hooks';
 import AffiliationsSelect from '../../AffiliationsSelect/AffiliationsSelect';
@@ -28,17 +18,9 @@ import UserRolesModal from './components/UserRolesModal/UserRolesModal';
 import { isAffiliationsEnabled } from '../../util/util';
 import { filtersConfig } from './helpers';
 
-function EditUserRoles({
-  accordionId,
-  form: { change },
-  user,
-  setAssignedRoleIds,
-  assignedRoleIds,
-  setTenantId,
-  tenantId,
-  isLoadingAffiliationRoles,
-}) {
+function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds, assignedRoleIds, setTenantId, tenantId, initialAssignedRoleIds, isLoadingAffiliationRoles }) {
   const stripes = useStripes();
+  const form = useForm();
   const [isOpen, setIsOpen] = useState(false);
   const [unassignModalOpen, setUnassignModalOpen] = useState(false);
   const intl = useIntl();
@@ -70,6 +52,18 @@ function EditUserRoles({
     }
   }, [affiliations, stripes.okapi.tenant, setTenantId, tenantId, refetch]);
 
+  // Initialize form field for the current tenant if it doesn't exist yet
+  useEffect(() => {
+    const formState = form.getState();
+    const currentFieldValue = formState.values?.assignedRoleIds?.[tenantId];
+    const hasInitialValue = initialAssignedRoleIds?.[tenantId];
+
+    // If the form field doesn't exist but we have initial values for this tenant, initialize it
+    if (currentFieldValue === undefined && hasInitialValue) {
+      change(`assignedRoleIds.${tenantId}`, initialAssignedRoleIds[tenantId]);
+    }
+  }, [tenantId, initialAssignedRoleIds, form, change]);
+
   const changeUserRoles = (roleIds) => {
     change(`assignedRoleIds[${tenantId}]`, roleIds);
   };
@@ -98,11 +92,12 @@ function EditUserRoles({
     values={{ roles: listItemsData.map(d => d.name).join(', ') }}
   />;
 
-  const renderRoleComponent = (fields) => (role) => {
+  const renderRoleComponent = (fields) => (_, index) => {
     const tenantValue = fields.value;
     if (isEmpty(tenantValue)) return null;
 
-    const fieldIndex = tenantValue.indexOf(role.id);
+    const roleId = tenantValue[index];
+    const role = allRolesMapStructure.get(roleId);
 
     if (!role) return null;
     return (
@@ -118,7 +113,7 @@ function EditUserRoles({
             type="button"
             id={`clickable-remove-user-role-${role.id}`}
             aria-label={`${intl.formatMessage({ id:'ui-users.roles.deleteRole' })}: ${role.name}`}
-            onClick={() => fields.remove(fieldIndex)}
+            onClick={() => fields.remove(index)}
           >
             <Icon icon="times-circle" />
           </Button>
@@ -179,20 +174,8 @@ function EditUserRoles({
             </IfConsortium>
             {renderUserRoles()}
             <IfPermission perm="ui-authorization-roles.users.settings.manage">
-              <Button
-                data-testid="add-roles-button"
-                onClick={() => setIsOpen(true)}
-                disabled={isLoadingData}
-              >
-                <FormattedMessage id="ui-users.roles.addRoles" />
-              </Button>
-              <Button
-                data-testid="unassign-all-roles-button"
-                disabled={isEmpty(listItemsData) || isLoadingData}
-                onClick={() => setUnassignModalOpen(true)}
-              >
-                <FormattedMessage id="ui-users.roles.unassignAllRoles" />
-              </Button>
+              <Button disabled={isLoadingData} data-testid="add-roles-button" onClick={() => setIsOpen(true)}><FormattedMessage id="ui-users.roles.addRoles" /></Button>
+              <Button data-testid="unassign-all-roles-button" disabled={isEmpty(listItemsData) || isLoadingData} onClick={() => setUnassignModalOpen(true)}><FormattedMessage id="ui-users.roles.unassignAllRoles" /></Button>
             </IfPermission>
           </Row>
         </Accordion>
@@ -236,6 +219,7 @@ EditUserRoles.propTypes = {
   assignedRoleIds: PropTypes.object.isRequired,
   setAssignedRoleIds: PropTypes.func.isRequired,
   tenantId: PropTypes.string.isRequired,
+  initialAssignedRoleIds: PropTypes.object.isRequired,
   isLoadingAffiliationRoles: PropTypes.bool.isRequired,
   setTenantId: PropTypes.func.isRequired
 };

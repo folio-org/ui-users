@@ -1,50 +1,52 @@
-import { useStripes, useOkapiKy } from '@folio/stripes/core';
-import { useQueries } from 'react-query';
+import { useMemo } from 'react';
+import { useQuery } from 'react-query';
 
-import useUserAffiliations from '../useUserAffiliations';
-import { isAffiliationsEnabled } from '../../components/util/util';
+import { useStripes, useOkapiKy, useNamespace } from '@folio/stripes/core';
 
-function useUserAffiliationRoles(userId, user) {
+import useAllRolesData from '../useAllRolesData/useAllRolesData';
+
+const DEFAULT = [];
+
+function useUserAffiliationRoles(userId, tenantId) {
   const stripes = useStripes();
-  const hasPerm = stripes.hasPerm('ui-users.roles.view');
+  const [namespace] = useNamespace({ key: 'user-affiliation-roles' });
+  const ky = useOkapiKy({ tenant: tenantId });
+
+  const hasViewRolesPermission = stripes.hasPerm('ui-users.roles.view');
+
+  // Since `roles/users` return doesn't include names (only ids) for the roles, and we need them sorted by role name,
+  // we need to retrieve all the records for roles and use them to determine the sequence of ids.
+  const {
+    isLoading: isAllRolesDataLoading,
+    isFetching: isAllRolesDataFetching,
+    allRolesMapStructure,
+  } = useAllRolesData({ tenantId, enabled: hasViewRolesPermission });
 
   const {
-    affiliations,
-  } = useUserAffiliations({
-    userId: user.id,
-  }, {
-    enabled: Boolean(hasPerm && isAffiliationsEnabled(user)),
-  });
-
-  const ky = useOkapiKy();
-
-  const userTenantRolesQueries = useQueries(
-    affiliations.map(({ tenantId: id }) => {
-      return {
-        queryKey:['userTenantRoles', id],
-        queryFn:() => {
-          const api = ky.extend({
-            hooks: {
-              beforeRequest: [(req) => req.headers.set('X-Okapi-Tenant', id)]
-            }
-          });
-          return api.get(`roles/users/${userId}`).json();
-        },
-        enabled: Boolean(userId)
-      };
-    })
+    data,
+    isLoading: isUserRolesLoading,
+    isFetching: isUserRolesFetching,
+  } = useQuery(
+    [namespace, userId, tenantId],
+    () => ky.get(`roles/users/${userId}`).json(),
+    {
+      enabled: Boolean(userId && tenantId && hasViewRolesPermission),
+    }
   );
 
-  const userRoles = affiliations.reduce((acc, { tenantId }, index) => {
-    acc[tenantId] = userTenantRolesQueries[index]?.data?.userRoles?.map(({ roleId }) => roleId) || [];
-    return acc;
-  }, {});
+  const userRoleIds = useMemo(() => {
+    if (!data?.userRoles || !allRolesMapStructure.size) return DEFAULT;
 
-  const isLoading = userTenantRolesQueries.some(query => query.isLoading);
+    return data.userRoles
+      .map(({ roleId }) => allRolesMapStructure.get(roleId))
+      .toSorted((a, b) => a.name.localeCompare(b.name))
+      .map(({ id }) => id);
+  }, [data?.userRoles, allRolesMapStructure]);
 
   return {
-    userRoles,
-    isLoading,
+    userRoleIds,
+    isLoading: isUserRolesLoading || isAllRolesDataLoading,
+    isFetching: isUserRolesFetching || isAllRolesDataFetching,
   };
 }
 
