@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## [12.1.16] (https://github.com/folio-org/ui-users/tree/v12.1.16) (2025-12-26)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.15...v12.1.16)
+* Optimize role fetching to load only selected tenant's roles instead of all tenants. Fixes UIU-3499.
+
 ## [12.1.15] (https://github.com/folio-org/ui-users/tree/v12.1.15) (2025-12-23)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.14...v12.1.15)
 * Remove UTC timezone from expiration date formatting in `UserInfo` and `EditUserInfo` components so that expiration is correct. Use `.format()` instead of `.format('L')` in `recalculatedDate` to preserve timezone information. Fixes UIU-3400.
