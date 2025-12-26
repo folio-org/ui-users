@@ -57,9 +57,8 @@ const mockData = {
   username: 'testUser',
 };
 
-const mockApiPut = jest.fn(() => ({
+const mockApiPut = jest.fn(() => Promise.resolve({
   json: () => Promise.resolve(),
-  catch: jest.fn(() => Promise.resolve({ status: 400 })),
 }));
 
 const mockKyPut = jest.fn();
