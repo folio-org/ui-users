@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { act, useEffect } from 'react';
 import { render, screen } from '@folio/jest-config-stripes/testing-library/react';
 import PropTypes from 'prop-types';
-import '__mock__/currencyData.mock';
-import okapiCurrentUser from 'fixtures/okapiCurrentUser';
+
+import okapiCurrentUser from '../../../test/jest/fixtures/okapiCurrentUser';
 
 import withServicePoints from './withServicePoints';
 
@@ -90,5 +90,37 @@ describe('withDeclareLost', () => {
   test('Check if service points are called', () => {
     renderWithServicePoints();
     expect(mockGet).toHaveBeenCalled();
+  });
+  describe('when servicePoints array is empty', () => {
+    it('should not show HandlerManager', async () => {
+      const MockComponentEmpty = ({ updateServicePoints }) => {
+        useEffect(() => {
+          updateServicePoints([], '-');
+        }, [updateServicePoints]);
+
+        return (
+          <div data-testid="userService">Test Mock Component</div>
+        );
+      };
+
+      const WrappedComponentEmpty = withServicePoints(MockComponentEmpty);
+      const propsWithCurrentUser = {
+        ...props,
+        match: { params: { id: props.stripes.user.user.id } },
+        stripes: {
+          ...props.stripes,
+          hasAnyPerm: jest.fn().mockReturnValue(true),
+          store: {
+            getState: jest.fn(),
+            dispatch: jest.fn(),
+            subscribe: jest.fn(),
+          }
+        }
+      };
+
+      await act(async () => render(<WrappedComponentEmpty {...propsWithCurrentUser} />));
+      
+      expect(screen.queryByText('HandlerManagerMock')).not.toBeInTheDocument();
+    });
   });
 });
