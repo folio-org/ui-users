@@ -421,3 +421,5 @@ export const MODULE_NAME = 'users';
 export const CUSTOM_FIELDS_ENTITY_TYPE = 'user';
 
 export const TAGS_SCOPE = 'ui-tags.tags.manage';
+
+export const USER_AFFILIATION_ROLES_CACHE_KEY = 'user-affiliation-roles';
