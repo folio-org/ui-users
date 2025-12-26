@@ -2,13 +2,13 @@
 import React from 'react';
 import { cleanup, waitFor } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
-import renderWithRouter from 'helpers/renderWithRouter';
 import {
   IfPermission,
   useStripes,
 } from '@folio/stripes/core';
 import { Form } from 'react-final-form';
-import affiliations from 'fixtures/affiliations';
+import renderWithRouter from '../../../../test/jest/helpers/renderWithRouter';
+import affiliations from '../../../../test/jest/fixtures/affiliations';
 import EditUserRoles from './EditUserRoles';
 
 import {

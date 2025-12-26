@@ -48,7 +48,8 @@ const mockRolesData = {
 };
 
 const mockUserAffiliationRoles = {
-  consortium: ['role1', 'role2'],
+  userRoleIds: ['role1', 'role2'],
+  isLoading: false,
 };
 
 const mockData = {
@@ -129,43 +130,44 @@ describe('withUserRoles HOC', () => {
   });
 
   it('fetches and sets assigned role ids on mount and assignedRoleIds passed to wrapped component correctly', async () => {
-    const ComponentWithUserRoles = withUserRoles(WrappedComponent);
-    const { getByTestId } = render(<ComponentWithUserRoles match={{ params: { id: 'user1' } }} stripes={{ hasInterface: jest.fn().mockReturnValue(true) }} />);
+    const { getByTestId } = renderComponent();
 
     await waitFor(() => expect(getByTestId('assigned-role-ids')).toHaveTextContent('role1, role2'));
   });
 
   it('check keycloak user', async () => {
-    const ComponentWithUserRoles = withUserRoles(WrappedComponent);
-    const { getByTestId } = render(<ComponentWithUserRoles match={{ params: { id: 'user1' } }} stripes={{ hasInterface: jest.fn().mockReturnValue(true) }} />);
+    const { getByTestId } = renderComponent();
 
     await userEvent.click(getByTestId('submit-form'));
   });
 
   it('submit form changing user role ids', async () => {
-    const ComponentWithUserRoles = withUserRoles(WrappedComponent);
-    const { getByTestId } = render(<ComponentWithUserRoles match={{ params: { id: 'user1' } }} stripes={{ hasInterface: jest.fn().mockReturnValue(true) }} />);
+    const { getByTestId } = renderComponent();
 
-    await userEvent.click(getByTestId('assignRoles'));
+    await act(() => userEvent.click(getByTestId('assignRoles')));
     await userEvent.click(getByTestId('submit-form'));
   });
 
   it('submit form after changing user role ids', async () => {
-    const ComponentWithUserRoles = withUserRoles(WrappedComponent);
-    const { getByTestId } = render(<ComponentWithUserRoles match={{ params: { id: 'user1' } }} stripes={{ hasInterface: jest.fn().mockReturnValue(true) }} />);
+    const { getByTestId } = renderComponent();
 
-    await userEvent.click(getByTestId('assignRoles'));
+    await act(() => userEvent.click(getByTestId('assignRoles')));
     await userEvent.click(getByTestId('confirm-create-keycloak-user'));
   });
 
   describe('when assigning roles for other tenants', () => {
     beforeEach(async () => {
-      useUserAffiliationRoles.mockReturnValue({ 
-        college: [],
-        consortium: ['role1', 'role2'],
-        university: [],
+      jest.clearAllMocks();
+
+      useUserAffiliationRoles.mockReturnValue({
+        userRoleIds: {
+          college: [],
+          consortium: ['role1', 'role2'],
+          university: [],
+        },
+        isLoading: false,
       });
-      
+
       const { getByTestId } = renderComponent();
 
       await act(() => userEvent.click(getByTestId('assignRoles')));
