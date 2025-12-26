@@ -157,7 +157,7 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
         <Accordion
           label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.roles.userRoles" /></Headline>}
           id={accordionId}
-          displayWhenClosed={<Badge>{assignedRoleIds[tenantId]?.length}</Badge>}
+          displayWhenClosed={<Badge>{assignedRoleIds[tenantId]?.length || 0}</Badge>}
         >
           <Row>
             <IfConsortium>
