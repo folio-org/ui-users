@@ -60,6 +60,7 @@ class UserEdit extends React.Component {
     setTenantId: PropTypes.func,
     isCreateKeycloakUserConfirmationOpen: PropTypes.bool,
     initialAssignedRoleIds: PropTypes.object,
+    isLoadingAffiliationRoles: PropTypes.bool.isRequired,
     checkAndHandleKeycloakAuthUser: PropTypes.func,
     confirmCreateKeycloakUser: PropTypes.func
   }
@@ -483,6 +484,7 @@ class UserEdit extends React.Component {
       setTenantId,
       tenantId,
       setAssignedRoleIds,
+      isLoadingAffiliationRoles,
       assignedRoleIds
     } = this.props;
 
@@ -525,6 +527,7 @@ class UserEdit extends React.Component {
         tenantId={tenantId}
         setAssignedRoleIds={setAssignedRoleIds}
         assignedRoleIds={assignedRoleIds}
+        isLoadingAffiliationRoles={isLoadingAffiliationRoles}
       />
     );
   }

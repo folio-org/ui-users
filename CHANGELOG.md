@@ -61,6 +61,7 @@
 * Migrate tag flag from mod-configuration to mod-settings. Refs UIU-3412.
 * Rename the `ui-users.settings.departments.create.edit.view` permission to avoid displaying the edit capability as a view. Fixes UIU-3403.
 * Disable the submit button while the affiliations manager is processing. Refs UIU-3497.
+* Optimize role fetching to load only selected tenant's roles instead of all tenants. Fixes UIU-3499.
 
 ## [12.1.14] (https://github.com/folio-org/ui-users/tree/v12.1.14) (2025-10-08)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.13...v12.1.14)
