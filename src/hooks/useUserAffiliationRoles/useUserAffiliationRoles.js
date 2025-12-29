@@ -4,12 +4,13 @@ import { useQuery } from 'react-query';
 import { useStripes, useOkapiKy, useNamespace } from '@folio/stripes/core';
 
 import useAllRolesData from '../useAllRolesData/useAllRolesData';
+import { USER_AFFILIATION_ROLES_CACHE_KEY } from '../../constants';
 
 const DEFAULT = [];
 
 function useUserAffiliationRoles(userId, tenantId) {
   const stripes = useStripes();
-  const [namespace] = useNamespace({ key: 'user-affiliation-roles' });
+  const [namespace] = useNamespace({ key: USER_AFFILIATION_ROLES_CACHE_KEY });
   const ky = useOkapiKy({ tenant: tenantId });
 
   const hasViewRolesPermission = stripes.hasPerm('ui-users.roles.view');
