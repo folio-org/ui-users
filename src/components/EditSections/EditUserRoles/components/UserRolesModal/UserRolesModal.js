@@ -49,7 +49,7 @@ export default function UserRolesModal({ isOpen,
     if (assignedRoleIds[tenantId]?.includes(id)) {
       setAssignedRoleIds({ ...assignedRoleIds, [tenantId]: assignedRoleIds[tenantId].filter(role => role !== id) });
     } else {
-      setAssignedRoleIds({ ...assignedRoleIds, [tenantId]: assignedRoleIds[tenantId].concat(id) });
+      setAssignedRoleIds({ ...assignedRoleIds, [tenantId]: (assignedRoleIds[tenantId] || []).concat(id) });
     }
   };
 
@@ -72,7 +72,7 @@ export default function UserRolesModal({ isOpen,
   };
 
   const handleSaveClick = () => {
-    const sortedAlphabetically = assignedRoleIds[tenantId]
+    const sortedAlphabetically = (assignedRoleIds[tenantId] || [])
       .map(id => {
         const foundRole = allRolesMapStructure.get(id);
         return { name: foundRole?.name, id: foundRole?.id };
@@ -106,7 +106,7 @@ export default function UserRolesModal({ isOpen,
           <div>
             <FormattedMessage
               id="ui-users.permissions.modal.total"
-              values={{ count: assignedRoleIds[tenantId]?.length }}
+              values={{ count: assignedRoleIds[tenantId]?.length || 0 }}
             />
           </div>
           <Button

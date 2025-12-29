@@ -1,14 +1,25 @@
 import React, { useEffect, useState } from 'react';
+import { useQueryClient } from 'react-query';
 
-import { useStripes, useOkapiKy, useCallout } from '@folio/stripes/core';
+import {
+  useStripes,
+  useOkapiKy,
+  useCallout,
+  useNamespace,
+} from '@folio/stripes/core';
 import isEqual from 'lodash/isEqual';
 import isEmpty from 'lodash/isEmpty';
 import { useCreateAuthUserKeycloak, useUserAffiliationRoles } from '../../hooks';
-import { KEYCLOAK_USER_EXISTANCE } from '../../constants';
+import {
+  KEYCLOAK_USER_EXISTANCE,
+  USER_AFFILIATION_ROLES_CACHE_KEY,
+} from '../../constants';
 import { showErrorCallout } from '../../views/UserEdit/UserEditHelpers';
 
 const withUserRoles = (WrappedComponent) => (props) => {
   const { okapi } = useStripes();
+  const [namespace] = useNamespace({ key: USER_AFFILIATION_ROLES_CACHE_KEY });
+  const queryClient = useQueryClient();
   // eslint-disable-next-line react/prop-types
   const userId = props.match.params.id;
   const [initialAssignedRoleIds, setInitialAssignedRoleIds] = useState({});
@@ -69,7 +80,11 @@ const withUserRoles = (WrappedComponent) => (props) => {
           userId,
           roleIds: roleIds[tenantIdKey],
         }
-      }).catch(sendErrorCallout);
+      })
+        .then(async () => {
+          await queryClient.invalidateQueries({ queryKey: [namespace, userId, tenantIdKey] });
+        })
+        .catch(sendErrorCallout);
     });
 
     await Promise.allSettled(requests);

@@ -410,3 +410,5 @@ export const NEW_FEE_FINE_FIELD_NAMES = {
   ITEM_BARCODE: 'itemBarcode',
   KEY_OF_ITEM_BARCODE: 'keyOfItemBarcode',
 };
+
+export const USER_AFFILIATION_ROLES_CACHE_KEY = 'user-affiliation-roles';
