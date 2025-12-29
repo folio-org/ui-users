@@ -50,7 +50,6 @@
 * Avoid indirection through null item when loaned item is deleted. Fixes UIU-3457.
 * In the list of a user's open loans, the "Use at location" includes service-point and (when relevant) exipiry date. Fixes UIU-3418.
 * Added null check to allow roles to be selected for user when list is emptied. Fixes UIU-3465.
-* Remove UTC timezone from expiration date formatting in `UserInfo` and `EditUserInfo` components so that expiration is correct. Use `.format()` instead of `.format('L')` in `recalculatedDate` to preserve timezone information. Fixes UIU-3400.
 * Add translations for use-at-location actions for history list in loan detail pages. Fixes UIU-3420.
 * Remove `DCB_VIRTUAL_USER` constant and update related tests to use user type directly. The last name will no longer be hardcoded to `DcbSystem`. Refs UIU-3477.
 * Reset loans and requests data on mount in UserLoans and UserRequests. Refs UIU-3460.
@@ -63,6 +62,10 @@
 * Disable the submit button while the affiliations manager is processing. Refs UIU-3497.
 * Optimize role fetching to load only selected tenant's roles instead of all tenants. Fixes UIU-3499.
 * Add condition to check for non-empty servicePoints before showing handler in withServicePoints component. Fixes UIU-3503.
+
+## [12.1.15] (https://github.com/folio-org/ui-users/tree/v12.1.15) (2025-12-23)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.14...v12.1.15)
+* Remove UTC timezone from expiration date formatting in `UserInfo` and `EditUserInfo` components so that expiration is correct. Use `.format()` instead of `.format('L')` in `recalculatedDate` to preserve timezone information. Fixes UIU-3400.
 
 ## [12.1.14] (https://github.com/folio-org/ui-users/tree/v12.1.14) (2025-10-08)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.13...v12.1.14)
