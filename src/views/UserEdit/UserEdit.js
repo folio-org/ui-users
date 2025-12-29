@@ -65,6 +65,24 @@ class UserEdit extends React.Component {
 
   static contextType = CalloutContext;
 
+  state = {
+    isLoading: true,
+  };
+
+  componentDidUpdate() {
+    const { resources } = this.props;
+    const { isLoading } = this.state;
+
+    const isDataLoading = !resourcesLoaded(resources, ['uniquenessValidator']) || (!this.getUser() && this.props.match.params.id);
+
+    // Show loading only when opening the page, because some resources are re-fetched during form save,
+    // which remounts custom fields components, triggering form.change(), which makes the form dirty
+    // and prevents redirection by showing the "Are you sure?" modal.
+    if (isLoading && !isDataLoading) {
+      this.setState({ isLoading: false });
+    }
+  }
+
   getUser() {
     const { resources, match: { params: { id } } } = this.props;
     const selUser = (resources.selUser || {}).records || [];
@@ -261,7 +279,7 @@ class UserEdit extends React.Component {
     });
   }
 
-  update({ requestPreferences, readingRoomsAccessList, ...userFormData }) {
+  async update({ requestPreferences, readingRoomsAccessList, ...userFormData }) {
     const {
       updateProxies,
       updateSponsors,
@@ -327,7 +345,7 @@ class UserEdit extends React.Component {
       data.active = (moment(user.expirationDate).endOf('day').isSameOrAfter(today));
     }
 
-    this.updateUserData(data, user);
+    await this.updateUserData(data);
   }
 
   async updateUserData(data) {
@@ -466,10 +484,11 @@ class UserEdit extends React.Component {
       isLoadingAffiliationRoles,
       assignedRoleIds
     } = this.props;
+    const { isLoading } = this.state;
 
     const profilePictureConfig = get(resources, 'settings.records[0]');
 
-    if (!resourcesLoaded(resources, ['uniquenessValidator']) || (!this.getUser() && this.props.match.params.id)) {
+    if (isLoading) {
       return (
         <LoadingView
           data-test-form-page

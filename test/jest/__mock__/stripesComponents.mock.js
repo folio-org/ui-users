@@ -271,4 +271,5 @@ jest.mock('@folio/stripes/components', () => ({
     );
   }),
   exportToCsv: jest.fn(),
+  LoadingView: jest.fn(() => <div>LoadingView</div>),
 }));
