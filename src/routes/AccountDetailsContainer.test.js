@@ -1,4 +1,4 @@
-import renderWithRouter from 'helpers/renderWithRouter';
+import renderWithRouter from '../../test/jest/helpers/renderWithRouter';
 import AccountDetailsContainer from './AccountDetailsContainer';
 
 const resources = {
@@ -46,7 +46,7 @@ describe('AccountDetailsContainer', () => {
 
       const { getByText } = renderAccountDetailsContainer(props);
 
-      expect(getByText('ui-users.accounts.loading')).toBeInTheDocument();
+      expect(getByText('LoadingView')).toBeInTheDocument();
     });
   });
 });

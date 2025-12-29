@@ -119,7 +119,7 @@ describe('withDeclareLost', () => {
       };
 
       await act(async () => render(<WrappedComponentEmpty {...propsWithCurrentUser} />));
-      
+
       expect(screen.queryByText('HandlerManagerMock')).not.toBeInTheDocument();
     });
   });
