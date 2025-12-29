@@ -5,9 +5,10 @@ import PropTypes from 'prop-types';
 import { isEmpty } from 'lodash';
 import { FieldArray } from 'react-final-form-arrays';
 import { OnChange } from 'react-final-form-listeners';
+import { useForm } from 'react-final-form';
 
 import { IfPermission, useStripes } from '@folio/stripes/core';
-import { Accordion, Headline, Badge, Row, Col, List, Button, Icon, ConfirmationModal } from '@folio/stripes/components';
+import { Accordion, Headline, Badge, Row, Col, List, Button, Icon, ConfirmationModal, Layout } from '@folio/stripes/components';
 
 import { useAllRolesData, useUserAffiliations } from '../../../hooks';
 import AffiliationsSelect from '../../AffiliationsSelect/AffiliationsSelect';
@@ -17,8 +18,9 @@ import UserRolesModal from './components/UserRolesModal/UserRolesModal';
 import { isAffiliationsEnabled } from '../../util/util';
 import { filtersConfig } from './helpers';
 
-function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds, assignedRoleIds, setTenantId, tenantId }) {
+function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds, assignedRoleIds, setTenantId, tenantId, initialAssignedRoleIds, isLoadingAffiliationRoles }) {
   const stripes = useStripes();
+  const form = useForm();
   const [isOpen, setIsOpen] = useState(false);
   const [unassignModalOpen, setUnassignModalOpen] = useState(false);
   const intl = useIntl();
@@ -28,7 +30,19 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
     isFetching: isAffiliationsFetching,
   } = useUserAffiliations({ userId: user.id }, { enabled: isAffiliationsEnabled(user) });
 
-  const { isLoading: isAllRolesDataLoading, allRolesMapStructure, refetch } = useAllRolesData({ tenantId });
+  const {
+    isLoading: isAllRolesDataLoading,
+    isFetching: isAllRolesDataFetching,
+    allRolesMapStructure,
+    refetch,
+  } = useAllRolesData({ tenantId });
+
+  const isLoadingData = (
+    isAffiliationsFetching
+    || isLoadingAffiliationRoles
+    || isAllRolesDataLoading
+    || isAllRolesDataFetching
+  );
 
   useEffect(() => {
     if (!affiliations.some(({ tenantId: assigned }) => tenantId === assigned)) {
@@ -37,6 +51,18 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
       refetch();
     }
   }, [affiliations, stripes.okapi.tenant, setTenantId, tenantId, refetch]);
+
+  // Initialize form field for the current tenant if it doesn't exist yet
+  useEffect(() => {
+    const formState = form.getState();
+    const currentFieldValue = formState.values?.assignedRoleIds?.[tenantId];
+    const hasInitialValue = initialAssignedRoleIds?.[tenantId];
+
+    // If the form field doesn't exist but we have initial values for this tenant, initialize it
+    if (currentFieldValue === undefined && hasInitialValue) {
+      change(`assignedRoleIds.${tenantId}`, initialAssignedRoleIds[tenantId]);
+    }
+  }, [tenantId, initialAssignedRoleIds, form, change]);
 
   const changeUserRoles = (roleIds) => {
     change(`assignedRoleIds[${tenantId}]`, roleIds);
@@ -107,6 +133,14 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
   };
 
   function renderUserRoles() {
+    if (isLoadingData) {
+      return (
+        <Layout className="full padding-bottom-gutter">
+          <Icon icon="spinner-ellipsis" />
+        </Layout>
+      );
+    }
+
     return (
       <Col xs={12}>
         <FieldArray
@@ -123,7 +157,7 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
         <Accordion
           label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.roles.userRoles" /></Headline>}
           id={accordionId}
-          displayWhenClosed={<Badge>{assignedRoleIds[tenantId]?.length}</Badge>}
+          displayWhenClosed={<Badge>{assignedRoleIds[tenantId]?.length || 0}</Badge>}
         >
           <Row>
             <IfConsortium>
@@ -140,8 +174,8 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
             </IfConsortium>
             {renderUserRoles()}
             <IfPermission perm="ui-authorization-roles.users.settings.manage">
-              <Button data-testid="add-roles-button" onClick={() => setIsOpen(true)}><FormattedMessage id="ui-users.roles.addRoles" /></Button>
-              <Button data-testid="unassign-all-roles-button" disabled={isEmpty(listItemsData)} onClick={() => setUnassignModalOpen(true)}><FormattedMessage id="ui-users.roles.unassignAllRoles" /></Button>
+              <Button disabled={isLoadingData} data-testid="add-roles-button" onClick={() => setIsOpen(true)}><FormattedMessage id="ui-users.roles.addRoles" /></Button>
+              <Button data-testid="unassign-all-roles-button" disabled={isEmpty(listItemsData) || isLoadingData} onClick={() => setUnassignModalOpen(true)}><FormattedMessage id="ui-users.roles.unassignAllRoles" /></Button>
             </IfPermission>
           </Row>
         </Accordion>
@@ -185,6 +219,8 @@ EditUserRoles.propTypes = {
   assignedRoleIds: PropTypes.object.isRequired,
   setAssignedRoleIds: PropTypes.func.isRequired,
   tenantId: PropTypes.string.isRequired,
+  initialAssignedRoleIds: PropTypes.object.isRequired,
+  isLoadingAffiliationRoles: PropTypes.bool.isRequired,
   setTenantId: PropTypes.func.isRequired
 };
 

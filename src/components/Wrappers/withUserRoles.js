@@ -1,17 +1,30 @@
 import React, { useEffect, useState } from 'react';
+import { useQueryClient } from 'react-query';
 
-import { useStripes, useOkapiKy, useCallout } from '@folio/stripes/core';
+import {
+  useStripes,
+  useOkapiKy,
+  useCallout,
+  useNamespace,
+} from '@folio/stripes/core';
 import isEqual from 'lodash/isEqual';
+import isEmpty from 'lodash/isEmpty';
 import { useCreateAuthUserKeycloak, useUserAffiliationRoles } from '../../hooks';
-import { KEYCLOAK_USER_EXISTANCE } from '../../constants';
+import {
+  KEYCLOAK_USER_EXISTANCE,
+  USER_AFFILIATION_ROLES_CACHE_KEY,
+} from '../../constants';
 import { showErrorCallout } from '../../views/UserEdit/UserEditHelpers';
 
 const withUserRoles = (WrappedComponent) => (props) => {
   const { okapi } = useStripes();
+  const [namespace] = useNamespace({ key: USER_AFFILIATION_ROLES_CACHE_KEY });
+  const queryClient = useQueryClient();
   // eslint-disable-next-line react/prop-types
   const userId = props.match.params.id;
-  const initialAssignedRoleIds = useUserAffiliationRoles(userId);
+  const [initialAssignedRoleIds, setInitialAssignedRoleIds] = useState({});
   const [tenantId, setTenantId] = useState(okapi.tenant);
+  const { userRoleIds, isLoading: isLoadingAffiliationRoles } = useUserAffiliationRoles(userId, tenantId);
   const [assignedRoleIds, setAssignedRoleIds] = useState({});
   const [isCreateKeycloakUserConfirmationOpen, setIsCreateKeycloakUserConfirmationOpen] = useState(false);
   const callout = useCallout();
@@ -26,17 +39,36 @@ const withUserRoles = (WrappedComponent) => (props) => {
     }
   });
 
-  const stringifiedInitialAssignedRoleIds = JSON.stringify(initialAssignedRoleIds);
-
   useEffect(() => {
-    setAssignedRoleIds(initialAssignedRoleIds);
-    // on each re-render reference to initialAssignedRoleIds are different, so putting initialAssignedRoleIds to deps causes infinite trigger
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [stringifiedInitialAssignedRoleIds]);
+    // No need to set roles if there are empty or loading
+    if (!userRoleIds.length) return;
+
+    setInitialAssignedRoleIds(prev => ({
+      ...prev,
+      [tenantId]: userRoleIds,
+    }));
+
+
+    // Set assigned roles only if they are not set for the tenant yet
+    if (isEmpty(assignedRoleIds[tenantId])) {
+      setAssignedRoleIds(prev => ({
+        ...prev,
+        [tenantId]: userRoleIds,
+      }));
+    }
+  // The effect should only re-run when userRoleIds changes, not when tenantId or assignedRoleIds change,
+  // ensuring roles are set only when new data is fetched.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userRoleIds]);
 
   const updateUserRoles = async (roleIds) => {
     // to update roles for different tenants, we need to make API requests for each tenant
     const requests = Object.keys(roleIds).map((tenantIdKey) => {
+      // No need to make API call if roles didn't change for the tenant
+      if (isEqual(roleIds[tenantIdKey], initialAssignedRoleIds[tenantIdKey])) {
+        return Promise.resolve();
+      }
+
       const putApi = ky.extend({
         hooks: {
           beforeRequest: [(req) => req.headers.set('X-Okapi-Tenant', tenantIdKey)]
@@ -48,7 +80,11 @@ const withUserRoles = (WrappedComponent) => (props) => {
           userId,
           roleIds: roleIds[tenantIdKey],
         }
-      }).catch(sendErrorCallout);
+      })
+        .then(async () => {
+          await queryClient.invalidateQueries({ queryKey: [namespace, userId, tenantIdKey] });
+        })
+        .catch(sendErrorCallout);
     });
 
     await Promise.allSettled(requests);
@@ -131,6 +167,7 @@ const withUserRoles = (WrappedComponent) => (props) => {
     initialAssignedRoleIds={initialAssignedRoleIds}
     checkAndHandleKeycloakAuthUser={checkAndHandleKeycloakAuthUser}
     confirmCreateKeycloakUser={confirmCreateKeycloakUser}
+    isLoadingAffiliationRoles={isLoadingAffiliationRoles}
   />;
 };
 

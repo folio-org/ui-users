@@ -1,8 +1,9 @@
+import { act } from 'react';
+
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
-import renderWithRouter from 'helpers/renderWithRouter';
+import renderWithRouter from '../../../test/jest/helpers/renderWithRouter';
 
-import UserForm from './UserForm';
 import UserEdit from './UserEdit';
 import { KEYCLOAK_USER_EXISTANCE } from '../../constants';
 
@@ -91,25 +92,33 @@ const props = {
         departments: ['department-id-1', 'department-id-2'],
         preferredEmailCommunication: ['Programs', 'Support']
       }],
+      isPending: false,
     },
     patronGroups: {
       records: [],
+      isPending: false,
     },
     perms: {
       records: [{ id: 'permUserRecordId' }],
+      isPending: false,
     },
     addressTypes: {
       records: [],
+      isPending: false,
     },
     servicePoints: {
       records: [],
+      isPending: false,
     },
     departments: {
       records: [],
+      isPending: false,
     },
     userReadingRoomPermissions: {
       records: [],
+      isPending: false,
     },
+    uniquenessValidator: { records: [], isPending: false },
   },
   history: {
     push: jest.fn(),
@@ -154,11 +163,30 @@ const props = {
   getProxies: jest.fn(),
   getSponsors: jest.fn(),
   okapiKy: {
-    extend: jest.fn(() => props.okapiKy),
+    extend: jest.fn(function extend() { return this; }),
     get: jest.fn(() => ({ json: () => Promise.resolve() })),
     post: jest.fn(() => ({ json: () => Promise.resolve({}) })),
     put: jest.fn(() => ({ json: () => Promise.resolve({}) })),
   },
+  assignedRoleIds: {},
+  isLoadingAffiliationRoles: false,
+};
+
+const getUserEdit = (_props = {}) => <UserEdit {..._props} />;
+
+const renderUserEdit = async (userProps) => {
+  const result = renderWithRouter(getUserEdit(props));
+
+  // Trigger componentDidUpdate to update isLoading to false
+  const { rerender } = await act(async () => renderWithRouter(
+    getUserEdit(userProps),
+    { rerender: result.rerender }
+  ));
+
+  return {
+    ...result,
+    rerender,
+  };
 };
 
 describe('UserEdit', () => {
@@ -387,27 +415,18 @@ describe('UserEdit', () => {
     expect(container).toBeInTheDocument();
   });
 
-  it('should submit form and call update', async () => {
-    const { container } = renderWithRouter(<UserEdit {...props} />);
-    const submitButton = container.querySelector('#clickable-save');
-    await userEvent.click(submitButton);
-    expect(container.querySelector('#clickable-cancel')).toBeInTheDocument();
-    expect(container.querySelector('#clickable-save')).toBeInTheDocument();
+  it('should render loading', () => {
+    const { getByText } = renderWithRouter(<UserEdit {...props} />);
+    expect(getByText('LoadingView')).toBeInTheDocument();
   });
 
-  it('should cancel form', async () => {
-    const { container } = renderWithRouter(<UserEdit {...props} />);
-    const submitButton = container.querySelector('#clickable-cancel');
-    await userEvent.click(submitButton);
-    expect(container.querySelector('#clickable-cancel')).toBeInTheDocument();
-    expect(container.querySelector('#clickable-save')).toBeInTheDocument();
-  });
+
 
   describe('Save user form', () => {
     it('should handle user updates', async () => {
-      renderWithRouter(<UserEdit {...props} />);
-
-      await UserForm.mock.calls[0][0].onSubmit(userFormData);
+      const { container } = await renderUserEdit(props);
+      const submitButton = container.querySelector('#clickable-save');
+      await userEvent.click(submitButton);
 
       expect(props.mutator.requestPreferences.POST).toHaveBeenCalled();
       expect(props.updateProxies).toHaveBeenCalled();
@@ -416,16 +435,15 @@ describe('UserEdit', () => {
     });
 
     it('should save the user updates when the users interfaces is not 16.2', async () => {
-      renderWithRouter(
-        <UserEdit
-          {...props}
-          stripes={{
-            ...props.stripes,
-            hasInterface: () => false,
-          }}
-        />
-      );
-      await UserForm.mock.calls[0][0].onSubmit(userFormData);
+      const { container } = await renderUserEdit({
+        ...props,
+        stripes: {
+          ...props.stripes,
+          hasInterface: () => false,
+        },
+      });
+      const submitButton = container.querySelector('#clickable-save');
+      await userEvent.click(submitButton);
 
       expect(props.mutator.requestPreferences.POST).toHaveBeenCalled();
       expect(props.updateProxies).toHaveBeenCalled();
@@ -434,17 +452,19 @@ describe('UserEdit', () => {
     });
 
     it('should update the user with correct data', async () => {
-      const { getByText } = renderWithRouter(
-        <UserEdit
-          {...props}
-          stripes={{
-            ...props.stripes,
-            hasInterface: () => false,
-          }}
-        />
-      );
+      const { container } = await renderUserEdit({
+        ...props,
+        resources: {
+          ...props.resources,
+          uniquenessValidator: { records: [] }
+        },
+        stripes: {
+          ...props.stripes,
+          hasInterface: () => false,
+        },
+      });
 
-      const submitButton = getByText('Submit Form');
+      const submitButton = container.querySelector('#clickable-save');
       await userEvent.click(submitButton);
 
       expect(props.mutator.selUser.PUT).toHaveBeenCalledWith(expect.objectContaining({
@@ -453,14 +473,17 @@ describe('UserEdit', () => {
     });
 
     it('should create the user with correct data', async () => {
-      const { getByText } = renderWithRouter(
-        <UserEdit
-          {...props}
-          match={{ params: { id: '' } }}
-        />
-      );
+      const { container } = await renderUserEdit({
+        ...props,
+        resources: {
+          ...props.resources,
+          uniquenessValidator: { records: [] },
+          selUser: { records: [] }
+        },
+        match: { params: { id: '' } },
+      });
 
-      const submitButton = getByText('Submit Form');
+      const submitButton = container.querySelector('#clickable-save');
       await userEvent.click(submitButton);
 
       expect(props.mutator.records.POST).toHaveBeenCalledWith(expect.objectContaining({
@@ -484,9 +507,9 @@ describe('UserEdit', () => {
             },
           }
         };
-        renderWithRouter(<UserEdit {..._props} />);
-
-        await UserForm.mock.calls[0][0].onSubmit(userFormData);
+        const { container } = await renderUserEdit(_props);
+        const submitButton = container.querySelector('#clickable-save');
+        await userEvent.click(submitButton);
 
         expect(props.mutator.permissions.PUT).toHaveBeenCalled();
       });
@@ -499,9 +522,9 @@ describe('UserEdit', () => {
             hasPerm: jest.fn().mockReturnValue(false),
           },
         };
-        renderWithRouter(<UserEdit {..._props} />);
-
-        await UserForm.mock.calls[0][0].onSubmit(userFormData);
+        const { container } = await renderUserEdit(_props);
+        const submitButton = container.querySelector('#clickable-save');
+        await userEvent.click(submitButton);
 
         expect(props.mutator.perms.PUT).not.toHaveBeenCalled();
       });
@@ -523,25 +546,33 @@ describe('UserEdit', () => {
       resources: {
         selUser: {
           records: [{ id: 'userId' }],
+          isPending: false,
         },
         patronGroups: {
           records: [],
+          isPending: false,
         },
         perms: {
           records: [{ id: 'permUserRecordId' }],
+          isPending: false,
         },
         addressTypes: {
           records: [],
+          isPending: false,
         },
         servicePoints: {
           records: [],
+          isPending: false,
         },
         departments: {
           records: [],
+          isPending: false,
         },
         userReadingRoomPermissions: {
-          records: []
+          records: [],
+          isPending: false,
         },
+        uniquenessValidator: { records: [], isPending: false },
       },
       history: {
         push: jest.fn(),
@@ -583,15 +614,17 @@ describe('UserEdit', () => {
       getProxies: jest.fn(),
       getSponsors: jest.fn(),
       okapiKy: {
-        extend: jest.fn(() => props.okapiKy),
+        extend: jest.fn(function extend() { return this; }),
         get: jest.fn(() => ({ json: () => Promise.resolve() })),
         post: jest.fn(() => ({ json: () => Promise.resolve({}) })),
         put: jest.fn(() => ({ json: () => Promise.resolve({}) })),
       },
+      assignedRoleIds: {},
+      isLoadingAffiliationRoles: false,
     };
 
     it('should call history.push on cancelling user edit form', async () => {
-      const { container } = renderWithRouter(<UserEdit {...defaultProps} />);
+      const { container } = await renderUserEdit(defaultProps);
       const cancelButton = container.querySelector('#clickable-cancel');
       await userEvent.click(cancelButton);
       expect(defaultProps.history.push).toHaveBeenCalled();
@@ -605,7 +638,7 @@ describe('UserEdit', () => {
           params:{}
         }
       };
-      const { container } = renderWithRouter(<UserEdit {...alteredProps} />);
+      const { container } = await renderUserEdit(alteredProps);
       const cancelButton = container.querySelector('#clickable-cancel');
       await userEvent.click(cancelButton);
       expect(alteredProps.history.push).toHaveBeenCalled();
@@ -624,25 +657,33 @@ describe('UserEdit', () => {
       resources: {
         selUser: {
           records: [{ id: 'userId' }],
+          isPending: false,
         },
         patronGroups: {
           records: [],
+          isPending: false,
         },
         perms: {
           records: [{ id: 'permUserRecordId' }],
+          isPending: false,
         },
         addressTypes: {
           records: [],
+          isPending: false,
         },
         servicePoints: {
           records: [],
+          isPending: false,
         },
         departments: {
           records: [],
+          isPending: false,
         },
         userReadingRoomPermissions: {
-          records: []
+          records: [],
+          isPending: false,
         },
+        uniquenessValidator: { records: [], isPending: false },
       },
       history: {
         push: jest.fn(),
@@ -684,11 +725,13 @@ describe('UserEdit', () => {
       getProxies: jest.fn(),
       getSponsors: jest.fn(),
       okapiKy: {
-        extend: jest.fn(() => props.okapiKy),
+        extend: jest.fn(function extend() { return this; }),
         get: jest.fn(() => ({ json: () => Promise.resolve() })),
         post: jest.fn(() => ({ json: () => Promise.resolve({}) })),
         put: jest.fn(() => ({ json: () => Promise.resolve({}) })),
       },
+      assignedRoleIds: {},
+      isLoadingAffiliationRoles: false,
       isCreateKeycloakUserConfirmationOpen: true,
       submitCreateKeycloakUser: jest.fn(),
       onCancelKeycloakConfirmation: jest.fn(),
@@ -699,7 +742,7 @@ describe('UserEdit', () => {
       jest.unmock('./UserForm');
     });
     it('cancel confirmation', async () => {
-      const { container } = renderWithRouter(<UserEdit {...defaultProps} />);
+      const { container } = await renderUserEdit(defaultProps);
       const cancelButton = container.querySelector('#cancel-confirmation');
 
       await userEvent.click(cancelButton);
@@ -711,7 +754,7 @@ describe('UserEdit', () => {
       const alteredProps = { ...defaultProps,
         confirmCreateKeycloakUser: mockSubmitCreateKeycloakUser };
 
-      const { container } = renderWithRouter(<UserEdit {...alteredProps} />);
+      const { container } = await renderUserEdit(alteredProps);
       const submitButton = container.querySelector('#submit-confirmation');
 
       await userEvent.click(submitButton);
@@ -728,7 +771,7 @@ describe('UserEdit', () => {
           submitCreateKeycloakUser: mockSubmitCreateKeycloakUser,
           updateUserRoles: mockUpdateRoles };
 
-        const { container } = renderWithRouter(<UserEdit {...alteredProps} />);
+        const { container } = await renderUserEdit(alteredProps);
         const submitButton = container.querySelector('#clickable-save');
 
         await userEvent.click(submitButton);
@@ -742,7 +785,7 @@ describe('UserEdit', () => {
           confirmCreateKeycloakUser: mockSubmitCreateKeycloakUser,
           checkAndHandleKeycloakAuthUser: jest.fn() };
 
-        const { container } = renderWithRouter(<UserEdit {...alteredProps} />);
+        const { container } = await renderUserEdit(alteredProps);
         const submitButton = container.querySelector('#clickable-save');
 
         await userEvent.click(submitButton);
@@ -757,7 +800,7 @@ describe('UserEdit', () => {
           submitCreateKeycloakUser: mockSubmitCreateKeycloakUser,
           updateUserRoles: mockUpdateRoles,
           checkUserInKeycloak: jest.fn().mockReturnValue(KEYCLOAK_USER_EXISTANCE.exist),
-          assignedRoleIds: [1, 2, 3] };
+          assignedRoleIds: { 1: true, 2: true, 3: true } };
 
         const { container } = renderWithRouter(<UserEdit {...alteredProps} />);
         const submitButton = container.querySelector('#clickable-save');

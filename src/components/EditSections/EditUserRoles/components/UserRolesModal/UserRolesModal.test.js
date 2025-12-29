@@ -139,4 +139,23 @@ describe('UserRoleModal', () => {
     await userEvent.click(submitButton);
     expect(mockChangeUserRoles).toHaveBeenCalledWith(['4', '1']);
   });
+
+  it('should handle toggling a role when assignedRoleIds[tenantId] is undefined', async () => {
+    const mockChangeUserRoles = jest.fn();
+
+    renderComponent({
+      isOpen: true,
+      onClose: mockOnClose,
+      initialRoleIds: {},
+      changeUserRoles: mockChangeUserRoles,
+      tenantId,
+    });
+
+    const roleCheckbox = document.querySelector('[name="selected-3"]');
+    expect(roleCheckbox.checked).toBe(false);
+
+    await userEvent.click(roleCheckbox);
+
+    expect(roleCheckbox.checked).toBe(true);
+  });
 });

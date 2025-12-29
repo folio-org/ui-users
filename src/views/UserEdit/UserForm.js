@@ -125,6 +125,7 @@ class UserForm extends React.Component {
     intl: PropTypes.object,
     profilePictureConfig: PropTypes.object,
     isCreateKeycloakUserConfirmationOpen: PropTypes.bool,
+    isLoadingAffiliationRoles: PropTypes.bool.isRequired,
     onCancelKeycloakConfirmation: PropTypes.func,
     confirmCreateKeycloakUser: PropTypes.func,
     setAssignedRoleIds: PropTypes.func,
@@ -355,6 +356,7 @@ class UserForm extends React.Component {
       uniquenessValidator,
       profilePictureConfig,
       isCreateKeycloakUserConfirmationOpen,
+      isLoadingAffiliationRoles,
       onCancelKeycloakConfirmation
     } = this.props;
     const isEditing = !!initialValues.id;
@@ -510,6 +512,8 @@ class UserForm extends React.Component {
                         setAssignedRoleIds={this.props.setAssignedRoleIds}
                         assignedRoleIds={this.props.assignedRoleIds}
                         accordionId={ACCORDION_ID.USER_ROLES}
+                        initialAssignedRoleIds={initialValues.assignedRoleIds}
+                        isLoadingAffiliationRoles={isLoadingAffiliationRoles}
                       />
                     </IfPermission>
                   )}
@@ -567,4 +571,5 @@ export default stripesFinalForm({
   initialValuesEqual: (a, b) => isEqual(a, b),
   navigationCheck: true,
   enableReinitialize: true,
+  keepDirtyOnReinitialize: true,
 })(injectIntl(UserForm));
