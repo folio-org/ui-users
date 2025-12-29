@@ -60,8 +60,11 @@
 * Migrate tag flag from mod-configuration to mod-settings. Refs UIU-3412.
 * Rename the `ui-users.settings.departments.create.edit.view` permission to avoid displaying the edit capability as a view. Fixes UIU-3403.
 * Disable the submit button while the affiliations manager is processing. Refs UIU-3497.
+
+## [12.1.16] (https://github.com/folio-org/ui-users/tree/v12.1.16) (2025-12-29)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.15...v12.1.16)
 * Optimize role fetching to load only selected tenant's roles instead of all tenants. Fixes UIU-3499.
-* Add condition to check for non-empty servicePoints before showing handler in withServicePoints component. Fixes UIU-3503.
+* Add condition to check for non-empty servicePoints before showing handler in withServicePoints component. Do not show loading when saving a user record to prevent triggering the 'Are you sure' modal. Fixes UIU-3503.
 
 ## [12.1.15] (https://github.com/folio-org/ui-users/tree/v12.1.15) (2025-12-23)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.14...v12.1.15)
