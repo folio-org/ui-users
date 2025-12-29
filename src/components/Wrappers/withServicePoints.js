@@ -190,7 +190,7 @@ const withServicePoints = WrappedComponent => class WithServicePointsComponent e
       if (defaultServicePointId) {
         const curServicePoint = servicePoints.find(r => r.id === defaultServicePointId);
         updateUser(store, { curServicePoint });
-      } else if (this._isMounted) {
+      } else if (this._isMounted && servicePoints.length) {
         this.setState({
           showChangeServicePointHandler: true
         });
