@@ -20,6 +20,7 @@ import {
   withOkapiKy,
 } from '@folio/stripes/core';
 
+import { getProfilePictureConfig } from '../../utils';
 import { getRecordObject } from '../../components/util';
 
 import UserForm from './UserForm';
@@ -507,7 +508,7 @@ class UserEdit extends React.Component {
     } = this.props;
     const { isLoading } = this.state;
 
-    const profilePictureConfig = get(resources, 'settings.records[0]');
+    const profilePictureConfig = getProfilePictureConfig({ resources });
 
     if (isLoading) {
       return (

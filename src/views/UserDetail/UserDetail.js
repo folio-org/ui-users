@@ -79,6 +79,7 @@ import ExportFeesFinesReportButton from './components';
 import { CUSTOM_FIELDS_SECTION } from '../../constants';
 
 import css from './UserDetail.css';
+import { getProfilePictureConfig } from '../../utils';
 
 export const ACCORDION_ID = {
   CUSTOM_FIELDS: 'customFields',
@@ -467,6 +468,12 @@ class UserDetail extends React.Component {
       });
   }
 
+  checkIfProfilePictureEnabled = () => {
+    const { resources } = this.props;
+
+    return getProfilePictureConfig({ resources }).enabled;
+  }
+
   getActionMenu = barcode => ({ onToggle }) => {
     const {
       okapi: {
@@ -482,10 +489,9 @@ class UserDetail extends React.Component {
     const feeFineActions = get(resources, ['feefineactions', 'records'], []);
     const accounts = get(resources, ['accounts', 'records'], []);
     const loans = get(resources, ['loanRecords', 'records'], []);
-    const settings = resources?.settings?.records;
     const isShadowUserType = isShadowUser(user);
     const isVirtualPatron = isDcbUser(user);
-    const isProfilePictureFeatureEnabled = Boolean(settings?.length) && settings[0].enabled;
+    const isProfilePictureFeatureEnabled = this.checkIfProfilePictureEnabled();
 
     const feesFinesReportData = {
       user,
@@ -662,7 +668,7 @@ class UserDetail extends React.Component {
     const addressTypes = (resources.addressTypes || {}).records || [];
     const addresses = getFormAddressList(get(user, 'personal.addresses', []));
     const addressesList = this.getAddressesList(addresses, addressTypes);
-    const settings = (resources.settings || {}).records || [];
+    const isProfilePictureFeatureEnabled = this.checkIfProfilePictureEnabled();
     const sponsors = this.props.getSponsors();
     const proxies = this.props.getProxies();
     const servicePoints = this.props.getUserServicePoints();
@@ -775,7 +781,7 @@ class UserDetail extends React.Component {
                   accordionId={ACCORDION_ID.USER_INFORMATION}
                   user={user}
                   patronGroup={patronGroup}
-                  settings={settings}
+                  isProfilePictureFeatureEnabled={isProfilePictureFeatureEnabled}
                   stripes={stripes}
                   expanded={sections[ACCORDION_ID.USER_INFORMATION]}
                   customFields={customFields}
