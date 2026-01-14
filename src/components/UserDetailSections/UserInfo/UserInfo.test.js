@@ -32,7 +32,7 @@ const props = {
     username: 'acq-admin'
   },
   customFields: [],
-  settings: [{ enabled: true }]
+  isProfilePictureFeatureEnabled: true,
 };
 
 describe('Render userInfo component', () => {
