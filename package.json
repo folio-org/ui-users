@@ -30,6 +30,7 @@
     ],
     "okapiInterfaces": {
       "users": "16.4",
+      "users.settings": "1.0",
       "configuration": "2.0",
       "permissions": "5.7",
       "login": "7.3",
@@ -91,7 +92,7 @@
           "departments.collection.get",
           "departments.item.get",
           "circulation-storage.request-preferences.collection.get",
-          "users.configurations.item.get",
+          "users.settings.collection.get",
           "users-keycloak.auth-users.item.get"
         ],
         "visible": true
