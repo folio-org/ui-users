@@ -197,12 +197,7 @@ class UserRecordContainer extends React.Component {
     },
     settings: {
       type: 'okapi',
-      path: (queryParams, pathComponents, resourceData, config, props) => {
-        if (props.stripes.hasInterface('users', '16.1')) {
-          return 'users/configurations/entry';
-        }
-        return null;
-      },
+      path: 'users/settings/entries',
     },
     requestPreferences: {
       type: 'okapi',

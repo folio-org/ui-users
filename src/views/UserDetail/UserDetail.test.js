@@ -10,7 +10,7 @@ import {
   IfInterface,
   StripesContext,
 } from '@folio/stripes/core';
-import '__mock__';
+
 import UserDetail from './UserDetail';
 import {
   PatronBlock,
