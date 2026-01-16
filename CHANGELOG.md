@@ -63,6 +63,7 @@
 * Optimize role fetching to load only selected tenant's roles instead of all tenants. Fixes UIU-3499.
 * Add condition to check for non-empty servicePoints before showing handler in withServicePoints component. Fixes UIU-3503.
 * *BREAKING* Replace `users/configurations/entry` endpoint with `users/settings/entries` for user settings. Refs UIU-3506.
+* Increase the CSS specificity in the loans button group, ensuring it will always override the base .buttonGroup class regardless of CSS loading order. Fixes UIU-3505.
 
 ## [12.1.15] (https://github.com/folio-org/ui-users/tree/v12.1.15) (2025-12-23)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.14...v12.1.15)
