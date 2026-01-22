@@ -62,6 +62,8 @@
 * Disable the submit button while the affiliations manager is processing. Refs UIU-3497.
 * Optimize role fetching to load only selected tenant's roles instead of all tenants. Fixes UIU-3499.
 * Add condition to check for non-empty servicePoints before showing handler in withServicePoints component. Fixes UIU-3503.
+* *BREAKING* Replace `users/configurations/entry` endpoint with `users/settings/entries` for user settings. Refs UIU-3506.
+* Increase the CSS specificity in the loans button group, ensuring it will always override the base .buttonGroup class regardless of CSS loading order. Fixes UIU-3505.
 * Bump jspdf from ^3.0.0 (EOL) to ^4.0.0. Fixes UIU-3508.
 
 ## [12.1.15] (https://github.com/folio-org/ui-users/tree/v12.1.15) (2025-12-23)

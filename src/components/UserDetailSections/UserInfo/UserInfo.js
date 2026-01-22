@@ -26,7 +26,7 @@ const UserInfo = (props) => {
   const {
     user,
     patronGroup,
-    settings,
+    isProfilePictureFeatureEnabled,
     expanded,
     accordionId,
     customFields,
@@ -37,10 +37,9 @@ const UserInfo = (props) => {
   const userStatus = (user?.active ?
     <FormattedMessage id="ui-users.active" /> :
     <FormattedMessage id="ui-users.inactive" />);
-  const profilePicturesEnabled = Boolean(settings.length) && settings[0].enabled;
   const hasViewProfilePicturePerm = stripes.hasPerm('ui-users.profile-pictures.view');
   const isShadowUser = user?.type === USER_TYPES.SHADOW;
-  const displayProfilePicture = profilePicturesEnabled && hasViewProfilePicturePerm && !isShadowUser;
+  const displayProfilePicture = isProfilePictureFeatureEnabled && hasViewProfilePicturePerm && !isShadowUser;
 
   return (
     <Accordion
@@ -167,7 +166,7 @@ UserInfo.propTypes = {
   accordionId: PropTypes.string.isRequired,
   user: PropTypes.object.isRequired,
   patronGroup: PropTypes.object.isRequired,
-  settings: PropTypes.arrayOf(PropTypes.object).isRequired,
+  isProfilePictureFeatureEnabled: PropTypes.bool.isRequired,
 };
 
 export default UserInfo;
