@@ -15,7 +15,6 @@ describe('render ActionMenuDeleteButton', () => {
         id: '123',
         handleDeleteClick: jest.fn(),
         onToggle: jest.fn(),
-        shouldSuppress: jest.fn(),
       };
 
       render(<ActionMenuDeleteButton {...props} />);
@@ -26,10 +25,9 @@ describe('render ActionMenuDeleteButton', () => {
     test('if suppressEdit records array is empty', async () => {
       const props = {
         id: '123',
-        suppressList: { records: [] },
+        suppressList: [],
         handleDeleteClick: jest.fn(),
         onToggle: jest.fn(),
-        shouldSuppress: jest.fn(),
       };
 
       render(<ActionMenuDeleteButton {...props} />);
@@ -40,10 +38,9 @@ describe('render ActionMenuDeleteButton', () => {
     test('if suppressEdit records array does not contain match', async () => {
       const props = {
         id: '123',
-        suppressList: { records: [{ value: '["456"]' }] },
+        suppressList: ['456'],
         onToggle: jest.fn(),
         handleDeleteClick: jest.fn(),
-        shouldSuppress: jest.fn(),
       };
 
       render(<ActionMenuDeleteButton {...props} />);
@@ -54,10 +51,8 @@ describe('render ActionMenuDeleteButton', () => {
     test('if suppressEdit records does not contain an array', async () => {
       const props = {
         id: '123',
-        suppressList: { records: [{ value: '{"monkey": "bagel"}' }] },
         onToggle: jest.fn(),
         handleDeleteClick: jest.fn(),
-        shouldSuppress: jest.fn(),
       };
 
       render(<ActionMenuDeleteButton {...props} />);
@@ -70,7 +65,6 @@ describe('render ActionMenuDeleteButton', () => {
         id: '123',
         onToggle: jest.fn(),
         handleDeleteClick: jest.fn(),
-        shouldSuppress: jest.fn(),
       };
 
       render(<ActionMenuDeleteButton {...props} />);
@@ -85,10 +79,9 @@ describe('render ActionMenuDeleteButton', () => {
     test('if supress records value matches', async () => {
       const props = {
         id: '123',
-        suppressList: { records: [{ value: '["123", "456"]' }] },
+        suppressList: ['123', '456'],
         onToggle: jest.fn(),
         handleDeleteClick: jest.fn(),
-        shouldSuppress: jest.fn(),
       };
 
       render(<ActionMenuDeleteButton {...props} />);
@@ -103,7 +96,6 @@ describe('render ActionMenuDeleteButton', () => {
         id: '123',
         onToggle: jest.fn(),
         handleDeleteClick: jest.fn(),
-        shouldSuppress: jest.fn(),
       };
 
       render(<ActionMenuDeleteButton {...props} />);

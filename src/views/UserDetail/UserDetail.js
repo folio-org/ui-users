@@ -76,7 +76,10 @@ import ActionMenuDeleteButton from './components/ActionMenuDeleteButton';
 import OpenTransactionModal from './components/OpenTransactionModal';
 import DeleteUserModal from './components/DeleteUserModal';
 import ExportFeesFinesReportButton from './components';
-import { CUSTOM_FIELDS_SECTION } from '../../constants';
+import {
+  CUSTOM_FIELDS_SECTION,
+  SUPPRESS_EDIT_SETTING_KEY,
+} from '../../constants';
 
 import css from './UserDetail.css';
 import { getProfilePictureConfig } from '../../utils';
@@ -149,9 +152,6 @@ class UserDetail extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
       loansHistory: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
-      }),
-      suppressEdit: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
       userReadingRoomPermissions: PropTypes.shape({
@@ -485,6 +485,7 @@ class UserDetail extends React.Component {
     const loans = get(resources, ['loanRecords', 'records'], []);
     const isShadowUserType = isShadowUser(user);
     const isVirtualPatron = isDcbUser(user);
+    const suppressList = resources.settings.records.find(setting => setting.key === SUPPRESS_EDIT_SETTING_KEY)?.value;
 
     const feesFinesReportData = {
       user,
@@ -507,7 +508,7 @@ class UserDetail extends React.Component {
         <>
           <ActionMenuEditButton
             id={this.props.match.params.id}
-            suppressList={this.props.resources.suppressEdit}
+            suppressList={suppressList}
             onToggle={onToggle}
             goToEdit={this.goToEdit}
             editButton={this.editButton}
@@ -542,7 +543,7 @@ class UserDetail extends React.Component {
             handleDeleteClick={this.handleDeleteClick}
             id={this.props.match.params.id}
             onToggle={onToggle}
-            suppressList={this.props.resources.suppressEdit}
+            suppressList={suppressList}
           />
         </>
       );
