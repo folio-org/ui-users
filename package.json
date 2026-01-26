@@ -1218,7 +1218,7 @@
     "start": "stripes serve",
     "build": "stripes build",
     "lint": "eslint .",
-    "test": "yarn run test:jest",
+    "test": "yarn run test:jest --silent",
     "test:jest": "jest --coverage",
     "build-mod-descriptor": "stripes mod descriptor --full --strict | jq '.[]' > module-descriptor.json ",
     "formatjs-compile": "stripes translate compile"
@@ -1262,7 +1262,7 @@
     "get-orientation": "^1.1.2",
     "hashcode": "^1.0.3",
     "html-to-react": "^1.7.0",
-    "jspdf": "^3.0.0",
+    "jspdf": "^4.0.0",
     "jspdf-autotable": "^5.0.2",
     "lodash": "^4.17.4",
     "prop-types": "^15.5.10",
