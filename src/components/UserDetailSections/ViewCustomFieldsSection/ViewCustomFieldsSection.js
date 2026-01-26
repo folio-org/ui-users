@@ -5,6 +5,7 @@ import { ViewCustomFieldsRecord } from '@folio/stripes/smart-components';
 
 import {
   CUSTOM_FIELDS_ENTITY_TYPE,
+  CUSTOM_FIELDS_LABEL_SCOPE,
   MODULE_NAME,
 } from '../../../constants';
 
@@ -34,6 +35,7 @@ const ViewCustomFieldsSection = ({
       entityType={CUSTOM_FIELDS_ENTITY_TYPE}
       customFieldsValues={customFields}
       customFieldsLabel={intl.formatMessage({ id: 'ui-users.custom.customFields' })}
+      scope={CUSTOM_FIELDS_LABEL_SCOPE}
       sectionId={sectionId}
     />
   );

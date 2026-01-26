@@ -8,6 +8,7 @@ import { ViewCustomFieldsSettings, EditCustomFieldsSettings } from '@folio/strip
 
 import {
   CUSTOM_FIELDS_SECTION,
+  CUSTOM_FIELDS_LABEL_SCOPE,
 } from '../constants';
 
 const propTypes = {
@@ -76,6 +77,7 @@ const CustomFieldsSettings = ({
             entityType={entityType}
             editRoute={`${base}/edit`}
             permissions={permissions}
+            scope={CUSTOM_FIELDS_LABEL_SCOPE}
             hasDisplayInAccordionField
             displayInAccordionOptions={displayInAccordionOptions}
           />
@@ -86,6 +88,7 @@ const CustomFieldsSettings = ({
             entityType={entityType}
             viewRoute={base}
             permissions={permissions}
+            scope={CUSTOM_FIELDS_LABEL_SCOPE}
             hasDisplayInAccordionField
             displayInAccordionOptions={displayInAccordionOptions}
           />

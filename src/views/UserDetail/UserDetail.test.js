@@ -69,7 +69,7 @@ const resources = {
   servicePointUserId: {},
   servicePoints: {},
   servicePointsUsers: {},
-  settings: {},
+  settings: { records: [] },
   sponsors: {},
   sponsorsFor: {},
   tagSettings: {},

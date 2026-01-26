@@ -31,7 +31,6 @@
     "okapiInterfaces": {
       "users": "16.4",
       "users.settings": "1.0",
-      "configuration": "2.0",
       "permissions": "5.7",
       "login": "7.3",
       "users-bl": "6.1",
@@ -82,7 +81,7 @@
           "users-keycloak.collection.get",
           "users-keycloak.item.get",
           "usergroups.collection.get",
-          "configuration.entries.collection.get",
+          "mod-settings.global.read.ui-users.custom-fields-label.manage",
           "mod-settings.global.read.ui-tags.tags.manage",
           "mod-settings.entries.collection.get",
           "mod-settings.entries.item.get",
@@ -420,7 +419,7 @@
         "displayName": "Settings (Users): Can view custom fields",
         "subPermissions": [
           "settings.users.enabled",
-          "configuration.entries.collection.get",
+          "mod-settings.global.read.ui-users.custom-fields-label.manage",
           "mod-settings.entries.collection.get",
           "mod-settings.entries.item.get",
           "user-settings.custom-fields.collection.get",
@@ -436,8 +435,7 @@
           "user-settings.custom-fields.collection.put",
           "user-settings.custom-fields.item.post",
           "user-settings.custom-fields.item.put",
-          "configuration.entries.item.post",
-          "configuration.entries.item.put",
+          "mod-settings.global.write.ui-users.custom-fields-label.manage",
           "mod-settings.entries.item.post",
           "mod-settings.entries.item.put"
         ],
@@ -1211,6 +1209,16 @@
           "staging-users.collection.get"
         ],
         "visible": true
+      },
+      {
+        "permissionName": "mod-settings.global.read.ui-users.custom-fields-label.manage",
+        "displayName": "Settings (Users): Read a label for custom fields",
+        "visible": false
+      },
+      {
+        "permissionName": "mod-settings.global.write.ui-users.custom-fields-label.manage",
+        "displayName": "Settings (Users): Write a label for custom fields",
+        "visible": false
       }
     ]
   },
