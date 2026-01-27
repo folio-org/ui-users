@@ -255,7 +255,7 @@ class UserEdit extends React.Component {
       delete user.preferredEmailCommunication;
     }
 
-    mutator.records.POST(user)
+    return mutator.records.POST(user)
       .then(() => {
         this.createRequestPreferences(requestPreferences, user.id);
         return mutator.perms.POST({ userId: user.id, permissions: [] });

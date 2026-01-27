@@ -66,6 +66,7 @@
 * Increase the CSS specificity in the loans button group, ensuring it will always override the base .buttonGroup class regardless of CSS loading order. Fixes UIU-3505.
 * Bump jspdf from ^3.0.0 (EOL) to ^4.0.0. Fixes UIU-3508.
 * *BREAKING* Migrate `suppressEdit` setting from mod-configuration to mod-users and `custom_fields_label` setting to mod-settings. Remove "configuration" interface. Refs UIU-3404.
+* Hide `AffiliationsSelect` when editing a patron/dcb/system user. Improve form submission handling in UserForm component. Fixes UIU-3374.
 
 ## [12.1.15] (https://github.com/folio-org/ui-users/tree/v12.1.15) (2025-12-23)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.14...v12.1.15)
