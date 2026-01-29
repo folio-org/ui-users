@@ -19,7 +19,7 @@ import {
 
 
 jest.mock('../../IfConsortium', () => jest.fn(({ children }) => <>{children}</>));
-jest.mock('../../IfConsortiumPermission', () => jest.fn().mockReturnValue(null));
+jest.mock('../../IfConsortiumPermission', () => jest.fn(({ children }) => <>{children}</>));
 
 jest.mock('../../../hooks', () => ({
   ...jest.requireActual('../../../hooks'),
@@ -215,5 +215,21 @@ describe('EditUserRoles Component', () => {
     await userEvent.click(confirmButton);
 
     expect(mockChangeFunction).toHaveBeenCalledWith('assignedRoleIds[consortium]', []);
+  });
+
+  describe('when affiliations are present from cache, but the user is patron type', () => {
+    it('should not display the AffiliationsSelect', () => {
+      useUserAffiliations.mockReturnValue({ isLoading: false, affiliations });
+
+      const { queryByText } = renderEditRolesAccordion({
+        ...propsData,
+        user: {
+          ...propsData.user,
+          type: 'patron'
+        },
+      });
+
+      expect(queryByText('ui-users.affiliations.select.label')).not.toBeInTheDocument();
+    });
   });
 });

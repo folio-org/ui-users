@@ -1,6 +1,8 @@
 import { act } from 'react';
 
 import { FormattedMessage } from 'react-intl';
+
+import { HasCommand } from '@folio/stripes/components';
 import {
   screen,
   within,
@@ -15,6 +17,22 @@ import {
   useUserTenantPermissions,
 } from '../../hooks';
 import UserForm, { validate } from './UserForm';
+
+HasCommand.mockImplementation(({ commands, children }) => (
+  <span>
+    {commands.map((command, index) => (
+      <button
+        key={index}
+        type="button"
+        data-testid={`keyboard-shortcut-${command.name}`}
+        onClick={(e) => command.handler(e)}
+      >
+        {command.name}
+      </button>
+    ))}
+    {children}
+  </span>
+));
 
 jest.mock('@folio/stripes/smart-components', () => ({
   ...jest.requireActual('@folio/stripes/smart-components'),
@@ -406,6 +424,42 @@ describe('UserForm', () => {
       const addressTypeSelects = screen.getAllByRole('combobox', { name: 'stripes-smart-components.addressEdit.label.addressType' });
 
       expect(within(addressTypeSelects[1]).getByText('ui-users.contact.selectAddressType').selected).toBeTruthy();
+    });
+  });
+
+  describe('handleSaveKeyCommand', () => {
+    describe('when form is disabled (pristine)', () => {
+      it('should not call handleSubmit when save keyboard shortcut is triggered', async () => {
+        renderUserForm();
+
+        const saveKeyboardShortcut = screen.getByTestId('keyboard-shortcut-save');
+
+        await act(async () => {
+          await userEvent.click(saveKeyboardShortcut);
+        });
+
+        expect(mockOnSubmit).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('when form is not disabled', () => {
+      it('should call handleSubmit when save keyboard shortcut is triggered on dirty form', async () => {
+        renderUserForm();
+
+        const preferredContactSelect = screen.getByRole('combobox', { name: 'ui-users.contact.preferredContact' });
+
+        await act(async () => {
+          await userEvent.selectOptions(preferredContactSelect, '001');
+        });
+
+        const saveKeyboardShortcut = screen.getByTestId('keyboard-shortcut-save');
+
+        await act(async () => {
+          await userEvent.click(saveKeyboardShortcut);
+        });
+
+        expect(mockOnSubmit).toHaveBeenCalled();
+      });
     });
   });
 

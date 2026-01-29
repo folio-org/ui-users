@@ -25,10 +25,12 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
   const [unassignModalOpen, setUnassignModalOpen] = useState(false);
   const intl = useIntl();
 
+  const hasAffiliationsEnabled = isAffiliationsEnabled(user);
+
   const {
     affiliations,
     isFetching: isAffiliationsFetching,
-  } = useUserAffiliations({ userId: user.id }, { enabled: isAffiliationsEnabled(user) });
+  } = useUserAffiliations({ userId: user.id }, { enabled: hasAffiliationsEnabled });
 
   const {
     isLoading: isAllRolesDataLoading,
@@ -162,7 +164,7 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
           <Row>
             <IfConsortium>
               <IfConsortiumPermission perm="consortia.user-tenants.collection.get">
-                {Boolean(affiliations?.length) && (
+                {Boolean(affiliations?.length) && hasAffiliationsEnabled && (
                   <AffiliationsSelect
                     affiliations={affiliations}
                     onChange={setTenantId}
