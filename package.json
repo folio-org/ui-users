@@ -30,7 +30,7 @@
     ],
     "okapiInterfaces": {
       "users": "16.4",
-      "configuration": "2.0",
+      "users.settings": "1.0",
       "permissions": "5.7",
       "login": "7.3",
       "users-bl": "6.1",
@@ -81,7 +81,7 @@
           "users-keycloak.collection.get",
           "users-keycloak.item.get",
           "usergroups.collection.get",
-          "configuration.entries.collection.get",
+          "mod-settings.global.read.ui-users.custom-fields-label.manage",
           "mod-settings.global.read.ui-tags.tags.manage",
           "mod-settings.entries.collection.get",
           "mod-settings.entries.item.get",
@@ -91,7 +91,7 @@
           "departments.collection.get",
           "departments.item.get",
           "circulation-storage.request-preferences.collection.get",
-          "users.configurations.item.get",
+          "users.settings.collection.get",
           "users-keycloak.auth-users.item.get"
         ],
         "visible": true
@@ -419,7 +419,7 @@
         "displayName": "Settings (Users): Can view custom fields",
         "subPermissions": [
           "settings.users.enabled",
-          "configuration.entries.collection.get",
+          "mod-settings.global.read.ui-users.custom-fields-label.manage",
           "mod-settings.entries.collection.get",
           "mod-settings.entries.item.get",
           "user-settings.custom-fields.collection.get",
@@ -435,8 +435,7 @@
           "user-settings.custom-fields.collection.put",
           "user-settings.custom-fields.item.post",
           "user-settings.custom-fields.item.put",
-          "configuration.entries.item.post",
-          "configuration.entries.item.put",
+          "mod-settings.global.write.ui-users.custom-fields-label.manage",
           "mod-settings.entries.item.post",
           "mod-settings.entries.item.put"
         ],
@@ -1210,6 +1209,16 @@
           "staging-users.collection.get"
         ],
         "visible": true
+      },
+      {
+        "permissionName": "mod-settings.global.read.ui-users.custom-fields-label.manage",
+        "displayName": "Settings (Users): Read a label for custom fields",
+        "visible": false
+      },
+      {
+        "permissionName": "mod-settings.global.write.ui-users.custom-fields-label.manage",
+        "displayName": "Settings (Users): Write a label for custom fields",
+        "visible": false
       }
     ]
   },
@@ -1217,7 +1226,7 @@
     "start": "stripes serve",
     "build": "stripes build",
     "lint": "eslint .",
-    "test": "yarn run test:jest",
+    "test": "yarn run test:jest --silent",
     "test:jest": "jest --coverage",
     "build-mod-descriptor": "stripes mod descriptor --full --strict | jq '.[]' > module-descriptor.json ",
     "formatjs-compile": "stripes translate compile"
@@ -1261,7 +1270,7 @@
     "get-orientation": "^1.1.2",
     "hashcode": "^1.0.3",
     "html-to-react": "^1.7.0",
-    "jspdf": "^3.0.0",
+    "jspdf": "^4.0.0",
     "jspdf-autotable": "^5.0.2",
     "lodash": "^4.17.4",
     "prop-types": "^15.5.10",

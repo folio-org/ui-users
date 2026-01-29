@@ -421,5 +421,9 @@ export const MODULE_NAME = 'users';
 export const CUSTOM_FIELDS_ENTITY_TYPE = 'user';
 
 export const TAGS_SCOPE = 'ui-tags.tags.manage';
+export const CUSTOM_FIELDS_LABEL_SCOPE = 'ui-users.custom-fields-label.manage';
+
+export const PROFILE_PICTURE_CONFIG_KEY = 'PROFILE_PICTURE_CONFIG';
+export const SUPPRESS_EDIT_SETTING_KEY = 'suppressEdit';
 
 export const USER_AFFILIATION_ROLES_CACHE_KEY = 'user-affiliation-roles';

@@ -170,7 +170,7 @@ jest.mock('@folio/stripes/components', () => ({
   // destructure appIcon and dismissible so they aren't incorrectly
   // applied as DOM attributes via ...rest.
   // eslint-disable-next-line no-unused-vars
-  Pane: jest.fn(({ children, className, defaultWidth, paneTitle, firstMenu, lastMenu, actionMenu, appIcon, dismissible, onClose, ...rest }) => {
+  Pane: jest.fn(({ children, className, defaultWidth, paneTitle, firstMenu, lastMenu, actionMenu, appIcon, dismissible, onClose, footer, ...rest }) => {
     return (
       <div className={className} {...rest} style={{ width: defaultWidth }}>
         <div>
@@ -188,13 +188,25 @@ jest.mock('@folio/stripes/components', () => ({
           {lastMenu ?? null}
         </div>
         {children}
+        {footer}
       </div>
     );
   }),
   PaneBackLink: jest.fn(() => <span />),
-  PaneFooter: jest.fn(({ ref, children, ...rest }) => (
-    <div ref={ref} {...rest}>{children}</div>
-  )),
+  PaneFooter: jest.fn(({ ref, children, renderStart, renderEnd, ...rest }) => {
+    if (renderStart || renderEnd) {
+      return (
+        <div ref={ref} {...rest}>
+          <div>{renderStart || null}</div>
+          <div>{renderEnd || null}</div>
+        </div>
+      );
+    }
+
+    return (
+      <div ref={ref} {...rest}>{children}</div>
+    );
+  }),
   PaneHeader: jest.fn(({ paneTitle, firstMenu, lastMenu, actionMenu }) => (
     <div actionMenu={actionMenu}>
       {firstMenu ?? null}

@@ -197,12 +197,8 @@ class UserRecordContainer extends React.Component {
     },
     settings: {
       type: 'okapi',
-      path: (queryParams, pathComponents, resourceData, config, props) => {
-        if (props.stripes.hasInterface('users', '16.1')) {
-          return 'users/configurations/entry';
-        }
-        return null;
-      },
+      path: 'users/settings/entries',
+      records: 'settings',
     },
     requestPreferences: {
       type: 'okapi',
@@ -221,11 +217,6 @@ class UserRecordContainer extends React.Component {
           return `request-preference-storage/request-preference/${resourceData.request_preferences.records[0].requestPreferences[0].id}`;
         },
       }
-    },
-    suppressEdit: {
-      type: 'okapi',
-      path: 'configurations/entries?query=module=="@folio/users" AND configName=="suppressEdit"',
-      records: 'configs',
     },
     userReadingRoomPermissions: {
       type: 'okapi',

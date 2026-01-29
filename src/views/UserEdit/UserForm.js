@@ -180,6 +180,12 @@ class UserForm extends React.Component {
   handleCollapseAll = (e) => collapseAllSections(e, this.accordionStatusRef);
   handleExpandAll = (e) => expandAllSections(e, this.accordionStatusRef);
 
+  isFormDisabled = () => {
+    const { pristine, submitting } = this.props;
+
+    return pristine || submitting;
+  }
+
   handleCancel = () => {
     const {
       match: {
@@ -232,28 +238,19 @@ class UserForm extends React.Component {
 
   handleSaveKeyCommand = (e) => {
     e.preventDefault();
-    this.executeSave();
+    const disabled = this.isFormDisabled();
+
+    if (disabled) return;
+
+    this.props.handleSubmit(e);
   };
-
-  executeSave() {
-    const {
-      handleSubmit,
-      onSubmit,
-    } = this.props;
-
-    const submitter = handleSubmit(onSubmit);
-
-    submitter();
-  }
 
   getPaneFooter() {
     const {
-      pristine,
-      submitting,
       onCancel,
     } = this.props;
 
-    const disabled = pristine || submitting;
+    const disabled = this.isFormDisabled();
 
     const startButton = (
       <Button

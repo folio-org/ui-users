@@ -1,9 +1,16 @@
 import options from '__mock__/cashDrawerReconciliationReportData.mock';
 import CashDrawerReconciliationReportPDF from './cashDrawerReconciliationReportPDF';
 
-
 describe('Cash Drawer Reconciliation Report in PDF format', () => {
   const report = new CashDrawerReconciliationReportPDF(options);
+
+  beforeEach(() => {
+    global.URL.createObjectURL = jest.fn(() => 'mock-url');
+  });
+
+  afterEach(() => {
+    delete global.URL.createObjectURL;
+  });
 
   it('should contain fields', () => {
     expect(report.data).toBe(options.data);

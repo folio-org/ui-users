@@ -16,7 +16,6 @@ describe('render ActionMenuEditOption', () => {
         onToggle: jest.fn(),
         goToEdit: jest.fn(),
         editButton: jest.fn(),
-        shouldSuppress: jest.fn(),
       };
 
       render(<ActionMenuEditButton {...props} />);
@@ -27,11 +26,10 @@ describe('render ActionMenuEditOption', () => {
     test('if suppressList records array is empty', async () => {
       const props = {
         id: '123',
-        suppressList: { records: [] },
+        suppressList: [],
         onToggle: jest.fn(),
         goToEdit: jest.fn(),
         editButton: jest.fn(),
-        shouldSuppress: jest.fn(),
       };
 
       render(<ActionMenuEditButton {...props} />);
@@ -42,11 +40,10 @@ describe('render ActionMenuEditOption', () => {
     test('if suppressList records array does not contain match', async () => {
       const props = {
         id: '123',
-        suppressList: { records: [{ value: '["456"]' }] },
+        suppressList: ['456'],
         onToggle: jest.fn(),
         goToEdit: jest.fn(),
         editButton: jest.fn(),
-        shouldSuppress: jest.fn(),
       };
 
       render(<ActionMenuEditButton {...props} />);
@@ -57,11 +54,9 @@ describe('render ActionMenuEditOption', () => {
     test('if suppressList records does not contain an array', async () => {
       const props = {
         id: '123',
-        suppressList: { records: [{ value: '{"monkey": "bagel"}' }] },
         onToggle: jest.fn(),
         goToEdit: jest.fn(),
         editButton: jest.fn(),
-        shouldSuppress: jest.fn(),
       };
 
       render(<ActionMenuEditButton {...props} />);
@@ -75,7 +70,6 @@ describe('render ActionMenuEditOption', () => {
         onToggle: jest.fn(),
         goToEdit: jest.fn(),
         editButton: jest.fn(),
-        shouldSuppress: jest.fn(),
       };
 
       render(<ActionMenuEditButton {...props} />);
@@ -90,11 +84,10 @@ describe('render ActionMenuEditOption', () => {
     test('if supress records value matches', async () => {
       const props = {
         id: '123',
-        suppressList: { records: [{ value: '["123", "456"]' }] },
+        suppressList: ['123', '456'],
         onToggle: jest.fn(),
         goToEdit: jest.fn(),
         editButton: jest.fn(),
-        shouldSuppress: jest.fn(),
       };
 
       render(<ActionMenuEditButton {...props} />);
@@ -110,7 +103,6 @@ describe('render ActionMenuEditOption', () => {
         onToggle: jest.fn(),
         goToEdit: jest.fn(),
         editButton: jest.fn(),
-        shouldSuppress: jest.fn(),
       };
 
       render(<ActionMenuEditButton {...props} />);
