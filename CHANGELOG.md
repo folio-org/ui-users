@@ -67,6 +67,7 @@
 * Bump jspdf from ^3.0.0 (EOL) to ^4.0.0. Fixes UIU-3508.
 * *BREAKING* Migrate `suppressEdit` setting from mod-configuration to mod-users and `custom_fields_label` setting to mod-settings. Remove "configuration" interface. Refs UIU-3404.
 * Hide `AffiliationsSelect` when editing a patron/dcb/system user. Improve form submission handling in UserForm component. Fixes UIU-3374.
+* Bump `jspdf` from `^4.0.0` to `^4.1.0` fixing CVE-2026-24133. Fixes UIU-3522.
 
 ## [12.1.16] (https://github.com/folio-org/ui-users/tree/v12.1.16) (2025-12-29)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.15...v12.1.16)
