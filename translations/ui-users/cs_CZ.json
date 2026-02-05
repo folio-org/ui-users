@@ -429,7 +429,7 @@
     "blocks.form.button.close": "Zavřít dialogové okno blokace čtenáře",
     "blocks.layer.newBlockTitle": "Nová blokace",
     "accounts.totalOpenAccounts": "(Celkem: {amount})",
-    "accounts.status.outstanding": "Vynikající",
+    "accounts.status.outstanding": "Nezaplacené",
     "feefines.defaultChargeNotice": "Výchozí notifikace o poplatku",
     "feefines.defaultActionNotice": "Výchozí notifikace akce",
     "feefines.columns.chargeNotice": "Notifikace o poplatku",
