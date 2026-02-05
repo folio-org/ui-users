@@ -534,7 +534,7 @@
     "accounts.comment.error.enterComment": "Yorum girin",
     "owners.noServicePoints": "Ortak ücret/ceza sahibi için ilişkili hizmet noktalarına izin verilmedi",
     "anonymization.confirmation.header": "Tüm ödünçler anonimleştirilsin mi?",
-    "anonymization.confirmation.message": " Bu kullanıcıya ait tüm ödünçler anonimleştirilecektir. Ödünçler artık kullanıcının kapalı ödünçlerinde görünmeyecektir. Ödünç kredilerin anonimleştirilmesi geri alınamaz.",
+    "anonymization.confirmation.message": "Bu kullanıcıya ait tüm ödünçler anonimleştirilecektir. Ödünçler artık kullanıcının kapalı ödünçlerinde görünmeyecektir. Ödünç kredilerin anonimleştirilmesi geri alınamaz.",
     "requests.preferences": "Talep tercihleri",
     "requests.fulfillmentPreference": "Yerine getirme tercihi",
     "requests.defaultDeliveryAddress": "Varsayılan teslimat adresi",
