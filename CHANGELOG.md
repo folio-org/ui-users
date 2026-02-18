@@ -64,11 +64,11 @@
 * Add condition to check for non-empty servicePoints before showing handler in withServicePoints component. Fixes UIU-3503.
 * *BREAKING* Replace `users/configurations/entry` endpoint with `users/settings/entries` for user settings. Refs UIU-3506.
 * Increase the CSS specificity in the loans button group, ensuring it will always override the base .buttonGroup class regardless of CSS loading order. Fixes UIU-3505.
-* Filter out undefined roles in useUserAffiliationRoles to prevent errors during destructuring. Fixes UIU-3514.
 * Bump jspdf from ^3.0.0 (EOL) to ^4.0.0. Fixes UIU-3508.
 * *BREAKING* Migrate `suppressEdit` setting from mod-configuration to mod-users and `custom_fields_label` setting to mod-settings. Remove "configuration" interface. Refs UIU-3404.
 * Hide `AffiliationsSelect` when editing a patron/dcb/system user. Improve form submission handling in UserForm component. Fixes UIU-3374.
 * Bump `jspdf` from `^4.0.0` to `^4.1.0` fixing CVE-2026-24133. Fixes UIU-3522.
+* Filter out undefined roles in useUserAffiliationRoles to prevent errors during destructuring. Fixes UIU-3514.
 
 ## [12.1.16] (https://github.com/folio-org/ui-users/tree/v12.1.16) (2025-12-29)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.15...v12.1.16)
