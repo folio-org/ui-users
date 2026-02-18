@@ -160,4 +160,36 @@ describe('useUserAffiliationRoles', () => {
     );
     expect(result.current.userRoleIds).toEqual([]);
   });
+
+  describe('when roleId does not exist in allRolesMapStructure', () => {
+    it('should filter out undefined roles', () => {
+      const userId = 'testUserId';
+      const tenantId = 'tenant1';
+
+      useAllRolesData.mockReturnValue({
+        isLoading: false,
+        isFetching: false,
+        allRolesMapStructure: new Map([
+          ['role-id-1', { id: 'role-id-1', name: 'Role 1' }],
+          ['role-id-2', { id: 'role-id-2', name: 'Role 2' }],
+        ]),
+      });
+
+      useQuery.mockReturnValue({
+        data: {
+          userRoles: [
+            { roleId: 'role-id-1' },
+            { roleId: 'missing-role-id' },
+            { roleId: 'role-id-2' },
+          ],
+        },
+        isLoading: false,
+        isFetching: false,
+      });
+
+      const { result } = renderHook(() => useUserAffiliationRoles(userId, tenantId));
+
+      expect(result.current.userRoleIds).toEqual(['role-id-1', 'role-id-2']);
+    });
+  });
 });
