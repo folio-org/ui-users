@@ -40,6 +40,10 @@ function useUserAffiliationRoles(userId, tenantId) {
 
     return data.userRoles
       .map(({ roleId }) => allRolesMapStructure.get(roleId))
+      // Filter out any undefined roles that can break destructuring.
+      // This can happen if a new role was created and added to the user,
+      // but the cached data in allRolesMapStructure doesn't have it yet.
+      .filter(Boolean)
       .toSorted((a, b) => a.name.localeCompare(b.name))
       .map(({ id }) => id);
   }, [data?.userRoles, allRolesMapStructure]);
