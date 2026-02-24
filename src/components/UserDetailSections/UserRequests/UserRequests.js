@@ -147,7 +147,6 @@ class UserRequests extends React.Component {
 
   render() {
     const {
-      stripes,
       expanded,
       onToggle,
       accordionId,
@@ -175,7 +174,7 @@ class UserRequests extends React.Component {
 
     const closedFilterString = getClosedRequestStatusesFilterString();
     const openFilterString = getOpenRequestStatusesFilterString();
-    const itemFormatter = stripes.hasPerm('ui-requests.all') ?
+    const itemFormatter = this.hasViewRequestsPerm ?
       this.renderLinkItem :
       this.renderItem;
 
