@@ -1,3 +1,4 @@
+import { List } from '@folio/stripes/components';
 import { screen } from '@folio/jest-config-stripes/testing-library/react';
 import '__mock__/stripesComponents.mock';
 
@@ -42,6 +43,10 @@ const mutator = {
 };
 
 const props = (perm) => {
+  const hasPerm = typeof perm === 'function'
+    ? perm
+    : jest.fn().mockReturnValue(perm);
+
   return {
     customFields: [],
     expanded: true,
@@ -59,7 +64,7 @@ const props = (perm) => {
     },
     stripes: {
       connect: (Component) => Component,
-      hasPerm: perm ? jest.fn().mockReturnValue(true) : jest.fn().mockReturnValue(false),
+      hasPerm,
       hasInterface: jest.fn().mockReturnValue(true),
     },
     patronGroup: {
@@ -175,5 +180,23 @@ describe('Render User Requests component', () => {
 
     expect(mutator.openRequestsCount.reset).toHaveBeenCalled();
     expect(mutator.closedRequestsCount.reset).toHaveBeenCalled();
+  });
+
+  describe('when user has ui-users.requests.all permission', () => {
+    it('should display clickable links to open and closed requests', () => {
+      const hasPerm = jest.fn((permission) => permission === 'ui-users.requests.all');
+
+      renderUserRequests(props(hasPerm));
+
+      const listProps = List.mock.calls[0][0];
+      const formattedItem = listProps.itemFormatter({
+        id: 'clickable-viewopenrequests',
+        count: 1,
+        formattedMessageId: 'ui-users.requests.numOpenRequests',
+        query: { query: 'user-id', filters: 'status.Open' },
+      }, 0);
+
+      expect(formattedItem.props.children.props.to).toContain('/requests/?');
+    });
   });
 });
