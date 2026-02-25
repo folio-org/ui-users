@@ -126,6 +126,7 @@ class UserRecordContainer extends React.Component {
       records: 'users',
       path: 'users',
       fetch: false,
+      throwErrors: false,
     },
     creds: {
       type: 'okapi',

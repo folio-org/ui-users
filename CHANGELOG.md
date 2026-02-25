@@ -69,6 +69,7 @@
 * Hide `AffiliationsSelect` when editing a patron/dcb/system user. Improve form submission handling in UserForm component. Fixes UIU-3374.
 * Bump `jspdf` from `^4.0.0` to `^4.1.0` fixing CVE-2026-24133. Fixes UIU-3522.
 * Filter out undefined roles in useUserAffiliationRoles to prevent errors during destructuring. Fixes UIU-3514.
+* Remove try-catch block in `updateKeycloakUser` to allow errors to propagate and be handled in the caller, preventing navigation from the page. Add `throwErrors: true` to prevent displaying an alert on error. Handle errors with `response` field in `showErrorCallout` to prevent displaying a generic error message instead of the specific error. Fixes UIU-3531.
 
 ## [12.1.16] (https://github.com/folio-org/ui-users/tree/v12.1.16) (2025-12-29)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.15...v12.1.16)

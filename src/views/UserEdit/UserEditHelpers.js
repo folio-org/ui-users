@@ -25,10 +25,11 @@ export function resourcesLoaded(obj, exceptions = []) {
  * Show an error in a callout.
  * Set the timeout to 0 so it must be manually dismissed.
  *
- * @param {object} res HTTP response object from a rejected Promise
+ * @param {object} err HTTP error object from a rejected Promise
  * @param {function} sendCallout function reference, likely this.context.sendCallout
  */
-export async function showErrorCallout(res, sendCallout) {
+export async function showErrorCallout(err, sendCallout) {
+  const res = err?.response || err;
   const calloutOptions = { type: 'error', timeout: 0 };
   try {
     const contentType = res.headers.get('content-type');

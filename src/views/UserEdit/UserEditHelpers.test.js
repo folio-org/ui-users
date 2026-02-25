@@ -48,6 +48,10 @@ describe('resourcesLoaded', () => {
 });
 
 describe('showErrorCallout', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   let res = {
     text: jest.fn().mockReturnValue(Promise.resolve('')),
     headers: {
@@ -93,5 +97,25 @@ describe('showErrorCallout', () => {
     expect(sendCallout).toHaveBeenCalledWith(expect.objectContaining({
       type: 'error',
     }));
+  });
+
+  describe('when there is an error.response', () => {
+    it('should display the received error message', async () => {
+      const mockResponse = {
+        headers: {
+          get: jest.fn().mockReturnValue('application/json'),
+        },
+        json: jest.fn().mockReturnValue(Promise.resolve({ errors: [{ message: 'some error' }] })),
+      };
+      const error = new Error('Network error');
+      error.response = mockResponse;
+
+      await showErrorCallout(error, sendCallout);
+
+      // Check that the message contains the specific error message
+      const callArgs = sendCallout.mock.calls[0][0];
+      const messageString = JSON.stringify(callArgs.message);
+      expect(messageString).toContain('some error');
+    });
   });
 });
