@@ -70,6 +70,7 @@
 * Bump `jspdf` from `^4.0.0` to `^4.1.0` fixing CVE-2026-24133. Fixes UIU-3522.
 * Filter out undefined roles in useUserAffiliationRoles to prevent errors during destructuring. Fixes UIU-3514.
 * Use `ui-users.requests.all` instead of `ui-requests.all` to display request links. Refs UIU-3516.
+* Replace the `ui-requests.all` permission with `ui-requests.create` to display the "New request" buttons. Refs UIU-3211.
 
 ## [12.1.16] (https://github.com/folio-org/ui-users/tree/v12.1.16) (2025-12-29)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.15...v12.1.16)

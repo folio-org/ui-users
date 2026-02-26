@@ -165,7 +165,7 @@ class UserRequests extends React.Component {
     const displayWhenClosed = requestsLoaded ? (<Badge>{openRequestsCount}</Badge>) : (<Icon icon="spinner-ellipsis" width="10px" />);
     const createRequestUrl = getRequestUrl(barcode, id);
     const displayWhenOpen = (
-      <IfPermission perm="ui-requests.all">
+      <IfPermission perm="ui-requests.create">
         <Button to={createRequestUrl}>
           <FormattedMessage id="ui-users.requests.createRequest" />
         </Button>
