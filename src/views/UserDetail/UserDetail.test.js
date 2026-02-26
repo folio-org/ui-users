@@ -424,6 +424,21 @@ describe('UserDetail', () => {
     });
   });
 
+  describe('when selUser request fails with a non-404 error', () => {
+    const failedUserResources = {
+      ...resources,
+      selUser: {
+        failed: {
+          httpStatus: 403
+        }
+      }
+    };
+    it('should render request-failed error pane', () => {
+      renderUserDetail(stripes, { resources: failedUserResources });
+      expect(screen.getByText('ui-users.errors.userRequestFailed')).toBeDefined();
+    });
+  });
+
   describe('when user information is not available', () => {
     const resourcesWithoutUserInfo = Object.keys(resources).reduce((acc, prop) => {
       if (prop !== 'selUser') {

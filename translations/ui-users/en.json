@@ -426,6 +426,7 @@
   "errors.reviewBeforeRenewal": "{message} Please review {policyName} before retrying renewal.",
   "errors.loanNotRenewedReason": "Loan cannot be renewed because: {message}.",
   "errors.userNotFound": "User not found",
+  "errors.userRequestFailed": "Unable to load user details",
   "errors.proxyBorrowerNotFound": "Proxy borrower not found",
   "errors.permissionChangeFailed": "Permissions were not changed",
   "errors.permissionsLoadFailed": "Permissions loading for user <b>{user}</b> in <b>{tenantId}</b> tenant was failed.",
