@@ -1,3 +1,4 @@
+import { useStripes } from '@folio/stripes/core';
 import { Icon } from '@folio/stripes/components';
 import { useCustomFieldsQuery } from '@folio/stripes/smart-components';
 
@@ -14,6 +15,8 @@ import {
  *   null when no custom fields are available, or undefined when custom fields exist and component should continue rendering
  */
 const useCustomFieldsSection = ({ sectionId }) => {
+  const stripes = useStripes();
+
   const {
     customFields,
     isLoadingCustomFields,
@@ -23,6 +26,10 @@ const useCustomFieldsSection = ({ sectionId }) => {
     sectionId,
     isVisible: true,
   });
+
+  if (!stripes.hasInterface('custom-fields')) {
+    return null;
+  }
 
   if (isLoadingCustomFields) {
     return <Icon icon="spinner-ellipsis" />;

@@ -66,6 +66,10 @@ const CustomFieldsSettings = ({
     history.replace('/settings/users');
   }
 
+  if (!stripes.hasInterface('custom-fields')) {
+    return null;
+  }
+
   return (
     <TitleManager
       record={formatMessage({ id: 'ui-users.settings.customFields' })}

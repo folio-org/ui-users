@@ -1,3 +1,4 @@
+import { useStripes } from '@folio/stripes/core';
 import { useCustomFieldsQuery } from '@folio/stripes/smart-components';
 
 import {
@@ -6,6 +7,8 @@ import {
 } from '../../constants';
 
 const withCustomFields = (WrappedComponent, { isVisible, sectionId } = {}) => (props) => {
+  const stripes = useStripes();
+
   const {
     customFields,
     isCustomFieldsError: customFieldsFetchFailed,
@@ -17,7 +20,8 @@ const withCustomFields = (WrappedComponent, { isVisible, sectionId } = {}) => (p
     isVisible,
   });
 
-  const showCustomFieldsSection = isLoadingCustomFields || (!customFieldsFetchFailed && customFields?.length > 0);
+  const showCustomFieldsSection = !!stripes.hasInterface('custom-fields')
+   && (isLoadingCustomFields || (!customFieldsFetchFailed && customFields?.length > 0));
 
   return (
     <WrappedComponent

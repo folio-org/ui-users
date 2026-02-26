@@ -1,6 +1,7 @@
 import { useIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 
+import { useStripes } from '@folio/stripes/core';
 import { ViewCustomFieldsRecord } from '@folio/stripes/smart-components';
 
 import {
@@ -25,6 +26,11 @@ const ViewCustomFieldsSection = ({
   onToggle,
 }) => {
   const intl = useIntl();
+  const stripes = useStripes();
+
+  if (!stripes.hasInterface('custom-fields')) {
+    return null;
+  }
 
   return (
     <ViewCustomFieldsRecord

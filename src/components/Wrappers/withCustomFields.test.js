@@ -1,5 +1,6 @@
 import { render } from '@folio/jest-config-stripes/testing-library/react';
 
+import { useStripes } from '@folio/stripes/core';
 import { useCustomFieldsQuery } from '@folio/stripes/smart-components';
 
 import withCustomFields from './withCustomFields';
@@ -44,5 +45,40 @@ describe('withCustomFields', () => {
       isVisible,
     });
     expect(WrappedComponent).toHaveBeenCalledWith(expect.objectContaining(props), {});
+  });
+
+  describe('when custom-fields interface is not available', () => {
+    it('should set showCustomFieldsSection to false', () => {
+      useStripes.mockReturnValueOnce({ hasInterface: () => false });
+      useCustomFieldsQuery.mockReturnValueOnce({
+        customFields: [{ id: 'field1' }],
+        isLoadingCustomFields: false,
+        isCustomFieldsError: false,
+      });
+
+      renderComponent({ accordionId: 'test-accordion' });
+
+      expect(WrappedComponent).toHaveBeenCalledWith(
+        expect.objectContaining({ showCustomFieldsSection: false }),
+        {}
+      );
+    });
+  });
+
+  describe('when interface is available and custom fields exist', () => {
+    it('should set showCustomFieldsSection to true', () => {
+      useCustomFieldsQuery.mockReturnValueOnce({
+        customFields: [{ id: 'field1' }, { id: 'field2' }],
+        isLoadingCustomFields: false,
+        isCustomFieldsError: false,
+      });
+
+      renderComponent({ accordionId: 'test-accordion' });
+
+      expect(WrappedComponent).toHaveBeenCalledWith(
+        expect.objectContaining({ showCustomFieldsSection: true }),
+        {}
+      );
+    });
   });
 });

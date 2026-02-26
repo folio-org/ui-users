@@ -1,4 +1,5 @@
 import { renderHook } from '@folio/jest-config-stripes/testing-library/react';
+import { useStripes } from '@folio/stripes/core';
 import { useCustomFieldsQuery } from '@folio/stripes/smart-components';
 
 import useCustomFieldsSection from './useCustomFieldsSection';
@@ -72,5 +73,17 @@ describe('useCustomFieldsSection', () => {
     const { result } = renderHook(() => useCustomFieldsSection({ sectionId: mockSectionId }));
 
     expect(result.current.props.icon).toBe('spinner-ellipsis');
+  });
+
+  it('should return null when custom-fields interface is not available', () => {
+    useStripes.mockReturnValueOnce({ hasInterface: () => false });
+    useCustomFieldsQuery.mockReturnValue({
+      customFields: [{ id: 'field1' }],
+      isLoadingCustomFields: false,
+    });
+
+    const { result } = renderHook(() => useCustomFieldsSection({ sectionId: mockSectionId }));
+
+    expect(result.current).toBeNull();
   });
 });

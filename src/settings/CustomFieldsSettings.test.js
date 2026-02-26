@@ -4,6 +4,7 @@ import '../../test/jest/__mock__';
 
 import { screen } from '@folio/jest-config-stripes/testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
+import { useStripes } from '@folio/stripes/core';
 import renderWithRouter from '../../test/jest/helpers/renderWithRouter';
 
 import CustomFieldsSettings from './CustomFieldsSettings';
@@ -72,5 +73,19 @@ describe('Custom fields settings page', () => {
     const editCustomFieldsSettings = await screen.findByText(/EditCustomFieldsSettings/);
 
     expect(editCustomFieldsSettings).toBeVisible();
+  });
+
+  it('should render nothing when custom-fields interface is not available', () => {
+    useStripes.mockReturnValueOnce({
+      hasPerm: jest.fn(() => true),
+      hasInterface: () => false,
+    });
+
+    renderCustomFieldsSettings({
+      initialEntries: ['/settings/users/custom-fields'],
+    });
+
+    expect(screen.queryByText(/ViewCustomFieldsSettings/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/EditCustomFieldsSettings/)).not.toBeInTheDocument();
   });
 });
