@@ -1,7 +1,7 @@
 import { act } from 'react';
 
 import { cleanup, render, waitFor } from '@folio/jest-config-stripes/testing-library/react';
-import { useStripes, useOkapiKy } from '@folio/stripes/core';
+import { useStripes, useOkapiKy, useCallout } from '@folio/stripes/core';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import withUserRoles from './withUserRoles';
 import { useAllRolesData, useUserAffiliationRoles } from '../../hooks';
@@ -198,6 +198,70 @@ describe('withUserRoles HOC', () => {
       expect(mockKyPut).toHaveBeenCalledWith('users-keycloak/users/user1', {
         json: mockData,
       });
+    });
+  });
+
+  describe('when updateKeycloakUser fails (ky.put throws)', () => {
+    const mockError = new Error('Keycloak update failed');
+    const mockSendCallout = jest.fn();
+    let capturedError;
+
+    // A dedicated component that captures errors thrown by checkAndHandleKeycloakAuthUser
+    const ErrorCapturingComponent = ({ checkAndHandleKeycloakAuthUser }) => (
+      <button
+        data-testid="submit-keycloak-fail"
+        type="button"
+        onClick={async () => {
+          capturedError = undefined;
+          try {
+            await checkAndHandleKeycloakAuthUser(() => {}, mockData);
+          } catch (e) {
+            capturedError = e;
+          }
+        }}
+      >
+        Submit
+      </button>
+    );
+    const CompWithRolesErrorCapture = withUserRoles(ErrorCapturingComponent);
+
+    beforeEach(() => {
+      capturedError = undefined;
+
+      useCallout.mockReturnValue({ sendCallout: mockSendCallout });
+      useOkapiKy.mockReturnValue({
+        extend: () => ({
+          get: jest.fn(() => Promise.resolve()),
+          put: jest.fn(),
+        }),
+        put: jest.fn().mockRejectedValue(mockError),
+      });
+    });
+
+    it('should propagate the error to the caller instead of catching it', async () => {
+      const { getByTestId } = render(
+        <CompWithRolesErrorCapture match={{ params: { id: 'user1' } }} />
+      );
+
+      await userEvent.click(getByTestId('submit-keycloak-fail'));
+
+      await waitFor(() => {
+        expect(capturedError).toBe(mockError);
+      });
+    });
+
+    it('should not call sendCallout from within updateKeycloakUser', async () => {
+      const { getByTestId } = render(
+        <CompWithRolesErrorCapture match={{ params: { id: 'user1' } }} />
+      );
+
+      await userEvent.click(getByTestId('submit-keycloak-fail'));
+
+      await waitFor(() => {
+        expect(capturedError).toBeDefined();
+      });
+
+      expect(mockSendCallout).not.toHaveBeenCalled();
     });
   });
 });
