@@ -91,14 +91,12 @@ const withUserRoles = (WrappedComponent) => (props) => {
   };
 
   const updateKeycloakUser = async (userId2, data) => {
-    try {
-      // use `ky.put` instead of `api.put` because updating current user data requires setting x-okapi-tenant to the current tenant.
-      await ky.put(`users-keycloak/users/${userId2}`, {
-        json: { ...data }
-      });
-    } catch (error) {
-      sendErrorCallout(error);
-    }
+    // use `ky.put` instead of `api.put` because updating current user data requires setting x-okapi-tenant to the current tenant.
+    // Don't catch an error to prevent navigating away from the page.
+    // The error will be caught in the UserEdit component and shown in a callout.
+    await ky.put(`users-keycloak/users/${userId2}`, {
+      json: { ...data }
+    });
   };
 
   const checkUserInKeycloak = async () => {
