@@ -165,5 +165,7 @@ jest.mock('@folio/stripes/core', () => {
         const fakeStripes = stripes || STRIPES;
         return <Component {...rest} stripes={fakeStripes} />;
       },
+    HandlerManager: jest.fn(() => <div>HandlerManagerMock</div>),
+    updateUser: jest.fn(),
   };
 });

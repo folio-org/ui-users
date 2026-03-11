@@ -122,7 +122,7 @@ const withUserRoles = (WrappedComponent) => (props) => {
     if (!isEqual(assignedRoleIds, initialAssignedRoleIds)) {
       await updateUserRoles(assignedRoleIds);
     }
-    onFinish();
+    await onFinish();
   };
 
   const checkAndHandleKeycloakAuthUser = async (onFinish, data, mutator) => {
@@ -141,7 +141,7 @@ const withUserRoles = (WrappedComponent) => (props) => {
         if (!isEqual(assignedRoleIds, initialAssignedRoleIds)) {
           setIsCreateKeycloakUserConfirmationOpen(true);
         } else {
-          onFinish();
+          await onFinish();
         }
         break;
       default:
@@ -152,7 +152,7 @@ const withUserRoles = (WrappedComponent) => (props) => {
   const confirmCreateKeycloakUser = async (onFinish) => {
     await submitCreateKeycloakUser();
     await updateUserRoles(assignedRoleIds);
-    onFinish();
+    await onFinish();
   };
 
   return <WrappedComponent
@@ -166,6 +166,7 @@ const withUserRoles = (WrappedComponent) => (props) => {
     checkAndHandleKeycloakAuthUser={checkAndHandleKeycloakAuthUser}
     confirmCreateKeycloakUser={confirmCreateKeycloakUser}
     isLoadingAffiliationRoles={isLoadingAffiliationRoles}
+    setIsCreateKeycloakUserConfirmationOpen={setIsCreateKeycloakUserConfirmationOpen}
   />;
 };
 

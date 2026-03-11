@@ -427,3 +427,5 @@ export const PROFILE_PICTURE_CONFIG_KEY = 'PROFILE_PICTURE_CONFIG';
 export const SUPPRESS_EDIT_SETTING_KEY = 'suppressEdit';
 
 export const USER_AFFILIATION_ROLES_CACHE_KEY = 'user-affiliation-roles';
+
+export const PREFERRED_SP_NONE = '-';

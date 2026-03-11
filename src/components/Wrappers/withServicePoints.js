@@ -138,6 +138,8 @@ const withServicePoints = WrappedComponent => class WithServicePointsComponent e
       this._isMounted = false;
     }
 
+    pendingChangeServicePointHandlerResolve = null;
+
     fetchServicePointsResources() {
       // Fetch the records for what service points are associated with this user. We can't
       // automatically fetch them since we have `fetch: false` turned on to avoid fetching
@@ -171,30 +173,48 @@ const withServicePoints = WrappedComponent => class WithServicePointsComponent e
       record.servicePointsIds = (servicePoints ?? []).map(sp => sp.id);
       record.defaultServicePointId = (!(servicePoints ?? []).length || preferredServicePoint === '-') ? null : preferredServicePoint;
 
-      mutator(record).then(() => {
+      return mutator(record).then(() => {
         this.props.mutator.servicePointsUsers.reset();
         this.props.mutator.servicePointsUsers.GET();
 
-        // Check if we finished editing the currently-logged-in user.
+        // Call setCurrentServicePoint only if the edited user is the currently logged in user.
         if (this.props.match.params.id === this.props.stripes.user.user.id) {
-          this.setCurrentServicePoint(servicePoints, record.defaultServicePointId);
+          return this.setCurrentServicePoint(servicePoints, record.defaultServicePointId);
         }
+
+        return undefined;
       });
     };
 
-    setCurrentServicePoint(servicePoints, defaultServicePointId) {
+    async setCurrentServicePoint(servicePoints, defaultServicePointId) {
       const { stripes: { store } } = this.props;
+      const curServicePoint = defaultServicePointId
+        ? servicePoints?.find(r => r.id === defaultServicePointId)
+        : null;
 
-      updateUser(store, { servicePoints });
+      await updateUser(store, {
+        servicePoints,
+        ...(defaultServicePointId && { curServicePoint }),
+      });
 
-      if (defaultServicePointId) {
-        const curServicePoint = servicePoints.find(r => r.id === defaultServicePointId);
-        updateUser(store, { curServicePoint });
-      } else if (this._isMounted && servicePoints.length) {
-        this.setState({
-          showChangeServicePointHandler: true
+      // This modal should be shown only when a user edits their own record and have "NONE" as the preferred service point.
+      if (!defaultServicePointId && this._isMounted && servicePoints?.length) {
+        return new Promise(resolve => {
+          this.pendingChangeServicePointHandlerResolve = resolve;
+
+          this.setState({
+            showChangeServicePointHandler: true,
+          });
         });
       }
+
+      return undefined;
+    }
+
+    closeChangeServicePointHandler = () => {
+      this.setState({ showChangeServicePointHandler: false }, () => {
+        this.pendingChangeServicePointHandlerResolve();
+      });
     }
 
     render() {
@@ -208,7 +228,9 @@ const withServicePoints = WrappedComponent => class WithServicePointsComponent e
           />
           { this.state.showChangeServicePointHandler ?
             <HandlerManager
-              props={{ onClose: () => this.setState({ showChangeServicePointHandler: false }) }}
+              props={{
+                onClose: this.closeChangeServicePointHandler,
+              }}
               event={events.CHANGE_SERVICE_POINT}
               stripes={this.props.stripes}
             /> : null

@@ -5,6 +5,8 @@ import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import renderWithRouter from '../../../test/jest/helpers/renderWithRouter';
 
 import UserEdit from './UserEdit';
+import UserForm from './UserForm';
+
 import { KEYCLOAK_USER_EXISTANCE } from '../../constants';
 
 const userFormData = {
@@ -24,19 +26,7 @@ const userFormData = {
   },
 };
 
-jest.mock('../../components/Wrappers/withUserRoles', () => (Component) => {
-  return Component;
-});
-
-jest.mock('@folio/service-interaction', () => ({
-  NumberGeneratorModalButton: () => <div>NumberGeneratorModalButton</div>
-}));
-
-jest.mock('@folio/stripes/components', () => ({
-  ...jest.requireActual('@folio/stripes/components'),
-  LoadingView: () => 'LoadingView',
-}));
-jest.mock('./UserForm', () => jest.fn(({ onSubmit, onCancel, onCancelKeycloakConfirmation, confirmCreateKeycloakUser }) => {
+function mockUserFormImplementation({ onSubmit, onCancel, onCancelKeycloakConfirmation, confirmCreateKeycloakUser }) {
   return (
     <>
       <div>UserForm</div>
@@ -61,7 +51,21 @@ jest.mock('./UserForm', () => jest.fn(({ onSubmit, onCancel, onCancelKeycloakCon
       </button>
     </>
   );
+}
+
+jest.mock('../../components/Wrappers/withUserRoles', () => (Component) => {
+  return Component;
+});
+
+jest.mock('@folio/service-interaction', () => ({
+  NumberGeneratorModalButton: () => <div>NumberGeneratorModalButton</div>
 }));
+
+jest.mock('@folio/stripes/components', () => ({
+  ...jest.requireActual('@folio/stripes/components'),
+  LoadingView: () => 'LoadingView',
+}));
+jest.mock('./UserForm', () => jest.fn(mockUserFormImplementation));
 jest.mock('@folio/stripes/smart-components', () => ({
   EditCustomFieldsRecord: () => 'EditCustomField',
 }));
@@ -84,6 +88,7 @@ const props = {
     okapi: {
       tenant: 'tenantId',
     },
+    user: { user: { id: 'other-user-id' } },
   },
   resources: {
     selUser: {
@@ -170,6 +175,7 @@ const props = {
   },
   assignedRoleIds: {},
   isLoadingAffiliationRoles: false,
+  setIsCreateKeycloakUserConfirmationOpen: jest.fn(),
 };
 
 const getUserEdit = (_props = {}) => <UserEdit {..._props} />;
@@ -192,6 +198,7 @@ const renderUserEdit = async (userProps) => {
 describe('UserEdit', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    UserForm.mockImplementation(mockUserFormImplementation);
   });
 
   it('should render without crashing', () => {
@@ -529,13 +536,133 @@ describe('UserEdit', () => {
         expect(props.mutator.perms.PUT).not.toHaveBeenCalled();
       });
     });
+
+    describe('service points update', () => {
+      const ownUserId = 'userId';
+      const servicePointsBaseProps = {
+        ...props,
+        stripes: {
+          hasPerm: jest.fn().mockReturnValue(true),
+          hasInterface: jest.fn().mockReturnValue(true),
+          okapi: { tenant: 'tenantId' },
+          user: { user: { id: ownUserId } },
+        },
+        match: { params: { id: ownUserId } },
+        updateServicePoints: jest.fn(),
+        checkAndHandleKeycloakAuthUser: jest.fn(async (afterUpdate) => { await afterUpdate(); }),
+        setIsCreateKeycloakUserConfirmationOpen: jest.fn(),
+      };
+
+      describe('when user edits own record with a non-NONE service point', () => {
+        it('should call updateServicePoints before the user has been updated', async () => {
+          UserForm.mockImplementation(({ onSubmit }) => (
+            <button
+              type="button"
+              id="clickable-save"
+              onClick={() => onSubmit({ ...userFormData, preferredServicePoint: 'sp-id-1' })}
+            >
+              Submit Form
+            </button>
+          ));
+
+          const updateServicePoints = jest.fn();
+          const checkAndHandleKeycloakAuthUser = jest.fn(async (afterUpdate) => { await afterUpdate(); });
+          const alteredProps = {
+            ...servicePointsBaseProps,
+            updateServicePoints,
+            checkAndHandleKeycloakAuthUser,
+          };
+
+          const { container } = await renderUserEdit(alteredProps);
+          await userEvent.click(container.querySelector('#clickable-save'));
+
+          expect(updateServicePoints).toHaveBeenCalled();
+          expect(updateServicePoints.mock.invocationCallOrder[0]).toBeLessThan(
+            checkAndHandleKeycloakAuthUser.mock.invocationCallOrder[0]
+          );
+        });
+      });
+
+      describe('when editing another user record with PREFERRED_SP_NONE', () => {
+        it('should call updateServicePoints before the user has been updated', async () => {
+          UserForm.mockImplementation(({ onSubmit }) => (
+            <button
+              type="button"
+              id="clickable-save"
+              onClick={() => onSubmit({ ...userFormData, preferredServicePoint: '-' })}
+            >
+              Submit Form
+            </button>
+          ));
+
+          const updateServicePoints = jest.fn();
+          const checkAndHandleKeycloakAuthUser = jest.fn(async (afterUpdate) => { await afterUpdate(); });
+          const alteredProps = {
+            ...servicePointsBaseProps,
+            match: { params: { id: 'userId-2' } },
+            resources: {
+              ...props.resources,
+              selUser: {
+                records: [{ id: 'userId-2', departments: [] }],
+                isPending: false,
+              },
+            },
+            updateServicePoints,
+            checkAndHandleKeycloakAuthUser,
+          };
+
+          const { container } = await renderUserEdit(alteredProps);
+          await userEvent.click(container.querySelector('#clickable-save'));
+
+          expect(updateServicePoints).toHaveBeenCalled();
+          expect(updateServicePoints.mock.invocationCallOrder[0]).toBeLessThan(
+            checkAndHandleKeycloakAuthUser.mock.invocationCallOrder[0]
+          );
+        });
+      });
+
+      describe('when user edits own record with PREFERRED_SP_NONE', () => {
+        it('should defer updateServicePoints until after user data is saved', async () => {
+          UserForm.mockImplementation(({ onSubmit }) => (
+            <button
+              type="button"
+              id="clickable-save"
+              onClick={() => onSubmit({ ...userFormData, preferredServicePoint: '-' })}
+            >
+              Submit Form
+            </button>
+          ));
+
+          let resolveKeycloakHandler;
+          const updateServicePoints = jest.fn();
+          const alteredProps = {
+            ...servicePointsBaseProps,
+            updateServicePoints,
+            checkAndHandleKeycloakAuthUser: jest.fn((afterUpdate) => (
+              new Promise(resolve => {
+                resolveKeycloakHandler = async () => {
+                  await afterUpdate();
+                  resolve();
+                };
+              })
+            )),
+          };
+
+          const { container } = await renderUserEdit(alteredProps);
+          await userEvent.click(container.querySelector('#clickable-save'));
+
+          expect(updateServicePoints).not.toHaveBeenCalled();
+
+          await act(async () => { await resolveKeycloakHandler(); });
+
+          expect(updateServicePoints).toHaveBeenCalled();
+          expect(servicePointsBaseProps.setIsCreateKeycloakUserConfirmationOpen).toHaveBeenCalledWith(false);
+        });
+      });
+    });
   });
 
   describe('Cancel user form', () => {
-    beforeEach(() => {
-      jest.unmock('./UserForm');
-    });
-
     const defaultProps = {
       stripes: {
         hasPerm: jest.fn().mockReturnValue(true),
@@ -653,6 +780,7 @@ describe('UserEdit', () => {
           tenant: 'tenantId',
         },
         hasInterface: jest.fn().mockReturnValue(true),
+        user: { user: { id: 'other-user-id' } },
       },
       resources: {
         selUser: {
@@ -738,9 +866,7 @@ describe('UserEdit', () => {
       confirmCreateKeycloakUser: jest.fn(),
       setIsCreateKeycloakUserConfirmationOpen: jest.fn(),
     };
-    beforeEach(() => {
-      jest.unmock('./UserForm');
-    });
+
     it('cancel confirmation', async () => {
       const { container } = await renderUserEdit(defaultProps);
       const cancelButton = container.querySelector('#cancel-confirmation');
@@ -806,6 +932,99 @@ describe('UserEdit', () => {
         const submitButton = container.querySelector('#clickable-save');
 
         await userEvent.click(submitButton);
+      });
+    });
+
+    describe('onCancelKeycloakConfirmation', () => {
+      describe('when updateSP is not set', () => {
+        it('should redirect without calling setIsCreateKeycloakUserConfirmationOpen', async () => {
+          const setIsCreateKeycloakUserConfirmationOpen = jest.fn();
+          const alteredProps = {
+            ...defaultProps,
+            setIsCreateKeycloakUserConfirmationOpen,
+          };
+
+          const { container } = await renderUserEdit(alteredProps);
+          const cancelButton = container.querySelector('#cancel-confirmation');
+          await userEvent.click(cancelButton);
+
+          expect(defaultProps.history.push).toHaveBeenCalled();
+          expect(setIsCreateKeycloakUserConfirmationOpen).not.toHaveBeenCalled();
+        });
+      });
+
+      describe('when updateSP is set (own user with PREFERRED_SP_NONE)', () => {
+        it('should call setIsCreateKeycloakUserConfirmationOpen(false), invoke updateServicePoints, and redirect', async () => {
+          const ownUserId = 'userId';
+          const updateServicePoints = jest.fn();
+          const setIsCreateKeycloakUserConfirmationOpen = jest.fn();
+
+          UserForm.mockImplementation(({ onSubmit, onCancelKeycloakConfirmation }) => (
+            <>
+              <button
+                type="button"
+                id="clickable-save"
+                onClick={() => onSubmit({ ...userFormData, preferredServicePoint: '-' })}
+              >
+                Submit
+              </button>
+              <button
+                type="button"
+                id="cancel-confirmation"
+                onClick={onCancelKeycloakConfirmation}
+              >
+                Cancel
+              </button>
+            </>
+          ));
+
+          const alteredProps = {
+            ...defaultProps,
+            stripes: {
+              ...defaultProps.stripes,
+              user: { user: { id: ownUserId } },
+            },
+            match: { params: { id: ownUserId } },
+            updateServicePoints,
+            setIsCreateKeycloakUserConfirmationOpen,
+            checkAndHandleKeycloakAuthUser: jest.fn().mockResolvedValue(undefined),
+          };
+
+          const { container } = await renderUserEdit(alteredProps);
+          await userEvent.click(container.querySelector('#clickable-save'));
+
+          await act(async () => {
+            await userEvent.click(container.querySelector('#cancel-confirmation'));
+          });
+
+          expect(setIsCreateKeycloakUserConfirmationOpen).toHaveBeenCalledWith(false);
+          expect(updateServicePoints).toHaveBeenCalled();
+          expect(defaultProps.history.push).toHaveBeenCalled();
+        });
+      });
+    });
+
+    describe('confirmCreateKeycloakUser', () => {
+      it('should redirect when the afterUpdate callback passed to confirmCreateKeycloakUser is invoked', async () => {
+        const historyPush = jest.fn();
+        let capturedAfterUpdate;
+        const confirmCreateKeycloakUser = jest.fn((afterUpdate) => {
+          capturedAfterUpdate = afterUpdate;
+        });
+
+        const alteredProps = {
+          ...defaultProps,
+          history: { push: historyPush },
+          confirmCreateKeycloakUser,
+        };
+
+        const { container } = await renderUserEdit(alteredProps);
+        await userEvent.click(container.querySelector('#submit-confirmation'));
+
+        expect(capturedAfterUpdate).toBeDefined();
+        await act(async () => { await capturedAfterUpdate(); });
+
+        expect(historyPush).toHaveBeenCalled();
       });
     });
   });
