@@ -86,6 +86,7 @@
           "users-keycloak.item.get",
           "usergroups.collection.get",
           "mod-settings.global.read.ui-users.custom-fields-label.manage",
+          "mod-settings.global.read.ui-users.number-generator-settings.manage",
           "mod-settings.global.read.ui-tags.tags.manage",
           "mod-settings.entries.collection.get",
           "mod-settings.entries.item.get",
