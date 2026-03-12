@@ -293,7 +293,7 @@ class UserForm extends React.Component {
     const { initialValues, stripes } = this.props;
     const showActionMenu = stripes.hasPerm('ui-users.patron-blocks.all')
       || stripes.hasPerm('ui-users.feesfines.actions.all')
-      || stripes.hasPerm('ui-requests.all');
+      || stripes.hasPerm('ui-requests.create');
 
     const isShadowUser = initialValues?.type === USER_TYPES.SHADOW;
     const isEditing = initialValues && initialValues.id;
