@@ -1,4 +1,4 @@
-import { List } from '@folio/stripes/components';
+import { Accordion, List } from '@folio/stripes/components';
 import { screen } from '@folio/jest-config-stripes/testing-library/react';
 import '__mock__/stripesComponents.mock';
 
@@ -198,5 +198,15 @@ describe('Render User Requests component', () => {
 
       expect(formattedItem.props.children.props.to).toContain('/requests/?');
     });
+  });
+
+  it('should use ui-requests.create permission for create request action', () => {
+    renderUserRequests(props(true));
+
+    const accordionProps = Accordion.mock.calls[0][0];
+    const createRequestPermission = accordionProps.displayWhenOpen.props.perm;
+
+    expect(createRequestPermission).toBe('ui-requests.create');
+    expect(createRequestPermission).not.toBe('ui-requests.all');
   });
 });

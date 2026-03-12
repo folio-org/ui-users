@@ -58,7 +58,7 @@ class RequestFeeFineBlockButtons extends React.Component {
             </Icon>
           </Button>
         </IfPermission>
-        <IfPermission perm="ui-requests.all">
+        <IfPermission perm="ui-requests.create">
           <Button
             buttonStyle="dropdownItem"
             data-test-actions-menu-create-request

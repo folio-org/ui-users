@@ -46,9 +46,9 @@ describe('RequestFeeFineBlockButtons', () => {
     });
   });
 
-  describe('without ui-requests.all permission', () => {
+  describe('without ui-requests.create permission', () => {
     beforeEach(() => {
-      IfPermission.mockImplementation(({ perm, children }) => (perm !== 'ui-requests.all' ? children : null));
+      IfPermission.mockImplementation(({ perm, children }) => (perm !== 'ui-requests.create' ? children : null));
     });
 
     it('renders all buttons without createRequest button', () => {

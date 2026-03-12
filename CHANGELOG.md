@@ -73,6 +73,7 @@
 * Add `stripes-core.settings.read` permission to app and settings permissions. Refs UIU-3491.
 * Remove try-catch block in `updateKeycloakUser` to allow errors to propagate and be handled in the caller, preventing navigation from the page. Add `throwErrors: false` to prevent displaying an alert on error. Handle errors with `response` field in `showErrorCallout` to prevent displaying a generic error message instead of the specific error. Fixes UIU-3531.
 * Add missing permission for Number generator. Fixes UIU-3539.
+* Replace the `ui-requests.all` permission with `ui-requests.create` to display the "New request" buttons. Refs UIU-3211.
 
 ## [12.1.16] (https://github.com/folio-org/ui-users/tree/v12.1.16) (2025-12-29)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.15...v12.1.16)
