@@ -694,7 +694,6 @@
     "reports.inProgress": "Export in progress",
     "departments": "Departments",
     "index.username": "Username",
-    "index.all": "Keyword (name, email, identifier)",
     "index.lastName": "Last name",
     "index.barcode": "Barcode",
     "loans.confirmDeclaredLost": "Confirm item status: Declared lost",
