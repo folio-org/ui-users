@@ -332,6 +332,24 @@ describe('LoanDetails', () => {
       renderLoanDetails(propsData);
       expect(screen.getByText('ui-users.loans.claimReturned')).toBeInTheDocument();
     });
+    it('renders translated item status label for known backend status values', () => {
+      renderLoanDetails({
+        ...propsData,
+        loan: {
+          ...propsData.loan,
+          item: {
+            ...propsData.loan.item,
+            status: {
+              ...propsData.loan.item.status,
+              name: 'Checked Out',
+            },
+          },
+        },
+      });
+
+      expect(screen.getByText('ui-users.item.status.checkedOut')).toBeInTheDocument();
+      expect(screen.queryByText('Checked Out')).not.toBeInTheDocument();
+    });
     it('should load component with options when loan item is "Claimed returned"', () => {
       renderLoanDetails(claimedReturnedPropsData);
       expect(screen.getByTestId('resolve-claim-dropdown')).toBeInTheDocument();

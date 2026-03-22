@@ -14,7 +14,7 @@ jest.unmock('@folio/stripes/util');
 
 const props = {
   intl: {
-    formatMessage: jest.fn(),
+    formatMessage: jest.fn(({ id }) => id),
   },
   allChecked: true,
   failedRenewals: [],
@@ -38,5 +38,23 @@ describe('BulkRenewedLoansList', () => {
     userEvent.click(document.querySelector('[id="list-column-ischecked"]'));
     userEvent.click(document.querySelector('[data-row-inner="0"]'));
     expect(screen.queryByText('ui-users.brd.failedRenewal:')).toBeInTheDocument();
+  });
+
+  it('renders translated item status label for known backend status values', () => {
+    const failedRenewals = [{
+      ...openLoans[0],
+      item: {
+        ...openLoans[0].item,
+        status: {
+          ...openLoans[0].item.status,
+          name: 'Checked Out',
+        },
+      },
+    }];
+
+    renderBulkOverrideLoansList({ failedRenewals });
+
+    expect(screen.getByText('ui-users.item.status.checkedOut')).toBeInTheDocument();
+    expect(screen.queryByText('Checked Out')).not.toBeInTheDocument();
   });
 });

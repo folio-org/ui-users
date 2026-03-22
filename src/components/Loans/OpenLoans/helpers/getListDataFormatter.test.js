@@ -46,7 +46,7 @@ const STRIPES = {
   withOkapi: true,
 };
 
-const formatMessageMock = jest.fn();
+const formatMessageMock = jest.fn(({ id }) => id);
 const contributorsMock = jest.fn(() => ['test', 'test2', 'test3']);
 const getFeeFineMock = jest.fn();
 
@@ -147,5 +147,44 @@ describe('Data Formatter component', () => {
     data[' '].formatter(loan);
     data['  '].formatter(loan);
     expect(getFeeFineMock).toHaveBeenCalled();
+  });
+
+  it('normalizes known item statuses for display and sorting', () => {
+    const data = getListDataFormatter(formatMessage, toggleItem, isLoanChecked, requestRecords,
+      requestCounts, resources, getLoanPolicy, handleOptionsChange, stripes, getFeeFine,
+      getContributorslist, feeFineCount, user, patronGroup, formatDate, formatTime);
+    const loanWithVariantStatus = {
+      ...loan,
+      item: {
+        ...loan.item,
+        status: {
+          ...loan.item.status,
+          name: 'Checked Out',
+        },
+      },
+    };
+
+    expect(data.itemStatus.formatter(loanWithVariantStatus)).toBe('ui-users.item.status.checkedOut');
+    expect(data.itemStatus.sorter(loanWithVariantStatus)).toBe('ui-users.item.status.checkedOut');
+    expect(formatMessageMock).toHaveBeenCalledWith({ id: 'ui-users.item.status.checkedOut' });
+  });
+
+  it('preserves unknown item statuses', () => {
+    const data = getListDataFormatter(formatMessage, toggleItem, isLoanChecked, requestRecords,
+      requestCounts, resources, getLoanPolicy, handleOptionsChange, stripes, getFeeFine,
+      getContributorslist, feeFineCount, user, patronGroup, formatDate, formatTime);
+    const loanWithUnknownStatus = {
+      ...loan,
+      item: {
+        ...loan.item,
+        status: {
+          ...loan.item.status,
+          name: 'Custom Backend Status',
+        },
+      },
+    };
+
+    expect(data.itemStatus.formatter(loanWithUnknownStatus)).toBe('Custom Backend Status');
+    expect(data.itemStatus.sorter(loanWithUnknownStatus)).toBe('Custom Backend Status');
   });
 });

@@ -8,6 +8,7 @@ import {
 } from '@folio/stripes/components';
 
 import { effectiveCallNumber } from '@folio/stripes/util';
+import { formatItemStatus } from '../../../util';
 
 import ActionsDropdown from '../components/ActionsDropdown/ActionsDropdown';
 import ContributorsView from '../components/ContributorsView/ContributorsView';
@@ -59,8 +60,8 @@ export default function getListDataFormatter(
     'itemStatus': {
       key: 'itemStatus',
       view: formatMessage({ id: 'ui-users.loans.columns.itemStatus' }),
-      formatter:  loan => get(loan, ['item', 'status', 'name'], <NoValue />),
-      sorter: loan => get(loan, ['item', 'status', 'name'], ''),
+      formatter: loan => formatItemStatus(formatMessage, loan?.item?.status?.name) || <NoValue />,
+      sorter: loan => formatItemStatus(formatMessage, loan?.item?.status?.name),
     },
     'barcode': {
       key: 'barcode',

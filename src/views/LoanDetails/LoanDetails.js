@@ -39,6 +39,7 @@ import {
   nav,
   getLoanLastReminderNumber,
   getOpenRequestsPath,
+  formatItemStatus,
   getRenewalPatronBlocksFromPatronBlocks,
   accountsMatchStatus,
   checkUserActive,
@@ -473,7 +474,7 @@ class LoanDetails extends React.Component {
       action: la => formatLoanAction(la, loanActionsWithUser),
       actionDate: la => <FormattedTime value={get(la, ['metadata', 'updatedDate'], '-')} day="numeric" month="numeric" year="numeric" />,
       dueDate: la => <FormattedTime value={la.dueDate} day="numeric" month="numeric" year="numeric" />,
-      itemStatus: la => la.itemStatus,
+      itemStatus: la => formatItemStatus(intl.formatMessage, la.itemStatus) || <NoValue />,
       source: la => {
         return la.user ?
           <Link to={`/users/view/${la.user?.id}`}>{getFullName(la.user)}</Link> :
@@ -493,6 +494,7 @@ class LoanDetails extends React.Component {
     const overduePolicyName = get(loan, ['overdueFinePolicy', 'name'], '-');
     const lostItemPolicyName = get(loan, ['lostItemPolicy', 'name'], '-');
     const itemStatus = get(loan, ['item', 'status', 'name'], <NoValue />);
+    const translatedItemStatus = formatItemStatus(intl.formatMessage, itemStatus) || <NoValue />;
     const claimedReturnedDate = itemStatus === itemStatuses.CLAIMED_RETURNED && loan.claimedReturnedDate;
     const isClaimedReturnedItem = itemStatus === itemStatuses.CLAIMED_RETURNED;
     const isDeclaredLostItem = itemStatus === itemStatuses.DECLARED_LOST;
@@ -720,7 +722,7 @@ class LoanDetails extends React.Component {
               >
                 <KeyValue
                   label={<FormattedMessage id="ui-users.loans.columns.itemStatus" />}
-                  value={itemStatus}
+                  value={translatedItemStatus}
                 />
               </Col>
               <Col xs={2}>
