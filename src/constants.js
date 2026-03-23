@@ -429,3 +429,21 @@ export const SUPPRESS_EDIT_SETTING_KEY = 'suppressEdit';
 export const USER_AFFILIATION_ROLES_CACHE_KEY = 'user-affiliation-roles';
 
 export const PREFERRED_SP_NONE = '-';
+
+export const AUDIT_USER_SETTING_GROUP = 'audit.user';
+export const AUDIT_USER_ENABLED_SETTING_KEY = 'enabled';
+
+export const HELPER_APP = {
+  TAGS: 'tags',
+  VERSION_HISTORY: 'versionHistory',
+};
+
+export const AUDIT_ACTION = {
+  CREATED: 'CREATED',
+};
+
+export const AUDIT_CHANGE_TYPE = {
+  ADDED: 'ADDED',
+  MODIFIED: 'MODIFIED',
+  REMOVED: 'REMOVED',
+};

@@ -17,6 +17,8 @@ import {
   TitleManager,
 } from '@folio/stripes/core';
 import {
+  Button,
+  Icon,
   Pane,
   PaneMenu,
   IconButton,
@@ -29,6 +31,7 @@ import {
   AccordionSet,
   LoadingPane,
   HasCommand,
+  Tooltip,
   dayjs,
 } from '@folio/stripes/components';
 import {
@@ -57,6 +60,7 @@ import IfConsortium from '../../components/IfConsortium';
 import { PatronBlockMessage } from '../../components/PatronBlock';
 import { getFormAddressList } from '../../components/data/converters/address';
 import {
+  getCentralTenantId,
   getFullName,
   getFormattedPronouns,
   isAffiliationsEnabled,
@@ -73,11 +77,13 @@ import LostItemsLink from '../../components/LostItemsLink';
 import IfConsortiumPermission from '../../components/IfConsortiumPermission';
 import ActionMenuEditButton from './components/ActionMenuEditButton';
 import ActionMenuDeleteButton from './components/ActionMenuDeleteButton';
+import { UserVersionHistory, UserVersionHistoryButton } from './components/UserVersionHistory';
 import OpenTransactionModal from './components/OpenTransactionModal';
 import DeleteUserModal from './components/DeleteUserModal';
 import ExportFeesFinesReportButton from './components';
 import {
   CUSTOM_FIELDS_SECTION,
+  HELPER_APP,
   SUPPRESS_EDIT_SETTING_KEY,
 } from '../../constants';
 
@@ -405,7 +411,7 @@ class UserDetail extends React.Component {
     return patronGroups.find(g => g.id === patronGroupId) || { group: '' };
   }
 
-  renderDetailsLastMenu(user) {
+  renderDetailsLastMenu(user, isVersionHistoryOpen) {
     const {
       tagsEnabled,
       intl,
@@ -415,16 +421,46 @@ class UserDetail extends React.Component {
 
     return (
       <PaneMenu>
+        {isVersionHistoryOpen && (
+          <Tooltip
+            id="actions-disabled-tooltip"
+            text={
+              <FormattedMessage
+                id="ui-users.versionHistory.actionsDisabled.tooltip"
+                values={{ b: chunks => <b>{chunks}</b> }}
+              />
+            }
+          >
+            {({ ref, ariaIds }) => (
+              <div ref={ref} aria-describedby={ariaIds.text}>
+                <Button
+                  buttonStyle="primary"
+                  disabled
+                  marginBottom0
+                >
+                  <Icon icon="triangle-down" iconPosition="end">
+                    <FormattedMessage id="stripes-components.paneMenuActionsToggleLabel" />
+                  </Icon>
+                </Button>
+              </div>
+            )}
+          </Tooltip>
+        )}
         {
           tagsEnabled &&
             <IconButton
               icon="tag"
               id="clickable-show-tags"
-              onClick={() => { this.showHelperApp('tags'); }}
+              onClick={() => { this.showHelperApp(HELPER_APP.TAGS); }}
               badgeCount={tags.length}
               aria-label={intl.formatMessage({ id: 'ui-users.showTags' })}
+              disabled={isVersionHistoryOpen}
             />
         }
+        <UserVersionHistoryButton
+          disabled={isVersionHistoryOpen}
+          onClick={() => this.showHelperApp(HELPER_APP.VERSION_HISTORY)}
+        />
       </PaneMenu>
     );
   }
@@ -717,6 +753,7 @@ class UserDetail extends React.Component {
     const isVirtualPatron = isDcbUser(user);
     const isShadowUserType = isShadowUser(user);
     const showPatronBlocksSection = hasPatronBlocksPermissions && !isShadowUserType;
+    const isVersionHistoryOpen = helperApp === HELPER_APP.VERSION_HISTORY;
 
     const displayReadingRoomAccessAccordion = isPatronUser(user) || isStaffUser(user);
     const readingRoomPermissions = resources?.userReadingRoomPermissions;
@@ -770,8 +807,8 @@ class UserDetail extends React.Component {
                   {getFullName(user)}
                 </span>
               }
-              actionMenu={this.getActionMenu(get(user, 'barcode', ''), isProfilePictureFeatureEnabled)}
-              lastMenu={this.renderDetailsLastMenu(user)}
+              actionMenu={isVersionHistoryOpen ? undefined : this.getActionMenu(get(user, 'barcode', ''), isProfilePictureFeatureEnabled)}
+              lastMenu={this.renderDetailsLastMenu(user, isVersionHistoryOpen)}
               dismissible
               onClose={this.onClose}
             >
@@ -985,7 +1022,14 @@ class UserDetail extends React.Component {
                 </IfInterface>
               </AccordionSet>
             </Pane>
-            { helperApp && <HelperApp appName={helperApp} onClose={this.closeHelperApp} /> }
+            {isVersionHistoryOpen && (
+              <UserVersionHistory
+                userId={match.params.id}
+                tenantId={getCentralTenantId(stripes)}
+                onClose={this.closeHelperApp}
+              />
+            )}
+            {helperApp && !isVersionHistoryOpen && <HelperApp appName={helperApp} onClose={this.closeHelperApp} />}
             <Callout ref={(ref) => { this.callout = ref; }} />
             <IfInterface name="notes">
               <IfPermission perm="ui-notes.item.view">

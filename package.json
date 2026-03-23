@@ -53,7 +53,8 @@
       "reading-room-patron-permission": "1.0",
       "roles": "1.0",
       "circulation-bff-loans": "1.6",
-      "users-keycloak": "1.0"
+      "users-keycloak": "1.0",
+      "audit-data": "1.0"
     },
     "permissionSets": [
       {
@@ -199,6 +200,18 @@
           "ui-users.roles.view",
           "ui-users.edit",
           "ui-authorization-roles.users.settings.manage"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.versionHistory.view",
+        "displayName": "Users: Can view version history",
+        "description": "Also includes basic permissions to view users",
+        "subPermissions": [
+          "ui-users.view",
+          "audit.user.collection.get",
+          "audit.config.groups.settings.collection.get",
+          "audit.config.groups.settings.audit.user.collection.get"
         ],
         "visible": true
       },
