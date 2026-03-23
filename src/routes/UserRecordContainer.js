@@ -198,7 +198,7 @@ class UserRecordContainer extends React.Component {
     },
     settings: {
       type: 'okapi',
-      path: 'users/settings',
+      path: 'user/settings',
       records: 'settings',
     },
     requestPreferences: {
