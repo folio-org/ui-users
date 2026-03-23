@@ -31,6 +31,7 @@ import {
   nav,
   isRefundAllowed,
   localizeCurrencyAmount,
+  localizePaymentStatus,
 } from '../../util';
 import {
   isCancelAllowed,
@@ -82,7 +83,7 @@ class ViewFeesFines extends React.Component {
       'feeFineType': f => f.feeFineType,
       'amount': f => f.amount,
       'remaining': f => f.remaining,
-      'paymentStatus.name': f => f.paymentStatus.name,
+      'paymentStatus.name': f => localizePaymentStatus(f.paymentStatus.name, this.props.intl),
       'feeFineOwner': f => f.feeFineOwner,
       'title': f => f.title,
       'barcode': f => f.barcode,
@@ -242,7 +243,7 @@ class ViewFeesFines extends React.Component {
       'feeFineType': f => (f.feeFineType ? this.showComments(f) : '-'),
       'amount': f => (f.amount ? localizeCurrencyAmount(f.amount, stripes.currency, intl) : '-'),
       'remaining': f => localizeCurrencyAmount(f.remaining || 0, stripes.currency, intl),
-      'paymentStatus.name': f => (f.paymentStatus || {}).name || '-',
+      'paymentStatus.name': f => localizePaymentStatus((f.paymentStatus || {}).name, intl) || '-',
       'feeFineOwner': f => (f.feeFineOwner ? f.feeFineOwner : '-'),
       'title': item => this.formatTitle(item),
       'barcode': f => (f.barcode ? f.barcode : '-'),

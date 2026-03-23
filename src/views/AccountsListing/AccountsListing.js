@@ -27,7 +27,12 @@ import {
 } from '@folio/stripes/core';
 import css from './AccountsListing.css';
 
-import { getFullName, isRefundAllowed, localizeCurrencyAmount } from '../../components/util';
+import {
+  getFullName,
+  isRefundAllowed,
+  localizeCurrencyAmount,
+  localizePaymentStatus,
+} from '../../components/util';
 import Actions from '../../components/Accounts/Actions/FeeFineActions';
 import FeeFineReport from '../../components/data/reports/FeeFineReport';
 import {
@@ -232,6 +237,7 @@ class AccountsHistory extends React.Component {
 
   componentDidUpdate() {
     const {
+      intl,
       match: { params },
       resources
     } = this.props;
@@ -243,7 +249,10 @@ class AccountsHistory extends React.Component {
     const paymentStatus = count(filterAccounts.map(a => (a.paymentStatus.name)));
     const itemTypes = count(filterAccounts.map(a => (a.materialType)));
     filterConfig[0].values = feeFineOwners.map(o => ({ name: `${o.name}`, cql: o.name }));
-    filterConfig[1].values = paymentStatus.map(s => ({ name: `${s.name}`, cql: s.name }));
+    filterConfig[1].values = paymentStatus.map(s => ({
+      name: localizePaymentStatus(s.name, intl),
+      cql: s.name,
+    }));
     filterConfig[2].values = feeFineTypes.map(f => ({ name: `${f.name}`, cql: f.name }));
     filterConfig[3].values = itemTypes.map(i => ({ name: `${i.name}`, cql: i.name }));
   }

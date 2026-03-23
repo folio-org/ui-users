@@ -56,6 +56,39 @@ export const formatDateAndTime = (date, formatter) => {
   return date ? formatter(date, { day: 'numeric', month: 'numeric', year: 'numeric' }) : '';
 };
 
+const paymentStatusMessageIds = {
+  Outstanding: 'ui-users.accounts.status.outstanding',
+  'Paid partially': 'ui-users.accounts.paymentStatus.paidPartially',
+  'Paid fully': 'ui-users.accounts.paymentStatus.paidFully',
+  'Waived partially': 'ui-users.accounts.paymentStatus.waivedPartially',
+  'Waived fully': 'ui-users.accounts.paymentStatus.waivedFully',
+  'Transferred partially': 'ui-users.accounts.paymentStatus.transferredPartially',
+  'Transferred fully': 'ui-users.accounts.paymentStatus.transferredFully',
+  'Refunded partially': 'ui-users.accounts.paymentStatus.refundedPartially',
+  'Refunded fully': 'ui-users.accounts.paymentStatus.refundedFully',
+  'Credited fully': 'ui-users.accounts.paymentStatus.creditedFully',
+  'Credited partially': 'ui-users.accounts.paymentStatus.creditedPartially',
+  'Cancelled item returned': 'ui-users.accounts.paymentStatus.cancelledItemReturned',
+  'Cancelled item renewed': 'ui-users.accounts.paymentStatus.cancelledItemRenewed',
+  'Cancelled item declared lost': 'ui-users.accounts.paymentStatus.cancelledItemDeclaredLost',
+  'Cancelled as error': 'ui-users.accounts.cancelError',
+  'Suspended claim returned': 'ui-users.accounts.paymentStatus.suspendedClaimReturned',
+};
+
+export const localizePaymentStatus = (paymentStatus, intl) => {
+  if (!paymentStatus) {
+    return '';
+  }
+
+  const messageId = paymentStatusMessageIds[paymentStatus];
+
+  if (!messageId || !intl?.messages?.[messageId]) {
+    return paymentStatus;
+  }
+
+  return intl.formatMessage({ id: messageId });
+};
+
 
 export const getServicePointOfCurrentAction = (action, servicePoints = []) => {
   const servicePoint = servicePoints.find(sp => sp.id === action.createdAt);
