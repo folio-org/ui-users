@@ -19,6 +19,7 @@ import DepartmentsSettings from './DepartmentsSettings';
 import NumberGeneratorSettings from './NumberGeneratorSettings';
 import BlockTemplates from './patronBlocks/BlockTemplates';
 import TransferCriteriaSettings from './TransferCriteriaSettings';
+import VersionHistorySettings from './VersionHistorySettings';
 
 const settingsGeneral = [
   {
@@ -66,7 +67,13 @@ const settingsGeneral = [
     label: <FormattedMessage id="ui-users.settings.customFields" />,
     component: CustomFieldsSettingsPane,
     perm: 'ui-users.settings.customfields.view',
-  }
+  },
+  {
+    route: 'version-history',
+    label: <FormattedMessage id="ui-users.settings.versionHistory" />,
+    component: VersionHistorySettings,
+    perm: 'ui-users.settings.versionHistory.view',
+  },
 ];
 
 const settingsFeefines = [
