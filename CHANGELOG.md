@@ -2,6 +2,7 @@
 
 ## 13.0.0 IN PROGRESS
 * Collect coverage from unit tests. Refs UIU-3356.
+* Fix HTTP 414 error when multi-selecting more than 80 patron groups – split CQL query into chunks and use chunked okapiKy requests for both record fetching and total count. Refs UIU-3545.
 * Modify translation string for search view: "User search -> Search & filter". Refs UIU-3231.
 * *BREAKING* Use number generator for barcode. Refs UIU-2729.
 * Change amount input type to number. Refs UIU-2836.
