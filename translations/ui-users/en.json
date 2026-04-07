@@ -1260,5 +1260,6 @@
   "keycloak.modal.creation": "This operation will create new record in Keycloak for <b>{user}</b>",
 
   "title.patronBlock.create": "Users - Create a new patron block",
-  "title.patronBlock.edit": "Users - Edit a patron block"
+  "title.patronBlock.edit": "Users - Edit a patron block",
+  "userSearch": "User search"
 }

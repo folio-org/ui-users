@@ -75,6 +75,7 @@
 * Add missing permission for Number generator. Fixes UIU-3539.
 * Replace the `ui-requests.all` permission with `ui-requests.create` to display the "New request" buttons. Refs UIU-3211.
 * *BREAKING* Change `users/settings/entries` to `user/settings`. Update `users.settings` interface version to 2.0. Refs UIU-3506.
+* Refactor `withServicePoints` to update service points and current service point in a single call of `updateUser` to prevent the second call overwriting the first call's updates. Prevent redirection when a service point modal appears while saving an updated user record. Fixes UIU-3541.
 
 ## [12.1.16] (https://github.com/folio-org/ui-users/tree/v12.1.16) (2025-12-29)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.15...v12.1.16)
