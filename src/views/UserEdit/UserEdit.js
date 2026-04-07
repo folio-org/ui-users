@@ -30,6 +30,7 @@ import {
   OKAPI_TENANT_HEADER,
   USER_FIELDS_TO_CHECK,
   deliveryFulfillmentValues,
+  PREFERRED_SP_NONE,
 } from '../../constants';
 import { resourcesLoaded, showErrorCallout } from './UserEditHelpers';
 import { preferredEmailCommunicationOptions } from '../../components/EditSections/EditContactInfo/constants';
@@ -63,7 +64,8 @@ class UserEdit extends React.Component {
     initialAssignedRoleIds: PropTypes.object,
     isLoadingAffiliationRoles: PropTypes.bool.isRequired,
     checkAndHandleKeycloakAuthUser: PropTypes.func,
-    confirmCreateKeycloakUser: PropTypes.func
+    confirmCreateKeycloakUser: PropTypes.func,
+    setIsCreateKeycloakUserConfirmationOpen: PropTypes.func.isRequired,
   }
 
   static contextType = CalloutContext;
@@ -85,6 +87,8 @@ class UserEdit extends React.Component {
       this.setState({ isLoading: false });
     }
   }
+
+  updateSP = null;
 
   getUser() {
     const { resources, match: { params: { id } } } = this.props;
@@ -284,7 +288,7 @@ class UserEdit extends React.Component {
     mutator.userReadingRoomPermissions.PUT(payload);
   }
 
-  onCompleteEdit = () => {
+  redirect = () => {
     const {
       match: { params },
       history,
@@ -300,6 +304,17 @@ class UserEdit extends React.Component {
     });
   }
 
+  afterUpdate = async () => {
+    const { setIsCreateKeycloakUserConfirmationOpen } = this.props;
+
+    if (this.updateSP) {
+      setIsCreateKeycloakUserConfirmationOpen(false);
+      await this.updateSP();
+    }
+
+    this.redirect();
+  }
+
   async update({ requestPreferences, readingRoomsAccessList, ...userFormData }) {
     const {
       updateProxies,
@@ -307,6 +322,7 @@ class UserEdit extends React.Component {
       updateServicePoints,
       resources,
       stripes,
+      match,
     } = this.props;
 
     const propertiesToOmit = ['creds', 'proxies', 'sponsors', 'permissions', 'servicePoints', 'preferredServicePoint', 'assignedRoleIds', 'initialAssignedRoleIds', 'tenantId'];
@@ -347,7 +363,18 @@ class UserEdit extends React.Component {
     }
 
     if (stripes.hasPerm('inventory-storage.service-points-users.item.post,inventory-storage.service-points-users.item.put')) {
-      updateServicePoints(servicePoints, preferredServicePoint);
+      const updateSP = () => updateServicePoints(servicePoints, preferredServicePoint);
+      const hasUserEditedTheirOwnRecord = match.params.id === stripes.user.user.id;
+
+      if (hasUserEditedTheirOwnRecord && preferredServicePoint === PREFERRED_SP_NONE) {
+        // When a user edits their own record and have "NONE" as the preferred service point,
+        // we need to stop the redirect, display the service points ChangeServicePoint modal,
+        // and only redirect after the user confirms/cancels the modal.
+        // Display the service points modal only after the user record has been updated.
+        this.updateSP = updateSP;
+      } else {
+        updateSP();
+      }
     }
 
     const data = omit(user, propertiesToOmit);
@@ -373,10 +400,10 @@ class UserEdit extends React.Component {
     const { mutator, stripes } = this.props;
     try {
       if (stripes.hasInterface('users-keycloak')) {
-        await this.props.checkAndHandleKeycloakAuthUser(this.onCompleteEdit, data, mutator);
+        await this.props.checkAndHandleKeycloakAuthUser(this.afterUpdate, data, mutator);
       } else {
         await mutator.selUser.PUT(data);
-        this.onCompleteEdit();
+        await this.afterUpdate();
       }
     } catch (e) {
       showErrorCallout(e, this.context.sendCallout);
@@ -532,7 +559,7 @@ class UserEdit extends React.Component {
         formData={formData}
         initialValues={this.getUserFormValues()} // values are strictly values...if we're editing (id param present) pull in existing values.
         onSubmit={onSubmit}
-        onCancel={this.onCompleteEdit}
+        onCancel={this.redirect}
         uniquenessValidator={this.props.mutator.uniquenessValidator}
         match={this.props.match}
         numberGeneratorData={numberGeneratorData}
@@ -541,8 +568,8 @@ class UserEdit extends React.Component {
         stripes={this.props.stripes}
         profilePictureConfig={profilePictureConfig}
         isCreateKeycloakUserConfirmationOpen={isCreateKeycloakUserConfirmationOpen}
-        onCancelKeycloakConfirmation={this.onCompleteEdit}
-        confirmCreateKeycloakUser={() => this.props.confirmCreateKeycloakUser(this.onCompleteEdit)}
+        onCancelKeycloakConfirmation={this.afterUpdate}
+        confirmCreateKeycloakUser={() => this.props.confirmCreateKeycloakUser(this.afterUpdate)}
         setTenantId={setTenantId}
         tenantId={tenantId}
         setAssignedRoleIds={setAssignedRoleIds}

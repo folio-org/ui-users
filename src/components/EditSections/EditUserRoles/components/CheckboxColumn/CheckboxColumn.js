@@ -35,7 +35,7 @@ const CheckboxColumn = memo(props => {
 CheckboxColumn.propTypes = {
   value: PropTypes.string.isRequired,
   checked: PropTypes.bool,
-  roleName: PropTypes.string.isRequired,
+  roleName: PropTypes.string,
   onChange: PropTypes.func,
 };
 
