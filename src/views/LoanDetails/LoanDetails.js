@@ -457,13 +457,7 @@ class LoanDetails extends React.Component {
       );
     }
 
-    const loanPolicyName = isEmpty(loanPolicies)
-      ? '-'
-      : loanPolicies[loan.loanPolicyId];
-
-    if (!loanPolicyName) {
-      return <div />;
-    }
+    const loanPolicyName = loanPolicies?.[loan.loanPolicyId] || <NoValue />;
 
     const { nonRenewedLoanItems } = this.state;
     const noLoanActionUser = user === null ?
