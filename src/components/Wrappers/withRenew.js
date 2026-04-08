@@ -316,28 +316,20 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
       },
     } = this.props;
 
-    // get a list of unique policy IDs to retrieve. multiple loans may share
-    // the same policy; we only need to retrieve that policy once.
-    const ids = [...new Set(this.state.loans
-      .filter(loan => loan.loanPolicyId)
-      .map(loan => loan.loanPolicyId))];
-    const query = `id==(${ids.join(' or ')})`;
+    reset();
 
-    if (ids.length) {
-      reset();
-      GET({ params: { query, limit: `${ids.length}` } })
-        .then((loanPolicies) => {
-          const loanPolicyObject = loanPolicies.reduce((map, loanPolicy) => {
-            map[loanPolicy.id] = loanPolicy.name;
+    GET({ params: { limit: `${MAX_RECORDS}` } })
+      .then((loanPolicies) => {
+        const loanPolicyObject = loanPolicies.reduce((map, loanPolicy) => {
+          map[loanPolicy.id] = loanPolicy.name;
 
-            return map;
-          }, {});
+          return map;
+        }, {});
 
-          if (this._isMounted) {
-            this.setState({ loanPolicies: loanPolicyObject });
-          }
-        });
-    }
+        if (this._isMounted) {
+          this.setState({ loanPolicies: loanPolicyObject });
+        }
+      });
   };
 
   render() {
