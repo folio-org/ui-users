@@ -7,7 +7,7 @@ import {
   concat,
   orderBy,
 } from 'lodash';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { injectIntl } from 'react-intl';
 
 import {
   AppIcon,
@@ -724,7 +724,7 @@ class UserDetail extends React.Component {
 
     if (this.userNotFound()) {
       return this.renderErrorPane({
-        id: "pane-user-not-found",
+        id: 'pane-user-not-found',
         paneTitle,
         errorMessage: intl.formatMessage({ id: 'ui-users.errors.userNotFound' }),
       });
@@ -732,7 +732,7 @@ class UserDetail extends React.Component {
 
     if (this.selUserFailed()) {
       return this.renderErrorPane({
-        id: "pane-user-request-failed",
+        id: 'pane-user-request-failed',
         paneTitle,
         errorMessage: intl.formatMessage({ id: 'ui-users.errors.userRequestFailed' }),
       });
