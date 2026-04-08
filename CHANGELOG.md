@@ -1,6 +1,7 @@
 # Change history for ui-users
 
 ## 13.0.0 IN PROGRESS
+* Handle non-404 4xx errors in UserDetail. Refs UIU-3057.
 * Collect coverage from unit tests. Refs UIU-3356.
 * Modify translation string for search view: "User search -> Search & filter". Refs UIU-3231.
 * *BREAKING* Use number generator for barcode. Refs UIU-2729.

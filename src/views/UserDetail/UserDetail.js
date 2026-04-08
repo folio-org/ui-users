@@ -589,6 +589,31 @@ class UserDetail extends React.Component {
     return this.props.resources?.selUser?.failed?.httpStatus === 404;
   }
 
+  selUserFailed = () => {
+    const { failed } = this.props.resources?.selUser ?? {};
+    return failed && failed.httpStatus !== 404;
+  }
+
+  renderErrorPane = ({
+    id,
+    paneTitle,
+    errorMessage,
+  }) => {
+    const { paneWidth } = this.props;
+
+    return (
+      <ErrorPane
+        id={id}
+        defaultWidth={paneWidth}
+        paneTitle={paneTitle}
+        dismissible
+        onClose={this.onClose}
+      >
+        {errorMessage}
+      </ErrorPane>
+    );
+  }
+
   loadPatronBlocks() {
     const {
       mutator: {
@@ -695,19 +720,22 @@ class UserDetail extends React.Component {
 
     const displayReadingRoomAccessAccordion = isPatronUser(user) || isStaffUser(user);
     const readingRoomPermissions = resources?.userReadingRoomPermissions;
+    const paneTitle = intl.formatMessage({ id: 'ui-users.information.userDetails' });
 
     if (this.userNotFound()) {
-      return (
-        <ErrorPane
-          id="pane-user-not-found"
-          defaultWidth={paneWidth}
-          paneTitle={<FormattedMessage id="ui-users.information.userDetails" />}
-          dismissible
-          onClose={this.onClose}
-        >
-          <FormattedMessage id="ui-users.errors.userNotFound" />
-        </ErrorPane>
-      );
+      return this.renderErrorPane({
+        id: "pane-user-not-found",
+        paneTitle,
+        errorMessage: intl.formatMessage({ id: 'ui-users.errors.userNotFound' }),
+      });
+    }
+
+    if (this.selUserFailed()) {
+      return this.renderErrorPane({
+        id: "pane-user-request-failed",
+        paneTitle,
+        errorMessage: intl.formatMessage({ id: 'ui-users.errors.userRequestFailed' }),
+      });
     }
 
     // Don't display loading if `resources.selUser.isPending` is true`, because creating a new tag in the 4th pane
@@ -719,7 +747,7 @@ class UserDetail extends React.Component {
         <LoadingPane
           id="pane-userdetails"
           defaultWidth={paneWidth}
-          paneTitle={<FormattedMessage id="ui-users.information.userDetails" />}
+          paneTitle={paneTitle}
           dismissible
           onClose={onClose}
         />
