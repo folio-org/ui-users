@@ -53,9 +53,9 @@ export default function UserRolesModal({ isOpen,
     }
   };
 
-  const toggleAllRoles = (checked) => {
+  const toggleRoleList = (checked, roleList) => {
     if (checked) {
-      setAssignedRoleIds({ ...assignedRoleIds, [tenantId]: allRolesData?.roles.map(role => role.id) });
+      setAssignedRoleIds({ ...assignedRoleIds, [tenantId]: roleList?.map(role => role.id) });
     } else {
       setAssignedRoleIds({ ...assignedRoleIds, [tenantId]: [] });
     }
@@ -172,7 +172,7 @@ export default function UserRolesModal({ isOpen,
               assignedUserRoleIds={assignedRoleIds}
               filteredRoles={filteredRoles}
               toggleRole={toggleRole}
-              toggleAllRoles={toggleAllRoles}
+              toggleRoleList={toggleRoleList}
               tenantId={tenantId}
             />
           </Pane>

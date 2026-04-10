@@ -14,7 +14,7 @@ const renderComponent = (props) => render(<UserRolesList {...props} />);
 
 describe('UserRolesList', () => {
   beforeEach(() => {
-    renderComponent({ assignedUserRoleIds, filteredRoles, toggleRole:mockToggleRole, toggleAllRoles:mockToggleAllRoles, tenantId });
+    renderComponent({ assignedUserRoleIds, filteredRoles, toggleRole: mockToggleRole, toggleRoleList: mockToggleAllRoles, tenantId });
   });
   afterAll(() => {
     cleanup();
@@ -31,7 +31,7 @@ describe('UserRolesList', () => {
 
     await userEvent.click(selectAllCheckbox);
 
-    expect(mockToggleAllRoles).toHaveBeenCalledWith(false);
+    expect(mockToggleAllRoles).toHaveBeenCalledWith(false, filteredRoles);
   });
 
   it('toggle select role', async () => {
