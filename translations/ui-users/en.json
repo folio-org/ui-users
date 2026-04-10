@@ -1147,7 +1147,7 @@
   "index.barcode": "Barcode",
   "index.lastName": "Last name",
   "index.username": "Username",
-  "index.all": "Keyword (name, email, identifier)",
+  "index.all": "Keyword (name, username, email, identifier, custom fields)",
   "loan404": "The requested loan could not be retrieved.",
   "notes.popupModal.label": "User note",
   "errorModal.currentUserServicePointAbsentee.label": "<strong>Access denied</strong>",

@@ -78,6 +78,7 @@
 * Refactor `withServicePoints` to update service points and current service point in a single call of `updateUser` to prevent the second call overwriting the first call's updates. Prevent redirection when a service point modal appears while saving an updated user record. Fixes UIU-3541.
 * Fix problem with missing loan policy. Refs UIU-3512.
 * Handle non-404 4xx errors in UserDetail. Refs UIU-3057.
+* Update the `index.all` translation. Refs UIU-1027.
 
 ## [12.1.16] (https://github.com/folio-org/ui-users/tree/v12.1.16) (2025-12-29)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.15...v12.1.16)
