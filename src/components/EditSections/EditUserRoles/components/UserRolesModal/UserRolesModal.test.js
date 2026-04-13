@@ -6,12 +6,12 @@ jest.mock('../../../../../hooks', () => {
   const mockAllRolesData = {
     data: {
       roles: [{ id: '1', name: 'testRole' },
-      { id: '4', name: 'AAtestRole4' },
-      { id: '3', name: 'testRole3' }]
+        { id: '4', name: 'AAtestRole4' },
+        { id: '3', name: 'testRole3' }]
     },
     allRolesMapStructure: new Map([['1', { id: '1', name: 'testRole' }],
-    ['4', { id: '4', name: 'AAtestRole4' }],
-    ['3', { id: '3', name: 'testRole3' }]])
+      ['4', { id: '4', name: 'AAtestRole4' }],
+      ['3', { id: '3', name: 'testRole3' }]])
   };
 
   return {
