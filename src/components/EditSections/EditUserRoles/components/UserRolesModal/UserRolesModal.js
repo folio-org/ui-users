@@ -55,9 +55,13 @@ export default function UserRolesModal({ isOpen,
 
   const toggleRoleList = (checked, roleList) => {
     if (checked) {
-      setAssignedRoleIds({ ...assignedRoleIds, [tenantId]: roleList?.map(role => role.id) });
+      const currentIds = assignedRoleIds[tenantId] || [];
+      const currentPlusFiltered = new Set([...currentIds, ...roleList.map(role => role.id)]);
+      setAssignedRoleIds({ ...assignedRoleIds, [tenantId]: Array.from(currentPlusFiltered) });
     } else {
-      setAssignedRoleIds({ ...assignedRoleIds, [tenantId]: [] });
+      const idsToUnassign = roleList.map(role => role.id);
+      const remainingIds = (assignedRoleIds[tenantId] || []).filter(id => !idsToUnassign.includes(id));
+      setAssignedRoleIds({ ...assignedRoleIds, [tenantId]: remainingIds });
     }
   };
 
