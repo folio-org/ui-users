@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## IN PROGRESS
+
+* Select user roles' modal's "Select all" button selects all *visible* records, following convention. Refs UIU-3548.
+
 ## [12.1.16] (https://github.com/folio-org/ui-users/tree/v12.1.16) (2025-12-29)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.15...v12.1.16)
 * Optimize role fetching to load only selected tenant's roles instead of all tenants. Fixes UIU-3499.
