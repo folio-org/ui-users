@@ -1256,5 +1256,7 @@
     "stagingRecords.list.columnNames.minor": "Küçük",
     "stagingRecords.minor.yes": "Evet",
     "data.loanActionMap.heldForUseAtLocation": "Konum için kullanım için tutuldu",
-    "data.loanActionMap.pickedUpForUseAtLocation": "Konum için kullanım için alındı"
+    "data.loanActionMap.pickedUpForUseAtLocation": "Konum için kullanım için alındı",
+    "userSearch": "User search",
+    "errors.userRequestFailed": "Unable to retrieve user details"
 }

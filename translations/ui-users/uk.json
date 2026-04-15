@@ -1256,5 +1256,7 @@
     "stagingRecords.list.columnNames.minor": "Другорядне",
     "stagingRecords.minor.yes": "Так",
     "data.loanActionMap.heldForUseAtLocation": "Утримується для використання у місці розміщення",
-    "data.loanActionMap.pickedUpForUseAtLocation": "Забрано для використання у місці розміщення"
+    "data.loanActionMap.pickedUpForUseAtLocation": "Забрано для використання у місці розміщення",
+    "userSearch": "User search",
+    "errors.userRequestFailed": "Unable to retrieve user details"
 }

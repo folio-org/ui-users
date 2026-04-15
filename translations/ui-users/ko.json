@@ -1256,5 +1256,7 @@
     "stagingRecords.list.columnNames.minor": "Minor",
     "stagingRecords.minor.yes": "Yes",
     "data.loanActionMap.heldForUseAtLocation": "Held for use at location",
-    "data.loanActionMap.pickedUpForUseAtLocation": "Picked up for use at location"
+    "data.loanActionMap.pickedUpForUseAtLocation": "Picked up for use at location",
+    "userSearch": "User search",
+    "errors.userRequestFailed": "Unable to retrieve user details"
 }

@@ -745,7 +745,7 @@
     "reports.refunds.staffInfo": "Additional information for staff from refund 'action'",
     "reports.refunds.patronInfo": "Additional information for patron from refund 'action'",
     "reports.refunds.itemBarcode": "資料バーコード",
-    "reports.refunds.instance": "Instance",
+    "reports.refunds.instance": "インスタンス",
     "reports.refunds.actionCompletionDate": "Date action completed",
     "reports.refunds.staffMemberName": "Staff member name",
     "reports.refunds.actionTaken": "Action taken",
@@ -753,7 +753,7 @@
     "information.recalculate.expirationDate": "リセット",
     "information.recalculate.modal.text": "利用者グループ<b> {group} </b>のライブラリ アカウントは、 <b> {offset}日</b>で期限切れになります。このユーザーのアカウントを<b> {date} </b>に期限切れになるように設定しますか?",
     "information.recalculate.modal.label": "有効期限を設定しますか?",
-    "information.recalculate.will.reactivate.user": "User will reactivate after saving",
+    "information.recalculate.will.reactivate.user": "保存後にユーザーが再アクティブ化されます",
     "blocks.form.label.template": "テンプレート名",
     "feefines.errors.notBilledTitle": "紛失手数料は利用者に請求されません",
     "feefines.errors.notBilledMessage": "「手数料/罰金: 所有者」の設定でアイテムの「プライマリ サービス ポイント」に「手数料/罰金所有者」が見つからないため、紛失したアイテムの手数料は利用者に請求されません。 <div> <b>紛失資料の料金を手動で請求する必要があります。 </b> </div>",
@@ -908,7 +908,7 @@
     "reports.financial.patronBarcode": "利用者バーコード",
     "reports.financial.patronGroup": "利用者グループ",
     "reports.financial.patronEmail": "利用者Eメールアドレス",
-    "reports.financial.instance": "Instance",
+    "reports.financial.instance": "インスタンス",
     "reports.financial.contributors": "寄与者",
     "reports.financial.itemBarcode": "資料バーコード",
     "reports.financial.callNumber": "請求記号",
@@ -1256,5 +1256,7 @@
     "stagingRecords.list.columnNames.minor": "Minor",
     "stagingRecords.minor.yes": "はい",
     "data.loanActionMap.heldForUseAtLocation": "Held for use at location",
-    "data.loanActionMap.pickedUpForUseAtLocation": "Picked up for use at location"
+    "data.loanActionMap.pickedUpForUseAtLocation": "Picked up for use at location",
+    "userSearch": "User search",
+    "errors.userRequestFailed": "Unable to retrieve user details"
 }
