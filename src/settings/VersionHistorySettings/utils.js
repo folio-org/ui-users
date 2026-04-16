@@ -123,7 +123,7 @@ const buildCurrentSettings = (currentValues) => {
   };
 };
 
-const sortedJson = (arr) => JSON.stringify([...arr].sort());
+const sortedJson = (arr) => JSON.stringify([...arr].sort((a, b) => a.localeCompare(b)));
 
 export const formValuesToSettingUpdates = (values, currentValues) => {
   const next = buildNextSettings(values);
