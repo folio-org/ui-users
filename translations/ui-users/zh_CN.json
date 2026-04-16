@@ -1256,5 +1256,7 @@
     "stagingRecords.list.columnNames.minor": "次要的",
     "stagingRecords.minor.yes": "是",
     "data.loanActionMap.heldForUseAtLocation": "预约在馆藏地使用",
-    "data.loanActionMap.pickedUpForUseAtLocation": "领取后在馆藏地使用"
+    "data.loanActionMap.pickedUpForUseAtLocation": "领取后在馆藏地使用",
+    "userSearch": "User search",
+    "errors.userRequestFailed": "Unable to retrieve user details"
 }

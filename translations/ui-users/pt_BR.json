@@ -694,7 +694,7 @@
     "reports.inProgress": "Exportação em andamento",
     "departments": "Departamentos",
     "index.username": "Nome de usuário",
-    "index.all": "Palavra-chave (nome, e-mail, identificador)",
+    "index.all": "Palavra-chave (nome, nome de usuário, e-mail, identificador, campos personalizados)",
     "index.lastName": "Sobrenome",
     "index.barcode": "Código de barras",
     "loans.confirmDeclaredLost": "Confirme o status do item: Declarado perdido",
@@ -1048,8 +1048,8 @@
     "loans.staffInfoDialogBody": "Adicione novas informações de equipe para <strong> {title} ({materialType}) </strong> (código de barras: {barcode}).",
     "loans.addInfo.patron": "Adicionar novas informações do usuário",
     "loans.addInfo.staff": "Adicionar novas informações da equipe",
-    "errors.affiliationsLoadFailed": "O carregamento de afiliações para o usuário <b> {user} </b> no locatário <b> {tenantId} </b> falhou.",
-    "errors.permissionsLoadFailed": "O carregamento de permissões para o usuário <b> {user} </b> no locatário <b> {tenantId} </b> falhou.",
+    "errors.affiliationsLoadFailed": "O carregamento de afiliações para o usuário <b> {user} </b> no inquilino <b> {tenantId} </b> falhou.",
+    "errors.permissionsLoadFailed": "O carregamento de permissões para o usuário <b> {user} </b> no inquilino <b> {tenantId} </b> falhou.",
     "affiliations.select.label": "Afiliação",
     "permission.settings.view": "Configurações (Usuários): Ver todas as configurações",
     "permission.settings.addresstypes.view": "Configurações (Usuários): Pode visualizar tipos de endereço",
@@ -1256,5 +1256,7 @@
     "stagingRecords.list.columnNames.minor": "Menor",
     "stagingRecords.minor.yes": "Sim",
     "data.loanActionMap.heldForUseAtLocation": "Mantido para uso no local",
-    "data.loanActionMap.pickedUpForUseAtLocation": "Retirado para uso no local"
+    "data.loanActionMap.pickedUpForUseAtLocation": "Retirado para uso no local",
+    "userSearch": "Buscar usuário",
+    "errors.userRequestFailed": "Não foi possível recuperar os detalhes do usuário"
 }

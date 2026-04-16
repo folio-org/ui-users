@@ -1256,5 +1256,7 @@
     "stagingRecords.list.columnNames.minor": "Maznozīmīgs",
     "stagingRecords.minor.yes": "Jā",
     "data.loanActionMap.heldForUseAtLocation": "Uzglabāts izmantošanai uz vietas",
-    "data.loanActionMap.pickedUpForUseAtLocation": "Paņemts lietošanai uz vietas"
+    "data.loanActionMap.pickedUpForUseAtLocation": "Paņemts lietošanai uz vietas",
+    "userSearch": "User search",
+    "errors.userRequestFailed": "Unable to retrieve user details"
 }

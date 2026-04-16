@@ -694,7 +694,7 @@
     "reports.inProgress": "Export in progress",
     "departments": "Dipartimenti",
     "index.username": "Username",
-    "index.all": "Keyword (name, email, identifier)",
+    "index.all": "Keyword (name, username, email, identifier, custom fields)",
     "index.lastName": "Last name",
     "index.barcode": "Barcode",
     "loans.confirmDeclaredLost": "Confermare lo stato dell'oggetto: Dichiarato perso",
@@ -1256,5 +1256,7 @@
     "stagingRecords.list.columnNames.minor": "Minor",
     "stagingRecords.minor.yes": "Yes",
     "data.loanActionMap.heldForUseAtLocation": "Held for use at location",
-    "data.loanActionMap.pickedUpForUseAtLocation": "Picked up for use at location"
+    "data.loanActionMap.pickedUpForUseAtLocation": "Picked up for use at location",
+    "userSearch": "User search",
+    "errors.userRequestFailed": "Unable to retrieve user details"
 }
