@@ -73,6 +73,7 @@ const settingsGeneral = [
     label: <FormattedMessage id="ui-users.settings.versionHistory" />,
     component: VersionHistorySettings,
     perm: 'ui-users.settings.versionHistory.view',
+    interface: 'audit-config',
   },
 ];
 

@@ -53,7 +53,8 @@
       "reading-room-patron-permission": "1.0",
       "roles": "1.0",
       "circulation-bff-loans": "1.6",
-      "users-keycloak": "1.0"
+      "users-keycloak": "1.0",
+      "audit-config": "1.0"
     },
     "permissionSets": [
       {
