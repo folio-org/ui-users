@@ -241,7 +241,9 @@ class UserDetail extends React.Component {
   }
 
   componentWillUnmount() {
+    const { mutator } = this.props;
     this._isMounted = false;
+    mutator.settings.reset();
   }
 
   /**
