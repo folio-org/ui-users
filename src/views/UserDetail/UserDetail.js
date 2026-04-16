@@ -457,10 +457,14 @@ class UserDetail extends React.Component {
               disabled={isVersionHistoryOpen}
             />
         }
-        <UserVersionHistoryButton
-          disabled={isVersionHistoryOpen}
-          onClick={() => this.showHelperApp(HELPER_APP.VERSION_HISTORY)}
-        />
+        <IfInterface name="audit-user">
+          <IfInterface name="audit-config">
+            <UserVersionHistoryButton
+              disabled={isVersionHistoryOpen}
+              onClick={() => this.showHelperApp(HELPER_APP.VERSION_HISTORY)}
+            />
+          </IfInterface>
+        </IfInterface>
       </PaneMenu>
     );
   }
