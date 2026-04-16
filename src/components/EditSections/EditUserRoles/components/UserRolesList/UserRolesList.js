@@ -10,11 +10,13 @@ const visibleColumns = ['selected', 'roleName', 'status'];
 const UserRolesList = ({ assignedUserRoleIds,
   filteredRoles,
   toggleRole,
-  toggleAllRoles,
+  toggleRoleList,
   tenantId }) => {
   const allChecked = filteredRoles.every(filteredRole => assignedUserRoleIds[tenantId]?.includes(filteredRole.id));
 
-  const handleToggleAllRoles = (event) => toggleAllRoles(event.target.checked);
+  const handleToggleRoleList = (event) => {
+    toggleRoleList(event.target.checked, filteredRoles);
+  };
 
   return (
     <div data-test-user-roles-list>
@@ -27,16 +29,16 @@ const UserRolesList = ({ assignedUserRoleIds,
         contentData={filteredRoles}
         columnMapping={{
           selected:
-          (
-            <div data-test-select-all-user-roles>
-              <CheckboxColumn
-                roleName="select-all"
-                value="selectAll"
-                checked={allChecked}
-                onChange={handleToggleAllRoles}
-              />
-            </div>
-          ),
+            (
+              <div data-test-select-all-user-roles>
+                <CheckboxColumn
+                  roleName="select-all"
+                  value="selectAll"
+                  checked={allChecked}
+                  onChange={handleToggleRoleList}
+                />
+              </div>
+            ),
           roleName: <FormattedMessage id="ui-users.information.name" />,
           status: <FormattedMessage id="ui-users.information.status" />,
         }}
@@ -57,13 +59,10 @@ const UserRolesList = ({ assignedUserRoleIds,
             </div>
           ),
           status: role => {
-            const statusText = `ui-users.roles.modal.${
-              // eslint-disable-next-line react/prop-types
-              assignedUserRoleIds[tenantId]?.includes(role.id)
-                ? 'assigned'
-                : 'unassigned'
-            }`;
-
+            const status = assignedUserRoleIds[tenantId]?.includes(role.id)
+              ? 'assigned'
+              : 'unassigned';
+            const statusText = `ui-users.roles.modal.${status}`;
             return <div data-test-role-status><FormattedMessage id={statusText} /></div>;
           }
         }}
@@ -81,7 +80,7 @@ UserRolesList.propTypes = {
     })
   ).isRequired,
   toggleRole: PropTypes.func.isRequired,
-  toggleAllRoles: PropTypes.func.isRequired,
+  toggleRoleList: PropTypes.func.isRequired,
   tenantId: PropTypes.string.isRequired
 };
 

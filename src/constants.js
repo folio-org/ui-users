@@ -428,6 +428,8 @@ export const SUPPRESS_EDIT_SETTING_KEY = 'suppressEdit';
 
 export const USER_AFFILIATION_ROLES_CACHE_KEY = 'user-affiliation-roles';
 
+export const PREFERRED_SP_NONE = '-';
+
 export const AUDIT_USER_SETTING_GROUP = 'audit.user';
 export const AUDIT_SETTINGS_NAMESPACE_KEY = 'audit-settings';
 export const AUDIT_SETTINGS_ENDPOINT = `audit/config/groups/${AUDIT_USER_SETTING_GROUP}/settings`;

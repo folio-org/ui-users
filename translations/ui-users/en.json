@@ -426,6 +426,7 @@
   "errors.reviewBeforeRenewal": "{message} Please review {policyName} before retrying renewal.",
   "errors.loanNotRenewedReason": "Loan cannot be renewed because: {message}.",
   "errors.userNotFound": "User not found",
+  "errors.userRequestFailed": "Unable to retrieve user details",
   "errors.proxyBorrowerNotFound": "Proxy borrower not found",
   "errors.permissionChangeFailed": "Permissions were not changed",
   "errors.permissionsLoadFailed": "Permissions loading for user <b>{user}</b> in <b>{tenantId}</b> tenant was failed.",
@@ -1146,7 +1147,7 @@
   "index.barcode": "Barcode",
   "index.lastName": "Last name",
   "index.username": "Username",
-  "index.all": "Keyword (name, email, identifier)",
+  "index.all": "Keyword (name, username, email, identifier, custom fields)",
   "loan404": "The requested loan could not be retrieved.",
   "notes.popupModal.label": "User note",
   "errorModal.currentUserServicePointAbsentee.label": "<strong>Access denied</strong>",
@@ -1261,6 +1262,8 @@
 
   "title.patronBlock.create": "Users - Create a new patron block",
   "title.patronBlock.edit": "Users - Edit a patron block",
+  
+  "userSearch": "User search",
 
   "settings.versionHistory": "Version history",
   "settings.versionHistory.createVersionHistory": "Create version history",

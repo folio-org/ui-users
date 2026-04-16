@@ -1247,14 +1247,16 @@
     "information.profilePicture.retakePhoto": "Перезняти фото",
     "requests.fulfillmentPreference.info": "Увімкніть чекбокс <strong>Доставка</strong>, щоб вибрати <strong>Налаштування виконання</strong> та <strong>Адреса доставки за замовчуванням</strong>.",
     "loans.columns.useAtLocation": "Використовувати у місці розміщення",
-    "loans.columns.useAtLocation.In use": "In use in {servicePoint}",
-    "loans.columns.useAtLocation.Held": "Held in {servicePoint} until {expiry}",
+    "loans.columns.useAtLocation.In use": "Використовується на {servicePoint}",
+    "loans.columns.useAtLocation.Held": "Утримується на {servicePoint} до {expiry}",
     "loans.columns.useAtLocation.Returned": "Повернуто",
     "loans.numOpenLoans.useAtLocation": "Використовувати у місці розміщення",
     "loans.numOpenLoans.held": "Утримується: {count}",
     "loans.numOpenLoans.inUse": "Використовується: {count}",
     "stagingRecords.list.columnNames.minor": "Другорядне",
     "stagingRecords.minor.yes": "Так",
-    "data.loanActionMap.heldForUseAtLocation": "Held for use at location",
-    "data.loanActionMap.pickedUpForUseAtLocation": "Picked up for use at location"
+    "data.loanActionMap.heldForUseAtLocation": "Утримується для використання у місці розміщення",
+    "data.loanActionMap.pickedUpForUseAtLocation": "Забрано для використання у місці розміщення",
+    "userSearch": "User search",
+    "errors.userRequestFailed": "Unable to retrieve user details"
 }

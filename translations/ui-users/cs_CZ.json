@@ -694,7 +694,7 @@
     "reports.inProgress": "Probíhá export",
     "departments": "Oddělení",
     "index.username": "Uživatelské jméno",
-    "index.all": "Klíčové slovo (jméno, e-mail, identifikátor)",
+    "index.all": "Klíčové slovo (jméno, uživatelské jméno, e-mail, identifikátor, vlastní pole)",
     "index.lastName": "Příjmení",
     "index.barcode": "Čárový kód",
     "loans.confirmDeclaredLost": "Potvrďte stav jednotky: Prohlášeno za ztracenou",
@@ -1256,5 +1256,7 @@
     "stagingRecords.list.columnNames.minor": "Drobné",
     "stagingRecords.minor.yes": "Ano",
     "data.loanActionMap.heldForUseAtLocation": "Drženo pro použití na místě",
-    "data.loanActionMap.pickedUpForUseAtLocation": "Vyzvednuto k použití na místě"
+    "data.loanActionMap.pickedUpForUseAtLocation": "Vyzvednuto k použití na místě",
+    "userSearch": "Vyhledávání uživatelů",
+    "errors.userRequestFailed": "Nelze načíst údaje o uživateli"
 }
