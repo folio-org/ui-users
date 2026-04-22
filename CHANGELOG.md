@@ -1,7 +1,7 @@
 # Change history for ui-users
 
-## IN PROGRESS
-
+## [12.1.17] (https://github.com/folio-org/ui-users/tree/v12.1.17) (2026-04-22)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.16...v12.1.17)
 * Select user roles' modal's "Select all" button selects all *visible* records, following convention. Refs UIU-3548.
 
 ## [12.1.16] (https://github.com/folio-org/ui-users/tree/v12.1.16) (2025-12-29)
