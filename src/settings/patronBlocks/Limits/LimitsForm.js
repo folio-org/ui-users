@@ -165,6 +165,7 @@ class LimitsForm extends Component {
           footer={this.renderFooter()}
         >
           {this.renderConditions()}
+          <div>_</div>
         </Pane>
       </form>
     );
