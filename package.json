@@ -1245,12 +1245,12 @@
     "@babel/plugin-transform-runtime": "^7.21.4",
     "@babel/preset-env": "^7.21.4",
     "@babel/preset-react": "^7.9.0",
-    "@folio/eslint-config-stripes": "^8.0.0",
-    "@folio/jest-config-stripes": "^3.0.0",
+    "@folio/eslint-config-stripes": "^9.0.0",
+    "@folio/jest-config-stripes": "^3.1.0",
     "@folio/service-interaction": "^4.0.0",
     "@folio/stripes": "^10.1.0",
-    "@folio/stripes-cli": "^4.0.0",
-    "@folio/stripes-erm-components": "^10.0.0",
+    "@folio/stripes-cli": "^5.0.0",
+    "@folio/stripes-erm-components": "^10.1.0",
     "@folio/stripes-testing": "^5.0.0",
     "core-js": "^3.6.4",
     "eslint": "^7.32.0",
@@ -1268,7 +1268,6 @@
     "regenerator-runtime": "^0.13.9"
   },
   "dependencies": {
-    "@folio/stripes-util": "^7.0.0",
     "compressorjs": "^1.2.1",
     "dompurify": "^3.2.0",
     "final-form-set-field-data": "^1.0.2",
@@ -1293,7 +1292,7 @@
   "peerDependencies": {
     "@folio/service-interaction": "^4.0.0",
     "@folio/stripes": "^10.1.0",
-    "@folio/stripes-erm-components": "^10.0.0",
+    "@folio/stripes-erm-components": "^10.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-intl": "^7.1.5",
@@ -1303,6 +1302,6 @@
     "react-router-dom": "^5.2.0"
   },
   "optionalDependencies": {
-    "@folio/plugin-find-user": "^8.0.0"
+    "@folio/plugin-find-user": "^8.1.0"
   }
 }
