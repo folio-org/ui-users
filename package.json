@@ -53,7 +53,8 @@
       "reading-room-patron-permission": "1.0",
       "roles": "1.0",
       "circulation-bff-loans": "1.6",
-      "users-keycloak": "1.0"
+      "users-keycloak": "1.0",
+      "audit-config": "1.0"
     },
     "permissionSets": [
       {
@@ -1212,6 +1213,29 @@
           "module.users.enabled",
           "ui-users.view",
           "staging-users.collection.get"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.versionHistory.view",
+        "displayName": "Settings (Users): Can view version history settings",
+        "subPermissions": [
+          "settings.users.enabled",
+          "audit.config.groups.settings.collection.get",
+          "audit.config.groups.settings.audit.user.collection.get"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-users.settings.versionHistory.edit",
+        "displayName": "Settings (Users): Can view and edit version history settings",
+        "subPermissions": [
+          "ui-users.settings.versionHistory.view",
+          "audit.config.groups.settings.item.put",
+          "audit.config.groups.settings.audit.user.enabled.item.put",
+          "audit.config.groups.settings.audit.user.records.retention.period.item.put",
+          "audit.config.groups.settings.audit.user.anonymize.item.put",
+          "audit.config.groups.settings.audit.user.excluded.fields.item.put"
         ],
         "visible": true
       },
