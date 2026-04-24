@@ -14,10 +14,8 @@ import {
   MAX_RECORDS,
   PERMISSIONS_API,
 } from '../../constants';
-import {
-  batchRequest,
-  buildQueryByIds,
-} from '../utils';
+import { buildQueryByIds } from '../../../../utils';
+import { batchRequest } from '../utils';
 
 const DEFAULT_DATA = [];
 

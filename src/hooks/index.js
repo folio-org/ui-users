@@ -16,3 +16,7 @@ export { default as useStagingUsersQuery } from './useStagingUsersQuery';
 export { default as useUsersQuery } from './useUsersQuery';
 export { default as useUserAffiliationRoles } from './useUserAffiliationRoles';
 export { default as useCustomFieldsSection } from './useCustomFieldsSection';
+export { default as useAuditSettingsQuery } from './useAuditSettingsQuery';
+export { default as useDepartmentsQuery } from './useDepartmentsQuery';
+export { default as useUserAuditDataQuery } from './useUserAuditDataQuery';
+export { default as useUserVersionHistory } from './useUserVersionHistory';

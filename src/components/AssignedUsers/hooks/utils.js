@@ -8,14 +8,7 @@ import {
   MAX_RECORDS,
   PERMISSIONS_API,
 } from '../constants';
-
-export const buildQueryByIds = (itemsChunk) => {
-  const query = itemsChunk
-    .map(chunkId => `id==${chunkId}`)
-    .join(' or ');
-
-  return query || '';
-};
+import { buildQueryByIds } from '../../../utils';
 
 export const buildQueryByUserIds = (itemsChunk) => {
   const query = itemsChunk
