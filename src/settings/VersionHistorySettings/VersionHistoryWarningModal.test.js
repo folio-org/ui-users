@@ -43,7 +43,7 @@ describe('VersionHistoryWarningModal', () => {
   it('calls onConfirm when confirm button clicked', async () => {
     renderComponent();
 
-    await userEvent.click(screen.getByText('ui-users.settings.versionHistory.warning.confirm'));
+    await userEvent.click(screen.getByRole('button', { name: 'confirm' }));
 
     expect(defaultProps.onConfirm).toHaveBeenCalled();
   });
@@ -51,7 +51,7 @@ describe('VersionHistoryWarningModal', () => {
   it('calls onCancel when cancel button clicked', async () => {
     renderComponent();
 
-    await userEvent.click(screen.getByText('ui-users.settings.versionHistory.warning.cancel'));
+    await userEvent.click(screen.getByRole('button', { name: 'cancel' }));
 
     expect(defaultProps.onCancel).toHaveBeenCalled();
   });

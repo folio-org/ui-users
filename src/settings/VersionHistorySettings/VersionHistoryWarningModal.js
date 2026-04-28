@@ -1,46 +1,36 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Button, Modal, ModalFooter } from '@folio/stripes/components';
+import { ConfirmationModal } from '@folio/stripes/components';
 
 import { renderBold } from './utils';
 import css from './VersionHistoryWarningModal.css';
 
 const VersionHistoryWarningModal = ({ open, warnings, onConfirm, onCancel }) => {
-  const footer = (
-    <ModalFooter>
-      <Button
-        buttonStyle="danger"
-        onClick={onConfirm}
-      >
-        <FormattedMessage id="ui-users.settings.versionHistory.warning.confirm" />
-      </Button>
-      <Button onClick={onCancel}>
-        <FormattedMessage id="ui-users.settings.versionHistory.warning.cancel" />
-      </Button>
-    </ModalFooter>
-  );
+  const message = warnings.map((warning) => (
+    <p key={warning.type} className={css.warning}>
+      <FormattedMessage
+        id={`ui-users.settings.versionHistory.warning.${warning.type}`}
+        values={{
+          period: warning.formattedPeriod,
+          b: renderBold,
+        }}
+      />
+    </p>
+  ));
 
   return (
-    <Modal
+    <ConfirmationModal
       open={open}
-      label={<FormattedMessage id="ui-users.settings.versionHistory.warning.title" />}
-      footer={footer}
-      dismissible
-      onClose={onCancel}
-    >
-      {warnings.map((warning) => (
-        <p key={warning.type} className={css.warning}>
-          <FormattedMessage
-            id={`ui-users.settings.versionHistory.warning.${warning.type}`}
-            values={{
-              period: warning.formattedPeriod,
-              b: renderBold,
-            }}
-          />
-        </p>
-      ))}
-    </Modal>
+      heading={<FormattedMessage id="ui-users.settings.versionHistory.warning.title" />}
+      message={message}
+      bodyTag="div"
+      buttonStyle="danger"
+      confirmLabel={<FormattedMessage id="ui-users.settings.versionHistory.warning.confirm" />}
+      cancelLabel={<FormattedMessage id="ui-users.settings.versionHistory.warning.cancel" />}
+      onConfirm={onConfirm}
+      onCancel={onCancel}
+    />
   );
 };
 
