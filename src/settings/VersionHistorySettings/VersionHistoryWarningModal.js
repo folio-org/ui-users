@@ -26,6 +26,8 @@ const VersionHistoryWarningModal = ({ open, warnings, onConfirm, onCancel }) => 
       open={open}
       label={<FormattedMessage id="ui-users.settings.versionHistory.warning.title" />}
       footer={footer}
+      dismissible
+      onClose={onCancel}
     >
       {warnings.map((warning) => (
         <p key={warning.type} className={css.warning}>

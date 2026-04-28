@@ -43,9 +43,9 @@ export const USER_FIELDS = [
   { value: 'personal.addresses', labelId: 'ui-users.contact.addresses' },
   // Extended information
   { value: 'enrollmentDate', labelId: 'ui-users.extended.dateEnrolled' },
-  { value: 'departments', labelId: 'ui-users.versionHistory.field.departments' },
-  { value: 'tags', labelId: 'ui-users.versionHistory.field.tags' },
-  { value: 'proxyFor', labelId: 'ui-users.versionHistory.field.proxyFor' },
+  { value: 'departments', labelId: 'ui-users.departments' },
+  { value: 'tags', labelId: 'ui-users.tags' },
+  { value: 'proxyFor', labelId: 'ui-users.permissions.proxy.sponsor' },
 ];
 
 export const SETTING_KEYS = {

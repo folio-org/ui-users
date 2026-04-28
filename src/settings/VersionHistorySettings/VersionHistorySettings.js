@@ -5,7 +5,12 @@ import { TitleManager, useCallout } from '@folio/stripes/core';
 import { useCustomFieldsQuery } from '@folio/stripes/smart-components';
 
 import { USER_FIELDS } from './constants';
-import { settingsToFormValues, formValuesToSettingUpdates, buildWarnings } from './utils';
+import {
+  settingsToFormValues,
+  getStoredRetentionDays,
+  formValuesToSettingUpdates,
+  buildWarnings,
+} from './utils';
 import useVersionHistorySettings from './useVersionHistorySettings';
 import VersionHistoryForm from './VersionHistoryForm';
 import VersionHistoryWarningModal from './VersionHistoryWarningModal';
@@ -15,7 +20,7 @@ const VersionHistorySettings = () => {
   const { formatMessage } = useIntl();
   const callout = useCallout();
   const { settings, isLoading, saveSettings } = useVersionHistorySettings();
-  const { customFields } = useCustomFieldsQuery({
+  const { customFields, isLoadingCustomFields } = useCustomFieldsQuery({
     moduleName: 'users',
     entityType: 'user',
   });
@@ -24,6 +29,7 @@ const VersionHistorySettings = () => {
   const [currentWarnings, setCurrentWarnings] = useState([]);
 
   const initialValues = useMemo(() => settingsToFormValues(settings), [settings]);
+  const storedRetentionDays = useMemo(() => getStoredRetentionDays(settings), [settings]);
 
   const fieldOptions = useMemo(() => {
     const userOpts = USER_FIELDS.map(({ value, labelId }) => ({
@@ -47,7 +53,7 @@ const VersionHistorySettings = () => {
 
   const performSave = useCallback(async (values) => {
     try {
-      const updates = formValuesToSettingUpdates(values, initialValues);
+      const updates = formValuesToSettingUpdates(values, initialValues, storedRetentionDays);
 
       if (updates.length > 0) {
         await saveSettings(updates);
@@ -62,10 +68,10 @@ const VersionHistorySettings = () => {
         message: formatMessage({ id: 'ui-users.settings.versionHistory.save.error' }),
       });
     }
-  }, [initialValues, saveSettings, callout, formatMessage]);
+  }, [initialValues, storedRetentionDays, saveSettings, callout, formatMessage]);
 
   const handleSubmit = useCallback((values) => {
-    const warnings = buildWarnings(initialValues, values, formatMessage);
+    const warnings = buildWarnings(initialValues, values, formatMessage, storedRetentionDays);
 
     if (warnings.length > 0) {
       setPendingValues(values);
@@ -73,7 +79,7 @@ const VersionHistorySettings = () => {
     } else {
       performSave(values);
     }
-  }, [initialValues, performSave]);
+  }, [initialValues, storedRetentionDays, formatMessage, performSave]);
 
   const handleWarningConfirm = useCallback(async () => {
     resetWarningState();
@@ -84,7 +90,7 @@ const VersionHistorySettings = () => {
     resetWarningState();
   }, [resetWarningState]);
 
-  if (isLoading) return <Loading />;
+  if (isLoading || isLoadingCustomFields) return <Loading />;
 
   return (
     <TitleManager record={formatMessage({ id: 'ui-users.settings.versionHistory' })}>

@@ -8,6 +8,7 @@ import {
   Col,
   InfoPopover,
   Label,
+  Layout,
   MultiSelection,
   Pane,
   PaneFooter,
@@ -18,6 +19,7 @@ import {
   TextField,
   Tooltip,
 } from '@folio/stripes/components';
+import { IfPermission } from '@folio/stripes/core';
 import stripesFinalForm from '@folio/stripes/final-form';
 import isEqual from 'lodash/isEqual';
 
@@ -48,14 +50,16 @@ const VersionHistoryForm = ({ handleSubmit, pristine, submitting, fieldOptions }
   const renderFooter = () => (
     <PaneFooter
       renderEnd={(
-        <Button
-          type="submit"
-          buttonStyle="primary paneHeaderNewButton"
-          disabled={pristine || submitting}
-          marginBottom0
-        >
-          <FormattedMessage id="stripes-core.button.save" />
-        </Button>
+        <IfPermission perm="ui-users.settings.versionHistory.edit">
+          <Button
+            type="submit"
+            buttonStyle="primary"
+            disabled={pristine || submitting}
+            marginBottom0
+          >
+            <FormattedMessage id="stripes-core.button.save" />
+          </Button>
+        </IfPermission>
       )}
     />
   );
@@ -79,6 +83,9 @@ const VersionHistoryForm = ({ handleSubmit, pristine, submitting, fieldOptions }
     [fieldOptions],
   );
 
+  const labelForExcludedValue = (value) => fieldOptionsMap[value]?.label
+    ?? formatMessage({ id: 'ui-users.settings.versionHistory.excludedFields.unknown' }, { value });
+
   const anonymizeCheckbox = (
     <Field
       name="anonymizeSource"
@@ -98,7 +105,7 @@ const VersionHistoryForm = ({ handleSubmit, pristine, submitting, fieldOptions }
       disabled={isNever}
       placeholder={formatMessage({ id: 'ui-users.settings.versionHistory.excludedFields.placeholder' })}
       itemToString={(option) => option?.label ?? option ?? ''}
-      format={(value) => (value || []).map(v => fieldOptionsMap[v] || { value: v, label: v })}
+      format={(value) => (value || []).map(v => ({ value: v, label: labelForExcludedValue(v) }))}
       parse={(items) => (items || []).map(item => item?.value ?? item)}
       isEqual={isEqual}
     />
@@ -132,27 +139,25 @@ const VersionHistoryForm = ({ handleSubmit, pristine, submitting, fieldOptions }
             label={<FormattedMessage id="ui-users.settings.versionHistory.retainIndefinitely" />}
             id="retention-mode-indefinitely"
           />
-          <Field
-            name="retentionMode"
-            component={RadioButton}
-            type="radio"
-            value={RETENTION_MODES.DURATION}
-            label={(
-              <>
-                <FormattedMessage id="ui-users.settings.versionHistory.retainForDuration" />
-                <InfoPopover
-                  iconSize="medium"
-                  content={(
-                    <FormattedMessage
-                      id="ui-users.settings.versionHistory.retainForDuration.info"
-                      values={{ b: renderBold }}
-                    />
-                  )}
+          <Layout className="flex">
+            <Field
+              name="retentionMode"
+              component={RadioButton}
+              type="radio"
+              value={RETENTION_MODES.DURATION}
+              label={<FormattedMessage id="ui-users.settings.versionHistory.retainForDuration" />}
+              id="retention-mode-duration"
+            />
+            <InfoPopover
+              iconSize="medium"
+              content={(
+                <FormattedMessage
+                  id="ui-users.settings.versionHistory.retainForDuration.info"
+                  values={{ b: renderBold }}
                 />
-              </>
-            )}
-            id="retention-mode-duration"
-          />
+              )}
+            />
+          </Layout>
         </RadioButtonGroup>
 
         <div className={css.indentedSection}>

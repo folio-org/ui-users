@@ -64,10 +64,14 @@ export const settingsToFormValues = (settings) => {
     durationUnit,
     anonymizeSource: anonymizeSetting?.value === true,
     excludedFields,
-    // Raw stored retention period — preserved across disable/enable so warnings
-    // can compare a new period against the last one that was actually persisted.
-    storedRetentionDays: typeof retentionDays === 'number' ? retentionDays : 0,
   };
+};
+
+export const getStoredRetentionDays = (settings) => {
+  const retentionSetting = findSetting(settings, SETTING_KEYS.RETENTION_PERIOD);
+  const value = retentionSetting?.value;
+
+  return typeof value === 'number' ? value : 0;
 };
 
 const buildSettingUpdate = (key, value, type) => ({
@@ -112,12 +116,12 @@ const buildNextSettings = (values) => {
 // Projects the initial (backend-derived) form values onto the same shape. Uses
 // storedRetentionDays so a currently-NEVER state still carries the last persisted
 // period — otherwise the diff would lose that information.
-const buildCurrentSettings = (currentValues) => {
+const buildCurrentSettings = (currentValues, storedRetentionDays) => {
   const wasEnabled = currentValues.retentionMode !== RETENTION_MODES.NEVER;
 
   return {
     enabled: wasEnabled,
-    retentionDays: wasEnabled ? getRetentionDays(currentValues) : (currentValues.storedRetentionDays ?? 0),
+    retentionDays: wasEnabled ? getRetentionDays(currentValues) : (storedRetentionDays ?? 0),
     anonymize: !!currentValues.anonymizeSource,
     excludedFields: currentValues.excludedFields || [],
   };
@@ -125,9 +129,9 @@ const buildCurrentSettings = (currentValues) => {
 
 const sortedJson = (arr) => JSON.stringify([...arr].sort((a, b) => a.localeCompare(b)));
 
-export const formValuesToSettingUpdates = (values, currentValues) => {
+export const formValuesToSettingUpdates = (values, currentValues, storedRetentionDays = 0) => {
   const next = buildNextSettings(values);
-  const current = buildCurrentSettings(currentValues);
+  const current = buildCurrentSettings(currentValues, storedRetentionDays);
   const updates = [];
 
   if (next.enabled !== current.enabled) {
@@ -159,7 +163,7 @@ const getUnitLabel = (unitValue, formatMessage) => {
   return unit ? formatMessage({ id: unit.labelId }) : unitValue;
 };
 
-export const buildWarnings = (initialValues, newValues, formatMessage) => {
+export const buildWarnings = (initialValues, newValues, formatMessage, storedRetentionDays = 0) => {
   const warnings = [];
 
   const wasEnabled = initialValues.retentionMode !== RETENTION_MODES.NEVER;
@@ -172,7 +176,7 @@ export const buildWarnings = (initialValues, newValues, formatMessage) => {
   if (isEnabled) {
     const oldDays = wasEnabled
       ? getRetentionDays(initialValues)
-      : (initialValues.storedRetentionDays ?? 0);
+      : (storedRetentionDays ?? 0);
     const newDays = getRetentionDays(newValues);
 
     const isRetentionShortened = (oldDays === -1 && newDays > 0)

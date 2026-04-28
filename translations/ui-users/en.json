@@ -1281,6 +1281,7 @@
   "settings.versionHistory.anonymizeSource": "Anonymize the change source",
   "settings.versionHistory.excludedFields": "Fields to exclude from version history",
   "settings.versionHistory.excludedFields.placeholder": "Select one or more fields",
+  "settings.versionHistory.excludedFields.unknown": "Unknown field ({value})",
   "settings.versionHistory.disabledTooltip": "To enable this field, select <b>Retain indefinitely</b> or <b>Retain for a set duration</b>.",
   "settings.versionHistory.save.success": "Setting was successfully updated.",
   "settings.versionHistory.save.error": "An error occurred while saving version history settings.",
@@ -1292,8 +1293,5 @@
   "settings.versionHistory.warning.cancel": "Cancel & keep editing",
   "settings.versionHistory.warning.confirm": "Save & lose data",
   "permission.settings.versionHistory.view": "Settings (Users): Can view version history settings",
-  "permission.settings.versionHistory.edit": "Settings (Users): Can view and edit version history settings",
-  "versionHistory.field.departments": "Departments",
-  "versionHistory.field.tags": "Tags",
-  "versionHistory.field.proxyFor": "Proxy/sponsor"
+  "permission.settings.versionHistory.edit": "Settings (Users): Can view and edit version history settings"
 }

@@ -1,5 +1,6 @@
 import {
   settingsToFormValues,
+  getStoredRetentionDays,
   formValuesToSettingUpdates,
   buildWarnings,
   validateForm,
@@ -20,10 +21,10 @@ describe('settingsToFormValues', () => {
     expect(result.retentionMode).toBe(RETENTION_MODES.NEVER);
     expect(result.anonymizeSource).toBe(false);
     expect(result.excludedFields).toEqual([]);
-    expect(result.storedRetentionDays).toBe(-1);
+    expect(getStoredRetentionDays(settings)).toBe(-1);
   });
 
-  it('preserves duration fields and storedRetentionDays when disabled but a prior period was stored', () => {
+  it('preserves duration fields when disabled but a prior period was stored', () => {
     const settings = [
       { key: 'enabled', value: false },
       { key: 'records.retention.period', value: 180 },
@@ -36,7 +37,7 @@ describe('settingsToFormValues', () => {
     expect(result.retentionMode).toBe(RETENTION_MODES.NEVER);
     expect(result.durationLength).toBe('6');
     expect(result.durationUnit).toBe('months');
-    expect(result.storedRetentionDays).toBe(180);
+    expect(getStoredRetentionDays(settings)).toBe(180);
   });
 
   it('returns "indefinitely" when enabled and retention is -1', () => {
@@ -174,7 +175,6 @@ describe('formValuesToSettingUpdates', () => {
       durationUnit: 'months',
       anonymizeSource: false,
       excludedFields: [],
-      storedRetentionDays: 180,
     };
     const values = {
       retentionMode: RETENTION_MODES.NEVER,
@@ -182,7 +182,7 @@ describe('formValuesToSettingUpdates', () => {
       excludedFields: [],
     };
 
-    const updates = formValuesToSettingUpdates(values, current);
+    const updates = formValuesToSettingUpdates(values, current, 180);
 
     expect(updates).toEqual(
       expect.arrayContaining([
@@ -198,7 +198,6 @@ describe('formValuesToSettingUpdates', () => {
       durationUnit: 'months',
       anonymizeSource: true,
       excludedFields: ['personal.email'],
-      storedRetentionDays: 180,
     };
     const values = {
       retentionMode: RETENTION_MODES.NEVER,
@@ -206,7 +205,7 @@ describe('formValuesToSettingUpdates', () => {
       excludedFields: ['personal.email'],
     };
 
-    const updates = formValuesToSettingUpdates(values, current);
+    const updates = formValuesToSettingUpdates(values, current, 180);
 
     expect(updates).toEqual(
       expect.arrayContaining([
@@ -221,7 +220,6 @@ describe('formValuesToSettingUpdates', () => {
       retentionMode: RETENTION_MODES.NEVER,
       anonymizeSource: false,
       excludedFields: [],
-      storedRetentionDays: -1,
     };
     const values = {
       retentionMode: RETENTION_MODES.NEVER,
@@ -229,7 +227,7 @@ describe('formValuesToSettingUpdates', () => {
       excludedFields: [],
     };
 
-    const updates = formValuesToSettingUpdates(values, current);
+    const updates = formValuesToSettingUpdates(values, current, -1);
 
     expect(updates).toEqual([]);
   });
@@ -384,7 +382,6 @@ describe('buildWarnings', () => {
       retentionMode: RETENTION_MODES.NEVER,
       anonymizeSource: false,
       excludedFields: [],
-      storedRetentionDays: 0,
     };
     const next = {
       retentionMode: RETENTION_MODES.DURATION,
@@ -394,7 +391,7 @@ describe('buildWarnings', () => {
       excludedFields: [],
     };
 
-    const warnings = buildWarnings(initial, next, formatMessage);
+    const warnings = buildWarnings(initial, next, formatMessage, 0);
 
     expect(warnings).toEqual([]);
   });
@@ -404,7 +401,6 @@ describe('buildWarnings', () => {
       retentionMode: RETENTION_MODES.NEVER,
       anonymizeSource: false,
       excludedFields: [],
-      storedRetentionDays: 180,
     };
     const next = {
       retentionMode: RETENTION_MODES.DURATION,
@@ -414,7 +410,7 @@ describe('buildWarnings', () => {
       excludedFields: [],
     };
 
-    const warnings = buildWarnings(initial, next, formatMessage);
+    const warnings = buildWarnings(initial, next, formatMessage, 180);
 
     expect(warnings).toEqual([]);
   });
@@ -424,7 +420,6 @@ describe('buildWarnings', () => {
       retentionMode: RETENTION_MODES.NEVER,
       anonymizeSource: false,
       excludedFields: [],
-      storedRetentionDays: 365,
     };
     const next = {
       retentionMode: RETENTION_MODES.DURATION,
@@ -434,7 +429,7 @@ describe('buildWarnings', () => {
       excludedFields: [],
     };
 
-    const warnings = buildWarnings(initial, next, formatMessage);
+    const warnings = buildWarnings(initial, next, formatMessage, 365);
 
     expect(warnings).toEqual(
       expect.arrayContaining([
@@ -448,7 +443,6 @@ describe('buildWarnings', () => {
       retentionMode: RETENTION_MODES.NEVER,
       anonymizeSource: false,
       excludedFields: [],
-      storedRetentionDays: -1,
     };
     const next = {
       retentionMode: RETENTION_MODES.DURATION,
@@ -458,7 +452,7 @@ describe('buildWarnings', () => {
       excludedFields: [],
     };
 
-    const warnings = buildWarnings(initial, next, formatMessage);
+    const warnings = buildWarnings(initial, next, formatMessage, -1);
 
     expect(warnings).toEqual(
       expect.arrayContaining([

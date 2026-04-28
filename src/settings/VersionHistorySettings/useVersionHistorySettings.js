@@ -24,8 +24,11 @@ const useVersionHistorySettings = () => {
   });
 
   const saveSettings = useCallback(async (updates) => {
-    await Promise.all(updates.map(update => mutateAsync({ body: update, settingKey: update.key })));
-    await queryClient.invalidateQueries([namespace, AUDIT_USER_SETTING_GROUP]);
+    try {
+      await Promise.all(updates.map(update => mutateAsync({ body: update, settingKey: update.key })));
+    } finally {
+      await queryClient.invalidateQueries([namespace, AUDIT_USER_SETTING_GROUP]);
+    }
   }, [mutateAsync, queryClient, namespace]);
 
   return {
