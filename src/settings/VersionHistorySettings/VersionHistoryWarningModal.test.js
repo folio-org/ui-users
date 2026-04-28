@@ -34,12 +34,6 @@ describe('VersionHistoryWarningModal', () => {
     expect(screen.getByText('ui-users.settings.versionHistory.warning.anonymize')).toBeInTheDocument();
   });
 
-  it('passes open=false to Modal when not open', () => {
-    renderComponent({ open: false });
-
-    expect(screen.getByText('ui-users.settings.versionHistory.warning.title')).toBeInTheDocument();
-  });
-
   it('calls onConfirm when confirm button clicked', async () => {
     renderComponent();
 

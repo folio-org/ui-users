@@ -135,6 +135,27 @@ describe('settingsToFormValues', () => {
   });
 });
 
+describe('getStoredRetentionDays', () => {
+  it('returns 0 when no retention setting is present', () => {
+    expect(getStoredRetentionDays([])).toBe(0);
+  });
+
+  it('returns 0 when the retention setting has a non-numeric value', () => {
+    expect(getStoredRetentionDays([
+      { key: 'records.retention.period', value: 'forever' },
+    ])).toBe(0);
+  });
+
+  it('returns the stored value when numeric (including -1)', () => {
+    expect(getStoredRetentionDays([
+      { key: 'records.retention.period', value: -1 },
+    ])).toBe(-1);
+    expect(getStoredRetentionDays([
+      { key: 'records.retention.period', value: 180 },
+    ])).toBe(180);
+  });
+});
+
 describe('formValuesToSettingUpdates', () => {
   const baseCurrentValues = {
     retentionMode: RETENTION_MODES.INDEFINITELY,
@@ -230,6 +251,30 @@ describe('formValuesToSettingUpdates', () => {
     const updates = formValuesToSettingUpdates(values, current, -1);
 
     expect(updates).toEqual([]);
+  });
+
+  it('emits a retention.period=-1 update when saving never while a positive period is currently stored', () => {
+    const current = {
+      retentionMode: RETENTION_MODES.NEVER,
+      anonymizeSource: false,
+      excludedFields: [],
+    };
+    const values = {
+      retentionMode: RETENTION_MODES.NEVER,
+      anonymizeSource: false,
+      excludedFields: [],
+    };
+
+    const updates = formValuesToSettingUpdates(values, current, 180);
+
+    // The diff has to fire — current.retentionDays is 180 (the stored value),
+    // next.retentionDays is -1, so emitting the update is what guarantees the
+    // server's stale positive period is replaced.
+    expect(updates).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ key: 'records.retention.period', value: -1, type: 'INTEGER' }),
+      ]),
+    );
   });
 
   it('returns retention period update when switching to duration', () => {

@@ -2,6 +2,7 @@ import React from 'react';
 import { screen, waitFor } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import { useCallout } from '@folio/stripes/core';
+import { useCustomFieldsQuery } from '@folio/stripes/smart-components';
 
 import renderWithRouter from 'helpers/renderWithRouter';
 import VersionHistorySettings from './VersionHistorySettings';
@@ -25,7 +26,7 @@ jest.mock('./VersionHistoryForm', () => {
           excludedFields: [],
         })}
       >
-        Save non-destructive
+        Submit indefinitely
       </button>
       <button
         type="button"
@@ -35,7 +36,7 @@ jest.mock('./VersionHistoryForm', () => {
           excludedFields: [],
         })}
       >
-        Save destructive
+        Submit never
       </button>
     </div>
   ));
@@ -99,6 +100,17 @@ describe('VersionHistorySettings', () => {
     expect(screen.queryByTestId('version-history-form')).not.toBeInTheDocument();
   });
 
+  it('shows loading while custom fields are being fetched', () => {
+    useCustomFieldsQuery.mockReturnValueOnce({
+      customFields: null,
+      isLoadingCustomFields: true,
+    });
+
+    renderWithRouter(<VersionHistorySettings />);
+
+    expect(screen.queryByTestId('version-history-form')).not.toBeInTheDocument();
+  });
+
   it('saves directly when no warnings', async () => {
     useVersionHistorySettings.mockReturnValue({
       settings: disabledSettings,
@@ -108,7 +120,7 @@ describe('VersionHistorySettings', () => {
 
     renderWithRouter(<VersionHistorySettings />);
 
-    await userEvent.click(screen.getByText('Save non-destructive'));
+    await userEvent.click(screen.getByText('Submit indefinitely'));
 
     await waitFor(() => {
       expect(mockSaveSettings).toHaveBeenCalled();
@@ -121,7 +133,7 @@ describe('VersionHistorySettings', () => {
   it('shows warning modal for destructive changes', async () => {
     renderWithRouter(<VersionHistorySettings />);
 
-    await userEvent.click(screen.getByText('Save destructive'));
+    await userEvent.click(screen.getByText('Submit never'));
 
     await waitFor(() => {
       expect(screen.getByTestId('warning-modal')).toHaveAttribute('data-open', 'true');
@@ -131,7 +143,7 @@ describe('VersionHistorySettings', () => {
   it('saves after confirming warning modal', async () => {
     renderWithRouter(<VersionHistorySettings />);
 
-    await userEvent.click(screen.getByText('Save destructive'));
+    await userEvent.click(screen.getByText('Submit never'));
 
     await waitFor(() => {
       expect(screen.getByTestId('warning-modal')).toHaveAttribute('data-open', 'true');
@@ -147,7 +159,7 @@ describe('VersionHistorySettings', () => {
   it('closes modal on cancel', async () => {
     renderWithRouter(<VersionHistorySettings />);
 
-    await userEvent.click(screen.getByText('Save destructive'));
+    await userEvent.click(screen.getByText('Submit never'));
 
     await waitFor(() => {
       expect(screen.getByTestId('warning-modal')).toHaveAttribute('data-open', 'true');
@@ -171,7 +183,7 @@ describe('VersionHistorySettings', () => {
 
     renderWithRouter(<VersionHistorySettings />);
 
-    await userEvent.click(screen.getByText('Save non-destructive'));
+    await userEvent.click(screen.getByText('Submit indefinitely'));
 
     await waitFor(() => {
       expect(mockSendCallout).toHaveBeenCalledWith(

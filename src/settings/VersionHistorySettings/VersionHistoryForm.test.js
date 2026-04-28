@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen, waitFor } from '@folio/jest-config-stripes/testing-library/react';
+import { screen } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
 import renderWithRouter from 'helpers/renderWithRouter';
@@ -35,16 +35,16 @@ describe('VersionHistoryForm', () => {
     jest.clearAllMocks();
   });
 
-  it('renders the form with radio buttons', async () => {
-    await waitFor(() => renderForm());
+  it('renders the form with radio buttons', () => {
+    renderForm();
 
     expect(screen.getByText('ui-users.settings.versionHistory')).toBeInTheDocument();
     expect(screen.getByLabelText(/ui-users.settings.versionHistory.never/)).toBeInTheDocument();
     expect(screen.getByLabelText(/ui-users.settings.versionHistory.retainIndefinitely/)).toBeInTheDocument();
   });
 
-  it('disables duration fields when "Never" is selected', async () => {
-    await waitFor(() => renderForm());
+  it('disables duration fields when "Never" is selected', () => {
+    renderForm();
 
     const lengthInput = document.querySelector('[name="durationLength"]');
     const unitSelect = document.querySelector('[name="durationUnit"]');
@@ -53,23 +53,23 @@ describe('VersionHistoryForm', () => {
     expect(unitSelect).toBeDisabled();
   });
 
-  it('disables anonymize checkbox when "Never" is selected', async () => {
-    await waitFor(() => renderForm());
+  it('disables anonymize checkbox when "Never" is selected', () => {
+    renderForm();
 
     const checkbox = document.querySelector('[name="anonymizeSource"]');
 
     expect(checkbox).toBeDisabled();
   });
 
-  it('enables duration fields when "Retain for a set duration" is selected', async () => {
-    await waitFor(() => renderForm({
+  it('enables duration fields when "Retain for a set duration" is selected', () => {
+    renderForm({
       initialValues: {
         ...defaultProps.initialValues,
         retentionMode: RETENTION_MODES.DURATION,
         durationLength: '6',
         durationUnit: 'months',
       },
-    }));
+    });
 
     const lengthInput = document.querySelector('[name="durationLength"]');
     const unitSelect = document.querySelector('[name="durationUnit"]');
@@ -78,21 +78,21 @@ describe('VersionHistoryForm', () => {
     expect(unitSelect).not.toBeDisabled();
   });
 
-  it('enables anonymize checkbox when "Retain indefinitely" is selected', async () => {
-    await waitFor(() => renderForm({
+  it('enables anonymize checkbox when "Retain indefinitely" is selected', () => {
+    renderForm({
       initialValues: {
         ...defaultProps.initialValues,
         retentionMode: RETENTION_MODES.INDEFINITELY,
       },
-    }));
+    });
 
     const checkbox = document.querySelector('[name="anonymizeSource"]');
 
     expect(checkbox).not.toBeDisabled();
   });
 
-  it('renders save button as disabled when form is pristine', async () => {
-    await waitFor(() => renderForm());
+  it('renders save button as disabled when form is pristine', () => {
+    renderForm();
 
     const saveButton = screen.getByText('stripes-core.button.save').closest('button');
 
@@ -100,7 +100,7 @@ describe('VersionHistoryForm', () => {
   });
 
   it('enables save button when form is dirty', async () => {
-    await waitFor(() => renderForm());
+    renderForm();
 
     await userEvent.click(screen.getByLabelText(/ui-users.settings.versionHistory.retainIndefinitely/));
 

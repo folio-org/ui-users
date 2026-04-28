@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Loading } from '@folio/stripes/components';
 import { TitleManager, useCallout } from '@folio/stripes/core';
@@ -27,6 +27,11 @@ const VersionHistorySettings = () => {
 
   const [pendingValues, setPendingValues] = useState(null);
   const [currentWarnings, setCurrentWarnings] = useState([]);
+  // Holds final-form's submission promise resolver while the warning modal is
+  // open, so `submitting` stays true (and the Save button stays disabled) for
+  // the entire confirm/cancel + PUT round-trip — not just the synchronous
+  // handleSubmit call.
+  const submitResolverRef = useRef(null);
 
   const initialValues = useMemo(() => settingsToFormValues(settings), [settings]);
   const storedRetentionDays = useMemo(() => getStoredRetentionDays(settings), [settings]);
@@ -51,6 +56,11 @@ const VersionHistorySettings = () => {
     setCurrentWarnings([]);
   }, []);
 
+  const finishSubmission = useCallback(() => {
+    submitResolverRef.current?.();
+    submitResolverRef.current = null;
+  }, []);
+
   const performSave = useCallback(async (values) => {
     try {
       const updates = formValuesToSettingUpdates(values, initialValues, storedRetentionDays);
@@ -73,22 +83,30 @@ const VersionHistorySettings = () => {
   const handleSubmit = useCallback((values) => {
     const warnings = buildWarnings(initialValues, values, formatMessage, storedRetentionDays);
 
-    if (warnings.length > 0) {
+    if (warnings.length === 0) {
+      return performSave(values);
+    }
+
+    return new Promise((resolve) => {
+      submitResolverRef.current = resolve;
       setPendingValues(values);
       setCurrentWarnings(warnings);
-    } else {
-      performSave(values);
-    }
+    });
   }, [initialValues, storedRetentionDays, formatMessage, performSave]);
 
   const handleWarningConfirm = useCallback(async () => {
     resetWarningState();
-    await performSave(pendingValues);
-  }, [pendingValues, performSave, resetWarningState]);
+    try {
+      await performSave(pendingValues);
+    } finally {
+      finishSubmission();
+    }
+  }, [pendingValues, performSave, resetWarningState, finishSubmission]);
 
   const handleWarningCancel = useCallback(() => {
     resetWarningState();
-  }, [resetWarningState]);
+    finishSubmission();
+  }, [resetWarningState, finishSubmission]);
 
   if (isLoading || isLoadingCustomFields) return <Loading />;
 
