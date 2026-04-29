@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Loading } from '@folio/stripes/components';
 import { TitleManager, useCallout } from '@folio/stripes/core';

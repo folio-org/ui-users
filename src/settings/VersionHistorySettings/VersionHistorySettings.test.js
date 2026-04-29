@@ -1,4 +1,3 @@
-import React from 'react';
 import { screen, waitFor } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import { useCallout } from '@folio/stripes/core';

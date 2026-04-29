@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Field, useFormState } from 'react-final-form';
 import { FormattedMessage, useIntl } from 'react-intl';
