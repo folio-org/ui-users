@@ -7,7 +7,6 @@ import {
   Checkbox,
   Col,
   InfoPopover,
-  Label,
   Layout,
   MultiSelection,
   Pane,
@@ -118,11 +117,13 @@ const VersionHistoryForm = ({ handleSubmit, pristine, submitting, fieldOptions }
         paneTitle={<FormattedMessage id="ui-users.settings.versionHistory" />}
         footer={renderFooter()}
       >
-        <Label>
-          <FormattedMessage id="ui-users.settings.versionHistory.createVersionHistory" />
-        </Label>
-
-        <RadioButtonGroup>
+        <RadioButtonGroup
+          label={(
+            <span className={css.groupLegend}>
+              <FormattedMessage id="ui-users.settings.versionHistory.createVersionHistory" />
+            </span>
+          )}
+        >
           <Field
             name="retentionMode"
             component={RadioButton}
