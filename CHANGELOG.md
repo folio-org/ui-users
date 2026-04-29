@@ -1,6 +1,7 @@
 # Change history for ui-users
 
-## 13.0.0 IN PROGRESS
+## [13.0.0] (https://github.com/folio-org/ui-users/tree/v13.0.0) (2026-04-16)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.16...v13.0.0)
 * Collect coverage from unit tests. Refs UIU-3356.
 * Modify translation string for search view: "User search -> Search & filter". Refs UIU-3231.
 * *BREAKING* Use number generator for barcode. Refs UIU-2729.
