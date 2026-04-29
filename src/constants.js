@@ -432,6 +432,8 @@ export const PREFERRED_SP_NONE = '-';
 
 export const AUDIT_USER_SETTING_GROUP = 'audit.user';
 export const AUDIT_USER_ENABLED_SETTING_KEY = 'enabled';
+export const AUDIT_SETTINGS_NAMESPACE_KEY = 'audit-settings';
+export const AUDIT_SETTINGS_ENDPOINT = `audit/config/groups/${AUDIT_USER_SETTING_GROUP}/settings`;
 
 export const HELPER_APP = {
   TAGS: 'tags',

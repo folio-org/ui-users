@@ -9,7 +9,6 @@ import {
 } from '@folio/jest-config-stripes/testing-library/react';
 import { useOkapiKy } from '@folio/stripes/core';
 
-import { AUDIT_USER_ENABLED_SETTING_KEY } from '../../constants';
 import useAuditSettingsQuery from './useAuditSettingsQuery';
 
 const queryClient = new QueryClient({
@@ -28,7 +27,7 @@ describe('useAuditSettingsQuery', () => {
   });
 
   it('should return settings when query succeeds', async () => {
-    const mockSettings = [{ key: AUDIT_USER_ENABLED_SETTING_KEY, value: true }];
+    const mockSettings = [{ key: 'enabled', value: true }];
 
     useOkapiKy.mockReturnValue({
       get: jest.fn(() => ({
