@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## 13.1.0 (IN PROGRESS)
+
+* Add a Version history pane on the user detail view, gated on the mod-audit interface. Refs UIU-3388.
+
 ## [13.0.0] (https://github.com/folio-org/ui-users/tree/v13.0.0) (2026-04-16)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.16...v13.0.0)
 * Collect coverage from unit tests. Refs UIU-3356.
