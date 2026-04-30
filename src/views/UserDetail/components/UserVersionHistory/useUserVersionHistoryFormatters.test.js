@@ -35,6 +35,14 @@ describe('useUserVersionHistoryFormatters', () => {
       expect(fieldFormatter.departments('dept-1')).toBe('Library');
       expect(fieldFormatter.departments('dept-missing')).toBe('dept-missing');
     });
+
+    it('renders NoValue for an empty proxyFor value', () => {
+      const { fieldFormatter } = renderFormatters();
+
+      expect(fieldFormatter.proxyFor('user-id-1')).toBe('user-id-1');
+      expect(isNoValue(fieldFormatter.proxyFor(''))).toBe(true);
+      expect(isNoValue(fieldFormatter.proxyFor(null))).toBe(true);
+    });
   });
 
   describe('fieldLabelsMap', () => {
@@ -112,24 +120,46 @@ describe('useUserVersionHistoryFormatters', () => {
   });
 
   describe('itemFormatter', () => {
-    it('formats a labelled line for non-empty values', () => {
+    const renderItem = item => {
       const { itemFormatter } = renderFormatters();
+      return itemFormatter(item);
+    };
 
-      expect(itemFormatter({ name: 'username', value: 'alice' }))
-        .toBe('ui-users.information.username: alice');
+    it('wraps the labelled line in an li element', () => {
+      const item = renderItem({ name: 'username', value: 'alice' });
+
+      expect(item.type).toBe('li');
+      expect(item.props.children).toBe('ui-users.information.username: alice');
     });
 
     it('falls back to the raw field name when no label exists', () => {
-      const { itemFormatter } = renderFormatters();
+      const item = renderItem({ name: 'unknownField', value: 'v' });
 
-      expect(itemFormatter({ name: 'unknownField', value: 'v' })).toBe('unknownField: v');
+      expect(item.props.children).toBe('unknownField: v');
     });
 
     it('returns null for null or empty values', () => {
-      const { itemFormatter } = renderFormatters();
+      expect(renderItem({ name: 'username', value: null })).toBeNull();
+      expect(renderItem({ name: 'username', value: '' })).toBeNull();
+    });
 
-      expect(itemFormatter({ name: 'username', value: null })).toBeNull();
-      expect(itemFormatter({ name: 'username', value: '' })).toBeNull();
+    it('renders boolean values as the localized yes/no label', () => {
+      expect(renderItem({ name: 'primaryAddress', value: true }).props.children)
+        .toBe('stripes-components.primaryAddress: ui-users.yes');
+      expect(renderItem({ name: 'primaryAddress', value: false }).props.children)
+        .toBe('stripes-components.primaryAddress: ui-users.no');
+    });
+
+    it('exposes labels for address sub-fields', () => {
+      const { fieldLabelsMap } = renderFormatters();
+
+      expect(fieldLabelsMap.addressLine1).toBe('stripes-components.addressLine1');
+      expect(fieldLabelsMap.city).toBe('stripes-components.city');
+      expect(fieldLabelsMap.region).toBe('stripes-components.stateProviceOrRegion');
+      expect(fieldLabelsMap.postalCode).toBe('stripes-components.zipOrPostalCode');
+      expect(fieldLabelsMap.countryId).toBe('stripes-components.country');
+      expect(fieldLabelsMap.addressTypeId).toBe('stripes-components.addressType');
+      expect(fieldLabelsMap.primaryAddress).toBe('stripes-components.primaryAddress');
     });
   });
 });

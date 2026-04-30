@@ -43,6 +43,14 @@ const buildFieldLabelsMap = (formatMessage, customFields) => ({
   dateOfBirth: formatMessage({ id: 'ui-users.extended.birthDate' }),
   preferredContactTypeId: formatMessage({ id: 'ui-users.contact.preferredContact' }),
   addresses: formatMessage({ id: 'ui-users.contact.addresses' }),
+  addressLine1: formatMessage({ id: 'stripes-components.addressLine1' }),
+  addressLine2: formatMessage({ id: 'stripes-components.addressLine2' }),
+  city: formatMessage({ id: 'stripes-components.city' }),
+  region: formatMessage({ id: 'stripes-components.stateProviceOrRegion' }),
+  postalCode: formatMessage({ id: 'stripes-components.zipOrPostalCode' }),
+  countryId: formatMessage({ id: 'stripes-components.country' }),
+  addressTypeId: formatMessage({ id: 'stripes-components.addressType' }),
+  primaryAddress: formatMessage({ id: 'stripes-components.primaryAddress' }),
   enrollmentDate: formatMessage({ id: 'ui-users.extended.dateEnrolled' }),
   departments: formatMessage({ id: 'ui-users.versionHistory.field.departments' }),
   profilePictureLink: formatMessage({ id: 'ui-users.information.profilePicture' }),
@@ -130,6 +138,7 @@ const useUserVersionHistoryFormatters = () => {
     type: valueOrNoValue,
     pronouns: valueOrNoValue,
     profilePictureLink: valueOrNoValue,
+    proxyFor: valueOrNoValue,
     ...customFieldFormatters,
   }), [formatMessage, patronGroupsMap, contactTypesMap, departmentsMap, customFieldFormatters]);
 
@@ -138,10 +147,13 @@ const useUserVersionHistoryFormatters = () => {
       if (value == null || value === '') return null;
 
       const label = fieldLabelsMap[name] || name;
+      const displayValue = typeof value === 'boolean'
+        ? formatMessage({ id: value ? 'ui-users.yes' : 'ui-users.no' })
+        : value;
 
-      return `${label}: ${value}`;
+      return <li key={name}>{`${label}: ${displayValue}`}</li>;
     },
-    [fieldLabelsMap],
+    [fieldLabelsMap, formatMessage],
   );
 
   return {
