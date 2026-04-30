@@ -24,14 +24,14 @@ export const getChangedFieldsList = diff => {
       fieldName, changeType, newValue, oldValue,
     }));
 
-  const collectionChanges = (diff.collectionChanges ?? []).flatMap(collection =>
+  const collectionChanges = (diff.collectionChanges ?? []).flatMap(collection => (
     (collection.itemChanges ?? []).map(field => ({
       fieldName: collection.collectionName,
       changeType: field.changeType,
       newValue: field.newValue,
       oldValue: field.oldValue,
     }))
-  );
+  ));
 
   return sortBy([...fieldChanges, ...collectionChanges], change => change.changeType);
 };

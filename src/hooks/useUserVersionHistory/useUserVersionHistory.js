@@ -13,7 +13,7 @@ const useUserVersionHistory = (data) => {
   const { formatMessage, formatDate } = useIntl();
 
   const userIds = useMemo(
-    () => data?.length ? uniq(data.map(entry => entry.performedBy).filter(Boolean)) : [],
+    () => (data?.length ? uniq(data.map(entry => entry.performedBy).filter(Boolean)) : []),
     [data],
   );
 

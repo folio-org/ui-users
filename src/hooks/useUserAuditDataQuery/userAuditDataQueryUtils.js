@@ -1,5 +1,7 @@
-const countFetchedItems = (allPages) =>
-  allPages.reduce((sum, page) => sum + (page?.userAuditItems?.length ?? 0), 0);
+const countFetchedItems = (allPages) => allPages.reduce(
+  (sum, page) => sum + (page?.userAuditItems?.length ?? 0),
+  0,
+);
 
 const isCursorStuck = (currentLastItem, prevPage) => {
   const prevLastItem = prevPage?.userAuditItems?.at(-1);
