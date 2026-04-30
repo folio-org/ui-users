@@ -70,15 +70,6 @@ describe('useUserAuditDataQuery', () => {
     expect(result.current.isLoading).toBe(false);
     expect(mockGet).not.toHaveBeenCalled();
   });
-
-  it('should pass tenantId to useOkapiKy', () => {
-    renderHook(
-      () => useUserAuditDataQuery('test-user-id', 'central-tenant'),
-      { wrapper },
-    );
-
-    expect(useOkapiKy).toHaveBeenCalledWith({ tenant: 'central-tenant' });
-  });
 });
 
 describe('getNextPageParam', () => {

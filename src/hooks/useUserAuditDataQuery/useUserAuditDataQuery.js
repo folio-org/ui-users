@@ -8,8 +8,8 @@ import {
 
 import { getNextPageParam } from './userAuditDataQueryUtils';
 
-const useUserAuditDataQuery = (userId, tenantId) => {
-  const ky = useOkapiKy({ tenant: tenantId });
+const useUserAuditDataQuery = (userId) => {
+  const ky = useOkapiKy();
   const [namespace] = useNamespace({ key: 'user-audit-data' });
 
   const {
@@ -19,7 +19,7 @@ const useUserAuditDataQuery = (userId, tenantId) => {
     hasNextPage,
     fetchNextPage,
   } = useInfiniteQuery({
-    queryKey: [namespace, userId, tenantId],
+    queryKey: [namespace, userId],
     queryFn: ({ pageParam }) => ky.get(`audit-data/user/${userId}`, {
       searchParams: {
         ...(pageParam && { eventTs: pageParam }),

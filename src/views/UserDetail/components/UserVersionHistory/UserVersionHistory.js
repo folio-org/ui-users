@@ -16,7 +16,7 @@ const renderSource = (version, canViewUser) => {
   return <Link to={`/users/preview/${version.performedByUserId}`}>{version.userName}</Link>;
 };
 
-const UserVersionHistory = ({ userId, onClose, tenantId }) => {
+const UserVersionHistory = ({ userId, onClose }) => {
   const stripes = useStripes();
   const canViewUser = stripes.hasPerm('users.item.get');
 
@@ -27,9 +27,9 @@ const UserVersionHistory = ({ userId, onClose, tenantId }) => {
     isLoadingMore,
     fetchNextPage,
     hasNextPage,
-  } = useUserAuditDataQuery(userId, tenantId);
+  } = useUserAuditDataQuery(userId);
 
-  const { versions, isLoading: isUsersLookupLoading } = useUserVersionHistory(data, { tenantId });
+  const { versions, isLoading: isUsersLookupLoading } = useUserVersionHistory(data);
   const isInitialLoading = isAuditLoading || isUsersLookupLoading;
 
   const versionsWithSource = useMemo(
@@ -42,7 +42,7 @@ const UserVersionHistory = ({ userId, onClose, tenantId }) => {
     fieldLabelsMap,
     fieldFormatter,
     itemFormatter,
-  } = useUserVersionHistoryFormatters(tenantId);
+  } = useUserVersionHistoryFormatters();
 
   return (
     <AuditLogPane
@@ -64,7 +64,6 @@ const UserVersionHistory = ({ userId, onClose, tenantId }) => {
 UserVersionHistory.propTypes = {
   userId: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
-  tenantId: PropTypes.string,
 };
 
 export default UserVersionHistory;

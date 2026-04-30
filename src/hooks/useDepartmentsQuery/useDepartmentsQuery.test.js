@@ -50,12 +50,6 @@ describe('useDepartmentsQuery', () => {
     expect(result.current.departments).toEqual(departments);
   });
 
-  it('should pass tenantId to useOkapiKy', () => {
-    renderHook(() => useDepartmentsQuery('central-tenant'), { wrapper });
-
-    expect(useOkapiKy).toHaveBeenCalledWith({ tenant: 'central-tenant' });
-  });
-
   it('should return empty array when response has no departments', async () => {
     useOkapiKy.mockReturnValue({
       get: jest.fn(() => ({

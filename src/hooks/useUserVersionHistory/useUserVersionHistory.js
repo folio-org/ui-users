@@ -9,7 +9,7 @@ import { buildQueryByIds } from '../../utils';
 import useUsersQuery from '../useUsersQuery';
 import { formatVersions } from './userVersionHistoryUtils';
 
-const useUserVersionHistory = (data, { tenantId } = {}) => {
+const useUserVersionHistory = (data) => {
   const { formatMessage, formatDate } = useIntl();
 
   const userIds = useMemo(
@@ -19,7 +19,7 @@ const useUserVersionHistory = (data, { tenantId } = {}) => {
 
   const { users, isFetched } = useUsersQuery(
     { query: userIds.length ? buildQueryByIds(userIds) : undefined },
-    { enabled: Boolean(userIds.length), tenantId, keepPreviousData: true },
+    { enabled: Boolean(userIds.length), keepPreviousData: true },
   );
 
   const usersMap = useMemo(() => keyBy(users, 'id'), [users]);

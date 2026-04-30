@@ -60,7 +60,6 @@ import IfConsortium from '../../components/IfConsortium';
 import { PatronBlockMessage } from '../../components/PatronBlock';
 import { getFormAddressList } from '../../components/data/converters/address';
 import {
-  getCentralTenantId,
   getFullName,
   getFormattedPronouns,
   isAffiliationsEnabled,
@@ -1029,7 +1028,6 @@ class UserDetail extends React.Component {
             {isVersionHistoryOpen && (
               <UserVersionHistory
                 userId={match.params.id}
-                tenantId={getCentralTenantId(stripes)}
                 onClose={this.closeHelperApp}
               />
             )}

@@ -78,11 +78,11 @@ const buildCustomFieldFormatters = (customFields, formatMessage) => {
   }, {});
 };
 
-const useUserVersionHistoryFormatters = (tenantId) => {
+const useUserVersionHistoryFormatters = () => {
   const { formatMessage } = useIntl();
 
-  const { patronGroups } = usePatronGroups({ tenantId });
-  const { departments } = useDepartmentsQuery(tenantId);
+  const { patronGroups } = usePatronGroups();
+  const { departments } = useDepartmentsQuery();
 
   const { customFields } = useCustomFieldsQuery({
     moduleName: MODULE_NAME,
