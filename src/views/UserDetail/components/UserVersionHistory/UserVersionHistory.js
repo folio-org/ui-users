@@ -9,6 +9,8 @@ import useUserAuditDataQuery from '../../../../hooks/useUserAuditDataQuery';
 import useUserVersionHistory from '../../../../hooks/useUserVersionHistory';
 import useUserVersionHistoryFormatters from './useUserVersionHistoryFormatters';
 
+const VIEW_USER_PERMISSION = 'users.item.get';
+
 const renderSource = (version, canViewUser) => {
   if (!version.userName) return null;
   if (!version.performedByUserId || !canViewUser) return version.userName;
@@ -18,7 +20,7 @@ const renderSource = (version, canViewUser) => {
 
 const UserVersionHistory = ({ userId, onClose }) => {
   const stripes = useStripes();
-  const canViewUser = stripes.hasPerm('users.item.get');
+  const canViewUser = stripes.hasPerm(VIEW_USER_PERMISSION);
 
   const {
     data,

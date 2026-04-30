@@ -12,7 +12,7 @@ const useDepartmentsQuery = () => {
   const [namespace] = useNamespace({ key: 'departments' });
   const ky = useOkapiKy();
 
-  const { data, isLoading } = useQuery(
+  const { data, isLoading, isError } = useQuery(
     [namespace],
     () => ky.get('departments', { searchParams: { limit: MAX_RECORDS } }).json(),
     { staleTime: DEPARTMENTS_STALE_TIME_MS },
@@ -21,6 +21,7 @@ const useDepartmentsQuery = () => {
   return {
     departments: data?.departments ?? DEFAULT_DATA,
     isLoading,
+    isError,
   };
 };
 

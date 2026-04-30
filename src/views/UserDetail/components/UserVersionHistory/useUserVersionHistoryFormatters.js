@@ -10,6 +10,7 @@ import contactTypes from '../../../../components/data/static/contactTypes';
 import {
   AUDIT_CHANGE_TYPE,
   CUSTOM_FIELDS_ENTITY_TYPE,
+  CUSTOM_FIELD_TYPES,
   MODULE_NAME,
 } from '../../../../constants';
 import { renderDateTime } from '../../../../utils';
@@ -63,14 +64,14 @@ const buildCustomFieldFormatters = (customFields, formatMessage) => {
         if (!value) return <NoValue />;
         return optionsMap[value] || value;
       };
-    } else if (cf.type === 'SINGLE_CHECKBOX') {
+    } else if (cf.type === CUSTOM_FIELD_TYPES.SINGLE_CHECKBOX) {
       acc[cf.refId] = value => {
         if (value == null) return <NoValue />;
         return toBool(value)
           ? formatMessage({ id: 'ui-users.yes' })
           : formatMessage({ id: 'ui-users.no' });
       };
-    } else if (cf.type === 'DATE_PICKER') {
+    } else if (cf.type === CUSTOM_FIELD_TYPES.DATE_PICKER) {
       acc[cf.refId] = renderDateTime;
     }
 

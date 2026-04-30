@@ -33,6 +33,11 @@ describe('UserVersionHistoryButton', () => {
     jest.clearAllMocks();
     queryClient.clear();
     useIsAuditEnabled.mockReturnValue({ isEnabled: true, isLoading: false });
+    useStripes().hasPerm.mockReturnValue(true);
+  });
+
+  afterEach(() => {
+    useStripes().hasPerm.mockReturnValue(true);
   });
 
   it('should render button when audit is enabled', () => {
@@ -64,15 +69,12 @@ describe('UserVersionHistoryButton', () => {
   });
 
   it('should render nothing when user lacks versionHistory.view permission', () => {
-    const stripes = useStripes();
-
-    stripes.hasPerm.mockReturnValue(false);
+    useStripes().hasPerm.mockReturnValue(false);
 
     const { container } = renderWithProviders(
       <UserVersionHistoryButton onClick={jest.fn()} />,
     );
 
     expect(container).toBeEmptyDOMElement();
-    stripes.hasPerm.mockReturnValue(true);
   });
 });
