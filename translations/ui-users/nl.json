@@ -1257,6 +1257,6 @@
     "stagingRecords.minor.yes": "Ja",
     "data.loanActionMap.heldForUseAtLocation": "Gereserveerd voor gebruik op locatie",
     "data.loanActionMap.pickedUpForUseAtLocation": "Afgehaald voor gebruik op Locatie",
-    "userSearch": "User search",
-    "errors.userRequestFailed": "Unable to retrieve user details"
+    "userSearch": "Gebruikers zoeken",
+    "errors.userRequestFailed": "Kan gebruikersgegevens niet ophalen"
 }
