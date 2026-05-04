@@ -24,7 +24,6 @@ const UserVersionHistory = ({ userId, onClose }) => {
 
   const {
     data,
-    totalRecords,
     isLoading: isAuditLoading,
     isLoadingMore,
     fetchNextPage,
@@ -57,7 +56,7 @@ const UserVersionHistory = ({ userId, onClose }) => {
       fieldLabelsMap={fieldLabelsMap}
       fieldFormatter={fieldFormatter}
       actionsMap={actionsMap}
-      totalVersions={totalRecords}
+      totalVersions={versionsWithSource.length}
       itemFormatter={itemFormatter}
     />
   );
