@@ -63,4 +63,15 @@ describe('useDepartmentsQuery', () => {
 
     expect(result.current.departments).toEqual([]);
   });
+
+  it('should pass tenantId to useOkapiKy when provided', async () => {
+    const { result } = renderHook(
+      () => useDepartmentsQuery({ tenantId: 'central' }),
+      { wrapper },
+    );
+
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
+
+    expect(useOkapiKy).toHaveBeenCalledWith({ tenant: 'central' });
+  });
 });
