@@ -13,7 +13,7 @@ import {
   CUSTOM_FIELD_TYPES,
   MODULE_NAME,
 } from '../../../../constants';
-import { renderDateTime } from '../../../../utils';
+import { renderDate } from '../../../../utils';
 
 const toBool = value => value === true || value === 'true';
 const valueOrNoValue = value => value || <NoValue />;
@@ -80,7 +80,7 @@ const buildCustomFieldFormatters = (customFields, formatMessage) => {
           : formatMessage({ id: 'ui-users.no' });
       };
     } else if (cf.type === CUSTOM_FIELD_TYPES.DATE_PICKER) {
-      acc[cf.refId] = renderDateTime;
+      acc[cf.refId] = renderDate;
     }
 
     return acc;
@@ -131,9 +131,9 @@ const useUserVersionHistoryFormatters = () => {
       : formatMessage({ id: 'ui-users.inactive' })),
     patronGroup: value => patronGroupsMap[value] || value,
     preferredContactTypeId: value => contactTypesMap[value] || value,
-    expirationDate: renderDateTime,
-    dateOfBirth: renderDateTime,
-    enrollmentDate: renderDateTime,
+    expirationDate: renderDate,
+    dateOfBirth: renderDate,
+    enrollmentDate: renderDate,
     departments: value => departmentsMap[value] || value,
     type: valueOrNoValue,
     pronouns: valueOrNoValue,
