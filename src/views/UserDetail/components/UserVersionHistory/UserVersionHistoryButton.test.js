@@ -32,7 +32,7 @@ describe('UserVersionHistoryButton', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     queryClient.clear();
-    useIsAuditEnabled.mockReturnValue({ isEnabled: true, isLoading: false });
+    useIsAuditEnabled.mockReturnValue({ isEnabled: true, isLoading: false, isError: false });
     useStripes().hasPerm.mockReturnValue(true);
   });
 
@@ -48,8 +48,19 @@ describe('UserVersionHistoryButton', () => {
     expect(screen.getByRole('button')).toBeInTheDocument();
   });
 
-  it('should render nothing while audit settings are loading', () => {
-    useIsAuditEnabled.mockReturnValue({ isEnabled: false, isLoading: true });
+  it('should render a loading indicator while audit settings are loading', () => {
+    useIsAuditEnabled.mockReturnValue({ isEnabled: false, isLoading: true, isError: false });
+
+    renderWithProviders(
+      <UserVersionHistoryButton onClick={jest.fn()} />,
+    );
+
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
+    expect(screen.getByText('Loading')).toBeInTheDocument();
+  });
+
+  it('should render nothing when audit is disabled', () => {
+    useIsAuditEnabled.mockReturnValue({ isEnabled: false, isLoading: false, isError: false });
 
     const { container } = renderWithProviders(
       <UserVersionHistoryButton onClick={jest.fn()} />,
@@ -58,14 +69,18 @@ describe('UserVersionHistoryButton', () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  it('should render nothing when audit is disabled', () => {
-    useIsAuditEnabled.mockReturnValue({ isEnabled: false, isLoading: false });
+  it('should render nothing and log when audit settings query errors', () => {
+    useIsAuditEnabled.mockReturnValue({ isEnabled: false, isLoading: false, isError: true });
 
     const { container } = renderWithProviders(
       <UserVersionHistoryButton onClick={jest.fn()} />,
     );
 
     expect(container).toBeEmptyDOMElement();
+    expect(useStripes().logger.log).toHaveBeenCalledWith(
+      'audit',
+      expect.stringContaining('Failed to load audit settings'),
+    );
   });
 
   it('should render nothing when user lacks versionHistory.view permission', () => {

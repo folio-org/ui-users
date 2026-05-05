@@ -1,7 +1,12 @@
+import { useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 
-import { IconButton, Tooltip } from '@folio/stripes/components';
+import {
+  IconButton,
+  Loading,
+  Tooltip,
+} from '@folio/stripes/components';
 import { useStripes } from '@folio/stripes/core';
 
 import { useIsAuditEnabled } from '../../../../hooks/useAuditSettingsQuery';
@@ -10,9 +15,17 @@ const UserVersionHistoryButton = ({ disabled, onClick }) => {
   const intl = useIntl();
   const stripes = useStripes();
   const hasPermission = stripes.hasPerm('ui-users.versionHistory.view');
-  const { isEnabled, isLoading } = useIsAuditEnabled();
+  const { isEnabled, isLoading, isError } = useIsAuditEnabled();
 
-  if (!hasPermission || isLoading || !isEnabled) return null;
+  useEffect(() => {
+    if (isError) {
+      stripes.logger.log('audit', 'Failed to load audit settings; user version history button will be hidden');
+    }
+  }, [isError, stripes.logger]);
+
+  if (!hasPermission) return null;
+  if (isLoading) return <Loading data-testid="version-history-loading" />;
+  if (isError || !isEnabled) return null;
 
   const tooltip = intl.formatMessage({ id: 'ui-users.versionHistory.button.tooltip' });
 
