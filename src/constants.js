@@ -437,7 +437,6 @@ export const AUDIT_SETTINGS_ENDPOINT = `audit/config/groups/${AUDIT_USER_SETTING
 
 export const HELPER_APP = {
   TAGS: 'tags',
-  VERSION_HISTORY: 'versionHistory',
 };
 
 export const AUDIT_ACTION = {

@@ -218,6 +218,7 @@ class UserDetail extends React.Component {
       lastUpdate: null,
       showOpenTransactionModal: false,
       showDeleteUserModal: false,
+      isVersionHistoryOpen: false,
       sections: {
         [ACCORDION_ID.USER_INFORMATION]: true,
         [ACCORDION_ID.AFFILIATIONS]: false,
@@ -335,6 +336,14 @@ class UserDetail extends React.Component {
     this.setState({
       helperApp: null
     });
+  }
+
+  openVersionHistory = () => {
+    this.setState({ isVersionHistoryOpen: true });
+  }
+
+  closeVersionHistory = () => {
+    this.setState({ isVersionHistoryOpen: false });
   }
 
   handleExpandAll = (obj) => {
@@ -460,7 +469,7 @@ class UserDetail extends React.Component {
           <IfInterface name="audit-config">
             <UserVersionHistoryButton
               disabled={isVersionHistoryOpen}
-              onClick={() => this.showHelperApp(HELPER_APP.VERSION_HISTORY)}
+              onClick={this.openVersionHistory}
             />
           </IfInterface>
         </IfInterface>
@@ -715,6 +724,7 @@ class UserDetail extends React.Component {
     const {
       sections,
       helperApp,
+      isVersionHistoryOpen,
       patronBlocks,
     } = this.state;
 
@@ -756,7 +766,6 @@ class UserDetail extends React.Component {
     const isVirtualPatron = isDcbUser(user);
     const isShadowUserType = isShadowUser(user);
     const showPatronBlocksSection = hasPatronBlocksPermissions && !isShadowUserType;
-    const isVersionHistoryOpen = helperApp === HELPER_APP.VERSION_HISTORY;
 
     const displayReadingRoomAccessAccordion = isPatronUser(user) || isStaffUser(user);
     const readingRoomPermissions = resources?.userReadingRoomPermissions;
@@ -1028,10 +1037,10 @@ class UserDetail extends React.Component {
             {isVersionHistoryOpen && (
               <UserVersionHistory
                 userId={match.params.id}
-                onClose={this.closeHelperApp}
+                onClose={this.closeVersionHistory}
               />
             )}
-            {helperApp && !isVersionHistoryOpen && <HelperApp appName={helperApp} onClose={this.closeHelperApp} />}
+            {helperApp && <HelperApp appName={helperApp} onClose={this.closeHelperApp} />}
             <Callout ref={(ref) => { this.callout = ref; }} />
             <IfInterface name="notes">
               <IfPermission perm="ui-notes.item.view">
