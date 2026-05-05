@@ -500,7 +500,7 @@ class UserForm extends React.Component {
                       initialValues={initialValues}
                       setButtonRef={this.setButtonRef}
                     /> :
-                    <IfPermission perm="ui-users.roles.view">
+                    <IfPermission perm="ui-authorization-roles.users.settings.view">
                       <EditUserRoles
                         form={form}
                         user={initialValues}

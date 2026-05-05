@@ -13,7 +13,7 @@ function useUserAffiliationRoles(userId, tenantId) {
   const [namespace] = useNamespace({ key: USER_AFFILIATION_ROLES_CACHE_KEY });
   const ky = useOkapiKy({ tenant: tenantId });
 
-  const hasViewRolesPermission = stripes.hasPerm('ui-users.roles.view');
+  const hasViewRolesPermission = stripes.hasPerm('ui-authorization-roles.users.settings.view');
 
   // Since `roles/users` return doesn't include names (only ids) for the roles, and we need them sorted by role name,
   // we need to retrieve all the records for roles and use them to determine the sequence of ids.

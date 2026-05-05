@@ -943,7 +943,7 @@ class UserDetail extends React.Component {
                 }
 
                 { !this.showPermissionsAccordion() &&
-                  <IfPermission perm="ui-users.roles.view">
+                  <IfPermission perm="ui-authorization-roles.users.settings.view">
                     <UserRoles
                       expanded={sections[ACCORDION_ID.ROLES]}
                       onToggle={this.handleSectionToggle}
