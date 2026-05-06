@@ -5,9 +5,14 @@ import {
   uniq,
 } from 'lodash';
 
-import { buildQueryByIds } from '../../utils';
-import useUsersQuery from '../useUsersQuery';
+import { useChunkedCQLFetch } from '@folio/stripes/core';
+
+import { USERS_API } from '../../constants';
 import { formatVersions } from './userVersionHistoryUtils';
+
+export const chunkedUsersReducer = (list) => (
+  list.reduce((acc, cur) => [...acc, ...(cur?.data?.users ?? [])], [])
+);
 
 const useUserVersionHistory = (data) => {
   const { formatMessage, formatDate } = useIntl();
@@ -17,13 +22,14 @@ const useUserVersionHistory = (data) => {
     [data],
   );
 
-  const { users, isFetched } = useUsersQuery(
-    { query: userIds.length ? buildQueryByIds(userIds) : undefined },
-    { enabled: Boolean(userIds.length), keepPreviousData: true },
-  );
+  const { items: users, isLoading: isUsersLookupLoading } = useChunkedCQLFetch({
+    endpoint: USERS_API,
+    ids: userIds,
+    reduceFunction: chunkedUsersReducer,
+  });
 
   const usersMap = useMemo(() => keyBy(users, 'id'), [users]);
-  const isUsersLoaded = userIds.length === 0 || isFetched;
+  const isUsersLoaded = userIds.length === 0 || !isUsersLookupLoading;
 
   const versions = useMemo(
     () => (data ? formatVersions(data, { usersMap, isUsersLoaded, formatMessage, formatDate }) : []),

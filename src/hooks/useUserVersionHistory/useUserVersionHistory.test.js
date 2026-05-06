@@ -7,15 +7,13 @@ import {
   renderHook,
   waitFor,
 } from '@folio/jest-config-stripes/testing-library/react';
+import { useChunkedCQLFetch } from '@folio/stripes/core';
 
-import useUsersQuery from '../useUsersQuery';
-import useUserVersionHistory from './useUserVersionHistory';
+import useUserVersionHistory, { chunkedUsersReducer } from './useUserVersionHistory';
 import {
   getChangedFieldsList,
   formatVersions,
 } from './userVersionHistoryUtils';
-
-jest.mock('../useUsersQuery', () => jest.fn(() => ({ users: [], isFetched: true })));
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: false } },
@@ -181,7 +179,7 @@ describe('useUserVersionHistory', () => {
     jest.clearAllMocks();
     queryClient.clear();
 
-    useUsersQuery.mockReturnValue({ users: [], isFetched: true });
+    useChunkedCQLFetch.mockReturnValue({ items: [], isLoading: false });
   });
 
   it('should return versions mapped from audit data', () => {
@@ -234,12 +232,12 @@ describe('useUserVersionHistory', () => {
   });
 
   it('should resolve performer name when matching user is fetched', async () => {
-    useUsersQuery.mockReturnValue({
-      users: [{
+    useChunkedCQLFetch.mockReturnValue({
+      items: [{
         id: 'user-performer-1',
         personal: { lastName: 'Smith', firstName: 'John' },
       }],
-      isFetched: true,
+      isLoading: false,
     });
 
     const { result } = renderHook(
@@ -253,7 +251,7 @@ describe('useUserVersionHistory', () => {
   });
 
   it('should mark the performer as deleted when no matching user is fetched', () => {
-    useUsersQuery.mockReturnValue({ users: [], isFetched: true });
+    useChunkedCQLFetch.mockReturnValue({ items: [], isLoading: false });
 
     const { result } = renderHook(
       () => useUserVersionHistory(auditData),
@@ -266,7 +264,7 @@ describe('useUserVersionHistory', () => {
   });
 
   it('should report loading and keep performedByUserId while the users lookup is pending', () => {
-    useUsersQuery.mockReturnValue({ users: [], isFetched: false });
+    useChunkedCQLFetch.mockReturnValue({ items: [], isLoading: true });
 
     const { result } = renderHook(
       () => useUserVersionHistory(auditData),
@@ -278,7 +276,7 @@ describe('useUserVersionHistory', () => {
   });
 
   it('should not report loading when there are no performers to look up', () => {
-    useUsersQuery.mockReturnValue({ users: [], isFetched: false });
+    useChunkedCQLFetch.mockReturnValue({ items: [], isLoading: true });
 
     const dataWithoutPerformers = [{
       eventId: 'evt-3',
@@ -296,5 +294,35 @@ describe('useUserVersionHistory', () => {
 
     expect(result.current.isLoading).toBe(false);
   });
+
+  it('should fetch unique performer ids in chunks via useChunkedCQLFetch', () => {
+    const dataWithDuplicates = [
+      ...auditData,
+      { ...auditData[1], eventId: 'evt-3', performedBy: 'user-performer-1' },
+      { ...auditData[1], eventId: 'evt-4', performedBy: 'user-performer-2' },
+    ];
+
+    renderHook(() => useUserVersionHistory(dataWithDuplicates), { wrapper });
+
+    expect(useChunkedCQLFetch).toHaveBeenCalledWith(expect.objectContaining({
+      endpoint: 'users',
+      ids: ['user-performer-1', 'user-performer-2'],
+      reduceFunction: expect.any(Function),
+    }));
+  });
 });
 
+describe('chunkedUsersReducer', () => {
+  it('flattens chunked user responses', () => {
+    const list = [
+      { data: { users: [{ id: 'a' }, { id: 'b' }] } },
+      { data: { users: [{ id: 'c' }] } },
+    ];
+
+    expect(chunkedUsersReducer(list)).toEqual([{ id: 'a' }, { id: 'b' }, { id: 'c' }]);
+  });
+
+  it('tolerates missing data on a chunk', () => {
+    expect(chunkedUsersReducer([{}, { data: { users: [{ id: 'a' }] } }])).toEqual([{ id: 'a' }]);
+  });
+});
