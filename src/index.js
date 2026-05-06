@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
 
-import { AppContextMenu, Route, Switch, IfPermission, IfInterface } from '@folio/stripes/core';
+import { AppContextMenu, Route, Switch, IfPermission } from '@folio/stripes/core';
 import {
   NavList,
   NavListItem,
@@ -15,7 +15,6 @@ import {
 
 import * as Routes from './routes';
 
-import { useIsAuditEnabled } from './hooks/useAuditSettingsQuery';
 import pkg from '../package';
 import commands from './commands';
 import Settings from './settings';
@@ -25,13 +24,6 @@ import {
   NoteViewPage,
   NoteEditPage
 } from './views';
-
-// Warms the react-query cache for UserVersionHistoryButton so the button
-// renders without a spinner when navigating from the user list into a record.
-const PrefetchAuditSettings = () => {
-  useIsAuditEnabled();
-  return null;
-};
 
 class UsersRouting extends React.Component {
   static propTypes = {
@@ -163,11 +155,6 @@ class UsersRouting extends React.Component {
 
     return (
       <>
-        <IfInterface name="audit-user">
-          <IfInterface name="audit-config">
-            <PrefetchAuditSettings />
-          </IfInterface>
-        </IfInterface>
         <CommandList commands={commands}>
           <HasCommand
             commands={this.shortcuts}
