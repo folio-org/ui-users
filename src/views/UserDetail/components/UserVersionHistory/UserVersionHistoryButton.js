@@ -15,7 +15,7 @@ const UserVersionHistoryButton = ({ disabled, onClick }) => {
   const intl = useIntl();
   const stripes = useStripes();
   const hasPermission = stripes.hasPerm('ui-users.settings.version-history.view');
-  const { isEnabled, isLoading, isError } = useIsAuditEnabled();
+  const { isEnabled, isLoading, isError } = useIsAuditEnabled({ enabled: hasPermission });
 
   useEffect(() => {
     if (isError) {
