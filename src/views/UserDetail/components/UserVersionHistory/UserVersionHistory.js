@@ -3,25 +3,19 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import { AuditLogPane } from '@folio/stripes/components';
-import { useStripes } from '@folio/stripes/core';
 
 import useUserAuditDataQuery from '../../../../hooks/useUserAuditDataQuery';
 import useUserVersionHistory from '../../../../hooks/useUserVersionHistory';
 import useUserVersionHistoryFormatters from './useUserVersionHistoryFormatters';
 
-const VIEW_USER_PERMISSION = 'users.item.get';
-
-const renderSource = (version, canViewUser) => {
+const renderSource = (version) => {
   if (!version.userName) return null;
-  if (!version.performedByUserId || !canViewUser) return version.userName;
+  if (!version.performedByUserId) return version.userName;
 
   return <Link to={`/users/preview/${version.performedByUserId}`}>{version.userName}</Link>;
 };
 
 const UserVersionHistory = ({ userId, onClose }) => {
-  const stripes = useStripes();
-  const canViewUser = stripes.hasPerm(VIEW_USER_PERMISSION);
-
   const {
     data,
     isLoading: isAuditLoading,
@@ -34,8 +28,8 @@ const UserVersionHistory = ({ userId, onClose }) => {
   const isInitialLoading = isAuditLoading || isUsersLookupLoading;
 
   const versionsWithSource = useMemo(
-    () => versions.map(version => ({ ...version, source: renderSource(version, canViewUser) })),
-    [versions, canViewUser],
+    () => versions.map(version => ({ ...version, source: renderSource(version) })),
+    [versions],
   );
 
   const {
