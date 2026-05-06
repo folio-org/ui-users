@@ -1,5 +1,9 @@
 # Change history for ui-users
 
+## 13.1.0 IN PROGRESS
+
+* Update IfPerm in user edit form from `ui-users-roles.view` to `ui-authorization-roles.users.settings.view` since `ui-users-roles.view` includes extraneous subpermissions. Refs UIU-3521.
+
 ## [13.0.0] (https://github.com/folio-org/ui-users/tree/v13.0.0) (2026-04-16)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.16...v13.0.0)
 * Collect coverage from unit tests. Refs UIU-3356.
@@ -81,7 +85,6 @@
 * Handle non-404 4xx errors in UserDetail. Refs UIU-3057.
 * Update the `index.all` translation. Refs UIU-1027.
 * Select user roles' modal's "Select all" button selects all *visible* records, following convention. Refs UIU-3548.
-* Update IfPerm in user edit form from `ui-users-roles.view` to `ui-authorization-roles.users.settings.view` since `ui-users-roles.view` includes extraneous subpermissions. Refs UIU-3521.
 
 ## [12.1.16] (https://github.com/folio-org/ui-users/tree/v12.1.16) (2025-12-29)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.15...v12.1.16)
