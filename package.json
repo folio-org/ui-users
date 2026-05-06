@@ -205,7 +205,7 @@
         "visible": true
       },
       {
-        "permissionName": "ui-users.versionHistory.view",
+        "permissionName": "ui-users.settings.version-history.view",
         "displayName": "Users: Can view version history",
         "description": "Also includes basic permissions to view users",
         "subPermissions": [

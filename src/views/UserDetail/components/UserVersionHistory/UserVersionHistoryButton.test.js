@@ -83,7 +83,7 @@ describe('UserVersionHistoryButton', () => {
     );
   });
 
-  it('should render nothing when user lacks versionHistory.view permission', () => {
+  it('should render nothing when user lacks settings.version-history.view permission', () => {
     useStripes().hasPerm.mockReturnValue(false);
 
     const { container } = renderWithProviders(

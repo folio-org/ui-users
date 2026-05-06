@@ -14,7 +14,7 @@ import { useIsAuditEnabled } from '../../../../hooks/useAuditSettingsQuery';
 const UserVersionHistoryButton = ({ disabled, onClick }) => {
   const intl = useIntl();
   const stripes = useStripes();
-  const hasPermission = stripes.hasPerm('ui-users.versionHistory.view');
+  const hasPermission = stripes.hasPerm('ui-users.settings.version-history.view');
   const { isEnabled, isLoading, isError } = useIsAuditEnabled();
 
   useEffect(() => {
