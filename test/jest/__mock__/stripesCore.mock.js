@@ -134,6 +134,8 @@ jest.mock('@folio/stripes/core', () => {
     IfPermission: jest.fn(({ perm, children }) => {
       if (perm === 'permission') {
         return children;
+      } else if (perm.startsWith('ui-authorization')) {
+        return children;
       } else if (perm.startsWith('ui-users')) {
         return children;
       } else if (perm.startsWith('perms')) {
