@@ -40,6 +40,7 @@ const buildFieldLabelsMap = (formatMessage, customFields) => ({
   email: formatMessage({ id: 'ui-users.contact.email' }),
   phone: formatMessage({ id: 'ui-users.contact.phone' }),
   mobilePhone: formatMessage({ id: 'ui-users.contact.mobilePhone' }),
+  preferredEmailCommunication: formatMessage({ id: 'ui-users.contact.preferredEmailCommunication' }),
   dateOfBirth: formatMessage({ id: 'ui-users.extended.birthDate' }),
   preferredContactTypeId: formatMessage({ id: 'ui-users.contact.preferredContact' }),
   addresses: formatMessage({ id: 'ui-users.contact.addresses' }),
