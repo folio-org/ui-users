@@ -7,7 +7,7 @@ import {
   concat,
   orderBy,
 } from 'lodash';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 
 import {
   AppIcon,
