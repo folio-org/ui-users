@@ -17,8 +17,6 @@ import {
   TitleManager,
 } from '@folio/stripes/core';
 import {
-  Button,
-  Icon,
   Pane,
   PaneMenu,
   IconButton,
@@ -31,7 +29,6 @@ import {
   AccordionSet,
   LoadingPane,
   HasCommand,
-  Tooltip,
   dayjs,
 } from '@folio/stripes/components';
 import {
@@ -327,9 +324,7 @@ class UserDetail extends React.Component {
   }
 
   showHelperApp = (helperName) => {
-    this.setState({
-      helperApp: helperName
-    });
+    this.setState({ helperApp: helperName, isVersionHistoryOpen: false });
   }
 
   closeHelperApp = () => {
@@ -339,7 +334,7 @@ class UserDetail extends React.Component {
   }
 
   openVersionHistory = () => {
-    this.setState({ isVersionHistoryOpen: true });
+    this.setState({ isVersionHistoryOpen: true, helperApp: null });
   }
 
   closeVersionHistory = () => {
@@ -419,41 +414,17 @@ class UserDetail extends React.Component {
     return patronGroups.find(g => g.id === patronGroupId) || { group: '' };
   }
 
-  renderDetailsLastMenu(user, isVersionHistoryOpen) {
+  renderDetailsLastMenu(user) {
     const {
       tagsEnabled,
       intl,
     } = this.props;
 
+    const { isVersionHistoryOpen } = this.state;
     const tags = ((user && user.tags) || {}).tagList || [];
 
     return (
       <PaneMenu>
-        {isVersionHistoryOpen && (
-          <Tooltip
-            id="actions-disabled-tooltip"
-            text={
-              <FormattedMessage
-                id="ui-users.versionHistory.actionsDisabled.tooltip"
-                values={{ b: chunks => <b>{chunks}</b> }}
-              />
-            }
-          >
-            {({ ref, ariaIds }) => (
-              <div ref={ref} aria-describedby={ariaIds.text}>
-                <Button
-                  buttonStyle="primary"
-                  disabled
-                  marginBottom0
-                >
-                  <Icon icon="triangle-down" iconPosition="end">
-                    <FormattedMessage id="stripes-components.paneMenuActionsToggleLabel" />
-                  </Icon>
-                </Button>
-              </div>
-            )}
-          </Tooltip>
-        )}
         {
           tagsEnabled &&
             <IconButton
@@ -462,7 +433,6 @@ class UserDetail extends React.Component {
               onClick={() => { this.showHelperApp(HELPER_APP.TAGS); }}
               badgeCount={tags.length}
               aria-label={intl.formatMessage({ id: 'ui-users.showTags' })}
-              disabled={isVersionHistoryOpen}
             />
         }
         <IfInterface name="audit-user">
@@ -819,8 +789,8 @@ class UserDetail extends React.Component {
                   {getFullName(user)}
                 </span>
               }
-              actionMenu={isVersionHistoryOpen ? undefined : this.getActionMenu(get(user, 'barcode', ''), isProfilePictureFeatureEnabled)}
-              lastMenu={this.renderDetailsLastMenu(user, isVersionHistoryOpen)}
+              actionMenu={this.getActionMenu(get(user, 'barcode', ''), isProfilePictureFeatureEnabled)}
+              lastMenu={this.renderDetailsLastMenu(user)}
               dismissible
               onClose={this.onClose}
             >
