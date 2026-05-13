@@ -7,8 +7,6 @@ import { formatDateTime } from '../../utils/formatDateTime';
 const EXCLUDED_METADATA_FIELDS = new Set([
   'createdDate',
   'updatedDate',
-  'createdByUserId',
-  'updatedByUserId',
   'metadata.createdDate',
   'metadata.updatedDate',
   'metadata.createdByUserId',
@@ -19,7 +17,7 @@ export const getChangedFieldsList = diff => {
   if (!diff) return [];
 
   const fieldChanges = (diff.fieldChanges ?? [])
-    .filter(field => !EXCLUDED_METADATA_FIELDS.has(field.fieldName))
+    .filter(field => !EXCLUDED_METADATA_FIELDS.has(field.fullPath))
     .map(({ fieldName, changeType, newValue, oldValue }) => ({
       fieldName, changeType, newValue, oldValue,
     }));

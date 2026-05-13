@@ -123,15 +123,13 @@ describe('getChangedFieldsList', () => {
   it('should exclude metadata fields', () => {
     const diff = {
       fieldChanges: [
-        { fieldName: 'username', changeType: 'MODIFIED', newValue: 'new', oldValue: 'old' },
-        { fieldName: 'updatedDate', changeType: 'MODIFIED', newValue: '2024-01-02', oldValue: '2024-01-01' },
-        { fieldName: 'createdDate', changeType: 'ADDED', newValue: '2024-01-01', oldValue: null },
-        { fieldName: 'createdByUserId', changeType: 'ADDED', newValue: 'user-1', oldValue: null },
-        { fieldName: 'updatedByUserId', changeType: 'MODIFIED', newValue: 'user-2', oldValue: 'user-1' },
-        { fieldName: 'metadata.createdDate', changeType: 'ADDED', newValue: '2024-01-01', oldValue: null },
-        { fieldName: 'metadata.updatedDate', changeType: 'MODIFIED', newValue: '2024-01-02', oldValue: '2024-01-01' },
-        { fieldName: 'metadata.createdByUserId', changeType: 'ADDED', newValue: 'user-1', oldValue: null },
-        { fieldName: 'metadata.updatedByUserId', changeType: 'MODIFIED', newValue: 'user-2', oldValue: 'user-1' },
+        { fieldName: 'username', fullPath: 'username', changeType: 'MODIFIED', newValue: 'new', oldValue: 'old' },
+        { fieldName: 'updatedDate', fullPath: 'updatedDate', changeType: 'MODIFIED', newValue: '2024-01-02', oldValue: '2024-01-01' },
+        { fieldName: 'createdDate', fullPath: 'createdDate', changeType: 'ADDED', newValue: '2024-01-01', oldValue: null },
+        { fieldName: 'createdDate', fullPath: 'metadata.createdDate', changeType: 'ADDED', newValue: '2024-01-01', oldValue: null },
+        { fieldName: 'updatedDate', fullPath: 'metadata.updatedDate', changeType: 'MODIFIED', newValue: '2024-01-02', oldValue: '2024-01-01' },
+        { fieldName: 'createdByUserId', fullPath: 'metadata.createdByUserId', changeType: 'ADDED', newValue: 'user-1', oldValue: null },
+        { fieldName: 'updatedByUserId', fullPath: 'metadata.updatedByUserId', changeType: 'MODIFIED', newValue: 'user-2', oldValue: 'user-1' },
       ],
     };
 
