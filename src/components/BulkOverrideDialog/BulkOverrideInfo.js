@@ -158,14 +158,12 @@ class BulkOverrideInfo extends React.Component {
       onCloseRenewModal,
     } = this.props;
 
-    Object.values(checkedLoans).forEach(
-      ({
-        item: {
-          barcode,
-        },
-      }) => {
-        return POST(
-          {
+    const loans = Object.values(checkedLoans);
+
+    const sendSequentially = async () => {
+      for (const { item: { barcode } } of loans) {
+        try {
+          await POST({
             userBarcode,
             itemBarcode: barcode,
             servicePointId: curServicePoint?.id,
@@ -185,13 +183,18 @@ class BulkOverrideInfo extends React.Component {
                 }
               ),
             },
-          }
-        );
+          });
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error(`Failed to override loan for item ${barcode}:`, error);
+        }
       }
-    );
+    };
 
-    onCancel();
-    onCloseRenewModal();
+    sendSequentially().finally(() => {
+      onCancel();
+      onCloseRenewModal();
+    });
   };
 
   render() {
