@@ -1262,8 +1262,16 @@
 
   "title.patronBlock.create": "Users - Create a new patron block",
   "title.patronBlock.edit": "Users - Edit a patron block",
-  
   "userSearch": "User search",
+
+  "versionHistory.button.tooltip": "Version history",
+  "versionHistory.action.added": "Added",
+  "versionHistory.action.edited": "Edited",
+  "versionHistory.action.removed": "Removed",
+  "versionHistory.anonymousUser": "Anonymized",
+  "versionHistory.field.departments": "Departments",
+  "versionHistory.field.tags": "Tags",
+  "versionHistory.field.proxyFor": "Proxy/sponsor",
 
   "settings.versionHistory": "Version history",
   "settings.versionHistory.createVersionHistory": "Create version history",

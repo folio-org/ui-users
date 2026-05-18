@@ -431,5 +431,25 @@ export const USER_AFFILIATION_ROLES_CACHE_KEY = 'user-affiliation-roles';
 export const PREFERRED_SP_NONE = '-';
 
 export const AUDIT_USER_SETTING_GROUP = 'audit.user';
+export const AUDIT_USER_ENABLED_SETTING_KEY = 'enabled';
 export const AUDIT_SETTINGS_NAMESPACE_KEY = 'audit-settings';
 export const AUDIT_SETTINGS_ENDPOINT = `audit/config/groups/${AUDIT_USER_SETTING_GROUP}/settings`;
+
+export const HELPER_APP = {
+  TAGS: 'tags',
+};
+
+export const AUDIT_ACTION = {
+  CREATED: 'CREATED',
+};
+
+export const AUDIT_CHANGE_TYPE = {
+  ADDED: 'ADDED',
+  MODIFIED: 'MODIFIED',
+  REMOVED: 'REMOVED',
+};
+
+export const CUSTOM_FIELD_TYPES = {
+  SINGLE_CHECKBOX: 'SINGLE_CHECKBOX',
+  DATE_PICKER: 'DATE_PICKER',
+};

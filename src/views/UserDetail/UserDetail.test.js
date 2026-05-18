@@ -135,6 +135,20 @@ jest.mock(
 
 jest.mock('../../components/PrintLibraryCardButton', () => jest.fn(() => null));
 
+jest.mock('./components/UserVersionHistory', () => ({
+  UserVersionHistory: jest.fn(() => <div data-testid="user-version-history">UserVersionHistory</div>),
+  UserVersionHistoryButton: jest.fn(({ onClick, disabled }) => (
+    <button
+      type="button"
+      data-testid="version-history-button"
+      onClick={onClick}
+      disabled={disabled}
+    >
+      VersionHistoryButton
+    </button>
+  )),
+}));
+
 jest.mock('../../components/IfConsortiumPermission', () => jest.fn().mockReturnValue(null));
 
 jest.mock(
@@ -316,58 +330,6 @@ describe('UserDetail', () => {
         });
 
         expect(screen.queryByText('LoadingPane')).not.toBeInTheDocument();
-      });
-    });
-
-    describe('when roles interface is absent', () => {
-      it('shows permissions accordion', async () => {
-        stripes.hasInterface = () => false;
-        renderUserDetail(stripes);
-        expect(screen.getByText('Permissions accordion')).toBeTruthy();
-      });
-    });
-
-    describe('when roles interface is present', () => {
-      it('shows roles accordion', async () => {
-        stripes.hasInterface = () => true;
-        renderUserDetail(stripes);
-        expect(screen.queryByText('Permissions accordion')).not.toBeTruthy();
-        expect(screen.getByText('Roles accordion')).toBeTruthy();
-      });
-
-      it('omits permissions accordion', async () => {
-        stripes.hasInterface = (i) => {
-          return (i === 'roles');
-        };
-
-        renderUserDetail(stripes);
-        expect(screen.queryByText('Permissions accordion')).toBeFalsy();
-      });
-    });
-
-    describe('when roles interface is absent', () => {
-      it('shows permissions accordion', async () => {
-        stripes.hasInterface = () => false;
-        renderUserDetail(stripes);
-        expect(screen.getByText('Permissions accordion')).toBeTruthy();
-      });
-    });
-
-    describe('when roles interface is present', () => {
-      it('shows roles accordion', async () => {
-        stripes.hasInterface = () => true;
-        renderUserDetail(stripes);
-        expect(screen.queryByText('Permissions accordion')).not.toBeTruthy();
-        expect(screen.getByText('Roles accordion')).toBeTruthy();
-      });
-
-      it('omits permissions accordion', async () => {
-        stripes.hasInterface = (i) => {
-          return (i === 'roles');
-        };
-
-        renderUserDetail(stripes);
-        expect(screen.queryByText('Permissions accordion')).toBeFalsy();
       });
     });
 

@@ -1,9 +1,10 @@
 # Change history for ui-users
 
-## 13.1.0 IN PROGRESS
+## 13.1.0 (IN PROGRESS)
 
 * Update IfPerm in user edit form from `ui-users-roles.view` to `ui-authorization-roles.users.settings.view` since `ui-users-roles.view` includes extraneous subpermissions. Refs UIU-3521.
 * Add Settings > Users > Version history page to configure retention, anonymization, and excluded fields. Refs UIU-3385.
+* Add a Version history pane on the user detail view, gated on the mod-audit interface. Refs UIU-3388.
 
 ## [13.0.0] (https://github.com/folio-org/ui-users/tree/v13.0.0) (2026-04-16)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.16...v13.0.0)

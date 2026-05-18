@@ -73,11 +73,13 @@ import LostItemsLink from '../../components/LostItemsLink';
 import IfConsortiumPermission from '../../components/IfConsortiumPermission';
 import ActionMenuEditButton from './components/ActionMenuEditButton';
 import ActionMenuDeleteButton from './components/ActionMenuDeleteButton';
+import { UserVersionHistory, UserVersionHistoryButton } from './components/UserVersionHistory';
 import OpenTransactionModal from './components/OpenTransactionModal';
 import DeleteUserModal from './components/DeleteUserModal';
 import ExportFeesFinesReportButton from './components';
 import {
   CUSTOM_FIELDS_SECTION,
+  HELPER_APP,
   SUPPRESS_EDIT_SETTING_KEY,
 } from '../../constants';
 
@@ -213,6 +215,7 @@ class UserDetail extends React.Component {
       lastUpdate: null,
       showOpenTransactionModal: false,
       showDeleteUserModal: false,
+      isVersionHistoryOpen: false,
       sections: {
         [ACCORDION_ID.USER_INFORMATION]: true,
         [ACCORDION_ID.AFFILIATIONS]: false,
@@ -321,15 +324,21 @@ class UserDetail extends React.Component {
   }
 
   showHelperApp = (helperName) => {
-    this.setState({
-      helperApp: helperName
-    });
+    this.setState({ helperApp: helperName, isVersionHistoryOpen: false });
   }
 
   closeHelperApp = () => {
     this.setState({
       helperApp: null
     });
+  }
+
+  openVersionHistory = () => {
+    this.setState({ isVersionHistoryOpen: true, helperApp: null });
+  }
+
+  closeVersionHistory = () => {
+    this.setState({ isVersionHistoryOpen: false });
   }
 
   handleExpandAll = (obj) => {
@@ -411,6 +420,7 @@ class UserDetail extends React.Component {
       intl,
     } = this.props;
 
+    const { isVersionHistoryOpen } = this.state;
     const tags = ((user && user.tags) || {}).tagList || [];
 
     return (
@@ -420,11 +430,19 @@ class UserDetail extends React.Component {
             <IconButton
               icon="tag"
               id="clickable-show-tags"
-              onClick={() => { this.showHelperApp('tags'); }}
+              onClick={() => { this.showHelperApp(HELPER_APP.TAGS); }}
               badgeCount={tags.length}
               aria-label={intl.formatMessage({ id: 'ui-users.showTags' })}
             />
         }
+        <IfInterface name="audit-user">
+          <IfInterface name="audit-config">
+            <UserVersionHistoryButton
+              disabled={isVersionHistoryOpen}
+              onClick={this.openVersionHistory}
+            />
+          </IfInterface>
+        </IfInterface>
       </PaneMenu>
     );
   }
@@ -676,6 +694,7 @@ class UserDetail extends React.Component {
     const {
       sections,
       helperApp,
+      isVersionHistoryOpen,
       patronBlocks,
     } = this.state;
 
@@ -985,7 +1004,13 @@ class UserDetail extends React.Component {
                 </IfInterface>
               </AccordionSet>
             </Pane>
-            { helperApp && <HelperApp appName={helperApp} onClose={this.closeHelperApp} /> }
+            {isVersionHistoryOpen && (
+              <UserVersionHistory
+                userId={match.params.id}
+                onClose={this.closeVersionHistory}
+              />
+            )}
+            {helperApp && <HelperApp appName={helperApp} onClose={this.closeHelperApp} />}
             <Callout ref={(ref) => { this.callout = ref; }} />
             <IfInterface name="notes">
               <IfPermission perm="ui-notes.item.view">

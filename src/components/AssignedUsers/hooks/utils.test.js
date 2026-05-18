@@ -1,25 +1,8 @@
-import { renderHook } from '@folio/jest-config-stripes/testing-library/react';
-
+import { buildQueryByIds } from '../../../utils';
 import {
-  buildQueryByIds,
   batchRequest,
   buildQueryByUserIds,
 } from './utils';
-
-describe('buildQueryByIds', () => {
-  it('should create query with id', async () => {
-    const ids = ['1', '2'];
-    const { result } = renderHook(() => buildQueryByIds(ids));
-
-    expect(result.current).toBe('id==1 or id==2');
-  });
-
-  it('should return empty string', () => {
-    const { result } = renderHook(() => buildQueryByIds([]));
-
-    expect(result.current).toBeFalsy();
-  });
-});
 
 describe('batchRequest', () => {
   const kyMock = jest.fn(() => ({

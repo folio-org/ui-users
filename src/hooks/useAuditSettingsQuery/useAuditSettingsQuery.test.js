@@ -74,4 +74,15 @@ describe('useAuditSettingsQuery', () => {
     });
     expect(result.current.settings).toEqual([]);
   });
+
+  it('should not fetch settings when disabled via options', async () => {
+    const get = jest.fn();
+
+    useOkapiKy.mockReturnValue({ get });
+
+    const { result } = renderHook(() => useAuditSettingsQuery({ enabled: false }), { wrapper });
+
+    expect(get).not.toHaveBeenCalled();
+    expect(result.current.settings).toEqual([]);
+  });
 });
