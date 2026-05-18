@@ -135,7 +135,7 @@ class UserEdit extends React.Component {
       personal: {
         addresses: [],
         firstName: '',
-        preferredContactTypeId: (find(contactTypes, { 'name': 'email' }) || {}).id,
+        // preferredContactTypeId: (find(contactTypes, { 'name': 'email' }) || {}).id,
       },
       requestPreferences: {
         holdShelf: true,

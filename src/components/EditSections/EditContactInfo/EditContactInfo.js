@@ -3,7 +3,7 @@ import {
   injectIntl,
 } from 'react-intl';
 import PropTypes from 'prop-types';
-import { Field } from 'react-final-form';
+import { Field, useField } from 'react-final-form';
 import isEqual from 'lodash/isEqual';
 
 import {
@@ -28,11 +28,14 @@ const EditContactInfo = ({
   onToggle,
   accordionId,
   addressTypes,
-  preferredContactTypeId,
+  // preferredContactTypeId,
   intl,
   disabled,
   isCreateMode = false,
 }) => {
+  const { input: { value: selectedContactTypeId } } = useField('personal.preferredContactTypeId');
+  const isMobilePhoneRequired = selectedContactTypeId === contactTypes.find(c => c.name === 'sms')?.id;
+
   const contactTypeOptions = (contactTypes || []).map(g => {
     return (
       <FormattedMessage key={g.id} id={g.desc}>
@@ -41,7 +44,7 @@ const EditContactInfo = ({
     );
   });
 
-  const selectedContactTypeId = contactTypeOptions.find(c => preferredContactTypeId === c.id)?.id;
+  // const selectedContactTypeId = contactTypeOptions.find(c => preferredContactTypeId === c.id)?.id;
 
   const addressFields = {
     addressType: {
@@ -102,6 +105,7 @@ const EditContactInfo = ({
             component={TextField}
             fullWidth
             disabled={disabled}
+            required={isMobilePhoneRequired}
           />
         </Col>
         <Col xs={12} md={3}>
@@ -113,8 +117,9 @@ const EditContactInfo = ({
             fullWidth
             aria-required="true"
             required
+            // placeholder={intl.formatMessage({ id: 'ui-users.contact.selectContactType' })}
             disabled={disabled}
-            defaultValue={selectedContactTypeId}
+          // defaultValue={selectedContactTypeId}
           >
             <FormattedMessage id="ui-users.contact.selectContactType">
               {(message) => <option value="">{message}</option>}

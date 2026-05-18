@@ -452,7 +452,7 @@ class UserForm extends React.Component {
                   <EditContactInfo
                     accordionId="contactInfo"
                     addressTypes={formData.addressTypes}
-                    preferredContactTypeId={initialValues.preferredContactTypeId}
+                    // preferredContactTypeId={initialValues.preferredContactTypeId}
                     disabled={isShadowUser}
                     stripes={stripes}
                     isCreateMode={!isEditing}
