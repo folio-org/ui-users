@@ -1,0 +1,17 @@
+.formWrapper {
+  height: 100%;
+}
+
+.indentedSection {
+  margin-left: 2rem;
+}
+
+.anonymizeWrapper {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.groupLegend {
+  font-size: var(--font-size-form-label);
+  font-weight: var(--text-weight-bold);
+}
