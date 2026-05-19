@@ -991,7 +991,8 @@
         "subPermissions": [
           "settings.users.enabled",
           "departments.collection.get",
-          "departments.item.get"
+          "departments.item.get",
+          "users.collection.get"
         ],
         "visible": false
       },
