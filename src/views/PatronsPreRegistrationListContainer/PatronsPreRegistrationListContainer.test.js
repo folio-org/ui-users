@@ -26,6 +26,7 @@ const defaultProps = {
   source: {
     loaded: () => true,
     totalCount: () => 0,
+    pending: () => false,
   },
   data: [],
   onNeedMoreData: jest.fn(),
@@ -65,6 +66,7 @@ describe('PatronsPreRegistrationListContainer', () => {
     const props = {
       ...defaultProps,
       source: {
+        ...defaultProps.source,
         loaded: () => true,
         totalCount: () => 1,
       },

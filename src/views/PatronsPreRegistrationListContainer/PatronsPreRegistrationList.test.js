@@ -76,11 +76,13 @@ describe('PatronsPreRegistrationList', () => {
       totalCount: 1,
       columnMapping: expect.any(Object),
       formatter: expect.any(Object),
+      loading: true,
     };
     const props = {
       ...defaultProps,
       totalCount: 1,
       data: preRegistrationRecords,
+      isLoadingRecords: true,
     };
 
     renderComponent(props);
