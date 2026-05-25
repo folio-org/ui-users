@@ -32,6 +32,7 @@ const PatronsPreRegistrationListContainer = ({
   const query = queryGetter ? queryGetter() || {} : {};
   const sortOrder = query.sort || '';
   const count = source ? source.totalCount() : 0;
+  const isLoadingRecords = source.pending();
   const emptyMessage = source
     ? <NoResultsMessage
         source={source}
@@ -158,6 +159,7 @@ const PatronsPreRegistrationListContainer = ({
                   onSort={onSort}
                   sortOrder={sortOrder}
                   onNeedMoreData={onNeedMoreData}
+                  isLoadingRecords={isLoadingRecords}
                 />
               </Pane>
             </Paneset>
