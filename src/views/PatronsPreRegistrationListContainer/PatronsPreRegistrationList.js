@@ -25,6 +25,7 @@ const PatronsPreRegistrationList = ({
   onNeedMoreData,
   onSort,
   sortOrder,
+  isLoadingRecords,
 }) => {
   const intl = useIntl();
 
@@ -85,6 +86,7 @@ const PatronsPreRegistrationList = ({
       fullWidth
       columnMapping={columnMapping}
       contentData={data}
+      loading={isLoadingRecords}
       formatter={preRegistrationsListFormatter()}
       isEmptyMessage={isEmptyMessage}
       onNeedMoreData={onNeedMoreData}
@@ -108,6 +110,7 @@ PatronsPreRegistrationList.propTypes = {
   onNeedMoreData: PropTypes.func.isRequired,
   sortOrder: PropTypes.string,
   onSort: PropTypes.func.isRequired,
+  isLoadingRecords: PropTypes.bool.isRequired,
 };
 
 export default PatronsPreRegistrationList;

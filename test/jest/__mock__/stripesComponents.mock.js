@@ -140,7 +140,10 @@ jest.mock('@folio/stripes/components', () => ({
     <div>{props.children}</div>
   )),
   MultiColumnList: jest.fn((props) => (
-    <div data-testid={props['data-testid']} />
+    <>
+      <div data-testid={props['data-testid']} />
+      {props.loading && <div>Loading...</div>}
+    </>
   )),
   MultiSelection: jest.fn(({ children, dataOptions }) => (
     <div>

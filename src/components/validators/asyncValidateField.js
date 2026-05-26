@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { escapeCqlWildcards } from '@folio/stripes-util';
+import { escapeCqlWildcards } from '@folio/stripes/util';
 
 import memoize from '../util/memoize';
 

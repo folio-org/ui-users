@@ -76,15 +76,26 @@ describe('PatronsPreRegistrationList', () => {
       totalCount: 1,
       columnMapping: expect.any(Object),
       formatter: expect.any(Object),
+      loading: true,
     };
     const props = {
       ...defaultProps,
       totalCount: 1,
       data: preRegistrationRecords,
+      isLoadingRecords: true,
     };
 
     renderComponent(props);
     expect(MultiColumnList).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
+  });
+
+  it('should display loading in MCL', () => {
+    renderComponent({
+      ...defaultProps,
+      isLoadingRecords: true,
+    });
+
+    expect(screen.getByText('Loading...')).toBeVisible();
   });
 
   it('should display minor column', () => {
