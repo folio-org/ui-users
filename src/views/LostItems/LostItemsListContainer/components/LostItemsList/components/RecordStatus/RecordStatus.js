@@ -55,7 +55,7 @@ const RecordStatus = ({
           <>
             <br /><DateTimeFormatter value={actualCostRecord.expirationDate} />
           </>
-        )}c
+        )}
       </>
     );
   }
