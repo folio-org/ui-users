@@ -30,14 +30,9 @@ const withUserRoles = (WrappedComponent) => (props) => {
   const callout = useCallout();
   const sendErrorCallout = error => showErrorCallout(error, callout.sendCallout);
 
-  const { mutateAsync: createKeycloakUser } = useCreateAuthUserKeycloak(sendErrorCallout, { tenantId });
+  const { mutateAsync: createKeycloakUser } = useCreateAuthUserKeycloak(sendErrorCallout);
 
   const ky = useOkapiKy();
-  const api = ky.extend({
-    hooks: {
-      beforeRequest: [(req) => req.headers.set('X-Okapi-Tenant', tenantId)]
-    }
-  });
 
   useEffect(() => {
     // No need to set roles if there are empty or loading
@@ -101,7 +96,11 @@ const withUserRoles = (WrappedComponent) => (props) => {
 
   const checkUserInKeycloak = async () => {
     try {
-      await api.get(`users-keycloak/auth-users/${userId}`);
+      // This endpoint is used to check if the user exists in Keycloak to determine whether to show the confirmation modal.
+      // The request must use the current tenant header and not the selected affiliation tenant to ensure the correct check.
+      // There is no need to check if the user exists in Keycloak in affiliated tenants, as they are automatically created
+      // in Keycloak after being assigned to the user.
+      await ky.get(`users-keycloak/auth-users/${userId}`);
       return KEYCLOAK_USER_EXISTANCE.exist;
     } catch (error) {
       if (error?.response?.status === 404) {
