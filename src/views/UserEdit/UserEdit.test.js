@@ -7,7 +7,7 @@ import renderWithRouter from '../../../test/jest/helpers/renderWithRouter';
 import UserEdit from './UserEdit';
 import UserForm from './UserForm';
 
-import { KEYCLOAK_USER_EXISTANCE } from '../../constants';
+import { KEYCLOAK_USER_EXISTENCE } from '../../constants';
 
 const userFormData = {
   departments: [{
@@ -925,7 +925,7 @@ describe('UserEdit', () => {
         const alteredProps = { ...defaultProps,
           submitCreateKeycloakUser: mockSubmitCreateKeycloakUser,
           updateUserRoles: mockUpdateRoles,
-          checkUserInKeycloak: jest.fn().mockReturnValue(KEYCLOAK_USER_EXISTANCE.exist),
+          checkUserInKeycloak: jest.fn().mockReturnValue(KEYCLOAK_USER_EXISTENCE.exist),
           assignedRoleIds: { 1: true, 2: true, 3: true } };
 
         const { container } = renderWithRouter(<UserEdit {...alteredProps} />);
