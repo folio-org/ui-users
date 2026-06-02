@@ -287,7 +287,6 @@ class UserEdit extends React.Component {
     } = this.props;
     const isMemberTenant = checkIfUserInMemberTenant(stripes);
     const centralTenantId = getCentralTenantId(stripes);
-    // const isMemberTenant = centralTenantId && centralTenantId !== stripes.okapi.tenant;
 
     if (isMemberTenant && stripes.hasInterface('users-keycloak')) {
       this.pendingCreateRecord = record;
