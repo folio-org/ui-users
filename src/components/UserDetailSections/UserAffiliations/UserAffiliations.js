@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { useCallback, useMemo, useRef, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { useIntl, FormattedMessage } from 'react-intl';
 
 import {
   useCallout,
@@ -24,6 +24,7 @@ import {
 import AffiliationsManager from '../../AffiliationsManager';
 import IfConsortiumPermission from '../../IfConsortiumPermission';
 import { KEYCLOAK_USER_EXISTENCE } from '../../../constants';
+import { getFullName } from '../../util';
 
 import css from './UserAffiliations.css';
 import { createErrorMessage } from './util';
@@ -38,9 +39,11 @@ const UserAffiliations = ({
   onToggle,
   userId,
   userName,
+  user,
 }) => {
   const callout = useCallout();
   const stripes = useStripes();
+  const intl = useIntl();
   const [isKeycloakConfirmationOpen, setIsKeycloakConfirmationOpen] = useState(false);
   const [keycloakMissingTenantNames, setKeycloakMissingTenantNames] = useState('');
   const [keycloakMissingTenantCount, setKeycloakMissingTenantCount] = useState(0);
@@ -60,6 +63,7 @@ const UserAffiliations = ({
     isLoading: isAffiliationsMutating,
   } = useUserAffiliationsMutation();
 
+  const userFullName = getFullName(user);
   const isLoading = isFetching || isAffiliationsMutating;
 
   const processAssignment = useCallback(async ({ added, removed }) => {
@@ -192,12 +196,16 @@ const UserAffiliations = ({
       </Accordion>
       <ConfirmationModal
         id="affiliations-keycloak-confirmation"
-        heading={<FormattedMessage id="ui-users.keycloak.modal.confirmationHeading" />}
-        message={<FormattedMessage id="ui-users.keycloak.modal.creation" values={{ user: userName, tenants: keycloakMissingTenantNames, count: keycloakMissingTenantCount }} />}
+        heading={intl.formatMessage({ id: 'ui-users.keycloak.modal.confirmationHeading' })}
+        message={intl.formatMessage({ id: 'ui-users.keycloak.modal.creationMessage' }, {
+          user: userFullName,
+          tenants: keycloakMissingTenantNames,
+          count: keycloakMissingTenantCount,
+        })}
         onConfirm={handleConfirmKeycloakCreation}
         onCancel={handleCancelKeycloakCreation}
         open={isKeycloakConfirmationOpen}
-        confirmLabel={<FormattedMessage id="stripes-core.button.confirm" />}
+        confirmLabel={intl.formatMessage({ id: 'stripes-core.button.confirm' })}
       />
     </>
   );
@@ -214,6 +222,7 @@ UserAffiliations.propTypes = {
   onToggle: PropTypes.func.isRequired,
   userId: PropTypes.string,
   userName: PropTypes.string,
+  user: PropTypes.object,
 };
 
 export default UserAffiliations;

@@ -551,7 +551,7 @@ class UserForm extends React.Component {
             <ConfirmationModal
               id="JIT-user"
               heading={<FormattedMessage id="ui-users.keycloak.modal.confirmationHeading" />}
-              message={<FormattedMessage id="ui-users.keycloak.modal.creation" values={{ user:getFullName(form.getState().values), tenants: keycloakMissingTenantNames, count: keycloakMissingTenantCount }} />}
+              message={<FormattedMessage id="ui-users.keycloak.modal.creationMessage" values={{ user:getFullName(form.getState().values), tenants: keycloakMissingTenantNames, count: keycloakMissingTenantCount }} />}
               onConfirm={this.handleConfirmCreateKeycloakUser}
               onCancel={onCancelKeycloakConfirmation}
               open={isCreateKeycloakUserConfirmationOpen}
