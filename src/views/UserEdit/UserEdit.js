@@ -18,10 +18,14 @@ import {
 import {
   CalloutContext,
   withOkapiKy,
+  checkIfUserInMemberTenant,
 } from '@folio/stripes/core';
 
 import { getProfilePictureConfig } from '../../utils';
-import { getRecordObject } from '../../components/util';
+import {
+  getRecordObject,
+  getCentralTenantId,
+} from '../../components/util';
 
 import UserForm from './UserForm';
 import { toUserAddresses, getFormAddressList } from '../../components/data/converters/address';
@@ -64,7 +68,9 @@ class UserEdit extends React.Component {
     initialAssignedRoleIds: PropTypes.object,
     isLoadingAffiliationRoles: PropTypes.bool.isRequired,
     keycloakMissingTenantNames: PropTypes.string,
+    setKeycloakMissingTenantNames: PropTypes.func,
     keycloakMissingTenantCount: PropTypes.number,
+    setKeycloakMissingTenantCount: PropTypes.func,
     checkAndHandleKeycloakAuthUser: PropTypes.func,
     confirmCreateKeycloakUser: PropTypes.func,
     setIsCreateKeycloakUserConfirmationOpen: PropTypes.func.isRequired,
@@ -91,6 +97,7 @@ class UserEdit extends React.Component {
   }
 
   updateSP = null;
+  pendingCreateRecord = null;
 
   getUser() {
     const { resources, match: { params: { id } } } = this.props;
@@ -246,7 +253,7 @@ class UserEdit extends React.Component {
     return departments.map(({ value }) => value);
   }
 
-  create = ({ requestPreferences, ...userFormData }) => {
+  performCreate = ({ requestPreferences, ...userFormData }) => {
     const { mutator, history, location: { search }, stripes } = this.props;
     const userData = cloneDeep(userFormData);
     const user = { ...userData, id: uuidv4() };
@@ -269,6 +276,44 @@ class UserEdit extends React.Component {
       .then(() => {
         history.push(`/users/preview/${user.id}${search}`);
       }).catch((e) => showErrorCallout(e, this.context.sendCallout));
+  }
+
+  create = (record) => {
+    const {
+      stripes,
+      setIsCreateKeycloakUserConfirmationOpen,
+      setKeycloakMissingTenantNames,
+      setKeycloakMissingTenantCount,
+    } = this.props;
+    const isMemberTenant = checkIfUserInMemberTenant(stripes);
+    const centralTenantId = getCentralTenantId(stripes);
+    // const isMemberTenant = centralTenantId && centralTenantId !== stripes.okapi.tenant;
+
+    if (isMemberTenant && stripes.hasInterface('users-keycloak')) {
+      this.pendingCreateRecord = record;
+      const centralTenantName = stripes.user?.user?.tenants?.find(t => t.id === centralTenantId)?.name || centralTenantId;
+      setKeycloakMissingTenantNames(centralTenantName);
+      setKeycloakMissingTenantCount(1);
+      setIsCreateKeycloakUserConfirmationOpen(true);
+      return undefined;
+    }
+
+    return this.performCreate(record);
+  }
+
+  handleConfirmKeycloakCreate = () => {
+    const { setIsCreateKeycloakUserConfirmationOpen } = this.props;
+
+    setIsCreateKeycloakUserConfirmationOpen(false);
+    this.performCreate(this.pendingCreateRecord);
+    this.pendingCreateRecord = null;
+  }
+
+  handleCancelKeycloakCreate = () => {
+    const { setIsCreateKeycloakUserConfirmationOpen } = this.props;
+
+    setIsCreateKeycloakUserConfirmationOpen(false);
+    this.pendingCreateRecord = null;
   }
 
   formatCustomFieldsPayload(customFields) {
@@ -556,7 +601,11 @@ class UserEdit extends React.Component {
 
     // data is information that the form needs, mostly to populate options lists
     const formData = this.getUserFormData();
-    const onSubmit = params.id ? (record) => this.update(record) : (record) => this.create(record);
+    const isCreating = !params.id;
+
+    const onSubmit = isCreating
+      ? (record) => this.create(record)
+      : (record) => this.update(record);
 
     return (
       <UserForm
@@ -572,8 +621,8 @@ class UserEdit extends React.Component {
         stripes={this.props.stripes}
         profilePictureConfig={profilePictureConfig}
         isCreateKeycloakUserConfirmationOpen={isCreateKeycloakUserConfirmationOpen}
-        onCancelKeycloakConfirmation={this.afterUpdate}
-        confirmCreateKeycloakUser={() => this.props.confirmCreateKeycloakUser(this.afterUpdate)}
+        onCancelKeycloakConfirmation={isCreating ? this.handleCancelKeycloakCreate : this.afterUpdate}
+        confirmCreateKeycloakUser={isCreating ? this.handleConfirmKeycloakCreate : () => this.props.confirmCreateKeycloakUser(this.afterUpdate)}
         setTenantId={setTenantId}
         tenantId={tenantId}
         setAssignedRoleIds={setAssignedRoleIds}

@@ -488,6 +488,10 @@ describe('UserEdit', () => {
           selUser: { records: [] }
         },
         match: { params: { id: '' } },
+        stripes: {
+          ...props.stripes,
+          hasInterface: jest.fn().mockReturnValue(false),
+        },
       });
 
       const submitButton = container.querySelector('#clickable-save');
@@ -865,6 +869,8 @@ describe('UserEdit', () => {
       onCancelKeycloakConfirmation: jest.fn(),
       confirmCreateKeycloakUser: jest.fn(),
       setIsCreateKeycloakUserConfirmationOpen: jest.fn(),
+      setKeycloakMissingTenantNames: jest.fn(),
+      setKeycloakMissingTenantCount: jest.fn(),
     };
 
     it('cancel confirmation', async () => {
@@ -1026,6 +1032,125 @@ describe('UserEdit', () => {
 
         expect(historyPush).toHaveBeenCalled();
       });
+    });
+  });
+
+  describe('Keycloak confirmation modal on user creation (member tenant)', () => {
+    const createProps = {
+      ...props,
+      stripes: {
+        ...props.stripes,
+        okapi: { tenant: 'memberTenantId' },
+        hasInterface: jest.fn((name) => ['users-keycloak', 'roles', 'consortia'].includes(name)),
+        user: {
+          user: {
+            id: 'current-user-id',
+            consortium: { centralTenantId: 'centralTenantId' },
+            tenants: [
+              { id: 'centralTenantId', name: 'Central' },
+              { id: 'memberTenantId', name: 'Member' },
+            ],
+          },
+        },
+      },
+      resources: {
+        ...props.resources,
+        selUser: { records: [], isPending: false },
+      },
+      history: { push: jest.fn() },
+      location: { search: '', pathname: '/users/create' },
+      match: { params: {} },
+      setKeycloakMissingTenantNames: jest.fn(),
+      setKeycloakMissingTenantCount: jest.fn(),
+    };
+
+    it('should show keycloak confirmation dialog when creating user on member tenant', async () => {
+      const { container } = await renderUserEdit(createProps);
+      const submitButton = container.querySelector('#clickable-save');
+      await userEvent.click(submitButton);
+
+      expect(createProps.setKeycloakMissingTenantNames).toHaveBeenCalledWith('Central');
+      expect(createProps.setKeycloakMissingTenantCount).toHaveBeenCalledWith(1);
+      expect(createProps.setIsCreateKeycloakUserConfirmationOpen).toHaveBeenCalledWith(true);
+      expect(createProps.mutator.records.POST).not.toHaveBeenCalled();
+    });
+
+    it('should proceed with user creation when confirmation is accepted', async () => {
+      UserForm.mockImplementation(({ onSubmit, confirmCreateKeycloakUser }) => (
+        <>
+          <button type="button" id="clickable-save" onClick={() => onSubmit(userFormData)}>
+            Submit Form
+          </button>
+          <button type="button" id="submit-confirmation" onClick={confirmCreateKeycloakUser}>
+            Confirm
+          </button>
+        </>
+      ));
+
+      const { container } = await renderUserEdit(createProps);
+      await userEvent.click(container.querySelector('#clickable-save'));
+
+      expect(createProps.mutator.records.POST).not.toHaveBeenCalled();
+
+      await userEvent.click(container.querySelector('#submit-confirmation'));
+
+      expect(createProps.setIsCreateKeycloakUserConfirmationOpen).toHaveBeenCalledWith(false);
+      expect(createProps.mutator.records.POST).toHaveBeenCalled();
+    });
+
+    it('should not create user when confirmation is cancelled', async () => {
+      UserForm.mockImplementation(({ onSubmit, onCancelKeycloakConfirmation }) => (
+        <>
+          <button type="button" id="clickable-save" onClick={() => onSubmit(userFormData)}>
+            Submit Form
+          </button>
+          <button type="button" id="cancel-confirmation" onClick={onCancelKeycloakConfirmation}>
+            Cancel
+          </button>
+        </>
+      ));
+
+      const { container } = await renderUserEdit(createProps);
+      await userEvent.click(container.querySelector('#clickable-save'));
+      await userEvent.click(container.querySelector('#cancel-confirmation'));
+
+      expect(createProps.setIsCreateKeycloakUserConfirmationOpen).toHaveBeenCalledWith(false);
+      expect(createProps.mutator.records.POST).not.toHaveBeenCalled();
+      expect(createProps.history.push).not.toHaveBeenCalled();
+    });
+
+    it('should skip keycloak dialog when creating user on central tenant', async () => {
+      const centralProps = {
+        ...createProps,
+        stripes: {
+          ...createProps.stripes,
+          okapi: { tenant: 'centralTenantId' },
+        },
+      };
+
+      const { container } = await renderUserEdit(centralProps);
+      const submitButton = container.querySelector('#clickable-save');
+      await userEvent.click(submitButton);
+
+      expect(centralProps.setIsCreateKeycloakUserConfirmationOpen).not.toHaveBeenCalled();
+      expect(centralProps.mutator.records.POST).toHaveBeenCalled();
+    });
+
+    it('should skip keycloak dialog when users-keycloak interface is not available', async () => {
+      const noKeycloakProps = {
+        ...createProps,
+        stripes: {
+          ...createProps.stripes,
+          hasInterface: jest.fn().mockReturnValue(false),
+        },
+      };
+
+      const { container } = await renderUserEdit(noKeycloakProps);
+      const submitButton = container.querySelector('#clickable-save');
+      await userEvent.click(submitButton);
+
+      expect(noKeycloakProps.setIsCreateKeycloakUserConfirmationOpen).not.toHaveBeenCalled();
+      expect(noKeycloakProps.mutator.records.POST).toHaveBeenCalled();
     });
   });
 });

@@ -199,7 +199,9 @@ const withUserRoles = (WrappedComponent) => (props) => {
     setAssignedRoleIds={setAssignedRoleIds}
     isCreateKeycloakUserConfirmationOpen={isCreateKeycloakUserConfirmationOpen}
     keycloakMissingTenantNames={keycloakMissingTenantNames}
+    setKeycloakMissingTenantNames={setKeycloakMissingTenantNames}
     keycloakMissingTenantCount={keycloakMissingTenantCount}
+    setKeycloakMissingTenantCount={setKeycloakMissingTenantCount}
     initialAssignedRoleIds={initialAssignedRoleIds}
     checkAndHandleKeycloakAuthUser={checkAndHandleKeycloakAuthUser}
     confirmCreateKeycloakUser={confirmCreateKeycloakUser}
