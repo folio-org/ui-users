@@ -1,6 +1,7 @@
 # Change history for ui-users
 
-## 13.1.0 (IN PROGRESS)
+## [13.0.1] (https://github.com/folio-org/ui-users/tree/v13.0.1) (2026-06-03)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v13.0.0...v13.0.1)
 
 * Remove extra character from `Expired time` in Lost items requiring actual cost table. Refs UIU-3580.
 
