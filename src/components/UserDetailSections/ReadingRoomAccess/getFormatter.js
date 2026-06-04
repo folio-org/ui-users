@@ -15,7 +15,7 @@ export const getFormatter = (lastUpdatedDetails) => ({
   ),
   [rraColumns.READING_ROOM_NAME]: ({ readingRoomName }) => readingRoomName,
   [rraColumns.NOTES]: ({ notes }) => notes,
-  [rraColumns.ID]: rra => (
+  [rraColumns.UPDATED_DATE]: rra => (
     rra?.metadata?.updatedDate ? (
       <ViewMetaData
         metadata={rra.metadata}
