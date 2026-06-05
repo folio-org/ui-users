@@ -18,12 +18,21 @@ import {
 } from '@folio/stripes/smart-components';
 
 import { UserSearch } from '../views';
-import { MAX_RECORDS } from '../constants';
+import { MAX_RECORDS, PATRON_GROUP_CHUNK_SIZE, USERS_API } from '../constants';
 import filterConfig from './filterConfig';
-import { buildFilterConfig } from './utils';
+import { buildFilterConfig, extractPatronGroupIds, stripPatronGroupFilters } from './utils';
 
-const INITIAL_RESULT_COUNT = 30;
-const RESULT_COUNT_INCREMENT = 30;
+const INITIAL_RESULT_COUNT = 100;
+const RESULT_COUNT_INCREMENT = 100;
+
+// Split a CQL query string at the last ' sortby ' keyword so we can wrap
+// the main part in parentheses before appending a patron-group clause.
+const splitCqlSort = (cql) => {
+  if (!cql) return { query: '', sortClause: '' };
+  const idx = cql.lastIndexOf(' sortby ');
+  if (idx === -1) return { query: cql, sortClause: '' };
+  return { query: cql.slice(0, idx), sortClause: cql.slice(idx) };
+};
 
 const searchFields = [
   'username="%{query}*"',
@@ -106,8 +115,15 @@ class UserSearchContainer extends React.Component {
       records: 'users',
       resultOffset: '%{resultOffset}',
       resultDensity: 'sparse',
-      perRequest: 100,
+      perRequest: RESULT_COUNT_INCREMENT,
       path: 'users',
+      // Disable the manifest fetch when too many patron groups are selected –
+      // the resulting CQL query would exceed URL length limits (HTTP 414).
+      // In that situation UserSearchContainer uses chunked okapiKy requests instead.
+      fetch: props => {
+        const filters = props.resources?.query?.filters || '';
+        return extractPatronGroupIds(filters).length <= PATRON_GROUP_CHUNK_SIZE;
+      },
       GET: {
         params: {
           query: buildQuery,
@@ -255,6 +271,9 @@ class UserSearchContainer extends React.Component {
   state = {
     actualTotalRecords: 0,
     hasLoadedActualTotalRecords: false,
+    // State for chunked-mode fetching (active when patron group count > PATRON_GROUP_CHUNK_SIZE)
+    chunkedUsers: [],
+    isChunkedFetching: false,
   }
 
   componentDidMount() {
@@ -269,6 +288,13 @@ class UserSearchContainer extends React.Component {
 
     if (resources.query?.query || resources.query?.filters) {
       this.fetchActualTotalRecords();
+    }
+
+    // Trigger initial chunked fetch when the page is loaded with 50+ patron groups
+    // already present in the URL (e.g. restored from a bookmark).
+    const patronGroupIds = extractPatronGroupIds(resources.query?.filters);
+    if (patronGroupIds.length > PATRON_GROUP_CHUNK_SIZE) {
+      this.fetchChunkedUsers();
     }
   }
 
@@ -288,16 +314,34 @@ class UserSearchContainer extends React.Component {
       }
     }
 
+    const queryChanged = resources.query.query !== prevProps.resources.query.query;
+    const filtersChanged = resources.query.filters !== prevProps.resources.query.filters;
+    const sortChanged = resources.query.sort !== prevProps.resources.query.sort;
+
+    const patronGroupIds = extractPatronGroupIds(resources.query?.filters);
+    const prevPatronGroupIds = extractPatronGroupIds(prevProps.resources.query?.filters);
+    const isChunkedMode = patronGroupIds.length > PATRON_GROUP_CHUNK_SIZE;
+    const wasChunkedMode = prevPatronGroupIds.length > PATRON_GROUP_CHUNK_SIZE;
+
     // Only fetch actual total records if the `query` or `filters` have changed
-    if ((resources.query.query !== prevProps.resources.query.query)
-      || (resources.query.filters !== prevProps.resources.query.filters)
-    ) {
+    if (queryChanged || filtersChanged || sortChanged) {
       if (resources.query?.query || resources.query?.filters) {
         this.fetchActualTotalRecords();
       } else {
         // Reset actual total records if both query and filters are empty and we previously had records
         this.resetActualTotalRecords();
       }
+    }
+
+    if (isChunkedMode) {
+      if (!wasChunkedMode || queryChanged || filtersChanged || sortChanged) {
+        // Entering chunked mode for the first time, or filters/query changed while in chunked mode
+        this.fetchChunkedUsers();
+      }
+    } else if (wasChunkedMode) {
+      // Leaving chunked mode – clear chunked state so normal manifest data takes over
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ chunkedUsers: [], isChunkedFetching: false });
     }
 
     this.source.update(this.props);
@@ -311,19 +355,33 @@ class UserSearchContainer extends React.Component {
   }
 
   fetchActualTotalRecords = async () => {
+    const { resources } = this.props;
+    const queryParams = { ...resources.query };
+    const patronGroupIds = extractPatronGroupIds(queryParams.filters);
+
+    if (patronGroupIds.length > PATRON_GROUP_CHUNK_SIZE) {
+      await this.fetchChunkedTotalRecords(patronGroupIds, queryParams);
+    } else {
+      await this.fetchSingleTotalRecords(queryParams);
+    }
+  }
+
+  fetchSingleTotalRecords = async (queryParams) => {
     const {
       okapiKy,
       resources,
     } = this.props;
-
-    const queryParams = { ...resources.query };
     const searchQuery = buildQuery(queryParams, {}, resources, this.logger, this.props);
 
     if (!searchQuery) return;
 
     try {
-      const response = await okapiKy(`users?limit=0&query=${searchQuery}`);
-      const data = await response.json();
+      const data = await okapiKy(USERS_API, {
+        searchParams: {
+          limit: 0,
+          query: searchQuery,
+        },
+      }).json();
 
       this.setState({
         actualTotalRecords: data.totalRecords,
@@ -333,6 +391,101 @@ class UserSearchContainer extends React.Component {
       // eslint-disable-next-line no-console
       console.error('Error fetching actual total records:', error);
     }
+  }
+
+  /**
+   * Build one CQL query string per chunk of patron group IDs.
+   * The sortby clause from the base query is stripped and re-appended after the
+   * combined (baseQuery) AND (pg chunk) expression so the CQL remains valid.
+   */
+  buildChunkedQueries = (patronGroupIds, queryParams) => {
+    const { resources } = this.props;
+    const filtersWithoutPG = stripPatronGroupFilters(queryParams.filters);
+    const baseQueryParams = { ...queryParams, filters: filtersWithoutPG };
+    const baseResourceData = { ...resources, query: { ...resources.query, filters: filtersWithoutPG } };
+
+    const fullBaseQuery = buildQuery(baseQueryParams, {}, baseResourceData, this.logger, this.props);
+    const query = buildQuery(queryParams, {}, resources, this.logger, this.props);
+    // Use original query (with patron group filters) to extract the sort clause,
+    // and the base query (without patron group filters) to extract the main query part,
+    // so that we can combine the main query with each chunk of patron group filters without losing the sort clause.
+    // Sort clause is empty if fullBaseQuery is empty, that's why we use the original query to extract it.
+    // fullBaseQuery can be empty when there no query and no filters (we strip patron group filters from the query,
+    // so if the only filters are patron groups, the resulting sort clause will be empty).
+    const { sortClause } = splitCqlSort(query);
+    const { query: baseQuery } = splitCqlSort(fullBaseQuery);
+
+    const queries = [];
+    for (let i = 0; i < patronGroupIds.length; i += PATRON_GROUP_CHUNK_SIZE) {
+      const chunk = patronGroupIds.slice(i, i + PATRON_GROUP_CHUNK_SIZE);
+      const pgCql = chunk.map(id => `patronGroup=="${id}"`).join(' OR ');
+      queries.push([baseQuery, `(${pgCql})`].filter(Boolean).join(' AND ') + sortClause);
+    }
+    return queries;
+  }
+
+  fetchChunkedTotalRecords = async (patronGroupIds, queryParams) => {
+    const { okapiKy } = this.props;
+    const queries = this.buildChunkedQueries(patronGroupIds, queryParams);
+
+    try {
+      const results = await Promise.all(
+        queries.map(q => okapiKy(USERS_API, { searchParams: { limit: 0, query: q } }).json())
+      );
+      const totalRecords = results.reduce((sum, r) => sum + (r.totalRecords ?? 0), 0);
+      this.setState({ actualTotalRecords: totalRecords, hasLoadedActualTotalRecords: true });
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('Error fetching chunked total records:', error);
+    }
+  }
+
+  /**
+   * Fetch users across all patron-group chunks and merge results.
+   * Each chunk is fetched with the same limit and offset so that PREV/NEXT paging
+   * works correctly within each chunk. Results are concatenated and stored as a
+   * sparse array so MCL can detect page boundaries.
+   * Note: because chunks are fetched independently, global sort order across chunk
+   * boundaries is not guaranteed – each chunk returns server-sorted results.
+   */
+  fetchChunkedUsers = async (pageAmount = RESULT_COUNT_INCREMENT, pageIndex = 0) => {
+    const {
+      okapiKy,
+      resources,
+    } = this.props;
+
+    const queryParams = { ...resources.query };
+    const patronGroupIds = extractPatronGroupIds(queryParams.filters);
+    const queries = this.buildChunkedQueries(patronGroupIds, queryParams);
+
+    this.setState({ isChunkedFetching: true });
+
+    try {
+      const results = await Promise.all(
+        queries.map(q => okapiKy(USERS_API, {
+          searchParams: { limit: pageAmount, offset: pageIndex, query: q },
+        }).json())
+      );
+
+      const allUsers = results.flatMap(r => r.users ?? []);
+
+      this.setState({
+        // Prepend empty slots matching the offset so that MultiColumnList can
+        // determine when the end of the list is reached and disable Next correctly.
+        // This sets `isSparse` to true in MultiColumnList.
+        chunkedUsers: new Array(pageIndex).concat(allUsers.slice(0, pageAmount)),
+        isChunkedFetching: false,
+      });
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('Error fetching chunked users:', error);
+      this.setState({ isChunkedFetching: false });
+    }
+  }
+
+  onNeedMoreDataChunked = (askAmount = RESULT_COUNT_INCREMENT, index = 0) => {
+    this.fetchActualTotalRecords();
+    this.fetchChunkedUsers(askAmount, index);
   }
 
   onNeedMoreData = (askAmount, index) => {
@@ -390,11 +543,46 @@ class UserSearchContainer extends React.Component {
     const {
       actualTotalRecords,
       hasLoadedActualTotalRecords,
+      chunkedUsers,
+      isChunkedFetching,
     } = this.state;
 
     if (this.source) {
       this.source.update(this.props);
     }
+
+    const patronGroupIds = extractPatronGroupIds(this.props.resources.query?.filters);
+    const isChunkedMode = patronGroupIds.length > PATRON_GROUP_CHUNK_SIZE;
+
+    // When chunked mode is active, supply a minimal source-adapter so that
+    // components that query source.totalCount() / source.pending() keep working.
+    const chunkedSource = isChunkedMode ? {
+      totalCount: () => actualTotalRecords,
+      pending: () => isChunkedFetching,
+      loaded: () => !isChunkedFetching,
+      records: () => chunkedUsers,
+      fetchMore: this.onNeedMoreDataChunked,
+      fetchOffset: this.onNeedMoreDataChunked,
+      failure: () => false,
+      failureMessage: () => null,
+    } : null;
+
+    // Override resources.records so UserSearch reads chunked data instead of the
+    // (disabled) manifest resource.
+    const chunkedResourcesOverride = isChunkedMode ? {
+      ...this.props.resources,
+      records: {
+        records: chunkedUsers,
+        isPending: isChunkedFetching,
+        hasLoaded: !isChunkedFetching,
+      },
+    } : null;
+
+    const chunkProps = isChunkedMode ? {
+      source: chunkedSource,
+      resources: chunkedResourcesOverride,
+      onNeedMoreData: this.onNeedMoreDataChunked,
+    } : {};
 
     return (
       <UserSearch
@@ -406,6 +594,7 @@ class UserSearchContainer extends React.Component {
         actualTotalRecords={actualTotalRecords}
         hasLoadedActualTotalRecords={hasLoadedActualTotalRecords}
         {...this.props}
+        {...chunkProps}
       >
         { this.props.children }
       </UserSearch>

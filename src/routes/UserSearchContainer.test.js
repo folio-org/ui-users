@@ -27,6 +27,13 @@ const mockOkapiKy = jest.fn().mockReturnValue({
   }),
 });
 
+const mockOkapiKyChunked = jest.fn().mockReturnValue({
+  json: jest.fn().mockResolvedValue({
+    users: [{ id: 'u1' }, { id: 'u2' }],
+    totalRecords: 10,
+  }),
+});
+
 const location = {
   pathname: '/users',
   search: '?sort=name',
@@ -112,6 +119,8 @@ const getUserSearchContainer = (_props = {}) => {
 
 const renderUserSearchContainer = (_props = {}) => render(getUserSearchContainer(_props));
 
+const makePatronGroupFilters = (count) => Array.from({ length: count }, (_, i) => `pg.pg-uuid-${i}`).join(',');
+
 describe('UserSearchContainer', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -130,9 +139,15 @@ describe('UserSearchContainer', () => {
     }));
 
     expect(mockOkapiKy).toHaveBeenCalledTimes(1);
-    expect(mockOkapiKy).toHaveBeenCalledWith(expect.stringContaining(
-      'users?limit=0&query=((keywords="test*") and active=="true")'
-    ));
+    expect(mockOkapiKy).toHaveBeenCalledWith(
+      'users',
+      {
+        searchParams: {
+          limit: 0,
+          query: expect.stringContaining('((keywords="test*") and active=="true")'),
+        },
+      }
+    );
   });
 
   describe('when query and filters are not present', () => {
@@ -372,8 +387,176 @@ describe('UserSearchContainer', () => {
         },
       })));
 
-      expect(mockOkapiKy).toHaveBeenCalledWith(expect.stringContaining('users?limit=0&query=(keywords="foo*")'));
+      expect(mockOkapiKy).toHaveBeenCalledWith(
+        'users',
+        {
+          searchParams: {
+            limit: 0,
+            query: expect.stringContaining('(keywords="foo*")'),
+          },
+        }
+      );
       expect(getByText('1,200 records found')).toBeInTheDocument();
+    });
+  });
+
+  describe('chunked patron-group mode', () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it('should call okapiKy with chunked query params on mount with 51+ patron groups', async () => {
+      await act(async () => {
+        renderUserSearchContainer({
+          okapiKy: mockOkapiKyChunked,
+          resources: {
+            ...resources,
+            query: {
+              query: 'test',
+              filters: makePatronGroupFilters(51),
+              sort: 'name',
+            },
+          },
+        });
+      });
+
+      expect(mockOkapiKyChunked).toHaveBeenCalledWith(
+        'users',
+        expect.objectContaining({
+          searchParams: expect.objectContaining({
+            limit: 100,
+            offset: 0,
+            query: expect.stringContaining('patronGroup=='),
+          }),
+        })
+      );
+    });
+
+    it('should call okapiKy with limit 0 for each chunk when fetching total records', async () => {
+      await act(async () => {
+        renderUserSearchContainer({
+          okapiKy: mockOkapiKyChunked,
+          resources: {
+            ...resources,
+            query: {
+              query: 'test',
+              filters: makePatronGroupFilters(51),
+              sort: 'name',
+            },
+          },
+        });
+      });
+
+      const totalRecordsCalls = mockOkapiKyChunked.mock.calls.filter(
+        ([, options]) => options?.searchParams?.limit === 0
+      );
+      expect(totalRecordsCalls).toHaveLength(2);
+    });
+
+    it('should use single-mode fetch after leaving chunked mode', async () => {
+      const { rerender } = await act(async () => renderUserSearchContainer({
+        okapiKy: mockOkapiKyChunked,
+        resources: {
+          ...resources,
+          query: {
+            query: 'test',
+            filters: makePatronGroupFilters(51),
+            sort: 'name',
+          },
+        },
+      }));
+
+      jest.clearAllMocks();
+
+      await act(async () => rerender(getUserSearchContainer({
+        resources: {
+          ...resources,
+          query: {
+            query: 'test',
+            filters: 'active.active',
+            sort: 'name',
+          },
+        },
+      })));
+
+      expect(mockOkapiKy).toHaveBeenCalledWith(
+        'users',
+        expect.objectContaining({
+          searchParams: expect.objectContaining({
+            limit: 0,
+          }),
+        })
+      );
+    });
+
+    it('should call okapiKy with limit, offset, and patronGroup== query when fetching chunked users', async () => {
+      await act(async () => {
+        renderUserSearchContainer({
+          okapiKy: mockOkapiKyChunked,
+          resources: {
+            ...resources,
+            query: {
+              query: 'test',
+              filters: makePatronGroupFilters(51),
+              sort: 'name',
+            },
+          },
+        });
+      });
+
+      expect(mockOkapiKyChunked).toHaveBeenCalledWith(
+        'users',
+        expect.objectContaining({
+          searchParams: expect.objectContaining({
+            limit: expect.any(Number),
+            offset: expect.any(Number),
+            query: expect.stringContaining('patronGroup=='),
+          }),
+        })
+      );
+    });
+
+    it('should build 2 chunk queries for 51 patron groups', async () => {
+      await act(async () => {
+        renderUserSearchContainer({
+          okapiKy: mockOkapiKyChunked,
+          resources: {
+            ...resources,
+            query: {
+              query: 'test',
+              filters: makePatronGroupFilters(51),
+              sort: 'name',
+            },
+          },
+        });
+      });
+
+      const patronGroupDataCalls = mockOkapiKyChunked.mock.calls.filter(
+        ([, options]) => options?.searchParams?.query?.includes('patronGroup==')
+          && options?.searchParams?.limit !== 0
+      );
+      expect(patronGroupDataCalls).toHaveLength(2);
+    });
+
+    it('should include sortby clause in chunked queries when sort is specified', async () => {
+      await act(async () => {
+        renderUserSearchContainer({
+          okapiKy: mockOkapiKyChunked,
+          resources: {
+            ...resources,
+            query: {
+              query: 'test',
+              filters: makePatronGroupFilters(51),
+              sort: 'name',
+            },
+          },
+        });
+      });
+
+      const callsWithSort = mockOkapiKyChunked.mock.calls.filter(
+        ([, options]) => options?.searchParams?.query?.includes(' sortby ')
+      );
+      expect(callsWithSort.length).toBeGreaterThan(0);
     });
   });
 });

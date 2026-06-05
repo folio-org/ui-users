@@ -16,6 +16,7 @@
 ## [13.0.0] (https://github.com/folio-org/ui-users/tree/v13.0.0) (2026-04-16)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.16...v13.0.0)
 * Collect coverage from unit tests. Refs UIU-3356.
+* Fix HTTP 414 error when multi-selecting more than 80 patron groups – split CQL query into chunks and use chunked okapiKy requests for both record fetching and total count. Refs UIU-3545.
 * Modify translation string for search view: "User search -> Search & filter". Refs UIU-3231.
 * *BREAKING* Use number generator for barcode. Refs UIU-2729.
 * Change amount input type to number. Refs UIU-2836.
