@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { every, orderBy } from 'lodash';
+import { every, get, orderBy } from 'lodash';
 import queryString from 'query-string';
 
 import { NoValue } from '@folio/stripes/components';
@@ -249,7 +249,9 @@ export const getReadingRoomSortedData = (e, meta, { data, order, direction }) =>
     newSortDirection = direction === sortTypes.ASC ? sortTypes.DESC : sortTypes.ASC;
   }
   const sortedData = orderBy(data,
-    [sortedRecord => sortedRecord[meta.name]?.toLowerCase()], newSortDirection);
+    // Use get(sortedRecord, meta.name) instead of sortedRecord[meta.name]
+    // so lodash resolves the nested metadata.updatedDate path correctly.
+    [sortedRecord => get(sortedRecord, meta.name)?.toLowerCase()], newSortDirection);
 
   return {
     data: sortedData,

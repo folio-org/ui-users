@@ -3,7 +3,7 @@ export const rraColumns = {
   ACCESS: 'access',
   READING_ROOM_NAME: 'readingRoomName',
   NOTES: 'notes',
-  ID: 'id'
+  UPDATED_DATE: 'metadata.updatedDate'
 };
 
 export const DEFAULT_SORT_ORDER = rraColumns.ACCESS;
