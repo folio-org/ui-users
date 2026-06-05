@@ -6,12 +6,12 @@
 * Add Settings > Users > Version history page to configure retention, anonymization, and excluded fields. Refs UIU-3385.
 * Add a Version history pane on the user detail view, gated on the mod-audit interface. Refs UIU-3388.
 * Send bulk override renewal requests sequentially to prevent race conditions. Refs UIU-3561.
+* In the "Last Updated" column in the "Reading Room Access" accordion, sort by date, not by id. Fixes UIU-3592.
 
 ## [13.0.1] (https://github.com/folio-org/ui-users/tree/v13.0.1) (2026-06-03)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v13.0.0...v13.0.1)
 
 * Remove extra character from `Expired time` in Lost items requiring actual cost table. Refs UIU-3580.
-* Fix Reading Room Access "Last Updated" column sorting by date instead of id. Refs UIU-3592.
 
 ## [13.0.0] (https://github.com/folio-org/ui-users/tree/v13.0.0) (2026-04-16)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.16...v13.0.0)
