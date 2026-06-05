@@ -395,7 +395,7 @@ export const USER_FIELDS_TO_CHECK = [USER_INFO.FIRST_NAME, USER_INFO.MIDDLE_NAME
 
 export const PATRON_PREREGISTRATION_RECORDS_NAME = 'patronPreRegistrationRecords';
 
-export const KEYCLOAK_USER_EXISTANCE = {
+export const KEYCLOAK_USER_EXISTENCE = {
   exist: 'exist',
   nonExist: 'nonExist',
   error: 'error',

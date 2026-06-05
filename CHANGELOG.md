@@ -4,6 +4,7 @@
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v13.0.0...v13.0.1)
 
 * Remove extra character from `Expired time` in Lost items requiring actual cost table. Refs UIU-3580.
+* Fix keycloak confirmation dialog not showing when assigning roles/affiliations to non-home tenants in ECS. Refs UIU-3586.
 
 ## [13.0.0] (https://github.com/folio-org/ui-users/tree/v13.0.0) (2026-04-16)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.16...v13.0.0)

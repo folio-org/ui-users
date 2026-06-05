@@ -820,6 +820,7 @@ class UserDetail extends React.Component {
                           onToggle={this.handleSectionToggle}
                           userId={user?.id}
                           userName={user?.username}
+                          user={user}
                         />
                       )
                     }
