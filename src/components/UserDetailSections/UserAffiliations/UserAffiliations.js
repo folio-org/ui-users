@@ -1,13 +1,15 @@
 import PropTypes from 'prop-types';
-import { useCallback, useMemo } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { useCallback, useMemo, useRef, useState } from 'react';
+import { useIntl, FormattedMessage } from 'react-intl';
 
 import {
-  useCallout
+  useCallout,
+  useStripes,
 } from '@folio/stripes/core';
 import {
   Accordion,
   Badge,
+  ConfirmationModal,
   Headline,
   Icon,
   List,
@@ -17,9 +19,12 @@ import {
 import {
   useUserAffiliations,
   useUserAffiliationsMutation,
+  useCheckUserInKeycloak,
 } from '../../../hooks';
 import AffiliationsManager from '../../AffiliationsManager';
 import IfConsortiumPermission from '../../IfConsortiumPermission';
+import { KEYCLOAK_USER_EXISTENCE } from '../../../constants';
+import { getFullName } from '../../util';
 
 import css from './UserAffiliations.css';
 import { createErrorMessage } from './util';
@@ -34,8 +39,17 @@ const UserAffiliations = ({
   onToggle,
   userId,
   userName,
+  user,
 }) => {
   const callout = useCallout();
+  const stripes = useStripes();
+  const intl = useIntl();
+  const [isKeycloakConfirmationOpen, setIsKeycloakConfirmationOpen] = useState(false);
+  const [keycloakMissingTenantNames, setKeycloakMissingTenantNames] = useState('');
+  const [keycloakMissingTenantCount, setKeycloakMissingTenantCount] = useState(0);
+  const pendingAssignmentRef = useRef(null);
+
+  const { checkUserInKeycloakForTenant } = useCheckUserInKeycloak(userId);
 
   const {
     affiliations,
@@ -49,9 +63,10 @@ const UserAffiliations = ({
     isLoading: isAffiliationsMutating,
   } = useUserAffiliationsMutation();
 
+  const userFullName = getFullName(user);
   const isLoading = isFetching || isAffiliationsMutating;
 
-  const onUpdateAffiliations = useCallback(async ({ added, removed }) => {
+  const processAssignment = useCallback(async ({ added, removed }) => {
     try {
       const { success, errors } = await handleAssignment({ added, removed });
 
@@ -94,6 +109,47 @@ const UserAffiliations = ({
     }
   }, [callout, handleAssignment, refetch, userName]);
 
+  const onUpdateAffiliations = useCallback(async ({ added, removed }) => {
+    if (!added.length || !stripes.hasInterface('users-keycloak')) {
+      await processAssignment({ added, removed });
+      return;
+    }
+
+    // Check keycloak existence for each tenant being added.
+    const statuses = await Promise.all(
+      added.map(async ({ tenantId }) => {
+        const status = await checkUserInKeycloakForTenant(tenantId);
+        return { tenantId, status };
+      })
+    );
+
+    const missingTenants = statuses.filter(({ status }) => status === KEYCLOAK_USER_EXISTENCE.nonExist);
+
+    if (missingTenants.length) {
+      const userTenants = stripes.user?.user?.tenants || [];
+      const names = missingTenants
+        .map(({ tenantId }) => userTenants.find(t => t.id === tenantId)?.name || tenantId)
+        .join(', ');
+      setKeycloakMissingTenantNames(names);
+      setKeycloakMissingTenantCount(missingTenants.length);
+      pendingAssignmentRef.current = { added, removed };
+      setIsKeycloakConfirmationOpen(true);
+    } else {
+      await processAssignment({ added, removed });
+    }
+  }, [checkUserInKeycloakForTenant, processAssignment, stripes]);
+
+  const handleConfirmKeycloakCreation = useCallback(async () => {
+    setIsKeycloakConfirmationOpen(false);
+    await processAssignment(pendingAssignmentRef.current);
+    pendingAssignmentRef.current = null;
+  }, [processAssignment]);
+
+  const handleCancelKeycloakCreation = useCallback(() => {
+    setIsKeycloakConfirmationOpen(false);
+    pendingAssignmentRef.current = null;
+  }, []);
+
   const label = (
     <Headline size="large" tag="h3">
       <FormattedMessage id="ui-users.affiliations.section.label" />
@@ -127,16 +183,31 @@ const UserAffiliations = ({
   }, [affiliations]);
 
   return (
-    <Accordion
-      open={expanded}
-      id={accordionId}
-      onToggle={onToggle}
-      label={label}
-      displayWhenOpen={displayWhenOpen}
-      displayWhenClosed={displayWhenClosed}
-    >
-      {isLoading ? <Loading /> : affiliationsList}
-    </Accordion>
+    <>
+      <Accordion
+        open={expanded}
+        id={accordionId}
+        onToggle={onToggle}
+        label={label}
+        displayWhenOpen={displayWhenOpen}
+        displayWhenClosed={displayWhenClosed}
+      >
+        {isLoading ? <Loading /> : affiliationsList}
+      </Accordion>
+      <ConfirmationModal
+        id="affiliations-keycloak-confirmation"
+        heading={intl.formatMessage({ id: 'ui-users.keycloak.modal.confirmationHeading' })}
+        message={intl.formatMessage({ id: 'ui-users.keycloak.modal.creationMessage' }, {
+          user: userFullName,
+          tenants: keycloakMissingTenantNames,
+          count: keycloakMissingTenantCount,
+        })}
+        onConfirm={handleConfirmKeycloakCreation}
+        onCancel={handleCancelKeycloakCreation}
+        open={isKeycloakConfirmationOpen}
+        confirmLabel={intl.formatMessage({ id: 'stripes-core.button.confirm' })}
+      />
+    </>
   );
 };
 
@@ -151,6 +222,7 @@ UserAffiliations.propTypes = {
   onToggle: PropTypes.func.isRequired,
   userId: PropTypes.string,
   userName: PropTypes.string,
+  user: PropTypes.object,
 };
 
 export default UserAffiliations;
