@@ -1,10 +1,11 @@
 import { act } from 'react';
+import { useQueryClient } from 'react-query';
 
-import { cleanup, render, waitFor } from '@folio/jest-config-stripes/testing-library/react';
+import { render, waitFor } from '@folio/jest-config-stripes/testing-library/react';
 import { useStripes, useOkapiKy, useCallout } from '@folio/stripes/core';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import withUserRoles from './withUserRoles';
-import { useAllRolesData, useUserAffiliationRoles } from '../../hooks';
+import { useAllRolesData, useUserAffiliationRoles, useCheckUserInKeycloak } from '../../hooks';
 
 jest.mock('react-query', () => ({
   useQueryClient: jest.fn(() => ({ invalidateQueries: jest.fn() })),
@@ -18,11 +19,9 @@ jest.mock('@folio/stripes/core', () => ({
 }));
 
 jest.mock('../../hooks', () => ({
-  useCreateAuthUserKeycloak: jest.fn(() => ({
-    mutateAsync: jest.fn()
-  })),
   useAllRolesData: jest.fn(),
   useUserAffiliationRoles: jest.fn(),
+  useCheckUserInKeycloak: jest.fn(),
 }));
 
 const mockStripes = {
@@ -32,11 +31,25 @@ const mockStripes = {
   config: {
     maxUnpagedResourceCount: 1000,
   },
-  mutator: {
-    selUser: {
-      PUT: jest.fn().mockResolvedValue({ data: {} }),
+  logger: {
+    log: jest.fn(),
+  },
+  user: {
+    user: {
+      tenants: [
+        { id: 'consortium', name: 'Consortium' },
+        { id: 'college', name: 'College' },
+        { id: 'university', name: 'University' },
+        { id: 'school', name: 'School' },
+      ],
     },
-  }
+  },
+};
+
+const mockMutator = {
+  selUser: {
+    PUT: jest.fn().mockResolvedValue({ data: {} }),
+  },
 };
 
 const mockRolesData = {
@@ -57,53 +70,95 @@ const mockData = {
   username: 'testUser',
 };
 
+const mockApiGet = jest.fn().mockResolvedValue();
 const mockApiPut = jest.fn(() => Promise.resolve({
   json: () => Promise.resolve(),
 }));
-
-const mockKyPut = jest.fn();
+const mockApiPost = jest.fn().mockResolvedValue();
 
 const mockKy = {
-  extend: () => ({
-    get: jest.fn().mockImplementationOnce(() => ({
-      json: () => Promise.resolve({ userRoles: [{ roleId: 'role1' }, { roleId: 'role2' }] }),
-    })).mockImplementationOnce(() => Promise.resolve(true)),
+  extend: jest.fn(() => ({
+    get: mockApiGet,
     put: mockApiPut,
-  }),
-  put: mockKyPut,
+    post: mockApiPost,
+  })),
+  put: jest.fn().mockResolvedValue(),
 };
 
-const WrappedComponent = ({ assignedRoleIds,
+const mockOnFinish = jest.fn().mockResolvedValue();
+const mockCheckUserInKeycloakForTenant = jest.fn().mockResolvedValue('exist');
+const mockInvalidateQueries = jest.fn().mockResolvedValue();
+const mockSendCallout = jest.fn();
+
+const WrappedComponent = ({
+  assignedRoleIds,
   setAssignedRoleIds,
-  checkAndHandleKeycloakAuthUser, confirmCreateKeycloakUser }) => (
-    <div data-testid="assigned-role-ids">{assignedRoleIds.consortium?.join(', ')}
-      <button
-        type="submit"
-        data-testid="submit-form"
-        onClick={() => checkAndHandleKeycloakAuthUser(() => {}, mockData)}
-      >Submit
-      </button>
+  checkAndHandleKeycloakAuthUser,
+  confirmCreateKeycloakUser,
+  isCreateKeycloakUserConfirmationOpen,
+  keycloakMissingTenantNames,
+  keycloakMissingTenantCount,
+}) => (
+  <div data-testid="assigned-role-ids">{assignedRoleIds.consortium?.join(', ')}
+    <button
+      type="submit"
+      data-testid="submit-form"
+      onClick={() => checkAndHandleKeycloakAuthUser(mockOnFinish, mockData, mockMutator)}
+    >Submit
+    </button>
+    <button
+      data-testid="set-roles-for-college"
+      type="button"
+      onClick={() => setAssignedRoleIds(prev => ({
+        ...prev,
+        college: ['collegeRole1', 'collegeRole2'],
+      }))}
+    >
+      Set College Roles
+    </button>
+    <button
+      data-testid="set-roles-for-consortium"
+      type="button"
+      onClick={() => setAssignedRoleIds(prev => ({
+        ...prev,
+        consortium: ['consortiumRole1', 'consortiumRole2'],
+      }))}
+    >
+      Set Consortium Roles
+    </button>
+    <button
+      data-testid="set-roles-for-university"
+      type="button"
+      onClick={() => setAssignedRoleIds(prev => ({
+        ...prev,
+        university: ['universityRole1', 'universityRole2'],
+      }))}
+    >
+      Set University Roles
+    </button>
+    <button
+      data-testid="set-roles-for-school"
+      type="button"
+      onClick={() => setAssignedRoleIds(prev => ({
+        ...prev,
+        school: ['schoolRole1', 'schoolRole2'],
+      }))}
+    >
+      Set School Roles
+    </button>
+    <div>
+      <span data-testid="dialog-open">{String(isCreateKeycloakUserConfirmationOpen)}</span>
+      <span data-testid="missing-names">{keycloakMissingTenantNames}</span>
+      <span data-testid="missing-count">{keycloakMissingTenantCount}</span>
       <button
         type="button"
-        onClick={() => setAssignedRoleIds({
-          college: ['collegeRole1'],
-          consortium: ['role1', 'role2'],
-          university: ['universityRole1'],
-        })}
-        data-testid="assignRoles"
+        data-testid="confirm-create-keycloak-user"
+        onClick={() => confirmCreateKeycloakUser(mockOnFinish)}
       >
-        Assign roles
+        Confirm
       </button>
-      <div data-testid="confirmation-dialog">
-        <button
-          type="button"
-          data-testid="confirm-create-keycloak-user"
-          onClick={() => confirmCreateKeycloakUser(() => {
-          })}
-        >Confirm
-        </button>
-      </div>
     </div>
+  </div>
 );
 
 const CompWithUserRoles = withUserRoles(WrappedComponent);
@@ -117,15 +172,19 @@ const renderComponent = (props = {}) => render(
 );
 
 describe('withUserRoles HOC', () => {
-  afterAll(() => {
-    jest.clearAllMocks();
-    cleanup();
-  });
   beforeEach(() => {
+    jest.clearAllMocks();
     useStripes.mockReturnValue(mockStripes);
     useAllRolesData.mockReturnValue(mockRolesData);
     useUserAffiliationRoles.mockReturnValue(mockUserAffiliationRoles);
     useOkapiKy.mockReturnValue(mockKy);
+    useCheckUserInKeycloak.mockReturnValue({
+      checkUserInKeycloakForTenant: mockCheckUserInKeycloakForTenant,
+    });
+    useQueryClient.mockReturnValue({
+      invalidateQueries: mockInvalidateQueries,
+    });
+    useCallout.mockReturnValue({ sendCallout: mockSendCallout });
   });
 
   it('fetches and sets assigned role ids on mount and assignedRoleIds passed to wrapped component correctly', async () => {
@@ -134,30 +193,8 @@ describe('withUserRoles HOC', () => {
     await waitFor(() => expect(getByTestId('assigned-role-ids')).toHaveTextContent('role1, role2'));
   });
 
-  it('check keycloak user', async () => {
-    const { getByTestId } = renderComponent();
-
-    await userEvent.click(getByTestId('submit-form'));
-  });
-
-  it('submit form changing user role ids', async () => {
-    const { getByTestId } = renderComponent();
-
-    await act(() => userEvent.click(getByTestId('assignRoles')));
-    await userEvent.click(getByTestId('submit-form'));
-  });
-
-  it('submit form after changing user role ids', async () => {
-    const { getByTestId } = renderComponent();
-
-    await act(() => userEvent.click(getByTestId('assignRoles')));
-    await userEvent.click(getByTestId('confirm-create-keycloak-user'));
-  });
-
   describe('when assigning roles for other tenants', () => {
     beforeEach(async () => {
-      jest.clearAllMocks();
-
       useUserAffiliationRoles.mockReturnValue({
         userRoleIds: {
           college: [],
@@ -169,7 +206,9 @@ describe('withUserRoles HOC', () => {
 
       const { getByTestId } = renderComponent();
 
-      await act(() => userEvent.click(getByTestId('assignRoles')));
+      await act(() => userEvent.click(getByTestId('set-roles-for-college')));
+      await act(() => userEvent.click(getByTestId('set-roles-for-university')));
+      await act(() => userEvent.click(getByTestId('set-roles-for-consortium')));
       await act(() => userEvent.click(getByTestId('submit-form')));
     });
 
@@ -177,25 +216,25 @@ describe('withUserRoles HOC', () => {
       expect(mockApiPut).toHaveBeenCalledWith('roles/users/user1', {
         json: {
           userId: 'user1',
-          roleIds: ['collegeRole1'],
+          roleIds: ['collegeRole1', 'collegeRole2'],
         },
       });
       expect(mockApiPut).toHaveBeenCalledWith('roles/users/user1', {
         json: {
           userId: 'user1',
-          roleIds: ['universityRole1'],
+          roleIds: ['universityRole1', 'universityRole2'],
         },
       });
       expect(mockApiPut).toHaveBeenCalledWith('roles/users/user1', {
         json: {
           userId: 'user1',
-          roleIds: ['role1', 'role2'],
+          roleIds: ['consortiumRole1', 'consortiumRole2'],
         },
       });
     });
 
     it('should save user data for the current tenant using `ky.put` rather than `api.put`', () => {
-      expect(mockKyPut).toHaveBeenCalledWith('users-keycloak/users/user1', {
+      expect(mockKy.put).toHaveBeenCalledWith('users-keycloak/users/user1', {
         json: mockData,
       });
     });
@@ -203,7 +242,6 @@ describe('withUserRoles HOC', () => {
 
   describe('when updateKeycloakUser fails (ky.put throws)', () => {
     const mockError = new Error('Keycloak update failed');
-    const mockSendCallout = jest.fn();
     let capturedError;
 
     // A dedicated component that captures errors thrown by checkAndHandleKeycloakAuthUser
@@ -227,13 +265,8 @@ describe('withUserRoles HOC', () => {
 
     beforeEach(() => {
       capturedError = undefined;
-
-      useCallout.mockReturnValue({ sendCallout: mockSendCallout });
       useOkapiKy.mockReturnValue({
-        extend: () => ({
-          get: jest.fn(() => Promise.resolve()),
-          put: jest.fn(),
-        }),
+        ...mockKy,
         put: jest.fn().mockRejectedValue(mockError),
       });
     });
@@ -262,6 +295,293 @@ describe('withUserRoles HOC', () => {
       });
 
       expect(mockSendCallout).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('when calling checkAndHandleKeycloakAuthUser', () => {
+    it('should check if user exists in keycloak for the home/current tenant', async () => {
+      const { getByTestId } = renderComponent();
+
+      await act(() => userEvent.click(getByTestId('submit-form')));
+
+      expect(mockCheckUserInKeycloakForTenant).toHaveBeenCalledWith(mockStripes.okapi.tenant);
+    });
+
+    describe('and home tenant has keycloak record', () => {
+      it('should save the user data for the HOME! tenant using mod-users-keycloak API', async () => {
+        const checkUserInKeycloakForTenant = jest.fn().mockResolvedValueOnce('exist');
+        useCheckUserInKeycloak.mockReturnValue({
+          checkUserInKeycloakForTenant,
+        });
+
+        const { getByTestId } = renderComponent();
+
+        await act(() => userEvent.click(getByTestId('submit-form')));
+
+        expect(checkUserInKeycloakForTenant).toHaveBeenCalledWith('consortium');
+        expect(mockKy.put).toHaveBeenCalledWith('users-keycloak/users/user1', {
+          json: mockData,
+        });
+        expect(mockMutator.selUser.PUT).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('and home tenant has no keycloak record', () => {
+      it('should save the user data via mod-users API (selUser.PUT) and not mod-users-keycloak API', async () => {
+        useCheckUserInKeycloak.mockReturnValue({
+          checkUserInKeycloakForTenant: jest.fn().mockResolvedValueOnce('nonExist'),
+        });
+
+        const { getByTestId } = renderComponent();
+
+        await act(() => userEvent.click(getByTestId('submit-form')));
+
+        expect(mockMutator.selUser.PUT).toHaveBeenCalledWith(mockData);
+        expect(mockKy.put).not.toHaveBeenCalledWith('users-keycloak/users/user1', expect.anything());
+      });
+    });
+
+    describe('and no roles have changed', () => {
+      it('should call onFinish directly without checking keycloak for non-home tenants or saving roles', async () => {
+        const { getByTestId } = renderComponent();
+
+        await act(() => userEvent.click(getByTestId('submit-form')));
+
+        expect(mockCheckUserInKeycloakForTenant).toHaveBeenCalledWith('consortium');
+        expect(mockOnFinish).toHaveBeenCalled();
+        expect(mockCheckUserInKeycloakForTenant).not.toHaveBeenCalledWith('college');
+      });
+    });
+
+    describe('and there are roles changes', () => {
+      it('should check keycloak record existence for each tenant with changed roles', async () => {
+        const { getByTestId } = renderComponent();
+
+        await act(() => userEvent.click(getByTestId('set-roles-for-college')));
+        await act(() => userEvent.click(getByTestId('set-roles-for-consortium')));
+        await act(() => userEvent.click(getByTestId('set-roles-for-school')));
+
+        await act(() => userEvent.click(getByTestId('submit-form')));
+
+        // Home (consortium) tenant is always checked first to determine the save path,
+        expect(mockCheckUserInKeycloakForTenant).toHaveBeenCalledWith('consortium');
+
+        // then only the tenants with changed roles are checked.
+        expect(mockCheckUserInKeycloakForTenant).toHaveBeenCalledWith('college');
+        expect(mockCheckUserInKeycloakForTenant).not.toHaveBeenCalledWith('university');
+        expect(mockCheckUserInKeycloakForTenant).toHaveBeenCalledWith('school');
+      });
+
+      describe('and keycloak user does not exist for any tenant with changed roles', () => {
+        it('should show confirmation dialog', async () => {
+          useCheckUserInKeycloak.mockReturnValue({
+            checkUserInKeycloakForTenant: jest.fn()
+              .mockResolvedValueOnce('exist') // home tenant has a record
+              .mockResolvedValue('nonExist'), // all other tenants with changed roles do not have records
+          });
+
+          const { getByTestId } = renderComponent();
+
+          await act(() => userEvent.click(getByTestId('set-roles-for-college')));
+          await act(() => userEvent.click(getByTestId('submit-form')));
+
+          expect(getByTestId('dialog-open')).toHaveTextContent('true');
+        });
+
+        it('should list the tenant names in the confirmation dialog', async () => {
+          useCheckUserInKeycloak.mockReturnValue({
+            checkUserInKeycloakForTenant: jest.fn()
+              .mockResolvedValueOnce('nonExist') // home/Consortium tenant doesn't have a record
+              .mockResolvedValueOnce('exist') // College tenant has a record
+              .mockResolvedValueOnce('nonExist') // University tenant doesn't have a record
+              .mockResolvedValueOnce('exist'), // School tenant has a record
+          });
+
+          const { getByTestId } = renderComponent();
+
+          await act(() => userEvent.click(getByTestId('set-roles-for-consortium')));
+          await act(() => userEvent.click(getByTestId('set-roles-for-college')));
+          await act(() => userEvent.click(getByTestId('set-roles-for-university')));
+          await act(() => userEvent.click(getByTestId('set-roles-for-school')));
+
+          await act(() => userEvent.click(getByTestId('submit-form')));
+
+          expect(getByTestId('missing-names')).toHaveTextContent('Consortium, University');
+          expect(getByTestId('missing-count')).toHaveTextContent('2');
+        });
+      });
+
+      describe('and keycloak user exists for all tenants with changed roles', () => {
+        it('should save roles and call onFinish without showing confirmation dialog', async () => {
+          const checkUserInKeycloakForTenant = jest.fn().mockResolvedValue('exist');
+          useCheckUserInKeycloak.mockReturnValue({
+            checkUserInKeycloakForTenant,
+          });
+
+          const { getByTestId } = renderComponent();
+
+          await act(() => userEvent.click(getByTestId('set-roles-for-college')));
+          await act(() => userEvent.click(getByTestId('set-roles-for-university')));
+          await act(() => userEvent.click(getByTestId('submit-form')));
+
+          expect(checkUserInKeycloakForTenant).toHaveBeenCalledWith('college');
+          expect(checkUserInKeycloakForTenant).toHaveBeenCalledWith('university');
+          expect(mockOnFinish).toHaveBeenCalled();
+          expect(getByTestId('dialog-open')).toHaveTextContent('false');
+        });
+      });
+
+      describe('and there is an error checking keycloak for any tenant', () => {
+        it('should not proceed with saving roles', async () => {
+          const checkUserInKeycloakForTenant = jest.fn()
+            .mockResolvedValueOnce('exist') // home tenant has a record
+            .mockResolvedValueOnce('error'); // error occurs for a tenant with changed roles
+
+          useCheckUserInKeycloak.mockReturnValue({
+            checkUserInKeycloakForTenant,
+          });
+
+          const { getByTestId } = renderComponent();
+
+          await act(() => userEvent.click(getByTestId('set-roles-for-college')));
+          await act(() => userEvent.click(getByTestId('submit-form')));
+
+          expect(checkUserInKeycloakForTenant).toHaveBeenCalledWith('college');
+          expect(mockApiPut).not.toHaveBeenCalledWith('roles/users/user1', expect.anything());
+          expect(mockOnFinish).not.toHaveBeenCalled();
+          expect(getByTestId('dialog-open')).toHaveTextContent('false');
+        });
+      });
+    });
+  });
+
+  describe('confirmation dialog', () => {
+    describe('when confirming creation of keycloak user for tenants missing keycloak records', () => {
+      it('should create keycloak users for the missing tenants', async () => {
+        useCheckUserInKeycloak.mockReturnValue({
+          checkUserInKeycloakForTenant: jest.fn()
+            .mockResolvedValueOnce('nonExist') // home/Consortium tenant doesn't have a record
+            .mockResolvedValueOnce('exist') // College tenant has a record
+            .mockResolvedValueOnce('nonExist') // University tenant doesn't have a record
+            .mockResolvedValueOnce('exist'), // School tenant has a record
+        });
+
+        const { getByTestId } = renderComponent();
+
+        await act(() => userEvent.click(getByTestId('set-roles-for-consortium')));
+        await act(() => userEvent.click(getByTestId('set-roles-for-college')));
+        await act(() => userEvent.click(getByTestId('set-roles-for-university')));
+        await act(() => userEvent.click(getByTestId('set-roles-for-school')));
+
+        await act(() => userEvent.click(getByTestId('submit-form')));
+
+        expect(getByTestId('dialog-open')).toHaveTextContent('true');
+
+        await act(() => userEvent.click(getByTestId('confirm-create-keycloak-user')));
+
+        expect(mockApiPost).toHaveBeenCalledWith('users-keycloak/auth-users/user1');
+        // For consortium and university tenants which are missing keycloak records
+        expect(mockApiPost).toHaveBeenCalledTimes(2);
+        expect(mockKy.extend).toHaveBeenCalledWith({
+          hooks: {
+            beforeRequest: [expect.any(Function)],
+          },
+        });
+      });
+
+      it('should invalidate queries', async () => {
+        useCheckUserInKeycloak.mockReturnValue({
+          checkUserInKeycloakForTenant: jest.fn()
+            .mockResolvedValueOnce('nonExist') // home/Consortium tenant doesn't have a record
+        });
+
+        const { getByTestId } = renderComponent();
+
+        await act(() => userEvent.click(getByTestId('set-roles-for-consortium')));
+        await act(() => userEvent.click(getByTestId('submit-form')));
+
+        expect(getByTestId('dialog-open')).toHaveTextContent('true');
+
+        await act(() => userEvent.click(getByTestId('confirm-create-keycloak-user')));
+
+        expect(mockInvalidateQueries).toHaveBeenCalledWith(['jit-auth-role']);
+      });
+
+      it('should update the user roles after creating keycloak users', async () => {
+        useCheckUserInKeycloak.mockReturnValue({
+          checkUserInKeycloakForTenant: jest.fn()
+            .mockResolvedValueOnce('nonExist') // home/Consortium tenant doesn't have a record
+            .mockResolvedValueOnce('exist') // College tenant has a record
+            .mockResolvedValueOnce('nonExist') // University tenant doesn't have a record
+            .mockResolvedValueOnce('exist'), // School tenant has a record
+        });
+
+        const { getByTestId } = renderComponent();
+
+        await act(() => userEvent.click(getByTestId('set-roles-for-consortium')));
+        await act(() => userEvent.click(getByTestId('set-roles-for-college')));
+        await act(() => userEvent.click(getByTestId('set-roles-for-university')));
+        await act(() => userEvent.click(getByTestId('set-roles-for-school')));
+
+        await act(() => userEvent.click(getByTestId('submit-form')));
+
+        expect(getByTestId('dialog-open')).toHaveTextContent('true');
+
+        await act(() => userEvent.click(getByTestId('confirm-create-keycloak-user')));
+
+        expect(mockApiPut).toHaveBeenCalledWith('roles/users/user1', expect.anything());
+        expect(mockApiPut).toHaveBeenCalledTimes(4);
+      });
+
+      it('should call onFinish', async () => {
+        useCheckUserInKeycloak.mockReturnValue({
+          checkUserInKeycloakForTenant: jest.fn()
+            .mockResolvedValueOnce('nonExist') // home/Consortium tenant doesn't have a record
+        });
+
+        const { getByTestId } = renderComponent();
+
+        await act(() => userEvent.click(getByTestId('set-roles-for-consortium')));
+        await act(() => userEvent.click(getByTestId('submit-form')));
+
+        expect(getByTestId('dialog-open')).toHaveTextContent('true');
+
+        await act(() => userEvent.click(getByTestId('confirm-create-keycloak-user')));
+
+        expect(mockOnFinish).toHaveBeenCalled();
+      });
+
+      describe('creation fails for any tenant', () => {
+        it('should call sendCallout with error message', async () => {
+          const post = jest.fn().mockRejectedValue('Keycloak user creation failed');
+
+          useOkapiKy.mockReturnValue({
+            ...mockKy,
+            extend: jest.fn(() => ({
+              get: mockApiGet,
+              put: mockApiPut,
+              post,
+            })),
+          });
+
+          useCheckUserInKeycloak.mockReturnValue({
+            checkUserInKeycloakForTenant: jest.fn()
+              .mockResolvedValueOnce('nonExist') // home/Consortium tenant doesn't have a record
+          });
+
+          const { getByTestId } = renderComponent();
+
+          await act(() => userEvent.click(getByTestId('set-roles-for-consortium')));
+          await act(() => userEvent.click(getByTestId('set-roles-for-college')));
+          await act(() => userEvent.click(getByTestId('submit-form')));
+
+          expect(getByTestId('dialog-open')).toHaveTextContent('true');
+
+          await act(() => userEvent.click(getByTestId('confirm-create-keycloak-user')));
+
+          expect(mockSendCallout).toHaveBeenCalled();
+        });
+      });
     });
   });
 });

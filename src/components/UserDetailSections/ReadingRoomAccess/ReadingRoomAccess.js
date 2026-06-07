@@ -34,7 +34,7 @@ const ReadingRoomAccess = (props) => {
     [rraColumns.ACCESS]: <FormattedMessage id="ui-users.readingRoom.access" />,
     [rraColumns.READING_ROOM_NAME]: <FormattedMessage id="ui-users.readingRoom.name" />,
     [rraColumns.NOTES]: <FormattedMessage id="ui-users.readingRoom.note" />,
-    [rraColumns.ID]: <FormattedMessage id="ui-users.readingRoom.lastUpdated" />,
+    [rraColumns.UPDATED_DATE]: <FormattedMessage id="ui-users.readingRoom.lastUpdated" />,
   };
   const visibleColumns = Object.keys(columnMapping);
   const sortInitialState = {

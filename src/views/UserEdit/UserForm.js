@@ -125,6 +125,8 @@ class UserForm extends React.Component {
     intl: PropTypes.object,
     profilePictureConfig: PropTypes.object,
     isCreateKeycloakUserConfirmationOpen: PropTypes.bool,
+    keycloakMissingTenantNames: PropTypes.string,
+    keycloakMissingTenantCount: PropTypes.number,
     isLoadingAffiliationRoles: PropTypes.bool.isRequired,
     onCancelKeycloakConfirmation: PropTypes.func,
     confirmCreateKeycloakUser: PropTypes.func,
@@ -353,6 +355,8 @@ class UserForm extends React.Component {
       uniquenessValidator,
       profilePictureConfig,
       isCreateKeycloakUserConfirmationOpen,
+      keycloakMissingTenantNames,
+      keycloakMissingTenantCount,
       isLoadingAffiliationRoles,
       onCancelKeycloakConfirmation
     } = this.props;
@@ -547,7 +551,7 @@ class UserForm extends React.Component {
             <ConfirmationModal
               id="JIT-user"
               heading={<FormattedMessage id="ui-users.keycloak.modal.confirmationHeading" />}
-              message={<FormattedMessage id="ui-users.keycloak.modal.creation" values={{ user:getFullName(form.getState().values) }} />}
+              message={<FormattedMessage id="ui-users.keycloak.modal.creationMessage" values={{ user:getFullName(form.getState().values), tenants: keycloakMissingTenantNames, count: keycloakMissingTenantCount }} />}
               onConfirm={this.handleConfirmCreateKeycloakUser}
               onCancel={onCancelKeycloakConfirmation}
               open={isCreateKeycloakUserConfirmationOpen}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useQueryClient } from 'react-query';
 
 import {
@@ -9,15 +9,16 @@ import {
 } from '@folio/stripes/core';
 import isEqual from 'lodash/isEqual';
 import isEmpty from 'lodash/isEmpty';
-import { useCreateAuthUserKeycloak, useUserAffiliationRoles } from '../../hooks';
+import { useUserAffiliationRoles, useCheckUserInKeycloak } from '../../hooks';
 import {
-  KEYCLOAK_USER_EXISTANCE,
+  KEYCLOAK_USER_EXISTENCE,
   USER_AFFILIATION_ROLES_CACHE_KEY,
 } from '../../constants';
 import { showErrorCallout } from '../../views/UserEdit/UserEditHelpers';
 
 const withUserRoles = (WrappedComponent) => (props) => {
-  const { okapi } = useStripes();
+  const stripes = useStripes();
+  const { okapi } = stripes;
   const [namespace] = useNamespace({ key: USER_AFFILIATION_ROLES_CACHE_KEY });
   const queryClient = useQueryClient();
   // eslint-disable-next-line react/prop-types
@@ -27,17 +28,15 @@ const withUserRoles = (WrappedComponent) => (props) => {
   const { userRoleIds, isLoading: isLoadingAffiliationRoles } = useUserAffiliationRoles(userId, tenantId);
   const [assignedRoleIds, setAssignedRoleIds] = useState({});
   const [isCreateKeycloakUserConfirmationOpen, setIsCreateKeycloakUserConfirmationOpen] = useState(false);
+  const [keycloakMissingTenantNames, setKeycloakMissingTenantNames] = useState('');
+  const [keycloakMissingTenantCount, setKeycloakMissingTenantCount] = useState(0);
+  const tenantsWithoutKeycloakRef = useRef([]);
   const callout = useCallout();
   const sendErrorCallout = error => showErrorCallout(error, callout.sendCallout);
 
-  const { mutateAsync: createKeycloakUser } = useCreateAuthUserKeycloak(sendErrorCallout, { tenantId });
-
   const ky = useOkapiKy();
-  const api = ky.extend({
-    hooks: {
-      beforeRequest: [(req) => req.headers.set('X-Okapi-Tenant', tenantId)]
-    }
-  });
+
+  const { checkUserInKeycloakForTenant } = useCheckUserInKeycloak(userId, sendErrorCallout);
 
   useEffect(() => {
     // No need to set roles if there are empty or loading
@@ -99,58 +98,95 @@ const withUserRoles = (WrappedComponent) => (props) => {
     });
   };
 
-  const checkUserInKeycloak = async () => {
-    try {
-      await api.get(`users-keycloak/auth-users/${userId}`);
-      return KEYCLOAK_USER_EXISTANCE.exist;
-    } catch (error) {
-      if (error?.response?.status === 404) {
-        return KEYCLOAK_USER_EXISTANCE.nonExist;
+  const createKeycloakUserForTenant = async (targetTenantId) => {
+    const tenantApi = ky.extend({
+      hooks: {
+        beforeRequest: [(req) => req.headers.set('X-Okapi-Tenant', targetTenantId)]
       }
-      sendErrorCallout(error);
-      return KEYCLOAK_USER_EXISTANCE.error;
-    }
+    });
+
+    stripes.logger.log('users-keycloak', `creating keycloak record for ${userId} in tenant ${targetTenantId}`);
+    await tenantApi.post(`users-keycloak/auth-users/${userId}`);
   };
 
-  const submitCreateKeycloakUser = async () => {
-    await createKeycloakUser(userId);
+  const getTenantsWithChangedRoles = () => {
+    return Object.keys(assignedRoleIds).filter(
+      (tid) => !isEqual(assignedRoleIds[tid], initialAssignedRoleIds[tid])
+    );
   };
 
-  const handleKeycloakUserExists = async (onFinish, data) => {
-    await updateKeycloakUser(userId, data);
-
-    if (!isEqual(assignedRoleIds, initialAssignedRoleIds)) {
-      await updateUserRoles(assignedRoleIds);
-    }
-    await onFinish();
-  };
-
+  // After clicking Save&Close:
+  // 1. Check if the user record exists in Keycloak in the current/home tenant → decide save path (mod-users or mod-users-keycloak)
+  // 2. Save user data via the correct path
+  // 3. For each tenant with role changes, check if the user record exists in Keycloak
+  // 4. If any tenants are missing a Keycloak record → show confirmation dialog → on confirm, create Keycloak records for the missing tenants → save roles
+  // 5. If none missing → save roles directly
   const checkAndHandleKeycloakAuthUser = async (onFinish, data, mutator) => {
-    const userKeycloakStatus = await checkUserInKeycloak();
-    switch (userKeycloakStatus) {
-      case KEYCLOAK_USER_EXISTANCE.exist:
-        // Only save changes to mod-users-keycloak.
-        await handleKeycloakUserExists(onFinish, data);
-        break;
-      case KEYCLOAK_USER_EXISTANCE.nonExist:
-        // First, save changes to mod-users.
-        await mutator.selUser.PUT(data);
+    // 1. Check keycloak in the home tenant to determine the user data save path.
+    const homeKeycloakStatus = await checkUserInKeycloakForTenant(okapi.tenant);
 
-        // Only prompt and create Keycloak user if assigning roles.
-        // If user confirms, then changes will be copied over from mod-users to mod-users-keycloak.
-        if (!isEqual(assignedRoleIds, initialAssignedRoleIds)) {
-          setIsCreateKeycloakUserConfirmationOpen(true);
-        } else {
-          await onFinish();
-        }
-        break;
-      default:
-        break;
+    if (homeKeycloakStatus === KEYCLOAK_USER_EXISTENCE.error) return;
+
+    // 2. Save user data via the appropriate path.
+    if (homeKeycloakStatus === KEYCLOAK_USER_EXISTENCE.exist) {
+      await updateKeycloakUser(userId, data);
+    } else {
+      await mutator.selUser.PUT(data);
+    }
+
+    // 3. Find tenants where roles changed and check keycloak in each.
+    const tenantsWithChangedRoles = getTenantsWithChangedRoles();
+
+    if (!tenantsWithChangedRoles.length) {
+      await onFinish();
+      return;
+    }
+
+    // Include home tenant if it doesn't have a keycloak record
+    // and has changed roles, since role assignment requires it.
+    const tenantKeycloakStatuses = await Promise.all(
+      tenantsWithChangedRoles.map(async (tid) => {
+        // Reuse the home tenant check result to avoid a duplicate request.
+        if (tid === okapi.tenant) return { tid, status: homeKeycloakStatus };
+
+        const status = await checkUserInKeycloakForTenant(tid);
+        return { tid, status };
+      })
+    );
+
+    const missingKeycloakTenants = tenantKeycloakStatuses
+      .filter(({ status }) => status === KEYCLOAK_USER_EXISTENCE.nonExist)
+      .map(({ tid }) => tid);
+
+    if (tenantKeycloakStatuses.some(({ status }) => status === KEYCLOAK_USER_EXISTENCE.error)) return;
+
+    if (missingKeycloakTenants.length) {
+      // 4. Store which tenants need keycloak records and show the confirmation dialog.
+      tenantsWithoutKeycloakRef.current = missingKeycloakTenants;
+
+      const userTenants = stripes.user?.user?.tenants || [];
+      const names = missingKeycloakTenants
+        .map(id => userTenants.find(t => t.id === id)?.name || id)
+        .join(', ');
+      setKeycloakMissingTenantNames(names);
+      setKeycloakMissingTenantCount(missingKeycloakTenants.length);
+      setIsCreateKeycloakUserConfirmationOpen(true);
+    } else {
+      // 5. Save roles directly
+      await updateUserRoles(assignedRoleIds);
+      await onFinish();
     }
   };
 
   const confirmCreateKeycloakUser = async (onFinish) => {
-    await submitCreateKeycloakUser();
+    // Create keycloak records for all tenants that need them.
+    await Promise.all(
+      tenantsWithoutKeycloakRef.current.map((tid) => createKeycloakUserForTenant(tid).catch(sendErrorCallout))
+    );
+
+    // Invalidate cached keycloak auth-user checks used in stripes-authorization-components.
+    await queryClient.invalidateQueries(['jit-auth-role']);
+
     await updateUserRoles(assignedRoleIds);
     await onFinish();
   };
@@ -162,6 +198,10 @@ const withUserRoles = (WrappedComponent) => (props) => {
     assignedRoleIds={assignedRoleIds}
     setAssignedRoleIds={setAssignedRoleIds}
     isCreateKeycloakUserConfirmationOpen={isCreateKeycloakUserConfirmationOpen}
+    keycloakMissingTenantNames={keycloakMissingTenantNames}
+    setKeycloakMissingTenantNames={setKeycloakMissingTenantNames}
+    keycloakMissingTenantCount={keycloakMissingTenantCount}
+    setKeycloakMissingTenantCount={setKeycloakMissingTenantCount}
     initialAssignedRoleIds={initialAssignedRoleIds}
     checkAndHandleKeycloakAuthUser={checkAndHandleKeycloakAuthUser}
     confirmCreateKeycloakUser={confirmCreateKeycloakUser}
