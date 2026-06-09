@@ -6,4 +6,5 @@ export { nav };
 export { default as isRefundAllowed } from './isRefundAllowed';
 export { default as getLoanLastReminderNumber } from './getLoanLastReminderNumber';
 export { default as localizeCurrencyAmount } from './localizeCurrencyAmount';
+export { default as formatItemStatus } from './formatItemStatus';
 

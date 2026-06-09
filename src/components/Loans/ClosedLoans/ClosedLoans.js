@@ -32,6 +32,7 @@ import {
   isDcbUser,
   isDcbItem,
   localizeCurrencyAmount,
+  formatItemStatus,
 } from '../../util';
 import ActionsBar from '../components/ActionsBar';
 import Label from '../../Label';
@@ -326,9 +327,13 @@ class ClosedLoans extends React.Component {
   }
 
   buildRecords(records) {
+    const { intl } = this.props;
+
     return records.map((record) => {
       const { item } = record;
       const contributors = item?.contributors;
+
+      record.item.status.name = formatItemStatus(intl.formatMessage, record.item.status.name) || <NoValue />;
 
       return _.isArray(contributors) ?
         {
