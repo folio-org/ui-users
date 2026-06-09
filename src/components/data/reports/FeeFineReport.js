@@ -13,6 +13,7 @@ import {
   formatDateAndTime,
   getServicePointOfCurrentAction,
   calculateRemainingAmount,
+  localizePaymentStatus,
 } from '../../util';
 
 const EMPTY_VALUE = '';
@@ -41,7 +42,8 @@ const extractComments = (action) => {
 };
 
 class FeeFineReport {
-  constructor({ data, intl: { formatMessage, formatTime } }) {
+  constructor({ data, intl }) {
+    const { formatMessage, formatTime } = intl;
     // data model:
     // data = {
     //  feeFineActions: [] - GET: 'feefineactions?query=(userId==:{id}&limit=${MAX_RECORDS})',
@@ -52,6 +54,7 @@ class FeeFineReport {
     //  user: user - GET: 'users/:{id}',
     // }
     this.data = data;
+    this.intl = intl;
     this.formatMessage = formatMessage;
     this.formatTime = formatTime;
     this.reportData = null;
@@ -104,7 +107,7 @@ class FeeFineReport {
         billedDate: formatDateAndTime(account.metadata.createdDate, this.formatTime),
         billedAmount: account.amount ? formatCurrencyAmount(account.amount) : EMPTY_VALUE,
         remainingAmount: calculateRemainingAmount(account.remaining),
-        latestPaymentStatus: account.paymentStatus.name,
+        latestPaymentStatus: localizePaymentStatus(account.paymentStatus.name, this.intl),
         details: account.id,
         itemInstance: getValue(account.title),
         itemMaterialType: getValue(account.materialType),
