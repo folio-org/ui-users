@@ -181,9 +181,7 @@ const withUserRoles = (WrappedComponent) => (props) => {
   const confirmCreateKeycloakUser = async (onFinish) => {
     // Create keycloak records for all tenants that need them.
     const results = await Promise.allSettled(
-      tenantsWithoutKeycloakRef.current.map((tid) =>
-        createKeycloakUserForTenant(tid).then(() => tid)
-      )
+      tenantsWithoutKeycloakRef.current.map((tid) => createKeycloakUserForTenant(tid).then(() => tid))
     );
 
     const succeeded = results.filter(r => r.status === 'fulfilled').map(r => r.value);
