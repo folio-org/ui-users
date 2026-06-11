@@ -243,7 +243,7 @@ class ViewFeesFines extends React.Component {
       'feeFineType': f => (f.feeFineType ? this.showComments(f) : '-'),
       'amount': f => (f.amount ? localizeCurrencyAmount(f.amount, stripes.currency, intl) : '-'),
       'remaining': f => localizeCurrencyAmount(f.remaining || 0, stripes.currency, intl),
-      'paymentStatus.name': f => localizePaymentStatus((f.paymentStatus || {}).name, intl) || '-',
+      'paymentStatus.name': f => localizePaymentStatus(f.paymentStatus?.name, intl) || '-',
       'feeFineOwner': f => (f.feeFineOwner ? f.feeFineOwner : '-'),
       'title': item => this.formatTitle(item),
       'barcode': f => (f.barcode ? f.barcode : '-'),
