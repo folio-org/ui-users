@@ -10,8 +10,11 @@ import {
   Icon,
   MultiColumnList,
   FormattedTime,
+  NoValue,
 } from '@folio/stripes/components';
 import { effectiveCallNumber } from '@folio/stripes/util';
+
+import { formatItemStatus } from '../util';
 
 class BulkOverrideLoansList extends Component {
   static propTypes = {
@@ -147,7 +150,7 @@ class BulkOverrideLoansList extends Component {
           },
           newDueDate: this.newDueDateFormatter,
           title: loan => get(loan, ['item', 'title']),
-          itemStatus: loan => get(loan, ['item', 'status', 'name']),
+          itemStatus: loan => formatItemStatus(formatMessage, loan?.item?.status?.name) || <NoValue />,
           currentDueDate: loan => (
             <FormattedTime
               value={get(loan, ['dueDate'])}

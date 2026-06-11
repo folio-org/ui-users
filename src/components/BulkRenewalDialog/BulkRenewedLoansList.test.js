@@ -38,4 +38,22 @@ describe('BulkRenewedLoansList', () => {
 
     expect(screen.queryByText('ui-users.brd.failedRenewal:')).toBeInTheDocument();
   });
+
+  it('renders translated item status label for known backend status values', () => {
+    const successRenewals = [{
+      ...openLoans[0],
+      item: {
+        ...openLoans[0].item,
+        status: {
+          ...openLoans[0].item.status,
+          name: 'Checked Out',
+        },
+      },
+    }];
+
+    renderBulkRenewedLoansList({ successRenewals });
+
+    expect(screen.getByText('ui-users.item.status.checkedOut')).toBeInTheDocument();
+    expect(screen.queryByText('Checked Out')).not.toBeInTheDocument();
+  });
 });

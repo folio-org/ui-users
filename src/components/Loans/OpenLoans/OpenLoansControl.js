@@ -13,12 +13,16 @@ import {
 } from 'react-intl';
 
 import { stripesShape } from '@folio/stripes/core';
-import { LoadingView } from '@folio/stripes/components';
+import {
+  LoadingView,
+  NoValue,
+} from '@folio/stripes/components';
 
 import {
   nav,
   getRenewalPatronBlocksFromPatronBlocks,
   formatDateAndTime,
+  formatItemStatus,
 } from '../../util';
 
 import {
@@ -317,6 +321,7 @@ class OpenLoansControl extends React.Component {
     const {
       intl: {
         formatTime,
+        formatMessage,
       },
     } = this.props;
 
@@ -325,6 +330,8 @@ class OpenLoansControl extends React.Component {
 
       result.dueDate = formatDateAndTime(result.dueDate, formatTime);
       result.loanDate = formatDateAndTime(result.loanDate, formatTime);
+      result.item.status.name = formatItemStatus(formatMessage, result.item.status.name) || <NoValue />;
+
       return result;
     });
   }

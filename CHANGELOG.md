@@ -8,6 +8,7 @@
 * Send bulk override renewal requests sequentially to prevent race conditions. Refs UIU-3561.
 * In the "Last Updated" column in the "Reading Room Access" accordion, sort by date, not by id. Fixes UIU-3592.
 * Add localization for payment status in accounts and reports. Fixes UIU-3517.
+* Translate known item statuses while preserving backend values for unknown statuses. Fixes UIU-3529.
 
 ## [13.0.1] (https://github.com/folio-org/ui-users/tree/v13.0.1) (2026-06-03)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v13.0.0...v13.0.1)
