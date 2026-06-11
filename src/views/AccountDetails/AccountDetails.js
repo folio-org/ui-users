@@ -33,6 +33,7 @@ import {
   getServicePointOfCurrentAction,
   isRefundAllowed,
   localizeCurrencyAmount,
+  localizePaymentStatus,
 } from '../../components/util';
 
 import {
@@ -499,7 +500,7 @@ feeFineActions
     };
 
     const feeFineActions = resources?.feefineactions?.records || [];
-    const latestPaymentStatus = account.paymentStatus.name;
+    const latestPaymentStatus = localizePaymentStatus(account.paymentStatus.name, intl);
 
     const actions = this.state.data || [];
     const actionsSort = _.orderBy(actions, [this.sortMap[sortOrder[0]], this.sortMap[sortOrder[1]]], sortDirection);
