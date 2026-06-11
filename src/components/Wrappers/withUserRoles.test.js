@@ -552,7 +552,7 @@ describe('withUserRoles HOC', () => {
       });
 
       describe('creation fails for any tenant', () => {
-        it('should call sendCallout with error message', async () => {
+        it('should show error callout and keep dialog open without calling onFinish', async () => {
           const post = jest.fn().mockRejectedValue('Keycloak user creation failed');
 
           useOkapiKy.mockReturnValue({
@@ -580,6 +580,82 @@ describe('withUserRoles HOC', () => {
           await act(() => userEvent.click(getByTestId('confirm-create-keycloak-user')));
 
           expect(mockSendCallout).toHaveBeenCalled();
+          expect(getByTestId('dialog-open')).toHaveTextContent('true');
+          expect(mockOnFinish).not.toHaveBeenCalled();
+          expect(mockApiPut).not.toHaveBeenCalledWith('roles/users/user1', expect.anything());
+        });
+
+        it('should invalidate queries for successfully created tenants', async () => {
+          const post = jest.fn()
+            .mockResolvedValueOnce() // first tenant succeeds
+            .mockRejectedValueOnce('Keycloak user creation failed'); // second tenant fails
+
+          useOkapiKy.mockReturnValue({
+            ...mockKy,
+            extend: jest.fn(() => ({
+              get: mockApiGet,
+              put: mockApiPut,
+              post,
+            })),
+          });
+
+          useCheckUserInKeycloak.mockReturnValue({
+            checkUserInKeycloakForTenant: jest.fn()
+              .mockResolvedValueOnce('nonExist') // home/Consortium
+              .mockResolvedValueOnce('nonExist'), // College
+          });
+
+          const { getByTestId } = renderComponent();
+
+          await act(() => userEvent.click(getByTestId('set-roles-for-consortium')));
+          await act(() => userEvent.click(getByTestId('set-roles-for-college')));
+          await act(() => userEvent.click(getByTestId('submit-form')));
+
+          await act(() => userEvent.click(getByTestId('confirm-create-keycloak-user')));
+
+          expect(mockInvalidateQueries).toHaveBeenCalledWith(['jit-auth-role']);
+          expect(mockOnFinish).not.toHaveBeenCalled();
+        });
+
+        it('should only retry failed tenants on subsequent confirm', async () => {
+          const post = jest.fn()
+            .mockResolvedValueOnce() // first confirm: consortium succeeds
+            .mockRejectedValueOnce('fail') // first confirm: college fails
+            .mockResolvedValueOnce(); // second confirm: college succeeds
+
+          useOkapiKy.mockReturnValue({
+            ...mockKy,
+            extend: jest.fn(() => ({
+              get: mockApiGet,
+              put: mockApiPut,
+              post,
+            })),
+          });
+
+          useCheckUserInKeycloak.mockReturnValue({
+            checkUserInKeycloakForTenant: jest.fn()
+              .mockResolvedValueOnce('nonExist') // Consortium
+              .mockResolvedValueOnce('nonExist'), // College
+          });
+
+          const { getByTestId } = renderComponent();
+
+          await act(() => userEvent.click(getByTestId('set-roles-for-consortium')));
+          await act(() => userEvent.click(getByTestId('set-roles-for-college')));
+          await act(() => userEvent.click(getByTestId('submit-form')));
+
+          // First confirm: consortium succeeds, college fails
+          await act(() => userEvent.click(getByTestId('confirm-create-keycloak-user')));
+
+          expect(post).toHaveBeenCalledTimes(2);
+          expect(mockOnFinish).not.toHaveBeenCalled();
+          expect(getByTestId('dialog-open')).toHaveTextContent('true');
+
+          // Second confirm: only college is retried
+          await act(() => userEvent.click(getByTestId('confirm-create-keycloak-user')));
+
+          expect(post).toHaveBeenCalledTimes(3); // 2 from first + 1 retry
+          expect(mockOnFinish).toHaveBeenCalled();
         });
       });
     });

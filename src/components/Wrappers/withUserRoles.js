@@ -180,12 +180,28 @@ const withUserRoles = (WrappedComponent) => (props) => {
 
   const confirmCreateKeycloakUser = async (onFinish) => {
     // Create keycloak records for all tenants that need them.
-    await Promise.all(
-      tenantsWithoutKeycloakRef.current.map((tid) => createKeycloakUserForTenant(tid).catch(sendErrorCallout))
+    const results = await Promise.allSettled(
+      tenantsWithoutKeycloakRef.current.map(async (tid) => {
+        await createKeycloakUserForTenant(tid);
+        return tid;
+      })
     );
 
+    const succeeded = results.filter(r => r.status === 'fulfilled').map(r => r.value);
+    const failures = results.filter(r => r.status === 'rejected');
+
     // Invalidate cached keycloak auth-user checks used in stripes-authorization-components.
-    await queryClient.invalidateQueries(['jit-auth-role']);
+    if (succeeded.length) {
+      await queryClient.invalidateQueries(['jit-auth-role']);
+    }
+
+    if (failures.length) {
+      failures.forEach(f => sendErrorCallout(f.reason));
+      // Remove succeeded tenants so retry only attempts the failed ones
+      tenantsWithoutKeycloakRef.current = tenantsWithoutKeycloakRef.current
+        .filter(tid => !succeeded.includes(tid));
+      return; // keep dialog open
+    }
 
     await updateUserRoles(assignedRoleIds);
     await onFinish();
