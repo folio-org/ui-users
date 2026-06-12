@@ -10,11 +10,16 @@
 * Add localization for payment status in accounts and reports. Fixes UIU-3517.
 * Translate known item statuses while preserving backend values for unknown statuses. Fixes UIU-3529.
 
+## [13.0.2] (https://github.com/folio-org/ui-users/tree/v13.0.2) (2026-06-12)
+[Full Changelog](https://github.com/folio-org/ui-users/compare/v13.0.1...v13.0.2)
+
+* Fix keycloak confirmation dialog not showing when assigning roles/affiliations to non-home tenants in ECS. Fixes UIU-3586.
+* Fix JIT AuthUser creation dialog closing on error. Fixes UIU-3593.
+
 ## [13.0.1] (https://github.com/folio-org/ui-users/tree/v13.0.1) (2026-06-03)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v13.0.0...v13.0.1)
 
 * Remove extra character from `Expired time` in Lost items requiring actual cost table. Refs UIU-3580.
-* Fix keycloak confirmation dialog not showing when assigning roles/affiliations to non-home tenants in ECS. Refs UIU-3586.
 
 ## [13.0.0] (https://github.com/folio-org/ui-users/tree/v13.0.0) (2026-04-16)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v12.1.16...v13.0.0)
