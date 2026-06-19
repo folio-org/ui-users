@@ -107,9 +107,10 @@ export function loadServicePoints(values) {
 
 export function accountRefundInfo(account, feeFineActions = []) {
   const accountFeeFinesActions = feeFineActions.filter(({ accountId }) => accountId === account.id);
-  const hasBeenPaid = accountFeeFinesActions.some(({ typeAction }) => {
+  const hasBeenPaidByActions = accountFeeFinesActions.some(({ typeAction }) => {
     return paymentStatusesAllowedToRefund.includes(typeAction);
   });
+  const hasBeenPaid = hasBeenPaidByActions || paymentStatusesAllowedToRefund.includes(account?.paymentStatus?.name);
   const paidAmount = (parseFloat(account.amount - account.remaining) * 100) / 100;
   const isCanceledAfterRefund = account.remaining === 0 && account.paymentStatus.name === cancelledStatus;
 
