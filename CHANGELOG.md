@@ -10,6 +10,7 @@
 * Add localization for payment status in accounts and reports. Fixes UIU-3517.
 * Translate known item statuses while preserving backend values for unknown statuses. Fixes UIU-3529.
 * Fix Refund button disabled on Fee/Fine History page. Refs UIU-3549.
+* Do not re-display pop-up notes when returning to the same user record; reset only on explicit pane close or search change. Refs UIU-3600.
 
 ## [13.0.2] (https://github.com/folio-org/ui-users/tree/v13.0.2) (2026-06-12)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v13.0.1...v13.0.2)

@@ -8,8 +8,13 @@ import {
 import {
   useStripes,
   IfInterface,
+  IfPermission,
   StripesContext,
 } from '@folio/stripes/core';
+import {
+  NotePopupModal,
+  resetNotePopupTracking,
+} from '@folio/stripes/smart-components';
 
 import UserDetail from './UserDetail';
 import {
@@ -461,6 +466,79 @@ describe('UserDetail', () => {
       await userEvent.click(screen.getByTestId('close-pane'));
 
       expect(history.push).toHaveBeenCalledWith(`/users${location.search}`);
+    });
+  });
+
+  describe('NotePopupModal popup tracking', () => {
+    beforeEach(() => {
+      resetNotePopupTracking.mockClear();
+      NotePopupModal.mockClear();
+      // Allow ui-notes permissions so NotePopupModal is rendered through IfPermission.
+      IfPermission.mockImplementation(({ children }) => children);
+    });
+
+    afterEach(() => {
+      IfPermission.mockReset();
+    });
+
+    it('renders NotePopupModal with preventDuplicates', () => {
+      renderUserDetail(stripes);
+
+      expect(NotePopupModal).toHaveBeenCalledWith(
+        expect.objectContaining({ preventDuplicates: true }),
+        expect.anything(),
+      );
+    });
+
+    it('calls resetNotePopupTracking when the pane close button is clicked', async () => {
+      const history = { push: jest.fn() };
+      renderUserDetail(stripes, { history, location: { search: '' } });
+
+      await userEvent.click(screen.getByTestId('close-pane'));
+
+      expect(resetNotePopupTracking).toHaveBeenCalledWith('popUpOnUser');
+    });
+
+    describe('when the component unmounts', () => {
+      let originalLocation;
+
+      beforeEach(() => {
+        originalLocation = window.location;
+      });
+
+      afterEach(() => {
+        window.location = originalLocation;
+      });
+
+      it('calls resetNotePopupTracking when the pathname is the module root (search/filter close)', () => {
+        delete window.location;
+        window.location = { pathname: '/users' };
+
+        const { unmount } = renderUserDetail(stripes);
+        unmount();
+
+        expect(resetNotePopupTracking).toHaveBeenCalledWith('popUpOnUser');
+      });
+
+      it('does not call resetNotePopupTracking when navigating to the edit route', () => {
+        delete window.location;
+        window.location = { pathname: '/users/84954cee-c6f9-4478-8ebd-80f04bc8571d/edit' };
+
+        const { unmount } = renderUserDetail(stripes);
+        unmount();
+
+        expect(resetNotePopupTracking).not.toHaveBeenCalled();
+      });
+
+      it('does not call resetNotePopupTracking when navigating to another app', () => {
+        delete window.location;
+        window.location = { pathname: '/checkout' };
+
+        const { unmount } = renderUserDetail(stripes);
+        unmount();
+
+        expect(resetNotePopupTracking).not.toHaveBeenCalled();
+      });
     });
   });
 });

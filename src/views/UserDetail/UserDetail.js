@@ -34,6 +34,7 @@ import {
 import {
   NotesSmartAccordion,
   NotePopupModal,
+  resetNotePopupTracking,
 } from '@folio/stripes/smart-components';
 
 import {
@@ -245,6 +246,13 @@ class UserDetail extends React.Component {
 
   componentWillUnmount() {
     this._isMounted = false;
+    // When a search/filter change closes the pane, querySetter navigates to the
+    // module root (/users) without going through onClose. Detect that here so
+    // the popup re-shows the next time this user record is opened.
+    const basePath = this.props.match.path.split('/preview')[0];
+    if (window.location.pathname === basePath) {
+      resetNotePopupTracking('popUpOnUser');
+    }
   }
 
   /**
@@ -404,6 +412,10 @@ class UserDetail extends React.Component {
       location,
     } = this.props;
 
+    // Reset here (not only in componentWillUnmount) because getLocationReferrer()
+    // may navigate outside /users (e.g. back to Check out), in which case
+    // componentWillUnmount's pathname check won't fire.
+    resetNotePopupTracking('popUpOnUser');
     history.push(this.getLocationReferrer() || `/users${location.search}`);
   }
 
@@ -1021,6 +1033,7 @@ class UserDetail extends React.Component {
                   entityType="user"
                   popUpPropertyName="popUpOnUser"
                   entityId={user?.id}
+                  preventDuplicates
                   label={intl.formatMessage({ id: 'ui-users.notes.popupModal.label' })}
                 />
               </IfPermission>
