@@ -11,6 +11,7 @@
 * Translate known item statuses while preserving backend values for unknown statuses. Fixes UIU-3529.
 * Fix Refund button disabled on Fee/Fine History page. Refs UIU-3549.
 * Add `ui-users.loans.view` to `ui-users.loans-renew.create` to also see loans with this permission. Fixes UIU-1140.
+* Prevent server requests when filling in other fields after filling in Username/Barcode. Fixes UIU-3585.
 
 ## [13.0.2] (https://github.com/folio-org/ui-users/tree/v13.0.2) (2026-06-12)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v13.0.1...v13.0.2)
