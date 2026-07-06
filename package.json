@@ -784,6 +784,7 @@
           "feesfines.accounts.refund.post",
           "feesfines.accounts-bulk.refund.post",
           "circulation-storage.loans.item.get",
+          "inventory.items.collection.get",
           "inventory.items.item.get"
         ],
         "visible": true
