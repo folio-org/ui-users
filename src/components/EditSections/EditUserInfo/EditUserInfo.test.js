@@ -362,6 +362,22 @@ describe('Render Edit User Information component', () => {
       await waitFor(() => expect(uniquenessValidator.GET).toHaveBeenCalled());
       expect(screen.queryByText('ui-users.errors.barcodeUnavailable')).not.toBeInTheDocument();
     });
+
+    it('should debounce validation requests and only send a single request while typing', async () => {
+      const uniquenessValidator = {
+        ...props.uniquenessValidator,
+        GET: jest.fn().mockResolvedValue([]),
+      };
+
+      renderEditUserInfo({ ...props, uniquenessValidator });
+
+      const barcodeField = screen.getByRole('textbox', { name: 'ui-users.information.barcode' });
+
+      await userEvent.clear(barcodeField);
+      await userEvent.type(barcodeField, '9999999999');
+
+      await waitFor(() => expect(uniquenessValidator.GET).toHaveBeenCalledTimes(1));
+    });
   });
 
   describe('when profilePicture configuration is not enabled', () => {
