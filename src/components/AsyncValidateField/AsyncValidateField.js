@@ -20,15 +20,6 @@ export const AsyncValidateField = ({
   // whenever a field with no `validateFields` setting changes). `memoize` guards
   // against that: it skips calling `debounce`/`validate` again (and thus avoids
   // firing another server request) when this field's own value hasn't changed.
-  //
-  // `debounce` on its own can't be used as the field-level `validate` function:
-  // since it only invokes `validate` on the trailing edge, calling the debounced
-  // function returns `undefined` synchronously instead of a Promise. final-form
-  // relies on the return value being a Promise to know the validation is async
-  // and to wait for it, so with a plain debounce the eventual (delayed) result
-  // is simply discarded and no error is ever shown. Wrapping it in a `Promise`
-  // that is resolved by the debounced call fixes this: every invocation now
-  // returns a real Promise that final-form can await.
   const debouncedValidate = useMemo(() => debounce((value, resolve) => {
     resolve(validate(value));
   }, wait), [validate, wait]);
