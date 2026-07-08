@@ -20,7 +20,13 @@ export const AsyncValidateField = ({
   // whenever a field with no `validateFields` setting changes). `memoize` guards
   // against that: it skips calling `debounce`/`validate` again (and thus avoids
   // firing another server request) when this field's own value hasn't changed.
-  const asyncValidate = useMemo(() => memoize(debounce(validate, wait)), [validate, wait]);
+  const debouncedValidate = useMemo(() => debounce((value, resolve) => {
+    resolve(validate(value));
+  }, wait), [validate, wait]);
+
+  const asyncValidate = useMemo(() => memoize((value) => new Promise((resolve) => {
+    debouncedValidate(value, resolve);
+  })), [debouncedValidate]);
 
   return (
     <Field
