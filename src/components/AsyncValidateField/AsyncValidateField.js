@@ -1,6 +1,5 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { Field } from 'react-final-form';
-import debounce from 'lodash/debounce';
 
 import memoize from '../util/memoize';
 
@@ -18,15 +17,26 @@ export const AsyncValidateField = ({
   // own changes - it does NOT stop this field from being revalidated when an
   // unrelated field changes (final-form falls back to validating every field
   // whenever a field with no `validateFields` setting changes). `memoize` guards
-  // against that: it skips calling `debounce`/`validate` again (and thus avoids
-  // firing another server request) when this field's own value hasn't changed.
-  const debouncedValidate = useMemo(() => debounce((value, resolve) => {
-    resolve(validate(value));
-  }, wait), [validate, wait]);
+  // against that: it skips calling `validate` again (and thus avoids firing another
+  // server request) when this field's own value hasn't changed.
+  const timeoutRef = useRef(null);
+  const pendingResolve = useRef();
 
-  const asyncValidate = useMemo(() => memoize((value) => new Promise((resolve) => {
-    debouncedValidate(value, resolve);
-  })), [debouncedValidate]);
+  useEffect(() => () => {
+    clearTimeout(timeoutRef.current);
+    pendingResolve.current?.();
+  }, []);
+
+  const asyncValidate = useMemo(() => memoize((value, allValues, meta) => new Promise((resolve) => {
+    pendingResolve.current?.();
+    clearTimeout(timeoutRef.current);
+
+    timeoutRef.current = setTimeout(() => {
+      resolve(validate(value, allValues, meta));
+    }, wait);
+
+    pendingResolve.current = resolve;
+  })), [validate, wait]);
 
   return (
     <Field
