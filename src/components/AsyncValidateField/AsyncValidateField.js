@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { Field } from 'react-final-form';
 import debounce from 'lodash/debounce';
 
@@ -20,12 +20,31 @@ export const AsyncValidateField = ({
   // whenever a field with no `validateFields` setting changes). `memoize` guards
   // against that: it skips calling `debounce`/`validate` again (and thus avoids
   // firing another server request) when this field's own value hasn't changed.
-  const debouncedValidate = useMemo(() => debounce((value, resolve) => {
-    resolve(validate(value));
+  //
+  // `pendingResolve` tracks the resolver of the most recent (not-yet-settled) Promise.
+  // final-form waits for every Promise it's ever given before considering the form
+  // done validating, but `lodash/debounce` only invokes its wrapped function once
+  // per burst (the trailing call) - so without resolving the previous Promise first,
+  // every superseded keystroke would leave its Promise dangling forever, permanently
+  // blocking submission (e.g. "Save & close").
+  const pendingResolve = useRef();
+
+  const debouncedValidate = useMemo(() => debounce((value, allValues, meta, resolve) => {
+    resolve(validate(value, allValues, meta));
   }, wait), [validate, wait]);
 
-  const asyncValidate = useMemo(() => memoize((value) => new Promise((resolve) => {
-    debouncedValidate(value, resolve);
+  // If the field unmounts (e.g. it's conditionally rendered) while its own debounce
+  // timer is still pending, the surrounding <Form> may still be mounted - so cancel
+  // the timer and resolve the dangling Promise instead of leaving it hanging.
+  useEffect(() => () => {
+    debouncedValidate.cancel();
+    pendingResolve.current?.();
+  }, [debouncedValidate]);
+
+  const asyncValidate = useMemo(() => memoize((value, allValues, meta) => new Promise((resolve) => {
+    pendingResolve.current?.();
+    pendingResolve.current = resolve;
+    debouncedValidate(value, allValues, meta, resolve);
   })), [debouncedValidate]);
 
   return (
