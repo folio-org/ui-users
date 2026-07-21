@@ -92,7 +92,7 @@ describe('ProxyEditItem', () => {
 
     jest.advanceTimersByTime(100);
 
-    expect(changeMock).toBeCalled();
+    expect(changeMock).toHaveBeenCalled();
   });
 
   it('updateStatus to be called when props data is updated', () => {
@@ -112,7 +112,7 @@ describe('ProxyEditItem', () => {
         ]
       },
     }, { rerender: true });
-    expect(changeMock).toBeCalled();
+    expect(changeMock).toHaveBeenCalled();
   });
 
   it('onDelete to be called ', () => {
@@ -120,6 +120,6 @@ describe('ProxyEditItem', () => {
     const button = screen.getByRole('button', { name: 'Icon (trash) Delete' });
     fireEvent.click(button);
 
-    expect(deleteMock).toBeCalled();
+    expect(deleteMock).toHaveBeenCalled();
   });
 });

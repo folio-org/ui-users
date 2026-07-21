@@ -198,27 +198,27 @@ describe('Account Details', () => {
   it('FeeFineReport should be called when exportAccountActionsHistoryReport is clicked', async () => {
     renderAccountDetails({ account: accountWithAdditionalDetails });
     await userEvent.click(document.getElementById('exportAccountActionsHistoryReport'));
-    expect(spyOnFeeFineReport).toBeCalled();
+    expect(spyOnFeeFineReport).toHaveBeenCalled();
   });
 
   it('calculateSortParams should be called when clicking column headers', async () => {
     renderAccountDetails({ account: accountWithAdditionalDetails });
     await userEvent.click(screen.getByRole('button', { name: 'ui-users.details.columns.date' }));
-    expect(spyOnCalculateSortParams).toBeCalledTimes(1);
+    expect(spyOnCalculateSortParams).toHaveBeenCalledTimes(1);
     await userEvent.click(screen.getByRole('button', { name: 'ui-users.details.columns.action' }));
-    expect(spyOnCalculateSortParams).toBeCalledTimes(2);
+    expect(spyOnCalculateSortParams).toHaveBeenCalledTimes(2);
     await userEvent.click(screen.getByRole('button', { name: 'ui-users.details.columns.amount' }));
-    expect(spyOnCalculateSortParams).toBeCalledTimes(3);
+    expect(spyOnCalculateSortParams).toHaveBeenCalledTimes(3);
     await userEvent.click(screen.getByRole('button', { name: 'ui-users.details.columns.balance' }));
-    expect(spyOnCalculateSortParams).toBeCalledTimes(4);
+    expect(spyOnCalculateSortParams).toHaveBeenCalledTimes(4);
     await userEvent.click(screen.getByRole('button', { name: 'ui-users.details.columns.transactioninfo' }));
-    expect(spyOnCalculateSortParams).toBeCalledTimes(5);
+    expect(spyOnCalculateSortParams).toHaveBeenCalledTimes(5);
     await userEvent.click(screen.getByRole('button', { name: 'ui-users.details.columns.source' }));
-    expect(spyOnCalculateSortParams).toBeCalledTimes(6);
+    expect(spyOnCalculateSortParams).toHaveBeenCalledTimes(6);
   });
   it('GET method should be called when the handleEdit button is clicked', async () => {
     renderAccountDetails({ account: accountWithAdditionalDetails });
     await userEvent.click(screen.getByRole('button', { name: 'handleEdit' }));
-    expect(mockGET).toBeCalled();
+    expect(mockGET).toHaveBeenCalled();
   });
 });
