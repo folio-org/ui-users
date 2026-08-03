@@ -106,16 +106,14 @@ class EditServicePoints extends React.Component {
   renderAddServicePointButton = () => {
     const { setButtonRef } = this.props;
     return (
-      <Row end="xs">
+      <Row>
         <Col>
           <Button
             id="add-service-point-btn"
             buttonRef={setButtonRef}
             onClick={() => this.setState({ addingServicePoint: true })}
           >
-            <FormattedMessage id="ui-users.sp.addServicePoints">
-              {(message) => `+ ${message}`}
-            </FormattedMessage>
+            <FormattedMessage id="ui-users.sp.button.addServicePoint" />
           </Button>
         </Col>
       </Row>
@@ -195,7 +193,7 @@ class EditServicePoints extends React.Component {
             onToggle={this.props.onToggle}
             displayWhenClosed={<Badge>{(this.userServicePoints && this.userServicePoints.length) || 0}</Badge>}
           >
-            <div>{this.renderAddServicePointButton()}</div>
+            {this.renderAddServicePointButton()}
             {this.renderPreferredServicePointSelect()}
             {this.renderServicePoints()}
             {this.renderAddServicePointModal()}
