@@ -214,8 +214,8 @@ class ProxyEditList extends React.Component {
                 dataKey={name}
                 searchLabel={
                   name === 'proxies' ?
-                    <FormattedMessage id="ui-users.sponsor.addSponsor" /> :
-                    <FormattedMessage id="ui-users.proxy.addProxy" />
+                    <FormattedMessage id="ui-users.proxy.button.addProxy" /> :
+                    <FormattedMessage id="ui-users.sponsor.button.addSponsor" />
                 }
                 searchButtonStyle="default"
                 selectUser={user => this.onAdd(user)}
