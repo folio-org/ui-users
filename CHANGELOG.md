@@ -14,6 +14,7 @@
 * Prevent server requests when filling in other fields after filling in Username/Barcode. Fixes UIU-3585.
 * Add missing sub permission for fees fines. Refs UIU-3602.
 * Update User buttons on the create/edit page. Refs UIU-3591.
+* Rename user status column header from Active to Status. Refs UIU-3610.
 
 ## [13.0.2] (https://github.com/folio-org/ui-users/tree/v13.0.2) (2026-06-12)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v13.0.1...v13.0.2)
