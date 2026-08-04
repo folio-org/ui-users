@@ -196,7 +196,7 @@ class UserSearch extends React.Component {
 
     return {
       name: intl.formatMessage({ id: 'ui-users.information.name' }),
-      active: intl.formatMessage({ id: 'ui-users.active' }),
+      active: intl.formatMessage({ id: 'ui-users.status' }),
       barcode: intl.formatMessage({ id: 'ui-users.information.barcode' }),
       patronGroup: intl.formatMessage({ id: 'ui-users.information.patronGroup' }),
       username: intl.formatMessage({ id: 'ui-users.information.username' }),
