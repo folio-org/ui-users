@@ -1,7 +1,7 @@
 {
     "data.contactTypes.email": "Email",
-    "data.contactTypes.mail": "Mail (Primary Address)",
-    "data.contactTypes.textMessage": "Text Message",
+    "data.contactTypes.mail": "Mail (primary address)",
+    "data.contactTypes.textMessage": "SMS text",
     "data.loanActionMap.checkedOut": "Checked out",
     "data.loanActionMap.checkedIn": "Checked in",
     "data.loanActionMap.renewed": "Renewed",
@@ -98,6 +98,7 @@
     "errors.missingRequiredPatronGroup": "Please select a patron group",
     "errors.missingRequiredContactType": "Please select contact type",
     "errors.missingRequiredAddressType": "Please select address type",
+    "errors.missingRequiredMobilePhone": "Please provide a mobile phone number when SMS texts are preferred",
     "errors.noMatch.oops": "Uh-oh!",
     "errors.noMatch.how": "How did you get to {location}?",
     "errors.usernameUnavailable": "This username already exists",

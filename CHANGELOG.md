@@ -15,6 +15,7 @@
 * Add missing sub permission for fees fines. Refs UIU-3602.
 * Update User buttons on the create/edit page. Refs UIU-3591.
 * Rename user status column header from Active to Status. Refs UIU-3610.
+* *BREAKING* Provide new `preferredContactTypeIds` multi-selection, require mobile phone when SMS is preferred. Bumps consumed `users` interface to 16.5. Refs UIU-3553.
 
 ## [13.0.2] (https://github.com/folio-org/ui-users/tree/v13.0.2) (2026-06-12)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v13.0.1...v13.0.2)

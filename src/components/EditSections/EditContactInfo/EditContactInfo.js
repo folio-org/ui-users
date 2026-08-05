@@ -3,7 +3,7 @@ import {
   injectIntl,
 } from 'react-intl';
 import PropTypes from 'prop-types';
-import { Field } from 'react-final-form';
+import { Field, useField } from 'react-final-form';
 import isEqual from 'lodash/isEqual';
 
 import {
@@ -28,20 +28,12 @@ const EditContactInfo = ({
   onToggle,
   accordionId,
   addressTypes,
-  preferredContactTypeId,
   intl,
   disabled,
   isCreateMode = false,
 }) => {
-  const contactTypeOptions = (contactTypes || []).map(g => {
-    return (
-      <FormattedMessage key={g.id} id={g.desc}>
-        {(message) => <option value={g.id}>{message}</option>}
-      </FormattedMessage>
-    );
-  });
-
-  const selectedContactTypeId = contactTypeOptions.find(c => preferredContactTypeId === c.id)?.id;
+  const selectedPreferredContactTypes = useField('personal.preferredContactTypeIds', { subscription: { value: true } }).input.value;
+  const isMobileContactTypePreferred = Array.isArray(selectedPreferredContactTypes) && selectedPreferredContactTypes.some(t => t.name === 'sms');
 
   const addressFields = {
     addressType: {
@@ -101,26 +93,23 @@ const EditContactInfo = ({
             id="adduser_mobilePhone"
             component={TextField}
             fullWidth
+            required={isMobileContactTypePreferred}
             disabled={disabled}
           />
         </Col>
         <Col xs={12} md={3}>
           <Field
             label={<FormattedMessage id="ui-users.contact.preferredContact" />}
-            name="personal.preferredContactTypeId"
+            name="personal.preferredContactTypeIds"
             id="adduser_preferredcontact"
-            component={Select}
+            component={MultiSelection}
             fullWidth
             aria-required="true"
             required
             disabled={disabled}
-            defaultValue={selectedContactTypeId}
-          >
-            <FormattedMessage id="ui-users.contact.selectContactType">
-              {(message) => <option value="">{message}</option>}
-            </FormattedMessage>
-            {contactTypeOptions}
-          </Field>
+            dataOptions={contactTypes}
+            defaultValue={[contactTypes.find(t => t.name === 'email')]}
+          />
         </Col>
       </Row>
       <Row>
@@ -161,7 +150,6 @@ EditContactInfo.propTypes = {
   onToggle: PropTypes.func,
   accordionId: PropTypes.string.isRequired,
   addressTypes: PropTypes.arrayOf(PropTypes.object),
-  preferredContactTypeId: PropTypes.string,
   intl: PropTypes.object.isRequired,
   disabled: PropTypes.bool,
   isCreateMode: PropTypes.bool,
