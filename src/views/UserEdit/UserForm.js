@@ -68,9 +68,12 @@ export function validate(values) {
     errors.patronGroup = <FormattedMessage id="ui-users.errors.missingRequiredPatronGroup" />;
   }
 
-  if (!isShadowUser && (!values.personal || !values.personal.preferredContactTypeId)) {
-    if (errors.personal) errors.personal.preferredContactTypeId = <FormattedMessage id="ui-users.errors.missingRequiredContactType" />;
-    else errors.personal = { preferredContactTypeId: <FormattedMessage id="ui-users.errors.missingRequiredContactType" /> };
+  if (!isShadowUser && (!values.personal?.preferredContactTypeIds?.length)) {
+    errors.personal.preferredContactTypeIds = <FormattedMessage id="ui-users.errors.missingRequiredContactType" />;
+  }
+
+  if (values.personal?.preferredContactTypeIds?.some(t => t.name === 'sms') && !values.personal.mobilePhone) {
+    errors.personal.mobilePhone = <FormattedMessage id="ui-users.errors.missingRequiredMobilePhone" />;
   }
 
   if (values.personal && values.personal.addresses) {
@@ -456,7 +459,6 @@ class UserForm extends React.Component {
                   <EditContactInfo
                     accordionId="contactInfo"
                     addressTypes={formData.addressTypes}
-                    preferredContactTypeId={initialValues.preferredContactTypeId}
                     disabled={isShadowUser}
                     stripes={stripes}
                     isCreateMode={!isEditing}

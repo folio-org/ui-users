@@ -29,7 +29,7 @@
       }
     ],
     "okapiInterfaces": {
-      "users": "16.4",
+      "users": "16.5",
       "users.settings": "2.0",
       "permissions": "5.7",
       "login": "7.3",

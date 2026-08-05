@@ -1,15 +1,8 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
-import {
-  Row,
-  Col,
-  Accordion,
-  KeyValue,
-  Headline,
-  NoValue,
-} from '@folio/stripes/components';
+import { FormattedList, FormattedMessage } from 'react-intl';
+import { Row, Col, Accordion, KeyValue, Headline, NoValue } from '@folio/stripes/components';
 
 import UserAddresses from '../../UserAddresses';
 import contactTypes from '../../data/static/contactTypes';
@@ -25,15 +18,25 @@ const ContactInfo = ({
   addresses,
   customFields,
 }) => {
-  const preferredContact = contactTypes.find(g => g.id === _.get(user, ['personal', 'preferredContactTypeId'], '')) || { type: '' };
-  const preferredEmailCommunication = _.get(user, ['preferredEmailCommunication'])?.join(', ') || <NoValue />;
+  const preferredContactIds = _.get(user, ['personal', 'preferredContactTypeIds'], null) ?? [
+    _.get(user, ['personal', 'preferredContactTypeId'], ''),
+  ];
+  const preferredContacts = preferredContactIds
+    .map((value) => contactTypes.find((g) => g.value === value))
+    .filter(Boolean)
+    .map((type) => type.label);
+  const preferredEmailCommunication = _.get(user, ['preferredEmailCommunication']);
 
   return (
     <Accordion
       open={expanded}
       id={accordionId}
       onToggle={onToggle}
-      label={<Headline size="large" tag="h3"><FormattedMessage id="ui-users.contact.contactInfo" /></Headline>}
+      label={
+        <Headline size="large" tag="h3">
+          <FormattedMessage id="ui-users.contact.contactInfo" />
+        </Headline>
+      }
     >
       <Row>
         <Col xs={3}>
@@ -57,7 +60,9 @@ const ContactInfo = ({
         <Col xs={3}>
           <KeyValue
             label={<FormattedMessage id="ui-users.contact.preferredContact" />}
-            value={preferredContact.desc ? <FormattedMessage id={preferredContact.desc} /> : ''}
+            value={
+              preferredContacts.length ? <FormattedList value={preferredContacts} /> : <NoValue />
+            }
           />
         </Col>
       </Row>
@@ -65,7 +70,13 @@ const ContactInfo = ({
         <Col xs={6}>
           <KeyValue
             label={<FormattedMessage id="ui-users.contact.preferredEmailCommunication" />}
-            value={preferredEmailCommunication}
+            value={
+              preferredEmailCommunication.length ? (
+                <FormattedList value={preferredEmailCommunication} />
+              ) : (
+                <NoValue />
+              )
+            }
           />
         </Col>
         <ViewCustomFieldsSection
@@ -75,10 +86,7 @@ const ContactInfo = ({
       </Row>
       <Row>
         <Col xs={12}>
-          <UserAddresses
-            addressTypes={addressTypes}
-            addresses={addresses}
-          />
+          <UserAddresses addressTypes={addressTypes} addresses={addresses} />
         </Col>
       </Row>
       <br />

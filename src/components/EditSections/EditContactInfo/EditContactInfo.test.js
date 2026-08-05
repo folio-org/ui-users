@@ -63,7 +63,7 @@ const props = {
     addressType: 'Work',
     id: '123123132'
   }],
-  preferredContactTypeId: '001',
+  preferredContactTypeIds: ['001'],
   addressTypeId: '93e38b6f-f499-4812-b272-721d232838ab',
   intl: {
     formatMessage : jest.fn()

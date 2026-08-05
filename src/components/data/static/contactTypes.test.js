@@ -11,7 +11,7 @@ describe('contactTypes', () => {
     const ids = ['002', '001', '003'];
 
     contactTypes.forEach((contactType, index) => {
-      expect(contactType.id).toEqual(ids[index]);
+      expect(contactType.value).toEqual(ids[index]);
     });
   });
 });

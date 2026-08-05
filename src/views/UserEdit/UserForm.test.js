@@ -137,7 +137,7 @@ const initialValues = {
   patronGroup: 'patronGroup',
   personal: {
     lastName: 'lastName',
-    preferredContactTypeId: 'preferredContactTypeId',
+    preferredContactTypeIds: ['preferredContactTypeIds'],
     addresses: [
       {
         addressType: 'home-id',
@@ -180,7 +180,7 @@ describe('UserForm', () => {
       const result = validate({
         personal: {
           lastName: 'lastName',
-          preferredContactTypeId: 'preferredContactTypeId',
+          preferredContactTypeIds: ['preferredContactTypeIds'],
           addresses: [
             { addressType: 'addressType' },
           ],
@@ -209,14 +209,24 @@ describe('UserForm', () => {
         expect(result.personal.lastName).toMatchObject(<FormattedMessage id="ui-users.errors.missingRequiredField" />);
       });
 
-      it('requires personal.preferredContactTypeId', () => {
+      it('requires personal.preferredContactTypeIds', () => {
         const result = validate({ personal: {} });
-        expect(result.personal.preferredContactTypeId).toMatchObject(<FormattedMessage id="ui-users.errors.missingRequiredContactType" />);
+        expect(result.personal.preferredContactTypeIds).toMatchObject(<FormattedMessage id="ui-users.errors.missingRequiredContactType" />);
       });
 
-      it('not requires personal.preferredContactTypeId for shadow user', () => {
+      it('requires non-empty personal.preferredContactTypeIds', () => {
+        const result = validate({ personal: { preferredContactTypeIds: [] } });
+        expect(result.personal.preferredContactTypeIds).toMatchObject(<FormattedMessage id="ui-users.errors.missingRequiredContactType" />);
+      });
+
+      it('requires mobile phone if personal.preferredContactTypeIds contains SMS', () => {
+        const result = validate({ personal: { preferredContactTypeIds: [{ name: 'sms' }] } });
+        expect(result.personal.mobilePhone).toMatchObject(<FormattedMessage id="ui-users.errors.missingRequiredMobilePhone" />);
+      });
+
+      it('not requires personal.preferredContactTypeIds for shadow user', () => {
         const result = validate({ personal: {}, type: USER_TYPES.SHADOW });
-        expect(result.personal.preferredContactTypeId).not.toBeDefined();
+        expect(result.personal.preferredContactTypeIds).not.toBeDefined();
       });
 
       it('requires username when password is present', () => {
@@ -295,7 +305,7 @@ describe('UserForm', () => {
       patronGroup: 'patronGroup',
       personal: {
         lastName: 'lastName',
-        preferredContactTypeId: 'preferredContactTypeId',
+        preferredContactTypeIds: ['preferredContactTypeIds'],
         addresses: [
           {
             addressType: 'home-id',
@@ -356,7 +366,7 @@ describe('UserForm', () => {
       patronGroup: 'patronGroup',
       personal: {
         lastName: 'lastName',
-        preferredContactTypeId: 'preferredContactTypeId',
+        preferredContactTypeIds: ['preferredContactTypeIds'],
         addresses: [
           {
             addressType: 'home-id',
@@ -446,10 +456,10 @@ describe('UserForm', () => {
       it('should call handleSubmit when save keyboard shortcut is triggered on dirty form', async () => {
         renderUserForm();
 
-        const preferredContactSelect = screen.getByRole('combobox', { name: 'ui-users.contact.preferredContact' });
+        const addressTextbox = screen.getByRole('textbox', { name: 'stripes-smart-components.addressEdit.label.addressLine1' });
 
         await act(async () => {
-          await userEvent.selectOptions(preferredContactSelect, '001');
+          await userEvent.type(addressTextbox, '123 main st');
         });
 
         const saveKeyboardShortcut = screen.getByTestId('keyboard-shortcut-save');
@@ -483,7 +493,7 @@ describe('UserForm', () => {
     //     patronGroup: 'patronGroup',
     //     personal: {
     //       lastName: 'lastName',
-    //       preferredContactTypeId: 'preferredContactTypeId',
+    //       preferredContactTypeIds: ['preferredContactTypeIds'],
     //       addresses: [
     //         { addressType: 'addressType' },
     //       ],
