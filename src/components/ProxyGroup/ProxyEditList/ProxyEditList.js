@@ -168,7 +168,7 @@ class ProxyEditList extends React.Component {
       <ComponentToRender
         record={fields.value[index]}
         index={index}
-        key={`item-${index}`}
+        key={fields.value[index]?.user?.id || `item-${index}`}
         namespace={name}
         name={fieldName}
         onDelete={record => this.beginDelete(index, record)}
