@@ -122,4 +122,82 @@ describe('ProxyEditItem', () => {
 
     expect(deleteMock).toBeCalled();
   });
+
+  it('should not crash when the item at the current index was absent in previous formValues', () => {
+    // Simulate the scenario where a new item is unshifted into the array:
+    // the existing component (now at index=1) receives prevFormValues that
+    // only had data at index=0, so prevFormValues[namespace][1] is undefined.
+    const propsAtNewIndex = {
+      ...props,
+      index: 1,
+      record: {
+        user: { id: '456', name: 'second user' },
+        proxy: {
+          status: 'Active',
+          expirationDate: '2025-01-01',
+          requestForSponsor: 'Yes',
+          notificationsTo: 'Proxy',
+          metadata: {},
+        },
+      },
+      formValues: {
+        sponsors: [
+          {
+            user: { id: '123' },
+            proxy: { status: 'Active', expirationDate: '2022-11-30', requestForSponsor: 'No', notificationsTo: 'Sponsor' },
+          },
+        ],
+      },
+    };
+
+    renderProxyEditItem(propsAtNewIndex);
+
+    expect(() => renderProxyEditItem({
+      ...propsAtNewIndex,
+      formValues: {
+        sponsors: [
+          {
+            user: { id: '789' },
+            proxy: { status: 'Active', expirationDate: '2022-11-30', requestForSponsor: 'No', notificationsTo: 'Sponsor' },
+          },
+          {
+            user: { id: '456' },
+            proxy: { status: 'Active', expirationDate: '2025-01-01', requestForSponsor: 'Yes', notificationsTo: 'Proxy' },
+          },
+        ],
+      },
+    }, { rerender: true })).not.toThrow();
+  });
+
+  it('should calls updateStatus when the current user expirationDate changes', () => {
+    renderProxyEditItem(props);
+    jest.advanceTimersByTime(100);
+    jest.clearAllMocks();
+
+    renderProxyEditItem({
+      ...props,
+      formValues: {
+        ...props.formValues,
+        expirationDate: '2030-12-31',
+      },
+    }, { rerender: true });
+
+    expect(changeMock).toHaveBeenCalled();
+  });
+
+  it('should not call updateStatus when unrelated formValues fields change', () => {
+    renderProxyEditItem(props);
+    jest.advanceTimersByTime(100);
+    jest.clearAllMocks();
+
+    renderProxyEditItem({
+      ...props,
+      formValues: {
+        ...props.formValues,
+        someUnrelatedField: 'changed',
+      },
+    }, { rerender: true });
+
+    expect(changeMock).not.toHaveBeenCalled();
+  });
 });
