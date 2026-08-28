@@ -19,6 +19,7 @@
 * Refactored src/settings/index.js to use Settings instead of custom SettingsPage. Refs UIU-3611.
 * Add localization for the renew error message. Refs UIU-3537.
 * Сlear loans data when returning to Open Loans page. Refs UIU-3612.
+* Sort loans in ascending case-insensitive order. Refs UIU-3369.
 
 ## [13.0.2] (https://github.com/folio-org/ui-users/tree/v13.0.2) (2026-06-12)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v13.0.1...v13.0.2)
