@@ -20,6 +20,7 @@
 * Add localization for the renew error message. Refs UIU-3537.
 * Сlear loans data when returning to Open Loans page. Refs UIU-3612.
 * Sort loans in ascending case-insensitive order. Refs UIU-3369.
+* Fix proxy/sponsor record editing crash after adding subsequent items. Refs UIU-3375.
 
 ## [13.0.2] (https://github.com/folio-org/ui-users/tree/v13.0.2) (2026-06-12)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v13.0.1...v13.0.2)

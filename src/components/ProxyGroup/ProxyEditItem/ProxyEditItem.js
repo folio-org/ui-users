@@ -56,11 +56,16 @@ class ProxyEditItem extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { namespace, index } = this.props;
-    const prevProxyRel = (prevState.formValues[namespace] || [])[index] || {};
-    const proxyRel = this.state.formValues[namespace][index] || {};
+    const prevFormValues = prevState.formValues || {};
+    const currFormValues = this.state.formValues || {};
+    const prevProxyRel = (prevFormValues[namespace] || [])[index] || {};
+    const proxyRel = (currFormValues[namespace] || [])[index] || {};
 
-    if (!isEqual(this.state.formValues, prevState.formValues) &&
-      prevProxyRel.proxy.status === proxyRel.proxy.status) {
+    const hasRelChanged = !isEqual(proxyRel, prevProxyRel);
+    const hasUserExpChanged = prevFormValues.expirationDate !== currFormValues.expirationDate;
+
+    if ((hasRelChanged || hasUserExpChanged) &&
+      get(prevProxyRel, 'proxy.status') === get(proxyRel, 'proxy.status')) {
       this.updateStatus();
     }
   }
