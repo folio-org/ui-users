@@ -55,7 +55,8 @@
       "circulation-bff-loans": "1.6",
       "users-keycloak": "1.0",
       "audit-user": "1.0",
-      "audit-config": "1.0"
+      "audit-config": "1.0",
+      "text-notify": "1.0"
     },
     "permissionSets": [
       {
