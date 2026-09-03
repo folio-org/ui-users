@@ -49,6 +49,12 @@ class UserRecordContainer extends React.Component {
       path: 'bl-users/by-id/:{id}/open-transactions',
       fetch: false,
     },
+    textNotify: {
+      type: 'okapi',
+      path: 'text-notify',
+      fetch: false,
+      throwErrors: false,
+    },
     hasManualPatronBlocks: {
       type: 'okapi',
       records: 'manualblocks',
@@ -282,6 +288,9 @@ class UserRecordContainer extends React.Component {
       }).isRequired,
       openTransactions: PropTypes.shape({
         GET: PropTypes.func.isRequired,
+      }).isRequired,
+      textNotify: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
       }).isRequired,
       selUser: PropTypes.shape({
         PUT: PropTypes.func.isRequired,

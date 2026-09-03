@@ -1325,8 +1325,9 @@
     "react-final-form-listeners": "^1.0.3",
     "react-router-prop-types": "^1.0.4",
     "react-to-print": "^3.0.1",
-    "uuid": "^9.0.0",
-    "react-webcam": "^7.2.0"
+    "react-webcam": "^7.2.0",
+    "sms-length": "^0.2.2",
+    "uuid": "^9.0.0"
   },
   "peerDependencies": {
     "@folio/service-interaction": "^4.0.0",
