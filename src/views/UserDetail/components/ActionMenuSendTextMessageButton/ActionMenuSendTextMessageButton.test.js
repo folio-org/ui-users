@@ -85,7 +85,7 @@ describe('ActionMenuSendTextMessageButton', () => {
     expect(handleClick).toHaveBeenCalled();
   });
 
-  test('does not render when user lacks the text-notify permission', () => {
+  test('does not render when user lacks the permission', () => {
     IfPermission.mockImplementationOnce(() => null);
     render(<ActionMenuSendTextMessageButton user={smsUser} handleClick={jest.fn()} />);
     expect(screen.queryByText('ui-users.details.sendTextMessage.button')).not.toBeInTheDocument();

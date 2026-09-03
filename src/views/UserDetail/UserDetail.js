@@ -8,6 +8,7 @@ import {
   orderBy,
 } from 'lodash';
 import { injectIntl } from 'react-intl';
+import { v4 } from 'uuid';
 
 import {
   AppIcon,
@@ -130,7 +131,7 @@ class UserDetail extends React.Component {
       openTransactions: PropTypes.shape({
         GET: PropTypes.func,
       }),
-      textNotify: PropTypes.shape({
+      messageDelivery: PropTypes.shape({
         POST: PropTypes.func,
       }),
     }),
@@ -491,9 +492,13 @@ class UserDetail extends React.Component {
     const user = this.getUser();
     const fullNameOfUser = getFullName(user);
 
-    return mutator.textNotify.POST({
-      to: user.id,
-      body: message,
+    return mutator.messageDelivery.POST({
+      notificationId: v4(), // required by API
+      recipientUserId: user.id,
+      messages: [{
+        deliveryChannel: 'sms',
+        body: message
+      }],
     })
       .then(() => {
         this.context.sendCallout({
@@ -564,7 +569,7 @@ class UserDetail extends React.Component {
       || stripes.hasPerm('ui-requests.create')
       || stripes.hasPerm('ui-users.delete,ui-users.open-transactions.view')
       || stripes.hasPerm('ui-users.profile-pictures.all')
-      || stripes.hasPerm('text-notify.message.post');
+      || stripes.hasPerm('sender.message-delivery.post');
 
     if (showActionMenu && !isVirtualPatron) {
       return (
@@ -602,7 +607,7 @@ class UserDetail extends React.Component {
               />
             )
           }
-          <IfInterface name="text-notify">
+          <IfInterface name="message-delivery">
             <ActionMenuSendTextMessageButton
               user={user}
               handleClick={() => {

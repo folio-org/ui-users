@@ -91,7 +91,7 @@ const mutator = {
   hasAutomatedPatronBlocks: {
     GET: jest.fn(),
   },
-  textNotify: {
+  messageDelivery: {
     POST: jest.fn(),
   },
 };
@@ -247,7 +247,7 @@ describe('UserDetail', () => {
   afterEach(() => {
     mutator.hasManualPatronBlocks.GET.mockClear();
     mutator.hasAutomatedPatronBlocks.GET.mockClear();
-    mutator.textNotify.POST.mockReset();
+    mutator.messageDelivery.POST.mockReset();
     sendCallout.mockClear();
     PatronBlock.mockClear();
   });
@@ -507,14 +507,20 @@ describe('UserDetail', () => {
 
     describe('handleSendTextMessage', () => {
       it('posts the message, shows a success callout, and closes the modal', async () => {
-        mutator.textNotify.POST.mockResolvedValue({});
+        mutator.messageDelivery.POST.mockResolvedValue({});
 
         await openSendTextMessageModal();
         await userEvent.click(screen.getByText('Submit SendTextMessageModal'));
 
-        await waitFor(() => expect(mutator.textNotify.POST).toHaveBeenCalledWith({
-          to: userId,
-          body: 'test message',
+        await waitFor(() => expect(mutator.messageDelivery.POST).toHaveBeenCalledWith({
+          notificationId: expect.any(String),
+          recipientUserId: userId,
+          messages: [
+            {
+              deliveryChannel: 'sms',
+              body: 'test message',
+            },
+          ],
         }));
         await waitFor(() => expect(sendCallout).toHaveBeenCalledWith({
           type: 'success',
@@ -524,7 +530,7 @@ describe('UserDetail', () => {
       });
 
       it('shows an error callout and closes the modal when the request fails', async () => {
-        mutator.textNotify.POST.mockRejectedValue(new Error('request failed'));
+        mutator.messageDelivery.POST.mockRejectedValue(new Error('request failed'));
 
         await openSendTextMessageModal();
         await userEvent.click(screen.getByText('Submit SendTextMessageModal'));

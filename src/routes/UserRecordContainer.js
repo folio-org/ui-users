@@ -49,9 +49,9 @@ class UserRecordContainer extends React.Component {
       path: 'bl-users/by-id/:{id}/open-transactions',
       fetch: false,
     },
-    textNotify: {
+    messageDelivery: {
       type: 'okapi',
-      path: 'text-notify',
+      path: 'message-delivery',
       fetch: false,
       throwErrors: false,
     },
@@ -289,7 +289,7 @@ class UserRecordContainer extends React.Component {
       openTransactions: PropTypes.shape({
         GET: PropTypes.func.isRequired,
       }).isRequired,
-      textNotify: PropTypes.shape({
+      messageDelivery: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }).isRequired,
       selUser: PropTypes.shape({
