@@ -800,7 +800,6 @@ class UserSearch extends React.Component {
                               buttonStyle="none"
                               id="clickable-reset-all"
                               disabled={!(filterChanged || searchChanged)}
-                              fullWidth
                               onClick={resetAll}
                             >
                               <Icon icon="times-circle-solid">

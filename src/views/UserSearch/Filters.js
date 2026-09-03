@@ -126,7 +126,7 @@ class Filters extends React.Component {
     return (
       <AccordionSet>
         <Accordion
-          displayClearButton
+          displayClearButton={active.length > 0}
           id={`${ACCORDION_ID_PREFIX}-status`}
           header={FilterAccordionHeader}
           label={formatMessage({ id: 'ui-users.status' })}
@@ -141,7 +141,7 @@ class Filters extends React.Component {
           />
         </Accordion>
         <Accordion
-          displayClearButton
+          displayClearButton={pg.length > 0}
           id={`${ACCORDION_ID_PREFIX}-patron-group`}
           header={FilterAccordionHeader}
           label={formatMessage({ id: 'ui-users.information.patronGroup' })}
@@ -157,7 +157,7 @@ class Filters extends React.Component {
         </Accordion>
         {departmentsAreNotEmpty && (
           <Accordion
-            displayClearButton
+            displayClearButton={departments.length > 0}
             id={`${ACCORDION_ID_PREFIX}-departments`}
             header={FilterAccordionHeader}
             label={formatMessage({ id: 'ui-users.departments' })}
@@ -174,7 +174,7 @@ class Filters extends React.Component {
           </Accordion>
         )}
         <Accordion
-          displayClearButton
+          displayClearButton={tags.length > 0}
           id={`${ACCORDION_ID_PREFIX}-tags`}
           header={FilterAccordionHeader}
           label={formatMessage({ id: 'ui-users.tags' })}
@@ -192,7 +192,7 @@ class Filters extends React.Component {
         {
           isConsortium && (
             <Accordion
-              displayClearButton
+              displayClearButton={userType?.length > 0}
               id={`${ACCORDION_ID_PREFIX}-user-types`}
               header={FilterAccordionHeader}
               label={formatMessage({ id: 'ui-users.userType' })}
