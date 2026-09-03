@@ -8,7 +8,7 @@ export function shouldAllowSendingText(user) {
   return !!(
     user?.personal &&
     (user.personal.preferredContactTypeId === contactTypesMap.sms.value ||
-      user.personal.preferredContactTypeIds.includes(contactTypesMap.sms.value)) &&
+      user.personal.preferredContactTypeIds?.includes(contactTypesMap.sms.value)) &&
     user.personal.mobilePhone?.length > 0
   );
 }

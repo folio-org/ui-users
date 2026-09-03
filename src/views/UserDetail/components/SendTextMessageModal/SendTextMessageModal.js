@@ -4,7 +4,7 @@ import { Field } from 'react-final-form';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { count } from 'sms-length';
 
-function SendTextMessageModal({ handleSubmit, invalid, values, onCloseModal }) {
+function SendTextMessageModal({ handleSubmit, invalid, submitting, values, onCloseModal }) {
   const intl = useIntl();
 
   return (
@@ -19,7 +19,7 @@ function SendTextMessageModal({ handleSubmit, invalid, values, onCloseModal }) {
         <ModalFooter>
           <Button
             type="submit"
-            disabled={invalid}
+            disabled={invalid || submitting}
             buttonStyle="primary"
             id="send-text-message-button"
           >
@@ -53,6 +53,7 @@ export default stripesFinalForm({
   destroyOnUnregister: true,
   subscription: {
     invalid: true,
+    submitting: true,
     values: true,
   },
   validate: ({ message }) => {
