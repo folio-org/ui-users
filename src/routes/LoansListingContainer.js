@@ -179,7 +179,7 @@ class LoansListingContainer extends React.Component {
     const automatedPatronBlocks = get(resources, ['hasAutomatedPatronBlocks', 'records'], []);
     const patronBlocks = concat(automatedPatronBlocks, manualPatronBlocks);
 
-    if (!user || isLoansHistoryPending) return (<LoadingView defaultWidth="100%" paneTitle="Loading loans" />);
+    if (!user || (isLoansHistoryPending && loansHistory.length === 0)) return (<LoadingView defaultWidth="100%" paneTitle="Loading loans" />);
     return (
       <LoansListing
         patronBlocks={patronBlocks}
