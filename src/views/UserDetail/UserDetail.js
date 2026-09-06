@@ -12,6 +12,7 @@ import { injectIntl } from 'react-intl';
 import {
   AppIcon,
   CalloutContext,
+  CustomMenuSection,
   IfPermission,
   IfInterface,
   TitleManager,
@@ -545,6 +546,7 @@ class UserDetail extends React.Component {
             onToggle={onToggle}
             suppressList={suppressList}
           />
+          <CustomMenuSection id="details" user={user} />
         </>
       );
     } else {

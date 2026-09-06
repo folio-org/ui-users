@@ -21,6 +21,10 @@
       "stripesHome",
       "usersSortByName"
     ],
+    "customMenus": [
+      { "id": "search" },
+      { "id": "details" }
+    ],
     "icons": [
       {
         "name": "app",

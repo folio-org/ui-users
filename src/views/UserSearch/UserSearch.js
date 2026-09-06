@@ -12,7 +12,7 @@ import {
   isEmpty,
 } from 'lodash';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { IfPermission, IfInterface, AppIcon, CalloutContext } from '@folio/stripes/core';
+import { IfPermission, IfInterface, AppIcon, CalloutContext, CustomMenuSection } from '@folio/stripes/core';
 import {
   Button,
   HasCommand,
@@ -372,6 +372,7 @@ class UserSearch extends React.Component {
             </IfPermission>
           </IfInterface>
         </MenuSection>
+        <CustomMenuSection id="search" />
         {renderColumnsMenu}
       </>
     );
@@ -721,7 +722,7 @@ class UserSearch extends React.Component {
     };
 
     return (
-      <HasCommand commands={this.shortcuts}>
+      <HasCommand commands={this.shortcuts} scope={document.body}>
         <div data-test-user-instances ref={contentRef}>
           <SearchAndSortQuery
             querySetter={querySetter}
@@ -856,7 +857,7 @@ class UserSearch extends React.Component {
                         </Pane>
                       )}
                     </ColumnManager>
-                    { this.props.children }
+                    {this.props.children}
                   </Paneset>
                 );
               }}
@@ -864,7 +865,7 @@ class UserSearch extends React.Component {
           {showRefundsReportModal && (
             <RefundsReportModal
               open
-              label={formatMessage({ id:'ui-users.reports.refunds.modal.label' })}
+              label={formatMessage({ id: 'ui-users.reports.refunds.modal.label' })}
               owners={owners}
               onClose={() => { this.changeModalState('showRefundsReportModal', false); }}
               onSubmit={this.handleRefundsReportFormSubmit}
@@ -874,7 +875,7 @@ class UserSearch extends React.Component {
           {showCashDrawerReportModal && (
             <CashDrawerReportModal
               open
-              label={formatMessage({ id:'ui-users.reports.cash.drawer.modal.label' })}
+              label={formatMessage({ id: 'ui-users.reports.cash.drawer.modal.label' })}
               servicePoints={servicePoints}
               onClose={() => { this.changeModalState('showCashDrawerReportModal', false); }}
               onSubmit={this.handleCashDrawerReportFormSubmit}
@@ -886,7 +887,7 @@ class UserSearch extends React.Component {
           {showFinancialTransactionsReportModal && (
             <FinancialTransactionsReportModal
               open
-              label={formatMessage({ id:'ui-users.reports.financial.trans.modal.label' })}
+              label={formatMessage({ id: 'ui-users.reports.financial.trans.modal.label' })}
               onClose={() => { this.changeModalState('showFinancialTransactionsReportModal', false); }}
               onSubmit={this.handleFinancialTransactionsReportFormSubmit}
               timezone={timezone}
