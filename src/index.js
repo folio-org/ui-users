@@ -18,7 +18,6 @@ import * as Routes from './routes';
 import pkg from '../package';
 import commands from './commands';
 import Settings from './settings';
-import sections from './settings/sections';
 import {
   NoteCreatePage,
   NoteViewPage,
@@ -133,24 +132,13 @@ class UsersRouting extends React.Component {
   render() {
     const {
       showSettings,
-      match: { path },
-      stripes
     } = this.props;
 
     this.shortcutScope = document.body;
     const base = '/users';
 
     if (showSettings) {
-      return (
-        <Route path={path} component={Settings}>
-          <Switch>
-            {[].concat(...sections.map(section => section.pages))
-              .filter(setting => !setting.perm || stripes.hasPerm(setting.perm))
-              .map(setting => <Route path={`${path}/${setting.route}`} key={setting.route} component={setting.component} />)
-            }
-          </Switch>
-        </Route>
-      );
+      return <Settings {...this.props} />;
     }
 
     return (

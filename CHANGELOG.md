@@ -9,6 +9,18 @@
 * In the "Last Updated" column in the "Reading Room Access" accordion, sort by date, not by id. Fixes UIU-3592.
 * Add localization for payment status in accounts and reports. Fixes UIU-3517.
 * Translate known item statuses while preserving backend values for unknown statuses. Fixes UIU-3529.
+* Fix Refund button disabled on Fee/Fine History page. Refs UIU-3549.
+* Add `ui-users.loans.view` to `ui-users.loans-renew.create` to also see loans with this permission. Fixes UIU-1140.
+* Prevent server requests when filling in other fields after filling in Username/Barcode. Fixes UIU-3585.
+* Add missing sub permission for fees fines. Refs UIU-3602.
+* Update User buttons on the create/edit page. Refs UIU-3591.
+* Rename user status column header from Active to Status. Refs UIU-3610.
+* *BREAKING* Provide new `preferredContactTypeIds` multi-selection, require mobile phone when SMS is preferred. Bumps consumed `users` interface to 16.5. Refs UIU-3553.
+* Refactored src/settings/index.js to use Settings instead of custom SettingsPage. Refs UIU-3611.
+* Add localization for the renew error message. Refs UIU-3537.
+* Сlear loans data when returning to Open Loans page. Refs UIU-3612.
+* Sort loans in ascending case-insensitive order. Refs UIU-3369.
+* Fix proxy/sponsor record editing crash after adding subsequent items. Refs UIU-3375.
 
 ## [13.0.2] (https://github.com/folio-org/ui-users/tree/v13.0.2) (2026-06-12)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v13.0.1...v13.0.2)

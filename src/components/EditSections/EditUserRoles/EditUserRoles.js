@@ -176,7 +176,13 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
             </IfConsortium>
             {renderUserRoles()}
             <IfPermission perm="ui-authorization-roles.users.settings.manage">
-              <Button disabled={isLoadingData} data-testid="add-roles-button" onClick={() => setIsOpen(true)}><FormattedMessage id="ui-users.roles.addRoles" /></Button>
+              <Button
+                disabled={isLoadingData}
+                data-testid="add-roles-button"
+                onClick={() => setIsOpen(true)}
+              >
+                <FormattedMessage id="ui-users.roles.button.addUserRole" />
+              </Button>
               <Button data-testid="unassign-all-roles-button" disabled={isEmpty(listItemsData) || isLoadingData} onClick={() => setUnassignModalOpen(true)}><FormattedMessage id="ui-users.roles.unassignAllRoles" /></Button>
             </IfPermission>
           </Row>

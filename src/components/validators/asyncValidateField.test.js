@@ -12,6 +12,7 @@ const mockValidator = {
   GET: jest.fn(() => Promise.resolve([])),
   reset: jest.fn(),
 };
+const value = 'foo';
 
 describe('Async Validate Field component', () => {
   beforeEach(() => {
@@ -24,7 +25,7 @@ describe('Async Validate Field component', () => {
       reset: jest.fn(),
       GET: jest.fn(() => new Promise(res => res(mockReponse))),
     };
-    const data = await waitFor(() => asyncValidateField(fieldName, initValue, validator));
+    const data = await waitFor(() => asyncValidateField(value, fieldName, initValue, validator));
     expect(data.props.id).toBe('ui-users.errors.usernameUnavailable');
   });
   it('if initValue and memoize function has same data', async () => {
@@ -34,7 +35,7 @@ describe('Async Validate Field component', () => {
       reset: jest.fn(),
       GET: jest.fn(() => new Promise(res => res(mockReponse))),
     };
-    const data = await waitFor(() => asyncValidateField(fieldName, initValue, validator));
+    const data = await waitFor(() => asyncValidateField(initValue, fieldName, initValue, validator));
     expect(data).toBe('');
   });
   it('if no validator data is passed', async () => {
@@ -44,7 +45,7 @@ describe('Async Validate Field component', () => {
       reset: jest.fn(),
       GET: jest.fn(() => new Promise(res => res([]))),
     };
-    const data = await waitFor(() => asyncValidateField(fieldName, initValue, validator));
+    const data = await waitFor(() => asyncValidateField(value, fieldName, initValue, validator));
     expect(data).toBe('');
   });
 
@@ -54,27 +55,27 @@ describe('Async Validate Field component', () => {
     });
 
     it('should escape *', async () => {
-      await asyncValidateField('username', '', mockValidator)('foo*');
+      await asyncValidateField('foo*', 'username', '', mockValidator);
       expect(mockValidator.GET).toHaveBeenCalledWith({ params: { query: '(username=="foo\\*")' } });
     });
 
     it('should escape ?', async () => {
-      await asyncValidateField('barcode', '', mockValidator)('foo?');
+      await asyncValidateField('foo?', 'barcode', '', mockValidator);
       expect(mockValidator.GET).toHaveBeenCalledWith({ params: { query: '(barcode=="foo\\?")' } });
     });
 
     it('should escape ^', async () => {
-      await asyncValidateField('username', '', mockValidator)('foo^');
+      await asyncValidateField('foo^', 'username', '', mockValidator);
       expect(mockValidator.GET).toHaveBeenCalledWith({ params: { query: '(username=="foo\\^")' } });
     });
 
     it('should escape "', async () => {
-      await asyncValidateField('username', '', mockValidator)('foo"');
+      await asyncValidateField('foo"', 'username', '', mockValidator);
       expect(mockValidator.GET).toHaveBeenCalledWith({ params: { query: '(username=="foo\\"")' } });
     });
 
     it('should escape \\', async () => {
-      await asyncValidateField('username', '', mockValidator)('foo\\');
+      await asyncValidateField('foo\\', 'username', '', mockValidator);
       expect(mockValidator.GET).toHaveBeenCalledWith({ params: { query: '(username=="foo\\\\")' } });
     });
   });

@@ -6,10 +6,13 @@ export default function memoize(fn) {
   let lastArg;
   let lastResult;
 
-  return arg => {
+  // Only the first argument is used as the memoization key (e.g. a field's own
+  // value), but every argument the caller passes (e.g. final-form's `allValues`
+  // and `meta` for field-level validators) is still forwarded to `fn`.
+  return (arg, ...rest) => {
     if (arg !== lastArg) {
       lastArg = arg;
-      lastResult = fn(arg);
+      lastResult = fn(arg, ...rest);
     }
 
     return lastResult;

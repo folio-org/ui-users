@@ -1,4 +1,5 @@
-import { screen } from '@folio/jest-config-stripes/testing-library/react';
+import { screen, waitFor } from '@folio/jest-config-stripes/testing-library/react';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import { Form } from 'react-final-form';
 import PropTypes from 'prop-types';
 
@@ -174,6 +175,115 @@ describe('Render Extended User Information component', () => {
       );
 
       expect(screen.getByRole('textbox', { name: 'ui-users.information.username' })).not.toBeRequired();
+    });
+  });
+
+  describe('Username uniqueness validation', () => {
+    let uniquenessValidator;
+    let user;
+
+    // The username field's async validation is debounced (see AsyncValidateField,
+    // default wait = 300ms). Fake timers let us fast-forward past that window
+    // instead of waiting in real time. `advanceTimersByTimeAsync` also flushes
+    // the microtasks in between, so the mocked `GET` promise gets a chance to
+    // resolve. Because the debounced/memoized validator only re-evaluates when
+    // the field's value actually changes, briefly appending then removing a
+    // character forces it to pick up the (by-then-resolved) async result.
+    // Finally, blur the field so final-form marks it `touched` - TextField only
+    // renders an error once touched.
+    const triggerRevalidation = async () => {
+      await jest.advanceTimersByTimeAsync(400);
+      const usernameField = screen.getByRole('textbox', { name: 'ui-users.information.username' });
+      await user.type(usernameField, 'X{backspace}');
+      await user.tab();
+    };
+
+    beforeEach(() => {
+      jest.useFakeTimers();
+      user = userEvent.setup({ delay: null, advanceTimers: jest.advanceTimersByTime });
+      uniquenessValidator = {
+        GET: jest.fn(),
+        reset: jest.fn(),
+      };
+    });
+
+    afterEach(() => {
+      jest.useRealTimers();
+    });
+
+    it('should show an error message when the entered username already exists', async () => {
+      uniquenessValidator.GET.mockResolvedValue([{ username: 'newUsername' }]);
+
+      renderEditExtendedInfo({
+        ...props,
+        uniquenessValidator,
+      }, { username: 'testName' });
+
+      const usernameField = screen.getByRole('textbox', { name: 'ui-users.information.username' });
+
+      await user.clear(usernameField);
+      await user.type(usernameField, 'newUsername');
+
+      await triggerRevalidation();
+
+      await waitFor(() => {
+        expect(screen.getByText('ui-users.errors.usernameUnavailable')).toBeInTheDocument();
+      });
+
+      expect(uniquenessValidator.reset).toHaveBeenCalled();
+      expect(uniquenessValidator.GET).toHaveBeenCalledWith({ params: { query: '(username=="newUsername")' } });
+    });
+
+    it('should NOT show an error message when the entered username is available', async () => {
+      uniquenessValidator.GET.mockResolvedValue([]);
+
+      renderEditExtendedInfo({
+        ...props,
+        uniquenessValidator,
+      }, { username: 'testName' });
+
+      const usernameField = screen.getByRole('textbox', { name: 'ui-users.information.username' });
+
+      await user.clear(usernameField);
+      await user.type(usernameField, 'availableUsername');
+
+      await triggerRevalidation();
+
+      await waitFor(() => {
+        expect(uniquenessValidator.GET).toHaveBeenCalled();
+      });
+
+      expect(screen.queryByText('ui-users.errors.usernameUnavailable')).not.toBeInTheDocument();
+    });
+
+    it('should NOT call the validator when the username is empty', async () => {
+      renderEditExtendedInfo({
+        ...props,
+        uniquenessValidator,
+      }, { username: 'testName' });
+
+      const usernameField = screen.getByRole('textbox', { name: 'ui-users.information.username' });
+
+      await user.clear(usernameField);
+
+      await triggerRevalidation();
+
+      expect(uniquenessValidator.GET).not.toHaveBeenCalled();
+    });
+
+    it('should NOT call the validator when the username matches its initial value', async () => {
+      renderEditExtendedInfo({
+        ...props,
+        uniquenessValidator,
+      }, { username: 'testName' });
+
+      const usernameField = screen.getByRole('textbox', { name: 'ui-users.information.username' });
+
+      await user.click(usernameField);
+
+      await triggerRevalidation();
+
+      expect(uniquenessValidator.GET).not.toHaveBeenCalled();
     });
   });
 });

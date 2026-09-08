@@ -1,5 +1,7 @@
+import { FormattedMessage } from 'react-intl';
+
 export default [
-  { id: '002', name: 'email', desc: 'ui-users.data.contactTypes.email' },
-  { id: '001', name: 'mail', desc: 'ui-users.data.contactTypes.mail' },
-  { id: '003', name: 'sms', desc: 'ui-users.data.contactTypes.textMessage' },
+  { value: '002', name: 'email', label: <FormattedMessage id="ui-users.data.contactTypes.email" /> },
+  { value: '001', name: 'mail', label: <FormattedMessage id="ui-users.data.contactTypes.mail" /> },
+  { value: '003', name: 'sms', label: <FormattedMessage id="ui-users.data.contactTypes.textMessage" /> },
 ];

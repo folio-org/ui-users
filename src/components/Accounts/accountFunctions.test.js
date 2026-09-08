@@ -151,6 +151,107 @@ describe('Account Functions', () => {
         expect(result).toEqual(expectedResult);
       });
     });
+
+    describe('hasBeenPaid via account.paymentStatus.name', () => {
+      it.each(paymentStatusesAllowedToRefund)(
+        'should set hasBeenPaid to true when paymentStatus.name is "%s" and feeFineActions is empty',
+        (statusName) => {
+          const result = accountRefundInfo({
+            ...userAccount,
+            paymentStatus: { name: statusName },
+          });
+
+          expect(result.hasBeenPaid).toBe(true);
+        }
+      );
+
+      it('should set hasBeenPaid to true when paymentStatus.name is in the allowed list and feeFineActions have no matching typeAction', () => {
+        const feeFineActions = [{
+          accountId: userAccount.id,
+          typeAction: 'Waived fully',
+        }];
+        const result = accountRefundInfo({
+          ...userAccount,
+          paymentStatus: { name: paymentStatusesAllowedToRefund[1] },
+        }, feeFineActions);
+
+        expect(result.hasBeenPaid).toBe(true);
+      });
+
+      it('should set hasBeenPaid to false when paymentStatus.name is not in the allowed list and feeFineActions is empty', () => {
+        const result = accountRefundInfo({
+          ...userAccount,
+          paymentStatus: { name: 'Outstanding' },
+        });
+
+        expect(result.hasBeenPaid).toBe(false);
+      });
+
+      it('should set hasBeenPaid to false when paymentStatus is undefined', () => {
+        const result = accountRefundInfo({
+          ...userAccount,
+          paymentStatus: undefined,
+        });
+
+        expect(result.hasBeenPaid).toBe(false);
+      });
+    });
+
+    describe('hasBeenPaid via feeFineActions (hasBeenPaidByActions)', () => {
+      it.each(paymentStatusesAllowedToRefund)(
+        'should set hasBeenPaid to true when feeFineAction typeAction is "%s"',
+        (typeAction) => {
+          const feeFineActions = [{ accountId: userAccount.id, typeAction }];
+          const result = accountRefundInfo(userAccount, feeFineActions);
+
+          expect(result.hasBeenPaid).toBe(true);
+        }
+      );
+
+      it('should set hasBeenPaid to false when feeFineAction typeAction is not in the allowed list', () => {
+        const feeFineActions = [{
+          accountId: userAccount.id,
+          typeAction: 'Waived fully',
+        }];
+        const result = accountRefundInfo(userAccount, feeFineActions);
+
+        expect(result.hasBeenPaid).toBe(false);
+      });
+
+      it('should not count feeFineActions that belong to a different accountId', () => {
+        const feeFineActions = [{
+          accountId: 'different-account-id',
+          typeAction: paymentStatusesAllowedToRefund[0],
+        }];
+        const result = accountRefundInfo(userAccount, feeFineActions);
+
+        expect(result.hasBeenPaid).toBe(false);
+      });
+
+      it('should set hasBeenPaid to true when at least one feeFineAction matches typeAction among multiple actions', () => {
+        const feeFineActions = [
+          { accountId: userAccount.id, typeAction: 'Waived fully' },
+          { accountId: userAccount.id, typeAction: paymentStatusesAllowedToRefund[2] },
+          { accountId: userAccount.id, typeAction: 'Refunded fully' },
+        ];
+        const result = accountRefundInfo(userAccount, feeFineActions);
+
+        expect(result.hasBeenPaid).toBe(true);
+      });
+
+      it('should set hasBeenPaid to true when both hasBeenPaidByActions and paymentStatus.name indicate payment', () => {
+        const feeFineActions = [{
+          accountId: userAccount.id,
+          typeAction: paymentStatusesAllowedToRefund[0],
+        }];
+        const result = accountRefundInfo({
+          ...userAccount,
+          paymentStatus: { name: paymentStatusesAllowedToRefund[3] },
+        }, feeFineActions);
+
+        expect(result.hasBeenPaid).toBe(true);
+      });
+    });
   });
 
   it('If calculateTotalPaymentAmount works', async () => {

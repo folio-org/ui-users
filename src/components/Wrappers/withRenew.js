@@ -10,6 +10,7 @@ import { Callout } from '@folio/stripes/components';
 import BulkRenewalDialog from '../BulkRenewalDialog';
 import isOverridePossible from '../Loans/OpenLoans/helpers/isOverridePossible';
 import {
+  ERROR_MESSAGE_TRANSLATION_ID_BY_BACKEND_ERROR_CODES,
   MAX_RECORDS,
   OVERRIDE_BLOCKS_FIELDS,
   requestStatuses,
@@ -217,19 +218,26 @@ const withRenew = WrappedComponent => class WithRenewComponent extends React.Com
     return '';
   };
 
-  // eslint-disable-next-line class-methods-use-this
   getMessage = (errors) => {
     if (!errors) return '';
 
     if (!Array.isArray(errors)) {
-      return <FormattedMessage
-        id="ui-users.errors.loanNotRenewedReason"
-        values={{ message: errors }}
-      />;
+      return (
+        <FormattedMessage
+          id="ui-users.errors.loanNotRenewedReason"
+          values={{ message: errors }}
+        />
+      );
     }
 
     const policyName = this.getPolicyName(errors);
-    const message = errors.reduce((msg, err) => ((msg) ? `${msg}, ${err.message}` : err.message), '');
+    const message = errors.reduce((msg, err) => {
+      const translationId = ERROR_MESSAGE_TRANSLATION_ID_BY_BACKEND_ERROR_CODES[err.code];
+      const errMessage = translationId
+        ? this.props.intl.formatMessage({ id: translationId })
+        : err.message;
+      return msg ? `${msg}, ${errMessage}` : errMessage;
+    }, '');
 
     return policyName ? (
       <FormattedMessage

@@ -473,7 +473,8 @@ class AccountsHistory extends React.Component {
       'dueDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.due' }),
       'returnedDate': intl.formatMessage({ id: 'ui-users.accounts.history.columns.returned' }),
     };
-    const selectedAccounts = this.state.selectedAccounts.map(a => this.accounts.find(ac => ac.id === a.id) || {});
+    const allAccounts = resources?.feefineshistory?.records || [];
+    const selectedAccounts = this.state.selectedAccounts.map(a => allAccounts.find(ac => ac.id === a.id) || {});
     const feeFineActions = resources?.comments?.records || [];
     const canRefund = selectedAccounts.some((a) => isRefundAllowed(a, feeFineActions));
     const showActionMenu = this.props.stripes.hasPerm('ui-users.feesfines.actions.all') ||

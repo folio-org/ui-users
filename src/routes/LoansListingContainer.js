@@ -169,15 +169,17 @@ class LoansListingContainer extends React.Component {
   }
 
   render() {
-    const { resources } = this.props;
+    const { resources, match } = this.props;
+    const userId = match?.params?.id;
     const user = this.getUser();
     const patronGroup = this.getPatronGroup();
-    const loansHistory = get(resources, ['loansHistory', 'records'], []);
+    const isLoansHistoryPending = get(resources, ['loansHistory', 'isPending'], true);
+    const loansHistory = get(resources, ['loansHistory', 'records'], []).filter(loan => loan.userId === userId);
     const manualPatronBlocks = get(resources, ['hasManualPatronBlocks', 'records'], []);
     const automatedPatronBlocks = get(resources, ['hasAutomatedPatronBlocks', 'records'], []);
     const patronBlocks = concat(automatedPatronBlocks, manualPatronBlocks);
 
-    if (!user) return (<LoadingView defaultWidth="100%" paneTitle="Loading loans" />);
+    if (!user || isLoansHistoryPending) return (<LoadingView defaultWidth="100%" paneTitle="Loading loans" />);
     return (
       <LoansListing
         patronBlocks={patronBlocks}

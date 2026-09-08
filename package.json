@@ -30,7 +30,7 @@
       }
     ],
     "okapiInterfaces": {
-      "users": "16.4",
+      "users": "16.5",
       "users.settings": "2.0",
       "permissions": "5.7",
       "login": "7.3",
@@ -811,6 +811,7 @@
           "feesfines.accounts.refund.post",
           "feesfines.accounts-bulk.refund.post",
           "circulation-storage.loans.item.get",
+          "inventory.items.collection.get",
           "inventory.items.item.get"
         ],
         "visible": true
@@ -823,6 +824,7 @@
           "ui-users.loans.renew"
         ],
         "subPermissions": [
+          "ui-users.loans.view",
           "circulation.renew-by-barcode.post",
           "inventory-storage.location-units.libraries.collection.get"
         ],

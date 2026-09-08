@@ -1,7 +1,7 @@
 import { act } from 'react';
 
 import okapiCurrentUser from 'fixtures/okapiCurrentUser';
-import { screen } from '@folio/jest-config-stripes/testing-library/react';
+import { screen, waitFor } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import { Form } from 'react-final-form';
 
@@ -325,6 +325,59 @@ describe('Render Edit User Information component', () => {
 
     expect(screen.getByRole('textbox', { name: 'ui-users.information.barcode' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'NumberGeneratorModalButton' })).toBeInTheDocument();
+  });
+
+  describe('barcode uniqueness validation', () => {
+    it('should show an error when an already taken barcode is entered and the field loses focus', async () => {
+      const uniquenessValidator = {
+        ...props.uniquenessValidator,
+        GET: jest.fn().mockResolvedValue([{ id: 'existing-user' }]),
+      };
+
+      renderEditUserInfo({ ...props, uniquenessValidator });
+
+      const barcodeField = screen.getByRole('textbox', { name: 'ui-users.information.barcode' });
+
+      await userEvent.clear(barcodeField);
+      await userEvent.type(barcodeField, '9999999999');
+      await userEvent.tab();
+
+      expect(await screen.findByText('ui-users.errors.barcodeUnavailable')).toBeInTheDocument();
+    });
+
+    it('should not show an error when a unique barcode is entered and the field loses focus', async () => {
+      const uniquenessValidator = {
+        ...props.uniquenessValidator,
+        GET: jest.fn().mockResolvedValue([]),
+      };
+
+      renderEditUserInfo({ ...props, uniquenessValidator });
+
+      const barcodeField = screen.getByRole('textbox', { name: 'ui-users.information.barcode' });
+
+      await userEvent.clear(barcodeField);
+      await userEvent.type(barcodeField, '9999999999');
+      await userEvent.tab();
+
+      await waitFor(() => expect(uniquenessValidator.GET).toHaveBeenCalled());
+      expect(screen.queryByText('ui-users.errors.barcodeUnavailable')).not.toBeInTheDocument();
+    });
+
+    it('should debounce validation requests and only send a single request while typing', async () => {
+      const uniquenessValidator = {
+        ...props.uniquenessValidator,
+        GET: jest.fn().mockResolvedValue([]),
+      };
+
+      renderEditUserInfo({ ...props, uniquenessValidator });
+
+      const barcodeField = screen.getByRole('textbox', { name: 'ui-users.information.barcode' });
+
+      await userEvent.clear(barcodeField);
+      await userEvent.type(barcodeField, '9999999999');
+
+      await waitFor(() => expect(uniquenessValidator.GET).toHaveBeenCalledTimes(1));
+    });
   });
 
   describe('when profilePicture configuration is not enabled', () => {

@@ -39,7 +39,7 @@ export const USER_FIELDS = [
   { value: 'personal.email', labelId: 'ui-users.contact.email' },
   { value: 'personal.phone', labelId: 'ui-users.contact.phone' },
   { value: 'personal.mobilePhone', labelId: 'ui-users.contact.mobilePhone' },
-  { value: 'personal.preferredContactTypeId', labelId: 'ui-users.contact.preferredContact' },
+  { value: 'personal.preferredContactTypeIds', labelId: 'ui-users.contact.preferredContact' },
   { value: 'personal.addresses', labelId: 'ui-users.contact.addresses' },
   // Extended information
   { value: 'enrollmentDate', labelId: 'ui-users.extended.dateEnrolled' },

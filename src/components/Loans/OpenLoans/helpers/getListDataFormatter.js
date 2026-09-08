@@ -92,7 +92,7 @@ export default function getListDataFormatter(
       key:'callNumber',
       view: formatMessage({ id: 'ui-users.loans.details.effectiveCallNumber' }),
       formatter: loan => (<div data-test-list-call-numbers>{effectiveCallNumber(loan) || <NoValue />}</div>),
-      sorter: loan => effectiveCallNumber(loan),
+      sorter: loan => effectiveCallNumber(loan)?.toLowerCase(),
     },
     'loanPolicy': {
       key:'loanPolicy',

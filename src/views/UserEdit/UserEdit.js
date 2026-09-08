@@ -109,6 +109,10 @@ class UserEdit extends React.Component {
     return selUser.find(u => u.id === id);
   }
 
+  getPreferredContactTypeIdsFormValue(preferredContactTypeIds) {
+    return preferredContactTypeIds?.map(c => contactTypes.find(t => t.value === c)).filter(Boolean);
+  }
+
   getPrefEmailCommunicationFormValue(prefEmailComm) {
     return prefEmailComm?.every(item => typeof item === 'string') ?
       prefEmailComm?.map(a => {
@@ -144,7 +148,6 @@ class UserEdit extends React.Component {
       personal: {
         addresses: [],
         firstName: '',
-        preferredContactTypeId: (find(contactTypes, { 'name': 'email' }) || {}).id,
       },
       requestPreferences: {
         holdShelf: true,
@@ -167,6 +170,7 @@ class UserEdit extends React.Component {
     }
 
     userFormValues.personal.addresses = getFormAddressList(get(user, 'personal.addresses', []));
+    userFormValues.personal.preferredContactTypeIds = this.getPreferredContactTypeIdsFormValue(get(user, 'personal.preferredContactTypeIds', []));
     userFormValues.preferredEmailCommunication = this.getPrefEmailCommunicationFormValue(userFormValues.preferredEmailCommunication);
 
     return {
@@ -249,6 +253,10 @@ class UserEdit extends React.Component {
     prefEmailComm?.map(option => option.value)
   )
 
+  formatPreferredContactTypeIds = preferredContactTypeIds => (
+    preferredContactTypeIds?.map(option => option.value)
+  )
+
   formatDepartments = (departments = []) => {
     return departments.map(({ value }) => value);
   }
@@ -259,6 +267,7 @@ class UserEdit extends React.Component {
     const user = { ...userData, id: uuidv4() };
     user.personal.addresses = toUserAddresses(user.personal.addresses);
     user.personal.email = user.personal.email.trim();
+    user.personal.preferredContactTypeIds = this.formatPreferredContactTypeIds(user.personal.preferredContactTypeIds);
     user.departments = this.formatDepartments(user.departments);
     this.deleteEmptyFields(user);
 
@@ -389,6 +398,7 @@ class UserEdit extends React.Component {
     this.deleteEmptyFields(user);
     user.personal.addresses = toUserAddresses(user.personal.addresses); // eslint-disable-line no-param-reassign
     user.personal.email = user.personal.email?.trim();
+    user.personal.preferredContactTypeIds = this.formatPreferredContactTypeIds(user.personal.preferredContactTypeIds);
     user.departments = this.formatDepartments(user.departments);
 
     if (stripes.hasInterface('users', '16.2')) {

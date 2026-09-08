@@ -42,7 +42,7 @@ const buildFieldLabelsMap = (formatMessage, customFields) => ({
   mobilePhone: formatMessage({ id: 'ui-users.contact.mobilePhone' }),
   preferredEmailCommunication: formatMessage({ id: 'ui-users.contact.preferredEmailCommunication' }),
   dateOfBirth: formatMessage({ id: 'ui-users.extended.birthDate' }),
-  preferredContactTypeId: formatMessage({ id: 'ui-users.contact.preferredContact' }),
+  preferredContactTypeIds: formatMessage({ id: 'ui-users.contact.preferredContact' }),
   addresses: formatMessage({ id: 'ui-users.contact.addresses' }),
   addressLine1: formatMessage({ id: 'stripes-components.addressLine1' }),
   addressLine2: formatMessage({ id: 'stripes-components.addressLine2' }),
@@ -89,7 +89,7 @@ const buildCustomFieldFormatters = (customFields, formatMessage) => {
 };
 
 const useUserVersionHistoryFormatters = () => {
-  const { formatMessage } = useIntl();
+  const { formatList, formatMessage } = useIntl();
 
   const { patronGroups } = usePatronGroups();
   const { departments } = useDepartmentsQuery();
@@ -131,7 +131,7 @@ const useUserVersionHistoryFormatters = () => {
       ? formatMessage({ id: 'ui-users.active' })
       : formatMessage({ id: 'ui-users.inactive' })),
     patronGroup: value => patronGroupsMap[value] || value,
-    preferredContactTypeId: value => contactTypesMap[value] || value,
+    preferredContactTypeIds: value => formatList(value.map(v => contactTypesMap[v])),
     expirationDate: renderDate,
     dateOfBirth: renderDate,
     enrollmentDate: renderDate,
@@ -141,7 +141,7 @@ const useUserVersionHistoryFormatters = () => {
     profilePictureLink: valueOrNoValue,
     proxyFor: valueOrNoValue,
     ...customFieldFormatters,
-  }), [formatMessage, patronGroupsMap, contactTypesMap, departmentsMap, customFieldFormatters]);
+  }), [formatList, formatMessage, patronGroupsMap, contactTypesMap, departmentsMap, customFieldFormatters]);
 
   const itemFormatter = useMemo(
     () => ({ name, value }) => {
