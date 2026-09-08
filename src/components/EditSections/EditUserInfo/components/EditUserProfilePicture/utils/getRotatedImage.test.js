@@ -10,14 +10,12 @@ describe('getRotatedImage', () => {
     const mockImage = new Image();
     mockImage.width = 100;
     mockImage.height = 200;
-    jest.spyOn(canvasUtilsmodule, 'createImage').mockResolvedValueOnce(mockImage);
-
     const mockCanvas = document.createElement('canvas');
     const mockCtx = mockCanvas.getContext('2d');
     jest.spyOn(document, 'createElement').mockReturnValueOnce(mockCanvas);
     jest.spyOn(mockCanvas, 'getContext').mockReturnValue(mockCtx);
 
-    const image = await canvasUtilsmodule.createImage(imageSrc);
+    const image = mockImage;
     const result = await canvasUtilsmodule.getRotatedImage(image, 90);
 
     expect(result).toContain('mocked-url-for-blob');

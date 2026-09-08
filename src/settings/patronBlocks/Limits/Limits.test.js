@@ -13,7 +13,7 @@ jest.unmock('@folio/stripes/components');
 jest.unmock('@folio/stripes/smart-components');
 
 
-const LimitsFormMock = ({ onSubmit }) => {
+function LimitsFormMock({ onSubmit }) {
   const obj = {
     blockBorrowing: false,
     blockRenewals: false,
@@ -37,7 +37,7 @@ const LimitsFormMock = ({ onSubmit }) => {
       <button type="button" data-testid="close-dialog" onClick={() => onSubmit(obj)}>save</button>
       <button type="button" data-testid="close-dialog" onClick={() => onSubmit(value)}>update</button>
     </div>);
-};
+}
 
 LimitsFormMock.propTypes = {
   onSubmit: PropTypes.func,

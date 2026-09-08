@@ -8,9 +8,9 @@ import '__mock__/intl.mock';
 import buildStripes from '__mock__/stripes.mock';
 import withRenew from './withRenew';
 
-const BulkRenewalDialogMock = ({ errorMessages }) => {
+function BulkRenewalDialogMock({ errorMessages }) {
   return <div>{errorMessages?.[1]?.props?.values?.message ?? ''}</div>;
-};
+}
 
 jest.mock('../BulkRenewalDialog', () => BulkRenewalDialogMock);
 

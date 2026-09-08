@@ -8,13 +8,14 @@ import loans from 'fixtures/openLoans';
 
 import withDeclareLost from './withDeclareLost';
 
-const LoanActionDialogMock = ({ open, onClose, toggleButton }) => (
+function LoanActionDialogMock({ open, onClose, toggleButton }) {
+  return (
   open && (
   <>
     <button type="button" data-testid="close-dialog" onClick={() => onClose()}>close</button>
     <button type="button" data-testid="disable-dialog" onClick={() => toggleButton(true)}>Disable</button>
-  </>)
-);
+  </>));
+}
 LoanActionDialogMock.propTypes = {
   onClose: PropTypes.func,
   open: PropTypes.bool,

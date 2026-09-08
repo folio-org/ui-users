@@ -172,14 +172,15 @@ const mockData = {
   }
 };
 
-const PatronBlockFormMock = ({ onSubmit, onDeleteItem, onClose }) => (
+function PatronBlockFormMock({ onSubmit, onDeleteItem, onClose }) {
+  return (
   <>
     <div>Patron Block Form</div>
     <button type="button" data-testid="submit" onClick={() => onSubmit(mockData)}>Submit</button>
     <button type="button" data-testid="delete" onClick={() => onDeleteItem()}>Delete</button>
     <button type="button" data-testid="cancel" onClick={() => onClose()}>Close</button>
-  </>
-);
+  </>);
+}
 
 PatronBlockFormMock.propTypes = {
   onClose: PropTypes.func,

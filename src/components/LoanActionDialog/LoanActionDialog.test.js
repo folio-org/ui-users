@@ -7,25 +7,13 @@ import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import renderWithRouter from 'helpers/renderWithRouter';
 import LoanActionDialog from './LoanActionDialog';
 
-
-
-const ModalContentMock = ({ loanAction, itemRequestCount, validateAction, handleError }) => {
-  return (
-    <>
-      <div>{loanAction}-{itemRequestCount}</div>
-      <button type="button" data-testid="close-dialog" onClick={() => handleError('No fee/fine owner found for item\'s permanent location')}>handleError</button>
-      <button type="button" data-testid="close-dialog" onClick={() => validateAction()}>close</button>
-    </>);
-};
-ModalContentMock.propTypes = {
-  loanAction: PropTypes.string,
-  itemRequestCount: PropTypes.number,
-  validateAction: PropTypes.func,
-  handleError: PropTypes.func,
-};
-
-jest.mock('../ModalContent', () => ModalContentMock);
-
+jest.mock('../ModalContent', () => ({ loanAction, itemRequestCount, validateAction, handleError }) => (
+  <>
+    <div>{loanAction}-{itemRequestCount}</div>
+    <button type="button" data-testid="close-dialog" onClick={() => handleError('No fee/fine owner found for item\'s permanent location')}>handleError</button>
+    <button type="button" data-testid="close-dialog" onClick={() => validateAction()}>close</button>
+  </>),
+);
 
 const renderLoanActionDialog = (props) => renderWithRouter(<LoanActionDialog {...props} />);
 

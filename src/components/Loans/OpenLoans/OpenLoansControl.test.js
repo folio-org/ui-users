@@ -23,7 +23,7 @@ jest.mock('../../util', () => {
   };
 });
 
-const ModalContentMock = ({ buildRecords,
+function ModalContentMock({ buildRecords,
   feeFineCount,
   renewSelected,
   toggleColumn,
@@ -35,7 +35,7 @@ const ModalContentMock = ({ buildRecords,
   showChangeDueDateDialog,
   onClosePatronBlockedModal,
   openPatronBlockedModal,
-  handleOptionsChange }) => {
+  handleOptionsChange }) {
   let loansLength = 0;
   const [loanPolicies, setLoanPolicies] = useState('');
 
@@ -70,7 +70,7 @@ const ModalContentMock = ({ buildRecords,
       <button type="button" data-testid="close-dialog" onClick={() => handleOptionsChange({ loan, action: 'feefineDetails', itemRequestCount: 10 })}>feefineDetails</button>
       <button type="button" data-testid="close-dialog" onClick={() => handleOptionsChange({ loan, action: 'renew', itemRequestCount: 10 })}>renew</button>
     </>);
-};
+}
 ModalContentMock.propTypes = {
   buildRecords: PropTypes.func,
   feeFineCount: PropTypes.func,

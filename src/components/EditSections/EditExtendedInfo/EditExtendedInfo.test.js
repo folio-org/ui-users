@@ -72,11 +72,11 @@ const props = {
   uniquenessValidator: {},
   stripes: buildStripes(),
 };
-const DepartmentsName = ({ departments }) => {
+function DepartmentsName({ departments }) {
   return departments.map((dep) => {
     return <><div>{dep.id}</div><div>{dep.name}</div></>;
   });
-};
+}
 
 DepartmentsName.propTypes = {
   departments: PropTypes.arrayOf(PropTypes.object),
@@ -84,11 +84,11 @@ DepartmentsName.propTypes = {
 
 jest.mock('./DepartmentsNameEdit', () => DepartmentsName);
 
-const RequestPreferencesEditMock = ({ addressTypes }) => {
+function RequestPreferencesEditMock({ addressTypes }) {
   return addressTypes.map((dep) => {
     return <><div>{dep.id}</div><div>{dep.addressType}</div></>;
   });
-};
+}
 
 RequestPreferencesEditMock.propTypes = {
   addressTypes: PropTypes.arrayOf(PropTypes.object),
@@ -96,9 +96,9 @@ RequestPreferencesEditMock.propTypes = {
 
 jest.mock('./RequestPreferencesEdit', () => RequestPreferencesEditMock);
 
-const CreateResetPasswordControlMock = ({ email, userId }) => {
+function CreateResetPasswordControlMock({ email, userId }) {
   return <><div>{email}</div><div>{userId}</div></>;
-};
+}
 
 CreateResetPasswordControlMock.propTypes = {
   email: PropTypes.string,
