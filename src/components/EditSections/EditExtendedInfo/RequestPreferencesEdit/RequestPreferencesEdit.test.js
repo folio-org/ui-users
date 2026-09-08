@@ -90,7 +90,7 @@ describe('request preference point', () => {
       ],
       defaultDeliveryAddressTypeId: 'addressType1'
     }, { rerender: true });
-    expect(setFieldValueMock).toBeCalled();
+    expect(setFieldValueMock).toHaveBeenCalled();
   });
   it('defaultPickupServicePoint value should be changed', async () => {
     renderRequestPreferencesEdit(props);

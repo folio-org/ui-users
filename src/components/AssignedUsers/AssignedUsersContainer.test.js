@@ -225,6 +225,6 @@ describe('handle mutations', () => {
     expect(screen.getByText('AssignedUsersList')).toBeInTheDocument();
 
     userEvent.click(screen.getByText('Assign/Unassign'));
-    await waitFor(() => expect(mockRefetch).toBeCalledTimes(scenario === 'no changes' ? 0 : 1));
+    await waitFor(() => expect(mockRefetch).toHaveBeenCalledTimes(scenario === 'no changes' ? 0 : 1));
   });
 });

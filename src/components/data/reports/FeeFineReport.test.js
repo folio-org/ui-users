@@ -58,7 +58,7 @@ describe('FeeFineReport', () => {
         try {
           fee.toCSV();
         } catch (error) {
-          expect(toCSVSpy).toThrowError("Cannot read properties of undefined (reading 'columnsMap')");
+          expect(toCSVSpy).toThrow("Cannot read properties of undefined (reading 'columnsMap')");
         }
       });
     });
@@ -81,4 +81,3 @@ describe('FeeFineReport', () => {
     });
   });
 });
-

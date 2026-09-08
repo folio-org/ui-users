@@ -349,7 +349,7 @@ describe('Given ClosedLoans', () => {
     });
 
     it('fires getChargeFineToLoanPath with proper params', () => {
-      expect(getChargeFineToLoanPath).toBeCalledWith('mock-match-params-id', 'b6475706-4505-4b20-9ed0-aadcda2b72ee');
+      expect(getChargeFineToLoanPath).toHaveBeenCalledWith('mock-match-params-id', 'b6475706-4505-4b20-9ed0-aadcda2b72ee');
     });
 
     it('should trigger push', () => {

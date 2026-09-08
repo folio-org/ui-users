@@ -12,7 +12,7 @@ import {
   ERROR_MESSAGE_TRANSLATION_ID_BY_BACKEND_ERROR_CODES,
 } from '../../constants';
 
-const BulkRenewalDialogMock = ({ errorMessages }) => {
+function BulkRenewalDialogMock({ errorMessages }) {
   const err = errorMessages?.[1];
   return (
     <div>
@@ -20,7 +20,9 @@ const BulkRenewalDialogMock = ({ errorMessages }) => {
       <span data-testid="error-message">{err?.props?.values?.message ?? ''}</span>
     </div>
   );
-};
+
+  return <div>{errorMessages?.[1]?.props?.values?.message ?? ''}</div>;
+}
 
 jest.mock('../BulkRenewalDialog', () => BulkRenewalDialogMock);
 

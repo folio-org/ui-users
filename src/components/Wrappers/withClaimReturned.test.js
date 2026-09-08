@@ -39,13 +39,14 @@ const props = {
   }
 };
 
-const LoanActionDialogMock = ({ open, onClose, validateAction }) => (
+function LoanActionDialogMock({ open, onClose, validateAction }) {
+  return (
   open && (
   <>
     <button type="button" data-testid="close-dialog" onClick={() => onClose()}>close</button>
     <button type="button" data-testid="validate-dialog" onClick={() => { validateAction(loan, props); }}>Validate</button>
-  </>)
-);
+  </>));
+}
 LoanActionDialogMock.propTypes = {
   onClose: PropTypes.func,
   open: PropTypes.bool,

@@ -171,7 +171,7 @@ describe('ActoinsDropdown component', () => {
 
         fireEvent.click(screen.queryByText('ui-users.loans.markAsMissing'));
 
-        expect(mockHandleOptionsChange).toBeCalledWith({
+        expect(mockHandleOptionsChange).toHaveBeenCalledWith({
           loan: propsWithClaimedReturned.loan,
           action:'markAsMissing',
           itemRequestCount: propsWithClaimedReturned.itemRequestCount,
@@ -196,7 +196,7 @@ describe('ActoinsDropdown component', () => {
 
         fireEvent.click(screen.queryByText('ui-users.renew'));
 
-        expect(mockHandleOptionsChange).toBeCalledWith({ loan: props.loan, action: 'renew' });
+        expect(mockHandleOptionsChange).toHaveBeenCalledWith({ loan: props.loan, action: 'renew' });
       });
     });
 
@@ -206,7 +206,7 @@ describe('ActoinsDropdown component', () => {
 
         fireEvent.click(screen.queryByText('ui-users.loans.claimReturned'));
 
-        expect(mockHandleOptionsChange).toBeCalledWith({ loan: props.loan, action: 'claimReturned', itemRequestCount: props.itemRequestCount });
+        expect(mockHandleOptionsChange).toHaveBeenCalledWith({ loan: props.loan, action: 'claimReturned', itemRequestCount: props.itemRequestCount });
       });
     });
 
@@ -216,7 +216,7 @@ describe('ActoinsDropdown component', () => {
 
         fireEvent.click(screen.queryByText('stripes-smart-components.cddd.changeDueDate'));
 
-        expect(mockHandleOptionsChange).toBeCalledWith({ loan: props.loan, action: 'changeDueDate' });
+        expect(mockHandleOptionsChange).toHaveBeenCalledWith({ loan: props.loan, action: 'changeDueDate' });
       });
     });
 
@@ -226,7 +226,7 @@ describe('ActoinsDropdown component', () => {
 
         fireEvent.click(screen.queryByText('ui-users.loans.declareLost'));
 
-        expect(mockHandleOptionsChange).toBeCalledWith({ loan: props.loan, action:'declareLost', itemRequestCount: props.itemRequestCount });
+        expect(mockHandleOptionsChange).toHaveBeenCalledWith({ loan: props.loan, action:'declareLost', itemRequestCount: props.itemRequestCount });
       });
     });
 
@@ -236,7 +236,7 @@ describe('ActoinsDropdown component', () => {
 
         fireEvent.click(screen.queryByText('ui-users.loans.feeFineDetails'));
 
-        expect(mockHandleOptionsChange).toBeCalledWith({ loan: props.loan, action: 'feefineDetails' });
+        expect(mockHandleOptionsChange).toHaveBeenCalledWith({ loan: props.loan, action: 'feefineDetails' });
       });
     });
   });

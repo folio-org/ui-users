@@ -7,16 +7,24 @@ import renderWithRouter from 'helpers/renderWithRouter';
 import account from 'fixtures/account';
 import openLoans from 'fixtures/openLoans';
 import okapiCurrentUser from 'fixtures/okapiCurrentUser';
+import { calculateSortParams } from '../../components/util';
+import FeeFineReport from '../../components/data/reports/FeeFineReport';
 
 import AccountDetails from './AccountDetails';
 
 jest.unmock('@folio/stripes/components');
 jest.mock('../../components/Accounts/Actions/FeeFineActions', () => (prop) => <div><button type="button" onClick={() => prop.handleEdit()}>handleEdit</button></div>);
 jest.mock('../../components/util/isRefundAllowed', () => jest.fn().mockReturnValue(true));
-
-const spyOnCalculateSortParams = jest.spyOn(require('../../components/util/util'), 'calculateSortParams');
-
-const spyOnFeeFineReport = jest.spyOn(require('../../components/data/reports/FeeFineReport'), 'default');
+jest.mock('../../components/util', () => {
+  const actual = jest.requireActual('../../components/util');
+  return {
+    ...actual,
+    calculateSortParams: jest.fn(actual.calculateSortParams),
+  };
+});
+jest.mock('../../components/data/reports/FeeFineReport', () => jest.fn().mockImplementation(() => ({
+  toCSV: jest.fn(),
+})));
 
 const history = createMemoryHistory();
 const mockGET = jest.fn();
@@ -198,27 +206,27 @@ describe('Account Details', () => {
   it('FeeFineReport should be called when exportAccountActionsHistoryReport is clicked', async () => {
     renderAccountDetails({ account: accountWithAdditionalDetails });
     await userEvent.click(document.getElementById('exportAccountActionsHistoryReport'));
-    expect(spyOnFeeFineReport).toBeCalled();
+    expect(FeeFineReport).toHaveBeenCalled();
   });
 
   it('calculateSortParams should be called when clicking column headers', async () => {
     renderAccountDetails({ account: accountWithAdditionalDetails });
     await userEvent.click(screen.getByRole('button', { name: 'ui-users.details.columns.date' }));
-    expect(spyOnCalculateSortParams).toBeCalledTimes(1);
+    expect(calculateSortParams).toHaveBeenCalledTimes(1);
     await userEvent.click(screen.getByRole('button', { name: 'ui-users.details.columns.action' }));
-    expect(spyOnCalculateSortParams).toBeCalledTimes(2);
+    expect(calculateSortParams).toHaveBeenCalledTimes(2);
     await userEvent.click(screen.getByRole('button', { name: 'ui-users.details.columns.amount' }));
-    expect(spyOnCalculateSortParams).toBeCalledTimes(3);
+    expect(calculateSortParams).toHaveBeenCalledTimes(3);
     await userEvent.click(screen.getByRole('button', { name: 'ui-users.details.columns.balance' }));
-    expect(spyOnCalculateSortParams).toBeCalledTimes(4);
+    expect(calculateSortParams).toHaveBeenCalledTimes(4);
     await userEvent.click(screen.getByRole('button', { name: 'ui-users.details.columns.transactioninfo' }));
-    expect(spyOnCalculateSortParams).toBeCalledTimes(5);
+    expect(calculateSortParams).toHaveBeenCalledTimes(5);
     await userEvent.click(screen.getByRole('button', { name: 'ui-users.details.columns.source' }));
-    expect(spyOnCalculateSortParams).toBeCalledTimes(6);
+    expect(calculateSortParams).toHaveBeenCalledTimes(6);
   });
   it('GET method should be called when the handleEdit button is clicked', async () => {
     renderAccountDetails({ account: accountWithAdditionalDetails });
     await userEvent.click(screen.getByRole('button', { name: 'handleEdit' }));
-    expect(mockGET).toBeCalled();
+    expect(mockGET).toHaveBeenCalled();
   });
 });

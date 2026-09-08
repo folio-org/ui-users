@@ -94,7 +94,7 @@ describe('Filters component', () => {
 
         fireEvent.click(screen.getByText('mock-loan'));
 
-        expect(props.mutator.query.update).toBeCalledWith({ loan: null });
+        expect(props.mutator.query.update).toHaveBeenCalledWith({ loan: null });
       });
     });
   });

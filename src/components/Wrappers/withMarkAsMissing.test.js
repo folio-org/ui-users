@@ -8,9 +8,11 @@ import loans from 'fixtures/openLoans';
 
 import withMarkAsMissing from './withMarkAsMissing';
 
-const LoanActionDialogMock = ({ open, onClose }) => (
+function LoanActionDialogMock({ open, onClose }) {
+  return (
   open && <button type="button" data-testid="close-dialog" onClick={() => onClose()}>close</button>
-);
+  );
+}
 LoanActionDialogMock.propTypes = {
   onClose: PropTypes.func,
   open: PropTypes.bool,

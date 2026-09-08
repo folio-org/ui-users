@@ -159,10 +159,6 @@ describe('UserRoleModal', () => {
   });
 
   it('should reset all filters', async () => {
-    const actual = jest.requireActual('./useRolesModalFilters');
-    const mockFunction = jest.spyOn(actual, 'default');
-    mockFunction.mockReturnValue({ filters: {}, onChangeFilter: jest.fn(), onClearFilter: jest.fn(), resetFilters: jest.fn() });
-
     renderComponent({
       isOpen: true,
       onClose: mockOnClose,
@@ -173,7 +169,7 @@ describe('UserRoleModal', () => {
 
     await userEvent.click(document.querySelector('[data-test-reset-all-button="true"]'));
 
-    expect(mockFunction).toBeDefined();
+    expect(document.querySelector('[data-test-reset-all-button="true"]')).toBeInTheDocument();
   });
 
   it('should toggle filters pane', async () => {
