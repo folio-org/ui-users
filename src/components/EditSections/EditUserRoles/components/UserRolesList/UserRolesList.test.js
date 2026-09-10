@@ -1,6 +1,10 @@
 import { cleanup, render } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import UserRolesList from './UserRolesList';
+import { Router } from 'react-router-dom';
+import { createMemoryHistory } from 'history';
+
+const history = createMemoryHistory();
 
 jest.unmock('@folio/stripes/components');
 
@@ -10,7 +14,13 @@ const filteredRoles = [{ id: '1', name: 'role1' }];
 const mockToggleRole = jest.fn();
 const mockToggleAllRoles = jest.fn();
 
-const renderComponent = (props) => render(<UserRolesList {...props} />);
+const renderComponent = (props) => {
+  return render(
+    <Router history={history}>
+      <UserRolesList {...props} />
+    </Router>
+  );
+};
 
 describe('UserRolesList', () => {
   beforeEach(() => {
