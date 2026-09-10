@@ -182,7 +182,7 @@ function EditUserRoles({ accordionId, form: { change }, user, setAssignedRoleIds
                 data-testid="add-roles-button"
                 onClick={() => setIsOpen(true)}
               >
-                <FormattedMessage id="ui-users.roles.button.addUserRole" />
+                <FormattedMessage id="ui-users.roles.addUserRole" />
               </Button>
               <Button data-testid="unassign-all-roles-button" disabled={isEmpty(listItemsData) || isLoadingData} onClick={() => setUnassignModalOpen(true)}><FormattedMessage id="ui-users.roles.unassignAllRoles" /></Button>
             </IfPermission>
