@@ -16,7 +16,6 @@ import IfConsortium from '../IfConsortium';
 import IfConsortiumPermission from '../IfConsortiumPermission';
 import { affiliationsShape } from '../../shapes';
 import { getRoleDetailPath } from '../util/util';
-// const roleDetailPath = (id) => `/settings/authorization-roles/${id}`;
 
 class RenderRoles extends React.Component {
   static propTypes = {
@@ -53,7 +52,7 @@ class RenderRoles extends React.Component {
       listedRoles,
     } = this.props;
     const listFormatter = item => <li key={item.id}>
-      <TextLink to={roleDetailPath(item.id)} target="_blank">{item.name}</TextLink>
+      <TextLink to={getRoleDetailPath(item.id)} target="_blank">{item.name}</TextLink>
     </li>;
     const noPermissionsFound = <FormattedMessage id="ui-users.roles.empty" />;
 
