@@ -11,8 +11,7 @@ const email = '002';
 
 const smsUser = {
   personal: {
-    preferredContactTypeId: sms,
-    preferredContactTypeIds: [],
+    preferredContactTypeIds: [sms],
     mobilePhone: '555-1234',
   },
 };
@@ -22,23 +21,18 @@ IfPermission.mockImplementation(({ children }) => children);
 describe('shouldAllowSendingText', () => {
   test.each([
     [
-      'preferredContactTypeId is sms with mobile phone',
-      { preferredContactTypeId: sms, preferredContactTypeIds: [], mobilePhone: '555-1234' },
-      true,
-    ],
-    [
       'preferredContactTypeIds includes sms with mobile phone',
-      { preferredContactTypeId: email, preferredContactTypeIds: [sms], mobilePhone: '555-1234' },
+      { preferredContactTypeIds: [sms], mobilePhone: '555-1234' },
       true,
     ],
     [
-      'preferred contact type is not sms',
-      { preferredContactTypeId: email, preferredContactTypeIds: [], mobilePhone: '555-1234' },
+      'preferred contact types does not contain sms',
+      { preferredContactTypeIds: [], mobilePhone: '555-1234' },
       false,
     ],
     [
       'mobile phone is absent',
-      { preferredContactTypeId: sms, preferredContactTypeIds: [], mobilePhone: '' },
+      { preferredContactTypeIds: [sms], mobilePhone: '' },
       false,
     ],
   ])('%s', (_, personal, expected) => {
@@ -63,8 +57,7 @@ describe('ActionMenuSendTextMessageButton', () => {
       'disabled',
       {
         personal: {
-          preferredContactTypeId: email,
-          preferredContactTypeIds: [],
+          preferredContactTypeIds: [email],
           mobilePhone: '555-1234',
         },
       },

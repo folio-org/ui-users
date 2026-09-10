@@ -54,6 +54,7 @@ class UserRecordContainer extends React.Component {
       path: 'message-delivery',
       fetch: false,
       throwErrors: false,
+      clientGeneratePk: false,
     },
     hasManualPatronBlocks: {
       type: 'okapi',
