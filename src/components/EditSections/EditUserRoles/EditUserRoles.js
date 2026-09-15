@@ -8,17 +8,18 @@ import { OnChange } from 'react-final-form-listeners';
 import { useForm } from 'react-final-form';
 
 import { IfPermission, useStripes } from '@folio/stripes/core';
-import { Accordion, Headline, Badge, Row, Col, List, Button, Icon, ConfirmationModal, Layout } from '@folio/stripes/components';
+import { Accordion, Headline, Badge, Row, Col, List, Button, Icon, ConfirmationModal, Layout, TextLink } from '@folio/stripes/components';
 
 import { useAllRolesData, useUserAffiliations } from '../../../hooks';
 import AffiliationsSelect from '../../AffiliationsSelect/AffiliationsSelect';
 import IfConsortium from '../../IfConsortium';
 import IfConsortiumPermission from '../../IfConsortiumPermission';
 import UserRolesModal from './components/UserRolesModal/UserRolesModal';
-import { isAffiliationsEnabled } from '../../util/util';
+import { isAffiliationsEnabled, getRoleDetailPath } from '../../util/util';
 import { filtersConfig } from './helpers';
 
-function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds, assignedRoleIds, setTenantId, tenantId, initialAssignedRoleIds, isLoadingAffiliationRoles }) {
+
+function EditUserRoles({ accordionId, form: { change }, user, setAssignedRoleIds, assignedRoleIds, setTenantId, tenantId, initialAssignedRoleIds, isLoadingAffiliationRoles }) {
   const stripes = useStripes();
   const form = useForm();
   const [isOpen, setIsOpen] = useState(false);
@@ -107,14 +108,14 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
         data-test-user-role={role.id}
         key={role.id}
       >
-        {role.name}
+        <TextLink to={getRoleDetailPath(role.id)} target="_blank">{role.name}</TextLink>
         <IfPermission perm="ui-authorization-roles.users.settings.manage">
           <Button
             buttonStyle="fieldControl"
             align="end"
             type="button"
             id={`clickable-remove-user-role-${role.id}`}
-            aria-label={`${intl.formatMessage({ id:'ui-users.roles.deleteRole' })}: ${role.name}`}
+            aria-label={`${intl.formatMessage({ id: 'ui-users.roles.deleteRole' })}: ${role.name}`}
             onClick={() => fields.remove(index)}
           >
             <Icon icon="times-circle" />
@@ -181,7 +182,7 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
                 data-testid="add-roles-button"
                 onClick={() => setIsOpen(true)}
               >
-                <FormattedMessage id="ui-users.roles.button.addUserRole" />
+                <FormattedMessage id="ui-users.roles.addUserRole" />
               </Button>
               <Button data-testid="unassign-all-roles-button" disabled={isEmpty(listItemsData) || isLoadingData} onClick={() => setUnassignModalOpen(true)}><FormattedMessage id="ui-users.roles.unassignAllRoles" /></Button>
             </IfPermission>
