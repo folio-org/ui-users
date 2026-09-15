@@ -8,6 +8,7 @@ import {
   orderBy,
 } from 'lodash';
 import { injectIntl } from 'react-intl';
+import { v4 } from 'uuid';
 
 import {
   AppIcon,
@@ -73,9 +74,11 @@ import LostItemsLink from '../../components/LostItemsLink';
 import IfConsortiumPermission from '../../components/IfConsortiumPermission';
 import ActionMenuEditButton from './components/ActionMenuEditButton';
 import ActionMenuDeleteButton from './components/ActionMenuDeleteButton';
+import ActionMenuSendTextMessageButton from './components/ActionMenuSendTextMessageButton';
 import { UserVersionHistory, UserVersionHistoryButton } from './components/UserVersionHistory';
 import OpenTransactionModal from './components/OpenTransactionModal';
 import DeleteUserModal from './components/DeleteUserModal';
+import SendTextMessageModal from './components/SendTextMessageModal';
 import ExportFeesFinesReportButton from './components';
 import {
   CUSTOM_FIELDS_SECTION,
@@ -127,6 +130,9 @@ class UserDetail extends React.Component {
       }),
       openTransactions: PropTypes.shape({
         GET: PropTypes.func,
+      }),
+      messageDelivery: PropTypes.shape({
+        POST: PropTypes.func,
       }),
     }),
     resources: PropTypes.shape({
@@ -214,6 +220,7 @@ class UserDetail extends React.Component {
       patronBlocks: [],
       lastUpdate: null,
       showOpenTransactionModal: false,
+      showSendTextMessageModal: false,
       showDeleteUserModal: false,
       isVersionHistoryOpen: false,
       sections: {
@@ -454,6 +461,12 @@ class UserDetail extends React.Component {
     });
   }
 
+  showSendTextMessageModal() {
+    this.setState({
+      showSendTextMessageModal: true,
+    });
+  }
+
   showDeleteUserModal(json) {
     this.setState({
       showDeleteUserModal: true,
@@ -466,6 +479,42 @@ class UserDetail extends React.Component {
       showDeleteUserModal: false,
       showOpenTransactionModal: false,
     });
+  }
+
+  doCloseSendTextMessageModal = () => {
+    this.setState({
+      showSendTextMessageModal: false,
+    });
+  }
+
+  handleSendTextMessage = (message) => {
+    const { mutator, intl } = this.props;
+    const user = this.getUser();
+    const fullNameOfUser = getFullName(user);
+
+    return mutator.messageDelivery.POST({
+      notificationId: v4(), // required by API
+      recipientUserId: user.id,
+      messages: [{
+        deliveryChannel: 'sms',
+        body: message
+      }],
+    })
+      .then(() => {
+        this.context.sendCallout({
+          type: 'success',
+          message: intl.formatMessage({ id: 'ui-users.details.sendTextMessage.successCallout' }, { name: fullNameOfUser }),
+        });
+      })
+      .catch(() => {
+        this.context.sendCallout({
+          type: 'error',
+          message: intl.formatMessage({ id: 'ui-users.details.sendTextMessage.errorCallout' }, { name: fullNameOfUser }),
+        });
+      })
+      .finally(() => {
+        this.doCloseSendTextMessageModal();
+      });
   }
 
   selectModal(transactions) {
@@ -519,7 +568,8 @@ class UserDetail extends React.Component {
       || stripes.hasPerm('ui-users.feesfines.actions.all')
       || stripes.hasPerm('ui-requests.create')
       || stripes.hasPerm('ui-users.delete,ui-users.open-transactions.view')
-      || stripes.hasPerm('ui-users.profile-pictures.all');
+      || stripes.hasPerm('ui-users.profile-pictures.all')
+      || stripes.hasPerm('sender.message-delivery.post');
 
     if (showActionMenu && !isVirtualPatron) {
       return (
@@ -557,6 +607,15 @@ class UserDetail extends React.Component {
               />
             )
           }
+          <IfInterface name="message-delivery">
+            <ActionMenuSendTextMessageButton
+              user={user}
+              handleClick={() => {
+                onToggle();
+                this.showSendTextMessageModal();
+              }}
+            />
+          </IfInterface>
           <ActionMenuDeleteButton
             handleDeleteClick={this.handleDeleteClick}
             id={this.props.match.params.id}
@@ -1040,6 +1099,12 @@ class UserDetail extends React.Component {
               username={fullNameOfUser}
             />
             }
+            {this.state.showSendTextMessageModal && (
+              <SendTextMessageModal
+                onCloseModal={this.doCloseSendTextMessageModal}
+                onSubmit={({ message }) => this.handleSendTextMessage(message)}
+              />
+            )}
           </>
         </HasCommand>
       );
