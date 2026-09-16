@@ -43,47 +43,119 @@ const initialProps = {
 };
 
 describe('Filters', () => {
-  it('Component render testing', () => {
+  it('should check component render', () => {
     renderFilters(initialProps);
+
     expect(screen.getByText('ui-users.status')).toBeTruthy();
   });
 
-  it('Checking on change handlers', () => {
+  it('should check on change handlers', () => {
     renderFilters(initialProps);
+
     fireEvent.click(screen.getByText('ui-users.filters.status.inactive'));
+
     expect(stateMock).toHaveBeenCalled();
   });
 
-  it('Checking clear Group', () => {
-    renderFilters(initialProps);
+  it('should check clear Group', () => {
+    const props = { ...initialProps, activeFilters: { active: ['true'] } };
+
+    renderFilters(props);
+
     fireEvent.click(screen.getAllByRole('button', { name: 'stripes-components.filterGroups.clearFilterSetLabel' })[0]);
+
     expect(stateMock).toHaveBeenCalled();
   });
 
-  it('Checking presence of patronGroup filter', () => {
+  it('should check presence of patronGroup filter', () => {
     renderFilters(initialProps);
+
     expect(screen.getByText('ui-users.information.patronGroup')).toBeInTheDocument();
   });
 
-  it('Checking presence of tags filter', () => {
+  it('should check presence of tags filter', () => {
     renderFilters(initialProps);
+
     expect(screen.getByText('ui-users.tags')).toBeInTheDocument();
   });
 
-  it('Checking presence of departments filter', () => {
+  it('should check presence of departments filter', () => {
     renderFilters(initialProps);
+
     expect(screen.getByText('ui-users.departments')).toBeInTheDocument();
   });
 
   it('should display user-type filter for consortia tenants', () => {
     isConsortiumEnabled.mockReturnValue(true);
+
     renderFilters(initialProps);
+
     expect(screen.getByText('ui-users.userType')).toBeInTheDocument();
   });
 
   it('should hide user-types filter for non-consortia tenants', () => {
     isConsortiumEnabled.mockReturnValue(false);
+
     renderFilters(initialProps);
+
     expect(screen.queryByText('ui-users.userType')).not.toBeInTheDocument();
+  });
+
+  describe('displayClearButton conditional behavior', () => {
+    it('should not show any clear buttons when no filters are active', () => {
+      renderFilters(initialProps);
+
+      expect(screen.queryAllByRole('button', { name: 'stripes-components.filterGroups.clearFilterSetLabel' })).toHaveLength(0);
+    });
+
+    it('should show clear button for status accordion only when active filter is set', () => {
+      const props = { ...initialProps, activeFilters: { active: ['true'] } };
+
+      renderFilters(props);
+
+      expect(screen.getAllByRole('button', { name: 'stripes-components.filterGroups.clearFilterSetLabel' })).toHaveLength(1);
+    });
+
+    it('should show clear button for patron group accordion only when pg filter is set', () => {
+      const props = { ...initialProps, activeFilters: { pg: ['idtest'] } };
+
+      renderFilters(props);
+
+      expect(screen.getAllByRole('button', { name: 'stripes-components.filterGroups.clearFilterSetLabel' })).toHaveLength(1);
+    });
+
+    it('should show clear button for departments accordion only when departments filter is set', () => {
+      const props = { ...initialProps, activeFilters: { departments: ['idtest1'] } };
+
+      renderFilters(props);
+
+      expect(screen.getAllByRole('button', { name: 'stripes-components.filterGroups.clearFilterSetLabel' })).toHaveLength(1);
+    });
+
+    it('should show clear button for tags accordion only when tags filter is set', () => {
+      const props = { ...initialProps, activeFilters: { tags: ['labeltest'] } };
+
+      renderFilters(props);
+
+      expect(screen.getAllByRole('button', { name: 'stripes-components.filterGroups.clearFilterSetLabel' })).toHaveLength(1);
+    });
+
+    it('should show clear button for user types accordion only when userType filter is set', () => {
+      isConsortiumEnabled.mockReturnValue(true);
+
+      const props = { ...initialProps, activeFilters: { userType: ['patron'] } };
+
+      renderFilters(props);
+
+      expect(screen.getAllByRole('button', { name: 'stripes-components.filterGroups.clearFilterSetLabel' })).toHaveLength(1);
+    });
+
+    it('should show clear buttons for each accordion that has active filters', () => {
+      const props = { ...initialProps, activeFilters: { active: ['true'], pg: ['idtest'], tags: ['labeltest'] } };
+
+      renderFilters(props);
+
+      expect(screen.getAllByRole('button', { name: 'stripes-components.filterGroups.clearFilterSetLabel' })).toHaveLength(3);
+    });
   });
 });

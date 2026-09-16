@@ -30,13 +30,10 @@
 
 /* reset button wrap - minor alignment adjustment */
 .resetButtonWrap {
-  & [disabled] :global .stripes__icon {
-    fill: rgba(0, 0, 0, 0.62);
-  }
+  color: rgba(0, 0, 0, 0.62);
 
-  &.resetButton {
-    border-color: rgba(0, 0, 0, 0.62);
-    color: rgba(0, 0, 0, 0.62);
+  button {
+    padding: 0 6px 0 3px;
   }
 }
 
