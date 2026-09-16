@@ -6,6 +6,7 @@ export { default as useUserAffiliations } from './useUserAffiliations';
 export { default as useUserAffiliationsMutation } from './useUserAffiliationsMutation';
 export { default as useUserTenantPermissions } from './useUserTenantPermissions';
 export { default as useUserTenantRoles } from './useUserTenantRoles';
+export { default as useNonRoleUserCapabilities } from './useNonRoleUserCapabilities';
 export { default as useLocalizedCurrency } from './useLocalizedCurrency';
 export { default as useNumberGeneratorOptions } from './useNumberGeneratorOptions';
 export { default as useAllRolesData } from './useAllRolesData';

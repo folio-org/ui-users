@@ -1,6 +1,6 @@
 {
   "name": "@folio/users",
-  "version": "13.1.0",
+  "version": "14.1.0",
   "description": "User management",
   "repository": "folio-org/ui-users",
   "publishConfig": {
@@ -135,7 +135,9 @@
         "permissionName": "ui-users.open-transactions.view",
         "displayName": "Users: Can check open transactions",
         "description": "Check if user does have any open transactions",
-        "replaces": ["ui-users.opentransactions"],
+        "replaces": [
+          "ui-users.opentransactions"
+        ],
         "subPermissions": [
           "users-bl.transactions.get"
         ],
@@ -159,7 +161,9 @@
         "permissionName": "ui-users.perms.view",
         "displayName": "Users: Can view permissions assigned to users",
         "description": "Also includes basic permissions to view users",
-        "replaces": ["ui-users.viewperms"],
+        "replaces": [
+          "ui-users.viewperms"
+        ],
         "subPermissions": [
           "ui-users.view",
           "perms.users.get",
@@ -171,7 +175,9 @@
         "permissionName": "ui-users.perms.edit",
         "displayName": "Users: Can assign and unassign permissions to users",
         "description": "",
-        "replaces": ["ui-users.editperms"],
+        "replaces": [
+          "ui-users.editperms"
+        ],
         "subPermissions": [
           "ui-users.edit",
           "ui-users.perms.view",
@@ -220,7 +226,9 @@
         "permissionName": "ui-users.user-service-points.view",
         "displayName": "Users: Can view service points assigned to users",
         "description": "Also includes basic permissions to view users",
-        "replaces": ["ui-users.viewuserservicepoints"],
+        "replaces": [
+          "ui-users.viewuserservicepoints"
+        ],
         "subPermissions": [
           "ui-users.view",
           "inventory-storage.service-points.collection.get",
@@ -232,7 +240,9 @@
         "permissionName": "ui-users.user-service-points.edit",
         "displayName": "Users: Can assign and unassign service points to users",
         "description": "",
-        "replaces": ["ui-users.edituserservicepoints"],
+        "replaces": [
+          "ui-users.edituserservicepoints"
+        ],
         "subPermissions": [
           "ui-users.edit",
           "ui-users.user-service-points.view",
@@ -311,7 +321,9 @@
       {
         "permissionName": "ui-users.proxies.view",
         "displayName": "Users: Can view proxies assigned to users",
-        "replaces": ["ui-users.viewproxies"],
+        "replaces": [
+          "ui-users.viewproxies"
+        ],
         "subPermissions": [
           "ui-users.view",
           "proxiesfor.collection.get"
@@ -322,7 +334,9 @@
         "permissionName": "ui-users.proxies.all",
         "displayName": "Users: Can create, edit and remove proxies",
         "description": "",
-        "replaces": ["ui-users.editproxies"],
+        "replaces": [
+          "ui-users.editproxies"
+        ],
         "subPermissions": [
           "ui-users.edit",
           "ui-users.proxies.view",
@@ -561,7 +575,9 @@
       {
         "permissionName": "ui-users.accounts.all",
         "displayName": "Fee/Fine History: Can create, edit and remove accounts",
-        "replaces": ["ui-users.accounts"],
+        "replaces": [
+          "ui-users.accounts"
+        ],
         "subPermissions": [
           "accounts.collection.get",
           "accounts.item.delete",
@@ -581,7 +597,9 @@
       {
         "permissionName": "ui-users.fee-fine-actions.all",
         "displayName": "Fee/Fine Details: Can create, edit and remove fee/fine actions",
-        "replaces": ["ui-users.feefineactions"],
+        "replaces": [
+          "ui-users.feefineactions"
+        ],
         "subPermissions": [
           "feefineactions.collection.get",
           "feefineactions.item.delete",
@@ -616,7 +634,9 @@
       {
         "permissionName": "ui-users.manual-pay.execute",
         "displayName": "Fees/Fines: Can pay",
-        "replaces": ["ui-users.manual_pay"],
+        "replaces": [
+          "ui-users.manual_pay"
+        ],
         "subPermissions": [
           "ui-users.accounts.all",
           "ui-users.fee-fine-actions.all",
@@ -634,7 +654,9 @@
       {
         "permissionName": "ui-users.manual-waive.execute",
         "displayName": "Fees/Fines: Can waive",
-        "replaces": ["ui-users.manual_waive"],
+        "replaces": [
+          "ui-users.manual_waive"
+        ],
         "subPermissions": [
           "ui-users.accounts.all",
           "ui-users.fee-fine-actions.all",
@@ -652,7 +674,9 @@
       {
         "permissionName": "ui-users.manual-charge.execute",
         "displayName": "Fees/Fines: Can charge",
-        "replaces": ["ui-users.manual_charge"],
+        "replaces": [
+          "ui-users.manual_charge"
+        ],
         "subPermissions": [
           "owners.collection.get",
           "owners.item.get",
@@ -665,7 +689,9 @@
       {
         "permissionName": "ui-users.patron-blocks.all",
         "displayName": "Users: Can create, edit and remove patron blocks",
-        "replaces": ["ui-users.patron_blocks"],
+        "replaces": [
+          "ui-users.patron_blocks"
+        ],
         "subPermissions": [
           "manualblocks.collection.get",
           "manual-block-templates.collection.get",
@@ -793,7 +819,9 @@
         "permissionName": "ui-users.loans-renew.create",
         "displayName": "Users: User loans renew",
         "description": "Also includes backend permissions to perform loans renew",
-        "replaces": ["ui-users.loans.renew"],
+        "replaces": [
+          "ui-users.loans.renew"
+        ],
         "subPermissions": [
           "ui-users.loans.view",
           "circulation.renew-by-barcode.post",
@@ -805,7 +833,9 @@
         "permissionName": "ui-users.loans-renew-override.create",
         "displayName": "Users: User loans renew through override",
         "description": "Also includes backend permissions to perform loans renew through override",
-        "replaces": ["ui-users.loans.renew-override"],
+        "replaces": [
+          "ui-users.loans.renew-override"
+        ],
         "subPermissions": [
           "circulation.override-renewal-block.post"
         ],
@@ -827,7 +857,9 @@
         "permissionName": "ui-users.loans-declare-item-lost.execute",
         "displayName": "Users: User loans declare lost",
         "description": "Also includes backend permissions to declare items lost",
-        "replaces": ["ui-users.loans.declare-item-lost"],
+        "replaces": [
+          "ui-users.loans.declare-item-lost"
+        ],
         "subPermissions": [
           "circulation.loans.declare-item-lost.post",
           "circulation-bff.loans.declare-item-lost.execute",
@@ -842,7 +874,9 @@
         "permissionName": "ui-users.loans-declare-claimed-returned-item-as-missing.execute",
         "displayName": "Users: User loans mark claimed returned missing",
         "description": "Also includes backend permission to declare claimed returned item as missing",
-        "replaces": ["ui-users.loans.declare-claimed-returned-item-as-missing"],
+        "replaces": [
+          "ui-users.loans.declare-claimed-returned-item-as-missing"
+        ],
         "subPermissions": [
           "circulation.loans.declare-claimed-returned-item-as-missing.post",
           "circulation-bff.loans.declare-claimed-returned-item-as-missing.execute",
@@ -857,7 +891,9 @@
         "permissionName": "ui-users.loans-claim-item-returned.execute",
         "displayName": "Users: User loans claim returned",
         "description": "Also includes backend permissions to claim items returned",
-        "replaces": ["ui-users.loans.claim-item-returned"],
+        "replaces": [
+          "ui-users.loans.claim-item-returned"
+        ],
         "subPermissions": [
           "circulation.loans.claim-item-returned.post",
           "circulation-bff.loans.claim-item-returned.execute",
@@ -891,7 +927,9 @@
         "permissionName": "ui-users.loans-due-date.edit",
         "displayName": "Users: User loans change due date",
         "description": "Also includes backend permissions to perform change due date",
-        "replaces": ["ui-users.loans.change-due-date"],
+        "replaces": [
+          "ui-users.loans.change-due-date"
+        ],
         "subPermissions": [
           "circulation.loans.item.put",
           "circulation.renew-by-barcode.post",
@@ -934,7 +972,9 @@
       {
         "permissionName": "ui-users.loans-anonymize.execute",
         "displayName": "Users: User loans anonymize",
-        "replaces": ["ui-users.loans.anonymize"],
+        "replaces": [
+          "ui-users.loans.anonymize"
+        ],
         "subPermissions": [
           "circulation.loans.collection.anonymize.user.post"
         ],
@@ -1027,7 +1067,9 @@
       {
         "permissionName": "ui-users.settings.departments.create-edit-view.edit",
         "displayName": "Settings (Users): Can create, edit, and view departments",
-        "replaces": ["ui-users.settings.departments.create.edit.view"],
+        "replaces": [
+          "ui-users.settings.departments.create.edit.view"
+        ],
         "subPermissions": [
           "ui-users.settings.departments.create",
           "ui-users.settings.departments.edit",
@@ -1049,7 +1091,9 @@
       {
         "permissionName": "ui-users.override-patron-block.execute",
         "displayName": "User: Can override patron blocks",
-        "replaces": ["ui-users.overridePatronBlock"],
+        "replaces": [
+          "ui-users.overridePatronBlock"
+        ],
         "subPermissions": [
           "circulation.override-patron-block.post"
         ],
@@ -1058,7 +1102,9 @@
       {
         "permissionName": "ui-users.override-item-block.execute",
         "displayName": "User: Can override item blocks",
-        "replaces": ["ui-users.overrideItemBlock"],
+        "replaces": [
+          "ui-users.overrideItemBlock"
+        ],
         "subPermissions": [
           "circulation.override-item-limit-block.post",
           "circulation.override-item-not-loanable-block.post"
@@ -1068,7 +1114,9 @@
       {
         "permissionName": "ui-users.cash-drawer-report.execute",
         "displayName": "Users: Create and download Cash drawer reconciliation report",
-        "replaces": ["ui-users.cashDrawerReport"],
+        "replaces": [
+          "ui-users.cashDrawerReport"
+        ],
         "subPermissions": [
           "feesfines.feefine-reports.cash-drawer-reconciliation.post",
           "feesfines.feefine-reports.cash-drawer-reconciliation-source.post"
@@ -1078,7 +1126,9 @@
       {
         "permissionName": "ui-users.financial-transaction-report.execute",
         "displayName": "Users: Create and download Financial transaction detail report",
-        "replaces": ["ui-users.financialTransactionReport"],
+        "replaces": [
+          "ui-users.financialTransactionReport"
+        ],
         "subPermissions": [
           "ui-users.view",
           "feefine-reports.financial-transactions-detail.post",
@@ -1089,7 +1139,9 @@
       {
         "permissionName": "ui-users.manual-process-refunds-report.execute",
         "displayName": "Users: Create and download Refunds to process manually report",
-        "replaces": ["ui-users.manualProcessRefundsReport"],
+        "replaces": [
+          "ui-users.manualProcessRefundsReport"
+        ],
         "subPermissions": [
           "ui-users.view",
           "feefine-reports.refund.post",
@@ -1100,7 +1152,9 @@
       {
         "permissionName": "ui-users.lost-items-requiring-actual-cost.execute",
         "displayName": "Users: Can process lost items requiring actual cost",
-        "replaces": ["ui-users.lost-items.requiring-actual-cost"],
+        "replaces": [
+          "ui-users.lost-items.requiring-actual-cost"
+        ],
         "subPermissions": [
           "ui-users.view",
           "ui-users.loans.view",
@@ -1172,7 +1226,9 @@
       {
         "permissionName": "ui-users.patron-notice-print-jobs.view",
         "displayName": "Users: View patron notice print jobs",
-        "replaces": ["ui-users.view-patron-notice-print-jobs"],
+        "replaces": [
+          "ui-users.view-patron-notice-print-jobs"
+        ],
         "subPermissions": [
           "ui-users.view",
           "batch-print.entries.collection.get",
@@ -1184,7 +1240,9 @@
       {
         "permissionName": "ui-users.patron-notice-print-jobs.delete",
         "displayName": "Users: View and remove patron notice print jobs",
-        "replaces": ["ui-users.remove-patron-notice-print-jobs"],
+        "replaces": [
+          "ui-users.remove-patron-notice-print-jobs"
+        ],
         "subPermissions": [
           "ui-circulation.settings.view-patron-notice-print-jobs",
           "batch-print.entries.item.delete"
@@ -1290,6 +1348,7 @@
     "@folio/stripes": "^10.1.0",
     "@folio/stripes-cli": "^5.0.0",
     "@folio/stripes-erm-components": "^10.1.0",
+    "@folio/stripes-authorization-components": "^2.2.0",
     "@folio/stripes-testing": "^5.0.0",
     "core-js": "^3.6.4",
     "eslint": "^7.32.0",
@@ -1332,6 +1391,7 @@
     "@folio/service-interaction": "^4.0.0",
     "@folio/stripes": "^10.1.0",
     "@folio/stripes-erm-components": "^10.1.0",
+    "@folio/stripes-authorization-components": "^2.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-intl": "^7.1.5",
