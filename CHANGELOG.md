@@ -22,6 +22,7 @@
 * Sort loans in ascending case-insensitive order. Refs UIU-3369.
 * Fix proxy/sponsor record editing crash after adding subsequent items. Refs UIU-3375.
 * Hyperlink roles in the "user roles" Accordion. Refs UIU-3550.
+* Add the ability to send ad-hoc text messages from a user's record. Refs UIU-3572.
 
 ## [13.0.2] (https://github.com/folio-org/ui-users/tree/v13.0.2) (2026-06-12)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v13.0.1...v13.0.2)
