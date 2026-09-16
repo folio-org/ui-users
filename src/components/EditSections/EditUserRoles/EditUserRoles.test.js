@@ -125,7 +125,7 @@ describe('EditUserRoles Component', () => {
 
     useStripes.mockClear().mockReturnValue(STRIPES);
     useAllRolesData.mockClear().mockReturnValue(mockAllRolesData);
-    IfPermission.mockImplementation(({ children }) => children);
+    IfPermission.mockImplementation(({ children }) => (typeof children === 'function' ? children({ hasPermission: true }) : children));
   });
   afterEach(cleanup);
 
@@ -157,14 +157,20 @@ describe('EditUserRoles Component', () => {
   });
 
   it('hides the roles accordion when user doesn\'t have view roles permission', () => {
-    IfPermission.mockImplementation(({ perm, children }) => (perm !== 'ui-authorization-roles.users.settings.view' ? children : null));
+    IfPermission.mockImplementation(({ perm, children }) => {
+      const hasPermission = perm !== 'ui-authorization-roles.users.settings.view';
+      return typeof children === 'function' ? children({ hasPermission }) : (hasPermission ? children : null);
+    });
     const { queryByText } = renderEditRolesAccordion(propsData);
 
     expect(queryByText('ui-users.roles.userRoles')).not.toBeInTheDocument();
   });
 
   it('hides the add role button when user doesn\'t have manage roles permission', () => {
-    IfPermission.mockImplementation(({ perm, children }) => (perm !== 'ui-authorization-roles.users.settings.manage' ? children : null));
+    IfPermission.mockImplementation(({ perm, children }) => {
+      const hasPermission = perm !== 'ui-authorization-roles.users.settings.manage';
+      return typeof children === 'function' ? children({ hasPermission }) : (hasPermission ? children : null);
+    });
     const { getByText, queryByText } = renderEditRolesAccordion(propsData);
 
     expect(getByText('test role')).toBeInTheDocument();

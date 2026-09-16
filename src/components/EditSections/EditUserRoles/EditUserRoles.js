@@ -8,14 +8,15 @@ import { OnChange } from 'react-final-form-listeners';
 import { useForm } from 'react-final-form';
 
 import { IfPermission, useStripes } from '@folio/stripes/core';
-import { Accordion, Headline, Badge, Row, Col, List, Button, Icon, ConfirmationModal, Layout, TextLink } from '@folio/stripes/components';
+import { Accordion, Headline, Badge, Row, Col, List, Button, Icon, ConfirmationModal, Layout } from '@folio/stripes/components';
 
 import { useAllRolesData, useUserAffiliations } from '../../../hooks';
 import AffiliationsSelect from '../../AffiliationsSelect/AffiliationsSelect';
 import IfConsortium from '../../IfConsortium';
 import IfConsortiumPermission from '../../IfConsortiumPermission';
+import RoleNameLink from '../../RoleNameLink';
 import UserRolesModal from './components/UserRolesModal/UserRolesModal';
-import { isAffiliationsEnabled, getRoleDetailPath } from '../../util/util';
+import { isAffiliationsEnabled } from '../../util/util';
 import { filtersConfig } from './helpers';
 
 
@@ -108,7 +109,7 @@ function EditUserRoles({ accordionId, form: { change }, user, setAssignedRoleIds
         data-test-user-role={role.id}
         key={role.id}
       >
-        <TextLink to={getRoleDetailPath(role.id)} target="_blank">{role.name}</TextLink>
+        <RoleNameLink role={role} />
         <IfPermission perm="ui-authorization-roles.users.settings.manage">
           <Button
             buttonStyle="fieldControl"

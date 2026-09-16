@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { getRoleDetailPath } from '../../../../util/util';
 
-import { MultiColumnList, TextLink } from '@folio/stripes/components';
+import { MultiColumnList } from '@folio/stripes/components';
 import CheckboxColumn from '../CheckboxColumn/CheckboxColumn';
+import RoleNameLink from '../../../../RoleNameLink';
 
 const visibleColumns = ['selected', 'roleName', 'status'];
 
@@ -56,9 +56,7 @@ const UserRolesList = ({ assignedUserRoleIds,
           // eslint-disable-next-line react/prop-types
           roleName: role => (
             <div data-test-role-name>
-              <TextLink to={getRoleDetailPath(role.id)} target="_blank">
-                {role.name}
-              </TextLink>
+              <RoleNameLink role={role} />
             </div>
           ),
           status: role => {
