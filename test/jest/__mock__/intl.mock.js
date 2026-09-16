@@ -3,6 +3,9 @@ import React from 'react';
 jest.mock('react-intl', () => {
   const intl = {
     formatMessage: ({ id }) => id,
+    // Real formatList interleaves separators and returns a node array for
+    // non-string values; returning the list as-is keeps assertions readable.
+    formatList: (values) => values,
     formatNumber: (value) => value,
     formatTime: (value) => value,
     formatDisplayName: (value) => value,
