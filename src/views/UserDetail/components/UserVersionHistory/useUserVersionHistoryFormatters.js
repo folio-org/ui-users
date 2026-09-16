@@ -112,8 +112,8 @@ const useUserVersionHistoryFormatters = () => {
   );
 
   const contactTypesMap = useMemo(
-    () => Object.fromEntries(contactTypes.map(type => [type.id, formatMessage({ id: type.desc })])),
-    [formatMessage],
+    () => Object.fromEntries(contactTypes.map(type => [type.value, type.label])),
+    [],
   );
 
   const fieldLabelsMap = useMemo(
@@ -131,7 +131,7 @@ const useUserVersionHistoryFormatters = () => {
       ? formatMessage({ id: 'ui-users.active' })
       : formatMessage({ id: 'ui-users.inactive' })),
     patronGroup: value => patronGroupsMap[value] || value,
-    preferredContactTypeIds: value => formatList(value.map(v => contactTypesMap[v])),
+    preferredContactTypeIds: value => formatList([value ?? []].flat().map(v => contactTypesMap[v] ?? v)),
     expirationDate: renderDate,
     dateOfBirth: renderDate,
     enrollmentDate: renderDate,
