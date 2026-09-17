@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
+import { useStripes } from '@folio/stripes/core';
 
 import {
   Accordion,
@@ -14,7 +15,8 @@ import { useNonRoleUserCapabilities } from '../../../hooks';
 
 const isCapabilitySelected = () => true;
 
-const UserCapabilities = ({ stripes, accordionId, expanded, onToggle }) => {
+const UserCapabilities = ({ accordionId, expanded, onToggle }) => {
+  const stripes = useStripes();
   const { id: userId } = useParams();
 
   const {
@@ -49,9 +51,6 @@ const UserCapabilities = ({ stripes, accordionId, expanded, onToggle }) => {
 };
 
 UserCapabilities.propTypes = {
-  stripes: PropTypes.shape({
-    okapi: PropTypes.shape({ tenant: PropTypes.string }).isRequired,
-  }).isRequired,
   accordionId: PropTypes.string,
   expanded: PropTypes.bool,
   onToggle: PropTypes.func,
