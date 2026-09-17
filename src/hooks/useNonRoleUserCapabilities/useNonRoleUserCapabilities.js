@@ -38,7 +38,7 @@ const useNonRoleUserCapabilities = (userId, tenant = '') => {
   const ky = useOkapiKy({ tenant });
   const [namespace] = useNamespace({ key: 'non-role-user-capabilities' });
 
-  const { data, isLoading: isUserCapabilitiesLoading } = useQuery({
+  const { data, isFetching: isUserCapabilitiesLoading } = useQuery({
     queryKey: [namespace, 'user', userId, tenant],
     queryFn: () => ky.get(`users/${userId}/capabilities`, { searchParams: userCapabilitiesSearchParams }).json(),
     enabled: Boolean(userId),

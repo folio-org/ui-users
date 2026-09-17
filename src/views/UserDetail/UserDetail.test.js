@@ -128,6 +128,7 @@ jest.mock(
     PatronBlock: jest.fn(() => null),
     UserPermissions: jest.fn(() => <div>Permissions accordion</div>),
     UserRoles: jest.fn(() => <div>Roles accordion</div>),
+    UserCapabilities: jest.fn(() => <div>Capabilities accordion</div>),
     UserLoans: jest.fn(() => null),
     UserRequests: jest.fn(() => null),
     UserAccounts: jest.fn(() => null),
