@@ -7,12 +7,13 @@ import {
   Accordion,
   Badge,
   Headline,
-  Loading
+  Loading,
 } from '@folio/stripes/components';
 
 import AffiliationsSelect from '../AffiliationsSelect/AffiliationsSelect';
 import IfConsortium from '../IfConsortium';
 import IfConsortiumPermission from '../IfConsortiumPermission';
+import RoleNameLink from '../RoleNameLink';
 import { affiliationsShape } from '../../shapes';
 
 class RenderRoles extends React.Component {
@@ -49,7 +50,9 @@ class RenderRoles extends React.Component {
     const {
       listedRoles,
     } = this.props;
-    const listFormatter = item => <li key={item.id}>{item.name}</li>;
+    const listFormatter = item => <li key={item.id}>
+      <RoleNameLink role={item} />
+    </li>;
     const noPermissionsFound = <FormattedMessage id="ui-users.roles.empty" />;
 
     return (

@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl';
 
 import { MultiColumnList } from '@folio/stripes/components';
 import CheckboxColumn from '../CheckboxColumn/CheckboxColumn';
+import RoleNameLink from '../../../../RoleNameLink';
 
 const visibleColumns = ['selected', 'roleName', 'status'];
 
@@ -55,7 +56,7 @@ const UserRolesList = ({ assignedUserRoleIds,
           // eslint-disable-next-line react/prop-types
           roleName: role => (
             <div data-test-role-name>
-              {role.name}
+              <RoleNameLink role={role} />
             </div>
           ),
           status: role => {
