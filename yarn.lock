@@ -1861,6 +1861,17 @@
     lodash "^4.17.4"
     prop-types "^15.6.0"
 
+"@folio/plugin-select-application@^2.0.0":
+  version "2.0.1099000000000159"
+  resolved "https://repository.folio.org/repository/npm-folioci/@folio/plugin-select-application/-/plugin-select-application-2.0.1099000000000159.tgz#e9b61ab740918a048d36bdf5365a67dff3411f28"
+  integrity sha512-BSzXeSgphCel5Xynz7J2XyTF5fVOHPKNulbUNLlGti1enGD5skbfpIdgn7bGzccWlqFwoHQxfsP8JrGt6GyMSg==
+  dependencies:
+    "@k-int/stripes-kint-components" "^5.1.1"
+    classnames "^2.2.5"
+    dom-helpers "^3.4.0"
+    lodash "^4.17.11"
+    prop-types "^15.6.0"
+
 "@folio/service-interaction@^4.0.0":
   version "4.2.1099000000000353"
   resolved "https://repository.folio.org/repository/npm-folioci/@folio/service-interaction/-/service-interaction-4.2.1099000000000353.tgz#a91a90e4d6913dcc0d82b63fb620dbff24cff7ea"
@@ -1870,6 +1881,17 @@
     dom-helpers "^3.4.0"
     lodash "^4.17.11"
     prop-types "^15.6.0"
+    react-final-form "^6.3.0"
+
+"@folio/stripes-authorization-components@^2.2.0":
+  version "2.2.1099000000000699"
+  resolved "https://repository.folio.org/repository/npm-folioci/@folio/stripes-authorization-components/-/stripes-authorization-components-2.2.1099000000000699.tgz#094baf78249661975c9841fee1e750dab84dedb9"
+  integrity sha512-X0hh/Sf37wwRL3KbPNWZy4nhIsSd8nueMv3KBqTsOVQKPM2Q0Ztp4CHBPe+CUc66ELYuDgaT7cI+557wTRJwtw==
+  dependencies:
+    "@folio/plugin-select-application" "^2.0.0"
+    classnames "^2.2.6"
+    lodash "^4.17.21"
+    prop-types "^15.7.2"
     react-final-form "^6.3.0"
 
 "@folio/stripes-cli@^5.0.0":
@@ -3019,6 +3041,17 @@
   dependencies:
     "@jsonjoy.com/buffers" "^1.0.0"
     "@jsonjoy.com/codegen" "^1.0.0"
+
+"@k-int/stripes-kint-components@^5.1.1":
+  version "5.37.1"
+  resolved "https://registry.yarnpkg.com/@k-int/stripes-kint-components/-/stripes-kint-components-5.37.1.tgz#e70109aa3627ea2bb80f5e61526468942ab1deea"
+  integrity sha512-kKR2paYUlt4sKrLR2QkS7UNMiIlXryIGAqYl4/s63Rp30M8sdzIONZESlU5zYvHWKDZLttsRlre0TEheV7CqDQ==
+  dependencies:
+    "@rehooks/local-storage" "^2.4.4"
+    compose-function "^3.0.3"
+    react-dropzone "^15.0.0"
+    react-resize-detector "^11.0.0"
+    zustand "^5.0.0"
 
 "@k-int/stripes-kint-components@^5.11.0", "@k-int/stripes-kint-components@^5.30.0":
   version "5.36.1"
