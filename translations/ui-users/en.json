@@ -1296,6 +1296,8 @@
   "patronNoticePrintJobs.updated": "Updated",
   "patronNoticePrintJobs.created": "Created",
   "patronNoticePrintJobs.errors.pdf": "'PDF generation failed",
+  "capabilities.userCapabilities": "User capabilities",
+  "capabilities.empty": "No user capabilities found",
   "roles.userRoles": "User roles",
   "roles.empty": "No user roles found",
   "roles.deleteRole": "Delete user role",

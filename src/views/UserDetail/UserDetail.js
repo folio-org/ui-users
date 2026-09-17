@@ -45,6 +45,7 @@ import {
   PatronBlock,
   UserPermissions,
   UserRoles,
+  UserCapabilities,
   UserLoans,
   UserRequests,
   UserAccounts,
@@ -102,6 +103,7 @@ export const ACCORDION_ID = {
   ACCOUNTS: 'accountsSection',
   PERMISSIONS: 'permissionsSection',
   ROLES: 'rolesSection',
+  CAPABILITIES: 'capabilitiesSection',
   SERVICE_POINTS: 'servicePointsSection',
   NOTES: 'notesAccordion',
   READING_ROOM_ACCESS: 'readingRoomAccessSection',
@@ -235,6 +237,7 @@ class UserDetail extends React.Component {
         [ACCORDION_ID.ACCOUNTS]: false,
         [ACCORDION_ID.PERMISSIONS]: false,
         [ACCORDION_ID.ROLES]: false,
+        [ACCORDION_ID.CAPABILITIES]: false,
         [ACCORDION_ID.SERVICE_POINTS]: false,
         [ACCORDION_ID.NOTES]: false,
         [ACCORDION_ID.CUSTOM_FIELDS]: false,
@@ -434,13 +437,13 @@ class UserDetail extends React.Component {
       <PaneMenu>
         {
           tagsEnabled &&
-            <IconButton
-              icon="tag"
-              id="clickable-show-tags"
-              onClick={() => { this.showHelperApp(HELPER_APP.TAGS); }}
-              badgeCount={tags.length}
-              aria-label={intl.formatMessage({ id: 'ui-users.showTags' })}
-            />
+          <IconButton
+            icon="tag"
+            id="clickable-show-tags"
+            onClick={() => { this.showHelperApp(HELPER_APP.TAGS); }}
+            badgeCount={tags.length}
+            aria-label={intl.formatMessage({ id: 'ui-users.showTags' })}
+          />
         }
         <IfInterface name="audit-user">
           <IfInterface name="audit-config">
@@ -1007,7 +1010,7 @@ class UserDetail extends React.Component {
                   )
                 }
 
-                { this.showPermissionsAccordion() &&
+                {this.showPermissionsAccordion() &&
                   <IfPermission perm="perms.users.get">
                     <IfInterface name="permissions" version="5.0">
                       <UserPermissions
@@ -1021,12 +1024,24 @@ class UserDetail extends React.Component {
                   </IfPermission>
                 }
 
-                { !this.showPermissionsAccordion() &&
+                {!this.showPermissionsAccordion() &&
                   <IfPermission perm="ui-authorization-roles.users.settings.view">
                     <UserRoles
                       expanded={sections[ACCORDION_ID.ROLES]}
                       onToggle={this.handleSectionToggle}
                       accordionId={ACCORDION_ID.ROLES}
+                      user={user}
+                      {...this.props}
+                    />
+                  </IfPermission>
+                }
+
+                {!this.showPermissionsAccordion() &&
+                  <IfPermission perm="ui-authorization-roles.users.settings.view">
+                    <UserCapabilities
+                      expanded={sections[ACCORDION_ID.CAPABILITIES]}
+                      onToggle={this.handleSectionToggle}
+                      accordionId={ACCORDION_ID.CAPABILITIES}
                       user={user}
                       {...this.props}
                     />
@@ -1085,19 +1100,19 @@ class UserDetail extends React.Component {
               </IfPermission>
             </IfInterface>
             {this.state.showDeleteUserModal &&
-            <DeleteUserModal
-              onCloseModal={this.doCloseTransactionDeleteModal}
-              username={fullNameOfUser}
-              userId={userId}
-              deleteUser={this.handleDeleteUser}
-            />
+              <DeleteUserModal
+                onCloseModal={this.doCloseTransactionDeleteModal}
+                username={fullNameOfUser}
+                userId={userId}
+                deleteUser={this.handleDeleteUser}
+              />
             }
             {this.state.showOpenTransactionModal &&
-            <OpenTransactionModal
-              onCloseModal={this.doCloseTransactionDeleteModal}
-              openTransactions={this.state.openTransactions}
-              username={fullNameOfUser}
-            />
+              <OpenTransactionModal
+                onCloseModal={this.doCloseTransactionDeleteModal}
+                openTransactions={this.state.openTransactions}
+                username={fullNameOfUser}
+              />
             }
             {this.state.showSendTextMessageModal && (
               <SendTextMessageModal
