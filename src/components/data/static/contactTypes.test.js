@@ -1,6 +1,4 @@
-import React from 'react';
-
-import contactTypes from './contactTypes';
+import contactTypes, { contactTypesMap } from './contactTypes';
 
 describe('contactTypes', () => {
   test('contains 3 types', () => {
@@ -12,6 +10,12 @@ describe('contactTypes', () => {
 
     contactTypes.forEach((contactType, index) => {
       expect(contactType.value).toEqual(ids[index]);
+    });
+  });
+
+  test('mapping is correct', () => {
+    contactTypes.forEach((contactType) => {
+      expect(contactTypesMap[contactType.name]).toEqual(contactType);
     });
   });
 });

@@ -44,7 +44,7 @@ const CustomFieldsFilter = ({
 
   return (
     <Accordion
-      displayClearButton
+      displayClearButton={selectedValues?.length > 0}
       id={`users-filter-accordion-custom-field-${refId}`}
       header={FilterAccordionHeader}
       label={name}

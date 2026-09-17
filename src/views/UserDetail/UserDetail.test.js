@@ -9,6 +9,7 @@ import {
   useStripes,
   IfInterface,
   StripesContext,
+  CalloutContext,
 } from '@folio/stripes/core';
 
 import UserDetail from './UserDetail';
@@ -90,6 +91,9 @@ const mutator = {
   hasAutomatedPatronBlocks: {
     GET: jest.fn(),
   },
+  messageDelivery: {
+    POST: jest.fn(),
+  },
 };
 
 jest.mock(
@@ -134,6 +138,18 @@ jest.mock(
 );
 
 jest.mock('../../components/PrintLibraryCardButton', () => jest.fn(() => null));
+
+jest.mock('./components/ActionMenuSendTextMessageButton', () => jest.fn(({ handleClick }) => (
+  <button type="button" onClick={handleClick}>ActionMenuSendTextMessageButton</button>
+)));
+
+jest.mock('./components/SendTextMessageModal', () => jest.fn(({ onCloseModal, onSubmit }) => (
+  <div>
+    <span>SendTextMessageModal</span>
+    <button type="button" onClick={() => onSubmit({ message: 'test message' })}>Submit SendTextMessageModal</button>
+    <button type="button" onClick={onCloseModal}>Cancel SendTextMessageModal</button>
+  </div>
+)));
 
 jest.mock('./components/UserVersionHistory', () => ({
   UserVersionHistory: jest.fn(() => <div data-testid="user-version-history">UserVersionHistory</div>),
@@ -195,22 +211,25 @@ const getSponsors = jest.fn();
 const getProxies = jest.fn();
 const getUserServicePoints = jest.fn();
 const getPreferredServicePoint = jest.fn();
+const sendCallout = jest.fn();
 
 const renderUserDetail = (stripes, props) => {
   return render(
     <StripesContext.Provider value={stripes}>
-      <UserDetail
-        resources={resources}
-        mutator={mutator}
-        match={match}
-        stripes={stripes}
-        getSponsors={getSponsors}
-        getProxies={getProxies}
-        getUserServicePoints={getUserServicePoints}
-        getPreferredServicePoint={getPreferredServicePoint}
-        okapi={okapi}
-        {...props}
-      />
+      <CalloutContext.Provider value={{ sendCallout }}>
+        <UserDetail
+          resources={resources}
+          mutator={mutator}
+          match={match}
+          stripes={stripes}
+          getSponsors={getSponsors}
+          getProxies={getProxies}
+          getUserServicePoints={getUserServicePoints}
+          getPreferredServicePoint={getPreferredServicePoint}
+          okapi={okapi}
+          {...props}
+        />
+      </CalloutContext.Provider>
     </StripesContext.Provider>
   );
 };
@@ -228,6 +247,8 @@ describe('UserDetail', () => {
   afterEach(() => {
     mutator.hasManualPatronBlocks.GET.mockClear();
     mutator.hasAutomatedPatronBlocks.GET.mockClear();
+    mutator.messageDelivery.POST.mockReset();
+    sendCallout.mockClear();
     PatronBlock.mockClear();
   });
 
@@ -461,6 +482,65 @@ describe('UserDetail', () => {
       await userEvent.click(screen.getByTestId('close-pane'));
 
       expect(history.push).toHaveBeenCalledWith(`/users${location.search}`);
+    });
+  });
+
+  describe('sending a text message', () => {
+    const openSendTextMessageModal = async () => {
+      renderUserDetail(stripes);
+      await userEvent.click(screen.getByText('ActionMenuSendTextMessageButton'));
+    };
+
+    it('showSendTextMessageModal opens the modal when the action menu button is clicked', async () => {
+      await openSendTextMessageModal();
+
+      expect(screen.getByText('SendTextMessageModal')).toBeInTheDocument();
+    });
+
+    it('doCloseSendTextMessageModal closes the modal when cancelled', async () => {
+      await openSendTextMessageModal();
+
+      await userEvent.click(screen.getByText('Cancel SendTextMessageModal'));
+
+      expect(screen.queryByText('SendTextMessageModal')).not.toBeInTheDocument();
+    });
+
+    describe('handleSendTextMessage', () => {
+      it('posts the message, shows a success callout, and closes the modal', async () => {
+        mutator.messageDelivery.POST.mockResolvedValue({});
+
+        await openSendTextMessageModal();
+        await userEvent.click(screen.getByText('Submit SendTextMessageModal'));
+
+        await waitFor(() => expect(mutator.messageDelivery.POST).toHaveBeenCalledWith({
+          notificationId: expect.any(String),
+          recipientUserId: userId,
+          messages: [
+            {
+              deliveryChannel: 'sms',
+              body: 'test message',
+            },
+          ],
+        }));
+        await waitFor(() => expect(sendCallout).toHaveBeenCalledWith({
+          type: 'success',
+          message: 'ui-users.details.sendTextMessage.successCallout',
+        }));
+        await waitFor(() => expect(screen.queryByText('SendTextMessageModal')).not.toBeInTheDocument());
+      });
+
+      it('shows an error callout and closes the modal when the request fails', async () => {
+        mutator.messageDelivery.POST.mockRejectedValue(new Error('request failed'));
+
+        await openSendTextMessageModal();
+        await userEvent.click(screen.getByText('Submit SendTextMessageModal'));
+
+        await waitFor(() => expect(sendCallout).toHaveBeenCalledWith({
+          type: 'error',
+          message: 'ui-users.details.sendTextMessage.errorCallout',
+        }));
+        await waitFor(() => expect(screen.queryByText('SendTextMessageModal')).not.toBeInTheDocument());
+      });
     });
   });
 });
