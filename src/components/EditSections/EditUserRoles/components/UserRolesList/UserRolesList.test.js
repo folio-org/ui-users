@@ -6,6 +6,7 @@ jest.unmock('@folio/stripes/components');
 
 const tenantId = 'consortium';
 const assignedUserRoleIds = { 'consortium': ['1', '2'] };
+const initialUserRoleIds = { 'consortium': ['1', '2'] };
 const filteredRoles = [{ id: '1', name: 'role1' }];
 const mockToggleRole = jest.fn();
 const mockToggleAllRoles = jest.fn();
@@ -14,7 +15,7 @@ const renderComponent = (props) => render(<UserRolesList {...props} />);
 
 describe('UserRolesList', () => {
   beforeEach(() => {
-    renderComponent({ assignedUserRoleIds, filteredRoles, toggleRole: mockToggleRole, toggleRoleList: mockToggleAllRoles, tenantId });
+    renderComponent({ assignedUserRoleIds, initialUserRoleIds, filteredRoles, toggleRole: mockToggleRole, toggleRoleList: mockToggleAllRoles, tenantId });
   });
   afterAll(() => {
     cleanup();
@@ -38,5 +39,33 @@ describe('UserRolesList', () => {
     await userEvent.click(document.querySelector('[name="selected-1"]'));
 
     expect(mockToggleRole).toHaveBeenCalledWith('1');
+  });
+
+  it('shows unassigned status when the role is unassigned initially, even if currently checked live', () => {
+    cleanup();
+    renderComponent({
+      assignedUserRoleIds: { consortium: ['1'] },
+      initialUserRoleIds: { consortium: [] },
+      filteredRoles,
+      toggleRole: mockToggleRole,
+      toggleRoleList: mockToggleAllRoles,
+      tenantId
+    });
+
+    expect(document.querySelector('[data-test-role-status]')).toHaveTextContent('ui-users.roles.modal.unassigned');
+  });
+
+  it('shows assigned status when the role is assigned initially, even if currently unchecked live', () => {
+    cleanup();
+    renderComponent({
+      assignedUserRoleIds: { consortium: [] },
+      initialUserRoleIds: { consortium: ['1'] },
+      filteredRoles,
+      toggleRole: mockToggleRole,
+      toggleRoleList: mockToggleAllRoles,
+      tenantId
+    });
+
+    expect(document.querySelector('[data-test-role-status]')).toHaveTextContent('ui-users.roles.modal.assigned');
   });
 });

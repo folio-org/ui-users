@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { cloneDeep } from 'lodash';
+import React, { useEffect, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import { Button, Modal, Pane, PaneHeader, Paneset } from '@folio/stripes/components';
@@ -7,7 +6,7 @@ import { CollapseFilterPaneButton, ExpandFilterPaneButton } from '@folio/stripes
 import UserRolesList from '../UserRolesList/UserRolesList';
 import SearchForm from '../SearchForm/SearchForm';
 import { useAllRolesData } from '../../../../../hooks';
-import { filtersConfig } from '../../helpers';
+import { filtersConfig, statusFilterConfig, selectionFilterConfig } from '../../helpers';
 import css from './index.css';
 import useRolesModalFilters from './useRolesModalFilters';
 
@@ -19,12 +18,25 @@ export default function UserRolesModal({ isOpen,
   const [filterPaneIsVisible, setFilterPaneIsVisible] = useState(true);
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState('');
   const [assignedRoleIds, setAssignedRoleIds] = useState({});
+  const [selectionSnapshot, setSelectionSnapshot] = useState(initialRoleIds);
+  const skipNextSnapshotRefresh = useRef(true);
   const { filters, onChangeFilter, onClearFilter, resetFilters } = useRolesModalFilters();
   const { data: allRolesData, allRolesMapStructure } = useAllRolesData({ tenantId });
 
   useEffect(() => {
     setAssignedRoleIds(initialRoleIds);
+    setSelectionSnapshot(initialRoleIds);
+    skipNextSnapshotRefresh.current = true;
   }, [initialRoleIds]);
+
+  useEffect(() => {
+    if (skipNextSnapshotRefresh.current) {
+      skipNextSnapshotRefresh.current = false;
+      return;
+    }
+    setSelectionSnapshot(assignedRoleIds);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filters, submittedSearchTerm]);
 
   const handleCloseModal = () => {
     setAssignedRoleIds(initialRoleIds);
@@ -36,10 +48,14 @@ export default function UserRolesModal({ isOpen,
   const getFilteredRoles = () => {
     if (!allRolesData?.roles) return [];
 
-    let filtered = cloneDeep(allRolesData.roles);
-    [filtersConfig].forEach((filterData) => {
-      // eslint-disable-next-line no-unused-vars
-      filtered = filterData.filter(filtered, filters, assignedRoleIds, tenantId);
+    const idsByFilterName = {
+      [statusFilterConfig.name]: initialRoleIds[tenantId],
+      [selectionFilterConfig.name]: selectionSnapshot[tenantId],
+    };
+
+    let filtered = allRolesData.roles;
+    filtersConfig.forEach((filterConfig) => {
+      filtered = filterConfig.filter(filtered, filters, idsByFilterName[filterConfig.name]);
     });
 
     return filtered.filter(role => role.name.trim().toLowerCase().includes(submittedSearchTerm.trim().toLowerCase()));
@@ -68,7 +84,7 @@ export default function UserRolesModal({ isOpen,
   const filteredRoles = getFilteredRoles();
 
   // eslint-disable-next-line no-unused-vars
-  const getFilterConfigGroups = () => [filtersConfig].map(({ filter, ...filterConfig }) => (filterConfig));
+  const getFilterConfigGroups = () => filtersConfig.map(({ filter, ...filterConfig }) => (filterConfig));
 
   const resetSearchForm = () => {
     setSubmittedSearchTerm('');
@@ -174,6 +190,7 @@ export default function UserRolesModal({ isOpen,
           >
             <UserRolesList
               assignedUserRoleIds={assignedRoleIds}
+              initialUserRoleIds={initialRoleIds}
               filteredRoles={filteredRoles}
               toggleRole={toggleRole}
               toggleRoleList={toggleRoleList}

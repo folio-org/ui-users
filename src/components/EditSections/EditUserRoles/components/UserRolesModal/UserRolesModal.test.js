@@ -158,6 +158,71 @@ describe('UserRoleModal', () => {
     expect(getAllByRole('gridcell')).toHaveLength(numberOfGridCellPerRow * numberOfUnassignedRoles);
   });
 
+  it('keeps a role visible when unchecked while the "Assigned" filter is active', async () => {
+    renderComponent({
+      isOpen: true,
+      onClose: mockOnClose,
+      initialRoleIds: { consortium: ['1'] },
+      changeUserRoles: jest.fn(),
+      tenantId
+    });
+
+    const assignedFilterCheckbox = document.querySelector('[name="status.assigned"]');
+    await userEvent.click(assignedFilterCheckbox);
+
+    expect(document.querySelector('[data-test-role-name]')).toHaveTextContent('testRole');
+
+    const roleCheckbox = document.querySelector('[name="selected-1"]');
+    await userEvent.click(roleCheckbox);
+
+    expect(roleCheckbox.checked).toBe(false);
+    expect(document.querySelector('[data-test-role-name]')).toHaveTextContent('testRole');
+  });
+
+  it('keeps roles visible when checked while the "Unassigned" filter is active', async () => {
+    const { getAllByRole } = renderComponent({
+      isOpen: true,
+      onClose: mockOnClose,
+      initialRoleIds,
+      changeUserRoles: jest.fn(),
+      tenantId
+    });
+
+    const unassignedFilterCheckbox = document.querySelector('[name="status.unassigned"]');
+    await userEvent.click(unassignedFilterCheckbox);
+
+    const roleCheckbox = document.querySelector('[name="selected-4"]');
+    await userEvent.click(roleCheckbox);
+
+    expect(roleCheckbox.checked).toBe(true);
+
+    const numberOfGridCellPerRow = 3;
+    const numberOfUnassignedRoles = 2;
+
+    expect(getAllByRole('gridcell')).toHaveLength(numberOfGridCellPerRow * numberOfUnassignedRoles);
+  });
+
+  it('supports a Selected/Unselected filter that stays frozen until the filter is re-applied', async () => {
+    renderComponent({
+      isOpen: true,
+      onClose: mockOnClose,
+      initialRoleIds: { consortium: ['1'] },
+      changeUserRoles: jest.fn(),
+      tenantId
+    });
+
+    const selectedFilterCheckbox = document.querySelector('[name="selection.selected"]');
+    await userEvent.click(selectedFilterCheckbox);
+
+    expect(document.querySelector('[data-test-role-name]')).toHaveTextContent('testRole');
+
+    const roleCheckbox = document.querySelector('[name="selected-1"]');
+    await userEvent.click(roleCheckbox);
+
+    expect(roleCheckbox.checked).toBe(false);
+    expect(document.querySelector('[data-test-role-name]')).toHaveTextContent('testRole');
+  });
+
   it('should reset all filters', async () => {
     const actual = jest.requireActual('./useRolesModalFilters');
     const mockFunction = jest.spyOn(actual, 'default');

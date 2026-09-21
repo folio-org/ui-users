@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { filtersConfig, getInitialFiltersState } from '../../helpers';
 
 export default function useRolesModalFilters() {
-  const [filters, setFilters] = useState(getInitialFiltersState([filtersConfig]));
+  const [filters, setFilters] = useState(getInitialFiltersState(filtersConfig));
 
   const onChangeFilter = ({ target: { name, checked } }) => {
     setFilters((prevState) => {
@@ -31,7 +31,7 @@ export default function useRolesModalFilters() {
     });
   };
 
-  const resetFilters = () => setFilters(getInitialFiltersState([filtersConfig]));
+  const resetFilters = () => setFilters(getInitialFiltersState(filtersConfig));
 
   return { filters, onChangeFilter, onClearFilter, resetFilters };
 }
