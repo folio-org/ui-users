@@ -16,11 +16,8 @@ import IfConsortium from '../../IfConsortium';
 import IfConsortiumPermission from '../../IfConsortiumPermission';
 import RoleNameLink from '../../RoleNameLink';
 import UserRolesModal from './components/UserRolesModal/UserRolesModal';
-import { isAffiliationsEnabled } from '../../util/util';
+import { isAffiliationsEnabled, isViewingLoginTenant } from '../../util/util';
 import { filtersConfig } from './helpers';
-
-const isViewingLoginTenant = (tenantId, stripes, affiliations) => affiliations?.length && tenantId
-  ? (stripes.okapi.tenant === tenantId) : true;
 
 function EditUserRoles({ accordionId, form: { change }, user, setAssignedRoleIds, assignedRoleIds, setTenantId, tenantId, initialAssignedRoleIds, isLoadingAffiliationRoles }) {
   const stripes = useStripes();
