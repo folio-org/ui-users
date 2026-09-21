@@ -306,6 +306,6 @@ export const base64ToBlob = (base64, mimeType) => {
 
 export const getRoleDetailPath = (id) => `/settings/authorization-roles/${id}`;
 
-export const isViewingLoginTenant = (tenantId, stripes, affiliations) => affiliations?.length && tenantId
-  ? (stripes.okapi.tenant === tenantId) : true;
-
+export const matchesLoginTenant = (tenantId, stripes, affiliations) => {
+  return affiliations?.length && tenantId ? (stripes.okapi.tenant === tenantId) : true;
+};

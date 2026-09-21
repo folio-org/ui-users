@@ -1,9 +1,9 @@
 import { cleanup, render } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 import { IfPermission } from '@folio/stripes/core';
-import UserRolesList from './UserRolesList';
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
+import UserRolesList from './UserRolesList';
 
 const history = createMemoryHistory();
 

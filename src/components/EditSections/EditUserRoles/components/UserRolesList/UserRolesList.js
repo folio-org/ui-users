@@ -8,7 +8,8 @@ import RoleNameLink from '../../../../RoleNameLink';
 
 const visibleColumns = ['selected', 'roleName', 'status'];
 
-const UserRolesList = ({ assignedUserRoleIds,
+const UserRolesList = ({
+  assignedUserRoleIds,
   filteredRoles,
   toggleRole,
   toggleRoleList,

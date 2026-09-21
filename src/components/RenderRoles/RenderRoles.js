@@ -15,7 +15,7 @@ import IfConsortium from '../IfConsortium';
 import IfConsortiumPermission from '../IfConsortiumPermission';
 import RoleNameLink from '../RoleNameLink';
 import { affiliationsShape } from '../../shapes';
-import { isViewingLoginTenant } from '../util/util';
+import { matchesLoginTenant } from '../util/util';
 
 class RenderRoles extends React.Component {
   static propTypes = {
@@ -59,11 +59,13 @@ class RenderRoles extends React.Component {
     // the selected affiliation. Due to the coupling of tenant and login session,
     // the link may lead to a 404 if it tries to access a role that's outside of the current
     // logged in tenant.
-    const viewingLoginAffiliation = isViewingLoginTenant(selectedAffiliation, stripes, affiliations);
+    const viewingLoginAffiliation = matchesLoginTenant(selectedAffiliation, stripes, affiliations);
 
-    const listFormatter = item => <li key={item.id}>
-      <RoleNameLink role={item} canRenderLink={viewingLoginAffiliation} />
-    </li>;
+    const listFormatter = item => (
+      <li key={item.id}>
+        <RoleNameLink role={item} canRenderLink={viewingLoginAffiliation} />
+      </li>
+    );
     const noPermissionsFound = <FormattedMessage id="ui-users.roles.empty" />;
 
     return (

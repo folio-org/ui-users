@@ -1,12 +1,11 @@
 import PropTypes from 'prop-types';
 
-import { IfPermission, useStripes } from '@folio/stripes/core';
+import { IfPermission } from '@folio/stripes/core';
 import { TextLink } from '@folio/stripes/components';
 
 import { getRoleDetailPath } from '../util/util';
 
 const RoleNameLink = ({ role, canRenderLink = true }) => {
-
   return (
     <IfPermission perm="ui-authorization-roles.settings.view">
       {({ hasPermission }) => (hasPermission && canRenderLink

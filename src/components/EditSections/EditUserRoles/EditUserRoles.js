@@ -16,7 +16,7 @@ import IfConsortium from '../../IfConsortium';
 import IfConsortiumPermission from '../../IfConsortiumPermission';
 import RoleNameLink from '../../RoleNameLink';
 import UserRolesModal from './components/UserRolesModal/UserRolesModal';
-import { isAffiliationsEnabled, isViewingLoginTenant } from '../../util/util';
+import { isAffiliationsEnabled, matchesLoginTenant } from '../../util/util';
 import { filtersConfig } from './helpers';
 
 function EditUserRoles({ accordionId, form: { change }, user, setAssignedRoleIds, assignedRoleIds, setTenantId, tenantId, initialAssignedRoleIds, isLoadingAffiliationRoles }) {
@@ -102,7 +102,7 @@ function EditUserRoles({ accordionId, form: { change }, user, setAssignedRoleIds
     const roleId = tenantValue[index];
     const role = allRolesMapStructure.get(roleId);
 
-    const viewingLoginAffiliation = isViewingLoginTenant(tenantId, stripes, affiliations);
+    const viewingLoginAffiliation = matchesLoginTenant(tenantId, stripes, affiliations);
 
     if (!role) return null;
     return (
@@ -156,7 +156,7 @@ function EditUserRoles({ accordionId, form: { change }, user, setAssignedRoleIds
     );
   }
 
-  const viewingLoginAffiliation = isViewingLoginTenant(tenantId, stripes, affiliations);
+  const viewingLoginAffiliation = matchesLoginTenant(tenantId, stripes, affiliations);
 
   return (
     <IfPermission perm="ui-authorization-roles.users.settings.view">
