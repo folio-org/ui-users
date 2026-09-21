@@ -28,6 +28,7 @@
 * Fix crash when opening the Version history pane on the user detail view. Fixes UIU-3630.
 * Adds 'Selected/Unselected' filter to the 'Add user role' modal. Fixes UIU-3557.
 * Adds 'Status' column to the 'Add user role' modal, displaying the persisted state of the user's role. Fixes UIU-3558.
+* Fix Unknown user display in Departments settings by adding missing permissions. Refs UIU-3571.
 
 ## [13.0.2] (https://github.com/folio-org/ui-users/tree/v13.0.2) (2026-06-12)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v13.0.1...v13.0.2)
