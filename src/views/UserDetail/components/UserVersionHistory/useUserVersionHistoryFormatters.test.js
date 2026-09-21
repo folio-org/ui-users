@@ -12,6 +12,10 @@ jest.mock('../../../../hooks/usePatronGroups', () => jest.fn());
 const renderFormatters = () => renderHook(() => useUserVersionHistoryFormatters()).result.current;
 
 const isNoValue = node => node?.type === NoValue;
+// contactTypes labels are <FormattedMessage> elements; unmatched codes stay raw strings.
+const contactTypeIds = (fieldFormatter, value) => fieldFormatter
+  .preferredContactTypeIds(value)
+  .map(item => item?.props?.id ?? item);
 
 describe('useUserVersionHistoryFormatters', () => {
   beforeEach(() => {
@@ -34,6 +38,35 @@ describe('useUserVersionHistoryFormatters', () => {
 
       expect(fieldFormatter.departments('dept-1')).toBe('Library');
       expect(fieldFormatter.departments('dept-missing')).toBe('dept-missing');
+    });
+
+    it('resolves preferred contact type ids to their labels', () => {
+      const { fieldFormatter } = renderFormatters();
+
+      expect(contactTypeIds(fieldFormatter, ['002', '003'])).toEqual([
+        'ui-users.data.contactTypes.email',
+        'ui-users.data.contactTypes.textMessage',
+      ]);
+    });
+
+    it('accepts a preferred contact type id that is not wrapped in an array', () => {
+      const { fieldFormatter } = renderFormatters();
+
+      expect(contactTypeIds(fieldFormatter, '001')).toEqual(['ui-users.data.contactTypes.mail']);
+    });
+
+    it('falls back to the raw value for an unknown preferred contact type id', () => {
+      const { fieldFormatter } = renderFormatters();
+
+      expect(contactTypeIds(fieldFormatter, ['999'])).toEqual(['999']);
+    });
+
+    it('renders an empty list when no preferred contact type is set', () => {
+      const { fieldFormatter } = renderFormatters();
+
+      expect(fieldFormatter.preferredContactTypeIds(null)).toEqual([]);
+      expect(fieldFormatter.preferredContactTypeIds(undefined)).toEqual([]);
+      expect(fieldFormatter.preferredContactTypeIds([])).toEqual([]);
     });
 
     it('renders NoValue for an empty proxyFor value', () => {
