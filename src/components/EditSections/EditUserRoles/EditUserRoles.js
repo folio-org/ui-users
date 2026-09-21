@@ -103,13 +103,16 @@ function EditUserRoles({ accordionId, form: { change }, user, setAssignedRoleIds
     const roleId = tenantValue[index];
     const role = allRolesMapStructure.get(roleId);
 
+    const viewingLoginAffiliation = affiliations?.length && tenantId
+      ? (stripes.okapi.tenant === tenantId) : true;
+
     if (!role) return null;
     return (
       <li
         data-test-user-role={role.id}
         key={role.id}
       >
-        <RoleNameLink role={role} />
+        <RoleNameLink role={role} canRenderLink={viewingLoginAffiliation} />
         <IfPermission perm="ui-authorization-roles.users.settings.manage">
           <Button
             buttonStyle="fieldControl"
@@ -155,6 +158,9 @@ function EditUserRoles({ accordionId, form: { change }, user, setAssignedRoleIds
     );
   }
 
+  const viewingLoginAffiliation = affiliations?.length && tenantId
+    ? (stripes.okapi.tenant === tenantId) : true;
+
   return (
     <IfPermission perm="ui-authorization-roles.users.settings.view">
       <div>
@@ -196,6 +202,7 @@ function EditUserRoles({ accordionId, form: { change }, user, setAssignedRoleIds
           initialRoleIds={assignedRoleIds}
           changeUserRoles={changeUserRoles}
           tenantId={tenantId}
+          displayRoleDetailLinks={viewingLoginAffiliation}
         />
         <ConfirmationModal
           open={unassignModalOpen}
