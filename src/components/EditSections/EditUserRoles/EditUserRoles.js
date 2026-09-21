@@ -19,6 +19,8 @@ import UserRolesModal from './components/UserRolesModal/UserRolesModal';
 import { isAffiliationsEnabled } from '../../util/util';
 import { filtersConfig } from './helpers';
 
+const isViewingLoginTenant = (tenantId, stripes, affiliations) => affiliations?.length && tenantId
+  ? (stripes.okapi.tenant === tenantId) : true;
 
 function EditUserRoles({ accordionId, form: { change }, user, setAssignedRoleIds, assignedRoleIds, setTenantId, tenantId, initialAssignedRoleIds, isLoadingAffiliationRoles }) {
   const stripes = useStripes();
@@ -103,8 +105,7 @@ function EditUserRoles({ accordionId, form: { change }, user, setAssignedRoleIds
     const roleId = tenantValue[index];
     const role = allRolesMapStructure.get(roleId);
 
-    const viewingLoginAffiliation = affiliations?.length && tenantId
-      ? (stripes.okapi.tenant === tenantId) : true;
+    const viewingLoginAffiliation = isViewingLoginTenant(tenantId, stripes, affiliations);
 
     if (!role) return null;
     return (
@@ -158,8 +159,7 @@ function EditUserRoles({ accordionId, form: { change }, user, setAssignedRoleIds
     );
   }
 
-  const viewingLoginAffiliation = affiliations?.length && tenantId
-    ? (stripes.okapi.tenant === tenantId) : true;
+  const viewingLoginAffiliation = isViewingLoginTenant(tenantId, stripes, affiliations);
 
   return (
     <IfPermission perm="ui-authorization-roles.users.settings.view">
