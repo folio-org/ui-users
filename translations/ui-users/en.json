@@ -1296,7 +1296,7 @@
   "roles.userRoles": "User roles",
   "roles.empty": "No user roles found",
   "roles.deleteRole": "Delete user role",
-  "roles.addUserRole": "Add user role",
+  "roles.button.addUserRole": "Add user role",
   "roles.unassignAllRoles": "Unassign all user roles",
   "roles.modal.assigned": "Assigned",
   "roles.modal.unassigned": "Unassigned",
