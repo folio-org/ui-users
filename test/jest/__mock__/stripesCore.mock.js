@@ -132,19 +132,17 @@ jest.mock('@folio/stripes/core', () => {
       return name === 'interface' || name === 'service-points-users' ? children : null;
     }),
     IfPermission: jest.fn(({ perm, children }) => {
-      if (perm === 'permission') {
-        return children;
-      } else if (perm.startsWith('ui-authorization')) {
-        return children;
-      } else if (perm.startsWith('ui-users')) {
-        return children;
-      } else if (perm.startsWith('perms')) {
-        return children;
-      } else if (perm.startsWith('inventory-storage')) {
-        return children;
-      } else {
-        return null;
+      const hasPermission = perm === 'permission'
+        || perm.startsWith('ui-authorization')
+        || perm.startsWith('ui-users')
+        || perm.startsWith('perms')
+        || perm.startsWith('inventory-storage');
+
+      if (typeof children === 'function') {
+        return children({ hasPermission });
       }
+
+      return hasPermission ? children : null;
     }),
     Pluggable: jest.fn(({ children }) => [children]),
     connect: stripesConnect,

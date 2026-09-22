@@ -14,11 +14,12 @@ import { useAllRolesData, useUserAffiliations } from '../../../hooks';
 import AffiliationsSelect from '../../AffiliationsSelect/AffiliationsSelect';
 import IfConsortium from '../../IfConsortium';
 import IfConsortiumPermission from '../../IfConsortiumPermission';
+import RoleNameLink from '../../RoleNameLink';
 import UserRolesModal from './components/UserRolesModal/UserRolesModal';
-import { isAffiliationsEnabled } from '../../util/util';
+import { isAffiliationsEnabled, matchesLoginTenant } from '../../util/util';
 import { filtersConfig } from './helpers';
 
-function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds, assignedRoleIds, setTenantId, tenantId, initialAssignedRoleIds, isLoadingAffiliationRoles }) {
+function EditUserRoles({ accordionId, form: { change }, user, setAssignedRoleIds, assignedRoleIds, setTenantId, tenantId, initialAssignedRoleIds, isLoadingAffiliationRoles }) {
   const stripes = useStripes();
   const form = useForm();
   const [isOpen, setIsOpen] = useState(false);
@@ -101,20 +102,22 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
     const roleId = tenantValue[index];
     const role = allRolesMapStructure.get(roleId);
 
+    const viewingLoginAffiliation = matchesLoginTenant(tenantId, stripes, affiliations);
+
     if (!role) return null;
     return (
       <li
         data-test-user-role={role.id}
         key={role.id}
       >
-        {role.name}
+        <RoleNameLink role={role} canRenderLink={viewingLoginAffiliation} />
         <IfPermission perm="ui-authorization-roles.users.settings.manage">
           <Button
             buttonStyle="fieldControl"
             align="end"
             type="button"
             id={`clickable-remove-user-role-${role.id}`}
-            aria-label={`${intl.formatMessage({ id:'ui-users.roles.deleteRole' })}: ${role.name}`}
+            aria-label={`${intl.formatMessage({ id: 'ui-users.roles.deleteRole' })}: ${role.name}`}
             onClick={() => fields.remove(index)}
           >
             <Icon icon="times-circle" />
@@ -152,6 +155,8 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
       </Col>
     );
   }
+
+  const viewingLoginAffiliation = matchesLoginTenant(tenantId, stripes, affiliations);
 
   return (
     <IfPermission perm="ui-authorization-roles.users.settings.view">
@@ -194,6 +199,7 @@ function EditUserRoles({ accordionId, form:{ change }, user, setAssignedRoleIds,
           initialRoleIds={assignedRoleIds}
           changeUserRoles={changeUserRoles}
           tenantId={tenantId}
+          displayRoleDetailLinks={viewingLoginAffiliation}
         />
         <ConfirmationModal
           open={unassignModalOpen}
