@@ -21,6 +21,7 @@
 * Сlear loans data when returning to Open Loans page. Refs UIU-3612.
 * Sort loans in ascending case-insensitive order. Refs UIU-3369.
 * Fix proxy/sponsor record editing crash after adding subsequent items. Refs UIU-3375.
+* Hyperlink roles in the "user roles" Accordion. Refs UIU-3550.
 * Add the ability to send ad-hoc text messages from a user's record. Refs UIU-3572.
 * Update Reset button style and conditional clear icons. Refs UIU-3232.
 * Show renew confirmation popup after multi-item renewal. Refs UIU-3625.

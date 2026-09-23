@@ -7,13 +7,15 @@ import {
   Accordion,
   Badge,
   Headline,
-  Loading
+  Loading,
 } from '@folio/stripes/components';
 
 import AffiliationsSelect from '../AffiliationsSelect/AffiliationsSelect';
 import IfConsortium from '../IfConsortium';
 import IfConsortiumPermission from '../IfConsortiumPermission';
+import RoleNameLink from '../RoleNameLink';
 import { affiliationsShape } from '../../shapes';
+import { matchesLoginTenant } from '../util/util';
 
 class RenderRoles extends React.Component {
   static propTypes = {
@@ -48,8 +50,22 @@ class RenderRoles extends React.Component {
   renderList() {
     const {
       listedRoles,
+      stripes,
+      affiliations,
+      selectedAffiliation,
     } = this.props;
-    const listFormatter = item => <li key={item.id}>{item.name}</li>;
+
+    // don't display the link to the role if the logged in tenant does not match
+    // the selected affiliation. Due to the coupling of tenant and login session,
+    // the link may lead to a 404 if it tries to access a role that's outside of the current
+    // logged in tenant.
+    const viewingLoginAffiliation = matchesLoginTenant(selectedAffiliation, stripes, affiliations);
+
+    const listFormatter = item => (
+      <li key={item.id}>
+        <RoleNameLink role={item} canRenderLink={viewingLoginAffiliation} />
+      </li>
+    );
     const noPermissionsFound = <FormattedMessage id="ui-users.roles.empty" />;
 
     return (
