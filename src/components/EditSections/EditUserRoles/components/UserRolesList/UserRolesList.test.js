@@ -1,6 +1,11 @@
 import { cleanup, render } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
+import { IfPermission } from '@folio/stripes/core';
+import { Router } from 'react-router-dom';
+import { createMemoryHistory } from 'history';
 import UserRolesList from './UserRolesList';
+
+const history = createMemoryHistory();
 
 jest.unmock('@folio/stripes/components');
 
@@ -11,7 +16,13 @@ const filteredRoles = [{ id: '1', name: 'role1' }];
 const mockToggleRole = jest.fn();
 const mockToggleAllRoles = jest.fn();
 
-const renderComponent = (props) => render(<UserRolesList {...props} />);
+const renderComponent = (props) => {
+  return render(
+    <Router history={history}>
+      <UserRolesList {...props} />
+    </Router>
+  );
+};
 
 describe('UserRolesList', () => {
   beforeEach(() => {
@@ -67,5 +78,27 @@ describe('UserRolesList', () => {
     });
 
     expect(document.querySelector('[data-test-role-status]')).toHaveTextContent('ui-users.roles.modal.assigned');
+  });
+
+  describe('role name link permission guard', () => {
+    afterEach(() => {
+      IfPermission.mockClear();
+    });
+
+    it('renders the role name as a link when the user has permission', () => {
+      IfPermission.mockImplementation(({ children }) => children({ hasPermission: true }));
+      cleanup();
+      const { getByText } = renderComponent({ assignedUserRoleIds, filteredRoles, toggleRole: mockToggleRole, toggleRoleList: mockToggleAllRoles, tenantId });
+
+      expect(getByText('role1').closest('a')).toHaveAttribute('href', '/settings/authorization-roles/1');
+    });
+
+    it('renders the role name as plain text when the user lacks permission', () => {
+      IfPermission.mockImplementation(({ children }) => children({ hasPermission: false }));
+      cleanup();
+      const { getByText } = renderComponent({ assignedUserRoleIds, filteredRoles, toggleRole: mockToggleRole, toggleRoleList: mockToggleAllRoles, tenantId });
+
+      expect(getByText('role1').closest('a')).not.toBeInTheDocument();
+    });
   });
 });

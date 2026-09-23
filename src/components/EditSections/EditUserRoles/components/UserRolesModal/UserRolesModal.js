@@ -14,7 +14,8 @@ export default function UserRolesModal({ isOpen,
   onClose,
   changeUserRoles,
   initialRoleIds,
-  tenantId }) {
+  tenantId,
+  displayRoleDetailLinks }) {
   const [filterPaneIsVisible, setFilterPaneIsVisible] = useState(true);
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState('');
   const [assignedRoleIds, setAssignedRoleIds] = useState(initialRoleIds);
@@ -196,6 +197,7 @@ export default function UserRolesModal({ isOpen,
               toggleRole={toggleRole}
               toggleRoleList={toggleRoleList}
               tenantId={tenantId}
+              displayRoleDetailLinks={displayRoleDetailLinks}
             />
           </Pane>
         </Paneset>
@@ -210,4 +212,5 @@ UserRolesModal.propTypes = {
   initialRoleIds: PropTypes.object,
   changeUserRoles: PropTypes.func.isRequired,
   tenantId: PropTypes.string.isRequired,
+  displayRoleDetailLinks: PropTypes.bool.isRequired
 };

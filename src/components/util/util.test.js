@@ -30,6 +30,7 @@ import {
   isDcbItem,
   isAValidImageUrl,
   getFormattedPronouns,
+  matchesLoginTenant,
 } from './util';
 
 const STRIPES = {
@@ -541,6 +542,36 @@ describe('isAValidImageUrl', () => {
 describe('getFormattedPronouns', () => {
   it('returns formatted pronouns', () => {
     expect(getFormattedPronouns({ personal: { pronouns: 'e2/e2' } })).toEqual('(e2/e2)');
+  });
+});
+
+describe('matchesLoginTenant', () => {
+  it('returns true when there are no affiliations', () => {
+    const stripes = { okapi: { tenant: 'tenantA' } };
+
+    expect(matchesLoginTenant('tenantB', stripes, [])).toBe(true);
+    expect(matchesLoginTenant('tenantB', stripes, undefined)).toBe(true);
+  });
+
+  it('returns true when tenantId is not provided', () => {
+    const stripes = { okapi: { tenant: 'tenantA' } };
+    const affiliations = [{ tenantId: 'tenantA' }];
+
+    expect(matchesLoginTenant(undefined, stripes, affiliations)).toBe(true);
+  });
+
+  it('returns true when the login tenant matches the given tenantId', () => {
+    const stripes = { okapi: { tenant: 'tenantA' } };
+    const affiliations = [{ tenantId: 'tenantA' }];
+
+    expect(matchesLoginTenant('tenantA', stripes, affiliations)).toBe(true);
+  });
+
+  it('returns false when the login tenant does not match the given tenantId', () => {
+    const stripes = { okapi: { tenant: 'tenantA' } };
+    const affiliations = [{ tenantId: 'tenantB' }];
+
+    expect(matchesLoginTenant('tenantB', stripes, affiliations)).toBe(false);
   });
 });
 

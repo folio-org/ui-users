@@ -4,15 +4,19 @@ import { FormattedMessage } from 'react-intl';
 
 import { MultiColumnList } from '@folio/stripes/components';
 import CheckboxColumn from '../CheckboxColumn/CheckboxColumn';
+import RoleNameLink from '../../../../RoleNameLink';
 
 const visibleColumns = ['selected', 'roleName', 'status'];
 
-const UserRolesList = ({ assignedUserRoleIds,
+const UserRolesList = ({
+  assignedUserRoleIds,
   initialUserRoleIds,
   filteredRoles,
   toggleRole,
   toggleRoleList,
-  tenantId }) => {
+  tenantId,
+  displayRoleDetailLinks,
+}) => {
   const allChecked = filteredRoles.every(filteredRole => assignedUserRoleIds[tenantId]?.includes(filteredRole.id));
 
   const handleToggleRoleList = (event) => {
@@ -56,7 +60,7 @@ const UserRolesList = ({ assignedUserRoleIds,
           // eslint-disable-next-line react/prop-types
           roleName: role => (
             <div data-test-role-name>
-              {role.name}
+              <RoleNameLink role={role} canRenderLink={displayRoleDetailLinks} />
             </div>
           ),
           status: role => {
@@ -83,7 +87,8 @@ UserRolesList.propTypes = {
   ).isRequired,
   toggleRole: PropTypes.func.isRequired,
   toggleRoleList: PropTypes.func.isRequired,
-  tenantId: PropTypes.string.isRequired
+  tenantId: PropTypes.string.isRequired,
+  displayRoleDetailLinks: PropTypes.bool.isRequired
 };
 
 export default UserRolesList;

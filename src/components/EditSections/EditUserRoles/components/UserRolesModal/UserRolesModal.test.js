@@ -1,5 +1,6 @@
-import { cleanup, render, waitFor } from '@folio/jest-config-stripes/testing-library/react';
+import { cleanup, waitFor } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
+import renderWithRouter from '../../../../../../test/jest/helpers/renderWithRouter';
 import UserRolesModal from './UserRolesModal';
 
 jest.mock('../../../../../hooks', () => {
@@ -26,7 +27,7 @@ const mockAssignedRoles = [{ id: '1', name: 'testRole' }];
 const tenantId = 'consortium';
 const initialRoleIds = { 'consortium': ['1'] };
 
-const renderComponent = (props = {}) => render(<div><UserRolesModal {...props} /></div>);
+const renderComponent = (props = {}) => renderWithRouter(<div><UserRolesModal {...props} /></div>);
 
 describe('UserRoleModal', () => {
   afterEach(() => {
