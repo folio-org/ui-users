@@ -88,7 +88,7 @@ describe('UserRolesList', () => {
     it('renders the role name as a link when the user has permission', () => {
       IfPermission.mockImplementation(({ children }) => children({ hasPermission: true }));
       cleanup();
-      const { getByText } = renderComponent({ assignedUserRoleIds, filteredRoles, toggleRole: mockToggleRole, toggleRoleList: mockToggleAllRoles, tenantId });
+      const { getByText } = renderComponent({ assignedUserRoleIds, initialUserRoleIds, filteredRoles, toggleRole: mockToggleRole, toggleRoleList: mockToggleAllRoles, tenantId });
 
       expect(getByText('role1').closest('a')).toHaveAttribute('href', '/settings/authorization-roles/1');
     });
@@ -96,7 +96,7 @@ describe('UserRolesList', () => {
     it('renders the role name as plain text when the user lacks permission', () => {
       IfPermission.mockImplementation(({ children }) => children({ hasPermission: false }));
       cleanup();
-      const { getByText } = renderComponent({ assignedUserRoleIds, filteredRoles, toggleRole: mockToggleRole, toggleRoleList: mockToggleAllRoles, tenantId });
+      const { getByText } = renderComponent({ assignedUserRoleIds, initialUserRoleIds, filteredRoles, toggleRole: mockToggleRole, toggleRoleList: mockToggleAllRoles, tenantId });
 
       expect(getByText('role1').closest('a')).not.toBeInTheDocument();
     });
