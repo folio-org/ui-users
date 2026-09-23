@@ -1,3 +1,2 @@
-// eslint-disable-next-line import/prefer-default-export
 export { default as getInitialFiltersState } from './getInitialFiltersState';
-export { default as filtersConfig } from './filtersConfig';
+export { default as filtersConfig, statusFilterConfig, selectionFilterConfig } from './filtersConfig';
