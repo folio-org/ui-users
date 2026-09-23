@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import { Button, Modal, Pane, PaneHeader, Paneset } from '@folio/stripes/components';
@@ -17,26 +17,27 @@ export default function UserRolesModal({ isOpen,
   tenantId }) {
   const [filterPaneIsVisible, setFilterPaneIsVisible] = useState(true);
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState('');
-  const [assignedRoleIds, setAssignedRoleIds] = useState({});
+  const [assignedRoleIds, setAssignedRoleIds] = useState(initialRoleIds);
   const [selectionSnapshot, setSelectionSnapshot] = useState(initialRoleIds);
-  const skipNextSnapshotRefresh = useRef(true);
   const { filters, onChangeFilter, onClearFilter, resetFilters } = useRolesModalFilters();
   const { data: allRolesData, allRolesMapStructure } = useAllRolesData({ tenantId });
 
-  useEffect(() => {
+  // The Selected/Unselected filter reads from a local snapshot of the initial selection, so a role
+  // doesn't disappear from the list the instant its checkbox is toggled. It only refreshes when
+  // initialRoleIds changes, or when filters/search change (never on a plain checkbox click).
+  const previousInitialRoleIdsRef = useRef(initialRoleIds);
+  const filtersKey = `${JSON.stringify(filters)}|${submittedSearchTerm}`;
+  const previousFiltersKeyRef = useRef(filtersKey);
+
+  if (previousInitialRoleIdsRef.current !== initialRoleIds) {
+    previousInitialRoleIdsRef.current = initialRoleIds;
+    previousFiltersKeyRef.current = filtersKey;
     setAssignedRoleIds(initialRoleIds);
     setSelectionSnapshot(initialRoleIds);
-    skipNextSnapshotRefresh.current = true;
-  }, [initialRoleIds]);
-
-  useEffect(() => {
-    if (skipNextSnapshotRefresh.current) {
-      skipNextSnapshotRefresh.current = false;
-      return;
-    }
+  } else if (previousFiltersKeyRef.current !== filtersKey) {
+    previousFiltersKeyRef.current = filtersKey;
     setSelectionSnapshot(assignedRoleIds);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters, submittedSearchTerm]);
+  }
 
   const handleCloseModal = () => {
     setAssignedRoleIds(initialRoleIds);
