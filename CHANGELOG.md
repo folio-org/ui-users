@@ -25,6 +25,8 @@
 * Update Reset button style and conditional clear icons. Refs UIU-3232.
 * Show renew confirmation popup after multi-item renewal. Refs UIU-3625.
 * Fix crash when opening the Version history pane on the user detail view. Fixes UIU-3630.
+* Adds 'Selected/Unselected' filter to the 'Add user role' modal. Fixes UIU-3557.
+* Adds 'Status' column to the 'Add user role' modal, displaying the persisted state of the user's role. Fixes UIU-3558.
 
 ## [13.0.2] (https://github.com/folio-org/ui-users/tree/v13.0.2) (2026-06-12)
 [Full Changelog](https://github.com/folio-org/ui-users/compare/v13.0.1...v13.0.2)
