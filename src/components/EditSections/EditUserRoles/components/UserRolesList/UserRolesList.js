@@ -10,6 +10,7 @@ const visibleColumns = ['selected', 'roleName', 'status'];
 
 const UserRolesList = ({
   assignedUserRoleIds,
+  initialUserRoleIds,
   filteredRoles,
   toggleRole,
   toggleRoleList,
@@ -63,7 +64,7 @@ const UserRolesList = ({
             </div>
           ),
           status: role => {
-            const status = assignedUserRoleIds[tenantId]?.includes(role.id)
+            const status = initialUserRoleIds[tenantId]?.includes(role.id)
               ? 'assigned'
               : 'unassigned';
             const statusText = `ui-users.roles.modal.${status}`;
@@ -77,6 +78,7 @@ const UserRolesList = ({
 
 UserRolesList.propTypes = {
   assignedUserRoleIds: PropTypes.object.isRequired,
+  initialUserRoleIds: PropTypes.object.isRequired,
   filteredRoles: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,

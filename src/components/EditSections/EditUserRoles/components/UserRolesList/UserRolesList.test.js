@@ -11,6 +11,7 @@ jest.unmock('@folio/stripes/components');
 
 const tenantId = 'consortium';
 const assignedUserRoleIds = { 'consortium': ['1', '2'] };
+const initialUserRoleIds = { 'consortium': ['1', '2'] };
 const filteredRoles = [{ id: '1', name: 'role1' }];
 const mockToggleRole = jest.fn();
 const mockToggleAllRoles = jest.fn();
@@ -25,7 +26,7 @@ const renderComponent = (props) => {
 
 describe('UserRolesList', () => {
   beforeEach(() => {
-    renderComponent({ assignedUserRoleIds, filteredRoles, toggleRole: mockToggleRole, toggleRoleList: mockToggleAllRoles, tenantId });
+    renderComponent({ assignedUserRoleIds, initialUserRoleIds, filteredRoles, toggleRole: mockToggleRole, toggleRoleList: mockToggleAllRoles, tenantId });
   });
   afterAll(() => {
     cleanup();
@@ -51,6 +52,34 @@ describe('UserRolesList', () => {
     expect(mockToggleRole).toHaveBeenCalledWith('1');
   });
 
+  it('shows unassigned status when the role is unassigned initially, even if currently checked live', () => {
+    cleanup();
+    renderComponent({
+      assignedUserRoleIds: { consortium: ['1'] },
+      initialUserRoleIds: { consortium: [] },
+      filteredRoles,
+      toggleRole: mockToggleRole,
+      toggleRoleList: mockToggleAllRoles,
+      tenantId
+    });
+
+    expect(document.querySelector('[data-test-role-status]')).toHaveTextContent('ui-users.roles.modal.unassigned');
+  });
+
+  it('shows assigned status when the role is assigned initially, even if currently unchecked live', () => {
+    cleanup();
+    renderComponent({
+      assignedUserRoleIds: { consortium: [] },
+      initialUserRoleIds: { consortium: ['1'] },
+      filteredRoles,
+      toggleRole: mockToggleRole,
+      toggleRoleList: mockToggleAllRoles,
+      tenantId
+    });
+
+    expect(document.querySelector('[data-test-role-status]')).toHaveTextContent('ui-users.roles.modal.assigned');
+  });
+
   describe('role name link permission guard', () => {
     afterEach(() => {
       IfPermission.mockClear();
@@ -59,7 +88,7 @@ describe('UserRolesList', () => {
     it('renders the role name as a link when the user has permission', () => {
       IfPermission.mockImplementation(({ children }) => children({ hasPermission: true }));
       cleanup();
-      const { getByText } = renderComponent({ assignedUserRoleIds, filteredRoles, toggleRole: mockToggleRole, toggleRoleList: mockToggleAllRoles, tenantId });
+      const { getByText } = renderComponent({ assignedUserRoleIds, initialUserRoleIds, filteredRoles, toggleRole: mockToggleRole, toggleRoleList: mockToggleAllRoles, tenantId });
 
       expect(getByText('role1').closest('a')).toHaveAttribute('href', '/settings/authorization-roles/1');
     });
@@ -67,7 +96,7 @@ describe('UserRolesList', () => {
     it('renders the role name as plain text when the user lacks permission', () => {
       IfPermission.mockImplementation(({ children }) => children({ hasPermission: false }));
       cleanup();
-      const { getByText } = renderComponent({ assignedUserRoleIds, filteredRoles, toggleRole: mockToggleRole, toggleRoleList: mockToggleAllRoles, tenantId });
+      const { getByText } = renderComponent({ assignedUserRoleIds, initialUserRoleIds, filteredRoles, toggleRole: mockToggleRole, toggleRoleList: mockToggleAllRoles, tenantId });
 
       expect(getByText('role1').closest('a')).not.toBeInTheDocument();
     });

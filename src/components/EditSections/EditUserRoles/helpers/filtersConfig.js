@@ -1,41 +1,33 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+import createBinaryStatusFilter from './createBinaryStatusFilter';
 
-const filtersConfig = {
-  label: (<FormattedMessage id="ui-users.roles.modal.filter.status.label" />),
+export const statusFilterConfig = createBinaryStatusFilter({
+  label: <FormattedMessage id="ui-users.roles.modal.filter.status.label" />,
   name: 'status',
-  cql: 'status',
-  values: [
-    {
-      displayName: <FormattedMessage id="ui-users.roles.modal.assigned" />,
-      name: 'assigned',
-      cql: 'assigned',
-      value: false,
-    },
-    {
-      displayName: <FormattedMessage id="ui-users.roles.modal.unassigned" />,
-      name: 'unassigned',
-      cql: 'unassigned',
-      value: false,
-    },
-  ],
-  filter(roles, filters, assignedRoleIds, tenantId) {
-    const {
-      [`${this.name}.${this.values[0].name}`]: showAssigned,
-      [`${this.name}.${this.values[1].name}`]: showUnassigned,
-    } = filters;
+  trueValue: {
+    displayName: <FormattedMessage id="ui-users.roles.modal.assigned" />,
+    name: 'assigned',
+  },
+  falseValue: {
+    displayName: <FormattedMessage id="ui-users.roles.modal.unassigned" />,
+    name: 'unassigned',
+  },
+});
 
-    return roles.filter(({ id }) => {
-      const rolesAssigned = assignedRoleIds[tenantId]?.includes(id);
+export const selectionFilterConfig = createBinaryStatusFilter({
+  label: <FormattedMessage id="ui-users.roles.modal.filter.selection.label" />,
+  name: 'selection',
+  trueValue: {
+    displayName: <FormattedMessage id="ui-users.roles.modal.selected" />,
+    name: 'selected',
+  },
+  falseValue: {
+    displayName: <FormattedMessage id="ui-users.roles.modal.unselected" />,
+    name: 'unselected',
+  },
+});
 
-      return (
-        (showUnassigned && !rolesAssigned && !showAssigned)
-          || (!showUnassigned && rolesAssigned && showAssigned)
-          || (showUnassigned && showAssigned)
-          || !Object.keys(filters).some((key) => (key.startsWith(this.name)))
-      );
-    });
-  }
-};
+const filtersConfig = [statusFilterConfig, selectionFilterConfig];
 
 export default filtersConfig;
