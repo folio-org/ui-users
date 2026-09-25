@@ -569,7 +569,7 @@ class UserDetail extends React.Component {
       || stripes.hasPerm('ui-requests.create')
       || stripes.hasPerm('ui-users.delete,ui-users.open-transactions.view')
       || stripes.hasPerm('ui-users.profile-pictures.all')
-      || stripes.hasPerm('sender.message-delivery.post');
+      || stripes.hasPerm('text-notify.message.post');
 
     if (showActionMenu && !isVirtualPatron) {
       return (

@@ -24,7 +24,7 @@ const ActionMenuSendTextMessageButton = ({ user, handleClick }) => {
   const shouldDisplay = useMemo(() => shouldAllowSendingText(user), [user]);
 
   return (
-    <IfPermission perm="sender.message-delivery.post">
+    <IfPermission perm="text-notify.message.post">
       <Button
         buttonStyle="dropdownItem"
         disabled={!shouldDisplay}
