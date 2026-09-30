@@ -422,6 +422,12 @@ class UserSearch extends React.Component {
     },
   ];
 
+  checkScope = () => {
+    const ignoreElements = ['TEXTAREA', 'INPUT'];
+
+    return !ignoreElements.includes(document.activeElement.tagName);
+  };
+
   isSelected = ({ item }) => item.id === this.state.selectedId;
 
   handleSubmit = (e, onSubmit) => {
@@ -721,7 +727,11 @@ class UserSearch extends React.Component {
     };
 
     return (
-      <HasCommand commands={this.shortcuts}>
+      <HasCommand
+        commands={this.shortcuts}
+        isWithinScope={this.checkScope}
+        scope={document.body}
+      >
         <div data-test-user-instances ref={contentRef}>
           <SearchAndSortQuery
             querySetter={querySetter}

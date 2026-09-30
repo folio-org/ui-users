@@ -473,6 +473,48 @@ describe('UserForm', () => {
     });
   });
 
+  describe('checkScope (isWithinScope)', () => {
+    const getLastHasCommandProps = () => {
+      const { calls } = HasCommand.mock;
+
+      return calls[calls.length - 1][0];
+    };
+
+    it('passes document.body as the scope prop to HasCommand', () => {
+      renderUserForm();
+
+      const { scope } = getLastHasCommandProps();
+
+      expect(scope).toBe(document.body);
+    });
+
+    it('returns false (out of scope) when focus is on an input element', async () => {
+      renderUserForm();
+
+      const addressTextbox = screen.getByRole('textbox', { name: 'stripes-smart-components.addressEdit.label.addressLine1' });
+
+      await act(async () => {
+        addressTextbox.focus();
+      });
+
+      const { isWithinScope } = getLastHasCommandProps();
+
+      expect(isWithinScope()).toBe(false);
+    });
+
+    it('returns true (within scope) when focus is not on an input or textarea', async () => {
+      renderUserForm();
+
+      await act(async () => {
+        document.body.focus();
+      });
+
+      const { isWithinScope } = getLastHasCommandProps();
+
+      expect(isWithinScope()).toBe(true);
+    });
+  });
+
   // this fails:
   //   Element type is invalid: expected a string (for built-in components)
   //   or a class/function (for composite components) but got: undefined.

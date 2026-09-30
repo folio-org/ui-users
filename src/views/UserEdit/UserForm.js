@@ -250,6 +250,12 @@ class UserForm extends React.Component {
     this.props.handleSubmit(e);
   };
 
+  checkScope = () => {
+    const ignoreElements = ['TEXTAREA', 'INPUT'];
+
+    return !ignoreElements.includes(document.activeElement.tagName);
+  };
+
   getPaneFooter() {
     const {
       onCancel,
@@ -376,7 +382,11 @@ class UserForm extends React.Component {
     const displayReadingRoomAccess = [USER_TYPES.PATRON, USER_TYPES.STAFF].includes(initialValues?.type);
 
     return (
-      <HasCommand commands={this.keyboardCommands}>
+      <HasCommand
+        commands={this.keyboardCommands}
+        isWithinScope={this.checkScope}
+        scope={document.body}
+      >
         <form
           data-test-form-page
           className={css.UserFormRoot}
