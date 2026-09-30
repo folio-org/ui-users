@@ -55,6 +55,12 @@ class UserRecordContainer extends React.Component {
       fetch: false,
       throwErrors: false,
       clientGeneratePk: false,
+      POST: {
+        headers: {
+          'Accept': 'text/plain',
+          'Content-Type': 'application/json',
+        },
+      },
     },
     hasManualPatronBlocks: {
       type: 'okapi',
