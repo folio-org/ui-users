@@ -1164,7 +1164,7 @@
     "roles.modal.unassignAll.header": "إلغاء تعيين كل أدوار المستخدم",
     "roles.modal.unassignAll.label": "You are unassigning all user roles <strong>{roles}</strong> <p><strong>Are you sure?</strong></p>",
     "roles.modal.search.header": "Search & filter",
-    "roles.modal.filter.status.label": "Role assigment status",
+    "roles.modal.filter.status.label": "Role assignment status",
     "roles.modal.header": "Select user roles",
     "loans.details.printDueDateReceipt": "طباعة إيصال تاريخ الاستحقاق",
     "actionMenu.preRegistrationRecords": "بحث تسجيلات ما قبل التسجيل للمستفيد",

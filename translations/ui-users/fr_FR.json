@@ -1164,7 +1164,7 @@
     "roles.modal.unassignAll.header": "Unassign all user roles",
     "roles.modal.unassignAll.label": "You are unassigning all user roles <strong>{roles}</strong> <p><strong>Are you sure?</strong></p>",
     "roles.modal.search.header": "Rechercher et filtrer",
-    "roles.modal.filter.status.label": "Role assigment status",
+    "roles.modal.filter.status.label": "Role assignment status",
     "roles.modal.header": "Select user roles",
     "loans.details.printDueDateReceipt": "Print due date receipt",
     "actionMenu.preRegistrationRecords": "Rechercher les dossiers de préinscription des usagers",
