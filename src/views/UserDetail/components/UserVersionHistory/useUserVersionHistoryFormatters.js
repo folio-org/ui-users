@@ -11,6 +11,7 @@ import {
   AUDIT_CHANGE_TYPE,
   CUSTOM_FIELDS_ENTITY_TYPE,
   CUSTOM_FIELD_TYPES,
+  LOAN_ANONYMIZATION_PREFERENCE_OPTIONS,
   MODULE_NAME,
 } from '../../../../constants';
 import { renderDate } from '../../../../utils';
@@ -57,6 +58,7 @@ const buildFieldLabelsMap = (formatMessage, customFields) => ({
   profilePictureLink: formatMessage({ id: 'ui-users.information.profilePicture' }),
   tags: formatMessage({ id: 'ui-users.versionHistory.field.tags' }),
   proxyFor: formatMessage({ id: 'ui-users.versionHistory.field.proxyFor' }),
+  loanAnonymizationPreference: formatMessage({ id: 'ui-users.extended.loanAnonymizationPreference' }),
   ...Object.fromEntries((customFields || []).map(cf => [cf.refId, cf.name])),
 });
 
@@ -116,6 +118,11 @@ const useUserVersionHistoryFormatters = () => {
     [],
   );
 
+  const loanAnonymizationPreferencesMap = useMemo(
+    () => Object.fromEntries(LOAN_ANONYMIZATION_PREFERENCE_OPTIONS.map(({ value, labelId }) => [value, formatMessage({ id: labelId })])),
+    [formatMessage],
+  );
+
   const fieldLabelsMap = useMemo(
     () => buildFieldLabelsMap(formatMessage, customFields),
     [formatMessage, customFields],
@@ -140,8 +147,9 @@ const useUserVersionHistoryFormatters = () => {
     pronouns: valueOrNoValue,
     profilePictureLink: valueOrNoValue,
     proxyFor: valueOrNoValue,
+    loanAnonymizationPreference: value => (value ? loanAnonymizationPreferencesMap[value] ?? value : <NoValue />),
     ...customFieldFormatters,
-  }), [formatList, formatMessage, patronGroupsMap, contactTypesMap, departmentsMap, customFieldFormatters]);
+  }), [formatList, formatMessage, patronGroupsMap, contactTypesMap, departmentsMap, loanAnonymizationPreferencesMap, customFieldFormatters]);
 
   const itemFormatter = useMemo(
     () => ({ name, value }) => {
