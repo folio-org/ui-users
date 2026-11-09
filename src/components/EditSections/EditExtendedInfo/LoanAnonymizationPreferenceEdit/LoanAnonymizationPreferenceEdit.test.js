@@ -52,7 +52,7 @@ const submit = async () => {
 describe('LoanAnonymizationPreferenceEdit', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    useUserSpecificLoanAnonymization.mockReturnValue({ isEnabled: true, isLoading: false });
+    useUserSpecificLoanAnonymization.mockReturnValue({ isEnabled: true });
   });
 
   it('should show the three options', () => {
@@ -109,7 +109,7 @@ describe('LoanAnonymizationPreferenceEdit', () => {
 
   describe('when user-specific loan anonymization is not enabled or the setting cannot be read', () => {
     beforeEach(() => {
-      useUserSpecificLoanAnonymization.mockReturnValue({ isEnabled: false, isLoading: false });
+      useUserSpecificLoanAnonymization.mockReturnValue({ isEnabled: false });
     });
 
     it('should hide the field', () => {

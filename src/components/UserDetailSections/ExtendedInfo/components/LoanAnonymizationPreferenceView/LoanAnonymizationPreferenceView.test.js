@@ -17,7 +17,7 @@ jest.mock('../../../../../hooks', () => ({
 
 describe('LoanAnonymizationPreferenceView', () => {
   beforeEach(() => {
-    useUserSpecificLoanAnonymization.mockReturnValue({ isEnabled: true, isLoading: false });
+    useUserSpecificLoanAnonymization.mockReturnValue({ isEnabled: true });
   });
 
   it.each([
@@ -41,7 +41,7 @@ describe('LoanAnonymizationPreferenceView', () => {
   });
 
   it('should be hidden when user-specific loan anonymization is not enabled or the setting cannot be read', () => {
-    useUserSpecificLoanAnonymization.mockReturnValue({ isEnabled: false, isLoading: false });
+    useUserSpecificLoanAnonymization.mockReturnValue({ isEnabled: false });
 
     renderWithRouter(<LoanAnonymizationPreferenceView preference="never" />);
 

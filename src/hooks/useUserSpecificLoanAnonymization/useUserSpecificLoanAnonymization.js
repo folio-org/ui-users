@@ -30,7 +30,7 @@ const useUserSpecificLoanAnonymization = () => {
     stripes.hasPerm('circulation.settings.collection.get'),
   );
 
-  const { data, isLoading } = useQuery(
+  const { data } = useQuery(
     [namespace, LOAN_HISTORY_SETTING_NAME],
     () => ky.get(CIRCULATION_SETTINGS_ENDPOINT, {
       searchParams: { query: `name==${LOAN_HISTORY_SETTING_NAME}` },
@@ -42,7 +42,6 @@ const useUserSpecificLoanAnonymization = () => {
 
   return {
     isEnabled: canReadSetting && USER_SPECIFIC_LOAN_ANONYMIZATION_ENABLED_TYPES.includes(userSpecificType),
-    isLoading: canReadSetting && isLoading,
   };
 };
 

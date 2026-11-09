@@ -53,7 +53,7 @@ const loanHistory = userSpecific => ({
 const renderUseUserSpecificLoanAnonymization = async () => {
   const { result } = renderHook(() => useUserSpecificLoanAnonymization(), { wrapper });
 
-  await waitFor(() => expect(result.current.isLoading).toBe(false));
+  await waitFor(() => expect(queryClient.isFetching()).toBe(0));
 
   return result.current;
 };
