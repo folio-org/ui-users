@@ -23,7 +23,10 @@ const wrapper = ({ children }) => (
   </QueryClientProvider>
 );
 
-const mockStripes = ({ hasInterface = true, hasPerm = true } = {}) => {
+// Spread instead of default parameters, so that an explicit undefined (e.g. permissions not loaded yet) is kept
+const mockStripes = (overrides = {}) => {
+  const { hasInterface, hasPerm } = { hasInterface: true, hasPerm: true, ...overrides };
+
   useStripes.mockReturnValue({
     hasInterface: jest.fn(() => hasInterface),
     hasPerm: jest.fn(() => hasPerm),
@@ -103,6 +106,7 @@ describe('useUserSpecificLoanAnonymization', () => {
   it.each([
     ['the circulation-settings interface is missing', { hasInterface: false }],
     ['the staff user may not read circulation settings', { hasPerm: false }],
+    ['the staff user permissions are not loaded yet', { hasPerm: undefined }],
   ])('should be disabled without a request when %s', async (_, stripes) => {
     mockStripes(stripes);
     const get = mockSettingResponse(() => Promise.resolve(loanHistory('immediately')));

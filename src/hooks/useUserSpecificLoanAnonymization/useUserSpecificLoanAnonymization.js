@@ -25,22 +25,24 @@ const useUserSpecificLoanAnonymization = () => {
   const ky = useOkapiKy();
   const [namespace] = useNamespace({ key: LOAN_ANONYMIZATION_SETTING_NAMESPACE_KEY });
 
-  const canReadSetting = stripes.hasInterface('circulation-settings') &&
-    stripes.hasPerm('circulation.settings.collection.get');
+  const canReadSetting = Boolean(
+    stripes.hasInterface('circulation-settings') &&
+    stripes.hasPerm('circulation.settings.collection.get'),
+  );
 
   const { data, isLoading } = useQuery(
     [namespace, LOAN_HISTORY_SETTING_NAME],
     () => ky.get(CIRCULATION_SETTINGS_ENDPOINT, {
       searchParams: { query: `name==${LOAN_HISTORY_SETTING_NAME}` },
     }).json(),
-    { enabled: Boolean(canReadSetting), staleTime: STALE_TIME_MS, retry: false },
+    { enabled: canReadSetting, staleTime: STALE_TIME_MS, retry: false },
   );
 
   const userSpecificType = data?.circulationSettings?.[0]?.value?.closingType?.userSpecific;
 
   return {
-    isEnabled: Boolean(canReadSetting) && USER_SPECIFIC_LOAN_ANONYMIZATION_ENABLED_TYPES.includes(userSpecificType),
-    isLoading: Boolean(canReadSetting) && isLoading,
+    isEnabled: canReadSetting && USER_SPECIFIC_LOAN_ANONYMIZATION_ENABLED_TYPES.includes(userSpecificType),
+    isLoading: canReadSetting && isLoading,
   };
 };
 
