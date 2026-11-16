@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
 
-import { AppContextMenu, Route, Switch, IfPermission } from '@folio/stripes/core';
+import { AppContextMenu, register, Route, Switch, IfPermission } from '@folio/stripes/core';
 import {
   NavList,
   NavListItem,
@@ -23,6 +23,8 @@ import {
   NoteViewPage,
   NoteEditPage
 } from './views';
+
+register({ type: 'user', link: '/users/preview/:id' });
 
 class UsersRouting extends React.Component {
   static propTypes = {
