@@ -107,12 +107,19 @@ CreateResetPasswordControlMock.propTypes = {
 };
 
 jest.mock('./CreateResetPasswordControl', () => CreateResetPasswordControlMock);
+jest.mock('./LoanAnonymizationPreferenceEdit', () => () => <div>LoanAnonymizationPreferenceEdit</div>);
 
 describe('Render Extended User Information component', () => {
   it('Must be rendered', () => {
     renderEditExtendedInfo(props);
     expect(screen.getByText('ui-users.extended.folioNumber')).toBeInTheDocument();
   });
+
+  it('Must render the loan anonymization preference', () => {
+    renderEditExtendedInfo(props);
+    expect(screen.getByText('LoanAnonymizationPreferenceEdit')).toBeInTheDocument();
+  });
+
   it('Must show all departments', () => {
     renderEditExtendedInfo(props);
     expect(screen.getByText('testDepartmentName')).toBeInTheDocument();

@@ -1,2 +1,2 @@
-// eslint-disable-next-line import/prefer-default-export
+export { default as LoanAnonymizationPreferenceView } from './LoanAnonymizationPreferenceView';
 export { default as RequestPreferencesView } from './RequestPreferencesView';

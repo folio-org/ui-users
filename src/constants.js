@@ -525,3 +525,23 @@ export const ERROR_MESSAGE_TRANSLATION_ID_BY_BACKEND_ERROR_CODES = {
   [BACKEND_ERROR_CODES.overrideRenewalDueDateRequiredWhenDueDateUnchanged]: 'ui-users.messages.overrideRenewalDueDateRequiredWhenDueDateUnchanged',
   [BACKEND_ERROR_CODES.overrideRenewalNotAllowedForCurrentLoan]: 'ui-users.messages.overrideRenewalNotAllowedForCurrentLoan'
 };
+
+// User-specific loan anonymization (UIU-3595). The tenant setting is stored by ui-circulation (UICIRC-1361)
+// in the circulation setting "loan_history"; user-specific preferences only apply when
+// closingType.userSpecific is "immediately" or "interval". "disabled" or a missing value turns them off.
+export const CIRCULATION_SETTINGS_ENDPOINT = 'circulation/settings';
+export const LOAN_HISTORY_SETTING_NAME = 'loan_history';
+export const LOAN_ANONYMIZATION_SETTING_NAMESPACE_KEY = 'loan-anonymization-setting';
+export const USER_SPECIFIC_LOAN_ANONYMIZATION_ENABLED_TYPES = ['immediately', 'interval'];
+
+export const LOAN_ANONYMIZATION_PREFERENCE = {
+  LIBRARY_POLICY: 'libraryPolicy',
+  AS_EARLY_AS_POSSIBLE: 'asEarlyAsPossible',
+  NEVER: 'never',
+};
+
+export const LOAN_ANONYMIZATION_PREFERENCE_OPTIONS = [
+  { value: LOAN_ANONYMIZATION_PREFERENCE.LIBRARY_POLICY, labelId: 'ui-users.extended.loanAnonymizationPreference.libraryPolicy' },
+  { value: LOAN_ANONYMIZATION_PREFERENCE.AS_EARLY_AS_POSSIBLE, labelId: 'ui-users.extended.loanAnonymizationPreference.asEarlyAsPossible' },
+  { value: LOAN_ANONYMIZATION_PREFERENCE.NEVER, labelId: 'ui-users.extended.loanAnonymizationPreference.never' },
+];

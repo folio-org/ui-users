@@ -8,6 +8,7 @@ import renderWithRouter from 'helpers/renderWithRouter';
 import ExtendedInfo from './ExtendedInfo';
 
 jest.unmock('@folio/stripes/components');
+jest.mock('./components/LoanAnonymizationPreferenceView', () => ({ preference }) => <div>{`LoanAnonymizationPreferenceView ${preference}`}</div>);
 
 useCustomFieldsQuery.mockReturnValue({
   customFields: [{
@@ -146,6 +147,11 @@ describe('ExtendedInfo', () => {
         expect(screen.queryByText(/ui-users.extended.department.name/i)).not.toBeInTheDocument();
       });
     });
+  });
+
+  it('passes the loan anonymization preference to its view', () => {
+    renderComponent({ user: { ...mockUser, loanAnonymizationPreference: 'never' } });
+    expect(screen.getByText('LoanAnonymizationPreferenceView never')).toBeInTheDocument();
   });
 
   it('displays username when available', () => {

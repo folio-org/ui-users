@@ -13,7 +13,10 @@ import { useCustomFieldsQuery } from '@folio/stripes/smart-components';
 
 import { requestPreferencesShape } from '../../../shapes';
 
-import RequestPreferencesView from './components/RequestPreferencesView';
+import {
+  LoanAnonymizationPreferenceView,
+  RequestPreferencesView,
+} from './components';
 import ViewCustomFieldsSection from '../ViewCustomFieldsSection';
 import {
   CUSTOM_FIELDS_ENTITY_TYPE,
@@ -82,6 +85,7 @@ const ExtendedInfo = (props) => {
         defaultServicePointName={defaultServicePointName}
         defaultDeliveryAddressTypeName={defaultDeliveryAddressTypeName}
       />
+      <LoanAnonymizationPreferenceView preference={user?.loanAnonymizationPreference} />
       {(showCustomFieldsSection || departments.length > 0) && (
         <Row>
           {departments.length > 0 && (

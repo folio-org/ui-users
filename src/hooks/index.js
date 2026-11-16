@@ -15,6 +15,7 @@ export { default as usePatronGroups } from './usePatronGroups';
 export { default as useStagingUserMutation } from './useStagingUserMutation';
 export { default as useStagingUsersQuery } from './useStagingUsersQuery';
 export { default as useUsersQuery } from './useUsersQuery';
+export { default as useUserSpecificLoanAnonymization } from './useUserSpecificLoanAnonymization';
 export { default as useUserAffiliationRoles } from './useUserAffiliationRoles';
 export { default as useCustomFieldsSection } from './useCustomFieldsSection';
 export { default as useAuditSettingsQuery } from './useAuditSettingsQuery';

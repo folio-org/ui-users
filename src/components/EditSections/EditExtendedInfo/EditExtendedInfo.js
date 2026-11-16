@@ -31,6 +31,7 @@ import {
 
 import CreateResetPasswordControl from './CreateResetPasswordControl';
 import RequestPreferencesEdit from './RequestPreferencesEdit';
+import LoanAnonymizationPreferenceEdit from './LoanAnonymizationPreferenceEdit';
 import DepartmentsNameEdit from './DepartmentsNameEdit';
 import EditCustomFieldsSection from '../EditCustomFieldsSection';
 import { AsyncValidateField } from '../../AsyncValidateField';
@@ -179,6 +180,7 @@ class EditExtendedInfo extends Component {
           setFieldValue={change}
           disabled={disabled}
         />
+        <LoanAnonymizationPreferenceEdit disabled={disabled} />
         <Row>
           {departments.length
             ? (

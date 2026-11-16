@@ -76,6 +76,16 @@ describe('useUserVersionHistoryFormatters', () => {
       expect(isNoValue(fieldFormatter.proxyFor(''))).toBe(true);
       expect(isNoValue(fieldFormatter.proxyFor(null))).toBe(true);
     });
+
+    it('resolves the loan anonymization preference to its label, falling back to raw value', () => {
+      const { fieldFormatter, fieldLabelsMap } = renderFormatters();
+
+      expect(fieldLabelsMap.loanAnonymizationPreference).toBe('ui-users.extended.loanAnonymizationPreference');
+      expect(fieldFormatter.loanAnonymizationPreference('never')).toBe('ui-users.extended.loanAnonymizationPreference.never');
+      expect(fieldFormatter.loanAnonymizationPreference('asEarlyAsPossible')).toBe('ui-users.extended.loanAnonymizationPreference.asEarlyAsPossible');
+      expect(fieldFormatter.loanAnonymizationPreference('unknown')).toBe('unknown');
+      expect(isNoValue(fieldFormatter.loanAnonymizationPreference(null))).toBe(true);
+    });
   });
 
   describe('fieldLabelsMap', () => {

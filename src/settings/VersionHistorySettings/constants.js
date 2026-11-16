@@ -44,6 +44,7 @@ export const USER_FIELDS = [
   // Extended information
   { value: 'enrollmentDate', labelId: 'ui-users.extended.dateEnrolled' },
   { value: 'departments', labelId: 'ui-users.departments' },
+  { value: 'loanAnonymizationPreference', labelId: 'ui-users.extended.loanAnonymizationPreference' },
   { value: 'tags', labelId: 'ui-users.tags' },
   { value: 'proxyFor', labelId: 'ui-users.permissions.proxy.sponsor' },
 ];
